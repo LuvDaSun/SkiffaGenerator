@@ -19,21 +19,17 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "clean": "rm -rf out",
-    "lock": "npm install --no-workspaces --package-lock-only --ignore-scripts",
-    "test": "npm run spec-all",
-    "lint": "prettier --check *",
-    "spelling": "cspell .",
-    "spec-all": "node --test ./out/*/*.spec.js",
-    "coverage": "c8 --reporter lcov npm test"
+    "test": "node --test ./out/*.spec.js ./out/*/*.spec.js",
+    "spelling": "cspell ."
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:OpenApi42/oa42-lib-ts"
+    "url": "git@github.com:LuvDaSun/OpenApi42"
   },
   "author": "LuvDaSun Software B.V.",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/OpenApi42/oa42-lib-ts/issues"
+    "url": "https://github.com/LuvDaSun/OpenApi42/issues"
   },
   "keywords": [
     "openapi",
@@ -46,7 +42,6 @@
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",
     "@types/node": "^20.9.0",
-    "c8": "^8.0.1",
     "cspell": "^8.0.0",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2"
