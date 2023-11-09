@@ -10,7 +10,7 @@
       "cwd": "${workspaceFolder}",
       "sourceMaps": true,
       "outFiles": ["${workspaceFolder}/out/**/*.js"],
-      "preLaunchTask": "watch",
+      "preLaunchTask": "build",
       "outputCapture": "std"
     },
     {
@@ -31,7 +31,7 @@
       "cwd": "${workspaceFolder}",
       "sourceMaps": true,
       "outFiles": ["${workspaceFolder}/out/**/*.js"],
-      "preLaunchTask": "watch"
+      "preLaunchTask": "build"
     },
     {
       "type": "node",
@@ -51,7 +51,7 @@
       "cwd": "${workspaceFolder}",
       "sourceMaps": true,
       "outFiles": ["${workspaceFolder}/out/**/*.js"],
-      "preLaunchTask": "watch"
+      "preLaunchTask": "build"
     },
     {
       "type": "node",
@@ -71,7 +71,7 @@
       "cwd": "${workspaceFolder}",
       "sourceMaps": true,
       "outFiles": ["${workspaceFolder}/out/**/*.js"],
-      "preLaunchTask": "watch"
+      "preLaunchTask": "build"
     },
     {
       "type": "node",
@@ -91,7 +91,7 @@
       "cwd": "${workspaceFolder}",
       "sourceMaps": true,
       "outFiles": ["${workspaceFolder}/out/**/*.js"],
-      "preLaunchTask": "watch"
+      "preLaunchTask": "build"
     }
   ]
 }

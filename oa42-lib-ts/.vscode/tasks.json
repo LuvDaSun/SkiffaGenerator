@@ -3,21 +3,13 @@
   "tasks": [
     {
       "type": "npm",
-      "label": "watch",
-      "script": "watch",
-      "isBackground": true,
-      "problemMatcher": ["$tsc-watch"],
+      "label": "build",
+      "script": "build",
+      "problemMatcher": ["$tsc"],
       "group": {
         "kind": "build",
         "isDefault": true
       }
-    },
-    {
-      "type": "npm",
-      "label": "build",
-      "script": "build",
-      "problemMatcher": ["$tsc"],
-      "group": "build"
     }
   ]
 }
