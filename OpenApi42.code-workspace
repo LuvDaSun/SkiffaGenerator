@@ -1,6 +1,10 @@
 {
 	"folders": [
 		{
+			"name": "fixtures",
+			"path": "fixtures"
+		},
+		{
 			"name": "oa42-lib-ts",
 			"path": "oa42-lib-ts"
 		},
