@@ -1,0 +1,58 @@
+{
+  "name": "@oa42/oa42-generator",
+  "version": "0.0.0",
+  "description": "",
+  "type": "module",
+  "bin": "./out/program.js",
+  "main": "./out/main.js",
+  "types": "./out/main.d.ts",
+  "files": [
+    "./out/**/*",
+    "./src/**/*"
+  ],
+  "scripts": {
+    "build": "tsc && chmod +x out/program.js",
+    "watch": "tsc --watch",
+    "clean": "rm -rf out",
+    "lock": "npm install --no-workspaces --package-lock-only --ignore-scripts",
+    "test": "npm run spec-all",
+    "lint": "prettier --check *",
+    "spelling": "cspell .",
+    "spec-all": "node --test ./out/*/*.spec.js",
+    "coverage": "c8 --reporter lcov npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:OpenApi42/oa42-generator-ts"
+  },
+  "author": "LuvDaSun Software B.V.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OpenApi42/oa42-generator-ts/issues"
+  },
+  "keywords": [
+    "openapi",
+    "generator"
+  ],
+  "dependencies": {
+    "@jns42/jns42-generator": "^0.7.3",
+    "@jns42/jns42-schema-oas-v3-0": "^0.1.4",
+    "@jns42/jns42-schema-oas-v3-1": "^0.1.4",
+    "@jns42/jns42-schema-swagger-v2": "^0.1.6",
+    "@oa42/oa42-lib": "^0.4.0 || 0.0.0",
+    "@types/node": "^20.9.0",
+    "@types/yargs": "^17.0.31",
+    "camelcase": "^8.0.0",
+    "goodrouter": "^2.1.2",
+    "tslib": "^2.6.2",
+    "type-fest": "^4.6.0",
+    "typescript": "^5.2.2",
+    "yaml": "^2.3.4",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "c8": "^8.0.1",
+    "cspell": "^8.0.0",
+    "prettier": "^3.0.3"
+  }
+}

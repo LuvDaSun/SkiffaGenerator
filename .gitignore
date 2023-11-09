@@ -1,0 +1,8 @@
+.*
+
+!.gitignore
+!.editorconfig
+!.npmrc
+
+/node_modules/
+

@@ -1,0 +1,53 @@
+{
+  "name": "@oa42/oa42-lib",
+  "version": "0.0.0",
+  "description": "",
+  "type": "module",
+  "main": "./out/main.js",
+  "types": "./out/main.d.ts",
+  "exports": {
+    ".": {
+      "default": "./out/main.js",
+      "browser": "./out/browser.js"
+    }
+  },
+  "files": [
+    "./out/**/*",
+    "./src/**/*"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "clean": "rm -rf out",
+    "lock": "npm install --no-workspaces --package-lock-only --ignore-scripts",
+    "test": "npm run spec-all",
+    "lint": "prettier --check *",
+    "spelling": "cspell .",
+    "spec-all": "node --test ./out/*/*.spec.js",
+    "coverage": "c8 --reporter lcov npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:OpenApi42/oa42-lib-ts"
+  },
+  "author": "LuvDaSun Software B.V.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OpenApi42/oa42-lib-ts/issues"
+  },
+  "keywords": [
+    "openapi",
+    "library"
+  ],
+  "dependencies": {
+    "tslib": "^2.6.2",
+    "type-fest": "^4.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.0",
+    "c8": "^8.0.1",
+    "cspell": "^8.0.0",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
+  }
+}

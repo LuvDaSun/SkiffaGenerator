@@ -1,0 +1,13 @@
+.*
+!.gitignore
+!.prettierignore
+!.editorconfig
+!.npmrc
+
+!/.vscode/
+!/.github/
+
+/node_modules/
+/coverage/
+/out/
+/docs/

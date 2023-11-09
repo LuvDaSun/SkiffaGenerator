@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "language": "en",
+  "useGitignore": true,
+  "enableGlobDot": true,
+  "words": [
+    "AZAZ",
+    "camelcase",
+    "endregion",
+    "goodrouter",
+    "lcov",
+    "npmjs",
+    "openapi",
+    "petstore",
+    "Promisable"
+  ],
+  "ignorePaths": [".*", "./fixtures/*"]
+}
