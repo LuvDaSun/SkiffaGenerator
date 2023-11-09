@@ -1,5 +1,7 @@
 .*
 
+*.tsbuildinfo
+
 !.gitignore
 !.prettierignore
 !.editorconfig

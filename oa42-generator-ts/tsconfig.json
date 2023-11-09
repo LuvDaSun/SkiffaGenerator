@@ -4,7 +4,9 @@
     "outDir": "./out",
     "rootDir": "./src",
     "sourceMap": true,
-    "declaration": true
+    "declaration": true,
+    "composite": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "references": [{ "path": "../oa42-lib-ts" }]
 }
