@@ -1,6 +1,4 @@
-export function toReadableStream(
-  iterable: AsyncIterable<Uint8Array>,
-): ReadableStream<Uint8Array> {
+export function toReadableStream(iterable: AsyncIterable<Uint8Array>): ReadableStream<Uint8Array> {
   let iterator: AsyncIterator<Uint8Array> | undefined;
   return new ReadableStream({
     type: "bytes",

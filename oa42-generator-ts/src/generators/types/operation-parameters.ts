@@ -7,11 +7,7 @@ export function* generateOperationParametersTypes(
   apiModel: models.Api,
   operationModel: models.Operation,
 ) {
-  const operationRequestParametersName = toPascal(
-    operationModel.name,
-    "request",
-    "parameters",
-  );
+  const operationRequestParametersName = toPascal(operationModel.name, "request", "parameters");
 
   const parameterModels = [
     ...operationModel.queryParameters,
@@ -25,14 +21,10 @@ export function* generateOperationParametersTypes(
       ${parameterModels.map((parameterModel) => {
         const parameterSchemaId = parameterModel.schemaId;
         const parameterTypeName =
-          parameterSchemaId == null
-            ? parameterSchemaId
-            : apiModel.names[parameterSchemaId];
+          parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
 
         return itt`
-          ${camelcase(parameterModel.name)}${
-            parameterModel.required ? "?" : ""
-          }:
+          ${camelcase(parameterModel.name)}${parameterModel.required ? "?" : ""}:
             ${parameterTypeName == null ? "unknown" : parameterTypeName}
         `;
       })}

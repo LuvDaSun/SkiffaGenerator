@@ -7,11 +7,7 @@ export function* generateOperationOutgoingResponseType(
   apiModel: models.Api,
   operationModel: models.Operation,
 ) {
-  const operationOutgoingResponseName = toPascal(
-    operationModel.name,
-    "outgoing",
-    "response",
-  );
+  const operationOutgoingResponseName = toPascal(operationModel.name, "outgoing", "response");
 
   yield itt`
     export type ${operationOutgoingResponseName} = ${joinIterable(
@@ -21,30 +17,18 @@ export function* generateOperationOutgoingResponseType(
   `;
 }
 
-function* generateResponseTypes(
-  apiModel: models.Api,
-  operationModel: models.Operation,
-) {
+function* generateResponseTypes(apiModel: models.Api, operationModel: models.Operation) {
   if (operationModel.operationResults.length === 0) {
     yield itt`never`;
   }
 
   for (const operationResultModel of operationModel.operationResults) {
     if (operationResultModel.bodies.length === 0) {
-      yield* generateResponseBodies(
-        apiModel,
-        operationModel,
-        operationResultModel,
-      );
+      yield* generateResponseBodies(apiModel, operationModel, operationResultModel);
     }
 
     for (const bodyModel of operationResultModel.bodies) {
-      yield* generateResponseBodies(
-        apiModel,
-        operationModel,
-        operationResultModel,
-        bodyModel,
-      );
+      yield* generateResponseBodies(apiModel, operationModel, operationResultModel, bodyModel);
     }
   }
 }
@@ -66,9 +50,7 @@ function* generateResponseBodies(
     yield itt`
       lib.OutgoingEmptyResponse<
         ${joinIterable(
-          operationResultModel.statusCodes.map((statusCode) =>
-            JSON.stringify(statusCode),
-          ),
+          operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
           "|",
         )},
         shared.${operationOutgoingParametersName}
@@ -82,9 +64,7 @@ function* generateResponseBodies(
       yield itt`
         lib.OutgoingTextResponse<
           ${joinIterable(
-            operationResultModel.statusCodes.map((statusCode) =>
-              JSON.stringify(statusCode),
-            ),
+            operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
             "|",
           )},
           shared.${operationOutgoingParametersName},
@@ -95,15 +75,12 @@ function* generateResponseBodies(
     }
     case "application/json": {
       const bodySchemaId = bodyModel.schemaId;
-      const bodyTypeName =
-        bodySchemaId == null ? bodySchemaId : apiModel.names[bodySchemaId];
+      const bodyTypeName = bodySchemaId == null ? bodySchemaId : apiModel.names[bodySchemaId];
 
       yield itt`
         lib.OutgoingJsonResponse<
           ${joinIterable(
-            operationResultModel.statusCodes.map((statusCode) =>
-              JSON.stringify(statusCode),
-            ),
+            operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
             "|",
           )},
           shared.${operationOutgoingParametersName},
@@ -117,9 +94,7 @@ function* generateResponseBodies(
       yield itt`
         lib.OutgoingStreamResponse<
           ${joinIterable(
-            operationResultModel.statusCodes.map((statusCode) =>
-              JSON.stringify(statusCode),
-            ),
+            operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
             "|",
           )},
           shared.${operationOutgoingParametersName},

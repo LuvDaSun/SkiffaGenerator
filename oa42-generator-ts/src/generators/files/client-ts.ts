@@ -36,26 +36,16 @@ export function* generateClientTsCode(apiModel: models.Api) {
     const router = new Router({
       parameterValueDecoder: value => value,
       parameterValueEncoder: value => value,
-    }).loadFromJson(${JSON.stringify(
-      apiModel.router.saveToJson(RouterMode.Client),
-    )});
+    }).loadFromJson(${JSON.stringify(apiModel.router.saveToJson(RouterMode.Client))});
   `;
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
       const operationFunctionName = toCamel(operationModel.name);
 
-      const operationOutgoingRequestName = toPascal(
-        operationModel.name,
-        "outgoing",
-        "request",
-      );
+      const operationOutgoingRequestName = toPascal(operationModel.name, "outgoing", "request");
 
-      const operationIncomingResponseName = toPascal(
-        operationModel.name,
-        "incoming",
-        "response",
-      );
+      const operationIncomingResponseName = toPascal(operationModel.name, "incoming", "response");
 
       yield itt`
         export async function ${operationFunctionName}(
@@ -63,11 +53,7 @@ export function* generateClientTsCode(apiModel: models.Api) {
           credentials: unknown,
           options: ClientOptions = defaultClientOptions,
         ): Promise<${operationIncomingResponseName}> {
-          ${generateClientOperationFunctionBody(
-            apiModel,
-            pathModel,
-            operationModel,
-          )}
+          ${generateClientOperationFunctionBody(apiModel, pathModel, operationModel)}
         }
       `;
       yield* generateOperationOutgoingRequestType(apiModel, operationModel);

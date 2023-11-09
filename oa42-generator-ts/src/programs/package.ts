@@ -53,9 +53,7 @@ async function main(options: MainOptions) {
   if (/^\w+\:\/\//.test(options.specificationUrl)) {
     specificationUrl = new URL(options.specificationUrl);
   } else {
-    specificationUrl = new URL(
-      "file://" + path.resolve(process.cwd(), options.specificationUrl),
-    );
+    specificationUrl = new URL("file://" + path.resolve(process.cwd(), options.specificationUrl));
   }
   const packageDirectoryPath = path.resolve(options.packageDirectory);
   const { packageName, packageVersion, rootNamePart } = options;

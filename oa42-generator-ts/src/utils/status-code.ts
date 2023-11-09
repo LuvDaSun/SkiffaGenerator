@@ -32,10 +32,7 @@ export function statusKindComparer(statusKindA: string, statusKindB: string) {
   return valueB - valueA;
 }
 
-export function* takeStatusCodes(
-  availableStatusCodes: Set<number>,
-  statusKind: string,
-) {
+export function* takeStatusCodes(availableStatusCodes: Set<number>, statusKind: string) {
   let statusCodeOffset = 0;
   let statusCodeCount = 0;
 

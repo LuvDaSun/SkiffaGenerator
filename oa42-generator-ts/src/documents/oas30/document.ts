@@ -78,19 +78,13 @@ export class Document extends DocumentBase<oas.Schema20210928> {
       id: pathIndex + 1,
       uri: pathUri,
       pattern: pathPattern,
-      operations: Array.from(
-        this.getOperationModels(pathUri, pathPattern, pathItem),
-      ),
+      operations: Array.from(this.getOperationModels(pathUri, pathPattern, pathItem)),
     };
 
     return pathModel;
   }
 
-  private *getOperationModels(
-    pathUri: URL,
-    pathPattern: string,
-    pathItem: oas.PathItem,
-  ) {
+  private *getOperationModels(pathUri: URL, pathPattern: string, pathItem: oas.PathItem) {
     for (const method of methods) {
       const operationItem = pathItem[method];
 
@@ -115,20 +109,11 @@ export class Document extends DocumentBase<oas.Schema20210928> {
   ) {
     const allParameters = [
       ...(pathItem.parameters ?? []).map(
-        (item, index) =>
-          [
-            appendToUriHash(pathUri, "parameters", index),
-            item.name,
-            item,
-          ] as const,
+        (item, index) => [appendToUriHash(pathUri, "parameters", index), item.name, item] as const,
       ),
       ...(operationItem.parameters ?? []).map(
         (item, index) =>
-          [
-            appendToUriHash(operationUri, "parameters", index),
-            item.name,
-            item,
-          ] as const,
+          [appendToUriHash(operationUri, "parameters", index), item.name, item] as const,
       ),
     ];
 
@@ -136,17 +121,13 @@ export class Document extends DocumentBase<oas.Schema20210928> {
       .filter(([, , parameterItem]) => parameterItem.in === "query")
       .map((args) => this.getParameterModel(...args));
     const headerParameters = allParameters
-      .filter(
-        ([, , parameterItem]) => (parameterItem.in as string) === "header",
-      )
+      .filter(([, , parameterItem]) => (parameterItem.in as string) === "header")
       .map((args) => this.getParameterModel(...args));
     const pathParameters = allParameters
       .filter(([, , parameterItem]) => (parameterItem.in as string) === "path")
       .map((args) => this.getParameterModel(...args));
     const cookieParameters = allParameters
-      .filter(
-        ([, , parameterItem]) => (parameterItem.in as string) === "cookie",
-      )
+      .filter(([, , parameterItem]) => (parameterItem.in as string) === "cookie")
       .map((args) => this.getParameterModel(...args));
 
     const authenticationRequirements = (
@@ -171,9 +152,7 @@ export class Document extends DocumentBase<oas.Schema20210928> {
           ]
         : [];
 
-    const operationResults = [
-      ...this.getOperationResultModels(operationUri, operationItem),
-    ];
+    const operationResults = [...this.getOperationResultModels(operationUri, operationItem)];
 
     const operationModel: models.Operation = {
       uri: operationUri,
@@ -196,10 +175,8 @@ export class Document extends DocumentBase<oas.Schema20210928> {
       return;
     }
 
-    for (const authenticationName in this.documentNode.components
-      .securitySchemes) {
-      const authenticationItem =
-        this.documentNode.components.securitySchemes[authenticationName];
+    for (const authenticationName in this.documentNode.components.securitySchemes) {
+      const authenticationItem = this.documentNode.components.securitySchemes[authenticationName];
 
       if (!oas.isSecurityScheme(authenticationItem)) {
         continue;
@@ -219,14 +196,9 @@ export class Document extends DocumentBase<oas.Schema20210928> {
     return authenticationModel;
   }
 
-  private *getOperationResultModels(
-    operationUri: URL,
-    operationItem: oas.Operation,
-  ) {
+  private *getOperationResultModels(operationUri: URL, operationItem: oas.Operation) {
     const statusCodesAvailable = new Set(statusCodes);
-    const statusKinds = Object.keys(operationItem.responses ?? {}).sort(
-      statusKindComparer,
-    );
+    const statusKinds = Object.keys(operationItem.responses ?? {}).sort(statusKindComparer);
 
     for (const statusKind of statusKinds) {
       const responseItem = operationItem.responses![statusKind];
@@ -235,9 +207,7 @@ export class Document extends DocumentBase<oas.Schema20210928> {
         continue;
       }
 
-      const statusCodes = [
-        ...takeStatusCodes(statusCodesAvailable, statusKind),
-      ];
+      const statusCodes = [...takeStatusCodes(statusCodesAvailable, statusKind)];
 
       yield this.getOperationResultModel(
         appendToUriHash(operationUri, "responses", statusKind),
@@ -259,12 +229,7 @@ export class Document extends DocumentBase<oas.Schema20210928> {
     ];
 
     const bodies = oas.isResponseContent(responseItem.content)
-      ? [
-          ...this.getBodyModels(
-            appendToUriHash(responseUri, "content"),
-            responseItem.content,
-          ),
-        ]
+      ? [...this.getBodyModels(appendToUriHash(responseUri, "content"), responseItem.content)]
       : [];
 
     return {
@@ -276,10 +241,7 @@ export class Document extends DocumentBase<oas.Schema20210928> {
     };
   }
 
-  private *getOperationResultHeaderParameters(
-    operationUri: URL,
-    responseItem: oas.Response,
-  ) {
+  private *getOperationResultHeaderParameters(operationUri: URL, responseItem: oas.Response) {
     for (const parameterName in responseItem.headers ?? {}) {
       const headerItem = responseItem.headers![parameterName];
       if (!oas.isHeader(headerItem)) {
@@ -300,11 +262,8 @@ export class Document extends DocumentBase<oas.Schema20210928> {
     parameterItem: oas.Parameter | oas.Header,
   ): models.Parameter {
     const schemaUri =
-      parameterItem.schema == null
-        ? undefined
-        : appendToUriHash(parameterUri, "schema");
-    const schemaId =
-      schemaUri == null ? schemaUri : normalizeUrl(schemaUri).toString();
+      parameterItem.schema == null ? undefined : appendToUriHash(parameterUri, "schema");
+    const schemaId = schemaUri == null ? schemaUri : normalizeUrl(schemaUri).toString();
 
     return {
       uri: parameterUri,
@@ -314,9 +273,7 @@ export class Document extends DocumentBase<oas.Schema20210928> {
     };
   }
 
-  private async *getSchemas(): AsyncIterable<
-    readonly [string, intermediateB.Node]
-  > {
+  private async *getSchemas(): AsyncIterable<readonly [string, intermediateB.Node]> {
     const documentContext = new jns42generator.DocumentContext();
 
     documentContext.registerFactory(
@@ -353,8 +310,7 @@ export class Document extends DocumentBase<oas.Schema20210928> {
     requestBodyItem: oas.RequestBodyContent | oas.ResponseContent,
   ) {
     for (const contentType in requestBodyItem) {
-      const mediaTypeItem =
-        requestBodyItem[contentType as keyof typeof requestBodyItem];
+      const mediaTypeItem = requestBodyItem[contentType as keyof typeof requestBodyItem];
 
       if (!oas.isMediaType(mediaTypeItem)) {
         continue;
@@ -373,11 +329,8 @@ export class Document extends DocumentBase<oas.Schema20210928> {
     mediaTypeItem: oas.MediaType,
   ): models.Body {
     const schemaUri =
-      mediaTypeItem.schema == null
-        ? undefined
-        : appendToUriHash(mediaTypeUri, "schema");
-    const schemaId =
-      schemaUri == null ? schemaUri : normalizeUrl(schemaUri).toString();
+      mediaTypeItem.schema == null ? undefined : appendToUriHash(mediaTypeUri, "schema");
+    const schemaId = schemaUri == null ? schemaUri : normalizeUrl(schemaUri).toString();
 
     return {
       uri: mediaTypeUri,

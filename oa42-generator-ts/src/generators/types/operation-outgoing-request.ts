@@ -7,11 +7,7 @@ export function* generateOperationOutgoingRequestType(
   apiModel: models.Api,
   operationModel: models.Operation,
 ) {
-  const operationOutgoingRequestName = toPascal(
-    operationModel.name,
-    "outgoing",
-    "request",
-  );
+  const operationOutgoingRequestName = toPascal(operationModel.name, "outgoing", "request");
 
   yield itt`
     export type ${operationOutgoingRequestName} = ${joinIterable(
@@ -21,10 +17,7 @@ export function* generateOperationOutgoingRequestType(
   `;
 }
 
-function* generateRequestTypes(
-  apiModel: models.Api,
-  operationModel: models.Operation,
-) {
+function* generateRequestTypes(apiModel: models.Api, operationModel: models.Operation) {
   if (operationModel.bodies.length === 0) {
     yield* generateRequestBodies(apiModel, operationModel);
   }
@@ -39,11 +32,7 @@ function* generateRequestBodies(
   operationModel: models.Operation,
   bodyModel?: models.Body,
 ) {
-  const operationOutgoingParametersName = toPascal(
-    operationModel.name,
-    "request",
-    "parameters",
-  );
+  const operationOutgoingParametersName = toPascal(operationModel.name, "request", "parameters");
 
   if (bodyModel == null) {
     yield itt`
@@ -64,8 +53,7 @@ function* generateRequestBodies(
     }
     case "application/json": {
       const bodySchemaId = bodyModel.schemaId;
-      const bodyTypeName =
-        bodySchemaId == null ? bodySchemaId : apiModel.names[bodySchemaId];
+      const bodyTypeName = bodySchemaId == null ? bodySchemaId : apiModel.names[bodySchemaId];
 
       yield itt`
         lib.OutgoingJsonRequest<

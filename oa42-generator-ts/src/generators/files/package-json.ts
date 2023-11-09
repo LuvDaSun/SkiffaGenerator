@@ -22,11 +22,7 @@ export function generatePackageJsonData(name: string, version: string) {
     },
     author: "",
     license: "ISC",
-    dependencies: withDependencies([
-      "@types/node",
-      "goodrouter",
-      "@oa42/oa42-lib",
-    ]),
+    dependencies: withDependencies(["@types/node", "goodrouter", "@oa42/oa42-lib"]),
     devDependencies: withDependencies(["typescript"]),
   };
 

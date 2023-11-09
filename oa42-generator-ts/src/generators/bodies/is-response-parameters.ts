@@ -11,9 +11,7 @@ export function* generateIsResponseParametersFunctionBody(
   for (const parameterModel of parameterModels) {
     const parameterSchemaId = parameterModel.schemaId;
     const parameterTypeName =
-      parameterSchemaId == null
-        ? parameterSchemaId
-        : apiModel.names[parameterSchemaId];
+      parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
     if (parameterTypeName == null) {
       continue;
     }

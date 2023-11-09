@@ -12,19 +12,12 @@ export type OutgoingTextRequest<P extends object, C extends string> = {
   readonly contentType: C;
 } & OutgoingTextContainer;
 
-export type OutgoingTextResponseDefault<
-  S extends StatusCode,
-  P extends object,
-> = {
+export type OutgoingTextResponseDefault<S extends StatusCode, P extends object> = {
   readonly status: S;
   readonly parameters: P;
 } & OutgoingTextContainer;
 
-export type OutgoingTextResponse<
-  S extends StatusCode,
-  P extends object,
-  C extends string,
-> = {
+export type OutgoingTextResponse<S extends StatusCode, P extends object, C extends string> = {
   readonly status: S;
   readonly parameters: P;
   readonly contentType: C;
@@ -35,11 +28,7 @@ export type IncomingTextRequest<P extends object, C extends string> = {
   readonly contentType: C;
 } & IncomingTextContainer;
 
-export type IncomingTextResponse<
-  S extends StatusCode,
-  P extends object,
-  C extends string,
-> = {
+export type IncomingTextResponse<S extends StatusCode, P extends object, C extends string> = {
   readonly status: S;
   readonly parameters: P;
   readonly contentType: C;
@@ -73,9 +62,7 @@ export async function* serializeTextValue(
   yield encoder.encode(value);
 }
 
-export async function* serializeTextLines(
-  lines: AsyncIterable<string>,
-): AsyncIterable<Uint8Array> {
+export async function* serializeTextLines(lines: AsyncIterable<string>): AsyncIterable<Uint8Array> {
   const encoder = new TextEncoder();
 
   for await (const line of lines) {

@@ -7,15 +7,10 @@ export function selectSchemas(pointer: string, document: oas.Schema20210928) {
 
   function* selectFromDocument(pointer: string) {
     for (const [path, pathObject] of Object.entries(document.paths)) {
-      yield* selectFromPath(
-        appendToPointer(pointer, "paths", path),
-        pathObject,
-      );
+      yield* selectFromPath(appendToPointer(pointer, "paths", path), pathObject);
     }
 
-    for (const [schema, schemaObject] of Object.entries(
-      document.components?.schemas ?? {},
-    )) {
+    for (const [schema, schemaObject] of Object.entries(document.components?.schemas ?? {})) {
       yield* selectFromSchema(
         appendToPointer(pointer, "components", "schemas", schema),
         schemaObject,
@@ -31,9 +26,7 @@ export function selectSchemas(pointer: string, document: oas.Schema20210928) {
       );
     }
 
-    for (const [response, responseObject] of Object.entries(
-      document.components?.responses ?? {},
-    )) {
+    for (const [response, responseObject] of Object.entries(document.components?.responses ?? {})) {
       yield* selectFromResponse(
         appendToPointer(pointer, "components", "responses", response),
         responseObject,
@@ -49,9 +42,7 @@ export function selectSchemas(pointer: string, document: oas.Schema20210928) {
       );
     }
 
-    for (const [header, headerObject] of Object.entries(
-      document.components?.headers ?? {},
-    )) {
+    for (const [header, headerObject] of Object.entries(document.components?.headers ?? {})) {
       yield* selectFromHeader(
         appendToPointer(pointer, "components", "headers", header),
         headerObject,
@@ -68,9 +59,7 @@ export function selectSchemas(pointer: string, document: oas.Schema20210928) {
       return;
     }
 
-    for (const [parameter, parameterObject] of Object.entries(
-      pathObject.parameters ?? {},
-    )) {
+    for (const [parameter, parameterObject] of Object.entries(pathObject.parameters ?? {})) {
       yield* selectFromParameter(
         appendToPointer(pointer, "parameters", parameter),
         parameterObject,
@@ -80,10 +69,7 @@ export function selectSchemas(pointer: string, document: oas.Schema20210928) {
     for (const method of Object.values(methods)) {
       const operationObject = pathObject[method];
 
-      yield* selectFromOperation(
-        appendToPointer(pointer, method),
-        operationObject,
-      );
+      yield* selectFromOperation(appendToPointer(pointer, method), operationObject);
     }
   }
 
@@ -92,22 +78,15 @@ export function selectSchemas(pointer: string, document: oas.Schema20210928) {
       return;
     }
 
-    for (const [parameter, parameterObject] of Object.entries(
-      operationObject.parameters ?? [],
-    )) {
+    for (const [parameter, parameterObject] of Object.entries(operationObject.parameters ?? [])) {
       yield* selectFromParameter(
         appendToPointer(pointer, "parameters", parameter),
         parameterObject,
       );
     }
 
-    for (const [response, responseObject] of Object.entries(
-      operationObject.responses ?? {},
-    )) {
-      yield* selectFromResponse(
-        appendToPointer(pointer, "responses", response),
-        responseObject,
-      );
+    for (const [response, responseObject] of Object.entries(operationObject.responses ?? {})) {
+      yield* selectFromResponse(appendToPointer(pointer, "responses", response), responseObject);
     }
 
     if (operationObject.requestBody) {
@@ -126,9 +105,7 @@ export function selectSchemas(pointer: string, document: oas.Schema20210928) {
       return;
     }
 
-    for (const [contentType, contentObject] of Object.entries(
-      requestBodyObject.content,
-    )) {
+    for (const [contentType, contentObject] of Object.entries(requestBodyObject.content)) {
       yield* selectFromMediaTypeObject(
         appendToPointer(pointer, "content", contentType),
         contentObject,
@@ -144,16 +121,10 @@ export function selectSchemas(pointer: string, document: oas.Schema20210928) {
       return;
     }
 
-    yield* selectFromSchema(
-      appendToPointer(pointer, "schema"),
-      mediaTypeObject.schema,
-    );
+    yield* selectFromSchema(appendToPointer(pointer, "schema"), mediaTypeObject.schema);
   }
 
-  function* selectFromResponse(
-    responsePointer: string,
-    responseObject: unknown,
-  ) {
+  function* selectFromResponse(responsePointer: string, responseObject: unknown) {
     if (oas.isReference(responseObject)) {
       return;
     }
@@ -162,49 +133,30 @@ export function selectSchemas(pointer: string, document: oas.Schema20210928) {
       return;
     }
 
-    for (const [contentType, contentObject] of Object.entries(
-      responseObject.content ?? {},
-    )) {
+    for (const [contentType, contentObject] of Object.entries(responseObject.content ?? {})) {
       yield* selectFromSchema(
         appendToPointer(responsePointer, "content", contentType, "schema"),
         contentObject.schema,
       );
     }
 
-    for (const [header, headerObject] of Object.entries(
-      responseObject.headers ?? {},
-    )) {
-      yield* selectFromHeader(
-        appendToPointer(responsePointer, "headers", header),
-        headerObject,
-      );
+    for (const [header, headerObject] of Object.entries(responseObject.headers ?? {})) {
+      yield* selectFromHeader(appendToPointer(responsePointer, "headers", header), headerObject);
     }
   }
 
-  function* selectFromParameter(
-    pointer: string,
-    parameterObject: oas.Reference | oas.Parameter,
-  ) {
+  function* selectFromParameter(pointer: string, parameterObject: oas.Reference | oas.Parameter) {
     if (oas.isReference(parameterObject)) return;
 
-    yield* selectFromSchema(
-      appendToPointer(pointer, "schema"),
-      parameterObject.schema,
-    );
+    yield* selectFromSchema(appendToPointer(pointer, "schema"), parameterObject.schema);
   }
 
-  function* selectFromHeader(
-    headerPointer: string,
-    headerObject: oas.Reference | oas.Header,
-  ) {
+  function* selectFromHeader(headerPointer: string, headerObject: oas.Reference | oas.Header) {
     if (oas.isReference(headerObject)) {
       return;
     }
 
-    yield* selectFromSchema(
-      appendToPointer(headerPointer, "schema"),
-      headerObject.schema,
-    );
+    yield* selectFromSchema(appendToPointer(headerPointer, "schema"), headerObject.schema);
   }
 
   function* selectFromSchema(

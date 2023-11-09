@@ -22,14 +22,10 @@ export function* generateOperationResultParameterTypes(
       ${parameterModels.map((parameterModel) => {
         const parameterSchemaId = parameterModel.schemaId;
         const parameterTypeName =
-          parameterSchemaId == null
-            ? parameterSchemaId
-            : apiModel.names[parameterSchemaId];
+          parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
 
         return itt`
-          ${camelcase(parameterModel.name)}${
-            parameterModel.required ? "?" : ""
-          }:
+          ${camelcase(parameterModel.name)}${parameterModel.required ? "?" : ""}:
             ${parameterTypeName == null ? "unknown" : parameterTypeName}
         `;
       })}

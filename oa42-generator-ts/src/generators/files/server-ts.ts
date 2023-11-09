@@ -38,40 +38,25 @@ export function* generateServerTsCode(apiModel: models.Api) {
     const router = new Router({
       parameterValueDecoder: value => value,
       parameterValueEncoder: value => value,
-    }).loadFromJson(${JSON.stringify(
-      apiModel.router.saveToJson(RouterMode.Server),
-    )});
+    }).loadFromJson(${JSON.stringify(apiModel.router.saveToJson(RouterMode.Server))});
   `;
 
   yield* generateServerAuthenticationType(apiModel);
   yield* generateServerClass(apiModel);
 
   for (const authenticationModel of apiModel.authentication) {
-    const handlerTypeName = toPascal(
-      authenticationModel.name,
-      "authentication",
-      "handler",
-    );
+    const handlerTypeName = toPascal(authenticationModel.name, "authentication", "handler");
 
     yield itt`
       export type ${handlerTypeName}<A extends ServerAuthentication> =
-        (credential: string) => A[${JSON.stringify(
-          toCamel(authenticationModel.name),
-        )}];
+        (credential: string) => A[${JSON.stringify(toCamel(authenticationModel.name))}];
     `;
   }
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      const isAuthenticationFunctionName = toCamel(
-        "is",
-        operationModel.name,
-        "authentication",
-      );
-      const authenticationTypeName = toPascal(
-        operationModel.name,
-        "authentication",
-      );
+      const isAuthenticationFunctionName = toCamel("is", operationModel.name, "authentication");
+      const authenticationTypeName = toPascal(operationModel.name, "authentication");
 
       yield itt`
         export function ${isAuthenticationFunctionName}<A extends ServerAuthentication>(

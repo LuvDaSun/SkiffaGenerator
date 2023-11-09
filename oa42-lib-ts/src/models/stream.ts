@@ -13,20 +13,13 @@ export interface OutgoingStreamRequest<P extends object, C extends string> {
   stream(signal?: AbortSignal): AsyncIterable<Uint8Array>;
 }
 
-export interface OutgoingStreamResponseDefault<
-  S extends StatusCode,
-  P extends object,
-> {
+export interface OutgoingStreamResponseDefault<S extends StatusCode, P extends object> {
   readonly status: S;
   readonly parameters: P;
   stream(signal?: AbortSignal): AsyncIterable<Uint8Array>;
 }
 
-export interface OutgoingStreamResponse<
-  S extends StatusCode,
-  P extends object,
-  C extends string,
-> {
+export interface OutgoingStreamResponse<S extends StatusCode, P extends object, C extends string> {
   readonly status: S;
   readonly parameters: P;
   readonly contentType: C;
@@ -39,11 +32,7 @@ export interface IncomingStreamRequest<P extends object, C extends string> {
   stream(signal?: AbortSignal): AsyncIterable<Uint8Array>;
 }
 
-export interface IncomingStreamResponse<
-  S extends StatusCode,
-  P extends object,
-  C extends string,
-> {
+export interface IncomingStreamResponse<S extends StatusCode, P extends object, C extends string> {
   readonly status: S;
   readonly parameters: P;
   readonly contentType: C;

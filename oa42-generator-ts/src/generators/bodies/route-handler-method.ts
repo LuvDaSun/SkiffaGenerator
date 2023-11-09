@@ -9,36 +9,15 @@ export function* generateRouteHandlerMethodBody(
   apiModel: models.Api,
   operationModel: models.Operation,
 ) {
-  const operationHandlerName = toCamel(
-    operationModel.name,
-    "operation",
-    "handler",
-  );
+  const operationHandlerName = toCamel(operationModel.name, "operation", "handler");
 
-  const operationIncomingRequestName = toPascal(
-    operationModel.name,
-    "incoming",
-    "request",
-  );
+  const operationIncomingRequestName = toPascal(operationModel.name, "incoming", "request");
 
-  const requestParametersName = toPascal(
-    operationModel.name,
-    "request",
-    "parameters",
-  );
+  const requestParametersName = toPascal(operationModel.name, "request", "parameters");
 
-  const isRequestParametersFunction = toCamel(
-    "is",
-    operationModel.name,
-    "request",
-    "parameters",
-  );
+  const isRequestParametersFunction = toCamel("is", operationModel.name, "request", "parameters");
 
-  const isOperationAuthenticationName = toCamel(
-    "is",
-    operationModel.name,
-    "authentication",
-  );
+  const isOperationAuthenticationName = toCamel("is", operationModel.name, "authentication");
 
   const authenticationNames = Array.from(
     new Set(
@@ -109,33 +88,25 @@ export function* generateRouteHandlerMethodBody(
         ...operationModel.pathParameters.map(
           (parameterModel) => `
     ${toCamel(parameterModel.name)}: 
-      lib.getParameterValue(pathParameters, ${JSON.stringify(
-        parameterModel.name,
-      )}),
+      lib.getParameterValue(pathParameters, ${JSON.stringify(parameterModel.name)}),
     `,
         ),
         ...operationModel.headerParameters.map(
           (parameterModel) => `
     ${toCamel(parameterModel.name)}: 
-      lib.getParameterValue(serverIncomingRequest.headers, ${JSON.stringify(
-        parameterModel.name,
-      )}),
+      lib.getParameterValue(serverIncomingRequest.headers, ${JSON.stringify(parameterModel.name)}),
     `,
         ),
         ...operationModel.queryParameters.map(
           (parameterModel) => `
     ${toCamel(parameterModel.name)}: 
-      lib.getParameterValue(queryParameters, ${JSON.stringify(
-        parameterModel.name,
-      )}),
+      lib.getParameterValue(queryParameters, ${JSON.stringify(parameterModel.name)}),
     `,
         ),
         ...operationModel.cookieParameters.map(
           (parameterModel) => `
     ${toCamel(parameterModel.name)}: 
-      lib.getParameterValue(cookieParameters, ${JSON.stringify(
-        parameterModel.name,
-      )}),
+      lib.getParameterValue(cookieParameters, ${JSON.stringify(parameterModel.name)}),
     `,
         ),
       ]}
@@ -216,10 +187,7 @@ function* generateRequestContentTypeCodeCaseClauses(
   `;
 }
 
-function* generateRequestContentTypeCodeBody(
-  apiModel: models.Api,
-  bodyModel?: models.Body,
-) {
+function* generateRequestContentTypeCodeBody(apiModel: models.Api, bodyModel?: models.Body) {
   if (bodyModel == null) {
     yield itt`
       incomingRequest = {
@@ -252,10 +220,8 @@ function* generateRequestContentTypeCodeBody(
 
     case "application/json": {
       const bodySchemaId = bodyModel.schemaId;
-      const bodyTypeName =
-        bodySchemaId == null ? bodySchemaId : apiModel.names[bodySchemaId];
-      const isBodyTypeFunction =
-        bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
+      const bodyTypeName = bodySchemaId == null ? bodySchemaId : apiModel.names[bodySchemaId];
+      const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
 
       yield itt`
         const mapAssertEntity = (entity: unknown) => {
@@ -283,9 +249,7 @@ function* generateRequestContentTypeCodeBody(
             let entities = lib.deserializeJsonEntities(
               incomingRequest.stream,
               signal,
-            ) as AsyncIterable<${
-              bodyTypeName == null ? "unknown" : `shared.${bodyTypeName}`
-            }>;
+            ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `shared.${bodyTypeName}`}>;
             if(validateRequestEntity) {
               entities = lib.mapAsyncIterable(entities, mapAssertEntity);
             }
@@ -294,9 +258,7 @@ function* generateRequestContentTypeCodeBody(
           entity() {
             let entity = lib.deserializeJsonEntity(
               incomingRequest.stream
-            ) as Promise<${
-              bodyTypeName == null ? "unknown" : `shared.${bodyTypeName}`
-            }>;
+            ) as Promise<${bodyTypeName == null ? "unknown" : `shared.${bodyTypeName}`}>;
             if(validateRequestEntity) {
               entity = lib.mapPromisable(entity, mapAssertEntity);
             }
@@ -321,10 +283,7 @@ function* generateRequestContentTypeCodeBody(
   }
 }
 
-function* generateStatusCodeCaseClauses(
-  apiModel: models.Api,
-  operationModel: models.Operation,
-) {
+function* generateStatusCodeCaseClauses(apiModel: models.Api, operationModel: models.Operation) {
   for (const operationResultModel of operationModel.operationResults) {
     const statusCodes = [...operationResultModel.statusCodes];
     let statusCode;
@@ -334,11 +293,7 @@ function* generateStatusCodeCaseClauses(
       if (statusCodes.length === 0) {
         yield itt`
           {
-            ${generateOperationResultBody(
-              apiModel,
-              operationModel,
-              operationResultModel,
-            )}
+            ${generateOperationResultBody(apiModel, operationModel, operationResultModel)}
             break;
           }
         `;
@@ -412,10 +367,7 @@ function* generateOperationResultBody(
   } else {
     yield itt`
       switch(outgoingResponse.contentType) {
-        ${generateOperationResultContentTypeCaseClauses(
-          apiModel,
-          operationResultModel,
-        )}
+        ${generateOperationResultContentTypeCaseClauses(apiModel, operationResultModel)}
       }
     `;
   }
@@ -441,10 +393,7 @@ function* generateOperationResultContentTypeCaseClauses(
   `;
 }
 
-function* generateOperationResultContentTypeBody(
-  apiModel: models.Api,
-  bodyModel?: models.Body,
-) {
+function* generateOperationResultContentTypeBody(apiModel: models.Api, bodyModel?: models.Body) {
   if (bodyModel == null) {
     yield itt`
       serverOutgoingResponse = {
@@ -483,10 +432,8 @@ function* generateOperationResultContentTypeBody(
 
     case "application/json": {
       const bodySchemaId = bodyModel.schemaId;
-      const bodyTypeName =
-        bodySchemaId == null ? bodySchemaId : apiModel.names[bodySchemaId];
-      const isBodyTypeFunction =
-        bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
+      const bodyTypeName = bodySchemaId == null ? bodySchemaId : apiModel.names[bodySchemaId];
+      const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
 
       yield itt`
         const mapAssertEntity = (entity: unknown) => {
@@ -499,9 +446,7 @@ function* generateOperationResultContentTypeBody(
             }
           `
           }
-          return entity as ${
-            bodyTypeName == null ? "unknown" : `shared.${bodyTypeName}`
-          };
+          return entity as ${bodyTypeName == null ? "unknown" : `shared.${bodyTypeName}`};
         }
       `;
 
