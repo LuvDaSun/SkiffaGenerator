@@ -1,0 +1,36 @@
+on:
+  push:
+    branches:
+      - "*"
+    paths:
+      - fixtures/**
+      - oa42-generator-ts/**
+
+env:
+  NPM_CONFIG_WORKSPACE: oa42-generator-ts
+
+jobs:
+  test-unit:
+    runs-on: ubuntu-latest
+    container: node:20.9-alpine3.17
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+
+  test-lint:
+    runs-on: ubuntu-latest
+    container: node:20.9-alpine3.17
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci
+      - run: npm run lint
+
+  test-audit:
+    runs-on: ubuntu-latest
+    container: node:20.9-alpine3.17
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci
+      - run: npm audit --audit-level high
