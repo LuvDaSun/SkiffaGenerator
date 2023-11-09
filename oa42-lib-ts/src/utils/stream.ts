@@ -29,6 +29,7 @@ export async function* fromReadableStream(
   }
 
   const onAbort = () => stream.cancel();
+
   signal?.addEventListener("abort", onAbort);
   try {
     const reader = stream.getReader();
