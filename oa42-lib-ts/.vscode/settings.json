@@ -4,6 +4,6 @@
     "source.fixAll": true,
     "source.organizeImports": true
   },
-  "editor.rulers": [80],
+  "editor.rulers": [100],
   "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

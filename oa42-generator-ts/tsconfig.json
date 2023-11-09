@@ -1,17 +1,10 @@
 {
+  "extends": "@tsconfig/node20",
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "Node16",
-    "moduleResolution": "node16",
     "outDir": "./out",
     "rootDir": "./src",
     "sourceMap": true,
-    "declaration": true,
-    "importHelpers": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "experimentalDecorators": true
+    "declaration": true
   },
   "include": ["src/**/*"]
 }
