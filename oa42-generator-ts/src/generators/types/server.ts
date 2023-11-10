@@ -60,16 +60,8 @@ function* generateServerBody(apiModel: models.Api) {
       authenticationModel.name,
       "authentication",
     );
-    const handlerTypeName = toPascal(
-      authenticationModel.name,
-      "authentication",
-      "handler",
-    );
-    const handlerPropertyName = toCamel(
-      authenticationModel.name,
-      "authentication",
-      "handler",
-    );
+    const handlerTypeName = toPascal(authenticationModel.name, "authentication", "handler");
+    const handlerPropertyName = toCamel(authenticationModel.name, "authentication", "handler");
 
     // TODO add JsDoc
 
@@ -86,22 +78,10 @@ function* generateServerBody(apiModel: models.Api) {
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      const handlerPropertyName = toCamel(
-        operationModel.name,
-        "operation",
-        "handler",
-      );
-      const handlerTypeName = toPascal(
-        operationModel.name,
-        "operation",
-        "handler",
-      );
+      const handlerPropertyName = toCamel(operationModel.name, "operation", "handler");
+      const handlerTypeName = toPascal(operationModel.name, "operation", "handler");
 
-      const registerHandlerMethodName = toCamel(
-        "register",
-        operationModel.name,
-        "operation",
-      );
+      const registerHandlerMethodName = toCamel("register", operationModel.name, "operation");
 
       const routeHandlerName = toCamel(operationModel.name, "route", "handler");
 

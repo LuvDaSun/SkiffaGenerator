@@ -10,10 +10,7 @@ import {
   generateOperationResultParameterTypes,
 } from "../types/index.js";
 
-export function* getSharedTsCode(
-  factory: ts.NodeFactory,
-  apiModel: models.Api,
-) {
+export function* getSharedTsCode(factory: ts.NodeFactory, apiModel: models.Api) {
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
       const isRequestParametersFunctionName = toCamel(
@@ -23,11 +20,7 @@ export function* getSharedTsCode(
         "parameters",
       );
 
-      const requestParametersTypeName = toPascal(
-        operationModel.name,
-        "request",
-        "parameters",
-      );
+      const requestParametersTypeName = toPascal(operationModel.name, "request", "parameters");
 
       yield itt`
         export function ${isRequestParametersFunctionName}(
@@ -59,10 +52,7 @@ export function* getSharedTsCode(
           export function ${isResponseParametersFunctionName}(
             parameters: Partial<Record<keyof ${responseParametersTypeName}, unknown>>,
           ): parameters is ${responseParametersTypeName} {
-            ${generateIsResponseParametersFunctionBody(
-              apiModel,
-              operationResultModel,
-            )}
+            ${generateIsResponseParametersFunctionBody(apiModel, operationResultModel)}
           }
         `;
 
@@ -93,10 +83,7 @@ export function* getSharedTsCode(
   });
 
   const sourceFile = factory.createSourceFile(
-    [
-      ...typesCodeGenerator.getStatements(),
-      ...validatorsCodeGenerator.getStatements(),
-    ],
+    [...typesCodeGenerator.getStatements(), ...validatorsCodeGenerator.getStatements()],
     factory.createToken(ts.SyntaxKind.EndOfFileToken),
     ts.NodeFlags.None,
   );

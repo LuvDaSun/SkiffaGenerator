@@ -7,15 +7,9 @@ test("takeStatusCodes", async (t) => {
 
   assert.deepEqual([...takeStatusCodes(availableStatusCodes, "100")], [100]);
 
-  assert.deepEqual(
-    [...takeStatusCodes(availableStatusCodes, "2XX")],
-    [200, 201],
-  );
+  assert.deepEqual([...takeStatusCodes(availableStatusCodes, "2XX")], [200, 201]);
 
-  assert.deepEqual(
-    [...takeStatusCodes(availableStatusCodes, "default")],
-    [300, 400, 500],
-  );
+  assert.deepEqual([...takeStatusCodes(availableStatusCodes, "default")], [300, 400, 500]);
 
   assert.deepEqual([...availableStatusCodes], []);
 });

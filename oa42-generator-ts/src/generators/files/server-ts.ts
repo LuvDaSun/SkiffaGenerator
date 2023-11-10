@@ -21,16 +21,16 @@ export function* generateServerTsCode(apiModel: models.Api) {
 
   yield itt`
     export interface ServerOptions {
-      validateRequestEntity?: boolean;
-      validateResponseEntity?: boolean;
-      validateRequestParameters?: boolean;
-      validateResponseParameters?: boolean;
+      validateIncomingEntity?: boolean;
+      validateIncomingParameters?: boolean;
+      validateOutgoingEntity?: boolean;
+      validateOutgoingParameters?: boolean;
     }
     export const defaultServerOptions = {
-      validateRequestEntity: true,
-      validateResponseEntity: false,
-      validateRequestParameters: true,
-      validateResponseParameters: false,
+      validateIncomingEntity: true,
+      validateIncomingParameters: true,
+      validateOutgoingEntity: false,
+      validateOutgoingParameters: false,
     };
   `;
 
@@ -38,40 +38,25 @@ export function* generateServerTsCode(apiModel: models.Api) {
     const router = new Router({
       parameterValueDecoder: value => value,
       parameterValueEncoder: value => value,
-    }).loadFromJson(${JSON.stringify(
-      apiModel.router.saveToJson(RouterMode.Server),
-    )});
+    }).loadFromJson(${JSON.stringify(apiModel.router.saveToJson(RouterMode.Server))});
   `;
 
   yield* generateServerAuthenticationType(apiModel);
   yield* generateServerClass(apiModel);
 
   for (const authenticationModel of apiModel.authentication) {
-    const handlerTypeName = toPascal(
-      authenticationModel.name,
-      "authentication",
-      "handler",
-    );
+    const handlerTypeName = toPascal(authenticationModel.name, "authentication", "handler");
 
     yield itt`
       export type ${handlerTypeName}<A extends ServerAuthentication> =
-        (credential: string) => A[${JSON.stringify(
-          toCamel(authenticationModel.name),
-        )}];
+        (credential: string) => A[${JSON.stringify(toCamel(authenticationModel.name))}];
     `;
   }
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      const isAuthenticationFunctionName = toCamel(
-        "is",
-        operationModel.name,
-        "authentication",
-      );
-      const authenticationTypeName = toPascal(
-        operationModel.name,
-        "authentication",
-      );
+      const isAuthenticationFunctionName = toCamel("is", operationModel.name, "authentication");
+      const authenticationTypeName = toPascal(operationModel.name, "authentication");
 
       yield itt`
         export function ${isAuthenticationFunctionName}<A extends ServerAuthentication>(

@@ -1,12 +1,15 @@
 on:
   push:
     tags:
-      - v*
+      - oa42-lib-ts@*.*.*
+
+env:
+  NPM_CONFIG_WORKSPACE: oa42-lib-ts
 
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
-    container: node:18
+    container: node:20.9-alpine3.17
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
@@ -14,5 +17,5 @@ jobs:
       - run: echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> ~/.npmrc
       - run: npm ci
       - run: npm run build
-      - run: npm version $GITHUB_REF_NAME
+      - run: npm version $(echo ${GITHUB_REF_NAME} | perl -pe "s/^(.*?)@(.*)$/\2/"))
       - run: npm publish --access public

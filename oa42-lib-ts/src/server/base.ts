@@ -85,9 +85,7 @@ export abstract class ServerBase {
         const outgoingResponse = await this.routeHandler(incomingRequest);
 
         response.statusCode = outgoingResponse.status;
-        for (const [headerName, headerValue] of Object.entries(
-          outgoingResponse.headers,
-        )) {
+        for (const [headerName, headerValue] of Object.entries(outgoingResponse.headers)) {
           response.setHeader(headerName, headerValue);
         }
         if ("flushHeaders" in response) {
@@ -95,13 +93,9 @@ export abstract class ServerBase {
         }
 
         if (outgoingResponse.stream != null) {
-          for await (const chunk of outgoingResponse.stream(
-            abortController.signal,
-          )) {
+          for await (const chunk of outgoingResponse.stream(abortController.signal)) {
             await new Promise<void>((resolve, reject) =>
-              response.write(chunk, (error) =>
-                error ? reject(error) : resolve(),
-              ),
+              response.write(chunk, (error) => (error ? reject(error) : resolve())),
             );
           }
         }

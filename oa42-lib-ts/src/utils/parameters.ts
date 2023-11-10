@@ -6,9 +6,7 @@ export function parseParameters(
   separator = "&",
   assignment = "=",
 ): Parameters {
-  return parametersFromEntries(
-    parseParameterEntries(str, prefix, separator, assignment),
-  );
+  return parametersFromEntries(parseParameterEntries(str, prefix, separator, assignment));
 }
 
 export function stringifyParameters(
@@ -17,12 +15,7 @@ export function stringifyParameters(
   separator = "&",
   assignment = "=",
 ): string {
-  return stringifyParameterEntries(
-    parametersToEntries(parameters),
-    prefix,
-    separator,
-    assignment,
-  );
+  return stringifyParameterEntries(parametersToEntries(parameters), prefix, separator, assignment);
 }
 
 export function parseParameterEntries(
@@ -80,9 +73,7 @@ export function stringifyParameterEntries(
   return str;
 }
 
-export function parametersFromEntries(
-  iterable: Iterable<[string, string]>,
-): Parameters {
+export function parametersFromEntries(iterable: Iterable<[string, string]>): Parameters {
   const parameters = {} as Parameters;
   for (const [name, value] of iterable) {
     addParameter(parameters, name, value);
@@ -90,18 +81,13 @@ export function parametersFromEntries(
   return parameters;
 }
 
-export function* parametersToEntries(
-  parameters: Parameters,
-): Iterable<[string, string]> {
+export function* parametersToEntries(parameters: Parameters): Iterable<[string, string]> {
   for (const name of Object.keys(parameters)) {
     yield* getParameterValues(parameters, name).map((value) => [name, value]);
   }
 }
 
-export function getParameterValue(
-  parameters: Parameters,
-  name: string,
-): string | undefined {
+export function getParameterValue(parameters: Parameters, name: string): string | undefined {
   let value = parameters[name];
 
   if (parameters[name] == null) return;
@@ -115,10 +101,7 @@ export function getParameterValue(
   return value;
 }
 
-export function getParameterValues(
-  parameters: Parameters,
-  name: string,
-): string[] {
+export function getParameterValues(parameters: Parameters, name: string): string[] {
   let value = parameters[name];
 
   if (value == null) return [];
@@ -130,11 +113,7 @@ export function getParameterValues(
   return value;
 }
 
-export function addParameter(
-  parameters: Parameters,
-  name: string,
-  value: string,
-) {
+export function addParameter(parameters: Parameters, name: string, value: string) {
   if (parameters[name] == null) {
     parameters[name] = value;
   } else {

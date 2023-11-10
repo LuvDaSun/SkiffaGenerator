@@ -3,13 +3,8 @@ import { joinIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { toCamel, toPascal } from "../../utils/name.js";
 
-export function* generateOperationAuthenticationType(
-  operationModel: models.Operation,
-) {
-  const operationAuthenticationName = toPascal(
-    operationModel.name,
-    "authentication",
-  );
+export function* generateOperationAuthenticationType(operationModel: models.Operation) {
+  const operationAuthenticationName = toPascal(operationModel.name, "authentication");
 
   yield itt`
     export type ${operationAuthenticationName}<A extends ServerAuthentication> = 
@@ -22,9 +17,7 @@ export function* generateOperationAuthenticationType(
                     requirements.length > 0
                       ? joinIterable(
                           requirements.map((requirement) =>
-                            JSON.stringify(
-                              toCamel(requirement.authenticationName),
-                            ),
+                            JSON.stringify(toCamel(requirement.authenticationName)),
                           ),
                           "|",
                         )

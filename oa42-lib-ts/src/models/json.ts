@@ -13,21 +13,12 @@ export type OutgoingJsonRequest<P extends object, C extends string, T> = {
   readonly contentType: C;
 } & OutgoingJsonContainer<T>;
 
-export type OutgoingJsonResponseDefault<
-  S extends StatusCode,
-  P extends object,
-  T,
-> = {
+export type OutgoingJsonResponseDefault<S extends StatusCode, P extends object, T> = {
   readonly status: S;
   readonly parameters: P;
 } & OutgoingJsonContainer<T>;
 
-export type OutgoingJsonResponse<
-  S extends StatusCode,
-  P extends object,
-  C extends string,
-  T,
-> = {
+export type OutgoingJsonResponse<S extends StatusCode, P extends object, C extends string, T> = {
   readonly status: S;
   readonly parameters: P;
   readonly contentType: C;
@@ -38,12 +29,7 @@ export type IncomingJsonRequest<P extends object, C extends string, T> = {
   readonly contentType: C;
 } & IncomingJsonContainer<T>;
 
-export type IncomingJsonResponse<
-  S extends StatusCode,
-  P extends object,
-  C extends string,
-  T,
-> = {
+export type IncomingJsonResponse<S extends StatusCode, P extends object, C extends string, T> = {
   readonly status: S;
   readonly parameters: P;
   readonly contentType: C;

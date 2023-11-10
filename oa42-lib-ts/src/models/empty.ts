@@ -9,10 +9,7 @@ export interface OutgoingEmptyRequest<P extends object> {
   readonly contentType: null;
 }
 
-export interface OutgoingEmptyResponseDefault<
-  S extends StatusCode,
-  P extends object,
-> {
+export interface OutgoingEmptyResponseDefault<S extends StatusCode, P extends object> {
   readonly status: S;
   readonly parameters: P;
 }

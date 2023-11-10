@@ -1,11 +1,17 @@
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - "*"
+    paths:
+      - oa42-lib-ts/**
+
+env:
+  NPM_CONFIG_WORKSPACE: oa42-lib-ts
 
 jobs:
   test-unit:
     runs-on: ubuntu-latest
-    container: node:18
+    container: node:20.9-alpine3.17
     steps:
       - uses: actions/checkout@v3
       - run: npm ci
@@ -14,7 +20,7 @@ jobs:
 
   test-lint:
     runs-on: ubuntu-latest
-    container: node:18
+    container: node:20.9-alpine3.17
     steps:
       - uses: actions/checkout@v3
       - run: npm ci
@@ -30,7 +36,7 @@ jobs:
 
   test-audit:
     runs-on: ubuntu-latest
-    container: node:18
+    container: node:20.9-alpine3.17
     steps:
       - uses: actions/checkout@v3
       - run: npm ci

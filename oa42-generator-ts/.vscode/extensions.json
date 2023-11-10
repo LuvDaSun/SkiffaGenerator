@@ -1,8 +1,8 @@
 {
-	"recommendations": [
-		"ryanluker.vscode-coverage-gutters",
-		"esbenp.prettier-vscode",
-		"streetsidesoftware.code-spell-checker"
-	],
-	"unwantedRecommendations": []
+  "recommendations": [
+    "ryanluker.vscode-coverage-gutters",
+    "esbenp.prettier-vscode",
+    "streetsidesoftware.code-spell-checker"
+  ],
+  "unwantedRecommendations": []
 }
