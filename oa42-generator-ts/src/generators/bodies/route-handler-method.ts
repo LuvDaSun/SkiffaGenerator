@@ -29,10 +29,10 @@ export function* generateRouteHandlerMethodBody(
 
   yield itt`
     const { 
-      validateRequestEntity,
-      validateResponseEntity,
-      validateRequestParameters,
-      validateResponseParameters,
+      validateIncomingEntity,
+      validateIncomingParameters,
+      validateOutgoingEntity,
+      validateOutgoingParameters,
     } = this.options;
   `;
 
@@ -111,7 +111,7 @@ export function* generateRouteHandlerMethodBody(
         ),
       ]}
     } as unknown as shared.${requestParametersName};
-    if(validateRequestParameters) {
+    if(validateIncomingParameters) {
       if(!shared.${isRequestParametersFunction}(requestParameters)) {
         throw new lib.ServerRequestParameterValidationFailed();
       }
@@ -250,7 +250,7 @@ function* generateRequestContentTypeCodeBody(apiModel: models.Api, bodyModel?: m
               incomingRequest.stream,
               signal,
             ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `shared.${bodyTypeName}`}>;
-            if(validateRequestEntity) {
+            if(validateIncomingEntity) {
               entities = lib.mapAsyncIterable(entities, mapAssertEntity);
             }
             return entities;
@@ -259,7 +259,7 @@ function* generateRequestContentTypeCodeBody(apiModel: models.Api, bodyModel?: m
             let entity = lib.deserializeJsonEntity(
               incomingRequest.stream
             ) as Promise<${bodyTypeName == null ? "unknown" : `shared.${bodyTypeName}`}>;
-            if(validateRequestEntity) {
+            if(validateIncomingEntity) {
               entity = lib.mapPromisable(entity, mapAssertEntity);
             }
             return entity;
@@ -328,7 +328,7 @@ function* generateOperationResultBody(
   );
 
   yield itt`
-    if(validateResponseParameters) {
+    if(validateOutgoingParameters) {
       if(!shared.${isResponseParametersFunction}(outgoingResponse.parameters)) {
         throw new lib.ServerResponseParameterValidationFailed();
       }
@@ -461,14 +461,14 @@ function* generateOperationResultContentTypeBody(apiModel: models.Api, bodyModel
             }
             else if("entities" in outgoingResponse) {
               let entities = outgoingResponse.entities(signal);
-              if(validateResponseEntity) {
+              if(validateOutgoingEntity) {
                 entities = lib.mapAsyncIterable(entities, mapAssertEntity);
               }
               return lib.serializeJsonEntities(outgoingResponse.entities(signal));
             }
             else if("entity" in outgoingResponse) {
               let entity = outgoingResponse.entity();
-              if(validateResponseEntity) {
+              if(validateOutgoingEntity) {
                 entity = lib.mapPromisable(entity, mapAssertEntity);
               }
               return lib.serializeJsonEntity(entity);

@@ -18,17 +18,17 @@ export function* generateClientTsCode(apiModel: models.Api) {
   yield itt`
     export interface ClientOptions {
       baseUrl?: URL;
-      validateRequestEntity?: boolean;
-      validateResponseEntity?: boolean;
-      validateRequestParameters?: boolean;
-      validateResponseParameters?: boolean;
+      validateIncomingEntity?: boolean;
+      validateIncomingParameters?: boolean;
+      validateOutgoingEntity?: boolean;
+      validateOutgoingParameters?: boolean;
     }
 
     export const defaultClientOptions = {
-      validateRequestEntity: false,
-      validateResponseEntity: true,
-      validateRequestParameters: false,
-      validateResponseParameters: true,
+      validateIncomingEntity: true,
+      validateIncomingParameters: true,
+      validateOutgoingEntity: false,
+      validateOutgoingParameters: false,
     };
   `;
 
