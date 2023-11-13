@@ -3,19 +3,10 @@ on:
     tags:
       - ts:oa42-generator@*.*.*
 
-env:
-  NPM_CONFIG_WORKSPACE: oa42-generator
-
 jobs:
-  publish-npm:
-    runs-on: ubuntu-latest
-    container: node:20.9-alpine3.17
-    env:
+  publish:
+    uses: ./.github/workflows/publish-ts.yaml
+    with:
+      NPM_CONFIG_WORKSPACE: oa42-generator
+    secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-    steps:
-      - uses: actions/checkout@v3
-      - run: echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> ~/.npmrc
-      - run: npm ci
-      - run: npm run build
-      - run: npm version $(echo ${GITHUB_REF_NAME} | perl -pe "s/^(.*?)@(.*)$/\2/"))
-      - run: npm publish --access public
