@@ -1,4 +1,4 @@
-import { Method } from "@oa42/oa42-lib";
+import { Method } from "oa42-lib";
 import { AuthenticationRequirement } from "./authentication-requirement.js";
 import { Body } from "./body.js";
 import { OperationResult } from "./operation-result.js";

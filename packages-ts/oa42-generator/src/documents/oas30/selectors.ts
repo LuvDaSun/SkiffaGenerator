@@ -1,5 +1,5 @@
 import * as oas from "@jns42/jns42-schema-oas-v3-0";
-import { methods } from "@oa42/oa42-lib";
+import { methods } from "oa42-lib";
 import { appendToPointer } from "../../utils/pointer.js";
 
 export function selectSchemas(pointer: string, document: oas.Schema20210928) {

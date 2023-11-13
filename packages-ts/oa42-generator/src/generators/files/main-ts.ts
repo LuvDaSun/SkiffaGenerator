@@ -7,7 +7,7 @@ import { itt } from "../../utils/iterable-text-template.js";
  */
 export function* generateMainTsCode(apiModel: models.Api) {
   yield itt`
-    export * from "@oa42/oa42-lib";
+    export * from "oa42-lib";
     export * from "./shared.js";
     export * from "./client.js";
     export * from "./server.js";

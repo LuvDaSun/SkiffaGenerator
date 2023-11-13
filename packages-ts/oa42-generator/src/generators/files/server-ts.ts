@@ -16,7 +16,7 @@ export function* generateServerTsCode(apiModel: models.Api) {
   yield itt`
     import { Router } from "goodrouter";
     import * as shared from "./shared.js";
-    import * as lib from "@oa42/oa42-lib";
+    import * as lib from "oa42-lib";
   `;
 
   yield itt`

@@ -1,4 +1,4 @@
-import { StatusCode } from "@oa42/oa42-lib";
+import { StatusCode } from "oa42-lib";
 
 export function isStatusCode(statusKind: string) {
   return /[1-5][0-9][0-9]/.test(statusKind);
