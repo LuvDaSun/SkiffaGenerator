@@ -1,10 +1,10 @@
 on:
   push:
     tags:
-      - oa42-generator-ts@*.*.*
+      - ts:oa42-lib@*.*.*
 
 env:
-  NPM_CONFIG_WORKSPACE: oa42-generator-ts
+  NPM_CONFIG_WORKSPACE: oa42-lib
 
 jobs:
   publish-npm:

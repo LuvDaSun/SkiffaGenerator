@@ -40,7 +40,7 @@
       "program": "${workspaceFolder}/src/program.ts",
       "args": [
         "package",
-        "../fixtures/specifications/docker.yaml",
+        "../../fixtures/specifications/docker.yaml",
         "--package-directory",
         ".package/specifications/docker",
         "--package-name",
@@ -60,7 +60,7 @@
       "program": "${workspaceFolder}/src/program.ts",
       "args": [
         "package",
-        "../fixtures/specifications/github.json",
+        "../../fixtures/specifications/github.json",
         "--package-directory",
         ".package/specifications/github",
         "--package-name",
@@ -80,7 +80,7 @@
       "program": "${workspaceFolder}/src/program.ts",
       "args": [
         "package",
-        "../fixtures/specifications/petstore.yaml",
+        "../../fixtures/specifications/petstore.yaml",
         "--package-directory",
         ".package/specifications/petstore",
         "--package-name",

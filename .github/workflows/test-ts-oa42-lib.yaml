@@ -3,11 +3,11 @@ on:
     branches:
       - "*"
     paths:
-      - fixtures/**
-      - oa42-generator-ts/**
+      - .github/**
+      - packages-ts/oa42-lib/**
 
 env:
-  NPM_CONFIG_WORKSPACE: oa42-generator-ts
+  NPM_CONFIG_WORKSPACE: oa42-lib
 
 jobs:
   test-unit:
