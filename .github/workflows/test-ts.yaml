@@ -6,10 +6,10 @@ on:
         type: string
 
 env:
-  NPM_CONFIG_WORKSPACE: ${ inputs.NPM_CONFIG_WORKSPACE }
+  NPM_CONFIG_WORKSPACE: ${{ inputs.NPM_CONFIG_WORKSPACE }}
 
 jobs:
-  test-unit:
+  unit:
     runs-on: ubuntu-latest
     container: node:20.9-alpine3.17
     steps:
@@ -18,7 +18,7 @@ jobs:
       - run: npm run build
       - run: npm test
 
-  test-lint:
+  lint:
     runs-on: ubuntu-latest
     container: node:20.9-alpine3.17
     steps:
@@ -26,7 +26,7 @@ jobs:
       - run: npm ci
       - run: npm run lint
 
-  test-spelling:
+  spelling:
     runs-on: ubuntu-latest
     container: node:18
     steps:
@@ -34,7 +34,7 @@ jobs:
       - run: npm ci
       - run: npm run spelling
 
-  test-audit:
+  audit:
     runs-on: ubuntu-latest
     container: node:20.9-alpine3.17
     steps:
