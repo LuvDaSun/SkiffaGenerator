@@ -2,7 +2,7 @@
   "folders": [
     {
       "name": "fixtures",
-      "path": "../fixtures"
+      "path": "../../fixtures"
     },
     {
       "name": "oa42-lib",
@@ -14,7 +14,7 @@
     }
   ],
   "settings": {
-    "typescript.tsdk": "../node_modules/typescript/lib",
+    "typescript.tsdk": "../../node_modules/typescript/lib",
     "window.title": "OpenApi42 (TS)"
   }
 }
