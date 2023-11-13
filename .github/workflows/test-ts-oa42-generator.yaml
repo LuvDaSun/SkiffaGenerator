@@ -10,6 +10,6 @@ on:
 
 jobs:
   test:
-    uses: ./.github/workflows/tes-ts.yaml
+    uses: ./.github/workflows/test-ts.yaml
     with:
       NPM_CONFIG_WORKSPACE: oa42-generator
