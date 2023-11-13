@@ -1,0 +1,15 @@
+on:
+  push:
+    branches:
+      - "*"
+    paths:
+      - "*"
+      - .github/**
+      - fixtures/**
+      - packages/ts/oa42-generator/**
+
+jobs:
+  test:
+    uses: ./.github/workflows/test-ts.yaml
+    with:
+      NPM_CONFIG_WORKSPACE: oa42-generator

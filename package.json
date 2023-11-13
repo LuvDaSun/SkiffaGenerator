@@ -1,8 +1,7 @@
 {
   "private": true,
   "workspaces": [
-    "oa42-lib-ts",
-    "oa42-generator-ts",
-    "jns42-generator-ts"
+    "packages/ts/oa42-lib",
+    "packages/ts/oa42-generator"
   ]
 }

@@ -1,4 +1,4 @@
-import { StatusCode } from "@oa42/oa42-lib";
+import { StatusCode } from "oa42-lib";
 import { Body } from "./body.js";
 import { Parameter } from "./parameter.js";
 

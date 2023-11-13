@@ -1,17 +1,21 @@
 on:
-  push:
-    tags:
-      - oa42-lib-ts@*.*.*
+  workflow_call:
+    inputs:
+      NPM_CONFIG_WORKSPACE:
+        required: true
+        type: string
+    secrets:
+      NPM_TOKEN:
+        required: true
 
 env:
-  NPM_CONFIG_WORKSPACE: oa42-lib-ts
+  NPM_CONFIG_WORKSPACE: ${{ inputs.NPM_CONFIG_WORKSPACE }}
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
 jobs:
-  publish-npm:
+  npm:
     runs-on: ubuntu-latest
     container: node:20.9-alpine3.17
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - uses: actions/checkout@v3
       - run: echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> ~/.npmrc
