@@ -13,7 +13,7 @@
   "scripts": {
     "build": "tsc --build && chmod +x out/program.js",
     "clean": "rm -rf out",
-    "test": "node --test ./out/*.spec.js ./out/*/*.spec.js",
+    "test": "node --test ./out/**/*.spec.js",
     "lint": "prettier --check *",
     "spelling": "cspell ."
   },
