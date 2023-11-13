@@ -5,7 +5,7 @@ on:
     paths:
       - "*"
       - .github/**
-      - packages-ts/oa42-lib/**
+      - packages/ts/oa42-lib/**
 
 jobs:
   test:

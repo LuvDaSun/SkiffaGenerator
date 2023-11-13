@@ -6,7 +6,7 @@ on:
       - "*"
       - .github/**
       - fixtures/**
-      - packages-ts/oa42-generator/**
+      - packages/ts/oa42-generator/**
 
 jobs:
   test:

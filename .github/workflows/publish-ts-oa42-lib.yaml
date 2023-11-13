@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-      - ts:oa42-lib@*.*.*
+      - ts/oa42-lib@*.*.*
 
 jobs:
   publish:

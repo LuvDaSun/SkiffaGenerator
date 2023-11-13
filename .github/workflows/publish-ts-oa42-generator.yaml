@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-      - ts:oa42-generator@*.*.*
+      - ts/oa42-generator@*.*.*
 
 jobs:
   publish:
