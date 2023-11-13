@@ -3,6 +3,7 @@ on:
     branches:
       - "*"
     paths:
+      - "*"
       - .github/**
       - fixtures/**
       - packages-ts/oa42-generator/**

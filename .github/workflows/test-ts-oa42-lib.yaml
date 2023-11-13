@@ -3,6 +3,7 @@ on:
     branches:
       - "*"
     paths:
+      - "*"
       - .github/**
       - packages-ts/oa42-lib/**
 
