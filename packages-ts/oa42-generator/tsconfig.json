@@ -9,5 +9,5 @@
     "lib": ["es2023", "DOM"]
   },
   "include": ["src/**/*"],
-  "references": [{ "path": "../oa42-lib-ts" }]
+  "references": [{ "path": "../oa42-lib" }]
 }
