@@ -1,5 +1,4 @@
 import * as jns42generator from "jns42-generator";
-import ts from "typescript";
 import * as models from "../../models/index.js";
 import { toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
@@ -10,7 +9,7 @@ import {
   generateOperationResultParameterTypes,
 } from "../types/index.js";
 
-export function* getSharedTsCode(factory: ts.NodeFactory, apiModel: models.Api) {
+export function* getSharedTsCode(apiModel: models.Api) {
   const specification = {
     names: apiModel.names,
     nodes: apiModel.schemas,

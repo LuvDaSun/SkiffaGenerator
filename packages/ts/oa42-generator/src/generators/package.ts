@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import ts from "typescript";
 import * as models from "../models/index.js";
 import { NestedText, flattenNestedText } from "../utils/index.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
@@ -17,11 +16,7 @@ export interface PackageOptions {
   directoryPath: string;
 }
 
-export async function generatePackage(
-  factory: ts.NodeFactory,
-  apiModel: models.Api,
-  options: PackageOptions,
-) {
+export async function generatePackage(apiModel: models.Api, options: PackageOptions) {
   fs.mkdirSync(options.directoryPath, { recursive: true });
 
   {
@@ -49,7 +44,7 @@ export async function generatePackage(
   }
 
   {
-    const code = generateSharedTsCode(factory, apiModel);
+    const code = generateSharedTsCode(apiModel);
     const filePath = path.join(options.directoryPath, "shared.ts");
     writeCodeToFile(filePath, code);
   }

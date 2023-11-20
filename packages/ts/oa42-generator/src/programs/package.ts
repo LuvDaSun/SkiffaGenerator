@@ -1,5 +1,4 @@
 import * as path from "path";
-import ts from "typescript";
 import * as yargs from "yargs";
 import { DocumentContext } from "../documents/document-context.js";
 import * as oas30 from "../documents/oas30/index.js";
@@ -75,7 +74,7 @@ async function main(options: MainOptions) {
 
   // generate code
 
-  await generatePackage(ts.factory, apiModel, {
+  await generatePackage(apiModel, {
     directoryPath: packageDirectoryPath,
     name: packageName,
     version: packageVersion,
