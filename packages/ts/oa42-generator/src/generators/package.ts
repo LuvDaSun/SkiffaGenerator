@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import ts from "typescript";
 import * as models from "../models/index.js";
-import { formatCode, formatData } from "../utils/index.js";
+import { NestedText, flattenNestedText } from "../utils/index.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
 import { generateClientTsCode } from "./files/client-ts.js";
 import { generateMainTsCode } from "./files/main-ts.js";
@@ -27,42 +27,50 @@ export async function generatePackage(
   {
     const data = generatePackageJsonData(options.name, options.version);
     const filePath = path.join(options.directoryPath, "package.json");
-    fs.writeFileSync(filePath, formatData(data));
+    fs.writeFileSync(filePath, JSON.stringify(data));
   }
 
   {
     const data = generateTsconfigJsonData();
     const filePath = path.join(options.directoryPath, "tsconfig.json");
-    fs.writeFileSync(filePath, formatData(data));
+    fs.writeFileSync(filePath, JSON.stringify(data));
   }
 
   {
     const code = generateMainTsCode(apiModel);
     const filePath = path.join(options.directoryPath, "main.ts");
-    fs.writeFileSync(filePath, await formatCode(code));
+    writeCodeToFile(filePath, code);
   }
 
   {
     const code = generateBrowserTsCode(apiModel);
     const filePath = path.join(options.directoryPath, "browser.ts");
-    fs.writeFileSync(filePath, await formatCode(code));
+    writeCodeToFile(filePath, code);
   }
 
   {
     const code = generateSharedTsCode(factory, apiModel);
     const filePath = path.join(options.directoryPath, "shared.ts");
-    fs.writeFileSync(filePath, await formatCode(code));
+    writeCodeToFile(filePath, code);
   }
 
   {
     const code = generateClientTsCode(apiModel);
     const filePath = path.join(options.directoryPath, "client.ts");
-    fs.writeFileSync(filePath, await formatCode(code));
+    writeCodeToFile(filePath, code);
   }
 
   {
     const code = generateServerTsCode(apiModel);
     const filePath = path.join(options.directoryPath, "server.ts");
-    fs.writeFileSync(filePath, await formatCode(code));
+    writeCodeToFile(filePath, code);
   }
+}
+
+function writeCodeToFile(filePath: string, code: NestedText) {
+  const fd = fs.openSync(filePath, "w");
+  for (const text of flattenNestedText(code)) {
+    fs.writeFileSync(fd, text);
+  }
+  fs.closeSync(fd);
 }

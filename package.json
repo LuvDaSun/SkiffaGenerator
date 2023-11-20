@@ -3,5 +3,10 @@
   "workspaces": [
     "packages/ts/oa42-lib",
     "packages/ts/oa42-generator"
-  ]
+  ],
+  "devDependencies": {
+    "cspell": "^8.0.0",
+    "prettier": "^3.1.0",
+    "typescript": "^5.2.2"
+  }
 }

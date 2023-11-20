@@ -1,5 +1,5 @@
 export * from "./async.js";
-export * from "./format.js";
+export * from "./banner.js";
 export * from "./functional.js";
 export * from "./iterable-text-template.js";
 export * from "./load.js";
