@@ -64,7 +64,10 @@ export function generatePackage(apiModel: models.Api, options: PackageOptions) {
 
 function writeCodeToFile(filePath: string, code: NestedText) {
   const fd = fs.openSync(filePath, "w");
+
   fs.writeFileSync(fd, banner);
+  fs.writeFileSync(fd, "\n\n");
+
   for (const text of flattenNestedText(code)) {
     fs.writeFileSync(fd, text);
   }
