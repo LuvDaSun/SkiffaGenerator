@@ -1,6 +1,6 @@
 export * from "./browser-ts.js";
 export * from "./client-ts.js";
-export * from "./main-spec-ts.js";
+export * from "./main-test-ts.js";
 export * from "./main-ts.js";
 export * from "./package-json.js";
 export * from "./server-ts.js";

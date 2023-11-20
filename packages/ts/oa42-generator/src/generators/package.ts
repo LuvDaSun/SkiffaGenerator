@@ -5,6 +5,7 @@ import * as models from "../models/index.js";
 import { NestedText, flattenNestedText } from "../utils/index.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
 import { generateClientTsCode } from "./files/client-ts.js";
+import { generateMainTestTsCode } from "./files/main-test-ts.js";
 import { generateMainTsCode } from "./files/main-ts.js";
 import { generatePackageJsonData } from "./files/package-json.js";
 import { generateServerTsCode } from "./files/server-ts.js";
@@ -76,6 +77,12 @@ export function generatePackage(apiModel: models.Api, options: PackageOptions) {
   {
     const code = generateServerTsCode(apiModel);
     const filePath = path.join(options.directoryPath, "server.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
+    const code = generateMainTestTsCode(apiModel);
+    const filePath = path.join(options.directoryPath, "main.test.ts");
     writeCodeToFile(filePath, code);
   }
 }

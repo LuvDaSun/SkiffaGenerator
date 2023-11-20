@@ -30,7 +30,7 @@ export function generatePackageJsonData(name: string, version: string) {
     },
     scripts: {
       prepare: "tsc",
-      test: "node --test ./*.spec.js",
+      test: "node --test ./*.test.js",
     },
     author: "",
     license: "ISC",
