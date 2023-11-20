@@ -4,6 +4,10 @@
     "packages/ts/oa42-lib",
     "packages/ts/oa42-generator"
   ],
+  "scripts": {
+    "spelling": "cspell",
+    "formatting": "prettier --check *"
+  },
   "devDependencies": {
     "cspell": "^8.0.0",
     "prettier": "^3.1.0"
