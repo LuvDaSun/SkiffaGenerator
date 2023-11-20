@@ -1,4 +1,3 @@
-import * as jns42generator from "jns42-generator";
 import * as models from "../../models/index.js";
 import { toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
@@ -10,13 +9,6 @@ import {
 } from "../types/index.js";
 
 export function* getSharedTsCode(apiModel: models.Api) {
-  const specification = {
-    names: apiModel.names,
-    nodes: apiModel.schemas,
-  };
-  yield* jns42generator.generateTypes(specification);
-  yield* jns42generator.generateValidators(specification);
-
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
       const isRequestParametersFunctionName = toCamel(

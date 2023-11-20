@@ -7,6 +7,8 @@ import { itt } from "../../utils/index.js";
 export function* generateBrowserTsCode(apiModel: models.Api) {
   yield itt`
     export * from "./shared.js";
+    export * from "./types.js";
+    export * from "./validators.js";
     export * from "./client.js";
   `;
 }

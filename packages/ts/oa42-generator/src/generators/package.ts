@@ -1,4 +1,5 @@
 import fs from "fs";
+import * as jns42generator from "jns42-generator";
 import path from "path";
 import * as models from "../models/index.js";
 import { NestedText, banner, flattenNestedText } from "../utils/index.js";
@@ -19,16 +20,21 @@ export interface PackageOptions {
 export function generatePackage(apiModel: models.Api, options: PackageOptions) {
   fs.mkdirSync(options.directoryPath, { recursive: true });
 
+  const specification = {
+    names: apiModel.names,
+    nodes: apiModel.schemas,
+  };
+
   {
     const data = generatePackageJsonData(options.name, options.version);
     const filePath = path.join(options.directoryPath, "package.json");
-    fs.writeFileSync(filePath, JSON.stringify(data));
+    fs.writeFileSync(filePath, JSON.stringify(data, undefined, 2));
   }
 
   {
     const data = generateTsconfigJsonData();
     const filePath = path.join(options.directoryPath, "tsconfig.json");
-    fs.writeFileSync(filePath, JSON.stringify(data));
+    fs.writeFileSync(filePath, JSON.stringify(data, undefined, 2));
   }
 
   {
@@ -46,6 +52,18 @@ export function generatePackage(apiModel: models.Api, options: PackageOptions) {
   {
     const code = generateSharedTsCode(apiModel);
     const filePath = path.join(options.directoryPath, "shared.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
+    const code = jns42generator.generateTypesTs(specification);
+    const filePath = path.join(options.directoryPath, "types.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
+    const code = jns42generator.generateValidatorsTs(specification);
+    const filePath = path.join(options.directoryPath, "validators.ts");
     writeCodeToFile(filePath, code);
   }
 

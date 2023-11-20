@@ -30,7 +30,7 @@ export function* generateIsResponseParametersFunctionBody(
 
     yield itt`
       if(
-        !${isParameterFunction}(
+        !validators.${isParameterFunction}(
           parameters.${parameterPropertyName}
         ) === undefined
       ) {

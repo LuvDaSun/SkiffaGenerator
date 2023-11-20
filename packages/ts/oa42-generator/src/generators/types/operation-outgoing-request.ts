@@ -59,7 +59,7 @@ function* generateRequestBodies(
         lib.OutgoingJsonRequest<
           shared.${operationOutgoingParametersName},
           ${JSON.stringify(bodyModel.contentType)},
-          ${bodyTypeName == null ? "unknown" : itt`shared.${bodyTypeName}`}
+          ${bodyTypeName == null ? "unknown" : itt`types.${bodyTypeName}`}
         >
       `;
       break;
