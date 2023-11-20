@@ -1,6 +1,0 @@
-{
-  "version": "0.2",
-  "words": [],
-  "useGitignore": true,
-  "files": ["packages/ts/oa42-generator/src/**", "packages/ts/oa42-lib/src/**"],
-}
