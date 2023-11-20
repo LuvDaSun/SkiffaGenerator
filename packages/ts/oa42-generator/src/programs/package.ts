@@ -74,7 +74,7 @@ async function main(options: MainOptions) {
 
   // generate code
 
-  await generatePackage(apiModel, {
+  generatePackage(apiModel, {
     directoryPath: packageDirectoryPath,
     name: packageName,
     version: packageVersion,

@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import * as models from "../models/index.js";
-import { NestedText, flattenNestedText } from "../utils/index.js";
+import { NestedText, banner, flattenNestedText } from "../utils/index.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
 import { generateClientTsCode } from "./files/client-ts.js";
 import { generateMainTsCode } from "./files/main-ts.js";
@@ -16,7 +16,7 @@ export interface PackageOptions {
   directoryPath: string;
 }
 
-export async function generatePackage(apiModel: models.Api, options: PackageOptions) {
+export function generatePackage(apiModel: models.Api, options: PackageOptions) {
   fs.mkdirSync(options.directoryPath, { recursive: true });
 
   {
@@ -64,6 +64,7 @@ export async function generatePackage(apiModel: models.Api, options: PackageOpti
 
 function writeCodeToFile(filePath: string, code: NestedText) {
   const fd = fs.openSync(filePath, "w");
+  fs.writeFileSync(fd, banner);
   for (const text of flattenNestedText(code)) {
     fs.writeFileSync(fd, text);
   }
