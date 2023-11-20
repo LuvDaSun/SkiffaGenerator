@@ -2,7 +2,7 @@ import fs from "fs";
 import * as jns42generator from "jns42-generator";
 import path from "path";
 import * as models from "../models/index.js";
-import { NestedText, banner, flattenNestedText } from "../utils/index.js";
+import { NestedText, flattenNestedText } from "../utils/index.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
 import { generateClientTsCode } from "./files/client-ts.js";
 import { generateMainTsCode } from "./files/main-ts.js";
@@ -83,11 +83,11 @@ export function generatePackage(apiModel: models.Api, options: PackageOptions) {
 function writeCodeToFile(filePath: string, code: NestedText) {
   const fd = fs.openSync(filePath, "w");
 
-  fs.writeFileSync(fd, banner);
-  fs.writeFileSync(fd, "\n\n");
-
-  for (const text of flattenNestedText(code)) {
-    fs.writeFileSync(fd, text);
+  try {
+    for (const text of flattenNestedText(code)) {
+      fs.writeFileSync(fd, text);
+    }
+  } finally {
+    fs.closeSync(fd);
   }
-  fs.closeSync(fd);
 }

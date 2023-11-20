@@ -1,6 +1,6 @@
 import { RouterMode } from "goodrouter";
 import * as models from "../../models/index.js";
-import { toCamel, toPascal } from "../../utils/index.js";
+import { banner, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateIsAuthenticationFunctionBody } from "../bodies/index.js";
 import {
@@ -13,6 +13,8 @@ import {
 } from "../types/index.js";
 
 export function* generateServerTsCode(apiModel: models.Api) {
+  yield banner;
+
   yield itt`
     import { Router } from "goodrouter";
     import * as shared from "./shared.js";

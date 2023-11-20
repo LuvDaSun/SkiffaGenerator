@@ -1,5 +1,5 @@
 import * as models from "../../models/index.js";
-import { toCamel, toPascal } from "../../utils/index.js";
+import { banner, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateIsRequestParametersFunctionBody } from "../bodies/index.js";
 import { generateIsResponseParametersFunctionBody } from "../bodies/is-response-parameters.js";
@@ -9,6 +9,8 @@ import {
 } from "../types/index.js";
 
 export function* getSharedTsCode(apiModel: models.Api) {
+  yield banner;
+
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
       const isRequestParametersFunctionName = toCamel(

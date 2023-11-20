@@ -15,6 +15,18 @@ export function generatePackageJsonData(name: string, version: string) {
         default: "./main.js",
         browser: "./browser.js",
       },
+      "./types": {
+        default: "./types.js",
+      },
+      "./validators": {
+        default: "./validators.js",
+      },
+      "./client": {
+        default: "./client.js",
+      },
+      "./server": {
+        default: "./server.js",
+      },
     },
     scripts: {
       prepare: "tsc",
