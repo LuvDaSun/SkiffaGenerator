@@ -1,4 +1,5 @@
 import prettier from "prettier";
+import { packageInfo } from "../utils/index.js";
 import { NestedText, flattenNestedText } from "./iterable-text-template.js";
 
 export function formatData(content: unknown) {
@@ -15,7 +16,7 @@ export async function formatCode(nestedCode: NestedText) {
 //  ██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██╔══██║██╔═══╝ ██║╚════██║██╔═══╝ 
 //  ╚██████╔╝██║     ███████╗██║ ╚████║██║  ██║██║     ██║     ██║███████╗
 //   ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝     ╚═╝     ╚═╝╚══════╝
-//                                                    -- www.OpenApi42.org
+//   v${(packageInfo.version ?? "").padEnd(47, " ")} -- www.OpenApi42.org
 `.trim();
 
   const code = [...flattenNestedText(nestedCode)].join("");
