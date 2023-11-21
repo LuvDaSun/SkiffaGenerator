@@ -1,5 +1,5 @@
 import * as models from "../../models/index.js";
-import { itt } from "../../utils/iterable-text-template.js";
+import { itt } from "../../utils/index.js";
 
 export function* generateIsAuthenticationFunctionBody(
   pathModel: models.Path,

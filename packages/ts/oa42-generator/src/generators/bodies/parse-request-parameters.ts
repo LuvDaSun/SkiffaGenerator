@@ -1,6 +1,5 @@
 import * as models from "../../models/index.js";
-import { toCamel, toPascal } from "../../utils/index.js";
-import { itt } from "../../utils/iterable-text-template.js";
+import { itt, toCamel, toPascal } from "../../utils/index.js";
 
 export function* generateParseRequestParametersFunctionBody(
   apiModel: models.Api,
