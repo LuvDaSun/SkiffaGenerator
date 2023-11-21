@@ -69,6 +69,12 @@ export function generatePackage(apiModel: models.Api, options: PackageOptions) {
   }
 
   {
+    const code = jns42generator.generateParsersTs(specification);
+    const filePath = path.join(options.directoryPath, "parsers.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
     const code = generateClientTsCode(apiModel);
     const filePath = path.join(options.directoryPath, "client.ts");
     writeCodeToFile(filePath, code);

@@ -1,7 +1,10 @@
 import * as models from "../../models/index.js";
 import { banner, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { generateIsRequestParametersFunctionBody } from "../bodies/index.js";
+import {
+  generateIsRequestParametersFunctionBody,
+  generateParseRequestParametersFunctionBody,
+} from "../bodies/index.js";
 import { generateIsResponseParametersFunctionBody } from "../bodies/is-response-parameters.js";
 import {
   generateOperationParametersTypes,
@@ -20,6 +23,13 @@ export function* getSharedTsCode(apiModel: models.Api) {
         "parameters",
       );
 
+      const parseRequestParametersFunctionName = toCamel(
+        "parse",
+        operationModel.name,
+        "request",
+        "parameters",
+      );
+
       const requestParametersTypeName = toPascal(operationModel.name, "request", "parameters");
 
       yield itt`
@@ -30,11 +40,27 @@ export function* getSharedTsCode(apiModel: models.Api) {
         }
       `;
 
+      yield itt`
+      export function ${parseRequestParametersFunctionName}(
+        parameters: Partial<Record<keyof ${requestParametersTypeName}, unknown>>,
+      ): Partial<Record<keyof ${requestParametersTypeName}, unknown>> {
+        ${generateParseRequestParametersFunctionBody(apiModel, operationModel)}
+      }
+    `;
+
       yield* generateOperationParametersTypes(apiModel, operationModel);
 
       for (const operationResultModel of operationModel.operationResults) {
         const isResponseParametersFunctionName = toCamel(
           "is",
+          operationModel.name,
+          operationResultModel.statusKind,
+          "response",
+          "parameters",
+        );
+
+        const parseResponseParametersFunctionName = toCamel(
+          "parse",
           operationModel.name,
           operationResultModel.statusKind,
           "response",
@@ -52,6 +78,14 @@ export function* getSharedTsCode(apiModel: models.Api) {
           export function ${isResponseParametersFunctionName}(
             parameters: Partial<Record<keyof ${responseParametersTypeName}, unknown>>,
           ): parameters is ${responseParametersTypeName} {
+            ${generateIsResponseParametersFunctionBody(apiModel, operationResultModel)}
+          }
+        `;
+
+        yield itt`
+          export function ${parseResponseParametersFunctionName}(
+            parameters: Partial<Record<keyof ${responseParametersTypeName}, unknown>>,
+          ): Partial<Record<keyof ${responseParametersTypeName}, unknown>> {
             ${generateIsResponseParametersFunctionBody(apiModel, operationResultModel)}
           }
         `;
