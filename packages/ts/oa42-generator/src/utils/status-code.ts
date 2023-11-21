@@ -16,18 +16,18 @@ export function statusKindComparer(statusKindA: string, statusKindB: string) {
   const valueA = isStatusCode(statusKindA)
     ? 3
     : isStatusClass(statusKindA)
-    ? 2
-    : isStatusDefault(statusKindA)
-    ? 1
-    : 0;
+      ? 2
+      : isStatusDefault(statusKindA)
+        ? 1
+        : 0;
 
   const valueB = isStatusCode(statusKindB)
     ? 3
     : isStatusClass(statusKindB)
-    ? 2
-    : isStatusDefault(statusKindB)
-    ? 1
-    : 0;
+      ? 2
+      : isStatusDefault(statusKindB)
+        ? 1
+        : 0;
 
   return valueB - valueA;
 }

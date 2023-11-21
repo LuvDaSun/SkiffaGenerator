@@ -2653,8 +2653,7 @@ definitions:
         x-nullable: false
         example: "tiborvass/sample-volume-plugin"
       Enabled:
-        description:
-          True if the plugin is running. False if the plugin is not running,
+        description: True if the plugin is running. False if the plugin is not running,
           only installed.
         type: "boolean"
         x-nullable: false
@@ -4650,16 +4649,7 @@ definitions:
           String representation of the container state. Can be one of "created",
           "running", "paused", "restarting", "removing", "exited", or "dead".
         type: "string"
-        enum:
-          [
-            "created",
-            "running",
-            "paused",
-            "restarting",
-            "removing",
-            "exited",
-            "dead",
-          ]
+        enum: ["created", "running", "paused", "restarting", "removing", "exited", "dead"]
         example: "running"
       Running:
         description: |
@@ -5406,11 +5396,7 @@ definitions:
         type: "array"
         items:
           type: "string"
-        example:
-          [
-            "registry.internal.corp.example.com:3000",
-            "[2001:db8:a0b:12f0::1]:443",
-          ]
+        example: ["registry.internal.corp.example.com:3000", "[2001:db8:a0b:12f0::1]:443"]
       InsecureRegistryCIDRs:
         description: |
           List of IP ranges of insecure registries, using the CIDR syntax
@@ -6380,8 +6366,7 @@ paths:
                 DeviceRequests:
                   - Driver: "nvidia"
                     Count: -1
-                    DeviceIDs":
-                      ["0", "1", "GPU-fef8089b-4820-abfc-e83e-94318197576e"]
+                    DeviceIDs": ["0", "1", "GPU-fef8089b-4820-abfc-e83e-94318197576e"]
                     Capabilities: [["gpu", "nvidia", "compute"]]
                     Options:
                       property1: "string"
@@ -6620,8 +6605,7 @@ paths:
                 DeviceRequests:
                   - Driver: "nvidia"
                     Count: -1
-                    DeviceIDs":
-                      ["0", "1", "GPU-fef8089b-4820-abfc-e83e-94318197576e"]
+                    DeviceIDs": ["0", "1", "GPU-fef8089b-4820-abfc-e83e-94318197576e"]
                     Capabilities: [["gpu", "nvidia", "compute"]]
                     Options:
                       property1: "string"
@@ -8819,15 +8803,7 @@ paths:
               description: "If the server is running with experimental mode enabled"
             Swarm:
               type: "string"
-              enum:
-                [
-                  "inactive",
-                  "pending",
-                  "error",
-                  "locked",
-                  "active/worker",
-                  "active/manager",
-                ]
+              enum: ["inactive", "pending", "error", "locked", "active/worker", "active/manager"]
               description: |
                 Contains information about Swarm status of the daemon,
                 and if the daemon is acting as a manager or worker node.
@@ -8873,15 +8849,7 @@ paths:
               description: "If the server is running with experimental mode enabled"
             Swarm:
               type: "string"
-              enum:
-                [
-                  "inactive",
-                  "pending",
-                  "error",
-                  "locked",
-                  "active/worker",
-                  "active/manager",
-                ]
+              enum: ["inactive", "pending", "error", "locked", "active/worker", "active/manager"]
               description: |
                 Contains information about Swarm status of the daemon,
                 and if the daemon is acting as a manager or worker node.
@@ -11121,11 +11089,7 @@ paths:
                             DriverConfig: {}
                             Labels:
                               com.example.something: "something-value"
-                      Hosts:
-                        [
-                          "10.10.10.10 host1",
-                          "ABCD:EF01:2345:6789:ABCD:EF01:2345:6789 host2",
-                        ]
+                      Hosts: ["10.10.10.10 host1", "ABCD:EF01:2345:6789:ABCD:EF01:2345:6789 host2"]
                       User: "33"
                       DNSConfig:
                         Nameservers: ["8.8.8.8"]
