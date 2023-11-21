@@ -33,7 +33,7 @@ export function* generateParseRequestParametersFunctionBody(
     yield itt`
       result[${JSON.stringify(
         parameterPropertyName,
-      )}] = ${parseParameterFunction}(parameters[${JSON.stringify(parameterPropertyName)}]);
+      )}] = parsers.${parseParameterFunction}(parameters[${JSON.stringify(parameterPropertyName)}]);
     `;
   }
 

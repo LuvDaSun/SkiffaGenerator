@@ -474,7 +474,7 @@ function* generateOperationResultContentTypeBody(apiModel: models.Api, bodyModel
             let entities = lib.deserializeJsonEntities(
               stream,
               signal,
-            ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `validators.${bodyTypeName}`}>;
+            ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
             if(validateIncomingEntity) {
               entities = lib.mapAsyncIterable(entities, mapAssertEntity);
             }
@@ -483,7 +483,7 @@ function* generateOperationResultContentTypeBody(apiModel: models.Api, bodyModel
           entity() {
             let entity = lib.deserializeJsonEntity(
               stream
-            ) as Promise<${bodyTypeName == null ? "unknown" : `validators.${bodyTypeName}`}>;
+            ) as Promise<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
             if(validateIncomingEntity) {
               entity = lib.mapPromisable(entity, mapAssertEntity);
             }

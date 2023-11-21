@@ -12,7 +12,7 @@ export function* generateOperationIncomingResponseType(
   yield itt`
     export type ${operationIncomingResponseName} = ${joinIterable(
       generateResponseTypes(apiModel, operationModel),
-      "|",
+      " |\n",
     )};
   `;
 }
@@ -51,7 +51,7 @@ function* generateResponseBodies(
       lib.IncomingEmptyResponse<
         ${joinIterable(
           operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
-          "|",
+          " |\n",
         )},
         parameters.${operationIncomingParametersName}
       >
@@ -65,7 +65,7 @@ function* generateResponseBodies(
         lib.IncomingTextResponse<
           ${joinIterable(
             operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
-            "|",
+            " |\n",
           )},
           parameters.${operationIncomingParametersName},
           ${JSON.stringify(bodyModel.contentType)}
@@ -81,7 +81,7 @@ function* generateResponseBodies(
         lib.IncomingJsonResponse<
           ${joinIterable(
             operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
-            "|",
+            " |\n",
           )},
           parameters.${operationIncomingParametersName},
           ${JSON.stringify(bodyModel.contentType)},
@@ -95,7 +95,7 @@ function* generateResponseBodies(
         lib.IncomingStreamResponse<
           ${joinIterable(
             operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
-            "|",
+            " |\n",
           )},
           parameters.${operationIncomingParametersName},
           ${JSON.stringify(bodyModel.contentType)}

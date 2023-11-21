@@ -4,6 +4,7 @@ import { itt } from "../../utils/iterable-text-template.js";
 import {
   generateIsRequestParametersFunctionBody,
   generateParseRequestParametersFunctionBody,
+  generateParseResponseParametersFunctionBody,
 } from "../bodies/index.js";
 import { generateIsResponseParametersFunctionBody } from "../bodies/is-response-parameters.js";
 import {
@@ -13,6 +14,12 @@ import {
 
 export function* generateParametersTsCode(apiModel: models.Api) {
   yield banner;
+
+  yield itt`
+  import * as types from "./types.js";
+  import * as validators from "./validators.js";
+  import * as parsers from "./parsers.js";
+  `;
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
@@ -86,7 +93,11 @@ export function* generateParametersTsCode(apiModel: models.Api) {
           export function ${parseResponseParametersFunctionName}(
             parameters: Partial<Record<keyof ${responseParametersTypeName}, unknown>>,
           ): Partial<Record<keyof ${responseParametersTypeName}, unknown>> {
-            ${generateIsResponseParametersFunctionBody(apiModel, operationResultModel)}
+            ${generateParseResponseParametersFunctionBody(
+              apiModel,
+              operationModel,
+              operationResultModel,
+            )}
           }
         `;
 

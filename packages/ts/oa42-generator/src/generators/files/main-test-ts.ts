@@ -8,6 +8,6 @@ export function* generateMainTestTsCode(apiModel: models.Api) {
   yield itt`
     import assert from "assert/strict";
     import test from "node:test";
-    import main from "./main.js";
+    import * as main from "./main.js";
   `;
 }

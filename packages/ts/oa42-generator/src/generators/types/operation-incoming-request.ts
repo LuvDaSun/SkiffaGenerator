@@ -12,7 +12,7 @@ export function* generateOperationIncomingRequestType(
   yield itt`
     export type ${operationIncomingRequestName} = ${joinIterable(
       generateRequestTypes(apiModel, operationModel),
-      "|",
+      " |\n",
     )};
   `;
 }
