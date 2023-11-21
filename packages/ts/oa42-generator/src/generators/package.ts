@@ -2,7 +2,7 @@ import fs from "fs";
 import * as jns42generator from "jns42-generator";
 import path from "path";
 import * as models from "../models/index.js";
-import { NestedText, flattenNestedText } from "../utils/index.js";
+import { NestedText, flattenNestedText, splitIterableText } from "../utils/index.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
 import { generateClientTsCode } from "./files/client-ts.js";
 import { generateMainTestTsCode } from "./files/main-test-ts.js";
@@ -57,19 +57,19 @@ export function generatePackage(apiModel: models.Api, options: PackageOptions) {
   }
 
   {
-    const code = jns42generator.generateTypesTs(specification);
+    const code = jns42generator.generateTypesTsCode(specification);
     const filePath = path.join(options.directoryPath, "types.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = jns42generator.generateValidatorsTs(specification);
+    const code = jns42generator.generateValidatorsTsCode(specification);
     const filePath = path.join(options.directoryPath, "validators.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = jns42generator.generateParsersTs(specification);
+    const code = jns42generator.generateParsersTsCode(specification);
     const filePath = path.join(options.directoryPath, "parsers.ts");
     writeCodeToFile(filePath, code);
   }
@@ -97,7 +97,12 @@ function writeCodeToFile(filePath: string, code: NestedText) {
   const fd = fs.openSync(filePath, "w");
 
   try {
-    for (const text of flattenNestedText(code)) {
+    for (let text of splitIterableText(flattenNestedText(code))) {
+      text = text.trim();
+      if (text.length === 0) {
+        continue;
+      }
+      text += "\n";
       fs.writeFileSync(fd, text);
     }
   } finally {
