@@ -3,10 +3,8 @@ import { banner, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
   generateIsRequestParametersFunctionBody,
-  generateParseRequestParametersFunctionBody,
-  generateParseResponseParametersFunctionBody,
+  generateIsResponseParametersFunctionBody,
 } from "../bodies/index.js";
-import { generateIsResponseParametersFunctionBody } from "../bodies/is-response-parameters.js";
 import {
   generateOperationParametersTypes,
   generateOperationResultParameterTypes,
@@ -47,14 +45,6 @@ export function* generateParametersTsCode(apiModel: models.Api) {
         }
       `;
 
-      yield itt`
-      export function ${parseRequestParametersFunctionName}(
-        parameters: Partial<Record<keyof ${requestParametersTypeName}, unknown>>,
-      ): Partial<Record<keyof ${requestParametersTypeName}, unknown>> {
-        ${generateParseRequestParametersFunctionBody(apiModel, operationModel)}
-      }
-    `;
-
       yield* generateOperationParametersTypes(apiModel, operationModel);
 
       for (const operationResultModel of operationModel.operationResults) {
@@ -86,18 +76,6 @@ export function* generateParametersTsCode(apiModel: models.Api) {
             parameters: Partial<Record<keyof ${responseParametersTypeName}, unknown>>,
           ): parameters is ${responseParametersTypeName} {
             ${generateIsResponseParametersFunctionBody(apiModel, operationResultModel)}
-          }
-        `;
-
-        yield itt`
-          export function ${parseResponseParametersFunctionName}(
-            parameters: Partial<Record<keyof ${responseParametersTypeName}, unknown>>,
-          ): Partial<Record<keyof ${responseParametersTypeName}, unknown>> {
-            ${generateParseResponseParametersFunctionBody(
-              apiModel,
-              operationModel,
-              operationResultModel,
-            )}
           }
         `;
 

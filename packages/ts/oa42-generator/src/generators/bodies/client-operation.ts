@@ -251,12 +251,25 @@ function* generateOperationResultBody(
   yield itt`
     const responseParameters = {
       ${operationResultModel.headerParameters.map((parameterModel) => {
+        const parameterSchemaId = parameterModel.schemaId;
+        const parameterTypeName =
+          parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
         const parameterName = toCamel(parameterModel.name);
+        if (parameterTypeName == null) {
+          return `
+            ${parameterName}: fetchResponse.headers.get(${JSON.stringify(parameterModel.name)}),
+          `;
+        }
+
+        const parseParameterFunction = toCamel("parse", parameterTypeName);
+
         return `
-          ${parameterName}: fetchResponse.headers.get(${JSON.stringify(parameterModel.name)}),
+          ${parameterName}: parsers.${parseParameterFunction}(fetchResponse.headers.get(${JSON.stringify(
+            parameterModel.name,
+          )})),
         `;
       })}
-    } as unknown as parameters.${responseParametersName};
+    } as parameters.${responseParametersName};
 
     if(validateIncomingParameters) {
       if(!parameters.${isResponseParametersFunction}(responseParameters)) {

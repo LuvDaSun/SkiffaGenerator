@@ -84,32 +84,93 @@ export function* generateRouteHandlerMethodBody(
   yield itt`
     const requestParameters = {
       ${[
-        ...operationModel.pathParameters.map(
-          (parameterModel) => `
-    ${toCamel(parameterModel.name)}: 
-      lib.getParameterValue(pathParameters, ${JSON.stringify(parameterModel.name)}),
-    `,
-        ),
-        ...operationModel.headerParameters.map(
-          (parameterModel) => `
-    ${toCamel(parameterModel.name)}: 
-      lib.getParameterValue(serverIncomingRequest.headers, ${JSON.stringify(parameterModel.name)}),
-    `,
-        ),
-        ...operationModel.queryParameters.map(
-          (parameterModel) => `
-    ${toCamel(parameterModel.name)}: 
-      lib.getParameterValue(queryParameters, ${JSON.stringify(parameterModel.name)}),
-    `,
-        ),
-        ...operationModel.cookieParameters.map(
-          (parameterModel) => `
-    ${toCamel(parameterModel.name)}: 
-      lib.getParameterValue(cookieParameters, ${JSON.stringify(parameterModel.name)}),
-    `,
-        ),
+        ...operationModel.pathParameters.map((parameterModel) => {
+          const parameterSchemaId = parameterModel.schemaId;
+          const parameterTypeName =
+            parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
+          const parameterName = toCamel(parameterModel.name);
+          if (parameterTypeName == null) {
+            return `
+              ${parameterName}: 
+                lib.getParameterValue(pathParameters, ${JSON.stringify(parameterModel.name)}),
+            `;
+          }
+
+          const parseParameterFunction = toCamel("parse", parameterTypeName);
+
+          return `
+            ${parameterName}: 
+              parsers.${parseParameterFunction}(lib.getParameterValue(pathParameters, ${JSON.stringify(
+                parameterModel.name,
+              )})),
+          `;
+        }),
+        ...operationModel.headerParameters.map((parameterModel) => {
+          const parameterSchemaId = parameterModel.schemaId;
+          const parameterTypeName =
+            parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
+          const parameterName = toCamel(parameterModel.name);
+          if (parameterTypeName == null) {
+            return `
+              ${parameterName}: 
+                lib.getParameterValue(pathParameters, ${JSON.stringify(parameterModel.name)}),
+            `;
+          }
+
+          const parseParameterFunction = toCamel("parse", parameterTypeName);
+
+          return `
+          ${parameterName}: 
+              parsers.${parseParameterFunction}(lib.getParameterValue(serverIncomingRequest.headers, ${JSON.stringify(
+                parameterModel.name,
+              )})),
+          `;
+        }),
+        ...operationModel.queryParameters.map((parameterModel) => {
+          const parameterSchemaId = parameterModel.schemaId;
+          const parameterTypeName =
+            parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
+          const parameterName = toCamel(parameterModel.name);
+          if (parameterTypeName == null) {
+            return `
+            ${parameterName}: 
+                lib.getParameterValue(queryParameters, ${JSON.stringify(parameterModel.name)}),
+            `;
+          }
+
+          const parseParameterFunction = toCamel("parse", parameterTypeName);
+
+          return `
+          ${parameterName}: 
+              parsers.${parseParameterFunction}(lib.getParameterValue(queryParameters, ${JSON.stringify(
+                parameterModel.name,
+              )})),
+          `;
+        }),
+        ...operationModel.cookieParameters.map((parameterModel) => {
+          const parameterSchemaId = parameterModel.schemaId;
+          const parameterTypeName =
+            parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
+          const parameterName = toCamel(parameterModel.name);
+          if (parameterTypeName == null) {
+            return `
+              ${parameterName}: 
+                lib.getParameterValue(cookieParameters, ${JSON.stringify(parameterModel.name)}),
+            `;
+          }
+
+          const parseParameterFunction = toCamel("parse", parameterTypeName);
+
+          return `
+            ${parameterName}: 
+              parsers.${parseParameterFunction}(lib.getParameterValue(cookieParameters, ${JSON.stringify(
+                parameterModel.name,
+              )})),
+          `;
+        }),
       ]}
-    } as unknown as parameters.${requestParametersName};
+    } as parameters.${requestParametersName};
+
     if(validateIncomingParameters) {
       if(!parameters.${isRequestParametersFunction}(requestParameters)) {
         throw new lib.ServerRequestParameterValidationFailed();
