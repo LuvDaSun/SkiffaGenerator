@@ -36,7 +36,7 @@ function* generateRequestBodies(
 
   if (bodyModel == null) {
     yield itt`
-      lib.OutgoingEmptyRequest<shared.${operationOutgoingParametersName}>
+      lib.OutgoingEmptyRequest<parameters.${operationOutgoingParametersName}>
     `;
     return;
   }
@@ -45,7 +45,7 @@ function* generateRequestBodies(
     case "plain/text": {
       yield itt`
         lib.OutgoingTextRequest<
-          shared.${operationOutgoingParametersName},
+          parameters.${operationOutgoingParametersName},
           ${JSON.stringify(bodyModel.contentType)}
         >
       `;
@@ -57,7 +57,7 @@ function* generateRequestBodies(
 
       yield itt`
         lib.OutgoingJsonRequest<
-          shared.${operationOutgoingParametersName},
+          parameters.${operationOutgoingParametersName},
           ${JSON.stringify(bodyModel.contentType)},
           ${bodyTypeName == null ? "unknown" : itt`types.${bodyTypeName}`}
         >
@@ -67,7 +67,7 @@ function* generateRequestBodies(
     default: {
       yield itt`
         lib.OutgoingStreamRequest<
-          shared.${operationOutgoingParametersName},
+          parameters.${operationOutgoingParametersName},
           ${JSON.stringify(bodyModel.contentType)}
         >
       `;

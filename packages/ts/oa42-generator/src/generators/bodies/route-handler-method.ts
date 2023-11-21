@@ -109,9 +109,9 @@ export function* generateRouteHandlerMethodBody(
     `,
         ),
       ]}
-    } as unknown as shared.${requestParametersName};
+    } as unknown as parameters.${requestParametersName};
     if(validateIncomingParameters) {
-      if(!shared.${isRequestParametersFunction}(requestParameters)) {
+      if(!parameters.${isRequestParametersFunction}(requestParameters)) {
         throw new lib.ServerRequestParameterValidationFailed();
       }
     }
@@ -328,7 +328,7 @@ function* generateOperationResultBody(
 
   yield itt`
     if(validateOutgoingParameters) {
-      if(!shared.${isResponseParametersFunction}(outgoingResponse.parameters)) {
+      if(!parameters.${isResponseParametersFunction}(outgoingResponse.parameters)) {
         throw new lib.ServerResponseParameterValidationFailed();
       }
     }

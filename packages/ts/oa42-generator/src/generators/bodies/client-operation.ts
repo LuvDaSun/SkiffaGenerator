@@ -33,7 +33,7 @@ export function* generateClientOperationFunctionBody(
 
   yield itt`
     if(validateOutgoingParameters) {
-      if(!shared.${isRequestParametersFunction}(outgoingRequest.parameters)) {
+      if(!parameters.${isRequestParametersFunction}(outgoingRequest.parameters)) {
         throw new lib.ClientRequestParameterValidationFailed();
       }
     }
@@ -256,10 +256,10 @@ function* generateOperationResultBody(
           ${parameterName}: fetchResponse.headers.get(${JSON.stringify(parameterModel.name)}),
         `;
       })}
-    } as unknown as shared.${responseParametersName};
+    } as unknown as parameters.${responseParametersName};
 
     if(validateIncomingParameters) {
-      if(!shared.${isResponseParametersFunction}(responseParameters)) {
+      if(!parameters.${isResponseParametersFunction}(responseParameters)) {
         throw new lib.ClientResponseParameterValidationFailed();
       }
     }

@@ -13,6 +13,8 @@ export function* generateMainTsCode(apiModel: models.Api) {
     export * from "oa42-lib";
     export * from "./types.js";
     export * from "./validators.js";
+    export * from "./parsers.js";
+    export * from "./parameters.js";
     export * from "./client.js";
     export * from "./server.js";
   `;

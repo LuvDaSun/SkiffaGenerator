@@ -21,6 +21,12 @@ export function generatePackageJsonData(name: string, version: string) {
       "./validators": {
         default: "./validators.js",
       },
+      "./parsers": {
+        default: "./parsers.js",
+      },
+      "./parameters": {
+        default: "./parameters.js",
+      },
       "./client": {
         default: "./client.js",
       },

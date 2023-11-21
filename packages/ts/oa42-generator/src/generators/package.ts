@@ -8,8 +8,8 @@ import { generateClientTsCode } from "./files/client-ts.js";
 import { generateMainTestTsCode } from "./files/main-test-ts.js";
 import { generateMainTsCode } from "./files/main-ts.js";
 import { generatePackageJsonData } from "./files/package-json.js";
+import { generateParametersTsCode } from "./files/parameters-ts.js";
 import { generateServerTsCode } from "./files/server-ts.js";
-import { getSharedTsCode as generateSharedTsCode } from "./files/shared-ts.js";
 import { generateTsconfigJsonData } from "./files/tsconfig-json.js";
 
 export interface PackageOptions {
@@ -51,8 +51,8 @@ export function generatePackage(apiModel: models.Api, options: PackageOptions) {
   }
 
   {
-    const code = generateSharedTsCode(apiModel);
-    const filePath = path.join(options.directoryPath, "shared.ts");
+    const code = generateParametersTsCode(apiModel);
+    const filePath = path.join(options.directoryPath, "parameters.ts");
     writeCodeToFile(filePath, code);
   }
 

@@ -53,7 +53,7 @@ function* generateResponseBodies(
           operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
           "|",
         )},
-        shared.${operationOutgoingParametersName}
+        parameters.${operationOutgoingParametersName}
       >
     `;
     return;
@@ -67,7 +67,7 @@ function* generateResponseBodies(
             operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
             "|",
           )},
-          shared.${operationOutgoingParametersName},
+          parameters.${operationOutgoingParametersName},
           ${JSON.stringify(bodyModel.contentType)}
         >
       `;
@@ -83,7 +83,7 @@ function* generateResponseBodies(
             operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
             "|",
           )},
-          shared.${operationOutgoingParametersName},
+          parameters.${operationOutgoingParametersName},
           ${JSON.stringify(bodyModel.contentType)},
           ${bodyTypeName == null ? "unknown" : itt`types.${bodyTypeName}`}
         >
@@ -97,7 +97,7 @@ function* generateResponseBodies(
             operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
             "|",
           )},
-          shared.${operationOutgoingParametersName},
+          parameters.${operationOutgoingParametersName},
           ${JSON.stringify(bodyModel.contentType)}
         >
       `;

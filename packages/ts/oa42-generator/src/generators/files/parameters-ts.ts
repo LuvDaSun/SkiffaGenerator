@@ -11,7 +11,7 @@ import {
   generateOperationResultParameterTypes,
 } from "../types/index.js";
 
-export function* getSharedTsCode(apiModel: models.Api) {
+export function* generateParametersTsCode(apiModel: models.Api) {
   yield banner;
 
   for (const pathModel of apiModel.paths) {
