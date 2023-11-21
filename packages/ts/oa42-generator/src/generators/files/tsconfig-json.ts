@@ -1,16 +1,11 @@
 export function generateTsconfigJsonData() {
   const content = {
+    extends: "@tsconfig/node20",
     compilerOptions: {
-      target: "ES2022",
-      module: "Node16",
-      moduleResolution: "node16",
-      declaration: true,
       sourceMap: true,
-      importHelpers: true,
-      strict: true,
-      forceConsistentCasingInFileNames: true,
-      esModuleInterop: true,
-      skipLibCheck: true,
+      declaration: true,
+      composite: true,
+      lib: ["es2023", "DOM"],
     },
   };
 
