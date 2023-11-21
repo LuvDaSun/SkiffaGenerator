@@ -1,6 +1,5 @@
 import * as models from "../../models/index.js";
-import { toCamel, toPascal } from "../../utils/index.js";
-import { itt } from "../../utils/iterable-text-template.js";
+import { itt, toCamel, toPascal } from "../../utils/index.js";
 
 /**
  * function statements for route handler
@@ -85,34 +84,95 @@ export function* generateRouteHandlerMethodBody(
   yield itt`
     const requestParameters = {
       ${[
-        ...operationModel.pathParameters.map(
-          (parameterModel) => `
-    ${toCamel(parameterModel.name)}: 
-      lib.getParameterValue(pathParameters, ${JSON.stringify(parameterModel.name)}),
-    `,
-        ),
-        ...operationModel.headerParameters.map(
-          (parameterModel) => `
-    ${toCamel(parameterModel.name)}: 
-      lib.getParameterValue(serverIncomingRequest.headers, ${JSON.stringify(parameterModel.name)}),
-    `,
-        ),
-        ...operationModel.queryParameters.map(
-          (parameterModel) => `
-    ${toCamel(parameterModel.name)}: 
-      lib.getParameterValue(queryParameters, ${JSON.stringify(parameterModel.name)}),
-    `,
-        ),
-        ...operationModel.cookieParameters.map(
-          (parameterModel) => `
-    ${toCamel(parameterModel.name)}: 
-      lib.getParameterValue(cookieParameters, ${JSON.stringify(parameterModel.name)}),
-    `,
-        ),
+        ...operationModel.pathParameters.map((parameterModel) => {
+          const parameterSchemaId = parameterModel.schemaId;
+          const parameterTypeName =
+            parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
+          const parameterName = toCamel(parameterModel.name);
+          if (parameterTypeName == null) {
+            return `
+              ${parameterName}: 
+                lib.getParameterValue(pathParameters, ${JSON.stringify(parameterModel.name)}),
+            `;
+          }
+
+          const parseParameterFunction = toCamel("parse", parameterTypeName);
+
+          return `
+            ${parameterName}: 
+              parsers.${parseParameterFunction}(lib.getParameterValue(pathParameters, ${JSON.stringify(
+                parameterModel.name,
+              )})),
+          `;
+        }),
+        ...operationModel.headerParameters.map((parameterModel) => {
+          const parameterSchemaId = parameterModel.schemaId;
+          const parameterTypeName =
+            parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
+          const parameterName = toCamel(parameterModel.name);
+          if (parameterTypeName == null) {
+            return `
+              ${parameterName}: 
+                lib.getParameterValue(pathParameters, ${JSON.stringify(parameterModel.name)}),
+            `;
+          }
+
+          const parseParameterFunction = toCamel("parse", parameterTypeName);
+
+          return `
+          ${parameterName}: 
+              parsers.${parseParameterFunction}(lib.getParameterValue(serverIncomingRequest.headers, ${JSON.stringify(
+                parameterModel.name,
+              )})),
+          `;
+        }),
+        ...operationModel.queryParameters.map((parameterModel) => {
+          const parameterSchemaId = parameterModel.schemaId;
+          const parameterTypeName =
+            parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
+          const parameterName = toCamel(parameterModel.name);
+          if (parameterTypeName == null) {
+            return `
+            ${parameterName}: 
+                lib.getParameterValue(queryParameters, ${JSON.stringify(parameterModel.name)}),
+            `;
+          }
+
+          const parseParameterFunction = toCamel("parse", parameterTypeName);
+
+          return `
+          ${parameterName}: 
+              parsers.${parseParameterFunction}(lib.getParameterValue(queryParameters, ${JSON.stringify(
+                parameterModel.name,
+              )})),
+          `;
+        }),
+        ...operationModel.cookieParameters.map((parameterModel) => {
+          const parameterSchemaId = parameterModel.schemaId;
+          const parameterTypeName =
+            parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
+          const parameterName = toCamel(parameterModel.name);
+          if (parameterTypeName == null) {
+            return `
+              ${parameterName}: 
+                lib.getParameterValue(cookieParameters, ${JSON.stringify(parameterModel.name)}),
+            `;
+          }
+
+          const parseParameterFunction = toCamel("parse", parameterTypeName);
+
+          return `
+            ${parameterName}: 
+              parsers.${parseParameterFunction}(lib.getParameterValue(cookieParameters, ${JSON.stringify(
+                parameterModel.name,
+              )})),
+          `;
+        }),
       ]}
-    } as unknown as shared.${requestParametersName};
+    } as parameters.${requestParametersName};
+
     if(validateIncomingParameters) {
-      if(!shared.${isRequestParametersFunction}(requestParameters)) {
+      if(!parameters.${isRequestParametersFunction}(requestParameters)) {
         throw new lib.ServerRequestParameterValidationFailed();
       }
     }
@@ -229,7 +289,7 @@ function* generateRequestContentTypeCodeBody(apiModel: models.Api, bodyModel?: m
             isBodyTypeFunction == null
               ? ""
               : itt`
-            if(!shared.${isBodyTypeFunction}(entity)) {
+            if(!validators.${isBodyTypeFunction}(entity)) {
               throw new lib.ServerRequestEntityValidationFailed();
             }
           `
@@ -249,7 +309,7 @@ function* generateRequestContentTypeCodeBody(apiModel: models.Api, bodyModel?: m
             let entities = lib.deserializeJsonEntities(
               incomingRequest.stream,
               signal,
-            ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `shared.${bodyTypeName}`}>;
+            ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
             if(validateIncomingEntity) {
               entities = lib.mapAsyncIterable(entities, mapAssertEntity);
             }
@@ -258,7 +318,7 @@ function* generateRequestContentTypeCodeBody(apiModel: models.Api, bodyModel?: m
           entity() {
             let entity = lib.deserializeJsonEntity(
               incomingRequest.stream
-            ) as Promise<${bodyTypeName == null ? "unknown" : `shared.${bodyTypeName}`}>;
+            ) as Promise<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
             if(validateIncomingEntity) {
               entity = lib.mapPromisable(entity, mapAssertEntity);
             }
@@ -329,7 +389,7 @@ function* generateOperationResultBody(
 
   yield itt`
     if(validateOutgoingParameters) {
-      if(!shared.${isResponseParametersFunction}(outgoingResponse.parameters)) {
+      if(!parameters.${isResponseParametersFunction}(outgoingResponse.parameters)) {
         throw new lib.ServerResponseParameterValidationFailed();
       }
     }
@@ -441,12 +501,12 @@ function* generateOperationResultContentTypeBody(apiModel: models.Api, bodyModel
             isBodyTypeFunction == null
               ? ""
               : itt`
-            if(!shared.${isBodyTypeFunction}(entity)) {
+            if(!validators.${isBodyTypeFunction}(entity)) {
               throw new lib.ServerResponseEntityValidationFailed();
             }
           `
           }
-          return entity as ${bodyTypeName == null ? "unknown" : `shared.${bodyTypeName}`};
+          return entity as ${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`};
         }
       `;
 

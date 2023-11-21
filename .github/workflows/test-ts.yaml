@@ -1,43 +1,27 @@
 on:
-  workflow_call:
-    inputs:
-      NPM_CONFIG_WORKSPACE:
-        required: true
-        type: string
-
-env:
-  NPM_CONFIG_WORKSPACE: ${{ inputs.NPM_CONFIG_WORKSPACE }}
+  push:
+    branches:
+      - "*"
+    paths:
+      - "*"
+      - .github/**
+      - fixtures/**
+      - packages/ts/**
 
 jobs:
   unit:
-    runs-on: ubuntu-latest
-    container: node:20.9-alpine3.17
-    steps:
-      - uses: actions/checkout@v3
-      - run: npm ci
-      - run: npm run build
-      - run: npm test
-
-  lint:
-    runs-on: ubuntu-latest
-    container: node:20.9-alpine3.17
-    steps:
-      - uses: actions/checkout@v3
-      - run: npm ci
-      - run: npm run lint
-
-  spelling:
     runs-on: ubuntu-latest
     container: node:18
     steps:
       - uses: actions/checkout@v3
       - run: npm ci
-      - run: npm run spelling
+      - run: npm --workspaces run build
+      - run: npm --workspaces test
 
   audit:
     runs-on: ubuntu-latest
-    container: node:20.9-alpine3.17
+    container: node:18
     steps:
       - uses: actions/checkout@v3
       - run: npm ci
-      - run: npm audit --audit-level high
+      - run: npm --workspaces audit --audit-level high

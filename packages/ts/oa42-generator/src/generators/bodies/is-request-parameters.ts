@@ -1,6 +1,5 @@
 import * as models from "../../models/index.js";
-import { toCamel } from "../../utils/index.js";
-import { itt } from "../../utils/iterable-text-template.js";
+import { itt, toCamel } from "../../utils/index.js";
 
 export function* generateIsRequestParametersFunctionBody(
   apiModel: models.Api,
@@ -35,7 +34,7 @@ export function* generateIsRequestParametersFunctionBody(
 
     yield itt`
       if(
-        !${isParameterFunction}(
+        !validators.${isParameterFunction}(
           parameters.${parameterPropertyName}
         ) === undefined
       ) {

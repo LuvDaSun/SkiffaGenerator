@@ -15,15 +15,33 @@ export function generatePackageJsonData(name: string, version: string) {
         default: "./main.js",
         browser: "./browser.js",
       },
+      "./types": {
+        default: "./types.js",
+      },
+      "./validators": {
+        default: "./validators.js",
+      },
+      "./parsers": {
+        default: "./parsers.js",
+      },
+      "./parameters": {
+        default: "./parameters.js",
+      },
+      "./client": {
+        default: "./client.js",
+      },
+      "./server": {
+        default: "./server.js",
+      },
     },
     scripts: {
       prepare: "tsc",
-      test: "node --test ./*.spec.js",
+      test: "node --test ./*.test.js",
     },
     author: "",
     license: "ISC",
     dependencies: withDependencies(["@types/node", "goodrouter", "oa42-lib"]),
-    devDependencies: withDependencies(["typescript"]),
+    devDependencies: withDependencies(["typescript", "@tsconfig/node20"]),
   };
 
   return content;

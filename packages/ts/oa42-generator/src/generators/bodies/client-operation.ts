@@ -1,6 +1,5 @@
 import * as models from "../../models/index.js";
-import { toCamel, toPascal } from "../../utils/index.js";
-import { itt } from "../../utils/iterable-text-template.js";
+import { itt, toCamel, toPascal } from "../../utils/index.js";
 
 export function* generateClientOperationFunctionBody(
   apiModel: models.Api,
@@ -34,7 +33,7 @@ export function* generateClientOperationFunctionBody(
 
   yield itt`
     if(validateOutgoingParameters) {
-      if(!shared.${isRequestParametersFunction}(outgoingRequest.parameters)) {
+      if(!parameters.${isRequestParametersFunction}(outgoingRequest.parameters)) {
         throw new lib.ClientRequestParameterValidationFailed();
       }
     }
@@ -252,15 +251,28 @@ function* generateOperationResultBody(
   yield itt`
     const responseParameters = {
       ${operationResultModel.headerParameters.map((parameterModel) => {
+        const parameterSchemaId = parameterModel.schemaId;
+        const parameterTypeName =
+          parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
         const parameterName = toCamel(parameterModel.name);
+        if (parameterTypeName == null) {
+          return `
+            ${parameterName}: fetchResponse.headers.get(${JSON.stringify(parameterModel.name)}),
+          `;
+        }
+
+        const parseParameterFunction = toCamel("parse", parameterTypeName);
+
         return `
-          ${parameterName}: fetchResponse.headers.get(${JSON.stringify(parameterModel.name)}),
+          ${parameterName}: parsers.${parseParameterFunction}(fetchResponse.headers.get(${JSON.stringify(
+            parameterModel.name,
+          )})),
         `;
       })}
-    } as unknown as shared.${responseParametersName};
+    } as parameters.${responseParametersName};
 
     if(validateIncomingParameters) {
-      if(!shared.${isResponseParametersFunction}(responseParameters)) {
+      if(!parameters.${isResponseParametersFunction}(responseParameters)) {
         throw new lib.ClientResponseParameterValidationFailed();
       }
     }
@@ -346,7 +358,7 @@ function* generateRequestContentTypeCodeBody(
             isBodyTypeFunction == null
               ? ""
               : itt`
-            if(!shared.${isBodyTypeFunction}(entity)) {
+            if(!validators.${isBodyTypeFunction}(entity)) {
               throw new lib.ClientResponseEntityValidationFailed();
             }
           `
@@ -454,7 +466,7 @@ function* generateOperationResultContentTypeBody(apiModel: models.Api, bodyModel
             isBodyTypeFunction == null
               ? ""
               : itt`
-            if(!shared.${isBodyTypeFunction}(entity)) {
+            if(!validators.${isBodyTypeFunction}(entity)) {
               throw new lib.ClientResponseEntityValidationFailed();
             }
           `
@@ -475,7 +487,7 @@ function* generateOperationResultContentTypeBody(apiModel: models.Api, bodyModel
             let entities = lib.deserializeJsonEntities(
               stream,
               signal,
-            ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `shared.${bodyTypeName}`}>;
+            ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
             if(validateIncomingEntity) {
               entities = lib.mapAsyncIterable(entities, mapAssertEntity);
             }
@@ -484,7 +496,7 @@ function* generateOperationResultContentTypeBody(apiModel: models.Api, bodyModel
           entity() {
             let entity = lib.deserializeJsonEntity(
               stream
-            ) as Promise<${bodyTypeName == null ? "unknown" : `shared.${bodyTypeName}`}>;
+            ) as Promise<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
             if(validateIncomingEntity) {
               entity = lib.mapPromisable(entity, mapAssertEntity);
             }

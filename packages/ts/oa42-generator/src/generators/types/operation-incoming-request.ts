@@ -12,7 +12,7 @@ export function* generateOperationIncomingRequestType(
   yield itt`
     export type ${operationIncomingRequestName} = ${joinIterable(
       generateRequestTypes(apiModel, operationModel),
-      "|",
+      " |\n",
     )};
   `;
 }
@@ -36,7 +36,7 @@ function* generateRequestBodies(
 
   if (bodyModel == null) {
     yield itt`
-      lib.IncomingEmptyRequest<shared.${operationIncomingParametersName}>
+      lib.IncomingEmptyRequest<parameters.${operationIncomingParametersName}>
     `;
     return;
   }
@@ -45,7 +45,7 @@ function* generateRequestBodies(
     case "plain/text": {
       yield itt`
         lib.IncomingTextRequest<
-          shared.${operationIncomingParametersName},
+          parameters.${operationIncomingParametersName},
           ${JSON.stringify(bodyModel.contentType)}
         >
       `;
@@ -57,9 +57,9 @@ function* generateRequestBodies(
 
       yield itt`
         lib.IncomingJsonRequest<
-          shared.${operationIncomingParametersName},
+          parameters.${operationIncomingParametersName},
           ${JSON.stringify(bodyModel.contentType)},
-          ${bodyTypeName == null ? "unknown" : itt`shared.${bodyTypeName}`}
+          ${bodyTypeName == null ? "unknown" : itt`types.${bodyTypeName}`}
         >
       `;
       break;
@@ -67,7 +67,7 @@ function* generateRequestBodies(
     default: {
       yield itt`
         lib.IncomingStreamRequest<
-          shared.${operationIncomingParametersName},
+          parameters.${operationIncomingParametersName},
           ${JSON.stringify(bodyModel.contentType)}
         >
       `;

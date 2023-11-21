@@ -26,7 +26,7 @@ export function* generateOperationResultParameterTypes(
 
         return itt`
           ${camelcase(parameterModel.name)}${parameterModel.required ? "?" : ""}:
-            ${parameterTypeName == null ? "unknown" : parameterTypeName}
+            ${parameterTypeName == null ? "unknown" : `types.${parameterTypeName}`}
         `;
       })}
     };

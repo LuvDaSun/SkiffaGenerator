@@ -12,7 +12,7 @@ export function* generateOperationIncomingResponseType(
   yield itt`
     export type ${operationIncomingResponseName} = ${joinIterable(
       generateResponseTypes(apiModel, operationModel),
-      "|",
+      " |\n",
     )};
   `;
 }
@@ -51,9 +51,9 @@ function* generateResponseBodies(
       lib.IncomingEmptyResponse<
         ${joinIterable(
           operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
-          "|",
+          " |\n",
         )},
-        shared.${operationIncomingParametersName}
+        parameters.${operationIncomingParametersName}
       >
     `;
     return;
@@ -65,9 +65,9 @@ function* generateResponseBodies(
         lib.IncomingTextResponse<
           ${joinIterable(
             operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
-            "|",
+            " |\n",
           )},
-          shared.${operationIncomingParametersName},
+          parameters.${operationIncomingParametersName},
           ${JSON.stringify(bodyModel.contentType)}
         >
       `;
@@ -81,11 +81,11 @@ function* generateResponseBodies(
         lib.IncomingJsonResponse<
           ${joinIterable(
             operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
-            "|",
+            " |\n",
           )},
-          shared.${operationIncomingParametersName},
+          parameters.${operationIncomingParametersName},
           ${JSON.stringify(bodyModel.contentType)},
-          ${bodyTypeName == null ? "unknown" : itt`shared.${bodyTypeName}`}
+          ${bodyTypeName == null ? "unknown" : itt`types.${bodyTypeName}`}
         >
       `;
       break;
@@ -95,9 +95,9 @@ function* generateResponseBodies(
         lib.IncomingStreamResponse<
           ${joinIterable(
             operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
-            "|",
+            " |\n",
           )},
-          shared.${operationIncomingParametersName},
+          parameters.${operationIncomingParametersName},
           ${JSON.stringify(bodyModel.contentType)}
         >
       `;
