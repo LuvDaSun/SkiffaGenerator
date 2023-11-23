@@ -87,7 +87,19 @@ function* generateServerBody(apiModel: models.Api) {
         private ${handlerPropertyName}?: ${handlerTypeName}<A>;
       `;
 
+      const jsDoc = [
+        operationModel.deprecated ? "@deprecated" : "",
+        operationModel.summary,
+        operationModel.description,
+      ]
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0)
+        .join("\n");
+
       yield itt`
+        /**
+         ${jsDoc}
+         */
         public ${registerHandlerMethodName}(operationHandler: ${handlerTypeName}<A>) {
           this.${handlerPropertyName} = operationHandler;
         }
