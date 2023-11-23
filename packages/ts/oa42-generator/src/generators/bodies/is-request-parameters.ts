@@ -29,16 +29,21 @@ export function* generateIsRequestParametersFunctionBody(
         if(parameters.${parameterPropertyName} === undefined) {
           return false;
         }
+        if(!validators.${isParameterFunction}(
+          parameters.${parameterPropertyName}
+        )) {
+          return false;
+        }
+      `;
+    } else {
+      yield itt`
+        if(parameters.${parameterPropertyName} !== undefined && !validators.${isParameterFunction}(
+          parameters.${parameterPropertyName}
+        )) {
+          return false;
+        }
       `;
     }
-
-    yield itt`
-      if(parameters.${parameterPropertyName} !== undefined && !validators.${isParameterFunction}(
-        parameters.${parameterPropertyName}
-      )) {
-        return false;
-      }
-    `;
   }
 
   yield itt`
