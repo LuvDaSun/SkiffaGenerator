@@ -8,8 +8,8 @@ export interface Operation {
   uri: URL;
   method: Method;
   name: string;
-  summary: string;
   deprecated: boolean;
+  summary: string;
   description: string;
   /**
    * all authentications from the second level should pass, any authentications

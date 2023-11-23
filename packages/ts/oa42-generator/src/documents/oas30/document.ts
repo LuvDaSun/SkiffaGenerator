@@ -158,8 +158,8 @@ export class Document extends DocumentBase<oas.Schema20210928> {
       uri: operationUri,
       method,
       name: operationItem.operationId ?? "",
-      summary: operationItem.summary ?? "",
       deprecated: operationItem.deprecated ?? false,
+      summary: operationItem.summary ?? "",
       description: operationItem.description ?? "",
       queryParameters,
       headerParameters,
@@ -237,6 +237,7 @@ export class Document extends DocumentBase<oas.Schema20210928> {
 
     return {
       uri: responseUri,
+      description: responseItem.description,
       statusKind,
       statusCodes,
       headerParameters,
