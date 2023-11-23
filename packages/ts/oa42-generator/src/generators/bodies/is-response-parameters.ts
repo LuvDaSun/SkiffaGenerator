@@ -28,11 +28,9 @@ export function* generateIsResponseParametersFunctionBody(
     }
 
     yield itt`
-      if(
-        !validators.${isParameterFunction}(
-          parameters.${parameterPropertyName}
-        ) === undefined
-      ) {
+      if(parameters.${parameterPropertyName} !== undefined && !validators.${isParameterFunction}(
+        parameters.${parameterPropertyName}
+      )) {
         return false;
       }
     `;
