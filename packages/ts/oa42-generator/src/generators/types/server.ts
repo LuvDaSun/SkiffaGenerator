@@ -63,8 +63,6 @@ function* generateServerBody(apiModel: models.Api) {
     const handlerTypeName = toPascal(authenticationModel.name, "authentication", "handler");
     const handlerPropertyName = toCamel(authenticationModel.name, "authentication", "handler");
 
-    // TODO add JsDoc
-
     yield itt`
       private ${handlerPropertyName}?: ${handlerTypeName}<A>;
     `;
