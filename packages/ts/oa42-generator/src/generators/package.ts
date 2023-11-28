@@ -1,5 +1,5 @@
 import fs from "fs";
-import * as jns42generator from "jns42-generator";
+import * as jns42generator from "generator";
 import path from "path";
 import * as models from "../models/index.js";
 import { NestedText, flattenNestedText, splitIterableText } from "../utils/index.js";

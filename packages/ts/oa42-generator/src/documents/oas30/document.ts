@@ -1,8 +1,8 @@
+import * as jns42generator from "generator";
+import { Namer } from "generator";
 import { Router } from "goodrouter";
-import * as jns42generator from "jns42-generator";
-import { Namer } from "jns42-generator";
-import * as oas from "jns42-schema-oas-v3-0";
 import { Method, StatusCode, methods, statusCodes } from "oa42-lib";
+import * as oas from "schema-oas-v3-0";
 import * as models from "../../models/index.js";
 import {
   appendToUriHash,

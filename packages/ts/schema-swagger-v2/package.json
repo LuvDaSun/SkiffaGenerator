@@ -1,5 +1,5 @@
 {
-  "name": "jns42-schema-swagger-v2",
+  "name": "schema-swagger-v2",
   "version": "0.0.0",
   "sideEffects": false,
   "type": "module",

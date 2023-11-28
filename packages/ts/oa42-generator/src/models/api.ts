@@ -1,5 +1,5 @@
+import { Specification } from "generator/out/models/specification.js";
 import { Router } from "goodrouter";
-import { Specification } from "jns42-generator/out/models/specification.js";
 import { Authentication } from "./authentication.js";
 import { Path } from "./path.js";
 

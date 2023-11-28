@@ -1,25 +1,25 @@
 SHELL:=$(PREFIX)/bin/sh
 
 build: \
-	../ts/jns42-schema-swagger-v2 \
-	../ts/jns42-schema-oas-v3-0 \
-	../ts/jns42-schema-oas-v3-1 \
+	../ts/schema-swagger-v2 \
+	../ts/schema-oas-v3-0 \
+	../ts/schema-oas-v3-1 \
 
 	npm install
 
-out/jns42-schema-swagger-v2:
+out/schema-swagger-v2:
 	npx --yes jns42-generator package http://swagger.io/v2/schema.json\# \
 		--package-directory $@ \
 		--package-name $(notdir $(basename $@)) \
 		--package-version 0.0.0 \
 
-out/jns42-schema-oas-v3-0:
+out/schema-oas-v3-0:
 	npx --yes jns42-generator package https://spec.openapis.org/oas/3.0/schema/2021-09-28 \
 		--package-directory $@ \
 		--package-name $(notdir $(basename $@)) \
 		--package-version 0.0.0 \
 
-out/jns42-schema-oas-v3-1:
+out/schema-oas-v3-1:
 	npx --yes jns42-generator package https://spec.openapis.org/oas/3.1/schema/2022-10-07 \
 		--package-directory $@ \
 		--package-name $(notdir $(basename $@)) \

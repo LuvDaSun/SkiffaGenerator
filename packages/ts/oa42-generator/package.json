@@ -34,9 +34,9 @@
     "generator"
   ],
   "dependencies": {
-    "jns42-schema-oas-v3-0": "file://../jns42-schema-oas-v3-0",
-    "jns42-schema-oas-v3-1": "file://../jns42-schema-oas-v3-1",
-    "jns42-schema-swagger-v2": "file://../jns42-schema-swagger-v2",
+    "schema-oas-v3-0": "file://../schema-oas-v3-0",
+    "schema-oas-v3-1": "file://../schema-oas-v3-1",
+    "schema-swagger-v2": "file://../schema-swagger-v2",
     "@types/node": "^20.10.0",
     "@types/yargs": "^17.0.32",
     "camelcase": "^8.0.0",
@@ -54,8 +54,8 @@
     "typescript": "^5.3.2"
   },
   "bundleDependencies": [
-    "jns42-schema-oas-v3-0",
-    "jns42-schema-oas-v3-1",
-    "jns42-schema-swagger-v2"
+    "schema-oas-v3-0",
+    "schema-oas-v3-1",
+    "schema-swagger-v2"
   ]
 }
