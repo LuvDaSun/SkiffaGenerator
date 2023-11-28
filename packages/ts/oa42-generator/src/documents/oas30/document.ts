@@ -276,6 +276,7 @@ export class Document extends DocumentBase<oas.Schema20210928> {
     };
   }
 
+  // TODO
   private async *getSchemas(): AsyncIterable<readonly [string, any]> {
     const documentContext = new jns42generator.DocumentContext();
 
