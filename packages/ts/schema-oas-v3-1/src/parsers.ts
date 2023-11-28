@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.8.9                          -- www.JsonSchema42.org
+// v0.8.12                         -- www.JsonSchema42.org
 export function parseSchema20221007(value: unknown): unknown {
 return _parseMapSchema20221007(value) ?? _parseReferenceSchema20221007(value) ?? _parseAnyOfSchema20221007(value);
 }

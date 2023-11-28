@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.8.9                          -- www.JsonSchema42.org
+// v0.8.12                         -- www.JsonSchema42.org
 import * as types from "./types.js";
 export function isSchema20221007(value: unknown): value is types.Schema20221007 {
 if(!_isMapSchema20221007(value) && !_isReferenceSchema20221007(value) && !_isAnyOfSchema20221007(value)) {
@@ -1503,7 +1503,7 @@ function _isStringOpenapi(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
-if(new RegExp("^3\\.1\\.\\d+(-.+)?$").test(value)) {
+if(!new RegExp("^3\\.1\\.\\d+(-.+)?$").test(value)) {
 return false;
 }
 return true;
@@ -4363,7 +4363,7 @@ function _isStringSchemasResponsesParametersExamplesRequestBodiesHeadersSecurity
 if(typeof value !== "string") {
 return false;
 }
-if(new RegExp("^[a-zA-Z0-9._-]+$").test(value)) {
+if(!new RegExp("^[a-zA-Z0-9._-]+$").test(value)) {
 return false;
 }
 return true;
@@ -5154,7 +5154,7 @@ function _isStringIfScheme(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
-if(new RegExp("^[Bb][Ee][Aa][Rr][Ee][Rr]$").test(value)) {
+if(!new RegExp("^[Bb][Ee][Aa][Rr][Ee][Rr]$").test(value)) {
 return false;
 }
 return true;
