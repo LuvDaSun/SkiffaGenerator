@@ -1,8 +1,7 @@
 {
   "private": true,
   "workspaces": [
-    "packages/ts/oa42-lib",
-    "packages/ts/oa42-generator"
+    "packages/ts/*"
   ],
   "scripts": {
     "spelling": "cspell",
