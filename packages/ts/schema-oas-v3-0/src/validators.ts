@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.8.12                         -- www.JsonSchema42.org
+// v0.8.13                         -- www.JsonSchema42.org
 import * as types from "./types.js";
 export function isSchema20210928(value: unknown): value is types.Schema20210928 {
 if(!_isMapSchema20210928(value)) {
@@ -31,51 +31,53 @@ case "openapi":
 if(!isOpenapi(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "info":
 if(!isPropertiesInfo(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "externalDocs":
 if(!isSchema20210928ExternalDocs(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "servers":
 if(!isSchema20210928Servers(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "security":
 if(!isSchema20210928Security(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "tags":
 if(!isSchema20210928Tags(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "paths":
 if(!isPropertiesPaths(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "components":
 if(!isPropertiesComponents(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isSchema20210928X(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isSchema20210928AdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -98,6 +100,7 @@ if(new RegExp("^\\$ref$").test(propertyName)) {
 if(!isPatternPropertiesRef(propertyValue)) {
 return false;
 }
+continue;
 }
 }
 return true;
@@ -125,41 +128,43 @@ case "title":
 if(!isInfoTitle(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isInfoDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "termsOfService":
 if(!isTermsOfService(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "contact":
 if(!isPropertiesContact(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "license":
 if(!isPropertiesLicense(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "version":
 if(!isVersion(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isInfoX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isInfoAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -180,26 +185,28 @@ case "name":
 if(!isContactName(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "url":
 if(!isContactUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "email":
 if(!isEmail(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isContactX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isContactAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -223,21 +230,23 @@ case "name":
 if(!isLicenseName(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "url":
 if(!isLicenseUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isLicenseX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isLicenseAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -261,26 +270,28 @@ case "url":
 if(!isServerUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isServerDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "variables":
 if(!isVariables(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isServerX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isServerAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -304,26 +315,28 @@ case "enum":
 if(!isServerVariableEnum(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "default":
 if(!isServerVariableDefault(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isServerVariableDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isServerVariableX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isServerVariableAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -344,56 +357,58 @@ case "schemas":
 if(!isSchemas(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "responses":
 if(!isComponentsPropertiesResponses(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "parameters":
 if(!isComponentsParameters(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "examples":
 if(!isComponentsExamples(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "requestBodies":
 if(!isRequestBodies(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "headers":
 if(!isComponentsHeaders(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "securitySchemes":
 if(!isSecuritySchemes(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "links":
 if(!isComponentsLinks(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "callbacks":
 if(!isComponentsCallbacks(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isComponentsX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isComponentsAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -414,186 +429,188 @@ case "title":
 if(!isSchemaTitle(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "multipleOf":
 if(!isMultipleOf(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "maximum":
 if(!isMaximum(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "exclusiveMaximum":
 if(!isExclusiveMaximum(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "minimum":
 if(!isMinimum(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "exclusiveMinimum":
 if(!isExclusiveMinimum(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "maxLength":
 if(!isMaxLength(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "minLength":
 if(!isMinLength(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "pattern":
 if(!isPattern(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "maxItems":
 if(!isMaxItems(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "minItems":
 if(!isMinItems(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "uniqueItems":
 if(!isUniqueItems(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "maxProperties":
 if(!isMaxProperties(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "minProperties":
 if(!isMinProperties(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "required":
 if(!isSchemaRequired(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "enum":
 if(!isSchemaEnum(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "type":
 if(!isSchemaType(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "not":
 if(!isPropertiesNot(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "allOf":
 if(!isAllOf(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "oneOf":
 if(!isOneOf(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "anyOf":
 if(!isAnyOf(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "items":
 if(!isPropertiesItems(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "properties":
 if(!isProperties(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "additionalProperties":
 if(!isSchemaPropertiesAdditionalProperties(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isSchemaDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "format":
 if(!isFormat(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "default":
 if(!isSchemaDefault(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "nullable":
 if(!isNullable(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "discriminator":
 if(!isPropertiesDiscriminator(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "readOnly":
 if(!isReadOnly(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "writeOnly":
 if(!isWriteOnly(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "example":
 if(!isSchemaPropertiesExample(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "externalDocs":
 if(!isSchemaExternalDocs(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "deprecated":
 if(!isSchemaDeprecated(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "xml":
 if(!isPropertiesXml(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isSchemaX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isSchemaAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -617,12 +634,12 @@ case "propertyName":
 if(!isPropertyName(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "mapping":
 if(!isMapping(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -644,36 +661,38 @@ case "name":
 if(!isXmlName(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "namespace":
 if(!isNamespace(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "prefix":
 if(!isPrefix(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "attribute":
 if(!isAttribute(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "wrapped":
 if(!isWrapped(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isXmlX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isXmlAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -697,31 +716,33 @@ case "description":
 if(!isResponseDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "headers":
 if(!isResponseHeaders(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "content":
 if(!isResponseContent(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "links":
 if(!isResponseLinks(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isResponseX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isResponseAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -742,31 +763,33 @@ case "schema":
 if(!isMediaTypePropertiesSchema(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "example":
 if(!isMediaTypePropertiesExample(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "examples":
 if(!isMediaTypeExamples(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "encoding":
 if(!isPropertiesEncoding(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isMediaTypeX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isMediaTypeAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -793,31 +816,33 @@ case "summary":
 if(!isExampleSummary(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isExampleDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "value":
 if(!isValue(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "externalValue":
 if(!isExternalValue(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isExampleX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isExampleAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -838,66 +863,68 @@ case "description":
 if(!isHeaderDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "required":
 if(!isHeaderRequired(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "deprecated":
 if(!isHeaderDeprecated(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "allowEmptyValue":
 if(!isHeaderAllowEmptyValue(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "style":
 if(!isHeaderStyle(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "explode":
 if(!isHeaderExplode(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "allowReserved":
 if(!isHeaderAllowReserved(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "schema":
 if(!isHeaderPropertiesSchema(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "content":
 if(!isHeaderContent(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "example":
 if(!isHeaderPropertiesExample(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "examples":
 if(!isHeaderExamples(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isHeaderX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isHeaderAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -926,15 +953,18 @@ if(new RegExp("^\\/").test(propertyName)) {
 if(!isPatternProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isPathsX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isPathsAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -955,41 +985,44 @@ case "$ref":
 if(!isPropertiesRef(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "summary":
 if(!isPathItemSummary(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isPathItemDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "servers":
 if(!isPathItemServers(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "parameters":
 if(!isPathItemParameters(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^(get|put|post|delete|options|head|patch|trace)$").test(propertyName)) {
 if(!isGetPutPostDeleteOptionsHeadPatchTrace(propertyValue)) {
 return false;
 }
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isPathItemX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isPathItemAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1013,71 +1046,73 @@ case "tags":
 if(!isOperationTags(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "summary":
 if(!isOperationSummary(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isOperationDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "externalDocs":
 if(!isOperationExternalDocs(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "operationId":
 if(!isOperationOperationId(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "parameters":
 if(!isOperationParameters(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "requestBody":
 if(!isOperationPropertiesRequestBody(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "responses":
 if(!isOperationPropertiesResponses(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "callbacks":
 if(!isOperationCallbacks(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "deprecated":
 if(!isOperationDeprecated(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "security":
 if(!isOperationSecurity(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "servers":
 if(!isOperationServers(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isOperationX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isOperationAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1100,21 +1135,24 @@ case "default":
 if(!isResponsesDefault(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^[1-5](?:\\d{2}|XX)$").test(propertyName)) {
 if(!isPatternProperties15D2Xx(propertyValue)) {
 return false;
 }
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isResponsesX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isResponsesAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 if(propertyCount < 1) {
 return false;
@@ -1136,6 +1174,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isSecurityRequirementAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1159,26 +1198,28 @@ case "name":
 if(!isTagName(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isTagDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "externalDocs":
 if(!isTagExternalDocs(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isTagX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isTagAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1202,21 +1243,23 @@ case "description":
 if(!isExternalDocumentationDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "url":
 if(!isExternalDocumentationUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isExternalDocumentationX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isExternalDocumentationAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1286,76 +1329,78 @@ case "name":
 if(!isParameterName(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "in":
 if(!isParameterIn(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isParameterDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "required":
 if(!isParameterRequired(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "deprecated":
 if(!isParameterDeprecated(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "allowEmptyValue":
 if(!isParameterAllowEmptyValue(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "style":
 if(!isParameterStyle(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "explode":
 if(!isParameterExplode(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "allowReserved":
 if(!isParameterAllowReserved(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "schema":
 if(!isParameterPropertiesSchema(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "content":
 if(!isParameterContent(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "example":
 if(!isParameterPropertiesExample(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "examples":
 if(!isParameterExamples(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isParameterX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isParameterAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1428,26 +1473,28 @@ case "description":
 if(!isRequestBodyDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "content":
 if(!isRequestBodyContent(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "required":
 if(!isRequestBodyRequired(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isRequestBodyX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isRequestBodyAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1514,31 +1561,33 @@ case "type":
 if(!isApiKeySecuritySchemeType(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "name":
 if(!isApiKeySecuritySchemeName(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "in":
 if(!isApiKeySecuritySchemeIn(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isApiKeySecuritySchemeDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isApiKeySecuritySchemeX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isApiKeySecuritySchemeAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1565,31 +1614,33 @@ case "scheme":
 if(!isHttpSecuritySchemeScheme(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "bearerFormat":
 if(!isBearerFormat(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isHttpSecuritySchemeDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "type":
 if(!isHttpSecuritySchemeType(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isHttpSecuritySchemeX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isHttpSecuritySchemeAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1635,26 +1686,28 @@ case "type":
 if(!isOauth2SecuritySchemeType(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "flows":
 if(!isFlows(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isOauth2SecuritySchemeDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isOauth2SecuritySchemeX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isOauth2SecuritySchemeAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1681,26 +1734,28 @@ case "type":
 if(!isOpenIdConnectSecuritySchemeType(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "openIdConnectUrl":
 if(!isOpenIdConnectUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isOpenIdConnectSecuritySchemeDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isOpenIdConnectSecuritySchemeX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isOpenIdConnectSecuritySchemeAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1721,31 +1776,33 @@ case "implicit":
 if(!isImplicit(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "password":
 if(!isPassword(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "clientCredentials":
 if(!isClientCredentials(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "authorizationCode":
 if(!isAuthorizationCode(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isOauthFlowsX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isOauthFlowsAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1772,26 +1829,28 @@ case "authorizationUrl":
 if(!isImplicitOauthFlowAuthorizationUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "refreshUrl":
 if(!isImplicitOauthFlowRefreshUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "scopes":
 if(!isImplicitOauthFlowScopes(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isImplicitOauthFlowX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isImplicitOauthFlowAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1818,26 +1877,28 @@ case "tokenUrl":
 if(!isPasswordOauthFlowTokenUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "refreshUrl":
 if(!isPasswordOauthFlowRefreshUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "scopes":
 if(!isPasswordOauthFlowScopes(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isPasswordOauthFlowX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isPasswordOauthFlowAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1864,26 +1925,28 @@ case "tokenUrl":
 if(!isClientCredentialsFlowTokenUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "refreshUrl":
 if(!isClientCredentialsFlowRefreshUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "scopes":
 if(!isClientCredentialsFlowScopes(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isClientCredentialsFlowX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isClientCredentialsFlowAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1913,31 +1976,33 @@ case "authorizationUrl":
 if(!isAuthorizationCodeOauthFlowAuthorizationUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "tokenUrl":
 if(!isAuthorizationCodeOauthFlowTokenUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "refreshUrl":
 if(!isAuthorizationCodeOauthFlowRefreshUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "scopes":
 if(!isAuthorizationCodeOauthFlowScopes(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isAuthorizationCodeOauthFlowX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isAuthorizationCodeOauthFlowAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1958,41 +2023,43 @@ case "operationId":
 if(!isLinkOperationId(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "operationRef":
 if(!isOperationRef(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "parameters":
 if(!isLinkParameters(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "requestBody":
 if(!isLinkPropertiesRequestBody(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isLinkDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "server":
 if(!isPropertiesServer(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
 if(!isLinkX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isLinkAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -2018,10 +2085,12 @@ if(new RegExp("^x-").test(propertyName)) {
 if(!isCallbackX(propertyValue)) {
 return false;
 }
+continue;
 }
 if(!isCallbackAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -2042,31 +2111,32 @@ case "contentType":
 if(!isContentType(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "headers":
 if(!isEncodingHeaders(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "style":
 if(!isEncodingStyle(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "explode":
 if(!isEncodingExplode(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "allowReserved":
 if(!isEncodingAllowReserved(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(!isDefinitionsEncodingAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -2423,6 +2493,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isVariablesAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -2508,6 +2579,7 @@ if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!isSchemasAZAZ09(propertyValue)) {
 return false;
 }
+continue;
 }
 }
 return true;
@@ -2528,6 +2600,7 @@ if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!isResponsesAZAZ09(propertyValue)) {
 return false;
 }
+continue;
 }
 }
 return true;
@@ -2548,6 +2621,7 @@ if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!isParametersAZAZ09(propertyValue)) {
 return false;
 }
+continue;
 }
 }
 return true;
@@ -2568,6 +2642,7 @@ if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!isExamplesAZAZ09(propertyValue)) {
 return false;
 }
+continue;
 }
 }
 return true;
@@ -2588,6 +2663,7 @@ if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!isRequestBodiesAZAZ09(propertyValue)) {
 return false;
 }
+continue;
 }
 }
 return true;
@@ -2608,6 +2684,7 @@ if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!isHeadersAZAZ09(propertyValue)) {
 return false;
 }
+continue;
 }
 }
 return true;
@@ -2628,6 +2705,7 @@ if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!isSecuritySchemesAZAZ09(propertyValue)) {
 return false;
 }
+continue;
 }
 }
 return true;
@@ -2648,6 +2726,7 @@ if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!isLinksAZAZ09(propertyValue)) {
 return false;
 }
+continue;
 }
 }
 return true;
@@ -2668,6 +2747,7 @@ if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!isCallbacksAZAZ09(propertyValue)) {
 return false;
 }
+continue;
 }
 }
 return true;
@@ -3054,6 +3134,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isPropertiesPropertiesAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -3241,6 +3322,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isMappingAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -3343,6 +3425,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isResponseHeadersAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -3361,6 +3444,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isResponseContentAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -3379,6 +3463,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isLinksAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -3437,6 +3522,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isMediaTypeExamplesAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -3455,6 +3541,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isPropertiesEncodingAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -3662,6 +3749,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isHeaderContentAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 if(propertyCount < 1) {
 return false;
@@ -3689,6 +3777,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isHeaderExamplesAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -3994,6 +4083,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isCallbacksAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -4467,6 +4557,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isParameterContentAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 if(propertyCount < 1) {
 return false;
@@ -4494,6 +4585,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isParameterExamplesAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -4565,17 +4657,17 @@ case "in":
 if(!isOneOf0In(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "style":
 if(!isOneOf0Style(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "required":
 if(!isOneOf0Required(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4597,12 +4689,12 @@ case "in":
 if(!isOneOf1In(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "style":
 if(!isOneOf1Style(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4624,12 +4716,12 @@ case "in":
 if(!isOneOf2In(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "style":
 if(!isOneOf2Style(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4651,12 +4743,12 @@ case "in":
 if(!isOneOf3In(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "style":
 if(!isOneOf3Style(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4688,6 +4780,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isRequestBodyContentAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -4909,7 +5002,7 @@ case "scheme":
 if(!isOneOf0Scheme(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4931,7 +5024,7 @@ case "scheme":
 if(!isOneOf1Scheme(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -5143,6 +5236,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isImplicitOauthFlowScopesAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -5197,6 +5291,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isPasswordOauthFlowScopesAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -5251,6 +5346,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isClientCredentialsFlowScopesAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -5317,6 +5413,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isAuthorizationCodeOauthFlowScopesAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -5371,6 +5468,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isParametersAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -5476,6 +5574,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isEncodingHeadersAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }

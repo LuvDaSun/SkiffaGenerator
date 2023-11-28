@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.8.12                         -- www.JsonSchema42.org
+// v0.8.13                         -- www.JsonSchema42.org
 import * as types from "./types.js";
 export function isSchema20221007(value: unknown): value is types.Schema20221007 {
 if(!_isMapSchema20221007(value) && !_isReferenceSchema20221007(value) && !_isAnyOfSchema20221007(value)) {
@@ -28,52 +28,52 @@ case "openapi":
 if(!isOpenapi(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "info":
 if(!isPropertiesInfo(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "jsonSchemaDialect":
 if(!isJsonSchemaDialect(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "servers":
 if(!isSchema20221007Servers(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "paths":
 if(!isPropertiesPaths(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "webhooks":
 if(!isWebhooks(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "components":
 if(!isPropertiesComponents(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "security":
 if(!isSchema20221007Security(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "tags":
 if(!isSchema20221007Tags(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "externalDocs":
 if(!isSchema20221007ExternalDocs(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -119,37 +119,37 @@ case "title":
 if(!isTitle(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "summary":
 if(!isInfoSummary(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isInfoDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "termsOfService":
 if(!isTermsOfService(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "contact":
 if(!isPropertiesContact(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "license":
 if(!isPropertiesLicense(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "version":
 if(!isVersion(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -177,17 +177,17 @@ case "name":
 if(!isContactName(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "url":
 if(!isContactUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "email":
 if(!isEmail(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -218,17 +218,17 @@ case "name":
 if(!isLicenseName(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "identifier":
 if(!isIdentifier(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "url":
 if(!isLicenseUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -259,17 +259,17 @@ case "url":
 if(!isServerUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isServerDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "variables":
 if(!isVariables(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -300,17 +300,17 @@ case "enum":
 if(!isEnum(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "default":
 if(!isServerVariableDefault(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isServerVariableDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -338,57 +338,58 @@ case "schemas":
 if(!isSchemas(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "responses":
 if(!isComponentsPropertiesResponses(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "parameters":
 if(!isComponentsParameters(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "examples":
 if(!isComponentsPropertiesExamples(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "requestBodies":
 if(!isRequestBodies(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "headers":
 if(!isComponentsHeaders(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "securitySchemes":
 if(!isSecuritySchemes(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "links":
 if(!isComponentsLinks(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "callbacks":
 if(!isComponentsPropertiesCallbacks(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "pathItems":
 if(!isPathItems(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^(schemas|responses|parameters|examples|requestBodies|headers|securitySchemes|links|callbacks|pathItems)$").test(propertyName)) {
 if(!isSchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItems(propertyValue)) {
 return false;
 }
+continue;
 }
 }
 return true;
@@ -415,6 +416,7 @@ if(new RegExp("^/").test(propertyName)) {
 if(!isPatternProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 }
 return true;
@@ -442,62 +444,62 @@ case "summary":
 if(!isPathItemSummary(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isPathItemDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "servers":
 if(!isPathItemServers(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "parameters":
 if(!isPathItemParameters(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "get":
 if(!isGet(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "put":
 if(!isPut(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "post":
 if(!isPost(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "delete":
 if(!isDelete(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "options":
 if(!isOptions(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "head":
 if(!isHead(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "patch":
 if(!isPatch(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "trace":
 if(!isTrace(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -534,62 +536,62 @@ case "tags":
 if(!isOperationTags(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "summary":
 if(!isOperationSummary(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isOperationDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "externalDocs":
 if(!isOperationExternalDocs(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "operationId":
 if(!isOperationOperationId(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "parameters":
 if(!isOperationParameters(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "requestBody":
 if(!isOperationPropertiesRequestBody(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "responses":
 if(!isOperationPropertiesResponses(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "callbacks":
 if(!isOperationPropertiesCallbacks(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "deprecated":
 if(!isOperationDeprecated(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "security":
 if(!isOperationSecurity(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "servers":
 if(!isOperationServers(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -620,12 +622,12 @@ case "description":
 if(!isExternalDocumentationDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "url":
 if(!isExternalDocumentationUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -659,37 +661,37 @@ case "name":
 if(!isParameterName(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "in":
 if(!isParameterIn(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isParameterDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "required":
 if(!isParameterRequired(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "deprecated":
 if(!isParameterDeprecated(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "schema":
 if(!isParameterPropertiesSchema(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "content":
 if(!isParameterPropertiesContent(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -751,17 +753,17 @@ case "description":
 if(!isRequestBodyDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "content":
 if(!isRequestBodyPropertiesContent(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "required":
 if(!isRequestBodyRequired(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -796,9 +798,11 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isContentPropertyNames(propertyValue)) {
 return false;
 }
+continue;
 if(!isContentAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -819,12 +823,12 @@ case "schema":
 if(!isMediaTypePropertiesSchema(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "encoding":
 if(!isPropertiesEncoding(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -855,27 +859,27 @@ case "contentType":
 if(!isContentType(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "headers":
 if(!isEncodingHeaders(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "style":
 if(!isEncodingStyle(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "explode":
 if(!isEncodingExplode(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "allowReserved":
 if(!isAllowReserved(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -908,12 +912,13 @@ case "default":
 if(!isResponsesDefault(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 if(new RegExp("^[1-5](?:[0-9]{2}|XX)$").test(propertyName)) {
 if(!isPatternProperties15092Xx(propertyValue)) {
 return false;
 }
+continue;
 }
 }
 if(propertyCount < 1) {
@@ -947,22 +952,22 @@ case "description":
 if(!isResponseDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "headers":
 if(!isResponseHeaders(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "content":
 if(!isResponsePropertiesContent(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "links":
 if(!isResponseLinks(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -997,6 +1002,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isDefsCallbacksAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1032,22 +1038,22 @@ case "summary":
 if(!isExampleSummary(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isExampleDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "value":
 if(!isValue(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "externalValue":
 if(!isExternalValue(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -1090,32 +1096,32 @@ case "operationRef":
 if(!isOperationRef(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "operationId":
 if(!isLinkOperationId(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "parameters":
 if(!isLinkParameters(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "requestBody":
 if(!isLinkPropertiesRequestBody(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isLinkDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "body":
 if(!isBody(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -1171,27 +1177,27 @@ case "description":
 if(!isHeaderDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "required":
 if(!isHeaderRequired(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "deprecated":
 if(!isHeaderDeprecated(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "schema":
 if(!isHeaderPropertiesSchema(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "content":
 if(!isHeaderPropertiesContent(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -1250,17 +1256,17 @@ case "name":
 if(!isTagName(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isTagDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "externalDocs":
 if(!isTagExternalDocs(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -1288,17 +1294,17 @@ case "$ref":
 if(!isRef(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "summary":
 if(!isReferenceSummary(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isReferenceDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -1344,12 +1350,12 @@ case "type":
 if(!isSecuritySchemeType(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "description":
 if(!isSecuritySchemeDescription(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -1401,22 +1407,22 @@ case "implicit":
 if(!isPropertiesImplicit(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "password":
 if(!isPropertiesPassword(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "clientCredentials":
 if(!isPropertiesClientCredentials(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "authorizationCode":
 if(!isPropertiesAuthorizationCode(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -1442,6 +1448,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isSecurityRequirementAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1465,12 +1472,12 @@ case "example":
 if(!isPropertiesExample(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "examples":
 if(!isExamplesPropertiesExamples(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -1490,6 +1497,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isMapOfStringsAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1577,6 +1585,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isWebhooksAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1889,6 +1898,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isVariablesAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1952,6 +1962,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isSchemasAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1970,6 +1981,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isResponsesAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -1988,6 +2000,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isParametersAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -2006,6 +2019,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isComponentsExamplesAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -2024,6 +2038,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isRequestBodiesAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -2042,6 +2057,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isComponentsHeadersAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -2060,6 +2076,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isSecuritySchemesAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -2078,6 +2095,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isComponentsLinksAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -2096,6 +2114,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isComponentsPropertiesCallbacksAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -2114,6 +2133,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isPathItemsAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -2453,6 +2473,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isOperationPropertiesCallbacksAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -2688,7 +2709,7 @@ case "in":
 if(!isIfIn(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -2710,7 +2731,7 @@ case "allowEmptyValue":
 if(!isAllowEmptyValue(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -2886,6 +2907,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isEncodingAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -2949,6 +2971,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isEncodingHeadersAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -3066,6 +3089,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isResponseHeadersAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -3096,6 +3120,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isResponseLinksAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -3886,17 +3911,17 @@ case "authorizationUrl":
 if(!isImplicitAuthorizationUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "refreshUrl":
 if(!isImplicitRefreshUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "scopes":
 if(!isImplicitScopes(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -3930,17 +3955,17 @@ case "tokenUrl":
 if(!isPasswordTokenUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "refreshUrl":
 if(!isPasswordRefreshUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "scopes":
 if(!isPasswordScopes(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -3974,17 +3999,17 @@ case "tokenUrl":
 if(!isClientCredentialsTokenUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "refreshUrl":
 if(!isClientCredentialsRefreshUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "scopes":
 if(!isClientCredentialsScopes(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4021,22 +4046,22 @@ case "authorizationUrl":
 if(!isAuthorizationCodeAuthorizationUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "tokenUrl":
 if(!isAuthorizationCodeTokenUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "refreshUrl":
 if(!isAuthorizationCodeRefreshUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "scopes":
 if(!isAuthorizationCodeScopes(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4146,6 +4171,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 if(!isExamplesExamplesAdditionalProperties(propertyValue)) {
 return false;
 }
+continue;
 }
 return true;
 }
@@ -4511,7 +4537,7 @@ case "style":
 if(!isIfStyle(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4533,7 +4559,7 @@ case "explode":
 if(!isThenExplode(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4555,7 +4581,7 @@ case "explode":
 if(!isElseExplode(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4616,7 +4642,7 @@ case "type":
 if(!isTypeApikeyIfType(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4644,12 +4670,12 @@ case "name":
 if(!isThenName(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "in":
 if(!isThenIn(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4674,7 +4700,7 @@ case "type":
 if(!isTypeHttpIfType(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4699,7 +4725,7 @@ case "scheme":
 if(!isThenScheme(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4727,12 +4753,12 @@ case "type":
 if(!isTypeHttpBearerIfType(propertyValue)) {
 return false;
 }
-break;
+continue;
 case "scheme":
 if(!isIfScheme(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4754,7 +4780,7 @@ case "bearerFormat":
 if(!isBearerFormat(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4779,7 +4805,7 @@ case "type":
 if(!isTypeOauth2IfType(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4804,7 +4830,7 @@ case "flows":
 if(!isFlows(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4829,7 +4855,7 @@ case "type":
 if(!isTypeOidcIfType(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
@@ -4854,7 +4880,7 @@ case "openIdConnectUrl":
 if(!isOpenIdConnectUrl(propertyValue)) {
 return false;
 }
-break;
+continue;
 }
 }
 return true;
