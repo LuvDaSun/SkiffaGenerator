@@ -1,4 +1,4 @@
-import * as oas from "@jns42/jns42-schema-oas-v3-0";
+import * as oas from "jns42-schema-oas-v3-0";
 import { methods } from "oa42-lib";
 import { appendToPointer } from "../../utils/pointer.js";
 

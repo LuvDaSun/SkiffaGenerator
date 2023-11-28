@@ -1,4 +1,4 @@
-import * as oas from "@jns42/jns42-schema-oas-v3-1";
+import * as oas from "jns42-schema-oas-v3-1";
 import * as models from "../../models/index.js";
 import { DocumentBase } from "../document-base.js";
 

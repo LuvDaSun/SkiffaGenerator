@@ -1,4 +1,4 @@
-import * as oas30 from "@jns42/jns42-schema-oas-v3-0";
+import * as oas30 from "jns42-schema-oas-v3-0";
 import { DocumentInitializer } from "../document-context.js";
 import { Document } from "./document.js";
 

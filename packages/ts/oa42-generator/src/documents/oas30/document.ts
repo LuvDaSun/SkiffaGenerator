@@ -1,8 +1,7 @@
-import * as intermediateB from "@jns42/jns42-schema-intermediate-b";
-import * as oas from "@jns42/jns42-schema-oas-v3-0";
 import { Router } from "goodrouter";
 import * as jns42generator from "jns42-generator";
 import { Namer } from "jns42-generator";
+import * as oas from "jns42-schema-oas-v3-0";
 import { Method, StatusCode, methods, statusCodes } from "oa42-lib";
 import * as models from "../../models/index.js";
 import {
@@ -277,7 +276,7 @@ export class Document extends DocumentBase<oas.Schema20210928> {
     };
   }
 
-  private async *getSchemas(): AsyncIterable<readonly [string, intermediateB.Node]> {
+  private async *getSchemas(): AsyncIterable<readonly [string, any]> {
     const documentContext = new jns42generator.DocumentContext();
 
     documentContext.registerFactory(
