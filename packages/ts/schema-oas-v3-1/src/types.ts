@@ -3,7 +3,8 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.8.13                         -- www.JsonSchema42.org
+// v0.8.21                         -- www.JsonSchema42.org
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07
 /**
 The description of OpenAPI v3.1.x documents without schema validation, as defined by https://spec.openapis.org/oas/v3.1.0
 */
@@ -29,6 +30,7 @@ export type Schema20221007 = (SpecificationExtensions) &
 "externalDocs"?: Schema20221007ExternalDocs,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info
 export type DefsInfo = (SpecificationExtensions) &
 ((
 {
@@ -41,6 +43,7 @@ export type DefsInfo = (SpecificationExtensions) &
 "version": Version,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact
 export type DefsContact = (SpecificationExtensions) &
 ((
 {
@@ -49,6 +52,7 @@ export type DefsContact = (SpecificationExtensions) &
 "email"?: Email,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license
 export type DefsLicense = (SpecificationExtensions) &
 ((
 {
@@ -57,6 +61,7 @@ export type DefsLicense = (SpecificationExtensions) &
 "url"?: LicenseUrl,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server
 export type Server = (SpecificationExtensions) &
 ((
 {
@@ -65,6 +70,7 @@ export type Server = (SpecificationExtensions) &
 "variables"?: Variables,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable
 export type ServerVariable = (SpecificationExtensions) &
 ((
 {
@@ -73,6 +79,7 @@ export type ServerVariable = (SpecificationExtensions) &
 "description"?: ServerVariableDescription,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components
 export type DefsComponents = (SpecificationExtensions) &
 ((
 {
@@ -100,12 +107,14 @@ PathItems |
 undefined,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/paths
 export type DefsPaths = (SpecificationExtensions) &
 ((
 {
 [key: string]: PatternProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item
 export type PathItem = (SpecificationExtensions) &
 ((
 {
@@ -123,8 +132,10 @@ export type PathItem = (SpecificationExtensions) &
 "trace"?: Trace,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference
 export type PathItemOrReference = (PathItemOrReferenceThen |
 PathItemOrReferenceElse);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation
 export type Operation = (SpecificationExtensions) &
 ((
 {
@@ -142,6 +153,7 @@ export type Operation = (SpecificationExtensions) &
 "servers"?: OperationServers,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation
 export type ExternalDocumentation = (SpecificationExtensions) &
 ((
 {
@@ -149,6 +161,7 @@ export type ExternalDocumentation = (SpecificationExtensions) &
 "url": ExternalDocumentationUrl,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter
 export type Parameter = (SpecificationExtensions) &
 (ParameterOneOf0 |
 ParameterOneOf1) &
@@ -164,8 +177,10 @@ ParameterOneOf1) &
 "content"?: ParameterPropertiesContent,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference
 export type ParameterOrReference = (ParameterOrReferenceThen |
 ParameterOrReferenceElse);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body
 export type DefsRequestBody = (SpecificationExtensions) &
 ((
 {
@@ -174,13 +189,16 @@ export type DefsRequestBody = (SpecificationExtensions) &
 "required"?: RequestBodyRequired,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference
 export type RequestBodyOrReference = (RequestBodyOrReferenceThen |
 RequestBodyOrReferenceElse);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content
 export type DefsContent = ((
 {
 [key: ContentPropertyNames]: ContentAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type
 export type MediaType = (MediaTypeAllOf0 &
 MediaTypeAllOf1) &
 ((
@@ -189,6 +207,7 @@ MediaTypeAllOf1) &
 "encoding"?: PropertiesEncoding,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding
 export type DefsEncoding = (EncodingAllOf0 &
 EncodingAllOf1) &
 ((
@@ -200,6 +219,7 @@ EncodingAllOf1) &
 "allowReserved"?: AllowReserved,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/responses
 export type DefsResponses = (SpecificationExtensions) &
 ((
 {
@@ -209,6 +229,7 @@ ResponsesDefault |
 undefined,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response
 export type Response = (SpecificationExtensions) &
 ((
 {
@@ -218,16 +239,20 @@ export type Response = (SpecificationExtensions) &
 "links"?: ResponseLinks,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference
 export type ResponseOrReference = (ResponseOrReferenceThen |
 ResponseOrReferenceElse);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks
 export type DefsCallbacks = (SpecificationExtensions) &
 ((
 {
 [key: string]: DefsCallbacksAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference
 export type CallbacksOrReference = (CallbacksOrReferenceThen |
 CallbacksOrReferenceElse);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example
 export type DefsExample = (SpecificationExtensions) &
 (Not) &
 ((
@@ -238,8 +263,10 @@ export type DefsExample = (SpecificationExtensions) &
 "externalValue"?: ExternalValue,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference
 export type ExampleOrReference = (ExampleOrReferenceThen |
 ExampleOrReferenceElse);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link
 export type Link = (SpecificationExtensions) &
 (LinkOneOf0 |
 LinkOneOf1) &
@@ -253,8 +280,10 @@ LinkOneOf1) &
 "body"?: Body,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference
 export type LinkOrReference = (LinkOrReferenceThen |
 LinkOrReferenceElse);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header
 export type Header = (SpecificationExtensions) &
 (HeaderOneOf0 |
 HeaderOneOf1) &
@@ -267,8 +296,10 @@ HeaderOneOf1) &
 "content"?: HeaderPropertiesContent,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference
 export type HeaderOrReference = (HeaderOrReferenceThen |
 HeaderOrReferenceElse);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag
 export type Tag = (SpecificationExtensions) &
 ((
 {
@@ -277,6 +308,7 @@ export type Tag = (SpecificationExtensions) &
 "externalDocs"?: TagExternalDocs,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference
 export type Reference = ((
 {
 "$ref"?: Ref,
@@ -284,11 +316,13 @@ export type Reference = ((
 "description"?: ReferenceDescription,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/schema
 export type DefsSchema = ((
 {
 }
 ) |
 (boolean));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme
 export type SecurityScheme = (SecuritySchemeAllOf0 &
 SecuritySchemeAllOf1 &
 AllOf2 &
@@ -301,8 +335,10 @@ AllOf5) &
 "description"?: SecuritySchemeDescription,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference
 export type SecuritySchemeOrReference = (SecuritySchemeOrReferenceThen |
 SecuritySchemeOrReferenceElse);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows
 export type OauthFlows = (SpecificationExtensions) &
 ((
 {
@@ -312,346 +348,522 @@ export type OauthFlows = (SpecificationExtensions) &
 "authorizationCode"?: PropertiesAuthorizationCode,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement
 export type SecurityRequirement = ((
 {
 [key: string]: SecurityRequirementAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions
 export type SpecificationExtensions = unknown;
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples
 export type DefsExamples = ((
 {
 "example"?: PropertiesExample,
 "examples"?: ExamplesPropertiesExamples,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/map-of-strings
 export type MapOfStrings = ((
 {
 [key: string]: MapOfStringsAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/openapi
 export type Openapi = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/info
 export type PropertiesInfo = (DefsInfo);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/jsonSchemaDialect
 export type JsonSchemaDialect = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/servers
 export type Schema20221007Servers = (((Schema20221007ServersItems)[]));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/paths
 export type PropertiesPaths = (DefsPaths);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/webhooks
 export type Webhooks = ((
 {
 [key: string]: WebhooksAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/components
 export type PropertiesComponents = (DefsComponents);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/security
 export type Schema20221007Security = (((Schema20221007SecurityItems)[]));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/tags
 export type Schema20221007Tags = (((Schema20221007TagsItems)[]));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/externalDocs
 export type Schema20221007ExternalDocs = (ExternalDocumentation);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/0
 export type AnyOf0 = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/1
 export type AnyOf1 = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/2
 export type AnyOf2 = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/title
 export type Title = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/summary
 export type InfoSummary = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/description
 export type InfoDescription = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/termsOfService
 export type TermsOfService = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/contact
 export type PropertiesContact = (DefsContact);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/license
 export type PropertiesLicense = (DefsLicense);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/version
 export type Version = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/name
 export type ContactName = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/url
 export type ContactUrl = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/email
 export type Email = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/name
 export type LicenseName = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/identifier
 export type Identifier = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/url
 export type LicenseUrl = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/url
 export type ServerUrl = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/description
 export type ServerDescription = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/variables
 export type Variables = ((
 {
 [key: string]: VariablesAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/enum
 export type Enum = (((EnumItems)[]));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/default
 export type ServerVariableDefault = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/description
 export type ServerVariableDescription = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/schemas
 export type Schemas = ((
 {
 [key: string]: SchemasAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/responses
 export type ComponentsPropertiesResponses = ((
 {
 [key: string]: ResponsesAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/parameters
 export type ComponentsParameters = ((
 {
 [key: string]: ParametersAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/examples
 export type ComponentsPropertiesExamples = ((
 {
 [key: string]: ComponentsExamplesAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/requestBodies
 export type RequestBodies = ((
 {
 [key: string]: RequestBodiesAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/headers
 export type ComponentsHeaders = ((
 {
 [key: string]: ComponentsHeadersAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/securitySchemes
 export type SecuritySchemes = ((
 {
 [key: string]: SecuritySchemesAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/links
 export type ComponentsLinks = ((
 {
 [key: string]: ComponentsLinksAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/callbacks
 export type ComponentsPropertiesCallbacks = ((
 {
 [key: string]: ComponentsPropertiesCallbacksAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/pathItems
 export type PathItems = ((
 {
 [key: string]: PathItemsAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/patternProperties/^(schemas|responses|parameters|examples|requestBodies|headers|securitySchemes|links|callbacks|pathItems)$
 export type SchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItems = unknown;
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/paths/patternProperties/^/
 export type PatternProperties = (PathItem);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/summary
 export type PathItemSummary = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/description
 export type PathItemDescription = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/servers
 export type PathItemServers = (((PathItemServersItems)[]));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/parameters
 export type PathItemParameters = (((PathItemParametersItems)[]));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/get
 export type Get = (Operation);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/put
 export type Put = (Operation);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/post
 export type Post = (Operation);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/delete
 export type Delete = (Operation);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/options
 export type Options = (Operation);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/head
 export type Head = (Operation);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/patch
 export type Patch = (Operation);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/trace
 export type Trace = (Operation);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference/if
 export type PathItemOrReferenceIf = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference/then
 export type PathItemOrReferenceThen = (Reference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference/else
 export type PathItemOrReferenceElse = (PathItem);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/tags
 export type OperationTags = (((OperationTagsItems)[]));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/summary
 export type OperationSummary = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/description
 export type OperationDescription = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/externalDocs
 export type OperationExternalDocs = (ExternalDocumentation);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/operationId
 export type OperationOperationId = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/parameters
 export type OperationParameters = (((OperationParametersItems)[]));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/requestBody
 export type OperationPropertiesRequestBody = (RequestBodyOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/responses
 export type OperationPropertiesResponses = (DefsResponses);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/callbacks
 export type OperationPropertiesCallbacks = ((
 {
 [key: string]: OperationPropertiesCallbacksAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/deprecated
 export type OperationDeprecated = ((boolean));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/security
 export type OperationSecurity = (((OperationSecurityItems)[]));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/servers
 export type OperationServers = (((OperationServersItems)[]));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation/properties/description
 export type ExternalDocumentationDescription = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation/properties/url
 export type ExternalDocumentationUrl = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/name
 export type ParameterName = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/in
 export type ParameterIn = (("query" |
 "header" |
 "path" |
 "cookie"));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/description
 export type ParameterDescription = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/required
 export type ParameterRequired = ((boolean));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/deprecated
 export type ParameterDeprecated = ((boolean));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/schema
 export type ParameterPropertiesSchema = (DefsSchema);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/content
 export type ParameterPropertiesContent = (DefsContent) &
 ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/oneOf/0
 export type ParameterOneOf0 = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/oneOf/1
 export type ParameterOneOf1 = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/if
 export type ParameterIf = ((
 {
 "in": IfIn,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/then
 export type ParameterThen = ((
 {
 "allowEmptyValue"?: AllowEmptyValue,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference/if
 export type ParameterOrReferenceIf = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference/then
 export type ParameterOrReferenceThen = (Reference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference/else
 export type ParameterOrReferenceElse = (Parameter);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/description
 export type RequestBodyDescription = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/content
 export type RequestBodyPropertiesContent = (DefsContent);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/required
 export type RequestBodyRequired = ((boolean));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference/if
 export type RequestBodyOrReferenceIf = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference/then
 export type RequestBodyOrReferenceThen = (Reference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference/else
 export type RequestBodyOrReferenceElse = (DefsRequestBody);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content/additionalProperties
 export type ContentAdditionalProperties = (MediaType);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content/propertyNames
 export type ContentPropertyNames = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/schema
 export type MediaTypePropertiesSchema = (DefsSchema);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/encoding
 export type PropertiesEncoding = ((
 {
 [key: string]: EncodingAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/allOf/0
 export type MediaTypeAllOf0 = (SpecificationExtensions);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/allOf/1
 export type MediaTypeAllOf1 = (DefsExamples);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default
 export type ExplodeDefault = (ExplodeDefaultThen |
 ExplodeDefaultElse);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/contentType
 export type ContentType = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/headers
 export type EncodingHeaders = ((
 {
 [key: string]: EncodingHeadersAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/style
 export type EncodingStyle = (("form" |
 "spaceDelimited" |
 "pipeDelimited" |
 "deepObject"));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/explode
 export type EncodingExplode = ((boolean));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/allowReserved
 export type AllowReserved = ((boolean));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/allOf/0
 export type EncodingAllOf0 = (SpecificationExtensions);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/allOf/1
 export type EncodingAllOf1 = (ExplodeDefault);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/responses/properties/default
 export type ResponsesDefault = (ResponseOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/responses/patternProperties/^[1-5](?:[0-9]{2}|XX)$
 export type PatternProperties15092Xx = (ResponseOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/description
 export type ResponseDescription = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/headers
 export type ResponseHeaders = ((
 {
 [key: string]: ResponseHeadersAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/content
 export type ResponsePropertiesContent = (DefsContent);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/links
 export type ResponseLinks = ((
 {
 [key: string]: ResponseLinksAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference/if
 export type ResponseOrReferenceIf = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference/then
 export type ResponseOrReferenceThen = (Reference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference/else
 export type ResponseOrReferenceElse = (Response);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks/additionalProperties
 export type DefsCallbacksAdditionalProperties = (PathItemOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference/if
 export type CallbacksOrReferenceIf = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference/then
 export type CallbacksOrReferenceThen = (Reference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference/else
 export type CallbacksOrReferenceElse = (DefsCallbacks);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/summary
 export type ExampleSummary = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/description
 export type ExampleDescription = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/value
 export type Value = ((any));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/externalValue
 export type ExternalValue = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/not
 export type Not = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference/if
 export type ExampleOrReferenceIf = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference/then
 export type ExampleOrReferenceThen = (Reference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference/else
 export type ExampleOrReferenceElse = (DefsExample);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/operationRef
 export type OperationRef = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/operationId
 export type LinkOperationId = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/parameters
 export type LinkParameters = (MapOfStrings);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/requestBody
 export type LinkPropertiesRequestBody = ((any));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/description
 export type LinkDescription = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/body
 export type Body = (Server);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/oneOf/0
 export type LinkOneOf0 = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/oneOf/1
 export type LinkOneOf1 = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference/if
 export type LinkOrReferenceIf = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference/then
 export type LinkOrReferenceThen = (Reference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference/else
 export type LinkOrReferenceElse = (Link);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/description
 export type HeaderDescription = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/required
 export type HeaderRequired = ((boolean));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/deprecated
 export type HeaderDeprecated = ((boolean));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/schema
 export type HeaderPropertiesSchema = (DefsSchema);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/content
 export type HeaderPropertiesContent = (DefsContent) &
 ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/oneOf/0
 export type HeaderOneOf0 = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/oneOf/1
 export type HeaderOneOf1 = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference/if
 export type HeaderOrReferenceIf = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference/then
 export type HeaderOrReferenceThen = (Reference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference/else
 export type HeaderOrReferenceElse = (Header);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/name
 export type TagName = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/description
 export type TagDescription = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/externalDocs
 export type TagExternalDocs = (ExternalDocumentation);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/$ref
 export type Ref = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/summary
 export type ReferenceSummary = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/description
 export type ReferenceDescription = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey
 export type TypeApikey = (TypeApikeyThen);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http
 export type TypeHttp = (TypeHttpThen);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer
 export type TypeHttpBearer = (TypeHttpBearerThen);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2
 export type TypeOauth2 = (TypeOauth2Then);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc
 export type TypeOidc = (TypeOidcThen);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/properties/type
 export type SecuritySchemeType = (("apiKey" |
 "http" |
 "mutualTLS" |
 "oauth2" |
 "openIdConnect"));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/properties/description
 export type SecuritySchemeDescription = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/0
 export type SecuritySchemeAllOf0 = (SpecificationExtensions);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/1
 export type SecuritySchemeAllOf1 = (TypeApikey);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/2
 export type AllOf2 = (TypeHttp);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/3
 export type AllOf3 = (TypeHttpBearer);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/4
 export type AllOf4 = (TypeOauth2);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/5
 export type AllOf5 = (TypeOidc);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference/if
 export type SecuritySchemeOrReferenceIf = ((
 {
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference/then
 export type SecuritySchemeOrReferenceThen = (Reference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference/else
 export type SecuritySchemeOrReferenceElse = (SecurityScheme);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit
 export type DefsImplicit = (SpecificationExtensions) &
 ((
 {
@@ -660,6 +872,7 @@ export type DefsImplicit = (SpecificationExtensions) &
 "scopes": ImplicitScopes,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password
 export type DefsPassword = (SpecificationExtensions) &
 ((
 {
@@ -668,6 +881,7 @@ export type DefsPassword = (SpecificationExtensions) &
 "scopes": PasswordScopes,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials
 export type DefsClientCredentials = (SpecificationExtensions) &
 ((
 {
@@ -676,6 +890,7 @@ export type DefsClientCredentials = (SpecificationExtensions) &
 "scopes": ClientCredentialsScopes,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code
 export type DefsAuthorizationCode = (SpecificationExtensions) &
 ((
 {
@@ -685,145 +900,227 @@ export type DefsAuthorizationCode = (SpecificationExtensions) &
 "scopes": AuthorizationCodeScopes,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/implicit
 export type PropertiesImplicit = (DefsImplicit);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/password
 export type PropertiesPassword = (DefsPassword);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/clientCredentials
 export type PropertiesClientCredentials = (DefsClientCredentials);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/authorizationCode
 export type PropertiesAuthorizationCode = (DefsAuthorizationCode);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement/additionalProperties
 export type SecurityRequirementAdditionalProperties = (((AdditionalPropertiesItems)[]));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions/patternProperties/^x-
 export type X = ((any));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples/properties/example
 export type PropertiesExample = ((any));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples/properties/examples
 export type ExamplesPropertiesExamples = ((
 {
 [key: string]: ExamplesExamplesAdditionalProperties,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/map-of-strings/additionalProperties
 export type MapOfStringsAdditionalProperties = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/servers/items
 export type Schema20221007ServersItems = (Server);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/webhooks/additionalProperties
 export type WebhooksAdditionalProperties = (PathItemOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/security/items
 export type Schema20221007SecurityItems = (SecurityRequirement);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/tags/items
 export type Schema20221007TagsItems = (Tag);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/variables/additionalProperties
 export type VariablesAdditionalProperties = (ServerVariable);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/enum/items
 export type EnumItems = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/schemas/additionalProperties
 export type SchemasAdditionalProperties = (DefsSchema);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/responses/additionalProperties
 export type ResponsesAdditionalProperties = (ResponseOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/parameters/additionalProperties
 export type ParametersAdditionalProperties = (ParameterOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/examples/additionalProperties
 export type ComponentsExamplesAdditionalProperties = (ExampleOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/requestBodies/additionalProperties
 export type RequestBodiesAdditionalProperties = (RequestBodyOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/headers/additionalProperties
 export type ComponentsHeadersAdditionalProperties = (HeaderOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/securitySchemes/additionalProperties
 export type SecuritySchemesAdditionalProperties = (SecuritySchemeOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/links/additionalProperties
 export type ComponentsLinksAdditionalProperties = (LinkOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/callbacks/additionalProperties
 export type ComponentsPropertiesCallbacksAdditionalProperties = (CallbacksOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/pathItems/additionalProperties
 export type PathItemsAdditionalProperties = (PathItemOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/patternProperties/^(schemas|responses|parameters|examples|requestBodies|headers|securitySchemes|links|callbacks|pathItems)$/propertyNames
 export type SchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItemsPropertyNames = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/servers/items
 export type PathItemServersItems = (Server);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/parameters/items
 export type PathItemParametersItems = (ParameterOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/tags/items
 export type OperationTagsItems = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/parameters/items
 export type OperationParametersItems = (ParameterOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/callbacks/additionalProperties
 export type OperationPropertiesCallbacksAdditionalProperties = (CallbacksOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/security/items
 export type OperationSecurityItems = (SecurityRequirement);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/servers/items
 export type OperationServersItems = (Server);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/if/properties/in
 export type IfIn = (("query"));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/then/properties/allowEmptyValue
 export type AllowEmptyValue = ((boolean));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/encoding/additionalProperties
 export type EncodingAdditionalProperties = (DefsEncoding);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/if
 export type ExplodeDefaultIf = ((
 {
 "style": IfStyle,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/then
 export type ExplodeDefaultThen = ((
 {
 "explode"?: ThenExplode,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/else
 export type ExplodeDefaultElse = ((
 {
 "explode"?: ElseExplode,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/headers/additionalProperties
 export type EncodingHeadersAdditionalProperties = (HeaderOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/headers/additionalProperties
 export type ResponseHeadersAdditionalProperties = (HeaderOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/links/additionalProperties
 export type ResponseLinksAdditionalProperties = (LinkOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/if
 export type TypeApikeyIf = ((
 {
 "type": TypeApikeyIfType,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/then
 export type TypeApikeyThen = ((
 {
 "name": ThenName,
 "in": ThenIn,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http/if
 export type TypeHttpIf = ((
 {
 "type": TypeHttpIfType,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http/then
 export type TypeHttpThen = ((
 {
 "scheme": ThenScheme,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/if
 export type TypeHttpBearerIf = ((
 {
 "type": TypeHttpBearerIfType,
 "scheme": IfScheme,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/then
 export type TypeHttpBearerThen = ((
 {
 "bearerFormat"?: BearerFormat,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2/if
 export type TypeOauth2If = ((
 {
 "type": TypeOauth2IfType,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2/then
 export type TypeOauth2Then = ((
 {
 "flows": Flows,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc/if
 export type TypeOidcIf = ((
 {
 "type": TypeOidcIfType,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc/then
 export type TypeOidcThen = ((
 {
 "openIdConnectUrl": OpenIdConnectUrl,
 }
 ));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/authorizationUrl
 export type ImplicitAuthorizationUrl = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/refreshUrl
 export type ImplicitRefreshUrl = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/scopes
 export type ImplicitScopes = (MapOfStrings);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/tokenUrl
 export type PasswordTokenUrl = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/refreshUrl
 export type PasswordRefreshUrl = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/scopes
 export type PasswordScopes = (MapOfStrings);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/tokenUrl
 export type ClientCredentialsTokenUrl = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/refreshUrl
 export type ClientCredentialsRefreshUrl = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/scopes
 export type ClientCredentialsScopes = (MapOfStrings);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/authorizationUrl
 export type AuthorizationCodeAuthorizationUrl = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/tokenUrl
 export type AuthorizationCodeTokenUrl = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/refreshUrl
 export type AuthorizationCodeRefreshUrl = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/scopes
 export type AuthorizationCodeScopes = (MapOfStrings);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement/additionalProperties/items
 export type AdditionalPropertiesItems = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples/properties/examples/additionalProperties
 export type ExamplesExamplesAdditionalProperties = (ExampleOrReference);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/if/properties/style
 export type IfStyle = (("form"));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/then/properties/explode
 export type ThenExplode = unknown;
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/else/properties/explode
 export type ElseExplode = unknown;
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/if/properties/type
 export type TypeApikeyIfType = (("apiKey"));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/then/properties/name
 export type ThenName = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/then/properties/in
 export type ThenIn = (("query" |
 "header" |
 "cookie"));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http/if/properties/type
 export type TypeHttpIfType = (("http"));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http/then/properties/scheme
 export type ThenScheme = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/if/properties/type
 export type TypeHttpBearerIfType = (("http"));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/if/properties/scheme
 export type IfScheme = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/then/properties/bearerFormat
 export type BearerFormat = ((string));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2/if/properties/type
 export type TypeOauth2IfType = (("oauth2"));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2/then/properties/flows
 export type Flows = (OauthFlows);
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc/if/properties/type
 export type TypeOidcIfType = (("openIdConnect"));
+// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc/then/properties/openIdConnectUrl
 export type OpenIdConnectUrl = ((string));

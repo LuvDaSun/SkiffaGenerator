@@ -3,8 +3,9 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.8.13                         -- www.JsonSchema42.org
+// v0.8.21                         -- www.JsonSchema42.org
 import * as types from "./types.js";
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#
 export function isSchema20210928(value: unknown): value is types.Schema20210928 {
 if(!_isMapSchema20210928(value)) {
 return false;
@@ -81,6 +82,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Reference
 export function isReference(value: unknown): value is types.Reference {
 if(!_isMapReference(value)) {
 return false;
@@ -105,6 +107,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Info
 export function isDefinitionsInfo(value: unknown): value is types.DefinitionsInfo {
 if(!_isMapDefinitionsInfo(value)) {
 return false;
@@ -168,6 +171,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Contact
 export function isDefinitionsContact(value: unknown): value is types.DefinitionsContact {
 if(!_isMapDefinitionsContact(value)) {
 return false;
@@ -210,6 +214,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/License
 export function isDefinitionsLicense(value: unknown): value is types.DefinitionsLicense {
 if(!_isMapDefinitionsLicense(value)) {
 return false;
@@ -250,6 +255,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Server
 export function isDefinitionsServer(value: unknown): value is types.DefinitionsServer {
 if(!_isMapDefinitionsServer(value)) {
 return false;
@@ -295,6 +301,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ServerVariable
 export function isServerVariable(value: unknown): value is types.ServerVariable {
 if(!_isMapServerVariable(value)) {
 return false;
@@ -340,6 +347,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components
 export function isDefinitionsComponents(value: unknown): value is types.DefinitionsComponents {
 if(!_isMapDefinitionsComponents(value)) {
 return false;
@@ -412,6 +420,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema
 export function isDefinitionsSchema(value: unknown): value is types.DefinitionsSchema {
 if(!_isMapDefinitionsSchema(value)) {
 return false;
@@ -614,6 +623,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Discriminator
 export function isDefinitionsDiscriminator(value: unknown): value is types.DefinitionsDiscriminator {
 if(!_isMapDefinitionsDiscriminator(value)) {
 return false;
@@ -644,6 +654,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/XML
 export function isDefinitionsXml(value: unknown): value is types.DefinitionsXml {
 if(!_isMapDefinitionsXml(value)) {
 return false;
@@ -696,6 +707,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Response
 export function isResponse(value: unknown): value is types.Response {
 if(!_isMapResponse(value)) {
 return false;
@@ -746,8 +758,12 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/MediaType
 export function isMediaType(value: unknown): value is types.MediaType {
-if(!_isMapMediaType(value) && !_isAllOfMediaType(value)) {
+if(!_isMapMediaType(value)) {
+return false;
+}
+if(!_isAllOfMediaType(value)) {
 return false;
 }
 return true;
@@ -799,6 +815,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Example
 export function isDefinitionsExample(value: unknown): value is types.DefinitionsExample {
 if(!_isMapDefinitionsExample(value)) {
 return false;
@@ -846,8 +863,12 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header
 export function isHeader(value: unknown): value is types.Header {
-if(!_isMapHeader(value) && !_isAllOfHeader(value)) {
+if(!_isMapHeader(value)) {
+return false;
+}
+if(!_isAllOfHeader(value)) {
 return false;
 }
 return true;
@@ -937,6 +958,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Paths
 export function isDefinitionsPaths(value: unknown): value is types.DefinitionsPaths {
 if(!_isMapDefinitionsPaths(value)) {
 return false;
@@ -968,6 +990,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PathItem
 export function isPathItem(value: unknown): value is types.PathItem {
 if(!_isMapPathItem(value)) {
 return false;
@@ -1026,6 +1049,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation
 export function isOperation(value: unknown): value is types.Operation {
 if(!_isMapOperation(value)) {
 return false;
@@ -1116,6 +1140,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Responses
 export function isDefinitionsResponses(value: unknown): value is types.DefinitionsResponses {
 if(!_isMapDefinitionsResponses(value)) {
 return false;
@@ -1159,6 +1184,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SecurityRequirement
 export function isSecurityRequirement(value: unknown): value is types.SecurityRequirement {
 if(!_isMapSecurityRequirement(value)) {
 return false;
@@ -1178,6 +1204,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Tag
 export function isTag(value: unknown): value is types.Tag {
 if(!_isMapTag(value)) {
 return false;
@@ -1223,6 +1250,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ExternalDocumentation
 export function isExternalDocumentation(value: unknown): value is types.ExternalDocumentation {
 if(!_isMapExternalDocumentation(value)) {
 return false;
@@ -1263,6 +1291,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ExampleXORExamples
 export function isExampleXorExamples(value: unknown): value is types.ExampleXorExamples {
 if(!_isNotExampleXorExamples(value)) {
 return false;
@@ -1275,8 +1304,9 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SchemaXORContent
 export function isSchemaXorContent(value: unknown): value is types.SchemaXorContent {
-if(!_isOneOfSchemaXorContent(value) && !_isNotSchemaXorContent(value)) {
+if(!_isOneOfSchemaXorContent(value) || !_isNotSchemaXorContent(value)) {
 return false;
 }
 return true;
@@ -1306,8 +1336,12 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter
 export function isParameter(value: unknown): value is types.Parameter {
-if(!_isMapParameter(value) && !_isAllOfParameter(value)) {
+if(!_isMapParameter(value)) {
+return false;
+}
+if(!_isAllOfParameter(value)) {
 return false;
 }
 return true;
@@ -1416,6 +1450,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ParameterLocation
 export function isParameterLocation(value: unknown): value is types.ParameterLocation {
 if(!_isOneOfParameterLocation(value)) {
 return false;
@@ -1453,6 +1488,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/RequestBody
 export function isDefinitionsRequestBody(value: unknown): value is types.DefinitionsRequestBody {
 if(!_isMapDefinitionsRequestBody(value)) {
 return false;
@@ -1498,6 +1534,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SecurityScheme
 export function isSecurityScheme(value: unknown): value is types.SecurityScheme {
 if(!_isOneOfSecurityScheme(value)) {
 return false;
@@ -1535,6 +1572,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/APIKeySecurityScheme
 export function isApiKeySecurityScheme(value: unknown): value is types.ApiKeySecurityScheme {
 if(!_isMapApiKeySecurityScheme(value)) {
 return false;
@@ -1591,8 +1629,12 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/HTTPSecurityScheme
 export function isHttpSecurityScheme(value: unknown): value is types.HttpSecurityScheme {
-if(!_isMapHttpSecurityScheme(value) && !_isOneOfHttpSecurityScheme(value)) {
+if(!_isMapHttpSecurityScheme(value)) {
+return false;
+}
+if(!_isOneOfHttpSecurityScheme(value)) {
 return false;
 }
 return true;
@@ -1663,6 +1705,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OAuth2SecurityScheme
 export function isOauth2SecurityScheme(value: unknown): value is types.Oauth2SecurityScheme {
 if(!_isMapOauth2SecurityScheme(value)) {
 return false;
@@ -1711,6 +1754,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OpenIdConnectSecurityScheme
 export function isOpenIdConnectSecurityScheme(value: unknown): value is types.OpenIdConnectSecurityScheme {
 if(!_isMapOpenIdConnectSecurityScheme(value)) {
 return false;
@@ -1759,6 +1803,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OAuthFlows
 export function isOauthFlows(value: unknown): value is types.OauthFlows {
 if(!_isMapOauthFlows(value)) {
 return false;
@@ -1806,6 +1851,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ImplicitOAuthFlow
 export function isImplicitOauthFlow(value: unknown): value is types.ImplicitOauthFlow {
 if(!_isMapImplicitOauthFlow(value)) {
 return false;
@@ -1854,6 +1900,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PasswordOAuthFlow
 export function isPasswordOauthFlow(value: unknown): value is types.PasswordOauthFlow {
 if(!_isMapPasswordOauthFlow(value)) {
 return false;
@@ -1902,6 +1949,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ClientCredentialsFlow
 export function isClientCredentialsFlow(value: unknown): value is types.ClientCredentialsFlow {
 if(!_isMapClientCredentialsFlow(value)) {
 return false;
@@ -1950,6 +1998,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/AuthorizationCodeOAuthFlow
 export function isAuthorizationCodeOauthFlow(value: unknown): value is types.AuthorizationCodeOauthFlow {
 if(!_isMapAuthorizationCodeOauthFlow(value)) {
 return false;
@@ -2006,8 +2055,12 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Link
 export function isLink(value: unknown): value is types.Link {
-if(!_isMapLink(value) && !_isNotLink(value)) {
+if(!_isMapLink(value)) {
+return false;
+}
+if(!_isNotLink(value)) {
 return false;
 }
 return true;
@@ -2069,6 +2122,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Callback
 export function isCallback(value: unknown): value is types.Callback {
 if(!_isMapCallback(value)) {
 return false;
@@ -2094,6 +2148,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Encoding
 export function isDefinitionsEncoding(value: unknown): value is types.DefinitionsEncoding {
 if(!_isMapDefinitionsEncoding(value)) {
 return false;
@@ -2140,6 +2195,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/properties/openapi
 export function isOpenapi(value: unknown): value is types.Openapi {
 if(!_isStringOpenapi(value)) {
 return false;
@@ -2155,6 +2211,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/properties/info
 export function isPropertiesInfo(value: unknown): value is types.PropertiesInfo {
 if(!_isReferencePropertiesInfo(value)) {
 return false;
@@ -2167,6 +2224,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/properties/externalDocs
 export function isSchema20210928ExternalDocs(value: unknown): value is types.Schema20210928ExternalDocs {
 if(!_isReferenceSchema20210928ExternalDocs(value)) {
 return false;
@@ -2179,6 +2237,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/properties/servers
 export function isSchema20210928Servers(value: unknown): value is types.Schema20210928Servers {
 if(!_isArraySchema20210928Servers(value)) {
 return false;
@@ -2197,6 +2256,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/properties/security
 export function isSchema20210928Security(value: unknown): value is types.Schema20210928Security {
 if(!_isArraySchema20210928Security(value)) {
 return false;
@@ -2215,6 +2275,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/properties/tags
 export function isSchema20210928Tags(value: unknown): value is types.Schema20210928Tags {
 if(!_isArraySchema20210928Tags(value)) {
 return false;
@@ -2238,6 +2299,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/properties/paths
 export function isPropertiesPaths(value: unknown): value is types.PropertiesPaths {
 if(!_isReferencePropertiesPaths(value)) {
 return false;
@@ -2250,6 +2312,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/properties/components
 export function isPropertiesComponents(value: unknown): value is types.PropertiesComponents {
 if(!_isReferencePropertiesComponents(value)) {
 return false;
@@ -2262,6 +2325,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/additionalProperties
 export function isSchema20210928AdditionalProperties(value: unknown): value is types.Schema20210928AdditionalProperties {
 if(!_isNeverSchema20210928AdditionalProperties(value)) {
 return false;
@@ -2271,9 +2335,11 @@ return true;
 function _isNeverSchema20210928AdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/patternProperties/^x-
 export function isSchema20210928X(value: unknown): value is types.Schema20210928X {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Reference/patternProperties/^\$ref$
 export function isPatternPropertiesRef(value: unknown): value is types.PatternPropertiesRef {
 if(!_isStringPatternPropertiesRef(value)) {
 return false;
@@ -2286,6 +2352,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Info/properties/title
 export function isInfoTitle(value: unknown): value is types.InfoTitle {
 if(!_isStringInfoTitle(value)) {
 return false;
@@ -2298,6 +2365,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Info/properties/description
 export function isInfoDescription(value: unknown): value is types.InfoDescription {
 if(!_isStringInfoDescription(value)) {
 return false;
@@ -2310,6 +2378,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Info/properties/termsOfService
 export function isTermsOfService(value: unknown): value is types.TermsOfService {
 if(!_isStringTermsOfService(value)) {
 return false;
@@ -2322,6 +2391,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Info/properties/contact
 export function isPropertiesContact(value: unknown): value is types.PropertiesContact {
 if(!_isReferencePropertiesContact(value)) {
 return false;
@@ -2334,6 +2404,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Info/properties/license
 export function isPropertiesLicense(value: unknown): value is types.PropertiesLicense {
 if(!_isReferencePropertiesLicense(value)) {
 return false;
@@ -2346,6 +2417,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Info/properties/version
 export function isVersion(value: unknown): value is types.Version {
 if(!_isStringVersion(value)) {
 return false;
@@ -2358,6 +2430,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Info/additionalProperties
 export function isInfoAdditionalProperties(value: unknown): value is types.InfoAdditionalProperties {
 if(!_isNeverInfoAdditionalProperties(value)) {
 return false;
@@ -2367,9 +2440,11 @@ return true;
 function _isNeverInfoAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Info/patternProperties/^x-
 export function isInfoX(value: unknown): value is types.InfoX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Contact/properties/name
 export function isContactName(value: unknown): value is types.ContactName {
 if(!_isStringContactName(value)) {
 return false;
@@ -2382,6 +2457,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Contact/properties/url
 export function isContactUrl(value: unknown): value is types.ContactUrl {
 if(!_isStringContactUrl(value)) {
 return false;
@@ -2394,6 +2470,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Contact/properties/email
 export function isEmail(value: unknown): value is types.Email {
 if(!_isStringEmail(value)) {
 return false;
@@ -2406,6 +2483,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Contact/additionalProperties
 export function isContactAdditionalProperties(value: unknown): value is types.ContactAdditionalProperties {
 if(!_isNeverContactAdditionalProperties(value)) {
 return false;
@@ -2415,9 +2493,11 @@ return true;
 function _isNeverContactAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Contact/patternProperties/^x-
 export function isContactX(value: unknown): value is types.ContactX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/License/properties/name
 export function isLicenseName(value: unknown): value is types.LicenseName {
 if(!_isStringLicenseName(value)) {
 return false;
@@ -2430,6 +2510,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/License/properties/url
 export function isLicenseUrl(value: unknown): value is types.LicenseUrl {
 if(!_isStringLicenseUrl(value)) {
 return false;
@@ -2442,6 +2523,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/License/additionalProperties
 export function isLicenseAdditionalProperties(value: unknown): value is types.LicenseAdditionalProperties {
 if(!_isNeverLicenseAdditionalProperties(value)) {
 return false;
@@ -2451,9 +2533,11 @@ return true;
 function _isNeverLicenseAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/License/patternProperties/^x-
 export function isLicenseX(value: unknown): value is types.LicenseX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Server/properties/url
 export function isServerUrl(value: unknown): value is types.ServerUrl {
 if(!_isStringServerUrl(value)) {
 return false;
@@ -2466,6 +2550,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Server/properties/description
 export function isServerDescription(value: unknown): value is types.ServerDescription {
 if(!_isStringServerDescription(value)) {
 return false;
@@ -2478,6 +2563,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Server/properties/variables
 export function isVariables(value: unknown): value is types.Variables {
 if(!_isMapVariables(value)) {
 return false;
@@ -2497,6 +2583,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Server/additionalProperties
 export function isServerAdditionalProperties(value: unknown): value is types.ServerAdditionalProperties {
 if(!_isNeverServerAdditionalProperties(value)) {
 return false;
@@ -2506,9 +2593,11 @@ return true;
 function _isNeverServerAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Server/patternProperties/^x-
 export function isServerX(value: unknown): value is types.ServerX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ServerVariable/properties/enum
 export function isServerVariableEnum(value: unknown): value is types.ServerVariableEnum {
 if(!_isArrayServerVariableEnum(value)) {
 return false;
@@ -2527,6 +2616,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ServerVariable/properties/default
 export function isServerVariableDefault(value: unknown): value is types.ServerVariableDefault {
 if(!_isStringServerVariableDefault(value)) {
 return false;
@@ -2539,6 +2629,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ServerVariable/properties/description
 export function isServerVariableDescription(value: unknown): value is types.ServerVariableDescription {
 if(!_isStringServerVariableDescription(value)) {
 return false;
@@ -2551,6 +2642,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ServerVariable/additionalProperties
 export function isServerVariableAdditionalProperties(value: unknown): value is types.ServerVariableAdditionalProperties {
 if(!_isNeverServerVariableAdditionalProperties(value)) {
 return false;
@@ -2560,9 +2652,11 @@ return true;
 function _isNeverServerVariableAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ServerVariable/patternProperties/^x-
 export function isServerVariableX(value: unknown): value is types.ServerVariableX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/schemas
 export function isSchemas(value: unknown): value is types.Schemas {
 if(!_isMapSchemas(value)) {
 return false;
@@ -2584,6 +2678,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/responses
 export function isComponentsPropertiesResponses(value: unknown): value is types.ComponentsPropertiesResponses {
 if(!_isMapComponentsPropertiesResponses(value)) {
 return false;
@@ -2605,6 +2700,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/parameters
 export function isComponentsParameters(value: unknown): value is types.ComponentsParameters {
 if(!_isMapComponentsParameters(value)) {
 return false;
@@ -2626,6 +2722,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/examples
 export function isComponentsExamples(value: unknown): value is types.ComponentsExamples {
 if(!_isMapComponentsExamples(value)) {
 return false;
@@ -2647,6 +2744,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/requestBodies
 export function isRequestBodies(value: unknown): value is types.RequestBodies {
 if(!_isMapRequestBodies(value)) {
 return false;
@@ -2668,6 +2766,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/headers
 export function isComponentsHeaders(value: unknown): value is types.ComponentsHeaders {
 if(!_isMapComponentsHeaders(value)) {
 return false;
@@ -2689,6 +2788,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/securitySchemes
 export function isSecuritySchemes(value: unknown): value is types.SecuritySchemes {
 if(!_isMapSecuritySchemes(value)) {
 return false;
@@ -2710,6 +2810,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/links
 export function isComponentsLinks(value: unknown): value is types.ComponentsLinks {
 if(!_isMapComponentsLinks(value)) {
 return false;
@@ -2731,6 +2832,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/callbacks
 export function isComponentsCallbacks(value: unknown): value is types.ComponentsCallbacks {
 if(!_isMapComponentsCallbacks(value)) {
 return false;
@@ -2752,6 +2854,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/additionalProperties
 export function isComponentsAdditionalProperties(value: unknown): value is types.ComponentsAdditionalProperties {
 if(!_isNeverComponentsAdditionalProperties(value)) {
 return false;
@@ -2761,9 +2864,11 @@ return true;
 function _isNeverComponentsAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/patternProperties/^x-
 export function isComponentsX(value: unknown): value is types.ComponentsX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/title
 export function isSchemaTitle(value: unknown): value is types.SchemaTitle {
 if(!_isStringSchemaTitle(value)) {
 return false;
@@ -2776,6 +2881,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/multipleOf
 export function isMultipleOf(value: unknown): value is types.MultipleOf {
 if(!_isNumberMultipleOf(value)) {
 return false;
@@ -2791,6 +2897,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/maximum
 export function isMaximum(value: unknown): value is types.Maximum {
 if(!_isNumberMaximum(value)) {
 return false;
@@ -2803,6 +2910,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/exclusiveMaximum
 export function isExclusiveMaximum(value: unknown): value is types.ExclusiveMaximum {
 if(!_isBooleanExclusiveMaximum(value)) {
 return false;
@@ -2815,6 +2923,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/minimum
 export function isMinimum(value: unknown): value is types.Minimum {
 if(!_isNumberMinimum(value)) {
 return false;
@@ -2827,6 +2936,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/exclusiveMinimum
 export function isExclusiveMinimum(value: unknown): value is types.ExclusiveMinimum {
 if(!_isBooleanExclusiveMinimum(value)) {
 return false;
@@ -2839,6 +2949,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/maxLength
 export function isMaxLength(value: unknown): value is types.MaxLength {
 if(!_isIntegerMaxLength(value)) {
 return false;
@@ -2854,6 +2965,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/minLength
 export function isMinLength(value: unknown): value is types.MinLength {
 if(!_isIntegerMinLength(value)) {
 return false;
@@ -2869,6 +2981,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/pattern
 export function isPattern(value: unknown): value is types.Pattern {
 if(!_isStringPattern(value)) {
 return false;
@@ -2881,6 +2994,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/maxItems
 export function isMaxItems(value: unknown): value is types.MaxItems {
 if(!_isIntegerMaxItems(value)) {
 return false;
@@ -2896,6 +3010,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/minItems
 export function isMinItems(value: unknown): value is types.MinItems {
 if(!_isIntegerMinItems(value)) {
 return false;
@@ -2911,6 +3026,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/uniqueItems
 export function isUniqueItems(value: unknown): value is types.UniqueItems {
 if(!_isBooleanUniqueItems(value)) {
 return false;
@@ -2923,6 +3039,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/maxProperties
 export function isMaxProperties(value: unknown): value is types.MaxProperties {
 if(!_isIntegerMaxProperties(value)) {
 return false;
@@ -2938,6 +3055,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/minProperties
 export function isMinProperties(value: unknown): value is types.MinProperties {
 if(!_isIntegerMinProperties(value)) {
 return false;
@@ -2953,6 +3071,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/required
 export function isSchemaRequired(value: unknown): value is types.SchemaRequired {
 if(!_isArraySchemaRequired(value)) {
 return false;
@@ -2979,6 +3098,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/enum
 export function isSchemaEnum(value: unknown): value is types.SchemaEnum {
 if(!_isArraySchemaEnum(value)) {
 return false;
@@ -3000,6 +3120,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/type
 export function isSchemaType(value: unknown): value is types.SchemaType {
 if(!_isStringSchemaType(value)) {
 return false;
@@ -3015,6 +3136,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/not
 export function isPropertiesNot(value: unknown): value is types.PropertiesNot {
 if(!_isOneOfPropertiesNot(value)) {
 return false;
@@ -3040,6 +3162,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/allOf
 export function isAllOf(value: unknown): value is types.AllOf {
 if(!_isArrayAllOf(value)) {
 return false;
@@ -3058,6 +3181,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/oneOf
 export function isOneOf(value: unknown): value is types.OneOf {
 if(!_isArrayOneOf(value)) {
 return false;
@@ -3076,6 +3200,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/anyOf
 export function isAnyOf(value: unknown): value is types.AnyOf {
 if(!_isArrayAnyOf(value)) {
 return false;
@@ -3094,6 +3219,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/items
 export function isPropertiesItems(value: unknown): value is types.PropertiesItems {
 if(!_isOneOfPropertiesItems(value)) {
 return false;
@@ -3119,6 +3245,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/properties
 export function isProperties(value: unknown): value is types.Properties {
 if(!_isMapProperties(value)) {
 return false;
@@ -3138,6 +3265,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/additionalProperties
 export function isSchemaPropertiesAdditionalProperties(value: unknown): value is types.SchemaPropertiesAdditionalProperties {
 if(!_isOneOfSchemaPropertiesAdditionalProperties(value)) {
 return false;
@@ -3169,6 +3297,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/description
 export function isSchemaDescription(value: unknown): value is types.SchemaDescription {
 if(!_isStringSchemaDescription(value)) {
 return false;
@@ -3181,6 +3310,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/format
 export function isFormat(value: unknown): value is types.Format {
 if(!_isStringFormat(value)) {
 return false;
@@ -3193,9 +3323,11 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/default
 export function isSchemaDefault(value: unknown): value is types.SchemaDefault {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/nullable
 export function isNullable(value: unknown): value is types.Nullable {
 if(!_isBooleanNullable(value)) {
 return false;
@@ -3208,6 +3340,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/discriminator
 export function isPropertiesDiscriminator(value: unknown): value is types.PropertiesDiscriminator {
 if(!_isReferencePropertiesDiscriminator(value)) {
 return false;
@@ -3220,6 +3353,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/readOnly
 export function isReadOnly(value: unknown): value is types.ReadOnly {
 if(!_isBooleanReadOnly(value)) {
 return false;
@@ -3232,6 +3366,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/writeOnly
 export function isWriteOnly(value: unknown): value is types.WriteOnly {
 if(!_isBooleanWriteOnly(value)) {
 return false;
@@ -3244,9 +3379,11 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/example
 export function isSchemaPropertiesExample(value: unknown): value is types.SchemaPropertiesExample {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/externalDocs
 export function isSchemaExternalDocs(value: unknown): value is types.SchemaExternalDocs {
 if(!_isReferenceSchemaExternalDocs(value)) {
 return false;
@@ -3259,6 +3396,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/deprecated
 export function isSchemaDeprecated(value: unknown): value is types.SchemaDeprecated {
 if(!_isBooleanSchemaDeprecated(value)) {
 return false;
@@ -3271,6 +3409,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/xml
 export function isPropertiesXml(value: unknown): value is types.PropertiesXml {
 if(!_isReferencePropertiesXml(value)) {
 return false;
@@ -3283,6 +3422,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/additionalProperties
 export function isSchemaAdditionalProperties(value: unknown): value is types.SchemaAdditionalProperties {
 if(!_isNeverSchemaAdditionalProperties(value)) {
 return false;
@@ -3292,9 +3432,11 @@ return true;
 function _isNeverSchemaAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/patternProperties/^x-
 export function isSchemaX(value: unknown): value is types.SchemaX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Discriminator/properties/propertyName
 export function isPropertyName(value: unknown): value is types.PropertyName {
 if(!_isStringPropertyName(value)) {
 return false;
@@ -3307,6 +3449,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Discriminator/properties/mapping
 export function isMapping(value: unknown): value is types.Mapping {
 if(!_isMapMapping(value)) {
 return false;
@@ -3326,6 +3469,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/XML/properties/name
 export function isXmlName(value: unknown): value is types.XmlName {
 if(!_isStringXmlName(value)) {
 return false;
@@ -3338,6 +3482,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/XML/properties/namespace
 export function isNamespace(value: unknown): value is types.Namespace {
 if(!_isStringNamespace(value)) {
 return false;
@@ -3350,6 +3495,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/XML/properties/prefix
 export function isPrefix(value: unknown): value is types.Prefix {
 if(!_isStringPrefix(value)) {
 return false;
@@ -3362,6 +3508,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/XML/properties/attribute
 export function isAttribute(value: unknown): value is types.Attribute {
 if(!_isBooleanAttribute(value)) {
 return false;
@@ -3374,6 +3521,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/XML/properties/wrapped
 export function isWrapped(value: unknown): value is types.Wrapped {
 if(!_isBooleanWrapped(value)) {
 return false;
@@ -3386,6 +3534,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/XML/additionalProperties
 export function isXmlAdditionalProperties(value: unknown): value is types.XmlAdditionalProperties {
 if(!_isNeverXmlAdditionalProperties(value)) {
 return false;
@@ -3395,9 +3544,11 @@ return true;
 function _isNeverXmlAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/XML/patternProperties/^x-
 export function isXmlX(value: unknown): value is types.XmlX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Response/properties/description
 export function isResponseDescription(value: unknown): value is types.ResponseDescription {
 if(!_isStringResponseDescription(value)) {
 return false;
@@ -3410,6 +3561,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Response/properties/headers
 export function isResponseHeaders(value: unknown): value is types.ResponseHeaders {
 if(!_isMapResponseHeaders(value)) {
 return false;
@@ -3429,6 +3581,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Response/properties/content
 export function isResponseContent(value: unknown): value is types.ResponseContent {
 if(!_isMapResponseContent(value)) {
 return false;
@@ -3448,6 +3601,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Response/properties/links
 export function isResponseLinks(value: unknown): value is types.ResponseLinks {
 if(!_isMapResponseLinks(value)) {
 return false;
@@ -3467,6 +3621,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Response/additionalProperties
 export function isResponseAdditionalProperties(value: unknown): value is types.ResponseAdditionalProperties {
 if(!_isNeverResponseAdditionalProperties(value)) {
 return false;
@@ -3476,9 +3631,11 @@ return true;
 function _isNeverResponseAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Response/patternProperties/^x-
 export function isResponseX(value: unknown): value is types.ResponseX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/MediaType/properties/schema
 export function isMediaTypePropertiesSchema(value: unknown): value is types.MediaTypePropertiesSchema {
 if(!_isOneOfMediaTypePropertiesSchema(value)) {
 return false;
@@ -3504,9 +3661,11 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/MediaType/properties/example
 export function isMediaTypePropertiesExample(value: unknown): value is types.MediaTypePropertiesExample {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/MediaType/properties/examples
 export function isMediaTypeExamples(value: unknown): value is types.MediaTypeExamples {
 if(!_isMapMediaTypeExamples(value)) {
 return false;
@@ -3526,6 +3685,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/MediaType/properties/encoding
 export function isPropertiesEncoding(value: unknown): value is types.PropertiesEncoding {
 if(!_isMapPropertiesEncoding(value)) {
 return false;
@@ -3545,6 +3705,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/MediaType/additionalProperties
 export function isMediaTypeAdditionalProperties(value: unknown): value is types.MediaTypeAdditionalProperties {
 if(!_isNeverMediaTypeAdditionalProperties(value)) {
 return false;
@@ -3554,9 +3715,11 @@ return true;
 function _isNeverMediaTypeAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/MediaType/patternProperties/^x-
 export function isMediaTypeX(value: unknown): value is types.MediaTypeX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/MediaType/allOf/0
 export function isMediaTypeAllOf0(value: unknown): value is types.MediaTypeAllOf0 {
 if(!_isReferenceMediaTypeAllOf0(value)) {
 return false;
@@ -3569,6 +3732,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Example/properties/summary
 export function isExampleSummary(value: unknown): value is types.ExampleSummary {
 if(!_isStringExampleSummary(value)) {
 return false;
@@ -3581,6 +3745,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Example/properties/description
 export function isExampleDescription(value: unknown): value is types.ExampleDescription {
 if(!_isStringExampleDescription(value)) {
 return false;
@@ -3593,9 +3758,11 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Example/properties/value
 export function isValue(value: unknown): value is types.Value {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Example/properties/externalValue
 export function isExternalValue(value: unknown): value is types.ExternalValue {
 if(!_isStringExternalValue(value)) {
 return false;
@@ -3608,6 +3775,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Example/additionalProperties
 export function isExampleAdditionalProperties(value: unknown): value is types.ExampleAdditionalProperties {
 if(!_isNeverExampleAdditionalProperties(value)) {
 return false;
@@ -3617,9 +3785,11 @@ return true;
 function _isNeverExampleAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Example/patternProperties/^x-
 export function isExampleX(value: unknown): value is types.ExampleX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/description
 export function isHeaderDescription(value: unknown): value is types.HeaderDescription {
 if(!_isStringHeaderDescription(value)) {
 return false;
@@ -3632,6 +3802,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/required
 export function isHeaderRequired(value: unknown): value is types.HeaderRequired {
 if(!_isBooleanHeaderRequired(value)) {
 return false;
@@ -3644,6 +3815,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/deprecated
 export function isHeaderDeprecated(value: unknown): value is types.HeaderDeprecated {
 if(!_isBooleanHeaderDeprecated(value)) {
 return false;
@@ -3656,6 +3828,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/allowEmptyValue
 export function isHeaderAllowEmptyValue(value: unknown): value is types.HeaderAllowEmptyValue {
 if(!_isBooleanHeaderAllowEmptyValue(value)) {
 return false;
@@ -3668,6 +3841,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/style
 export function isHeaderStyle(value: unknown): value is types.HeaderStyle {
 if(!_isStringHeaderStyle(value)) {
 return false;
@@ -3683,6 +3857,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/explode
 export function isHeaderExplode(value: unknown): value is types.HeaderExplode {
 if(!_isBooleanHeaderExplode(value)) {
 return false;
@@ -3695,6 +3870,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/allowReserved
 export function isHeaderAllowReserved(value: unknown): value is types.HeaderAllowReserved {
 if(!_isBooleanHeaderAllowReserved(value)) {
 return false;
@@ -3707,6 +3883,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/schema
 export function isHeaderPropertiesSchema(value: unknown): value is types.HeaderPropertiesSchema {
 if(!_isOneOfHeaderPropertiesSchema(value)) {
 return false;
@@ -3732,6 +3909,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/content
 export function isHeaderContent(value: unknown): value is types.HeaderContent {
 if(!_isMapHeaderContent(value)) {
 return false;
@@ -3759,9 +3937,11 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/example
 export function isHeaderPropertiesExample(value: unknown): value is types.HeaderPropertiesExample {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/examples
 export function isHeaderExamples(value: unknown): value is types.HeaderExamples {
 if(!_isMapHeaderExamples(value)) {
 return false;
@@ -3781,6 +3961,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/additionalProperties
 export function isHeaderAdditionalProperties(value: unknown): value is types.HeaderAdditionalProperties {
 if(!_isNeverHeaderAdditionalProperties(value)) {
 return false;
@@ -3790,9 +3971,11 @@ return true;
 function _isNeverHeaderAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/patternProperties/^x-
 export function isHeaderX(value: unknown): value is types.HeaderX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/allOf/0
 export function isHeaderAllOf0(value: unknown): value is types.HeaderAllOf0 {
 if(!_isReferenceHeaderAllOf0(value)) {
 return false;
@@ -3805,6 +3988,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/allOf/1
 export function isHeaderAllOf1(value: unknown): value is types.HeaderAllOf1 {
 if(!_isReferenceHeaderAllOf1(value)) {
 return false;
@@ -3817,6 +4001,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Paths/additionalProperties
 export function isPathsAdditionalProperties(value: unknown): value is types.PathsAdditionalProperties {
 if(!_isNeverPathsAdditionalProperties(value)) {
 return false;
@@ -3826,6 +4011,7 @@ return true;
 function _isNeverPathsAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Paths/patternProperties/^\/
 export function isPatternProperties(value: unknown): value is types.PatternProperties {
 if(!_isReferencePatternProperties(value)) {
 return false;
@@ -3838,9 +4024,11 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Paths/patternProperties/^x-
 export function isPathsX(value: unknown): value is types.PathsX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PathItem/properties/$ref
 export function isPropertiesRef(value: unknown): value is types.PropertiesRef {
 if(!_isStringPropertiesRef(value)) {
 return false;
@@ -3853,6 +4041,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PathItem/properties/summary
 export function isPathItemSummary(value: unknown): value is types.PathItemSummary {
 if(!_isStringPathItemSummary(value)) {
 return false;
@@ -3865,6 +4054,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PathItem/properties/description
 export function isPathItemDescription(value: unknown): value is types.PathItemDescription {
 if(!_isStringPathItemDescription(value)) {
 return false;
@@ -3877,6 +4067,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PathItem/properties/servers
 export function isPathItemServers(value: unknown): value is types.PathItemServers {
 if(!_isArrayPathItemServers(value)) {
 return false;
@@ -3895,6 +4086,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PathItem/properties/parameters
 export function isPathItemParameters(value: unknown): value is types.PathItemParameters {
 if(!_isArrayPathItemParameters(value)) {
 return false;
@@ -3918,6 +4110,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PathItem/additionalProperties
 export function isPathItemAdditionalProperties(value: unknown): value is types.PathItemAdditionalProperties {
 if(!_isNeverPathItemAdditionalProperties(value)) {
 return false;
@@ -3927,6 +4120,7 @@ return true;
 function _isNeverPathItemAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PathItem/patternProperties/^(get|put|post|delete|options|head|patch|trace)$
 export function isGetPutPostDeleteOptionsHeadPatchTrace(value: unknown): value is types.GetPutPostDeleteOptionsHeadPatchTrace {
 if(!_isReferenceGetPutPostDeleteOptionsHeadPatchTrace(value)) {
 return false;
@@ -3939,9 +4133,11 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PathItem/patternProperties/^x-
 export function isPathItemX(value: unknown): value is types.PathItemX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/tags
 export function isOperationTags(value: unknown): value is types.OperationTags {
 if(!_isArrayOperationTags(value)) {
 return false;
@@ -3960,6 +4156,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/summary
 export function isOperationSummary(value: unknown): value is types.OperationSummary {
 if(!_isStringOperationSummary(value)) {
 return false;
@@ -3972,6 +4169,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/description
 export function isOperationDescription(value: unknown): value is types.OperationDescription {
 if(!_isStringOperationDescription(value)) {
 return false;
@@ -3984,6 +4182,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/externalDocs
 export function isOperationExternalDocs(value: unknown): value is types.OperationExternalDocs {
 if(!_isReferenceOperationExternalDocs(value)) {
 return false;
@@ -3996,6 +4195,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/operationId
 export function isOperationOperationId(value: unknown): value is types.OperationOperationId {
 if(!_isStringOperationOperationId(value)) {
 return false;
@@ -4008,6 +4208,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/parameters
 export function isOperationParameters(value: unknown): value is types.OperationParameters {
 if(!_isArrayOperationParameters(value)) {
 return false;
@@ -4031,6 +4232,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/requestBody
 export function isOperationPropertiesRequestBody(value: unknown): value is types.OperationPropertiesRequestBody {
 if(!_isOneOfOperationPropertiesRequestBody(value)) {
 return false;
@@ -4056,6 +4258,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/responses
 export function isOperationPropertiesResponses(value: unknown): value is types.OperationPropertiesResponses {
 if(!_isReferenceOperationPropertiesResponses(value)) {
 return false;
@@ -4068,6 +4271,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/callbacks
 export function isOperationCallbacks(value: unknown): value is types.OperationCallbacks {
 if(!_isMapOperationCallbacks(value)) {
 return false;
@@ -4087,6 +4291,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/deprecated
 export function isOperationDeprecated(value: unknown): value is types.OperationDeprecated {
 if(!_isBooleanOperationDeprecated(value)) {
 return false;
@@ -4099,6 +4304,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/security
 export function isOperationSecurity(value: unknown): value is types.OperationSecurity {
 if(!_isArrayOperationSecurity(value)) {
 return false;
@@ -4117,6 +4323,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/servers
 export function isOperationServers(value: unknown): value is types.OperationServers {
 if(!_isArrayOperationServers(value)) {
 return false;
@@ -4135,6 +4342,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/additionalProperties
 export function isOperationAdditionalProperties(value: unknown): value is types.OperationAdditionalProperties {
 if(!_isNeverOperationAdditionalProperties(value)) {
 return false;
@@ -4144,9 +4352,11 @@ return true;
 function _isNeverOperationAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/patternProperties/^x-
 export function isOperationX(value: unknown): value is types.OperationX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Responses/properties/default
 export function isResponsesDefault(value: unknown): value is types.ResponsesDefault {
 if(!_isOneOfResponsesDefault(value)) {
 return false;
@@ -4172,6 +4382,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Responses/additionalProperties
 export function isResponsesAdditionalProperties(value: unknown): value is types.ResponsesAdditionalProperties {
 if(!_isNeverResponsesAdditionalProperties(value)) {
 return false;
@@ -4181,6 +4392,7 @@ return true;
 function _isNeverResponsesAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Responses/patternProperties/^[1-5](?:\d{2}|XX)$
 export function isPatternProperties15D2Xx(value: unknown): value is types.PatternProperties15D2Xx {
 if(!_isOneOfPatternProperties15D2Xx(value)) {
 return false;
@@ -4206,9 +4418,11 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Responses/patternProperties/^x-
 export function isResponsesX(value: unknown): value is types.ResponsesX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SecurityRequirement/additionalProperties
 export function isSecurityRequirementAdditionalProperties(value: unknown): value is types.SecurityRequirementAdditionalProperties {
 if(!_isArraySecurityRequirementAdditionalProperties(value)) {
 return false;
@@ -4227,6 +4441,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Tag/properties/name
 export function isTagName(value: unknown): value is types.TagName {
 if(!_isStringTagName(value)) {
 return false;
@@ -4239,6 +4454,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Tag/properties/description
 export function isTagDescription(value: unknown): value is types.TagDescription {
 if(!_isStringTagDescription(value)) {
 return false;
@@ -4251,6 +4467,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Tag/properties/externalDocs
 export function isTagExternalDocs(value: unknown): value is types.TagExternalDocs {
 if(!_isReferenceTagExternalDocs(value)) {
 return false;
@@ -4263,6 +4480,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Tag/additionalProperties
 export function isTagAdditionalProperties(value: unknown): value is types.TagAdditionalProperties {
 if(!_isNeverTagAdditionalProperties(value)) {
 return false;
@@ -4272,9 +4490,11 @@ return true;
 function _isNeverTagAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Tag/patternProperties/^x-
 export function isTagX(value: unknown): value is types.TagX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ExternalDocumentation/properties/description
 export function isExternalDocumentationDescription(value: unknown): value is types.ExternalDocumentationDescription {
 if(!_isStringExternalDocumentationDescription(value)) {
 return false;
@@ -4287,6 +4507,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ExternalDocumentation/properties/url
 export function isExternalDocumentationUrl(value: unknown): value is types.ExternalDocumentationUrl {
 if(!_isStringExternalDocumentationUrl(value)) {
 return false;
@@ -4299,6 +4520,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ExternalDocumentation/additionalProperties
 export function isExternalDocumentationAdditionalProperties(value: unknown): value is types.ExternalDocumentationAdditionalProperties {
 if(!_isNeverExternalDocumentationAdditionalProperties(value)) {
 return false;
@@ -4308,9 +4530,11 @@ return true;
 function _isNeverExternalDocumentationAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ExternalDocumentation/patternProperties/^x-
 export function isExternalDocumentationX(value: unknown): value is types.ExternalDocumentationX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ExampleXORExamples/not
 export function isExampleXorExamplesNot(value: unknown): value is types.ExampleXorExamplesNot {
 if(!_isMapExampleXorExamplesNot(value)) {
 return false;
@@ -4332,6 +4556,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SchemaXORContent/oneOf/0
 export function isSchemaXorContentOneOf0(value: unknown): value is types.SchemaXorContentOneOf0 {
 if(!_isMapSchemaXorContentOneOf0(value)) {
 return false;
@@ -4350,8 +4575,12 @@ const propertyValue = value[propertyName as keyof typeof value];
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SchemaXORContent/oneOf/1
 export function isSchemaXorContentOneOf1(value: unknown): value is types.SchemaXorContentOneOf1 {
-if(!_isMapSchemaXorContentOneOf1(value) && !_isAllOfSchemaXorContentOneOf1(value)) {
+if(!_isMapSchemaXorContentOneOf1(value)) {
+return false;
+}
+if(!_isAllOfSchemaXorContentOneOf1(value)) {
 return false;
 }
 return true;
@@ -4386,6 +4615,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SchemaXORContent/not
 export function isSchemaXorContentNot(value: unknown): value is types.SchemaXorContentNot {
 if(!_isMapSchemaXorContentNot(value)) {
 return false;
@@ -4407,6 +4637,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/name
 export function isParameterName(value: unknown): value is types.ParameterName {
 if(!_isStringParameterName(value)) {
 return false;
@@ -4419,6 +4650,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/in
 export function isParameterIn(value: unknown): value is types.ParameterIn {
 if(!_isStringParameterIn(value)) {
 return false;
@@ -4431,6 +4663,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/description
 export function isParameterDescription(value: unknown): value is types.ParameterDescription {
 if(!_isStringParameterDescription(value)) {
 return false;
@@ -4443,6 +4676,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/required
 export function isParameterRequired(value: unknown): value is types.ParameterRequired {
 if(!_isBooleanParameterRequired(value)) {
 return false;
@@ -4455,6 +4689,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/deprecated
 export function isParameterDeprecated(value: unknown): value is types.ParameterDeprecated {
 if(!_isBooleanParameterDeprecated(value)) {
 return false;
@@ -4467,6 +4702,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/allowEmptyValue
 export function isParameterAllowEmptyValue(value: unknown): value is types.ParameterAllowEmptyValue {
 if(!_isBooleanParameterAllowEmptyValue(value)) {
 return false;
@@ -4479,6 +4715,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/style
 export function isParameterStyle(value: unknown): value is types.ParameterStyle {
 if(!_isStringParameterStyle(value)) {
 return false;
@@ -4491,6 +4728,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/explode
 export function isParameterExplode(value: unknown): value is types.ParameterExplode {
 if(!_isBooleanParameterExplode(value)) {
 return false;
@@ -4503,6 +4741,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/allowReserved
 export function isParameterAllowReserved(value: unknown): value is types.ParameterAllowReserved {
 if(!_isBooleanParameterAllowReserved(value)) {
 return false;
@@ -4515,6 +4754,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/schema
 export function isParameterPropertiesSchema(value: unknown): value is types.ParameterPropertiesSchema {
 if(!_isOneOfParameterPropertiesSchema(value)) {
 return false;
@@ -4540,6 +4780,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/content
 export function isParameterContent(value: unknown): value is types.ParameterContent {
 if(!_isMapParameterContent(value)) {
 return false;
@@ -4567,9 +4808,11 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/example
 export function isParameterPropertiesExample(value: unknown): value is types.ParameterPropertiesExample {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/examples
 export function isParameterExamples(value: unknown): value is types.ParameterExamples {
 if(!_isMapParameterExamples(value)) {
 return false;
@@ -4589,6 +4832,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/additionalProperties
 export function isParameterAdditionalProperties(value: unknown): value is types.ParameterAdditionalProperties {
 if(!_isNeverParameterAdditionalProperties(value)) {
 return false;
@@ -4598,9 +4842,11 @@ return true;
 function _isNeverParameterAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/patternProperties/^x-
 export function isParameterX(value: unknown): value is types.ParameterX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/allOf/0
 export function isParameterAllOf0(value: unknown): value is types.ParameterAllOf0 {
 if(!_isReferenceParameterAllOf0(value)) {
 return false;
@@ -4613,6 +4859,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/allOf/1
 export function isParameterAllOf1(value: unknown): value is types.ParameterAllOf1 {
 if(!_isReferenceParameterAllOf1(value)) {
 return false;
@@ -4625,6 +4872,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/allOf/2
 export function isParameterAllOf2(value: unknown): value is types.ParameterAllOf2 {
 if(!_isReferenceParameterAllOf2(value)) {
 return false;
@@ -4637,6 +4885,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ParameterLocation/oneOf/0
 export function isParameterLocationOneOf0(value: unknown): value is types.ParameterLocationOneOf0 {
 if(!_isMapParameterLocationOneOf0(value)) {
 return false;
@@ -4672,6 +4921,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ParameterLocation/oneOf/1
 export function isParameterLocationOneOf1(value: unknown): value is types.ParameterLocationOneOf1 {
 if(!_isMapParameterLocationOneOf1(value)) {
 return false;
@@ -4699,6 +4949,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ParameterLocation/oneOf/2
 export function isParameterLocationOneOf2(value: unknown): value is types.ParameterLocationOneOf2 {
 if(!_isMapParameterLocationOneOf2(value)) {
 return false;
@@ -4726,6 +4977,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ParameterLocation/oneOf/3
 export function isParameterLocationOneOf3(value: unknown): value is types.ParameterLocationOneOf3 {
 if(!_isMapParameterLocationOneOf3(value)) {
 return false;
@@ -4753,6 +5005,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/RequestBody/properties/description
 export function isRequestBodyDescription(value: unknown): value is types.RequestBodyDescription {
 if(!_isStringRequestBodyDescription(value)) {
 return false;
@@ -4765,6 +5018,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/RequestBody/properties/content
 export function isRequestBodyContent(value: unknown): value is types.RequestBodyContent {
 if(!_isMapRequestBodyContent(value)) {
 return false;
@@ -4784,6 +5038,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/RequestBody/properties/required
 export function isRequestBodyRequired(value: unknown): value is types.RequestBodyRequired {
 if(!_isBooleanRequestBodyRequired(value)) {
 return false;
@@ -4796,6 +5051,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/RequestBody/additionalProperties
 export function isRequestBodyAdditionalProperties(value: unknown): value is types.RequestBodyAdditionalProperties {
 if(!_isNeverRequestBodyAdditionalProperties(value)) {
 return false;
@@ -4805,9 +5061,11 @@ return true;
 function _isNeverRequestBodyAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/RequestBody/patternProperties/^x-
 export function isRequestBodyX(value: unknown): value is types.RequestBodyX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SecurityScheme/oneOf/0
 export function isSecuritySchemeOneOf0(value: unknown): value is types.SecuritySchemeOneOf0 {
 if(!_isReferenceSecuritySchemeOneOf0(value)) {
 return false;
@@ -4820,6 +5078,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SecurityScheme/oneOf/1
 export function isSecuritySchemeOneOf1(value: unknown): value is types.SecuritySchemeOneOf1 {
 if(!_isReferenceSecuritySchemeOneOf1(value)) {
 return false;
@@ -4832,6 +5091,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SecurityScheme/oneOf/2
 export function isSecuritySchemeOneOf2(value: unknown): value is types.SecuritySchemeOneOf2 {
 if(!_isReferenceSecuritySchemeOneOf2(value)) {
 return false;
@@ -4844,6 +5104,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SecurityScheme/oneOf/3
 export function isSecuritySchemeOneOf3(value: unknown): value is types.SecuritySchemeOneOf3 {
 if(!_isReferenceSecuritySchemeOneOf3(value)) {
 return false;
@@ -4856,6 +5117,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/APIKeySecurityScheme/properties/type
 export function isApiKeySecuritySchemeType(value: unknown): value is types.ApiKeySecuritySchemeType {
 if(!_isStringApiKeySecuritySchemeType(value)) {
 return false;
@@ -4871,6 +5133,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/APIKeySecurityScheme/properties/name
 export function isApiKeySecuritySchemeName(value: unknown): value is types.ApiKeySecuritySchemeName {
 if(!_isStringApiKeySecuritySchemeName(value)) {
 return false;
@@ -4883,6 +5146,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/APIKeySecurityScheme/properties/in
 export function isApiKeySecuritySchemeIn(value: unknown): value is types.ApiKeySecuritySchemeIn {
 if(!_isStringApiKeySecuritySchemeIn(value)) {
 return false;
@@ -4898,6 +5162,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/APIKeySecurityScheme/properties/description
 export function isApiKeySecuritySchemeDescription(value: unknown): value is types.ApiKeySecuritySchemeDescription {
 if(!_isStringApiKeySecuritySchemeDescription(value)) {
 return false;
@@ -4910,6 +5175,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/APIKeySecurityScheme/additionalProperties
 export function isApiKeySecuritySchemeAdditionalProperties(value: unknown): value is types.ApiKeySecuritySchemeAdditionalProperties {
 if(!_isNeverApiKeySecuritySchemeAdditionalProperties(value)) {
 return false;
@@ -4919,9 +5185,11 @@ return true;
 function _isNeverApiKeySecuritySchemeAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/APIKeySecurityScheme/patternProperties/^x-
 export function isApiKeySecuritySchemeX(value: unknown): value is types.ApiKeySecuritySchemeX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/HTTPSecurityScheme/properties/scheme
 export function isHttpSecuritySchemeScheme(value: unknown): value is types.HttpSecuritySchemeScheme {
 if(!_isStringHttpSecuritySchemeScheme(value)) {
 return false;
@@ -4934,6 +5202,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/HTTPSecurityScheme/properties/bearerFormat
 export function isBearerFormat(value: unknown): value is types.BearerFormat {
 if(!_isStringBearerFormat(value)) {
 return false;
@@ -4946,6 +5215,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/HTTPSecurityScheme/properties/description
 export function isHttpSecuritySchemeDescription(value: unknown): value is types.HttpSecuritySchemeDescription {
 if(!_isStringHttpSecuritySchemeDescription(value)) {
 return false;
@@ -4958,6 +5228,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/HTTPSecurityScheme/properties/type
 export function isHttpSecuritySchemeType(value: unknown): value is types.HttpSecuritySchemeType {
 if(!_isStringHttpSecuritySchemeType(value)) {
 return false;
@@ -4973,6 +5244,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/HTTPSecurityScheme/additionalProperties
 export function isHttpSecuritySchemeAdditionalProperties(value: unknown): value is types.HttpSecuritySchemeAdditionalProperties {
 if(!_isNeverHttpSecuritySchemeAdditionalProperties(value)) {
 return false;
@@ -4982,9 +5254,11 @@ return true;
 function _isNeverHttpSecuritySchemeAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/HTTPSecurityScheme/patternProperties/^x-
 export function isHttpSecuritySchemeX(value: unknown): value is types.HttpSecuritySchemeX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/HTTPSecurityScheme/oneOf/0
 export function isHttpSecuritySchemeOneOf0(value: unknown): value is types.HttpSecuritySchemeOneOf0 {
 if(!_isMapHttpSecuritySchemeOneOf0(value)) {
 return false;
@@ -5007,8 +5281,12 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/HTTPSecurityScheme/oneOf/1
 export function isHttpSecuritySchemeOneOf1(value: unknown): value is types.HttpSecuritySchemeOneOf1 {
-if(!_isMapHttpSecuritySchemeOneOf1(value) && !_isNotHttpSecuritySchemeOneOf1(value)) {
+if(!_isMapHttpSecuritySchemeOneOf1(value)) {
+return false;
+}
+if(!_isNotHttpSecuritySchemeOneOf1(value)) {
 return false;
 }
 return true;
@@ -5035,6 +5313,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OAuth2SecurityScheme/properties/type
 export function isOauth2SecuritySchemeType(value: unknown): value is types.Oauth2SecuritySchemeType {
 if(!_isStringOauth2SecuritySchemeType(value)) {
 return false;
@@ -5050,6 +5329,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OAuth2SecurityScheme/properties/flows
 export function isFlows(value: unknown): value is types.Flows {
 if(!_isReferenceFlows(value)) {
 return false;
@@ -5062,6 +5342,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OAuth2SecurityScheme/properties/description
 export function isOauth2SecuritySchemeDescription(value: unknown): value is types.Oauth2SecuritySchemeDescription {
 if(!_isStringOauth2SecuritySchemeDescription(value)) {
 return false;
@@ -5074,6 +5355,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OAuth2SecurityScheme/additionalProperties
 export function isOauth2SecuritySchemeAdditionalProperties(value: unknown): value is types.Oauth2SecuritySchemeAdditionalProperties {
 if(!_isNeverOauth2SecuritySchemeAdditionalProperties(value)) {
 return false;
@@ -5083,9 +5365,11 @@ return true;
 function _isNeverOauth2SecuritySchemeAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OAuth2SecurityScheme/patternProperties/^x-
 export function isOauth2SecuritySchemeX(value: unknown): value is types.Oauth2SecuritySchemeX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OpenIdConnectSecurityScheme/properties/type
 export function isOpenIdConnectSecuritySchemeType(value: unknown): value is types.OpenIdConnectSecuritySchemeType {
 if(!_isStringOpenIdConnectSecuritySchemeType(value)) {
 return false;
@@ -5101,6 +5385,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OpenIdConnectSecurityScheme/properties/openIdConnectUrl
 export function isOpenIdConnectUrl(value: unknown): value is types.OpenIdConnectUrl {
 if(!_isStringOpenIdConnectUrl(value)) {
 return false;
@@ -5113,6 +5398,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OpenIdConnectSecurityScheme/properties/description
 export function isOpenIdConnectSecuritySchemeDescription(value: unknown): value is types.OpenIdConnectSecuritySchemeDescription {
 if(!_isStringOpenIdConnectSecuritySchemeDescription(value)) {
 return false;
@@ -5125,6 +5411,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OpenIdConnectSecurityScheme/additionalProperties
 export function isOpenIdConnectSecuritySchemeAdditionalProperties(value: unknown): value is types.OpenIdConnectSecuritySchemeAdditionalProperties {
 if(!_isNeverOpenIdConnectSecuritySchemeAdditionalProperties(value)) {
 return false;
@@ -5134,9 +5421,11 @@ return true;
 function _isNeverOpenIdConnectSecuritySchemeAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OpenIdConnectSecurityScheme/patternProperties/^x-
 export function isOpenIdConnectSecuritySchemeX(value: unknown): value is types.OpenIdConnectSecuritySchemeX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OAuthFlows/properties/implicit
 export function isImplicit(value: unknown): value is types.Implicit {
 if(!_isReferenceImplicit(value)) {
 return false;
@@ -5149,6 +5438,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OAuthFlows/properties/password
 export function isPassword(value: unknown): value is types.Password {
 if(!_isReferencePassword(value)) {
 return false;
@@ -5161,6 +5451,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OAuthFlows/properties/clientCredentials
 export function isClientCredentials(value: unknown): value is types.ClientCredentials {
 if(!_isReferenceClientCredentials(value)) {
 return false;
@@ -5173,6 +5464,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OAuthFlows/properties/authorizationCode
 export function isAuthorizationCode(value: unknown): value is types.AuthorizationCode {
 if(!_isReferenceAuthorizationCode(value)) {
 return false;
@@ -5185,6 +5477,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OAuthFlows/additionalProperties
 export function isOauthFlowsAdditionalProperties(value: unknown): value is types.OauthFlowsAdditionalProperties {
 if(!_isNeverOauthFlowsAdditionalProperties(value)) {
 return false;
@@ -5194,9 +5487,11 @@ return true;
 function _isNeverOauthFlowsAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/OAuthFlows/patternProperties/^x-
 export function isOauthFlowsX(value: unknown): value is types.OauthFlowsX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ImplicitOAuthFlow/properties/authorizationUrl
 export function isImplicitOauthFlowAuthorizationUrl(value: unknown): value is types.ImplicitOauthFlowAuthorizationUrl {
 if(!_isStringImplicitOauthFlowAuthorizationUrl(value)) {
 return false;
@@ -5209,6 +5504,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ImplicitOAuthFlow/properties/refreshUrl
 export function isImplicitOauthFlowRefreshUrl(value: unknown): value is types.ImplicitOauthFlowRefreshUrl {
 if(!_isStringImplicitOauthFlowRefreshUrl(value)) {
 return false;
@@ -5221,6 +5517,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ImplicitOAuthFlow/properties/scopes
 export function isImplicitOauthFlowScopes(value: unknown): value is types.ImplicitOauthFlowScopes {
 if(!_isMapImplicitOauthFlowScopes(value)) {
 return false;
@@ -5240,6 +5537,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ImplicitOAuthFlow/additionalProperties
 export function isImplicitOauthFlowAdditionalProperties(value: unknown): value is types.ImplicitOauthFlowAdditionalProperties {
 if(!_isNeverImplicitOauthFlowAdditionalProperties(value)) {
 return false;
@@ -5249,9 +5547,11 @@ return true;
 function _isNeverImplicitOauthFlowAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ImplicitOAuthFlow/patternProperties/^x-
 export function isImplicitOauthFlowX(value: unknown): value is types.ImplicitOauthFlowX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PasswordOAuthFlow/properties/tokenUrl
 export function isPasswordOauthFlowTokenUrl(value: unknown): value is types.PasswordOauthFlowTokenUrl {
 if(!_isStringPasswordOauthFlowTokenUrl(value)) {
 return false;
@@ -5264,6 +5564,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PasswordOAuthFlow/properties/refreshUrl
 export function isPasswordOauthFlowRefreshUrl(value: unknown): value is types.PasswordOauthFlowRefreshUrl {
 if(!_isStringPasswordOauthFlowRefreshUrl(value)) {
 return false;
@@ -5276,6 +5577,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PasswordOAuthFlow/properties/scopes
 export function isPasswordOauthFlowScopes(value: unknown): value is types.PasswordOauthFlowScopes {
 if(!_isMapPasswordOauthFlowScopes(value)) {
 return false;
@@ -5295,6 +5597,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PasswordOAuthFlow/additionalProperties
 export function isPasswordOauthFlowAdditionalProperties(value: unknown): value is types.PasswordOauthFlowAdditionalProperties {
 if(!_isNeverPasswordOauthFlowAdditionalProperties(value)) {
 return false;
@@ -5304,9 +5607,11 @@ return true;
 function _isNeverPasswordOauthFlowAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PasswordOAuthFlow/patternProperties/^x-
 export function isPasswordOauthFlowX(value: unknown): value is types.PasswordOauthFlowX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ClientCredentialsFlow/properties/tokenUrl
 export function isClientCredentialsFlowTokenUrl(value: unknown): value is types.ClientCredentialsFlowTokenUrl {
 if(!_isStringClientCredentialsFlowTokenUrl(value)) {
 return false;
@@ -5319,6 +5624,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ClientCredentialsFlow/properties/refreshUrl
 export function isClientCredentialsFlowRefreshUrl(value: unknown): value is types.ClientCredentialsFlowRefreshUrl {
 if(!_isStringClientCredentialsFlowRefreshUrl(value)) {
 return false;
@@ -5331,6 +5637,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ClientCredentialsFlow/properties/scopes
 export function isClientCredentialsFlowScopes(value: unknown): value is types.ClientCredentialsFlowScopes {
 if(!_isMapClientCredentialsFlowScopes(value)) {
 return false;
@@ -5350,6 +5657,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ClientCredentialsFlow/additionalProperties
 export function isClientCredentialsFlowAdditionalProperties(value: unknown): value is types.ClientCredentialsFlowAdditionalProperties {
 if(!_isNeverClientCredentialsFlowAdditionalProperties(value)) {
 return false;
@@ -5359,9 +5667,11 @@ return true;
 function _isNeverClientCredentialsFlowAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ClientCredentialsFlow/patternProperties/^x-
 export function isClientCredentialsFlowX(value: unknown): value is types.ClientCredentialsFlowX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/AuthorizationCodeOAuthFlow/properties/authorizationUrl
 export function isAuthorizationCodeOauthFlowAuthorizationUrl(value: unknown): value is types.AuthorizationCodeOauthFlowAuthorizationUrl {
 if(!_isStringAuthorizationCodeOauthFlowAuthorizationUrl(value)) {
 return false;
@@ -5374,6 +5684,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/AuthorizationCodeOAuthFlow/properties/tokenUrl
 export function isAuthorizationCodeOauthFlowTokenUrl(value: unknown): value is types.AuthorizationCodeOauthFlowTokenUrl {
 if(!_isStringAuthorizationCodeOauthFlowTokenUrl(value)) {
 return false;
@@ -5386,6 +5697,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/AuthorizationCodeOAuthFlow/properties/refreshUrl
 export function isAuthorizationCodeOauthFlowRefreshUrl(value: unknown): value is types.AuthorizationCodeOauthFlowRefreshUrl {
 if(!_isStringAuthorizationCodeOauthFlowRefreshUrl(value)) {
 return false;
@@ -5398,6 +5710,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/AuthorizationCodeOAuthFlow/properties/scopes
 export function isAuthorizationCodeOauthFlowScopes(value: unknown): value is types.AuthorizationCodeOauthFlowScopes {
 if(!_isMapAuthorizationCodeOauthFlowScopes(value)) {
 return false;
@@ -5417,6 +5730,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/AuthorizationCodeOAuthFlow/additionalProperties
 export function isAuthorizationCodeOauthFlowAdditionalProperties(value: unknown): value is types.AuthorizationCodeOauthFlowAdditionalProperties {
 if(!_isNeverAuthorizationCodeOauthFlowAdditionalProperties(value)) {
 return false;
@@ -5426,9 +5740,11 @@ return true;
 function _isNeverAuthorizationCodeOauthFlowAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/AuthorizationCodeOAuthFlow/patternProperties/^x-
 export function isAuthorizationCodeOauthFlowX(value: unknown): value is types.AuthorizationCodeOauthFlowX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Link/properties/operationId
 export function isLinkOperationId(value: unknown): value is types.LinkOperationId {
 if(!_isStringLinkOperationId(value)) {
 return false;
@@ -5441,6 +5757,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Link/properties/operationRef
 export function isOperationRef(value: unknown): value is types.OperationRef {
 if(!_isStringOperationRef(value)) {
 return false;
@@ -5453,6 +5770,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Link/properties/parameters
 export function isLinkParameters(value: unknown): value is types.LinkParameters {
 if(!_isMapLinkParameters(value)) {
 return false;
@@ -5472,9 +5790,11 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Link/properties/requestBody
 export function isLinkPropertiesRequestBody(value: unknown): value is types.LinkPropertiesRequestBody {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Link/properties/description
 export function isLinkDescription(value: unknown): value is types.LinkDescription {
 if(!_isStringLinkDescription(value)) {
 return false;
@@ -5487,6 +5807,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Link/properties/server
 export function isPropertiesServer(value: unknown): value is types.PropertiesServer {
 if(!_isReferencePropertiesServer(value)) {
 return false;
@@ -5499,6 +5820,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Link/additionalProperties
 export function isLinkAdditionalProperties(value: unknown): value is types.LinkAdditionalProperties {
 if(!_isNeverLinkAdditionalProperties(value)) {
 return false;
@@ -5508,9 +5830,11 @@ return true;
 function _isNeverLinkAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Link/patternProperties/^x-
 export function isLinkX(value: unknown): value is types.LinkX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Link/not
 export function isLinkNot(value: unknown): value is types.LinkNot {
 if(!_isMapLinkNot(value)) {
 return false;
@@ -5532,6 +5856,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Callback/additionalProperties
 export function isCallbackAdditionalProperties(value: unknown): value is types.CallbackAdditionalProperties {
 if(!_isReferenceCallbackAdditionalProperties(value)) {
 return false;
@@ -5544,9 +5869,11 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Callback/patternProperties/^x-
 export function isCallbackX(value: unknown): value is types.CallbackX {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Encoding/properties/contentType
 export function isContentType(value: unknown): value is types.ContentType {
 if(!_isStringContentType(value)) {
 return false;
@@ -5559,6 +5886,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Encoding/properties/headers
 export function isEncodingHeaders(value: unknown): value is types.EncodingHeaders {
 if(!_isMapEncodingHeaders(value)) {
 return false;
@@ -5578,6 +5906,7 @@ continue;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Encoding/properties/style
 export function isEncodingStyle(value: unknown): value is types.EncodingStyle {
 if(!_isStringEncodingStyle(value)) {
 return false;
@@ -5593,6 +5922,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Encoding/properties/explode
 export function isEncodingExplode(value: unknown): value is types.EncodingExplode {
 if(!_isBooleanEncodingExplode(value)) {
 return false;
@@ -5605,6 +5935,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Encoding/properties/allowReserved
 export function isEncodingAllowReserved(value: unknown): value is types.EncodingAllowReserved {
 if(!_isBooleanEncodingAllowReserved(value)) {
 return false;
@@ -5617,6 +5948,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Encoding/additionalProperties
 export function isDefinitionsEncodingAdditionalProperties(value: unknown): value is types.DefinitionsEncodingAdditionalProperties {
 if(!_isNeverDefinitionsEncodingAdditionalProperties(value)) {
 return false;
@@ -5626,6 +5958,7 @@ return true;
 function _isNeverDefinitionsEncodingAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/properties/servers/items
 export function isSchema20210928ServersItems(value: unknown): value is types.Schema20210928ServersItems {
 if(!_isReferenceSchema20210928ServersItems(value)) {
 return false;
@@ -5638,6 +5971,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/properties/security/items
 export function isSchema20210928SecurityItems(value: unknown): value is types.Schema20210928SecurityItems {
 if(!_isReferenceSchema20210928SecurityItems(value)) {
 return false;
@@ -5650,6 +5984,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/properties/tags/items
 export function isSchema20210928TagsItems(value: unknown): value is types.Schema20210928TagsItems {
 if(!_isReferenceSchema20210928TagsItems(value)) {
 return false;
@@ -5662,6 +5997,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Server/properties/variables/additionalProperties
 export function isVariablesAdditionalProperties(value: unknown): value is types.VariablesAdditionalProperties {
 if(!_isReferenceVariablesAdditionalProperties(value)) {
 return false;
@@ -5674,6 +6010,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ServerVariable/properties/enum/items
 export function isServerVariableEnumItems(value: unknown): value is types.ServerVariableEnumItems {
 if(!_isStringServerVariableEnumItems(value)) {
 return false;
@@ -5686,6 +6023,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/schemas/patternProperties/^[a-zA-Z0-9\.\-_]+$
 export function isSchemasAZAZ09(value: unknown): value is types.SchemasAZAZ09 {
 if(!_isOneOfSchemasAZAZ09(value)) {
 return false;
@@ -5711,6 +6049,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/responses/patternProperties/^[a-zA-Z0-9\.\-_]+$
 export function isResponsesAZAZ09(value: unknown): value is types.ResponsesAZAZ09 {
 if(!_isOneOfResponsesAZAZ09(value)) {
 return false;
@@ -5736,6 +6075,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/parameters/patternProperties/^[a-zA-Z0-9\.\-_]+$
 export function isParametersAZAZ09(value: unknown): value is types.ParametersAZAZ09 {
 if(!_isOneOfParametersAZAZ09(value)) {
 return false;
@@ -5761,6 +6101,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/examples/patternProperties/^[a-zA-Z0-9\.\-_]+$
 export function isExamplesAZAZ09(value: unknown): value is types.ExamplesAZAZ09 {
 if(!_isOneOfExamplesAZAZ09(value)) {
 return false;
@@ -5786,6 +6127,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/requestBodies/patternProperties/^[a-zA-Z0-9\.\-_]+$
 export function isRequestBodiesAZAZ09(value: unknown): value is types.RequestBodiesAZAZ09 {
 if(!_isOneOfRequestBodiesAZAZ09(value)) {
 return false;
@@ -5811,6 +6153,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/headers/patternProperties/^[a-zA-Z0-9\.\-_]+$
 export function isHeadersAZAZ09(value: unknown): value is types.HeadersAZAZ09 {
 if(!_isOneOfHeadersAZAZ09(value)) {
 return false;
@@ -5836,6 +6179,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/securitySchemes/patternProperties/^[a-zA-Z0-9\.\-_]+$
 export function isSecuritySchemesAZAZ09(value: unknown): value is types.SecuritySchemesAZAZ09 {
 if(!_isOneOfSecuritySchemesAZAZ09(value)) {
 return false;
@@ -5861,6 +6205,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/links/patternProperties/^[a-zA-Z0-9\.\-_]+$
 export function isLinksAZAZ09(value: unknown): value is types.LinksAZAZ09 {
 if(!_isOneOfLinksAZAZ09(value)) {
 return false;
@@ -5886,6 +6231,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/callbacks/patternProperties/^[a-zA-Z0-9\.\-_]+$
 export function isCallbacksAZAZ09(value: unknown): value is types.CallbacksAZAZ09 {
 if(!_isOneOfCallbacksAZAZ09(value)) {
 return false;
@@ -5911,6 +6257,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/required/items
 export function isRequiredItems(value: unknown): value is types.RequiredItems {
 if(!_isStringRequiredItems(value)) {
 return false;
@@ -5923,9 +6270,11 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/enum/items
 export function isSchemaEnumItems(value: unknown): value is types.SchemaEnumItems {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/not/oneOf/0
 export function isNotOneOf0(value: unknown): value is types.NotOneOf0 {
 if(!_isReferenceNotOneOf0(value)) {
 return false;
@@ -5938,6 +6287,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/not/oneOf/1
 export function isNotOneOf1(value: unknown): value is types.NotOneOf1 {
 if(!_isReferenceNotOneOf1(value)) {
 return false;
@@ -5950,6 +6300,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/allOf/items
 export function isAllOfItems(value: unknown): value is types.AllOfItems {
 if(!_isOneOfAllOfItems(value)) {
 return false;
@@ -5975,6 +6326,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/oneOf/items
 export function isOneOfItems(value: unknown): value is types.OneOfItems {
 if(!_isOneOfOneOfItems(value)) {
 return false;
@@ -6000,6 +6352,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/anyOf/items
 export function isAnyOfItems(value: unknown): value is types.AnyOfItems {
 if(!_isOneOfAnyOfItems(value)) {
 return false;
@@ -6025,6 +6378,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/items/oneOf/0
 export function isPropertiesItemsOneOf0(value: unknown): value is types.PropertiesItemsOneOf0 {
 if(!_isReferencePropertiesItemsOneOf0(value)) {
 return false;
@@ -6037,6 +6391,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/items/oneOf/1
 export function isPropertiesItemsOneOf1(value: unknown): value is types.PropertiesItemsOneOf1 {
 if(!_isReferencePropertiesItemsOneOf1(value)) {
 return false;
@@ -6049,6 +6404,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/properties/additionalProperties
 export function isPropertiesPropertiesAdditionalProperties(value: unknown): value is types.PropertiesPropertiesAdditionalProperties {
 if(!_isOneOfPropertiesPropertiesAdditionalProperties(value)) {
 return false;
@@ -6074,6 +6430,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/additionalProperties/oneOf/0
 export function isSchemaPropertiesAdditionalPropertiesOneOf0(value: unknown): value is types.SchemaPropertiesAdditionalPropertiesOneOf0 {
 if(!_isReferenceSchemaPropertiesAdditionalPropertiesOneOf0(value)) {
 return false;
@@ -6086,6 +6443,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/additionalProperties/oneOf/1
 export function isSchemaPropertiesAdditionalPropertiesOneOf1(value: unknown): value is types.SchemaPropertiesAdditionalPropertiesOneOf1 {
 if(!_isReferenceSchemaPropertiesAdditionalPropertiesOneOf1(value)) {
 return false;
@@ -6098,6 +6456,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/additionalProperties/oneOf/2
 export function isAdditionalPropertiesOneOf2(value: unknown): value is types.AdditionalPropertiesOneOf2 {
 if(!_isBooleanAdditionalPropertiesOneOf2(value)) {
 return false;
@@ -6110,6 +6469,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Discriminator/properties/mapping/additionalProperties
 export function isMappingAdditionalProperties(value: unknown): value is types.MappingAdditionalProperties {
 if(!_isStringMappingAdditionalProperties(value)) {
 return false;
@@ -6122,6 +6482,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Response/properties/headers/additionalProperties
 export function isResponseHeadersAdditionalProperties(value: unknown): value is types.ResponseHeadersAdditionalProperties {
 if(!_isOneOfResponseHeadersAdditionalProperties(value)) {
 return false;
@@ -6147,6 +6508,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Response/properties/content/additionalProperties
 export function isResponseContentAdditionalProperties(value: unknown): value is types.ResponseContentAdditionalProperties {
 if(!_isReferenceResponseContentAdditionalProperties(value)) {
 return false;
@@ -6159,6 +6521,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Response/properties/links/additionalProperties
 export function isLinksAdditionalProperties(value: unknown): value is types.LinksAdditionalProperties {
 if(!_isOneOfLinksAdditionalProperties(value)) {
 return false;
@@ -6184,6 +6547,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/MediaType/properties/schema/oneOf/0
 export function isMediaTypeSchemaOneOf0(value: unknown): value is types.MediaTypeSchemaOneOf0 {
 if(!_isReferenceMediaTypeSchemaOneOf0(value)) {
 return false;
@@ -6196,6 +6560,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/MediaType/properties/schema/oneOf/1
 export function isMediaTypeSchemaOneOf1(value: unknown): value is types.MediaTypeSchemaOneOf1 {
 if(!_isReferenceMediaTypeSchemaOneOf1(value)) {
 return false;
@@ -6208,6 +6573,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/MediaType/properties/examples/additionalProperties
 export function isMediaTypeExamplesAdditionalProperties(value: unknown): value is types.MediaTypeExamplesAdditionalProperties {
 if(!_isOneOfMediaTypeExamplesAdditionalProperties(value)) {
 return false;
@@ -6233,6 +6599,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/MediaType/properties/encoding/additionalProperties
 export function isPropertiesEncodingAdditionalProperties(value: unknown): value is types.PropertiesEncodingAdditionalProperties {
 if(!_isReferencePropertiesEncodingAdditionalProperties(value)) {
 return false;
@@ -6245,6 +6612,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/schema/oneOf/0
 export function isHeaderSchemaOneOf0(value: unknown): value is types.HeaderSchemaOneOf0 {
 if(!_isReferenceHeaderSchemaOneOf0(value)) {
 return false;
@@ -6257,6 +6625,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/schema/oneOf/1
 export function isHeaderSchemaOneOf1(value: unknown): value is types.HeaderSchemaOneOf1 {
 if(!_isReferenceHeaderSchemaOneOf1(value)) {
 return false;
@@ -6269,6 +6638,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/content/additionalProperties
 export function isHeaderContentAdditionalProperties(value: unknown): value is types.HeaderContentAdditionalProperties {
 if(!_isReferenceHeaderContentAdditionalProperties(value)) {
 return false;
@@ -6281,6 +6651,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/examples/additionalProperties
 export function isHeaderExamplesAdditionalProperties(value: unknown): value is types.HeaderExamplesAdditionalProperties {
 if(!_isOneOfHeaderExamplesAdditionalProperties(value)) {
 return false;
@@ -6306,6 +6677,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PathItem/properties/servers/items
 export function isPathItemServersItems(value: unknown): value is types.PathItemServersItems {
 if(!_isReferencePathItemServersItems(value)) {
 return false;
@@ -6318,6 +6690,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PathItem/properties/parameters/items
 export function isPathItemParametersItems(value: unknown): value is types.PathItemParametersItems {
 if(!_isOneOfPathItemParametersItems(value)) {
 return false;
@@ -6343,6 +6716,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/tags/items
 export function isOperationTagsItems(value: unknown): value is types.OperationTagsItems {
 if(!_isStringOperationTagsItems(value)) {
 return false;
@@ -6355,6 +6729,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/parameters/items
 export function isOperationParametersItems(value: unknown): value is types.OperationParametersItems {
 if(!_isOneOfOperationParametersItems(value)) {
 return false;
@@ -6380,6 +6755,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/requestBody/oneOf/0
 export function isRequestBodyOneOf0(value: unknown): value is types.RequestBodyOneOf0 {
 if(!_isReferenceRequestBodyOneOf0(value)) {
 return false;
@@ -6392,6 +6768,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/requestBody/oneOf/1
 export function isRequestBodyOneOf1(value: unknown): value is types.RequestBodyOneOf1 {
 if(!_isReferenceRequestBodyOneOf1(value)) {
 return false;
@@ -6404,6 +6781,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/callbacks/additionalProperties
 export function isCallbacksAdditionalProperties(value: unknown): value is types.CallbacksAdditionalProperties {
 if(!_isOneOfCallbacksAdditionalProperties(value)) {
 return false;
@@ -6429,6 +6807,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/security/items
 export function isOperationSecurityItems(value: unknown): value is types.OperationSecurityItems {
 if(!_isReferenceOperationSecurityItems(value)) {
 return false;
@@ -6441,6 +6820,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/servers/items
 export function isOperationServersItems(value: unknown): value is types.OperationServersItems {
 if(!_isReferenceOperationServersItems(value)) {
 return false;
@@ -6453,6 +6833,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Responses/properties/default/oneOf/0
 export function isDefaultOneOf0(value: unknown): value is types.DefaultOneOf0 {
 if(!_isReferenceDefaultOneOf0(value)) {
 return false;
@@ -6465,6 +6846,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Responses/properties/default/oneOf/1
 export function isDefaultOneOf1(value: unknown): value is types.DefaultOneOf1 {
 if(!_isReferenceDefaultOneOf1(value)) {
 return false;
@@ -6477,6 +6859,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Responses/patternProperties/^[1-5](?:\d{2}|XX)$/oneOf/0
 export function isPatternProperties15D2XxOneOf0(value: unknown): value is types.PatternProperties15D2XxOneOf0 {
 if(!_isReferencePatternProperties15D2XxOneOf0(value)) {
 return false;
@@ -6489,6 +6872,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Responses/patternProperties/^[1-5](?:\d{2}|XX)$/oneOf/1
 export function isPatternProperties15D2XxOneOf1(value: unknown): value is types.PatternProperties15D2XxOneOf1 {
 if(!_isReferencePatternProperties15D2XxOneOf1(value)) {
 return false;
@@ -6501,6 +6885,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SecurityRequirement/additionalProperties/items
 export function isAdditionalPropertiesItems(value: unknown): value is types.AdditionalPropertiesItems {
 if(!_isStringAdditionalPropertiesItems(value)) {
 return false;
@@ -6513,6 +6898,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SchemaXORContent/oneOf/1/allOf/0
 export function isOneOf1AllOf0(value: unknown): value is types.OneOf1AllOf0 {
 if(!_isNotOneOf1AllOf0(value)) {
 return false;
@@ -6525,6 +6911,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SchemaXORContent/oneOf/1/allOf/1
 export function isOneOf1AllOf1(value: unknown): value is types.OneOf1AllOf1 {
 if(!_isNotOneOf1AllOf1(value)) {
 return false;
@@ -6537,6 +6924,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SchemaXORContent/oneOf/1/allOf/2
 export function isOneOf1AllOf2(value: unknown): value is types.OneOf1AllOf2 {
 if(!_isNotOneOf1AllOf2(value)) {
 return false;
@@ -6549,6 +6937,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SchemaXORContent/oneOf/1/allOf/3
 export function isAllOf3(value: unknown): value is types.AllOf3 {
 if(!_isNotAllOf3(value)) {
 return false;
@@ -6561,6 +6950,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SchemaXORContent/oneOf/1/allOf/4
 export function isAllOf4(value: unknown): value is types.AllOf4 {
 if(!_isNotAllOf4(value)) {
 return false;
@@ -6573,6 +6963,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/schema/oneOf/0
 export function isParameterSchemaOneOf0(value: unknown): value is types.ParameterSchemaOneOf0 {
 if(!_isReferenceParameterSchemaOneOf0(value)) {
 return false;
@@ -6585,6 +6976,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/schema/oneOf/1
 export function isParameterSchemaOneOf1(value: unknown): value is types.ParameterSchemaOneOf1 {
 if(!_isReferenceParameterSchemaOneOf1(value)) {
 return false;
@@ -6597,6 +6989,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/content/additionalProperties
 export function isParameterContentAdditionalProperties(value: unknown): value is types.ParameterContentAdditionalProperties {
 if(!_isReferenceParameterContentAdditionalProperties(value)) {
 return false;
@@ -6609,6 +7002,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/examples/additionalProperties
 export function isParameterExamplesAdditionalProperties(value: unknown): value is types.ParameterExamplesAdditionalProperties {
 if(!_isOneOfParameterExamplesAdditionalProperties(value)) {
 return false;
@@ -6634,6 +7028,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ParameterLocation/oneOf/0/properties/in
 export function isOneOf0In(value: unknown): value is types.OneOf0In {
 if(!_isStringOneOf0In(value)) {
 return false;
@@ -6649,6 +7044,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ParameterLocation/oneOf/0/properties/style
 export function isOneOf0Style(value: unknown): value is types.OneOf0Style {
 if(!_isStringOneOf0Style(value)) {
 return false;
@@ -6664,6 +7060,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ParameterLocation/oneOf/0/properties/required
 export function isOneOf0Required(value: unknown): value is types.OneOf0Required {
 if(!_isBooleanOneOf0Required(value)) {
 return false;
@@ -6679,6 +7076,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ParameterLocation/oneOf/1/properties/in
 export function isOneOf1In(value: unknown): value is types.OneOf1In {
 if(!_isStringOneOf1In(value)) {
 return false;
@@ -6694,6 +7092,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ParameterLocation/oneOf/1/properties/style
 export function isOneOf1Style(value: unknown): value is types.OneOf1Style {
 if(!_isStringOneOf1Style(value)) {
 return false;
@@ -6709,6 +7108,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ParameterLocation/oneOf/2/properties/in
 export function isOneOf2In(value: unknown): value is types.OneOf2In {
 if(!_isStringOneOf2In(value)) {
 return false;
@@ -6724,6 +7124,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ParameterLocation/oneOf/2/properties/style
 export function isOneOf2Style(value: unknown): value is types.OneOf2Style {
 if(!_isStringOneOf2Style(value)) {
 return false;
@@ -6739,6 +7140,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ParameterLocation/oneOf/3/properties/in
 export function isOneOf3In(value: unknown): value is types.OneOf3In {
 if(!_isStringOneOf3In(value)) {
 return false;
@@ -6754,6 +7156,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ParameterLocation/oneOf/3/properties/style
 export function isOneOf3Style(value: unknown): value is types.OneOf3Style {
 if(!_isStringOneOf3Style(value)) {
 return false;
@@ -6769,6 +7172,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/RequestBody/properties/content/additionalProperties
 export function isRequestBodyContentAdditionalProperties(value: unknown): value is types.RequestBodyContentAdditionalProperties {
 if(!_isReferenceRequestBodyContentAdditionalProperties(value)) {
 return false;
@@ -6781,6 +7185,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/HTTPSecurityScheme/oneOf/0/properties/scheme
 export function isOneOf0Scheme(value: unknown): value is types.OneOf0Scheme {
 if(!_isStringOneOf0Scheme(value)) {
 return false;
@@ -6796,6 +7201,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/HTTPSecurityScheme/oneOf/1/properties/scheme
 export function isOneOf1Scheme(value: unknown): value is types.OneOf1Scheme {
 if(!_isNotOneOf1Scheme(value)) {
 return false;
@@ -6808,6 +7214,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/HTTPSecurityScheme/oneOf/1/not
 export function isOneOf1Not(value: unknown): value is types.OneOf1Not {
 if(!_isMapOneOf1Not(value)) {
 return false;
@@ -6826,6 +7233,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ImplicitOAuthFlow/properties/scopes/additionalProperties
 export function isImplicitOauthFlowScopesAdditionalProperties(value: unknown): value is types.ImplicitOauthFlowScopesAdditionalProperties {
 if(!_isStringImplicitOauthFlowScopesAdditionalProperties(value)) {
 return false;
@@ -6838,6 +7246,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PasswordOAuthFlow/properties/scopes/additionalProperties
 export function isPasswordOauthFlowScopesAdditionalProperties(value: unknown): value is types.PasswordOauthFlowScopesAdditionalProperties {
 if(!_isStringPasswordOauthFlowScopesAdditionalProperties(value)) {
 return false;
@@ -6850,6 +7259,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/ClientCredentialsFlow/properties/scopes/additionalProperties
 export function isClientCredentialsFlowScopesAdditionalProperties(value: unknown): value is types.ClientCredentialsFlowScopesAdditionalProperties {
 if(!_isStringClientCredentialsFlowScopesAdditionalProperties(value)) {
 return false;
@@ -6862,6 +7272,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/AuthorizationCodeOAuthFlow/properties/scopes/additionalProperties
 export function isAuthorizationCodeOauthFlowScopesAdditionalProperties(value: unknown): value is types.AuthorizationCodeOauthFlowScopesAdditionalProperties {
 if(!_isStringAuthorizationCodeOauthFlowScopesAdditionalProperties(value)) {
 return false;
@@ -6874,9 +7285,11 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Link/properties/parameters/additionalProperties
 export function isParametersAdditionalProperties(value: unknown): value is types.ParametersAdditionalProperties {
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Encoding/properties/headers/additionalProperties
 export function isEncodingHeadersAdditionalProperties(value: unknown): value is types.EncodingHeadersAdditionalProperties {
 if(!_isOneOfEncodingHeadersAdditionalProperties(value)) {
 return false;
@@ -6902,6 +7315,7 @@ return false
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/schemas/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/0
 export function isSchemasAZAZ09OneOf0(value: unknown): value is types.SchemasAZAZ09OneOf0 {
 if(!_isReferenceSchemasAZAZ09OneOf0(value)) {
 return false;
@@ -6914,6 +7328,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/schemas/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/1
 export function isSchemasAZAZ09OneOf1(value: unknown): value is types.SchemasAZAZ09OneOf1 {
 if(!_isReferenceSchemasAZAZ09OneOf1(value)) {
 return false;
@@ -6926,6 +7341,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/responses/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/0
 export function isResponsesAZAZ09OneOf0(value: unknown): value is types.ResponsesAZAZ09OneOf0 {
 if(!_isReferenceResponsesAZAZ09OneOf0(value)) {
 return false;
@@ -6938,6 +7354,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/responses/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/1
 export function isResponsesAZAZ09OneOf1(value: unknown): value is types.ResponsesAZAZ09OneOf1 {
 if(!_isReferenceResponsesAZAZ09OneOf1(value)) {
 return false;
@@ -6950,6 +7367,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/parameters/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/0
 export function isParametersAZAZ09OneOf0(value: unknown): value is types.ParametersAZAZ09OneOf0 {
 if(!_isReferenceParametersAZAZ09OneOf0(value)) {
 return false;
@@ -6962,6 +7380,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/parameters/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/1
 export function isParametersAZAZ09OneOf1(value: unknown): value is types.ParametersAZAZ09OneOf1 {
 if(!_isReferenceParametersAZAZ09OneOf1(value)) {
 return false;
@@ -6974,6 +7393,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/examples/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/0
 export function isExamplesAZAZ09OneOf0(value: unknown): value is types.ExamplesAZAZ09OneOf0 {
 if(!_isReferenceExamplesAZAZ09OneOf0(value)) {
 return false;
@@ -6986,6 +7406,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/examples/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/1
 export function isExamplesAZAZ09OneOf1(value: unknown): value is types.ExamplesAZAZ09OneOf1 {
 if(!_isReferenceExamplesAZAZ09OneOf1(value)) {
 return false;
@@ -6998,6 +7419,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/requestBodies/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/0
 export function isRequestBodiesAZAZ09OneOf0(value: unknown): value is types.RequestBodiesAZAZ09OneOf0 {
 if(!_isReferenceRequestBodiesAZAZ09OneOf0(value)) {
 return false;
@@ -7010,6 +7432,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/requestBodies/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/1
 export function isRequestBodiesAZAZ09OneOf1(value: unknown): value is types.RequestBodiesAZAZ09OneOf1 {
 if(!_isReferenceRequestBodiesAZAZ09OneOf1(value)) {
 return false;
@@ -7022,6 +7445,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/headers/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/0
 export function isHeadersAZAZ09OneOf0(value: unknown): value is types.HeadersAZAZ09OneOf0 {
 if(!_isReferenceHeadersAZAZ09OneOf0(value)) {
 return false;
@@ -7034,6 +7458,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/headers/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/1
 export function isHeadersAZAZ09OneOf1(value: unknown): value is types.HeadersAZAZ09OneOf1 {
 if(!_isReferenceHeadersAZAZ09OneOf1(value)) {
 return false;
@@ -7046,6 +7471,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/securitySchemes/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/0
 export function isSecuritySchemesAZAZ09OneOf0(value: unknown): value is types.SecuritySchemesAZAZ09OneOf0 {
 if(!_isReferenceSecuritySchemesAZAZ09OneOf0(value)) {
 return false;
@@ -7058,6 +7484,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/securitySchemes/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/1
 export function isSecuritySchemesAZAZ09OneOf1(value: unknown): value is types.SecuritySchemesAZAZ09OneOf1 {
 if(!_isReferenceSecuritySchemesAZAZ09OneOf1(value)) {
 return false;
@@ -7070,6 +7497,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/links/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/0
 export function isLinksAZAZ09OneOf0(value: unknown): value is types.LinksAZAZ09OneOf0 {
 if(!_isReferenceLinksAZAZ09OneOf0(value)) {
 return false;
@@ -7082,6 +7510,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/links/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/1
 export function isLinksAZAZ09OneOf1(value: unknown): value is types.LinksAZAZ09OneOf1 {
 if(!_isReferenceLinksAZAZ09OneOf1(value)) {
 return false;
@@ -7094,6 +7523,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/callbacks/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/0
 export function isCallbacksAZAZ09OneOf0(value: unknown): value is types.CallbacksAZAZ09OneOf0 {
 if(!_isReferenceCallbacksAZAZ09OneOf0(value)) {
 return false;
@@ -7106,6 +7536,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Components/properties/callbacks/patternProperties/^[a-zA-Z0-9\.\-_]+$/oneOf/1
 export function isCallbacksAZAZ09OneOf1(value: unknown): value is types.CallbacksAZAZ09OneOf1 {
 if(!_isReferenceCallbacksAZAZ09OneOf1(value)) {
 return false;
@@ -7118,6 +7549,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/allOf/items/oneOf/0
 export function isAllOfItemsOneOf0(value: unknown): value is types.AllOfItemsOneOf0 {
 if(!_isReferenceAllOfItemsOneOf0(value)) {
 return false;
@@ -7130,6 +7562,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/allOf/items/oneOf/1
 export function isAllOfItemsOneOf1(value: unknown): value is types.AllOfItemsOneOf1 {
 if(!_isReferenceAllOfItemsOneOf1(value)) {
 return false;
@@ -7142,6 +7575,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/oneOf/items/oneOf/0
 export function isOneOfItemsOneOf0(value: unknown): value is types.OneOfItemsOneOf0 {
 if(!_isReferenceOneOfItemsOneOf0(value)) {
 return false;
@@ -7154,6 +7588,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/oneOf/items/oneOf/1
 export function isOneOfItemsOneOf1(value: unknown): value is types.OneOfItemsOneOf1 {
 if(!_isReferenceOneOfItemsOneOf1(value)) {
 return false;
@@ -7166,6 +7601,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/anyOf/items/oneOf/0
 export function isAnyOfItemsOneOf0(value: unknown): value is types.AnyOfItemsOneOf0 {
 if(!_isReferenceAnyOfItemsOneOf0(value)) {
 return false;
@@ -7178,6 +7614,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/anyOf/items/oneOf/1
 export function isAnyOfItemsOneOf1(value: unknown): value is types.AnyOfItemsOneOf1 {
 if(!_isReferenceAnyOfItemsOneOf1(value)) {
 return false;
@@ -7190,6 +7627,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/properties/additionalProperties/oneOf/0
 export function isPropertiesPropertiesAdditionalPropertiesOneOf0(value: unknown): value is types.PropertiesPropertiesAdditionalPropertiesOneOf0 {
 if(!_isReferencePropertiesPropertiesAdditionalPropertiesOneOf0(value)) {
 return false;
@@ -7202,6 +7640,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema/properties/properties/additionalProperties/oneOf/1
 export function isPropertiesPropertiesAdditionalPropertiesOneOf1(value: unknown): value is types.PropertiesPropertiesAdditionalPropertiesOneOf1 {
 if(!_isReferencePropertiesPropertiesAdditionalPropertiesOneOf1(value)) {
 return false;
@@ -7214,6 +7653,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Response/properties/headers/additionalProperties/oneOf/0
 export function isResponseHeadersAdditionalPropertiesOneOf0(value: unknown): value is types.ResponseHeadersAdditionalPropertiesOneOf0 {
 if(!_isReferenceResponseHeadersAdditionalPropertiesOneOf0(value)) {
 return false;
@@ -7226,6 +7666,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Response/properties/headers/additionalProperties/oneOf/1
 export function isResponseHeadersAdditionalPropertiesOneOf1(value: unknown): value is types.ResponseHeadersAdditionalPropertiesOneOf1 {
 if(!_isReferenceResponseHeadersAdditionalPropertiesOneOf1(value)) {
 return false;
@@ -7238,6 +7679,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Response/properties/links/additionalProperties/oneOf/0
 export function isLinksAdditionalPropertiesOneOf0(value: unknown): value is types.LinksAdditionalPropertiesOneOf0 {
 if(!_isReferenceLinksAdditionalPropertiesOneOf0(value)) {
 return false;
@@ -7250,6 +7692,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Response/properties/links/additionalProperties/oneOf/1
 export function isLinksAdditionalPropertiesOneOf1(value: unknown): value is types.LinksAdditionalPropertiesOneOf1 {
 if(!_isReferenceLinksAdditionalPropertiesOneOf1(value)) {
 return false;
@@ -7262,6 +7705,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/MediaType/properties/examples/additionalProperties/oneOf/0
 export function isMediaTypeExamplesAdditionalPropertiesOneOf0(value: unknown): value is types.MediaTypeExamplesAdditionalPropertiesOneOf0 {
 if(!_isReferenceMediaTypeExamplesAdditionalPropertiesOneOf0(value)) {
 return false;
@@ -7274,6 +7718,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/MediaType/properties/examples/additionalProperties/oneOf/1
 export function isMediaTypeExamplesAdditionalPropertiesOneOf1(value: unknown): value is types.MediaTypeExamplesAdditionalPropertiesOneOf1 {
 if(!_isReferenceMediaTypeExamplesAdditionalPropertiesOneOf1(value)) {
 return false;
@@ -7286,6 +7731,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/examples/additionalProperties/oneOf/0
 export function isHeaderExamplesAdditionalPropertiesOneOf0(value: unknown): value is types.HeaderExamplesAdditionalPropertiesOneOf0 {
 if(!_isReferenceHeaderExamplesAdditionalPropertiesOneOf0(value)) {
 return false;
@@ -7298,6 +7744,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Header/properties/examples/additionalProperties/oneOf/1
 export function isHeaderExamplesAdditionalPropertiesOneOf1(value: unknown): value is types.HeaderExamplesAdditionalPropertiesOneOf1 {
 if(!_isReferenceHeaderExamplesAdditionalPropertiesOneOf1(value)) {
 return false;
@@ -7310,6 +7757,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PathItem/properties/parameters/items/oneOf/0
 export function isPathItemParametersItemsOneOf0(value: unknown): value is types.PathItemParametersItemsOneOf0 {
 if(!_isReferencePathItemParametersItemsOneOf0(value)) {
 return false;
@@ -7322,6 +7770,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/PathItem/properties/parameters/items/oneOf/1
 export function isPathItemParametersItemsOneOf1(value: unknown): value is types.PathItemParametersItemsOneOf1 {
 if(!_isReferencePathItemParametersItemsOneOf1(value)) {
 return false;
@@ -7334,6 +7783,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/parameters/items/oneOf/0
 export function isOperationParametersItemsOneOf0(value: unknown): value is types.OperationParametersItemsOneOf0 {
 if(!_isReferenceOperationParametersItemsOneOf0(value)) {
 return false;
@@ -7346,6 +7796,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/parameters/items/oneOf/1
 export function isOperationParametersItemsOneOf1(value: unknown): value is types.OperationParametersItemsOneOf1 {
 if(!_isReferenceOperationParametersItemsOneOf1(value)) {
 return false;
@@ -7358,6 +7809,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/callbacks/additionalProperties/oneOf/0
 export function isCallbacksAdditionalPropertiesOneOf0(value: unknown): value is types.CallbacksAdditionalPropertiesOneOf0 {
 if(!_isReferenceCallbacksAdditionalPropertiesOneOf0(value)) {
 return false;
@@ -7370,6 +7822,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Operation/properties/callbacks/additionalProperties/oneOf/1
 export function isCallbacksAdditionalPropertiesOneOf1(value: unknown): value is types.CallbacksAdditionalPropertiesOneOf1 {
 if(!_isReferenceCallbacksAdditionalPropertiesOneOf1(value)) {
 return false;
@@ -7382,6 +7835,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SchemaXORContent/oneOf/1/allOf/0/not
 export function isAllOf0Not(value: unknown): value is types.AllOf0Not {
 if(!_isMapAllOf0Not(value)) {
 return false;
@@ -7400,6 +7854,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SchemaXORContent/oneOf/1/allOf/1/not
 export function isAllOf1Not(value: unknown): value is types.AllOf1Not {
 if(!_isMapAllOf1Not(value)) {
 return false;
@@ -7418,6 +7873,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SchemaXORContent/oneOf/1/allOf/2/not
 export function isAllOf2Not(value: unknown): value is types.AllOf2Not {
 if(!_isMapAllOf2Not(value)) {
 return false;
@@ -7436,6 +7892,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SchemaXORContent/oneOf/1/allOf/3/not
 export function isAllOf3Not(value: unknown): value is types.AllOf3Not {
 if(!_isMapAllOf3Not(value)) {
 return false;
@@ -7454,6 +7911,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/SchemaXORContent/oneOf/1/allOf/4/not
 export function isAllOf4Not(value: unknown): value is types.AllOf4Not {
 if(!_isMapAllOf4Not(value)) {
 return false;
@@ -7472,6 +7930,7 @@ const propertyValue = value[propertyName as keyof typeof value];
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/examples/additionalProperties/oneOf/0
 export function isParameterExamplesAdditionalPropertiesOneOf0(value: unknown): value is types.ParameterExamplesAdditionalPropertiesOneOf0 {
 if(!_isReferenceParameterExamplesAdditionalPropertiesOneOf0(value)) {
 return false;
@@ -7484,6 +7943,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Parameter/properties/examples/additionalProperties/oneOf/1
 export function isParameterExamplesAdditionalPropertiesOneOf1(value: unknown): value is types.ParameterExamplesAdditionalPropertiesOneOf1 {
 if(!_isReferenceParameterExamplesAdditionalPropertiesOneOf1(value)) {
 return false;
@@ -7496,6 +7956,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/HTTPSecurityScheme/oneOf/1/properties/scheme/not
 export function isSchemeNot(value: unknown): value is types.SchemeNot {
 if(!_isStringSchemeNot(value)) {
 return false;
@@ -7511,6 +7972,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Encoding/properties/headers/additionalProperties/oneOf/0
 export function isEncodingHeadersAdditionalPropertiesOneOf0(value: unknown): value is types.EncodingHeadersAdditionalPropertiesOneOf0 {
 if(!_isReferenceEncodingHeadersAdditionalPropertiesOneOf0(value)) {
 return false;
@@ -7523,6 +7985,7 @@ return false;
 }
 return true;
 }
+// https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Encoding/properties/headers/additionalProperties/oneOf/1
 export function isEncodingHeadersAdditionalPropertiesOneOf1(value: unknown): value is types.EncodingHeadersAdditionalPropertiesOneOf1 {
 if(!_isReferenceEncodingHeadersAdditionalPropertiesOneOf1(value)) {
 return false;
