@@ -9,7 +9,6 @@ import {
   normalizeUrl,
   statusKindComparer,
   takeStatusCodes,
-  toArrayAsync,
 } from "../../utils/index.js";
 import { DocumentBase } from "../document-base.js";
 import { selectSchemas } from "./selectors.js";
@@ -20,7 +19,7 @@ export class Document extends DocumentBase<oas.Schema20210928> {
 
     const paths = [...this.getPathModels()];
     const authentication = [...this.getAuthenticationModels()];
-    const schemas = Object.fromEntries(await toArrayAsync(this.getSchemas()));
+    const schemas = Object.fromEntries(await this.getSchemas());
     const router = new Router<number>();
     for (const pathModel of paths) {
       router.insertRoute(pathModel.id, pathModel.pattern);
@@ -277,7 +276,7 @@ export class Document extends DocumentBase<oas.Schema20210928> {
   }
 
   // TODO
-  private async *getSchemas(): AsyncIterable<readonly [string, any]> {
+  private async getSchemas(): Promise<Iterable<readonly [string, any]>> {
     const documentContext = new jns42generator.DocumentContext();
 
     documentContext.registerFactory(
@@ -304,9 +303,9 @@ export class Document extends DocumentBase<oas.Schema20210928> {
         this.documentNode,
         jns42generator.schemaDraft04.metaSchemaId,
       );
-
-      yield* documentContext.getIntermediateSchemaEntries();
     }
+
+    return documentContext.getIntermediateSchemaEntries();
   }
 
   private *getBodyModels(
