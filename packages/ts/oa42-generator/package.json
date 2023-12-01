@@ -5,7 +5,7 @@
   "description": "",
   "type": "module",
   "bin": {
-    "oa42-generator": "./out/program.js"
+    "oa42-generator": "bin/oa42-generator"
   },
   "main": "./out/main.js",
   "types": "./out/main.d.ts",
@@ -14,7 +14,7 @@
     "./src/**/*"
   ],
   "scripts": {
-    "build": "tsc --build && chmod +x out/program.js",
+    "build": "tsc --build",
     "clean": "rm -rf out",
     "test": "node --test ./out/**/*.test.js",
     "lint": "prettier --check *",
