@@ -4,6 +4,7 @@ import { DocumentBase } from "./document-base.js";
 export interface DocumentOptions {
   defaultName: string;
   namerMaximumIterations: number;
+  anyOfHack: boolean;
 }
 
 export interface DocumentInitializer<N = unknown> {

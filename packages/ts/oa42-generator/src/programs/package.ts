@@ -67,13 +67,14 @@ async function main(options: MainOptions) {
     specificationUrl = new URL("file://" + path.resolve(process.cwd(), options.specificationUrl));
   }
   const packageDirectoryPath = path.resolve(options.packageDirectory);
-  const { packageName, packageVersion, defaultName, namerMaximumIterations } = options;
+  const { packageName, packageVersion, defaultName, namerMaximumIterations, anyOfHack } = options;
 
   // setup document context
 
   const documentContext = new DocumentContext({
-    defaultName: options.defaultName,
-    namerMaximumIterations: options.namerMaximumIterations,
+    defaultName,
+    namerMaximumIterations,
+    anyOfHack,
   });
   documentContext.registerFactory(swagger2.factory);
   documentContext.registerFactory(oas30.factory);
