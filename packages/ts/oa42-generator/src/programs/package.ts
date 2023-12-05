@@ -37,6 +37,11 @@ export function configurePackageProgram(argv: yargs.Argv) {
           description: "maximum number of iterations for finding unique names",
           type: "number",
           default: 5,
+        })
+        .option("any-of-hack", {
+          description: "quick-fix to make any of work with many types",
+          type: "boolean",
+          default: false,
         }),
     (argv) => main(argv as MainOptions),
   );
@@ -49,6 +54,7 @@ interface MainOptions {
   packageVersion: string;
   defaultName: string;
   namerMaximumIterations: number;
+  anyOfHack: boolean;
 }
 
 async function main(options: MainOptions) {
@@ -82,8 +88,9 @@ async function main(options: MainOptions) {
   // generate code
 
   generatePackage(apiModel, {
-    directoryPath: packageDirectoryPath,
-    name: packageName,
-    version: packageVersion,
+    packageDirectoryPath,
+    packageName,
+    packageVersion,
+    anyOfHack,
   });
 }
