@@ -16,6 +16,8 @@
     "./src/**/*"
   ],
   "scripts": {
+    "prepack": "npm install --no-workspaces",
+    "postinstall": "tsc --build",
     "build": "tsc --build ",
     "clean": "rm -rf out",
     "test": "node --test ./out/**/*.test.js",

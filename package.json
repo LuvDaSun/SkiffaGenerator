@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "cspell": "^8.1.2",
-    "jns42-generator": "^0.9.3",
+    "jns42-generator": "^0.9.6",
     "prettier": "^3.1.0"
   }
 }
