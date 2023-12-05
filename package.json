@@ -8,8 +8,8 @@
     "formatting": "prettier --check *"
   },
   "devDependencies": {
-    "cspell": "^8.0.0",
-    "jns42-generator": "^0.8.21",
+    "cspell": "^8.1.2",
+    "jns42-generator": "^0.9.0",
     "prettier": "^3.1.0"
   }
 }
