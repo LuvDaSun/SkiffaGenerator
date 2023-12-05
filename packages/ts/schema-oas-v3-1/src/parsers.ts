@@ -3,11 +3,11 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.8.21                         -- www.JsonSchema42.org
-export function parseSchema20221007(value: unknown): unknown {
-return _parseMapSchema20221007(value) ?? _parseReferenceSchema20221007(value) ?? _parseAnyOfSchema20221007(value);
+// v0.9.0                          -- www.JsonSchema42.org
+export function parseSchemaDocument(value: unknown): unknown {
+return _parseMapSchemaDocument(value) ?? _parseReferenceSchemaDocument(value) ?? _parseAnyOfSchemaDocument(value);
 }
-function _parseMapSchema20221007(value: unknown): unknown {
+function _parseMapSchemaDocument(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -28,7 +28,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "servers": {
-const propertyValue = parseSchema20221007Servers(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesServers(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -48,17 +48,17 @@ result[propertyName] = propertyValue;
 break;
 }
 case "security": {
-const propertyValue = parseSchema20221007Security(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesSecurity(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "tags": {
-const propertyValue = parseSchema20221007Tags(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesTags(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "externalDocs": {
-const propertyValue = parseSchema20221007ExternalDocs(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesExternalDocs(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -68,16 +68,16 @@ return result;
 }
 return undefined;
 }
-function _parseReferenceSchema20221007(value: unknown): unknown {
+function _parseReferenceSchemaDocument(value: unknown): unknown {
 return parseSpecificationExtensions(value);
 }
-function _parseAnyOfSchema20221007(value: unknown): unknown {
+function _parseAnyOfSchemaDocument(value: unknown): unknown {
 return parseAnyOf0(value) ?? parseAnyOf1(value) ?? parseAnyOf2(value);
 }
-export function parseDefsInfo(value: unknown): unknown {
-return _parseMapDefsInfo(value) ?? _parseReferenceDefsInfo(value);
+export function parseInfo(value: unknown): unknown {
+return _parseMapInfo(value) ?? _parseReferenceInfo(value);
 }
-function _parseMapDefsInfo(value: unknown): unknown {
+function _parseMapInfo(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -103,12 +103,12 @@ result[propertyName] = propertyValue;
 break;
 }
 case "contact": {
-const propertyValue = parsePropertiesContact(value[propertyName as keyof typeof value]);
+const propertyValue = parseInfoContact(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "license": {
-const propertyValue = parsePropertiesLicense(value[propertyName as keyof typeof value]);
+const propertyValue = parseInfoLicense(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -123,13 +123,13 @@ return result;
 }
 return undefined;
 }
-function _parseReferenceDefsInfo(value: unknown): unknown {
+function _parseReferenceInfo(value: unknown): unknown {
 return parseSpecificationExtensions(value);
 }
-export function parseDefsContact(value: unknown): unknown {
-return _parseMapDefsContact(value) ?? _parseReferenceDefsContact(value);
+export function parseContact(value: unknown): unknown {
+return _parseMapContact(value) ?? _parseReferenceContact(value);
 }
-function _parseMapDefsContact(value: unknown): unknown {
+function _parseMapContact(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -155,13 +155,13 @@ return result;
 }
 return undefined;
 }
-function _parseReferenceDefsContact(value: unknown): unknown {
+function _parseReferenceContact(value: unknown): unknown {
 return parseSpecificationExtensions(value);
 }
-export function parseDefsLicense(value: unknown): unknown {
-return _parseMapDefsLicense(value) ?? _parseReferenceDefsLicense(value);
+export function parseLicense(value: unknown): unknown {
+return _parseMapLicense(value) ?? _parseReferenceLicense(value);
 }
-function _parseMapDefsLicense(value: unknown): unknown {
+function _parseMapLicense(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -187,7 +187,7 @@ return result;
 }
 return undefined;
 }
-function _parseReferenceDefsLicense(value: unknown): unknown {
+function _parseReferenceLicense(value: unknown): unknown {
 return parseSpecificationExtensions(value);
 }
 export function parseServer(value: unknown): unknown {
@@ -254,10 +254,10 @@ return undefined;
 function _parseReferenceServerVariable(value: unknown): unknown {
 return parseSpecificationExtensions(value);
 }
-export function parseDefsComponents(value: unknown): unknown {
-return _parseMapDefsComponents(value) ?? _parseReferenceDefsComponents(value);
+export function parseComponents(value: unknown): unknown {
+return _parseMapComponents(value) ?? _parseReferenceComponents(value);
 }
-function _parseMapDefsComponents(value: unknown): unknown {
+function _parseMapComponents(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -268,7 +268,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "responses": {
-const propertyValue = parseComponentsPropertiesResponses(value[propertyName as keyof typeof value]);
+const propertyValue = parseComponentsResponses(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -278,7 +278,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "examples": {
-const propertyValue = parseComponentsPropertiesExamples(value[propertyName as keyof typeof value]);
+const propertyValue = parseComponentsExamples(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -303,7 +303,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "callbacks": {
-const propertyValue = parseComponentsPropertiesCallbacks(value[propertyName as keyof typeof value]);
+const propertyValue = parseComponentsCallbacks(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -318,13 +318,13 @@ return result;
 }
 return undefined;
 }
-function _parseReferenceDefsComponents(value: unknown): unknown {
+function _parseReferenceComponents(value: unknown): unknown {
 return parseSpecificationExtensions(value);
 }
-export function parseDefsPaths(value: unknown): unknown {
-return _parseMapDefsPaths(value) ?? _parseReferenceDefsPaths(value);
+export function parsePaths(value: unknown): unknown {
+return _parseMapPaths(value) ?? _parseReferencePaths(value);
 }
-function _parseMapDefsPaths(value: unknown): unknown {
+function _parseMapPaths(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -333,7 +333,7 @@ return result;
 }
 return undefined;
 }
-function _parseReferenceDefsPaths(value: unknown): unknown {
+function _parseReferencePaths(value: unknown): unknown {
 return parseSpecificationExtensions(value);
 }
 export function parsePathItem(value: unknown): unknown {
@@ -458,17 +458,17 @@ result[propertyName] = propertyValue;
 break;
 }
 case "requestBody": {
-const propertyValue = parseOperationPropertiesRequestBody(value[propertyName as keyof typeof value]);
+const propertyValue = parseOperationRequestBody(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "responses": {
-const propertyValue = parseOperationPropertiesResponses(value[propertyName as keyof typeof value]);
+const propertyValue = parseOperationResponses(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "callbacks": {
-const propertyValue = parseOperationPropertiesCallbacks(value[propertyName as keyof typeof value]);
+const propertyValue = parseOperationCallbacks(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -537,7 +537,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "in": {
-const propertyValue = parseParameterIn(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesParameterIn(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -557,12 +557,12 @@ result[propertyName] = propertyValue;
 break;
 }
 case "schema": {
-const propertyValue = parseParameterPropertiesSchema(value[propertyName as keyof typeof value]);
+const propertyValue = parseParameterSchema(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "content": {
-const propertyValue = parseParameterPropertiesContent(value[propertyName as keyof typeof value]);
+const propertyValue = parseParameterContent(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -587,10 +587,10 @@ return _parseIfParameterOrReference(value);
 function _parseIfParameterOrReference(value: unknown): unknown {
 return parseParameterOrReferenceIf(value) ?? parseParameterOrReferenceThen(value) ?? parseParameterOrReferenceElse(value);
 }
-export function parseDefsRequestBody(value: unknown): unknown {
-return _parseMapDefsRequestBody(value) ?? _parseReferenceDefsRequestBody(value);
+export function parseRequestBody(value: unknown): unknown {
+return _parseMapRequestBody(value) ?? _parseReferenceRequestBody(value);
 }
-function _parseMapDefsRequestBody(value: unknown): unknown {
+function _parseMapRequestBody(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -601,7 +601,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "content": {
-const propertyValue = parseRequestBodyPropertiesContent(value[propertyName as keyof typeof value]);
+const propertyValue = parseRequestBodyContent(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -616,7 +616,7 @@ return result;
 }
 return undefined;
 }
-function _parseReferenceDefsRequestBody(value: unknown): unknown {
+function _parseReferenceRequestBody(value: unknown): unknown {
 return parseSpecificationExtensions(value);
 }
 export function parseRequestBodyOrReference(value: unknown): unknown {
@@ -625,10 +625,10 @@ return _parseIfRequestBodyOrReference(value);
 function _parseIfRequestBodyOrReference(value: unknown): unknown {
 return parseRequestBodyOrReferenceIf(value) ?? parseRequestBodyOrReferenceThen(value) ?? parseRequestBodyOrReferenceElse(value);
 }
-export function parseDefsContent(value: unknown): unknown {
-return _parseMapDefsContent(value);
+export function parseContent(value: unknown): unknown {
+return _parseMapContent(value);
 }
-function _parseMapDefsContent(value: unknown): unknown {
+function _parseMapContent(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -648,12 +648,12 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "schema": {
-const propertyValue = parseMediaTypePropertiesSchema(value[propertyName as keyof typeof value]);
+const propertyValue = parseMediaTypeSchema(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "encoding": {
-const propertyValue = parsePropertiesEncoding(value[propertyName as keyof typeof value]);
+const propertyValue = parseMediaTypeEncoding(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -664,12 +664,12 @@ return result;
 return undefined;
 }
 function _parseAllOfMediaType(value: unknown): unknown {
-return parseMediaTypeAllOf0(value) ?? parseMediaTypeAllOf1(value);
+return parseMediaType0(value) ?? parseMediaType1(value);
 }
-export function parseDefsEncoding(value: unknown): unknown {
-return _parseMapDefsEncoding(value) ?? _parseAllOfDefsEncoding(value);
+export function parseEncoding(value: unknown): unknown {
+return _parseMapEncoding(value) ?? _parseAllOfEncoding(value);
 }
-function _parseMapDefsEncoding(value: unknown): unknown {
+function _parseMapEncoding(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -705,13 +705,13 @@ return result;
 }
 return undefined;
 }
-function _parseAllOfDefsEncoding(value: unknown): unknown {
+function _parseAllOfEncoding(value: unknown): unknown {
 return parseEncodingAllOf0(value) ?? parseEncodingAllOf1(value);
 }
-export function parseDefsResponses(value: unknown): unknown {
-return _parseMapDefsResponses(value) ?? _parseReferenceDefsResponses(value);
+export function parseResponses(value: unknown): unknown {
+return _parseMapResponses(value) ?? _parseReferenceResponses(value);
 }
-function _parseMapDefsResponses(value: unknown): unknown {
+function _parseMapResponses(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -727,7 +727,7 @@ return result;
 }
 return undefined;
 }
-function _parseReferenceDefsResponses(value: unknown): unknown {
+function _parseReferenceResponses(value: unknown): unknown {
 return parseSpecificationExtensions(value);
 }
 export function parseResponse(value: unknown): unknown {
@@ -749,7 +749,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "content": {
-const propertyValue = parseResponsePropertiesContent(value[propertyName as keyof typeof value]);
+const propertyValue = parseResponseContent(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -773,20 +773,20 @@ return _parseIfResponseOrReference(value);
 function _parseIfResponseOrReference(value: unknown): unknown {
 return parseResponseOrReferenceIf(value) ?? parseResponseOrReferenceThen(value) ?? parseResponseOrReferenceElse(value);
 }
-export function parseDefsCallbacks(value: unknown): unknown {
-return _parseMapDefsCallbacks(value) ?? _parseReferenceDefsCallbacks(value);
+export function parseCallbacks(value: unknown): unknown {
+return _parseMapCallbacks(value) ?? _parseReferenceCallbacks(value);
 }
-function _parseMapDefsCallbacks(value: unknown): unknown {
+function _parseMapCallbacks(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
-result[propertyName] ??= parseDefsCallbacksAdditionalProperties(value[propertyName as keyof typeof value]);
+result[propertyName] ??= parseCallbacksAdditionalProperties(value[propertyName as keyof typeof value]);
 }
 return result;
 }
 return undefined;
 }
-function _parseReferenceDefsCallbacks(value: unknown): unknown {
+function _parseReferenceCallbacks(value: unknown): unknown {
 return parseSpecificationExtensions(value);
 }
 export function parseCallbacksOrReference(value: unknown): unknown {
@@ -795,10 +795,10 @@ return _parseIfCallbacksOrReference(value);
 function _parseIfCallbacksOrReference(value: unknown): unknown {
 return parseCallbacksOrReferenceIf(value) ?? parseCallbacksOrReferenceThen(value) ?? parseCallbacksOrReferenceElse(value);
 }
-export function parseDefsExample(value: unknown): unknown {
-return _parseMapDefsExample(value) ?? _parseReferenceDefsExample(value) ?? _parseNotDefsExample(value);
+export function parseExample(value: unknown): unknown {
+return _parseMapExample(value) ?? _parseReferenceExample(value) ?? _parseNotExample(value);
 }
-function _parseMapDefsExample(value: unknown): unknown {
+function _parseMapExample(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -829,10 +829,10 @@ return result;
 }
 return undefined;
 }
-function _parseReferenceDefsExample(value: unknown): unknown {
+function _parseReferenceExample(value: unknown): unknown {
 return parseSpecificationExtensions(value);
 }
-function _parseNotDefsExample(value: unknown): unknown {
+function _parseNotExample(value: unknown): unknown {
 return parseNot(value);
 }
 export function parseExampleOrReference(value: unknown): unknown {
@@ -865,7 +865,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "requestBody": {
-const propertyValue = parseLinkPropertiesRequestBody(value[propertyName as keyof typeof value]);
+const propertyValue = parseLinkRequestBody(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -921,12 +921,12 @@ result[propertyName] = propertyValue;
 break;
 }
 case "schema": {
-const propertyValue = parseHeaderPropertiesSchema(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderSchema(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "content": {
-const propertyValue = parseHeaderPropertiesContent(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderContent(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1009,10 +1009,10 @@ return result;
 }
 return undefined;
 }
-export function parseDefsSchema(value: unknown): unknown {
-return _parseMapDefsSchema(value) ?? _parseBooleanDefsSchema(value);
+export function parseSchema(value: unknown): unknown {
+return _parseMapSchema(value) ?? _parseBooleanSchema(value);
 }
-function _parseMapDefsSchema(value: unknown): unknown {
+function _parseMapSchema(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -1021,7 +1021,7 @@ return result;
 }
 return undefined;
 }
-function _parseBooleanDefsSchema(value: unknown): unknown {
+function _parseBooleanSchema(value: unknown): unknown {
 if(value == null) {
 return false;
 }
@@ -1086,22 +1086,22 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "implicit": {
-const propertyValue = parsePropertiesImplicit(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesOauthFlowsImplicit(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "password": {
-const propertyValue = parsePropertiesPassword(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesOauthFlowsPassword(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "clientCredentials": {
-const propertyValue = parsePropertiesClientCredentials(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesOauthFlowsClientCredentials(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "authorizationCode": {
-const propertyValue = parsePropertiesAuthorizationCode(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesOauthFlowsAuthorizationCode(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1130,21 +1130,21 @@ return undefined;
 export function parseSpecificationExtensions(value: unknown): unknown {
 return ;
 }
-export function parseDefsExamples(value: unknown): unknown {
-return _parseMapDefsExamples(value);
+export function parseExamples(value: unknown): unknown {
+return _parseMapExamples(value);
 }
-function _parseMapDefsExamples(value: unknown): unknown {
+function _parseMapExamples(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "example": {
-const propertyValue = parsePropertiesExample(value[propertyName as keyof typeof value]);
+const propertyValue = parseExamplesExample(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "examples": {
-const propertyValue = parseExamplesPropertiesExamples(value[propertyName as keyof typeof value]);
+const propertyValue = parseExamplesExamples(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1185,7 +1185,7 @@ export function parsePropertiesInfo(value: unknown): unknown {
 return _parseReferencePropertiesInfo(value);
 }
 function _parseReferencePropertiesInfo(value: unknown): unknown {
-return parseDefsInfo(value);
+return parseInfo(value);
 }
 export function parseJsonSchemaDialect(value: unknown): unknown {
 return _parseStringJsonSchemaDialect(value);
@@ -1201,14 +1201,14 @@ default:
 return undefined;
 }
 }
-export function parseSchema20221007Servers(value: unknown): unknown {
-return _parseArraySchema20221007Servers(value);
+export function parsePropertiesServers(value: unknown): unknown {
+return _parseArrayPropertiesServers(value);
 }
-function _parseArraySchema20221007Servers(value: unknown): unknown {
+function _parseArrayPropertiesServers(value: unknown): unknown {
 if(Array.isArray(value)) {
 const result = new Array<unknown>(value.length);
 for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseSchema20221007ServersItems(value[elementIndex]);
+result[elementIndex] = parsePropertiesServersItems(value[elementIndex]);
 }
 return result;
 }
@@ -1218,7 +1218,7 @@ export function parsePropertiesPaths(value: unknown): unknown {
 return _parseReferencePropertiesPaths(value);
 }
 function _parseReferencePropertiesPaths(value: unknown): unknown {
-return parseDefsPaths(value);
+return parsePaths(value);
 }
 export function parseWebhooks(value: unknown): unknown {
 return _parseMapWebhooks(value);
@@ -1237,38 +1237,38 @@ export function parsePropertiesComponents(value: unknown): unknown {
 return _parseReferencePropertiesComponents(value);
 }
 function _parseReferencePropertiesComponents(value: unknown): unknown {
-return parseDefsComponents(value);
+return parseComponents(value);
 }
-export function parseSchema20221007Security(value: unknown): unknown {
-return _parseArraySchema20221007Security(value);
+export function parsePropertiesSecurity(value: unknown): unknown {
+return _parseArrayPropertiesSecurity(value);
 }
-function _parseArraySchema20221007Security(value: unknown): unknown {
+function _parseArrayPropertiesSecurity(value: unknown): unknown {
 if(Array.isArray(value)) {
 const result = new Array<unknown>(value.length);
 for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseSchema20221007SecurityItems(value[elementIndex]);
+result[elementIndex] = parsePropertiesSecurityItems(value[elementIndex]);
 }
 return result;
 }
 return undefined;
 }
-export function parseSchema20221007Tags(value: unknown): unknown {
-return _parseArraySchema20221007Tags(value);
+export function parsePropertiesTags(value: unknown): unknown {
+return _parseArrayPropertiesTags(value);
 }
-function _parseArraySchema20221007Tags(value: unknown): unknown {
+function _parseArrayPropertiesTags(value: unknown): unknown {
 if(Array.isArray(value)) {
 const result = new Array<unknown>(value.length);
 for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseSchema20221007TagsItems(value[elementIndex]);
+result[elementIndex] = parsePropertiesTagsItems(value[elementIndex]);
 }
 return result;
 }
 return undefined;
 }
-export function parseSchema20221007ExternalDocs(value: unknown): unknown {
-return _parseReferenceSchema20221007ExternalDocs(value);
+export function parsePropertiesExternalDocs(value: unknown): unknown {
+return _parseReferencePropertiesExternalDocs(value);
 }
-function _parseReferenceSchema20221007ExternalDocs(value: unknown): unknown {
+function _parseReferencePropertiesExternalDocs(value: unknown): unknown {
 return parseExternalDocumentation(value);
 }
 export function parseAnyOf0(value: unknown): unknown {
@@ -1363,17 +1363,17 @@ default:
 return undefined;
 }
 }
-export function parsePropertiesContact(value: unknown): unknown {
-return _parseReferencePropertiesContact(value);
+export function parseInfoContact(value: unknown): unknown {
+return _parseReferenceInfoContact(value);
 }
-function _parseReferencePropertiesContact(value: unknown): unknown {
-return parseDefsContact(value);
+function _parseReferenceInfoContact(value: unknown): unknown {
+return parseContact(value);
 }
-export function parsePropertiesLicense(value: unknown): unknown {
-return _parseReferencePropertiesLicense(value);
+export function parseInfoLicense(value: unknown): unknown {
+return _parseReferenceInfoLicense(value);
 }
-function _parseReferencePropertiesLicense(value: unknown): unknown {
-return parseDefsLicense(value);
+function _parseReferenceInfoLicense(value: unknown): unknown {
+return parseLicense(value);
 }
 export function parseVersion(value: unknown): unknown {
 return _parseStringVersion(value);
@@ -1568,10 +1568,10 @@ return result;
 }
 return undefined;
 }
-export function parseComponentsPropertiesResponses(value: unknown): unknown {
-return _parseMapComponentsPropertiesResponses(value);
+export function parseComponentsResponses(value: unknown): unknown {
+return _parseMapComponentsResponses(value);
 }
-function _parseMapComponentsPropertiesResponses(value: unknown): unknown {
+function _parseMapComponentsResponses(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -1594,10 +1594,10 @@ return result;
 }
 return undefined;
 }
-export function parseComponentsPropertiesExamples(value: unknown): unknown {
-return _parseMapComponentsPropertiesExamples(value);
+export function parseComponentsExamples(value: unknown): unknown {
+return _parseMapComponentsExamples(value);
 }
-function _parseMapComponentsPropertiesExamples(value: unknown): unknown {
+function _parseMapComponentsExamples(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -1659,14 +1659,14 @@ return result;
 }
 return undefined;
 }
-export function parseComponentsPropertiesCallbacks(value: unknown): unknown {
-return _parseMapComponentsPropertiesCallbacks(value);
+export function parseComponentsCallbacks(value: unknown): unknown {
+return _parseMapComponentsCallbacks(value);
 }
-function _parseMapComponentsPropertiesCallbacks(value: unknown): unknown {
+function _parseMapComponentsCallbacks(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
-result[propertyName] ??= parseComponentsPropertiesCallbacksAdditionalProperties(value[propertyName as keyof typeof value]);
+result[propertyName] ??= parseComponentsCallbacksAdditionalProperties(value[propertyName as keyof typeof value]);
 }
 return result;
 }
@@ -1894,26 +1894,26 @@ return result;
 }
 return undefined;
 }
-export function parseOperationPropertiesRequestBody(value: unknown): unknown {
-return _parseReferenceOperationPropertiesRequestBody(value);
+export function parseOperationRequestBody(value: unknown): unknown {
+return _parseReferenceOperationRequestBody(value);
 }
-function _parseReferenceOperationPropertiesRequestBody(value: unknown): unknown {
+function _parseReferenceOperationRequestBody(value: unknown): unknown {
 return parseRequestBodyOrReference(value);
 }
-export function parseOperationPropertiesResponses(value: unknown): unknown {
-return _parseReferenceOperationPropertiesResponses(value);
+export function parseOperationResponses(value: unknown): unknown {
+return _parseReferenceOperationResponses(value);
 }
-function _parseReferenceOperationPropertiesResponses(value: unknown): unknown {
-return parseDefsResponses(value);
+function _parseReferenceOperationResponses(value: unknown): unknown {
+return parseResponses(value);
 }
-export function parseOperationPropertiesCallbacks(value: unknown): unknown {
-return _parseMapOperationPropertiesCallbacks(value);
+export function parseOperationCallbacks(value: unknown): unknown {
+return _parseMapOperationCallbacks(value);
 }
-function _parseMapOperationPropertiesCallbacks(value: unknown): unknown {
+function _parseMapOperationCallbacks(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
-result[propertyName] ??= parseOperationPropertiesCallbacksAdditionalProperties(value[propertyName as keyof typeof value]);
+result[propertyName] ??= parseOperationCallbacksAdditionalProperties(value[propertyName as keyof typeof value]);
 }
 return result;
 }
@@ -2013,10 +2013,10 @@ default:
 return undefined;
 }
 }
-export function parseParameterIn(value: unknown): unknown {
-return _parseStringParameterIn(value);
+export function parsePropertiesParameterIn(value: unknown): unknown {
+return _parseStringPropertiesParameterIn(value);
 }
-function _parseStringParameterIn(value: unknown): unknown {
+function _parseStringPropertiesParameterIn(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -2093,16 +2093,16 @@ return value;
 }
 return undefined;
 }
-export function parseParameterPropertiesSchema(value: unknown): unknown {
-return _parseReferenceParameterPropertiesSchema(value);
+export function parseParameterSchema(value: unknown): unknown {
+return _parseReferenceParameterSchema(value);
 }
-function _parseReferenceParameterPropertiesSchema(value: unknown): unknown {
-return parseDefsSchema(value);
+function _parseReferenceParameterSchema(value: unknown): unknown {
+return parseSchema(value);
 }
-export function parseParameterPropertiesContent(value: unknown): unknown {
-return _parseMapParameterPropertiesContent(value) ?? _parseReferenceParameterPropertiesContent(value);
+export function parseParameterContent(value: unknown): unknown {
+return _parseMapParameterContent(value) ?? _parseReferenceParameterContent(value);
 }
-function _parseMapParameterPropertiesContent(value: unknown): unknown {
+function _parseMapParameterContent(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -2111,8 +2111,8 @@ return result;
 }
 return undefined;
 }
-function _parseReferenceParameterPropertiesContent(value: unknown): unknown {
-return parseDefsContent(value);
+function _parseReferenceParameterContent(value: unknown): unknown {
+return parseContent(value);
 }
 export function parseParameterOneOf0(value: unknown): unknown {
 return _parseMapParameterOneOf0(value);
@@ -2147,7 +2147,7 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "in": {
-const propertyValue = parseIfIn(value[propertyName as keyof typeof value]);
+const propertyValue = parseIfParameterIn(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -2214,11 +2214,11 @@ default:
 return undefined;
 }
 }
-export function parseRequestBodyPropertiesContent(value: unknown): unknown {
-return _parseReferenceRequestBodyPropertiesContent(value);
+export function parseRequestBodyContent(value: unknown): unknown {
+return _parseReferenceRequestBodyContent(value);
 }
-function _parseReferenceRequestBodyPropertiesContent(value: unknown): unknown {
-return parseDefsContent(value);
+function _parseReferenceRequestBodyContent(value: unknown): unknown {
+return parseContent(value);
 }
 export function parseRequestBodyRequired(value: unknown): unknown {
 return _parseBooleanRequestBodyRequired(value);
@@ -2268,7 +2268,7 @@ export function parseRequestBodyOrReferenceElse(value: unknown): unknown {
 return _parseReferenceRequestBodyOrReferenceElse(value);
 }
 function _parseReferenceRequestBodyOrReferenceElse(value: unknown): unknown {
-return parseDefsRequestBody(value);
+return parseRequestBody(value);
 }
 export function parseContentAdditionalProperties(value: unknown): unknown {
 return _parseReferenceContentAdditionalProperties(value);
@@ -2290,36 +2290,36 @@ default:
 return undefined;
 }
 }
-export function parseMediaTypePropertiesSchema(value: unknown): unknown {
-return _parseReferenceMediaTypePropertiesSchema(value);
+export function parseMediaTypeSchema(value: unknown): unknown {
+return _parseReferenceMediaTypeSchema(value);
 }
-function _parseReferenceMediaTypePropertiesSchema(value: unknown): unknown {
-return parseDefsSchema(value);
+function _parseReferenceMediaTypeSchema(value: unknown): unknown {
+return parseSchema(value);
 }
-export function parsePropertiesEncoding(value: unknown): unknown {
-return _parseMapPropertiesEncoding(value);
+export function parseMediaTypeEncoding(value: unknown): unknown {
+return _parseMapMediaTypeEncoding(value);
 }
-function _parseMapPropertiesEncoding(value: unknown): unknown {
+function _parseMapMediaTypeEncoding(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
-result[propertyName] ??= parseEncodingAdditionalProperties(value[propertyName as keyof typeof value]);
+result[propertyName] ??= parseMediaTypeAdditionalProperties(value[propertyName as keyof typeof value]);
 }
 return result;
 }
 return undefined;
 }
-export function parseMediaTypeAllOf0(value: unknown): unknown {
-return _parseReferenceMediaTypeAllOf0(value);
+export function parseMediaType0(value: unknown): unknown {
+return _parseReferenceMediaType0(value);
 }
-function _parseReferenceMediaTypeAllOf0(value: unknown): unknown {
+function _parseReferenceMediaType0(value: unknown): unknown {
 return parseSpecificationExtensions(value);
 }
-export function parseMediaTypeAllOf1(value: unknown): unknown {
-return _parseReferenceMediaTypeAllOf1(value);
+export function parseMediaType1(value: unknown): unknown {
+return _parseReferenceMediaType1(value);
 }
-function _parseReferenceMediaTypeAllOf1(value: unknown): unknown {
-return parseDefsExamples(value);
+function _parseReferenceMediaType1(value: unknown): unknown {
+return parseExamples(value);
 }
 export function parseExplodeDefault(value: unknown): unknown {
 return _parseIfExplodeDefault(value);
@@ -2471,11 +2471,11 @@ return result;
 }
 return undefined;
 }
-export function parseResponsePropertiesContent(value: unknown): unknown {
-return _parseReferenceResponsePropertiesContent(value);
+export function parseResponseContent(value: unknown): unknown {
+return _parseReferenceResponseContent(value);
 }
-function _parseReferenceResponsePropertiesContent(value: unknown): unknown {
-return parseDefsContent(value);
+function _parseReferenceResponseContent(value: unknown): unknown {
+return parseContent(value);
 }
 export function parseResponseLinks(value: unknown): unknown {
 return _parseMapResponseLinks(value);
@@ -2514,10 +2514,10 @@ return _parseReferenceResponseOrReferenceElse(value);
 function _parseReferenceResponseOrReferenceElse(value: unknown): unknown {
 return parseResponse(value);
 }
-export function parseDefsCallbacksAdditionalProperties(value: unknown): unknown {
-return _parseReferenceDefsCallbacksAdditionalProperties(value);
+export function parseCallbacksAdditionalProperties(value: unknown): unknown {
+return _parseReferenceCallbacksAdditionalProperties(value);
 }
-function _parseReferenceDefsCallbacksAdditionalProperties(value: unknown): unknown {
+function _parseReferenceCallbacksAdditionalProperties(value: unknown): unknown {
 return parsePathItemOrReference(value);
 }
 export function parseCallbacksOrReferenceIf(value: unknown): unknown {
@@ -2542,7 +2542,7 @@ export function parseCallbacksOrReferenceElse(value: unknown): unknown {
 return _parseReferenceCallbacksOrReferenceElse(value);
 }
 function _parseReferenceCallbacksOrReferenceElse(value: unknown): unknown {
-return parseDefsCallbacks(value);
+return parseCallbacks(value);
 }
 export function parseExampleSummary(value: unknown): unknown {
 return _parseStringExampleSummary(value);
@@ -2626,7 +2626,7 @@ export function parseExampleOrReferenceElse(value: unknown): unknown {
 return _parseReferenceExampleOrReferenceElse(value);
 }
 function _parseReferenceExampleOrReferenceElse(value: unknown): unknown {
-return parseDefsExample(value);
+return parseExample(value);
 }
 export function parseOperationRef(value: unknown): unknown {
 return _parseStringOperationRef(value);
@@ -2662,10 +2662,10 @@ return _parseReferenceLinkParameters(value);
 function _parseReferenceLinkParameters(value: unknown): unknown {
 return parseMapOfStrings(value);
 }
-export function parseLinkPropertiesRequestBody(value: unknown): unknown {
-return _parseAnyLinkPropertiesRequestBody(value);
+export function parseLinkRequestBody(value: unknown): unknown {
+return _parseAnyLinkRequestBody(value);
 }
-function _parseAnyLinkPropertiesRequestBody(value: unknown): unknown {
+function _parseAnyLinkRequestBody(value: unknown): unknown {
 return value;
 }
 export function parseLinkDescription(value: unknown): unknown {
@@ -2802,16 +2802,16 @@ return value;
 }
 return undefined;
 }
-export function parseHeaderPropertiesSchema(value: unknown): unknown {
-return _parseReferenceHeaderPropertiesSchema(value);
+export function parseHeaderSchema(value: unknown): unknown {
+return _parseReferenceHeaderSchema(value);
 }
-function _parseReferenceHeaderPropertiesSchema(value: unknown): unknown {
-return parseDefsSchema(value);
+function _parseReferenceHeaderSchema(value: unknown): unknown {
+return parseSchema(value);
 }
-export function parseHeaderPropertiesContent(value: unknown): unknown {
-return _parseMapHeaderPropertiesContent(value) ?? _parseReferenceHeaderPropertiesContent(value);
+export function parseHeaderContent(value: unknown): unknown {
+return _parseMapHeaderContent(value) ?? _parseReferenceHeaderContent(value);
 }
-function _parseMapHeaderPropertiesContent(value: unknown): unknown {
+function _parseMapHeaderContent(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -2820,8 +2820,8 @@ return result;
 }
 return undefined;
 }
-function _parseReferenceHeaderPropertiesContent(value: unknown): unknown {
-return parseDefsContent(value);
+function _parseReferenceHeaderContent(value: unknown): unknown {
+return parseContent(value);
 }
 export function parseHeaderOneOf0(value: unknown): unknown {
 return _parseMapHeaderOneOf0(value);
@@ -3065,10 +3065,10 @@ return _parseReferenceSecuritySchemeOrReferenceElse(value);
 function _parseReferenceSecuritySchemeOrReferenceElse(value: unknown): unknown {
 return parseSecurityScheme(value);
 }
-export function parseDefsImplicit(value: unknown): unknown {
-return _parseMapDefsImplicit(value) ?? _parseReferenceDefsImplicit(value);
+export function parseDefsOauthFlowsImplicit(value: unknown): unknown {
+return _parseMapDefsOauthFlowsImplicit(value) ?? _parseReferenceDefsOauthFlowsImplicit(value);
 }
-function _parseMapDefsImplicit(value: unknown): unknown {
+function _parseMapDefsOauthFlowsImplicit(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -3094,13 +3094,13 @@ return result;
 }
 return undefined;
 }
-function _parseReferenceDefsImplicit(value: unknown): unknown {
+function _parseReferenceDefsOauthFlowsImplicit(value: unknown): unknown {
 return parseSpecificationExtensions(value);
 }
-export function parseDefsPassword(value: unknown): unknown {
-return _parseMapDefsPassword(value) ?? _parseReferenceDefsPassword(value);
+export function parseDefsOauthFlowsPassword(value: unknown): unknown {
+return _parseMapDefsOauthFlowsPassword(value) ?? _parseReferenceDefsOauthFlowsPassword(value);
 }
-function _parseMapDefsPassword(value: unknown): unknown {
+function _parseMapDefsOauthFlowsPassword(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -3126,13 +3126,13 @@ return result;
 }
 return undefined;
 }
-function _parseReferenceDefsPassword(value: unknown): unknown {
+function _parseReferenceDefsOauthFlowsPassword(value: unknown): unknown {
 return parseSpecificationExtensions(value);
 }
-export function parseDefsClientCredentials(value: unknown): unknown {
-return _parseMapDefsClientCredentials(value) ?? _parseReferenceDefsClientCredentials(value);
+export function parseDefsOauthFlowsClientCredentials(value: unknown): unknown {
+return _parseMapDefsOauthFlowsClientCredentials(value) ?? _parseReferenceDefsOauthFlowsClientCredentials(value);
 }
-function _parseMapDefsClientCredentials(value: unknown): unknown {
+function _parseMapDefsOauthFlowsClientCredentials(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -3158,13 +3158,13 @@ return result;
 }
 return undefined;
 }
-function _parseReferenceDefsClientCredentials(value: unknown): unknown {
+function _parseReferenceDefsOauthFlowsClientCredentials(value: unknown): unknown {
 return parseSpecificationExtensions(value);
 }
-export function parseDefsAuthorizationCode(value: unknown): unknown {
-return _parseMapDefsAuthorizationCode(value) ?? _parseReferenceDefsAuthorizationCode(value);
+export function parseDefsOauthFlowsAuthorizationCode(value: unknown): unknown {
+return _parseMapDefsOauthFlowsAuthorizationCode(value) ?? _parseReferenceDefsOauthFlowsAuthorizationCode(value);
 }
-function _parseMapDefsAuthorizationCode(value: unknown): unknown {
+function _parseMapDefsOauthFlowsAuthorizationCode(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -3195,32 +3195,32 @@ return result;
 }
 return undefined;
 }
-function _parseReferenceDefsAuthorizationCode(value: unknown): unknown {
+function _parseReferenceDefsOauthFlowsAuthorizationCode(value: unknown): unknown {
 return parseSpecificationExtensions(value);
 }
-export function parsePropertiesImplicit(value: unknown): unknown {
-return _parseReferencePropertiesImplicit(value);
+export function parsePropertiesOauthFlowsImplicit(value: unknown): unknown {
+return _parseReferencePropertiesOauthFlowsImplicit(value);
 }
-function _parseReferencePropertiesImplicit(value: unknown): unknown {
-return parseDefsImplicit(value);
+function _parseReferencePropertiesOauthFlowsImplicit(value: unknown): unknown {
+return parseDefsOauthFlowsImplicit(value);
 }
-export function parsePropertiesPassword(value: unknown): unknown {
-return _parseReferencePropertiesPassword(value);
+export function parsePropertiesOauthFlowsPassword(value: unknown): unknown {
+return _parseReferencePropertiesOauthFlowsPassword(value);
 }
-function _parseReferencePropertiesPassword(value: unknown): unknown {
-return parseDefsPassword(value);
+function _parseReferencePropertiesOauthFlowsPassword(value: unknown): unknown {
+return parseDefsOauthFlowsPassword(value);
 }
-export function parsePropertiesClientCredentials(value: unknown): unknown {
-return _parseReferencePropertiesClientCredentials(value);
+export function parsePropertiesOauthFlowsClientCredentials(value: unknown): unknown {
+return _parseReferencePropertiesOauthFlowsClientCredentials(value);
 }
-function _parseReferencePropertiesClientCredentials(value: unknown): unknown {
-return parseDefsClientCredentials(value);
+function _parseReferencePropertiesOauthFlowsClientCredentials(value: unknown): unknown {
+return parseDefsOauthFlowsClientCredentials(value);
 }
-export function parsePropertiesAuthorizationCode(value: unknown): unknown {
-return _parseReferencePropertiesAuthorizationCode(value);
+export function parsePropertiesOauthFlowsAuthorizationCode(value: unknown): unknown {
+return _parseReferencePropertiesOauthFlowsAuthorizationCode(value);
 }
-function _parseReferencePropertiesAuthorizationCode(value: unknown): unknown {
-return parseDefsAuthorizationCode(value);
+function _parseReferencePropertiesOauthFlowsAuthorizationCode(value: unknown): unknown {
+return parseDefsOauthFlowsAuthorizationCode(value);
 }
 export function parseSecurityRequirementAdditionalProperties(value: unknown): unknown {
 return _parseArraySecurityRequirementAdditionalProperties(value);
@@ -3229,7 +3229,7 @@ function _parseArraySecurityRequirementAdditionalProperties(value: unknown): unk
 if(Array.isArray(value)) {
 const result = new Array<unknown>(value.length);
 for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseAdditionalPropertiesItems(value[elementIndex]);
+result[elementIndex] = parseSecurityRequirementItems(value[elementIndex]);
 }
 return result;
 }
@@ -3241,16 +3241,16 @@ return _parseAnyX(value);
 function _parseAnyX(value: unknown): unknown {
 return value;
 }
-export function parsePropertiesExample(value: unknown): unknown {
-return _parseAnyPropertiesExample(value);
+export function parseExamplesExample(value: unknown): unknown {
+return _parseAnyExamplesExample(value);
 }
-function _parseAnyPropertiesExample(value: unknown): unknown {
+function _parseAnyExamplesExample(value: unknown): unknown {
 return value;
 }
-export function parseExamplesPropertiesExamples(value: unknown): unknown {
-return _parseMapExamplesPropertiesExamples(value);
+export function parseExamplesExamples(value: unknown): unknown {
+return _parseMapExamplesExamples(value);
 }
-function _parseMapExamplesPropertiesExamples(value: unknown): unknown {
+function _parseMapExamplesExamples(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
@@ -3274,10 +3274,10 @@ default:
 return undefined;
 }
 }
-export function parseSchema20221007ServersItems(value: unknown): unknown {
-return _parseReferenceSchema20221007ServersItems(value);
+export function parsePropertiesServersItems(value: unknown): unknown {
+return _parseReferencePropertiesServersItems(value);
 }
-function _parseReferenceSchema20221007ServersItems(value: unknown): unknown {
+function _parseReferencePropertiesServersItems(value: unknown): unknown {
 return parseServer(value);
 }
 export function parseWebhooksAdditionalProperties(value: unknown): unknown {
@@ -3286,16 +3286,16 @@ return _parseReferenceWebhooksAdditionalProperties(value);
 function _parseReferenceWebhooksAdditionalProperties(value: unknown): unknown {
 return parsePathItemOrReference(value);
 }
-export function parseSchema20221007SecurityItems(value: unknown): unknown {
-return _parseReferenceSchema20221007SecurityItems(value);
+export function parsePropertiesSecurityItems(value: unknown): unknown {
+return _parseReferencePropertiesSecurityItems(value);
 }
-function _parseReferenceSchema20221007SecurityItems(value: unknown): unknown {
+function _parseReferencePropertiesSecurityItems(value: unknown): unknown {
 return parseSecurityRequirement(value);
 }
-export function parseSchema20221007TagsItems(value: unknown): unknown {
-return _parseReferenceSchema20221007TagsItems(value);
+export function parsePropertiesTagsItems(value: unknown): unknown {
+return _parseReferencePropertiesTagsItems(value);
 }
-function _parseReferenceSchema20221007TagsItems(value: unknown): unknown {
+function _parseReferencePropertiesTagsItems(value: unknown): unknown {
 return parseTag(value);
 }
 export function parseVariablesAdditionalProperties(value: unknown): unknown {
@@ -3322,7 +3322,7 @@ export function parseSchemasAdditionalProperties(value: unknown): unknown {
 return _parseReferenceSchemasAdditionalProperties(value);
 }
 function _parseReferenceSchemasAdditionalProperties(value: unknown): unknown {
-return parseDefsSchema(value);
+return parseSchema(value);
 }
 export function parseResponsesAdditionalProperties(value: unknown): unknown {
 return _parseReferenceResponsesAdditionalProperties(value);
@@ -3366,10 +3366,10 @@ return _parseReferenceComponentsLinksAdditionalProperties(value);
 function _parseReferenceComponentsLinksAdditionalProperties(value: unknown): unknown {
 return parseLinkOrReference(value);
 }
-export function parseComponentsPropertiesCallbacksAdditionalProperties(value: unknown): unknown {
-return _parseReferenceComponentsPropertiesCallbacksAdditionalProperties(value);
+export function parseComponentsCallbacksAdditionalProperties(value: unknown): unknown {
+return _parseReferenceComponentsCallbacksAdditionalProperties(value);
 }
-function _parseReferenceComponentsPropertiesCallbacksAdditionalProperties(value: unknown): unknown {
+function _parseReferenceComponentsCallbacksAdditionalProperties(value: unknown): unknown {
 return parseCallbacksOrReference(value);
 }
 export function parsePathItemsAdditionalProperties(value: unknown): unknown {
@@ -3424,10 +3424,10 @@ return _parseReferenceOperationParametersItems(value);
 function _parseReferenceOperationParametersItems(value: unknown): unknown {
 return parseParameterOrReference(value);
 }
-export function parseOperationPropertiesCallbacksAdditionalProperties(value: unknown): unknown {
-return _parseReferenceOperationPropertiesCallbacksAdditionalProperties(value);
+export function parseOperationCallbacksAdditionalProperties(value: unknown): unknown {
+return _parseReferenceOperationCallbacksAdditionalProperties(value);
 }
-function _parseReferenceOperationPropertiesCallbacksAdditionalProperties(value: unknown): unknown {
+function _parseReferenceOperationCallbacksAdditionalProperties(value: unknown): unknown {
 return parseCallbacksOrReference(value);
 }
 export function parseOperationSecurityItems(value: unknown): unknown {
@@ -3442,10 +3442,10 @@ return _parseReferenceOperationServersItems(value);
 function _parseReferenceOperationServersItems(value: unknown): unknown {
 return parseServer(value);
 }
-export function parseIfIn(value: unknown): unknown {
-return _parseStringIfIn(value);
+export function parseIfParameterIn(value: unknown): unknown {
+return _parseStringIfParameterIn(value);
 }
-function _parseStringIfIn(value: unknown): unknown {
+function _parseStringIfParameterIn(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3482,11 +3482,11 @@ return value;
 }
 return undefined;
 }
-export function parseEncodingAdditionalProperties(value: unknown): unknown {
-return _parseReferenceEncodingAdditionalProperties(value);
+export function parseMediaTypeAdditionalProperties(value: unknown): unknown {
+return _parseReferenceMediaTypeAdditionalProperties(value);
 }
-function _parseReferenceEncodingAdditionalProperties(value: unknown): unknown {
-return parseDefsEncoding(value);
+function _parseReferenceMediaTypeAdditionalProperties(value: unknown): unknown {
+return parseEncoding(value);
 }
 export function parseExplodeDefaultIf(value: unknown): unknown {
 return _parseMapExplodeDefaultIf(value);
@@ -3497,7 +3497,7 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "style": {
-const propertyValue = parseIfStyle(value[propertyName as keyof typeof value]);
+const propertyValue = parseExplodeDefaultStyle(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -3516,7 +3516,7 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "explode": {
-const propertyValue = parseThenExplode(value[propertyName as keyof typeof value]);
+const propertyValue = parseEncodingExplodeDefaultExplode(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -3535,7 +3535,7 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "explode": {
-const propertyValue = parseElseExplode(value[propertyName as keyof typeof value]);
+const propertyValue = parseElseExplodeDefaultExplode(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -3572,7 +3572,7 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "type": {
-const propertyValue = parseTypeApikeyIfType(value[propertyName as keyof typeof value]);
+const propertyValue = parseTypeApikeyType(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -3591,12 +3591,12 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "name": {
-const propertyValue = parseThenName(value[propertyName as keyof typeof value]);
+const propertyValue = parseTypeApikeyName(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "in": {
-const propertyValue = parseThenIn(value[propertyName as keyof typeof value]);
+const propertyValue = parseTypeApikeyIn(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -3615,7 +3615,7 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "type": {
-const propertyValue = parseTypeHttpIfType(value[propertyName as keyof typeof value]);
+const propertyValue = parseTypeHttpType(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -3634,7 +3634,7 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "scheme": {
-const propertyValue = parseThenScheme(value[propertyName as keyof typeof value]);
+const propertyValue = parseTypeHttpScheme(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -3653,12 +3653,12 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "type": {
-const propertyValue = parseTypeHttpBearerIfType(value[propertyName as keyof typeof value]);
+const propertyValue = parseTypeHttpBearerType(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "scheme": {
-const propertyValue = parseIfScheme(value[propertyName as keyof typeof value]);
+const propertyValue = parseTypeHttpBearerScheme(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -3696,7 +3696,7 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "type": {
-const propertyValue = parseTypeOauth2IfType(value[propertyName as keyof typeof value]);
+const propertyValue = parseTypeOauth2Type(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -3734,7 +3734,7 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "type": {
-const propertyValue = parseTypeOidcIfType(value[propertyName as keyof typeof value]);
+const propertyValue = parseTypeOidcType(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -3913,10 +3913,10 @@ return _parseReferenceAuthorizationCodeScopes(value);
 function _parseReferenceAuthorizationCodeScopes(value: unknown): unknown {
 return parseMapOfStrings(value);
 }
-export function parseAdditionalPropertiesItems(value: unknown): unknown {
-return _parseStringAdditionalPropertiesItems(value);
+export function parseSecurityRequirementItems(value: unknown): unknown {
+return _parseStringSecurityRequirementItems(value);
 }
-function _parseStringAdditionalPropertiesItems(value: unknown): unknown {
+function _parseStringSecurityRequirementItems(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3933,10 +3933,10 @@ return _parseReferenceExamplesExamplesAdditionalProperties(value);
 function _parseReferenceExamplesExamplesAdditionalProperties(value: unknown): unknown {
 return parseExampleOrReference(value);
 }
-export function parseIfStyle(value: unknown): unknown {
-return _parseStringIfStyle(value);
+export function parseExplodeDefaultStyle(value: unknown): unknown {
+return _parseStringExplodeDefaultStyle(value);
 }
-function _parseStringIfStyle(value: unknown): unknown {
+function _parseStringExplodeDefaultStyle(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3947,16 +3947,16 @@ default:
 return undefined;
 }
 }
-export function parseThenExplode(value: unknown): unknown {
+export function parseEncodingExplodeDefaultExplode(value: unknown): unknown {
 return ;
 }
-export function parseElseExplode(value: unknown): unknown {
+export function parseElseExplodeDefaultExplode(value: unknown): unknown {
 return ;
 }
-export function parseTypeApikeyIfType(value: unknown): unknown {
-return _parseStringTypeApikeyIfType(value);
+export function parseTypeApikeyType(value: unknown): unknown {
+return _parseStringTypeApikeyType(value);
 }
-function _parseStringTypeApikeyIfType(value: unknown): unknown {
+function _parseStringTypeApikeyType(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3967,10 +3967,10 @@ default:
 return undefined;
 }
 }
-export function parseThenName(value: unknown): unknown {
-return _parseStringThenName(value);
+export function parseTypeApikeyName(value: unknown): unknown {
+return _parseStringTypeApikeyName(value);
 }
-function _parseStringThenName(value: unknown): unknown {
+function _parseStringTypeApikeyName(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3981,10 +3981,10 @@ default:
 return undefined;
 }
 }
-export function parseThenIn(value: unknown): unknown {
-return _parseStringThenIn(value);
+export function parseTypeApikeyIn(value: unknown): unknown {
+return _parseStringTypeApikeyIn(value);
 }
-function _parseStringThenIn(value: unknown): unknown {
+function _parseStringTypeApikeyIn(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3995,10 +3995,10 @@ default:
 return undefined;
 }
 }
-export function parseTypeHttpIfType(value: unknown): unknown {
-return _parseStringTypeHttpIfType(value);
+export function parseTypeHttpType(value: unknown): unknown {
+return _parseStringTypeHttpType(value);
 }
-function _parseStringTypeHttpIfType(value: unknown): unknown {
+function _parseStringTypeHttpType(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -4009,10 +4009,10 @@ default:
 return undefined;
 }
 }
-export function parseThenScheme(value: unknown): unknown {
-return _parseStringThenScheme(value);
+export function parseTypeHttpScheme(value: unknown): unknown {
+return _parseStringTypeHttpScheme(value);
 }
-function _parseStringThenScheme(value: unknown): unknown {
+function _parseStringTypeHttpScheme(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -4023,10 +4023,10 @@ default:
 return undefined;
 }
 }
-export function parseTypeHttpBearerIfType(value: unknown): unknown {
-return _parseStringTypeHttpBearerIfType(value);
+export function parseTypeHttpBearerType(value: unknown): unknown {
+return _parseStringTypeHttpBearerType(value);
 }
-function _parseStringTypeHttpBearerIfType(value: unknown): unknown {
+function _parseStringTypeHttpBearerType(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -4037,10 +4037,10 @@ default:
 return undefined;
 }
 }
-export function parseIfScheme(value: unknown): unknown {
-return _parseStringIfScheme(value);
+export function parseTypeHttpBearerScheme(value: unknown): unknown {
+return _parseStringTypeHttpBearerScheme(value);
 }
-function _parseStringIfScheme(value: unknown): unknown {
+function _parseStringTypeHttpBearerScheme(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -4065,10 +4065,10 @@ default:
 return undefined;
 }
 }
-export function parseTypeOauth2IfType(value: unknown): unknown {
-return _parseStringTypeOauth2IfType(value);
+export function parseTypeOauth2Type(value: unknown): unknown {
+return _parseStringTypeOauth2Type(value);
 }
-function _parseStringTypeOauth2IfType(value: unknown): unknown {
+function _parseStringTypeOauth2Type(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -4085,10 +4085,10 @@ return _parseReferenceFlows(value);
 function _parseReferenceFlows(value: unknown): unknown {
 return parseOauthFlows(value);
 }
-export function parseTypeOidcIfType(value: unknown): unknown {
-return _parseStringTypeOidcIfType(value);
+export function parseTypeOidcType(value: unknown): unknown {
+return _parseStringTypeOidcType(value);
 }
-function _parseStringTypeOidcIfType(value: unknown): unknown {
+function _parseStringTypeOidcType(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;

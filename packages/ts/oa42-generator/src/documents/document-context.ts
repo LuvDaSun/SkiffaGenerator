@@ -2,7 +2,8 @@ import { loadYAML } from "../utils/index.js";
 import { DocumentBase } from "./document-base.js";
 
 export interface DocumentOptions {
-  rootNamePart: string;
+  defaultName: string;
+  namerMaximumIterations: number;
 }
 
 export interface DocumentInitializer<N = unknown> {

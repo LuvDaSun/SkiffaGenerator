@@ -13,7 +13,7 @@ import {
 import { DocumentBase } from "../document-base.js";
 import { selectSchemas } from "./selectors.js";
 
-export class Document extends DocumentBase<oas.Schema20210928> {
+export class Document extends DocumentBase<oas.SchemaDocument> {
   public async getApiModel(): Promise<models.Api> {
     const uri = this.documentUri;
 
@@ -25,7 +25,7 @@ export class Document extends DocumentBase<oas.Schema20210928> {
       router.insertRoute(pathModel.id, pathModel.pattern);
     }
 
-    const namer = new Namer(this.options.rootNamePart);
+    const namer = new Namer(this.options.defaultName, this.options.namerMaximumIterations);
     for (const nodeId in schemas) {
       const nodeUrl = new URL(nodeId);
       const path = nodeUrl.pathname + nodeUrl.hash.replace(/^#/g, "");

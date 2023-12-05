@@ -28,10 +28,15 @@ export function configurePackageProgram(argv: yargs.Argv) {
           description: "version of the package",
           type: "string",
         })
-        .option("root-name-part", {
-          description: "root name of the schema",
+        .option("default-name", {
+          description: "default name for types",
           type: "string",
-          default: "schema",
+          default: "schema-document",
+        })
+        .option("namer-maximum-iterations", {
+          description: "maximum number of iterations for finding unique names",
+          type: "number",
+          default: 5,
         }),
     (argv) => main(argv as MainOptions),
   );
@@ -42,7 +47,8 @@ interface MainOptions {
   packageDirectory: string;
   packageName: string;
   packageVersion: string;
-  rootNamePart: string;
+  defaultName: string;
+  namerMaximumIterations: number;
 }
 
 async function main(options: MainOptions) {
@@ -55,12 +61,13 @@ async function main(options: MainOptions) {
     specificationUrl = new URL("file://" + path.resolve(process.cwd(), options.specificationUrl));
   }
   const packageDirectoryPath = path.resolve(options.packageDirectory);
-  const { packageName, packageVersion, rootNamePart } = options;
+  const { packageName, packageVersion, defaultName, namerMaximumIterations } = options;
 
   // setup document context
 
   const documentContext = new DocumentContext({
-    rootNamePart: options.rootNamePart,
+    defaultName: options.defaultName,
+    namerMaximumIterations: options.namerMaximumIterations,
   });
   documentContext.registerFactory(swagger2.factory);
   documentContext.registerFactory(oas30.factory);

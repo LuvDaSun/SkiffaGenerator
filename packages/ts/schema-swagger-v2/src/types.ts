@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.8.21                         -- www.JsonSchema42.org
+// v0.9.0                          -- www.JsonSchema42.org
 // http://swagger.io/v2/schema.json#
 /**
 A JSON Schema for Swagger 2.0 API.
@@ -14,34 +14,34 @@ export type SchemaJson = ((
 "info": PropertiesInfo,
 "host"?: Host,
 "basePath"?: BasePath,
-"schemes"?: SchemaJsonSchemes,
-"consumes"?: SchemaJsonConsumes,
-"produces"?: SchemaJsonProduces,
+"schemes"?: PropertiesSchemes,
+"consumes"?: PropertiesConsumes,
+"produces"?: PropertiesProduces,
 "paths": PropertiesPaths,
 "definitions"?: PropertiesDefinitions,
-"parameters"?: SchemaJsonParameters,
-"responses"?: SchemaJsonPropertiesResponses,
-"security"?: SchemaJsonPropertiesSecurity,
+"parameters"?: PropertiesParameters,
+"responses"?: PropertiesResponses,
+"security"?: PropertiesSecurity,
 "securityDefinitions"?: PropertiesSecurityDefinitions,
-"tags"?: SchemaJsonTags,
-"externalDocs"?: SchemaJsonPropertiesExternalDocs,
-[key: string]: SchemaJsonAdditionalProperties |
-SchemaJsonX |
+"tags"?: PropertiesTags,
+"externalDocs"?: PropertiesExternalDocs,
+[key: string]: V2AdditionalProperties |
+V2PatternPropertiesX |
 Swagger |
 PropertiesInfo |
 Host |
 BasePath |
-SchemaJsonSchemes |
-SchemaJsonConsumes |
-SchemaJsonProduces |
+PropertiesSchemes |
+PropertiesConsumes |
+PropertiesProduces |
 PropertiesPaths |
 PropertiesDefinitions |
-SchemaJsonParameters |
-SchemaJsonPropertiesResponses |
-SchemaJsonPropertiesSecurity |
+PropertiesParameters |
+PropertiesResponses |
+PropertiesSecurity |
 PropertiesSecurityDefinitions |
-SchemaJsonTags |
-SchemaJsonPropertiesExternalDocs |
+PropertiesTags |
+PropertiesExternalDocs |
 undefined,
 }
 ));
@@ -51,20 +51,20 @@ General information about the API.
 */
 export type DefinitionsInfo = ((
 {
-"title": InfoPropertiesTitle,
+"title": InfoTitle,
 "version": Version,
-"description"?: InfoPropertiesDescription,
+"description"?: InfoDescription,
 "termsOfService"?: TermsOfService,
-"contact"?: PropertiesContact,
-"license"?: PropertiesLicense,
+"contact"?: InfoContact,
+"license"?: InfoLicense,
 [key: string]: InfoAdditionalProperties |
 InfoX |
-InfoPropertiesTitle |
+InfoTitle |
 Version |
-InfoPropertiesDescription |
+InfoDescription |
 TermsOfService |
-PropertiesContact |
-PropertiesLicense |
+InfoContact |
+InfoLicense |
 undefined,
 }
 ));
@@ -141,11 +141,11 @@ information about external documentation
 */
 export type DefinitionsExternalDocs = ((
 {
-"description"?: ExternalDocsPropertiesDescription,
+"description"?: ExternalDocsDescription,
 "url": ExternalDocsUrl,
 [key: string]: ExternalDocsAdditionalProperties |
 ExternalDocsX |
-ExternalDocsPropertiesDescription |
+ExternalDocsDescription |
 ExternalDocsUrl |
 undefined,
 }
@@ -166,30 +166,30 @@ export type Operation = ((
 {
 "tags"?: OperationTags,
 "summary"?: Summary,
-"description"?: OperationPropertiesDescription,
-"externalDocs"?: OperationPropertiesExternalDocs,
+"description"?: OperationDescription,
+"externalDocs"?: OperationExternalDocs,
 "operationId"?: OperationId,
 "produces"?: OperationProduces,
 "consumes"?: OperationConsumes,
 "parameters"?: OperationParameters,
-"responses": OperationPropertiesResponses,
+"responses": OperationResponses,
 "schemes"?: OperationSchemes,
 "deprecated"?: Deprecated,
-"security"?: OperationPropertiesSecurity,
+"security"?: OperationSecurity,
 [key: string]: OperationAdditionalProperties |
 OperationX |
 OperationTags |
 Summary |
-OperationPropertiesDescription |
-OperationPropertiesExternalDocs |
+OperationDescription |
+OperationExternalDocs |
 OperationId |
 OperationProduces |
 OperationConsumes |
 OperationParameters |
-OperationPropertiesResponses |
+OperationResponses |
 OperationSchemes |
 Deprecated |
-OperationPropertiesSecurity |
+OperationSecurity |
 undefined,
 }
 ));
@@ -227,26 +227,26 @@ export type DefinitionsResponses = (Not) &
 ((
 {
 [key: string]: ResponsesAdditionalProperties |
-PatternProperties093Default |
+Responses093Default |
 ResponsesX,
 }
 ));
 // http://swagger.io/v2/schema.json#/definitions/responseValue
-export type ResponseValue = (ResponseValueOneOf0 |
-ResponseValueOneOf1);
+export type ResponseValue = (ResponseValue0 |
+ResponseValue1);
 // http://swagger.io/v2/schema.json#/definitions/response
 export type Response = ((
 {
-"description": ResponsePropertiesDescription,
-"schema"?: ResponsePropertiesSchema,
-"headers"?: PropertiesHeaders,
-"examples"?: PropertiesExamples,
+"description": ResponseDescription,
+"schema"?: ResponseSchema,
+"headers"?: ResponseHeaders,
+"examples"?: ResponseExamples,
 [key: string]: ResponseAdditionalProperties |
 ResponseX |
-ResponsePropertiesDescription |
-ResponsePropertiesSchema |
-PropertiesHeaders |
-PropertiesExamples |
+ResponseDescription |
+ResponseSchema |
+ResponseHeaders |
+ResponseExamples |
 undefined,
 }
 ));
@@ -261,42 +261,42 @@ export type Header = ((
 {
 "type": HeaderType,
 "format"?: HeaderFormat,
-"items"?: HeaderPropertiesItems,
-"collectionFormat"?: HeaderPropertiesCollectionFormat,
-"default"?: HeaderPropertiesDefault,
-"maximum"?: HeaderPropertiesMaximum,
-"exclusiveMaximum"?: HeaderPropertiesExclusiveMaximum,
-"minimum"?: HeaderPropertiesMinimum,
-"exclusiveMinimum"?: HeaderPropertiesExclusiveMinimum,
-"maxLength"?: HeaderPropertiesMaxLength,
-"minLength"?: HeaderPropertiesMinLength,
-"pattern"?: HeaderPropertiesPattern,
-"maxItems"?: HeaderPropertiesMaxItems,
-"minItems"?: HeaderPropertiesMinItems,
-"uniqueItems"?: HeaderPropertiesUniqueItems,
-"enum"?: HeaderPropertiesEnum,
-"multipleOf"?: HeaderPropertiesMultipleOf,
-"description"?: HeaderPropertiesDescription,
+"items"?: HeaderItems,
+"collectionFormat"?: HeaderCollectionFormat,
+"default"?: HeaderDefault,
+"maximum"?: HeaderMaximum,
+"exclusiveMaximum"?: HeaderExclusiveMaximum,
+"minimum"?: HeaderMinimum,
+"exclusiveMinimum"?: HeaderExclusiveMinimum,
+"maxLength"?: HeaderMaxLength,
+"minLength"?: HeaderMinLength,
+"pattern"?: HeaderPattern,
+"maxItems"?: HeaderMaxItems,
+"minItems"?: HeaderMinItems,
+"uniqueItems"?: HeaderUniqueItems,
+"enum"?: HeaderEnum,
+"multipleOf"?: HeaderMultipleOf,
+"description"?: HeaderDescription,
 [key: string]: HeaderAdditionalProperties |
 HeaderX |
 HeaderType |
 HeaderFormat |
-HeaderPropertiesItems |
-HeaderPropertiesCollectionFormat |
-HeaderPropertiesDefault |
-HeaderPropertiesMaximum |
-HeaderPropertiesExclusiveMaximum |
-HeaderPropertiesMinimum |
-HeaderPropertiesExclusiveMinimum |
-HeaderPropertiesMaxLength |
-HeaderPropertiesMinLength |
-HeaderPropertiesPattern |
-HeaderPropertiesMaxItems |
-HeaderPropertiesMinItems |
-HeaderPropertiesUniqueItems |
-HeaderPropertiesEnum |
-HeaderPropertiesMultipleOf |
-HeaderPropertiesDescription |
+HeaderItems |
+HeaderCollectionFormat |
+HeaderDefault |
+HeaderMaximum |
+HeaderExclusiveMaximum |
+HeaderMinimum |
+HeaderExclusiveMinimum |
+HeaderMaxLength |
+HeaderMinLength |
+HeaderPattern |
+HeaderMaxItems |
+HeaderMinItems |
+HeaderUniqueItems |
+HeaderEnum |
+HeaderMultipleOf |
+HeaderDescription |
 undefined,
 }
 ));
@@ -308,18 +308,18 @@ export type VendorExtension = unknown;
 // http://swagger.io/v2/schema.json#/definitions/bodyParameter
 export type BodyParameter = ((
 {
-"description"?: BodyParameterPropertiesDescription,
+"description"?: BodyParameterDescription,
 "name": BodyParameterName,
 "in": BodyParameterIn,
 "required"?: BodyParameterRequired,
-"schema": BodyParameterPropertiesSchema,
+"schema": BodyParameterSchema,
 [key: string]: BodyParameterAdditionalProperties |
 BodyParameterX |
-BodyParameterPropertiesDescription |
+BodyParameterDescription |
 BodyParameterName |
 BodyParameterIn |
 BodyParameterRequired |
-BodyParameterPropertiesSchema |
+BodyParameterSchema |
 undefined,
 }
 ));
@@ -328,48 +328,48 @@ export type HeaderParameterSubSchema = ((
 {
 "required"?: HeaderParameterSubSchemaRequired,
 "in"?: HeaderParameterSubSchemaIn,
-"description"?: HeaderParameterSubSchemaPropertiesDescription,
+"description"?: HeaderParameterSubSchemaDescription,
 "name"?: HeaderParameterSubSchemaName,
 "type"?: HeaderParameterSubSchemaType,
 "format"?: HeaderParameterSubSchemaFormat,
-"items"?: HeaderParameterSubSchemaPropertiesItems,
-"collectionFormat"?: HeaderParameterSubSchemaPropertiesCollectionFormat,
-"default"?: HeaderParameterSubSchemaPropertiesDefault,
-"maximum"?: HeaderParameterSubSchemaPropertiesMaximum,
-"exclusiveMaximum"?: HeaderParameterSubSchemaPropertiesExclusiveMaximum,
-"minimum"?: HeaderParameterSubSchemaPropertiesMinimum,
-"exclusiveMinimum"?: HeaderParameterSubSchemaPropertiesExclusiveMinimum,
-"maxLength"?: HeaderParameterSubSchemaPropertiesMaxLength,
-"minLength"?: HeaderParameterSubSchemaPropertiesMinLength,
-"pattern"?: HeaderParameterSubSchemaPropertiesPattern,
-"maxItems"?: HeaderParameterSubSchemaPropertiesMaxItems,
-"minItems"?: HeaderParameterSubSchemaPropertiesMinItems,
-"uniqueItems"?: HeaderParameterSubSchemaPropertiesUniqueItems,
-"enum"?: HeaderParameterSubSchemaPropertiesEnum,
-"multipleOf"?: HeaderParameterSubSchemaPropertiesMultipleOf,
+"items"?: HeaderParameterSubSchemaItems,
+"collectionFormat"?: HeaderParameterSubSchemaCollectionFormat,
+"default"?: HeaderParameterSubSchemaDefault,
+"maximum"?: HeaderParameterSubSchemaMaximum,
+"exclusiveMaximum"?: HeaderParameterSubSchemaExclusiveMaximum,
+"minimum"?: HeaderParameterSubSchemaMinimum,
+"exclusiveMinimum"?: HeaderParameterSubSchemaExclusiveMinimum,
+"maxLength"?: HeaderParameterSubSchemaMaxLength,
+"minLength"?: HeaderParameterSubSchemaMinLength,
+"pattern"?: HeaderParameterSubSchemaPattern,
+"maxItems"?: HeaderParameterSubSchemaMaxItems,
+"minItems"?: HeaderParameterSubSchemaMinItems,
+"uniqueItems"?: HeaderParameterSubSchemaUniqueItems,
+"enum"?: HeaderParameterSubSchemaEnum,
+"multipleOf"?: HeaderParameterSubSchemaMultipleOf,
 [key: string]: HeaderParameterSubSchemaAdditionalProperties |
 HeaderParameterSubSchemaX |
 HeaderParameterSubSchemaRequired |
 HeaderParameterSubSchemaIn |
-HeaderParameterSubSchemaPropertiesDescription |
+HeaderParameterSubSchemaDescription |
 HeaderParameterSubSchemaName |
 HeaderParameterSubSchemaType |
 HeaderParameterSubSchemaFormat |
-HeaderParameterSubSchemaPropertiesItems |
-HeaderParameterSubSchemaPropertiesCollectionFormat |
-HeaderParameterSubSchemaPropertiesDefault |
-HeaderParameterSubSchemaPropertiesMaximum |
-HeaderParameterSubSchemaPropertiesExclusiveMaximum |
-HeaderParameterSubSchemaPropertiesMinimum |
-HeaderParameterSubSchemaPropertiesExclusiveMinimum |
-HeaderParameterSubSchemaPropertiesMaxLength |
-HeaderParameterSubSchemaPropertiesMinLength |
-HeaderParameterSubSchemaPropertiesPattern |
-HeaderParameterSubSchemaPropertiesMaxItems |
-HeaderParameterSubSchemaPropertiesMinItems |
-HeaderParameterSubSchemaPropertiesUniqueItems |
-HeaderParameterSubSchemaPropertiesEnum |
-HeaderParameterSubSchemaPropertiesMultipleOf |
+HeaderParameterSubSchemaItems |
+HeaderParameterSubSchemaCollectionFormat |
+HeaderParameterSubSchemaDefault |
+HeaderParameterSubSchemaMaximum |
+HeaderParameterSubSchemaExclusiveMaximum |
+HeaderParameterSubSchemaMinimum |
+HeaderParameterSubSchemaExclusiveMinimum |
+HeaderParameterSubSchemaMaxLength |
+HeaderParameterSubSchemaMinLength |
+HeaderParameterSubSchemaPattern |
+HeaderParameterSubSchemaMaxItems |
+HeaderParameterSubSchemaMinItems |
+HeaderParameterSubSchemaUniqueItems |
+HeaderParameterSubSchemaEnum |
+HeaderParameterSubSchemaMultipleOf |
 undefined,
 }
 ));
@@ -378,50 +378,50 @@ export type QueryParameterSubSchema = ((
 {
 "required"?: QueryParameterSubSchemaRequired,
 "in"?: QueryParameterSubSchemaIn,
-"description"?: QueryParameterSubSchemaPropertiesDescription,
+"description"?: QueryParameterSubSchemaDescription,
 "name"?: QueryParameterSubSchemaName,
 "allowEmptyValue"?: QueryParameterSubSchemaAllowEmptyValue,
 "type"?: QueryParameterSubSchemaType,
 "format"?: QueryParameterSubSchemaFormat,
-"items"?: QueryParameterSubSchemaPropertiesItems,
-"collectionFormat"?: QueryParameterSubSchemaPropertiesCollectionFormat,
-"default"?: QueryParameterSubSchemaPropertiesDefault,
-"maximum"?: QueryParameterSubSchemaPropertiesMaximum,
-"exclusiveMaximum"?: QueryParameterSubSchemaPropertiesExclusiveMaximum,
-"minimum"?: QueryParameterSubSchemaPropertiesMinimum,
-"exclusiveMinimum"?: QueryParameterSubSchemaPropertiesExclusiveMinimum,
-"maxLength"?: QueryParameterSubSchemaPropertiesMaxLength,
-"minLength"?: QueryParameterSubSchemaPropertiesMinLength,
-"pattern"?: QueryParameterSubSchemaPropertiesPattern,
-"maxItems"?: QueryParameterSubSchemaPropertiesMaxItems,
-"minItems"?: QueryParameterSubSchemaPropertiesMinItems,
-"uniqueItems"?: QueryParameterSubSchemaPropertiesUniqueItems,
-"enum"?: QueryParameterSubSchemaPropertiesEnum,
-"multipleOf"?: QueryParameterSubSchemaPropertiesMultipleOf,
+"items"?: QueryParameterSubSchemaItems,
+"collectionFormat"?: QueryParameterSubSchemaCollectionFormat,
+"default"?: QueryParameterSubSchemaDefault,
+"maximum"?: QueryParameterSubSchemaMaximum,
+"exclusiveMaximum"?: QueryParameterSubSchemaExclusiveMaximum,
+"minimum"?: QueryParameterSubSchemaMinimum,
+"exclusiveMinimum"?: QueryParameterSubSchemaExclusiveMinimum,
+"maxLength"?: QueryParameterSubSchemaMaxLength,
+"minLength"?: QueryParameterSubSchemaMinLength,
+"pattern"?: QueryParameterSubSchemaPattern,
+"maxItems"?: QueryParameterSubSchemaMaxItems,
+"minItems"?: QueryParameterSubSchemaMinItems,
+"uniqueItems"?: QueryParameterSubSchemaUniqueItems,
+"enum"?: QueryParameterSubSchemaEnum,
+"multipleOf"?: QueryParameterSubSchemaMultipleOf,
 [key: string]: QueryParameterSubSchemaAdditionalProperties |
 QueryParameterSubSchemaX |
 QueryParameterSubSchemaRequired |
 QueryParameterSubSchemaIn |
-QueryParameterSubSchemaPropertiesDescription |
+QueryParameterSubSchemaDescription |
 QueryParameterSubSchemaName |
 QueryParameterSubSchemaAllowEmptyValue |
 QueryParameterSubSchemaType |
 QueryParameterSubSchemaFormat |
-QueryParameterSubSchemaPropertiesItems |
-QueryParameterSubSchemaPropertiesCollectionFormat |
-QueryParameterSubSchemaPropertiesDefault |
-QueryParameterSubSchemaPropertiesMaximum |
-QueryParameterSubSchemaPropertiesExclusiveMaximum |
-QueryParameterSubSchemaPropertiesMinimum |
-QueryParameterSubSchemaPropertiesExclusiveMinimum |
-QueryParameterSubSchemaPropertiesMaxLength |
-QueryParameterSubSchemaPropertiesMinLength |
-QueryParameterSubSchemaPropertiesPattern |
-QueryParameterSubSchemaPropertiesMaxItems |
-QueryParameterSubSchemaPropertiesMinItems |
-QueryParameterSubSchemaPropertiesUniqueItems |
-QueryParameterSubSchemaPropertiesEnum |
-QueryParameterSubSchemaPropertiesMultipleOf |
+QueryParameterSubSchemaItems |
+QueryParameterSubSchemaCollectionFormat |
+QueryParameterSubSchemaDefault |
+QueryParameterSubSchemaMaximum |
+QueryParameterSubSchemaExclusiveMaximum |
+QueryParameterSubSchemaMinimum |
+QueryParameterSubSchemaExclusiveMinimum |
+QueryParameterSubSchemaMaxLength |
+QueryParameterSubSchemaMinLength |
+QueryParameterSubSchemaPattern |
+QueryParameterSubSchemaMaxItems |
+QueryParameterSubSchemaMinItems |
+QueryParameterSubSchemaUniqueItems |
+QueryParameterSubSchemaEnum |
+QueryParameterSubSchemaMultipleOf |
 undefined,
 }
 ));
@@ -430,50 +430,50 @@ export type FormDataParameterSubSchema = ((
 {
 "required"?: FormDataParameterSubSchemaRequired,
 "in"?: FormDataParameterSubSchemaIn,
-"description"?: FormDataParameterSubSchemaPropertiesDescription,
+"description"?: FormDataParameterSubSchemaDescription,
 "name"?: FormDataParameterSubSchemaName,
 "allowEmptyValue"?: FormDataParameterSubSchemaAllowEmptyValue,
 "type"?: FormDataParameterSubSchemaType,
 "format"?: FormDataParameterSubSchemaFormat,
-"items"?: FormDataParameterSubSchemaPropertiesItems,
-"collectionFormat"?: FormDataParameterSubSchemaPropertiesCollectionFormat,
-"default"?: FormDataParameterSubSchemaPropertiesDefault,
-"maximum"?: FormDataParameterSubSchemaPropertiesMaximum,
-"exclusiveMaximum"?: FormDataParameterSubSchemaPropertiesExclusiveMaximum,
-"minimum"?: FormDataParameterSubSchemaPropertiesMinimum,
-"exclusiveMinimum"?: FormDataParameterSubSchemaPropertiesExclusiveMinimum,
-"maxLength"?: FormDataParameterSubSchemaPropertiesMaxLength,
-"minLength"?: FormDataParameterSubSchemaPropertiesMinLength,
-"pattern"?: FormDataParameterSubSchemaPropertiesPattern,
-"maxItems"?: FormDataParameterSubSchemaPropertiesMaxItems,
-"minItems"?: FormDataParameterSubSchemaPropertiesMinItems,
-"uniqueItems"?: FormDataParameterSubSchemaPropertiesUniqueItems,
-"enum"?: FormDataParameterSubSchemaPropertiesEnum,
-"multipleOf"?: FormDataParameterSubSchemaPropertiesMultipleOf,
+"items"?: FormDataParameterSubSchemaItems,
+"collectionFormat"?: FormDataParameterSubSchemaCollectionFormat,
+"default"?: FormDataParameterSubSchemaDefault,
+"maximum"?: FormDataParameterSubSchemaMaximum,
+"exclusiveMaximum"?: FormDataParameterSubSchemaExclusiveMaximum,
+"minimum"?: FormDataParameterSubSchemaMinimum,
+"exclusiveMinimum"?: FormDataParameterSubSchemaExclusiveMinimum,
+"maxLength"?: FormDataParameterSubSchemaMaxLength,
+"minLength"?: FormDataParameterSubSchemaMinLength,
+"pattern"?: FormDataParameterSubSchemaPattern,
+"maxItems"?: FormDataParameterSubSchemaMaxItems,
+"minItems"?: FormDataParameterSubSchemaMinItems,
+"uniqueItems"?: FormDataParameterSubSchemaUniqueItems,
+"enum"?: FormDataParameterSubSchemaEnum,
+"multipleOf"?: FormDataParameterSubSchemaMultipleOf,
 [key: string]: FormDataParameterSubSchemaAdditionalProperties |
 FormDataParameterSubSchemaX |
 FormDataParameterSubSchemaRequired |
 FormDataParameterSubSchemaIn |
-FormDataParameterSubSchemaPropertiesDescription |
+FormDataParameterSubSchemaDescription |
 FormDataParameterSubSchemaName |
 FormDataParameterSubSchemaAllowEmptyValue |
 FormDataParameterSubSchemaType |
 FormDataParameterSubSchemaFormat |
-FormDataParameterSubSchemaPropertiesItems |
-FormDataParameterSubSchemaPropertiesCollectionFormat |
-FormDataParameterSubSchemaPropertiesDefault |
-FormDataParameterSubSchemaPropertiesMaximum |
-FormDataParameterSubSchemaPropertiesExclusiveMaximum |
-FormDataParameterSubSchemaPropertiesMinimum |
-FormDataParameterSubSchemaPropertiesExclusiveMinimum |
-FormDataParameterSubSchemaPropertiesMaxLength |
-FormDataParameterSubSchemaPropertiesMinLength |
-FormDataParameterSubSchemaPropertiesPattern |
-FormDataParameterSubSchemaPropertiesMaxItems |
-FormDataParameterSubSchemaPropertiesMinItems |
-FormDataParameterSubSchemaPropertiesUniqueItems |
-FormDataParameterSubSchemaPropertiesEnum |
-FormDataParameterSubSchemaPropertiesMultipleOf |
+FormDataParameterSubSchemaItems |
+FormDataParameterSubSchemaCollectionFormat |
+FormDataParameterSubSchemaDefault |
+FormDataParameterSubSchemaMaximum |
+FormDataParameterSubSchemaExclusiveMaximum |
+FormDataParameterSubSchemaMinimum |
+FormDataParameterSubSchemaExclusiveMinimum |
+FormDataParameterSubSchemaMaxLength |
+FormDataParameterSubSchemaMinLength |
+FormDataParameterSubSchemaPattern |
+FormDataParameterSubSchemaMaxItems |
+FormDataParameterSubSchemaMinItems |
+FormDataParameterSubSchemaUniqueItems |
+FormDataParameterSubSchemaEnum |
+FormDataParameterSubSchemaMultipleOf |
 undefined,
 }
 ));
@@ -482,63 +482,63 @@ export type PathParameterSubSchema = ((
 {
 "required": PathParameterSubSchemaRequired,
 "in"?: PathParameterSubSchemaIn,
-"description"?: PathParameterSubSchemaPropertiesDescription,
+"description"?: PathParameterSubSchemaDescription,
 "name"?: PathParameterSubSchemaName,
 "type"?: PathParameterSubSchemaType,
 "format"?: PathParameterSubSchemaFormat,
-"items"?: PathParameterSubSchemaPropertiesItems,
-"collectionFormat"?: PathParameterSubSchemaPropertiesCollectionFormat,
-"default"?: PathParameterSubSchemaPropertiesDefault,
-"maximum"?: PathParameterSubSchemaPropertiesMaximum,
-"exclusiveMaximum"?: PathParameterSubSchemaPropertiesExclusiveMaximum,
-"minimum"?: PathParameterSubSchemaPropertiesMinimum,
-"exclusiveMinimum"?: PathParameterSubSchemaPropertiesExclusiveMinimum,
-"maxLength"?: PathParameterSubSchemaPropertiesMaxLength,
-"minLength"?: PathParameterSubSchemaPropertiesMinLength,
-"pattern"?: PathParameterSubSchemaPropertiesPattern,
-"maxItems"?: PathParameterSubSchemaPropertiesMaxItems,
-"minItems"?: PathParameterSubSchemaPropertiesMinItems,
-"uniqueItems"?: PathParameterSubSchemaPropertiesUniqueItems,
-"enum"?: PathParameterSubSchemaPropertiesEnum,
-"multipleOf"?: PathParameterSubSchemaPropertiesMultipleOf,
+"items"?: PathParameterSubSchemaItems,
+"collectionFormat"?: PathParameterSubSchemaCollectionFormat,
+"default"?: PathParameterSubSchemaDefault,
+"maximum"?: PathParameterSubSchemaMaximum,
+"exclusiveMaximum"?: PathParameterSubSchemaExclusiveMaximum,
+"minimum"?: PathParameterSubSchemaMinimum,
+"exclusiveMinimum"?: PathParameterSubSchemaExclusiveMinimum,
+"maxLength"?: PathParameterSubSchemaMaxLength,
+"minLength"?: PathParameterSubSchemaMinLength,
+"pattern"?: PathParameterSubSchemaPattern,
+"maxItems"?: PathParameterSubSchemaMaxItems,
+"minItems"?: PathParameterSubSchemaMinItems,
+"uniqueItems"?: PathParameterSubSchemaUniqueItems,
+"enum"?: PathParameterSubSchemaEnum,
+"multipleOf"?: PathParameterSubSchemaMultipleOf,
 [key: string]: PathParameterSubSchemaAdditionalProperties |
 PathParameterSubSchemaX |
 PathParameterSubSchemaRequired |
 PathParameterSubSchemaIn |
-PathParameterSubSchemaPropertiesDescription |
+PathParameterSubSchemaDescription |
 PathParameterSubSchemaName |
 PathParameterSubSchemaType |
 PathParameterSubSchemaFormat |
-PathParameterSubSchemaPropertiesItems |
-PathParameterSubSchemaPropertiesCollectionFormat |
-PathParameterSubSchemaPropertiesDefault |
-PathParameterSubSchemaPropertiesMaximum |
-PathParameterSubSchemaPropertiesExclusiveMaximum |
-PathParameterSubSchemaPropertiesMinimum |
-PathParameterSubSchemaPropertiesExclusiveMinimum |
-PathParameterSubSchemaPropertiesMaxLength |
-PathParameterSubSchemaPropertiesMinLength |
-PathParameterSubSchemaPropertiesPattern |
-PathParameterSubSchemaPropertiesMaxItems |
-PathParameterSubSchemaPropertiesMinItems |
-PathParameterSubSchemaPropertiesUniqueItems |
-PathParameterSubSchemaPropertiesEnum |
-PathParameterSubSchemaPropertiesMultipleOf |
+PathParameterSubSchemaItems |
+PathParameterSubSchemaCollectionFormat |
+PathParameterSubSchemaDefault |
+PathParameterSubSchemaMaximum |
+PathParameterSubSchemaExclusiveMaximum |
+PathParameterSubSchemaMinimum |
+PathParameterSubSchemaExclusiveMinimum |
+PathParameterSubSchemaMaxLength |
+PathParameterSubSchemaMinLength |
+PathParameterSubSchemaPattern |
+PathParameterSubSchemaMaxItems |
+PathParameterSubSchemaMinItems |
+PathParameterSubSchemaUniqueItems |
+PathParameterSubSchemaEnum |
+PathParameterSubSchemaMultipleOf |
 undefined,
 }
 ));
 // http://swagger.io/v2/schema.json#/definitions/nonBodyParameter
-export type NonBodyParameter = (NonBodyParameterOneOf0 |
-NonBodyParameterOneOf1 |
-NonBodyParameterOneOf2 |
-NonBodyParameterOneOf3) &
+export type NonBodyParameter = (NonBodyParameter0 |
+NonBodyParameter1 |
+NonBodyParameter2 |
+NonBodyParameter3) &
 ((
 {
 }
 ));
 // http://swagger.io/v2/schema.json#/definitions/parameter
-export type Parameter = (ParameterOneOf0 |
-ParameterOneOf1);
+export type Parameter = (Parameter0 |
+Parameter1);
 // http://swagger.io/v2/schema.json#/definitions/schema
 /**
 A deterministic version of a JSON Schema object.
@@ -547,65 +547,65 @@ export type DefinitionsSchema = ((
 {
 "$ref"?: SchemaRef,
 "format"?: SchemaFormat,
-"title"?: DefinitionsSchemaPropertiesTitle,
-"description"?: DefinitionsSchemaPropertiesDescription,
-"default"?: DefinitionsSchemaPropertiesDefault,
-"multipleOf"?: DefinitionsSchemaPropertiesMultipleOf,
-"maximum"?: DefinitionsSchemaPropertiesMaximum,
-"exclusiveMaximum"?: DefinitionsSchemaPropertiesExclusiveMaximum,
-"minimum"?: DefinitionsSchemaPropertiesMinimum,
-"exclusiveMinimum"?: DefinitionsSchemaPropertiesExclusiveMinimum,
-"maxLength"?: SchemaPropertiesMaxLength,
-"minLength"?: SchemaPropertiesMinLength,
-"pattern"?: DefinitionsSchemaPropertiesPattern,
-"maxItems"?: SchemaPropertiesMaxItems,
-"minItems"?: SchemaPropertiesMinItems,
-"uniqueItems"?: DefinitionsSchemaPropertiesUniqueItems,
+"title"?: SchemaTitle,
+"description"?: SchemaDescription,
+"default"?: SchemaDefault,
+"multipleOf"?: SchemaMultipleOf,
+"maximum"?: SchemaMaximum,
+"exclusiveMaximum"?: SchemaExclusiveMaximum,
+"minimum"?: SchemaMinimum,
+"exclusiveMinimum"?: SchemaExclusiveMinimum,
+"maxLength"?: SchemaMaxLength,
+"minLength"?: SchemaMinLength,
+"pattern"?: SchemaPattern,
+"maxItems"?: SchemaMaxItems,
+"minItems"?: SchemaMinItems,
+"uniqueItems"?: SchemaUniqueItems,
 "maxProperties"?: MaxProperties,
 "minProperties"?: MinProperties,
 "required"?: SchemaRequired,
-"enum"?: DefinitionsSchemaPropertiesEnum,
-"additionalProperties"?: SchemaPropertiesAdditionalProperties,
-"type"?: DefinitionsSchemaType,
-"items"?: SchemaPropertiesItems,
+"enum"?: SchemaEnum,
+"additionalProperties"?: PropertiesSchemaAdditionalProperties,
+"type"?: SchemaType,
+"items"?: SchemaItems,
 "allOf"?: AllOf,
 "properties"?: Properties,
 "discriminator"?: Discriminator,
 "readOnly"?: SchemaReadOnly,
-"xml"?: PropertiesXml,
-"externalDocs"?: SchemaPropertiesExternalDocs,
+"xml"?: SchemaXml,
+"externalDocs"?: SchemaExternalDocs,
 "example"?: SchemaExample,
-[key: string]: SchemaAdditionalProperties |
-SchemaX |
+[key: string]: DefinitionsSchemaAdditionalProperties |
+SchemaPatternPropertiesX |
 SchemaRef |
 SchemaFormat |
-DefinitionsSchemaPropertiesTitle |
-DefinitionsSchemaPropertiesDescription |
-DefinitionsSchemaPropertiesDefault |
-DefinitionsSchemaPropertiesMultipleOf |
-DefinitionsSchemaPropertiesMaximum |
-DefinitionsSchemaPropertiesExclusiveMaximum |
-DefinitionsSchemaPropertiesMinimum |
-DefinitionsSchemaPropertiesExclusiveMinimum |
-SchemaPropertiesMaxLength |
-SchemaPropertiesMinLength |
-DefinitionsSchemaPropertiesPattern |
-SchemaPropertiesMaxItems |
-SchemaPropertiesMinItems |
-DefinitionsSchemaPropertiesUniqueItems |
+SchemaTitle |
+SchemaDescription |
+SchemaDefault |
+SchemaMultipleOf |
+SchemaMaximum |
+SchemaExclusiveMaximum |
+SchemaMinimum |
+SchemaExclusiveMinimum |
+SchemaMaxLength |
+SchemaMinLength |
+SchemaPattern |
+SchemaMaxItems |
+SchemaMinItems |
+SchemaUniqueItems |
 MaxProperties |
 MinProperties |
 SchemaRequired |
-DefinitionsSchemaPropertiesEnum |
-SchemaPropertiesAdditionalProperties |
-DefinitionsSchemaType |
-SchemaPropertiesItems |
+SchemaEnum |
+PropertiesSchemaAdditionalProperties |
+SchemaType |
+SchemaItems |
 AllOf |
 Properties |
 Discriminator |
 SchemaReadOnly |
-PropertiesXml |
-SchemaPropertiesExternalDocs |
+SchemaXml |
+SchemaExternalDocs |
 SchemaExample |
 undefined,
 }
@@ -617,24 +617,24 @@ A deterministic version of a JSON Schema object.
 export type FileSchema = ((
 {
 "format"?: FileSchemaFormat,
-"title"?: FileSchemaPropertiesTitle,
-"description"?: FileSchemaPropertiesDescription,
-"default"?: FileSchemaPropertiesDefault,
+"title"?: FileSchemaTitle,
+"description"?: FileSchemaDescription,
+"default"?: FileSchemaDefault,
 "required"?: FileSchemaRequired,
 "type": FileSchemaType,
 "readOnly"?: FileSchemaReadOnly,
-"externalDocs"?: FileSchemaPropertiesExternalDocs,
+"externalDocs"?: FileSchemaExternalDocs,
 "example"?: FileSchemaExample,
 [key: string]: FileSchemaAdditionalProperties |
 FileSchemaX |
 FileSchemaFormat |
-FileSchemaPropertiesTitle |
-FileSchemaPropertiesDescription |
-FileSchemaPropertiesDefault |
+FileSchemaTitle |
+FileSchemaDescription |
+FileSchemaDefault |
 FileSchemaRequired |
 FileSchemaType |
 FileSchemaReadOnly |
-FileSchemaPropertiesExternalDocs |
+FileSchemaExternalDocs |
 FileSchemaExample |
 undefined,
 }
@@ -644,40 +644,40 @@ export type PrimitivesItems = ((
 {
 "type"?: PrimitivesItemsType,
 "format"?: PrimitivesItemsFormat,
-"items"?: PrimitivesItemsPropertiesItems,
-"collectionFormat"?: PrimitivesItemsPropertiesCollectionFormat,
-"default"?: PrimitivesItemsPropertiesDefault,
-"maximum"?: PrimitivesItemsPropertiesMaximum,
-"exclusiveMaximum"?: PrimitivesItemsPropertiesExclusiveMaximum,
-"minimum"?: PrimitivesItemsPropertiesMinimum,
-"exclusiveMinimum"?: PrimitivesItemsPropertiesExclusiveMinimum,
-"maxLength"?: PrimitivesItemsPropertiesMaxLength,
-"minLength"?: PrimitivesItemsPropertiesMinLength,
-"pattern"?: PrimitivesItemsPropertiesPattern,
-"maxItems"?: PrimitivesItemsPropertiesMaxItems,
-"minItems"?: PrimitivesItemsPropertiesMinItems,
-"uniqueItems"?: PrimitivesItemsPropertiesUniqueItems,
-"enum"?: PrimitivesItemsPropertiesEnum,
-"multipleOf"?: PrimitivesItemsPropertiesMultipleOf,
+"items"?: PrimitivesItemsItems,
+"collectionFormat"?: PrimitivesItemsCollectionFormat,
+"default"?: PrimitivesItemsDefault,
+"maximum"?: PrimitivesItemsMaximum,
+"exclusiveMaximum"?: PrimitivesItemsExclusiveMaximum,
+"minimum"?: PrimitivesItemsMinimum,
+"exclusiveMinimum"?: PrimitivesItemsExclusiveMinimum,
+"maxLength"?: PrimitivesItemsMaxLength,
+"minLength"?: PrimitivesItemsMinLength,
+"pattern"?: PrimitivesItemsPattern,
+"maxItems"?: PrimitivesItemsMaxItems,
+"minItems"?: PrimitivesItemsMinItems,
+"uniqueItems"?: PrimitivesItemsUniqueItems,
+"enum"?: PrimitivesItemsEnum,
+"multipleOf"?: PrimitivesItemsMultipleOf,
 [key: string]: PrimitivesItemsAdditionalProperties |
 PrimitivesItemsX |
 PrimitivesItemsType |
 PrimitivesItemsFormat |
-PrimitivesItemsPropertiesItems |
-PrimitivesItemsPropertiesCollectionFormat |
-PrimitivesItemsPropertiesDefault |
-PrimitivesItemsPropertiesMaximum |
-PrimitivesItemsPropertiesExclusiveMaximum |
-PrimitivesItemsPropertiesMinimum |
-PrimitivesItemsPropertiesExclusiveMinimum |
-PrimitivesItemsPropertiesMaxLength |
-PrimitivesItemsPropertiesMinLength |
-PrimitivesItemsPropertiesPattern |
-PrimitivesItemsPropertiesMaxItems |
-PrimitivesItemsPropertiesMinItems |
-PrimitivesItemsPropertiesUniqueItems |
-PrimitivesItemsPropertiesEnum |
-PrimitivesItemsPropertiesMultipleOf |
+PrimitivesItemsItems |
+PrimitivesItemsCollectionFormat |
+PrimitivesItemsDefault |
+PrimitivesItemsMaximum |
+PrimitivesItemsExclusiveMaximum |
+PrimitivesItemsMinimum |
+PrimitivesItemsExclusiveMinimum |
+PrimitivesItemsMaxLength |
+PrimitivesItemsMinLength |
+PrimitivesItemsPattern |
+PrimitivesItemsMaxItems |
+PrimitivesItemsMinItems |
+PrimitivesItemsUniqueItems |
+PrimitivesItemsEnum |
+PrimitivesItemsMultipleOf |
 undefined,
 }
 ));
@@ -711,13 +711,13 @@ undefined,
 export type Tag = ((
 {
 "name": TagName,
-"description"?: TagPropertiesDescription,
-"externalDocs"?: TagPropertiesExternalDocs,
+"description"?: TagDescription,
+"externalDocs"?: TagExternalDocs,
 [key: string]: TagAdditionalProperties |
 TagX |
 TagName |
-TagPropertiesDescription |
-TagPropertiesExternalDocs |
+TagDescription |
+TagExternalDocs |
 undefined,
 }
 ));
@@ -731,11 +731,11 @@ export type DefinitionsSecurityDefinitions = ((
 export type BasicAuthenticationSecurity = ((
 {
 "type": BasicAuthenticationSecurityType,
-"description"?: BasicAuthenticationSecurityPropertiesDescription,
+"description"?: BasicAuthenticationSecurityDescription,
 [key: string]: BasicAuthenticationSecurityAdditionalProperties |
 BasicAuthenticationSecurityX |
 BasicAuthenticationSecurityType |
-BasicAuthenticationSecurityPropertiesDescription |
+BasicAuthenticationSecurityDescription |
 undefined,
 }
 ));
@@ -745,13 +745,13 @@ export type ApiKeySecurity = ((
 "type": ApiKeySecurityType,
 "name": ApiKeySecurityName,
 "in": ApiKeySecurityIn,
-"description"?: ApiKeySecurityPropertiesDescription,
+"description"?: ApiKeySecurityDescription,
 [key: string]: ApiKeySecurityAdditionalProperties |
 ApiKeySecurityX |
 ApiKeySecurityType |
 ApiKeySecurityName |
 ApiKeySecurityIn |
-ApiKeySecurityPropertiesDescription |
+ApiKeySecurityDescription |
 undefined,
 }
 ));
@@ -762,14 +762,14 @@ export type Oauth2ImplicitSecurity = ((
 "flow": Oauth2ImplicitSecurityFlow,
 "scopes"?: Oauth2ImplicitSecurityScopes,
 "authorizationUrl": Oauth2ImplicitSecurityAuthorizationUrl,
-"description"?: Oauth2ImplicitSecurityPropertiesDescription,
+"description"?: Oauth2ImplicitSecurityDescription,
 [key: string]: Oauth2ImplicitSecurityAdditionalProperties |
 Oauth2ImplicitSecurityX |
 Oauth2ImplicitSecurityType |
 Oauth2ImplicitSecurityFlow |
 Oauth2ImplicitSecurityScopes |
 Oauth2ImplicitSecurityAuthorizationUrl |
-Oauth2ImplicitSecurityPropertiesDescription |
+Oauth2ImplicitSecurityDescription |
 undefined,
 }
 ));
@@ -780,14 +780,14 @@ export type Oauth2PasswordSecurity = ((
 "flow": Oauth2PasswordSecurityFlow,
 "scopes"?: Oauth2PasswordSecurityScopes,
 "tokenUrl": Oauth2PasswordSecurityTokenUrl,
-"description"?: Oauth2PasswordSecurityPropertiesDescription,
+"description"?: Oauth2PasswordSecurityDescription,
 [key: string]: Oauth2PasswordSecurityAdditionalProperties |
 Oauth2PasswordSecurityX |
 Oauth2PasswordSecurityType |
 Oauth2PasswordSecurityFlow |
 Oauth2PasswordSecurityScopes |
 Oauth2PasswordSecurityTokenUrl |
-Oauth2PasswordSecurityPropertiesDescription |
+Oauth2PasswordSecurityDescription |
 undefined,
 }
 ));
@@ -798,14 +798,14 @@ export type Oauth2ApplicationSecurity = ((
 "flow": Oauth2ApplicationSecurityFlow,
 "scopes"?: Oauth2ApplicationSecurityScopes,
 "tokenUrl": Oauth2ApplicationSecurityTokenUrl,
-"description"?: Oauth2ApplicationSecurityPropertiesDescription,
+"description"?: Oauth2ApplicationSecurityDescription,
 [key: string]: Oauth2ApplicationSecurityAdditionalProperties |
 Oauth2ApplicationSecurityX |
 Oauth2ApplicationSecurityType |
 Oauth2ApplicationSecurityFlow |
 Oauth2ApplicationSecurityScopes |
 Oauth2ApplicationSecurityTokenUrl |
-Oauth2ApplicationSecurityPropertiesDescription |
+Oauth2ApplicationSecurityDescription |
 undefined,
 }
 ));
@@ -817,7 +817,7 @@ export type Oauth2AccessCodeSecurity = ((
 "scopes"?: Oauth2AccessCodeSecurityScopes,
 "authorizationUrl": Oauth2AccessCodeSecurityAuthorizationUrl,
 "tokenUrl": Oauth2AccessCodeSecurityTokenUrl,
-"description"?: Oauth2AccessCodeSecurityPropertiesDescription,
+"description"?: Oauth2AccessCodeSecurityDescription,
 [key: string]: Oauth2AccessCodeSecurityAdditionalProperties |
 Oauth2AccessCodeSecurityX |
 Oauth2AccessCodeSecurityType |
@@ -825,7 +825,7 @@ Oauth2AccessCodeSecurityFlow |
 Oauth2AccessCodeSecurityScopes |
 Oauth2AccessCodeSecurityAuthorizationUrl |
 Oauth2AccessCodeSecurityTokenUrl |
-Oauth2AccessCodeSecurityPropertiesDescription |
+Oauth2AccessCodeSecurityDescription |
 undefined,
 }
 ));
@@ -859,35 +859,35 @@ export type CollectionFormatWithMulti = (("csv" |
 "pipes" |
 "multi"));
 // http://swagger.io/v2/schema.json#/definitions/title
-export type DefinitionsTitle = (Draft04SchemaPropertiesTitle);
+export type DefinitionsTitle = (Draft04Title);
 // http://swagger.io/v2/schema.json#/definitions/description
-export type DefinitionsDescription = (Draft04SchemaPropertiesDescription);
+export type DefinitionsDescription = (Draft04Description);
 // http://swagger.io/v2/schema.json#/definitions/default
-export type DefinitionsDefault = (Draft04SchemaPropertiesDefault);
+export type DefinitionsDefault = (Draft04Default);
 // http://swagger.io/v2/schema.json#/definitions/multipleOf
-export type DefinitionsMultipleOf = (Draft04SchemaPropertiesMultipleOf);
+export type DefinitionsMultipleOf = (Draft04MultipleOf);
 // http://swagger.io/v2/schema.json#/definitions/maximum
-export type DefinitionsMaximum = (Draft04SchemaPropertiesMaximum);
+export type DefinitionsMaximum = (Draft04Maximum);
 // http://swagger.io/v2/schema.json#/definitions/exclusiveMaximum
-export type DefinitionsExclusiveMaximum = (Draft04SchemaPropertiesExclusiveMaximum);
+export type DefinitionsExclusiveMaximum = (Draft04ExclusiveMaximum);
 // http://swagger.io/v2/schema.json#/definitions/minimum
-export type DefinitionsMinimum = (Draft04SchemaPropertiesMinimum);
+export type DefinitionsMinimum = (Draft04Minimum);
 // http://swagger.io/v2/schema.json#/definitions/exclusiveMinimum
-export type DefinitionsExclusiveMinimum = (Draft04SchemaPropertiesExclusiveMinimum);
+export type DefinitionsExclusiveMinimum = (Draft04ExclusiveMinimum);
 // http://swagger.io/v2/schema.json#/definitions/maxLength
 export type DefinitionsMaxLength = (PositiveInteger);
 // http://swagger.io/v2/schema.json#/definitions/minLength
 export type DefinitionsMinLength = (PositiveIntegerDefault0);
 // http://swagger.io/v2/schema.json#/definitions/pattern
-export type DefinitionsPattern = (Draft04SchemaPropertiesPattern);
+export type DefinitionsPattern = (Draft04Pattern);
 // http://swagger.io/v2/schema.json#/definitions/maxItems
 export type DefinitionsMaxItems = (PositiveInteger);
 // http://swagger.io/v2/schema.json#/definitions/minItems
 export type DefinitionsMinItems = (PositiveIntegerDefault0);
 // http://swagger.io/v2/schema.json#/definitions/uniqueItems
-export type DefinitionsUniqueItems = (Draft04SchemaPropertiesUniqueItems);
+export type DefinitionsUniqueItems = (Draft04UniqueItems);
 // http://swagger.io/v2/schema.json#/definitions/enum
-export type DefinitionsEnum = (Draft04SchemaPropertiesEnum);
+export type DefinitionsEnum = (Draft04Enum);
 // http://swagger.io/v2/schema.json#/definitions/jsonReference
 export type JsonReference = ((
 {
@@ -914,42 +914,42 @@ The base path to the API. Example: '/api'.
 */
 export type BasePath = ((string));
 // http://swagger.io/v2/schema.json#/properties/schemes
-export type SchemaJsonSchemes = (SchemesList);
+export type PropertiesSchemes = (SchemesList);
 // http://swagger.io/v2/schema.json#/properties/consumes
 /**
 A list of MIME types accepted by the API.
 */
-export type SchemaJsonConsumes = (SchemaJsonConsumesAllOf0);
+export type PropertiesConsumes = (PropertiesAllOfConsumes0);
 // http://swagger.io/v2/schema.json#/properties/produces
 /**
 A list of MIME types the API can produce.
 */
-export type SchemaJsonProduces = (SchemaJsonProducesAllOf0);
+export type PropertiesProduces = (PropertiesAllOfProduces0);
 // http://swagger.io/v2/schema.json#/properties/paths
 export type PropertiesPaths = (DefinitionsPaths);
 // http://swagger.io/v2/schema.json#/properties/definitions
 export type PropertiesDefinitions = (DefinitionsDefinitions);
 // http://swagger.io/v2/schema.json#/properties/parameters
-export type SchemaJsonParameters = (ParameterDefinitions);
+export type PropertiesParameters = (ParameterDefinitions);
 // http://swagger.io/v2/schema.json#/properties/responses
-export type SchemaJsonPropertiesResponses = (ResponseDefinitions);
+export type PropertiesResponses = (ResponseDefinitions);
 // http://swagger.io/v2/schema.json#/properties/security
-export type SchemaJsonPropertiesSecurity = (DefinitionsSecurity);
+export type PropertiesSecurity = (DefinitionsSecurity);
 // http://swagger.io/v2/schema.json#/properties/securityDefinitions
 export type PropertiesSecurityDefinitions = (DefinitionsSecurityDefinitions);
 // http://swagger.io/v2/schema.json#/properties/tags
-export type SchemaJsonTags = (((SchemaJsonTagsItems)[]));
+export type PropertiesTags = (((PropertiesTagsItems)[]));
 // http://swagger.io/v2/schema.json#/properties/externalDocs
-export type SchemaJsonPropertiesExternalDocs = (DefinitionsExternalDocs);
+export type PropertiesExternalDocs = (DefinitionsExternalDocs);
 // http://swagger.io/v2/schema.json#/additionalProperties
-export type SchemaJsonAdditionalProperties = ((never));
+export type V2AdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/patternProperties/^x-
-export type SchemaJsonX = (VendorExtension);
+export type V2PatternPropertiesX = (VendorExtension);
 // http://swagger.io/v2/schema.json#/definitions/info/properties/title
 /**
 A unique and precise title of the API.
 */
-export type InfoPropertiesTitle = ((string));
+export type InfoTitle = ((string));
 // http://swagger.io/v2/schema.json#/definitions/info/properties/version
 /**
 A semantic version number of the API.
@@ -959,16 +959,16 @@ export type Version = ((string));
 /**
 A longer description of the API. Should be different from the title.  GitHub Flavored Markdown is allowed.
 */
-export type InfoPropertiesDescription = ((string));
+export type InfoDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/info/properties/termsOfService
 /**
 The terms of service for the API.
 */
 export type TermsOfService = ((string));
 // http://swagger.io/v2/schema.json#/definitions/info/properties/contact
-export type PropertiesContact = (DefinitionsContact);
+export type InfoContact = (DefinitionsContact);
 // http://swagger.io/v2/schema.json#/definitions/info/properties/license
-export type PropertiesLicense = (DefinitionsLicense);
+export type InfoLicense = (DefinitionsLicense);
 // http://swagger.io/v2/schema.json#/definitions/info/additionalProperties
 export type InfoAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/info/patternProperties/^x-
@@ -1019,7 +1019,7 @@ export type ParameterDefinitionsAdditionalProperties = (Parameter);
 // http://swagger.io/v2/schema.json#/definitions/responseDefinitions/additionalProperties
 export type ResponseDefinitionsAdditionalProperties = (Response);
 // http://swagger.io/v2/schema.json#/definitions/externalDocs/properties/description
-export type ExternalDocsPropertiesDescription = ((string));
+export type ExternalDocsDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/externalDocs/properties/url
 export type ExternalDocsUrl = ((string));
 // http://swagger.io/v2/schema.json#/definitions/externalDocs/additionalProperties
@@ -1039,9 +1039,9 @@ export type Summary = ((string));
 /**
 A longer description of the operation, GitHub Flavored Markdown is allowed.
 */
-export type OperationPropertiesDescription = ((string));
+export type OperationDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/externalDocs
-export type OperationPropertiesExternalDocs = (DefinitionsExternalDocs);
+export type OperationExternalDocs = (DefinitionsExternalDocs);
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/operationId
 /**
 A unique identifier of the operation.
@@ -1051,22 +1051,22 @@ export type OperationId = ((string));
 /**
 A list of MIME types the API can produce.
 */
-export type OperationProduces = (OperationProducesAllOf0);
+export type OperationProduces = (OperationAllOfProduces0);
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/consumes
 /**
 A list of MIME types the API can consume.
 */
-export type OperationConsumes = (OperationConsumesAllOf0);
+export type OperationConsumes = (OperationAllOfConsumes0);
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/parameters
 export type OperationParameters = (ParametersList);
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/responses
-export type OperationPropertiesResponses = (DefinitionsResponses);
+export type OperationResponses = (DefinitionsResponses);
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/schemes
 export type OperationSchemes = (SchemesList);
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/deprecated
 export type Deprecated = ((boolean));
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/security
-export type OperationPropertiesSecurity = (DefinitionsSecurity);
+export type OperationSecurity = (DefinitionsSecurity);
 // http://swagger.io/v2/schema.json#/definitions/operation/additionalProperties
 export type OperationAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/operation/patternProperties/^x-
@@ -1096,7 +1096,7 @@ export type PathItemX = (VendorExtension);
 // http://swagger.io/v2/schema.json#/definitions/responses/additionalProperties
 export type ResponsesAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/responses/patternProperties/^([0-9]{3})$|^(default)$
-export type PatternProperties093Default = (ResponseValue);
+export type Responses093Default = (ResponseValue);
 // http://swagger.io/v2/schema.json#/definitions/responses/patternProperties/^x-
 export type ResponsesX = (VendorExtension);
 // http://swagger.io/v2/schema.json#/definitions/responses/not
@@ -1107,18 +1107,18 @@ NotX,
 }
 ));
 // http://swagger.io/v2/schema.json#/definitions/responseValue/oneOf/0
-export type ResponseValueOneOf0 = (Response);
+export type ResponseValue0 = (Response);
 // http://swagger.io/v2/schema.json#/definitions/responseValue/oneOf/1
-export type ResponseValueOneOf1 = (JsonReference);
+export type ResponseValue1 = (JsonReference);
 // http://swagger.io/v2/schema.json#/definitions/response/properties/description
-export type ResponsePropertiesDescription = ((string));
+export type ResponseDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/response/properties/schema
-export type ResponsePropertiesSchema = (SchemaOneOf0 |
-SchemaOneOf1);
+export type ResponseSchema = (Response0 |
+Response1);
 // http://swagger.io/v2/schema.json#/definitions/response/properties/headers
-export type PropertiesHeaders = (DefinitionsHeaders);
+export type ResponseHeaders = (DefinitionsHeaders);
 // http://swagger.io/v2/schema.json#/definitions/response/properties/examples
-export type PropertiesExamples = (DefinitionsExamples);
+export type ResponseExamples = (DefinitionsExamples);
 // http://swagger.io/v2/schema.json#/definitions/response/additionalProperties
 export type ResponseAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/response/patternProperties/^x-
@@ -1134,37 +1134,37 @@ export type HeaderType = (("string" |
 // http://swagger.io/v2/schema.json#/definitions/header/properties/format
 export type HeaderFormat = ((string));
 // http://swagger.io/v2/schema.json#/definitions/header/properties/items
-export type HeaderPropertiesItems = (PrimitivesItems);
+export type HeaderItems = (PrimitivesItems);
 // http://swagger.io/v2/schema.json#/definitions/header/properties/collectionFormat
-export type HeaderPropertiesCollectionFormat = (DefinitionsCollectionFormat);
+export type HeaderCollectionFormat = (DefinitionsCollectionFormat);
 // http://swagger.io/v2/schema.json#/definitions/header/properties/default
-export type HeaderPropertiesDefault = (DefinitionsDefault);
+export type HeaderDefault = (DefinitionsDefault);
 // http://swagger.io/v2/schema.json#/definitions/header/properties/maximum
-export type HeaderPropertiesMaximum = (DefinitionsMaximum);
+export type HeaderMaximum = (DefinitionsMaximum);
 // http://swagger.io/v2/schema.json#/definitions/header/properties/exclusiveMaximum
-export type HeaderPropertiesExclusiveMaximum = (DefinitionsExclusiveMaximum);
+export type HeaderExclusiveMaximum = (DefinitionsExclusiveMaximum);
 // http://swagger.io/v2/schema.json#/definitions/header/properties/minimum
-export type HeaderPropertiesMinimum = (DefinitionsMinimum);
+export type HeaderMinimum = (DefinitionsMinimum);
 // http://swagger.io/v2/schema.json#/definitions/header/properties/exclusiveMinimum
-export type HeaderPropertiesExclusiveMinimum = (DefinitionsExclusiveMinimum);
+export type HeaderExclusiveMinimum = (DefinitionsExclusiveMinimum);
 // http://swagger.io/v2/schema.json#/definitions/header/properties/maxLength
-export type HeaderPropertiesMaxLength = (DefinitionsMaxLength);
+export type HeaderMaxLength = (DefinitionsMaxLength);
 // http://swagger.io/v2/schema.json#/definitions/header/properties/minLength
-export type HeaderPropertiesMinLength = (DefinitionsMinLength);
+export type HeaderMinLength = (DefinitionsMinLength);
 // http://swagger.io/v2/schema.json#/definitions/header/properties/pattern
-export type HeaderPropertiesPattern = (DefinitionsPattern);
+export type HeaderPattern = (DefinitionsPattern);
 // http://swagger.io/v2/schema.json#/definitions/header/properties/maxItems
-export type HeaderPropertiesMaxItems = (DefinitionsMaxItems);
+export type HeaderMaxItems = (DefinitionsMaxItems);
 // http://swagger.io/v2/schema.json#/definitions/header/properties/minItems
-export type HeaderPropertiesMinItems = (DefinitionsMinItems);
+export type HeaderMinItems = (DefinitionsMinItems);
 // http://swagger.io/v2/schema.json#/definitions/header/properties/uniqueItems
-export type HeaderPropertiesUniqueItems = (DefinitionsUniqueItems);
+export type HeaderUniqueItems = (DefinitionsUniqueItems);
 // http://swagger.io/v2/schema.json#/definitions/header/properties/enum
-export type HeaderPropertiesEnum = (DefinitionsEnum);
+export type HeaderEnum = (DefinitionsEnum);
 // http://swagger.io/v2/schema.json#/definitions/header/properties/multipleOf
-export type HeaderPropertiesMultipleOf = (DefinitionsMultipleOf);
+export type HeaderMultipleOf = (DefinitionsMultipleOf);
 // http://swagger.io/v2/schema.json#/definitions/header/properties/description
-export type HeaderPropertiesDescription = ((string));
+export type HeaderDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/header/additionalProperties
 export type HeaderAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/header/patternProperties/^x-
@@ -1177,7 +1177,7 @@ export type VendorExtensionAdditionalItems = ((any));
 /**
 A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.
 */
-export type BodyParameterPropertiesDescription = ((string));
+export type BodyParameterDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/bodyParameter/properties/name
 /**
 The name of the parameter.
@@ -1194,7 +1194,7 @@ Determines whether or not this parameter is required or optional.
 */
 export type BodyParameterRequired = ((boolean));
 // http://swagger.io/v2/schema.json#/definitions/bodyParameter/properties/schema
-export type BodyParameterPropertiesSchema = (DefinitionsSchema);
+export type BodyParameterSchema = (DefinitionsSchema);
 // http://swagger.io/v2/schema.json#/definitions/bodyParameter/additionalProperties
 export type BodyParameterAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/bodyParameter/patternProperties/^x-
@@ -1213,7 +1213,7 @@ export type HeaderParameterSubSchemaIn = (("header"));
 /**
 A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.
 */
-export type HeaderParameterSubSchemaPropertiesDescription = ((string));
+export type HeaderParameterSubSchemaDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/name
 /**
 The name of the parameter.
@@ -1228,35 +1228,35 @@ export type HeaderParameterSubSchemaType = (("string" |
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/format
 export type HeaderParameterSubSchemaFormat = ((string));
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/items
-export type HeaderParameterSubSchemaPropertiesItems = (PrimitivesItems);
+export type HeaderParameterSubSchemaItems = (PrimitivesItems);
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/collectionFormat
-export type HeaderParameterSubSchemaPropertiesCollectionFormat = (DefinitionsCollectionFormat);
+export type HeaderParameterSubSchemaCollectionFormat = (DefinitionsCollectionFormat);
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/default
-export type HeaderParameterSubSchemaPropertiesDefault = (DefinitionsDefault);
+export type HeaderParameterSubSchemaDefault = (DefinitionsDefault);
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/maximum
-export type HeaderParameterSubSchemaPropertiesMaximum = (DefinitionsMaximum);
+export type HeaderParameterSubSchemaMaximum = (DefinitionsMaximum);
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/exclusiveMaximum
-export type HeaderParameterSubSchemaPropertiesExclusiveMaximum = (DefinitionsExclusiveMaximum);
+export type HeaderParameterSubSchemaExclusiveMaximum = (DefinitionsExclusiveMaximum);
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/minimum
-export type HeaderParameterSubSchemaPropertiesMinimum = (DefinitionsMinimum);
+export type HeaderParameterSubSchemaMinimum = (DefinitionsMinimum);
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/exclusiveMinimum
-export type HeaderParameterSubSchemaPropertiesExclusiveMinimum = (DefinitionsExclusiveMinimum);
+export type HeaderParameterSubSchemaExclusiveMinimum = (DefinitionsExclusiveMinimum);
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/maxLength
-export type HeaderParameterSubSchemaPropertiesMaxLength = (DefinitionsMaxLength);
+export type HeaderParameterSubSchemaMaxLength = (DefinitionsMaxLength);
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/minLength
-export type HeaderParameterSubSchemaPropertiesMinLength = (DefinitionsMinLength);
+export type HeaderParameterSubSchemaMinLength = (DefinitionsMinLength);
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/pattern
-export type HeaderParameterSubSchemaPropertiesPattern = (DefinitionsPattern);
+export type HeaderParameterSubSchemaPattern = (DefinitionsPattern);
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/maxItems
-export type HeaderParameterSubSchemaPropertiesMaxItems = (DefinitionsMaxItems);
+export type HeaderParameterSubSchemaMaxItems = (DefinitionsMaxItems);
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/minItems
-export type HeaderParameterSubSchemaPropertiesMinItems = (DefinitionsMinItems);
+export type HeaderParameterSubSchemaMinItems = (DefinitionsMinItems);
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/uniqueItems
-export type HeaderParameterSubSchemaPropertiesUniqueItems = (DefinitionsUniqueItems);
+export type HeaderParameterSubSchemaUniqueItems = (DefinitionsUniqueItems);
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/enum
-export type HeaderParameterSubSchemaPropertiesEnum = (DefinitionsEnum);
+export type HeaderParameterSubSchemaEnum = (DefinitionsEnum);
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/multipleOf
-export type HeaderParameterSubSchemaPropertiesMultipleOf = (DefinitionsMultipleOf);
+export type HeaderParameterSubSchemaMultipleOf = (DefinitionsMultipleOf);
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/additionalProperties
 export type HeaderParameterSubSchemaAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/patternProperties/^x-
@@ -1275,7 +1275,7 @@ export type QueryParameterSubSchemaIn = (("query"));
 /**
 A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.
 */
-export type QueryParameterSubSchemaPropertiesDescription = ((string));
+export type QueryParameterSubSchemaDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/name
 /**
 The name of the parameter.
@@ -1295,35 +1295,35 @@ export type QueryParameterSubSchemaType = (("string" |
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/format
 export type QueryParameterSubSchemaFormat = ((string));
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/items
-export type QueryParameterSubSchemaPropertiesItems = (PrimitivesItems);
+export type QueryParameterSubSchemaItems = (PrimitivesItems);
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/collectionFormat
-export type QueryParameterSubSchemaPropertiesCollectionFormat = (CollectionFormatWithMulti);
+export type QueryParameterSubSchemaCollectionFormat = (CollectionFormatWithMulti);
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/default
-export type QueryParameterSubSchemaPropertiesDefault = (DefinitionsDefault);
+export type QueryParameterSubSchemaDefault = (DefinitionsDefault);
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/maximum
-export type QueryParameterSubSchemaPropertiesMaximum = (DefinitionsMaximum);
+export type QueryParameterSubSchemaMaximum = (DefinitionsMaximum);
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/exclusiveMaximum
-export type QueryParameterSubSchemaPropertiesExclusiveMaximum = (DefinitionsExclusiveMaximum);
+export type QueryParameterSubSchemaExclusiveMaximum = (DefinitionsExclusiveMaximum);
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/minimum
-export type QueryParameterSubSchemaPropertiesMinimum = (DefinitionsMinimum);
+export type QueryParameterSubSchemaMinimum = (DefinitionsMinimum);
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/exclusiveMinimum
-export type QueryParameterSubSchemaPropertiesExclusiveMinimum = (DefinitionsExclusiveMinimum);
+export type QueryParameterSubSchemaExclusiveMinimum = (DefinitionsExclusiveMinimum);
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/maxLength
-export type QueryParameterSubSchemaPropertiesMaxLength = (DefinitionsMaxLength);
+export type QueryParameterSubSchemaMaxLength = (DefinitionsMaxLength);
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/minLength
-export type QueryParameterSubSchemaPropertiesMinLength = (DefinitionsMinLength);
+export type QueryParameterSubSchemaMinLength = (DefinitionsMinLength);
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/pattern
-export type QueryParameterSubSchemaPropertiesPattern = (DefinitionsPattern);
+export type QueryParameterSubSchemaPattern = (DefinitionsPattern);
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/maxItems
-export type QueryParameterSubSchemaPropertiesMaxItems = (DefinitionsMaxItems);
+export type QueryParameterSubSchemaMaxItems = (DefinitionsMaxItems);
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/minItems
-export type QueryParameterSubSchemaPropertiesMinItems = (DefinitionsMinItems);
+export type QueryParameterSubSchemaMinItems = (DefinitionsMinItems);
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/uniqueItems
-export type QueryParameterSubSchemaPropertiesUniqueItems = (DefinitionsUniqueItems);
+export type QueryParameterSubSchemaUniqueItems = (DefinitionsUniqueItems);
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/enum
-export type QueryParameterSubSchemaPropertiesEnum = (DefinitionsEnum);
+export type QueryParameterSubSchemaEnum = (DefinitionsEnum);
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/multipleOf
-export type QueryParameterSubSchemaPropertiesMultipleOf = (DefinitionsMultipleOf);
+export type QueryParameterSubSchemaMultipleOf = (DefinitionsMultipleOf);
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/additionalProperties
 export type QueryParameterSubSchemaAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/patternProperties/^x-
@@ -1342,7 +1342,7 @@ export type FormDataParameterSubSchemaIn = (("formData"));
 /**
 A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.
 */
-export type FormDataParameterSubSchemaPropertiesDescription = ((string));
+export type FormDataParameterSubSchemaDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/name
 /**
 The name of the parameter.
@@ -1363,35 +1363,35 @@ export type FormDataParameterSubSchemaType = (("string" |
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/format
 export type FormDataParameterSubSchemaFormat = ((string));
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/items
-export type FormDataParameterSubSchemaPropertiesItems = (PrimitivesItems);
+export type FormDataParameterSubSchemaItems = (PrimitivesItems);
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/collectionFormat
-export type FormDataParameterSubSchemaPropertiesCollectionFormat = (CollectionFormatWithMulti);
+export type FormDataParameterSubSchemaCollectionFormat = (CollectionFormatWithMulti);
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/default
-export type FormDataParameterSubSchemaPropertiesDefault = (DefinitionsDefault);
+export type FormDataParameterSubSchemaDefault = (DefinitionsDefault);
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/maximum
-export type FormDataParameterSubSchemaPropertiesMaximum = (DefinitionsMaximum);
+export type FormDataParameterSubSchemaMaximum = (DefinitionsMaximum);
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/exclusiveMaximum
-export type FormDataParameterSubSchemaPropertiesExclusiveMaximum = (DefinitionsExclusiveMaximum);
+export type FormDataParameterSubSchemaExclusiveMaximum = (DefinitionsExclusiveMaximum);
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/minimum
-export type FormDataParameterSubSchemaPropertiesMinimum = (DefinitionsMinimum);
+export type FormDataParameterSubSchemaMinimum = (DefinitionsMinimum);
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/exclusiveMinimum
-export type FormDataParameterSubSchemaPropertiesExclusiveMinimum = (DefinitionsExclusiveMinimum);
+export type FormDataParameterSubSchemaExclusiveMinimum = (DefinitionsExclusiveMinimum);
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/maxLength
-export type FormDataParameterSubSchemaPropertiesMaxLength = (DefinitionsMaxLength);
+export type FormDataParameterSubSchemaMaxLength = (DefinitionsMaxLength);
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/minLength
-export type FormDataParameterSubSchemaPropertiesMinLength = (DefinitionsMinLength);
+export type FormDataParameterSubSchemaMinLength = (DefinitionsMinLength);
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/pattern
-export type FormDataParameterSubSchemaPropertiesPattern = (DefinitionsPattern);
+export type FormDataParameterSubSchemaPattern = (DefinitionsPattern);
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/maxItems
-export type FormDataParameterSubSchemaPropertiesMaxItems = (DefinitionsMaxItems);
+export type FormDataParameterSubSchemaMaxItems = (DefinitionsMaxItems);
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/minItems
-export type FormDataParameterSubSchemaPropertiesMinItems = (DefinitionsMinItems);
+export type FormDataParameterSubSchemaMinItems = (DefinitionsMinItems);
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/uniqueItems
-export type FormDataParameterSubSchemaPropertiesUniqueItems = (DefinitionsUniqueItems);
+export type FormDataParameterSubSchemaUniqueItems = (DefinitionsUniqueItems);
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/enum
-export type FormDataParameterSubSchemaPropertiesEnum = (DefinitionsEnum);
+export type FormDataParameterSubSchemaEnum = (DefinitionsEnum);
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/multipleOf
-export type FormDataParameterSubSchemaPropertiesMultipleOf = (DefinitionsMultipleOf);
+export type FormDataParameterSubSchemaMultipleOf = (DefinitionsMultipleOf);
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/additionalProperties
 export type FormDataParameterSubSchemaAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/patternProperties/^x-
@@ -1410,7 +1410,7 @@ export type PathParameterSubSchemaIn = (("path"));
 /**
 A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.
 */
-export type PathParameterSubSchemaPropertiesDescription = ((string));
+export type PathParameterSubSchemaDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/name
 /**
 The name of the parameter.
@@ -1425,83 +1425,83 @@ export type PathParameterSubSchemaType = (("string" |
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/format
 export type PathParameterSubSchemaFormat = ((string));
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/items
-export type PathParameterSubSchemaPropertiesItems = (PrimitivesItems);
+export type PathParameterSubSchemaItems = (PrimitivesItems);
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/collectionFormat
-export type PathParameterSubSchemaPropertiesCollectionFormat = (DefinitionsCollectionFormat);
+export type PathParameterSubSchemaCollectionFormat = (DefinitionsCollectionFormat);
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/default
-export type PathParameterSubSchemaPropertiesDefault = (DefinitionsDefault);
+export type PathParameterSubSchemaDefault = (DefinitionsDefault);
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/maximum
-export type PathParameterSubSchemaPropertiesMaximum = (DefinitionsMaximum);
+export type PathParameterSubSchemaMaximum = (DefinitionsMaximum);
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/exclusiveMaximum
-export type PathParameterSubSchemaPropertiesExclusiveMaximum = (DefinitionsExclusiveMaximum);
+export type PathParameterSubSchemaExclusiveMaximum = (DefinitionsExclusiveMaximum);
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/minimum
-export type PathParameterSubSchemaPropertiesMinimum = (DefinitionsMinimum);
+export type PathParameterSubSchemaMinimum = (DefinitionsMinimum);
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/exclusiveMinimum
-export type PathParameterSubSchemaPropertiesExclusiveMinimum = (DefinitionsExclusiveMinimum);
+export type PathParameterSubSchemaExclusiveMinimum = (DefinitionsExclusiveMinimum);
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/maxLength
-export type PathParameterSubSchemaPropertiesMaxLength = (DefinitionsMaxLength);
+export type PathParameterSubSchemaMaxLength = (DefinitionsMaxLength);
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/minLength
-export type PathParameterSubSchemaPropertiesMinLength = (DefinitionsMinLength);
+export type PathParameterSubSchemaMinLength = (DefinitionsMinLength);
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/pattern
-export type PathParameterSubSchemaPropertiesPattern = (DefinitionsPattern);
+export type PathParameterSubSchemaPattern = (DefinitionsPattern);
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/maxItems
-export type PathParameterSubSchemaPropertiesMaxItems = (DefinitionsMaxItems);
+export type PathParameterSubSchemaMaxItems = (DefinitionsMaxItems);
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/minItems
-export type PathParameterSubSchemaPropertiesMinItems = (DefinitionsMinItems);
+export type PathParameterSubSchemaMinItems = (DefinitionsMinItems);
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/uniqueItems
-export type PathParameterSubSchemaPropertiesUniqueItems = (DefinitionsUniqueItems);
+export type PathParameterSubSchemaUniqueItems = (DefinitionsUniqueItems);
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/enum
-export type PathParameterSubSchemaPropertiesEnum = (DefinitionsEnum);
+export type PathParameterSubSchemaEnum = (DefinitionsEnum);
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/multipleOf
-export type PathParameterSubSchemaPropertiesMultipleOf = (DefinitionsMultipleOf);
+export type PathParameterSubSchemaMultipleOf = (DefinitionsMultipleOf);
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/additionalProperties
 export type PathParameterSubSchemaAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/patternProperties/^x-
 export type PathParameterSubSchemaX = (VendorExtension);
 // http://swagger.io/v2/schema.json#/definitions/nonBodyParameter/oneOf/0
-export type NonBodyParameterOneOf0 = (HeaderParameterSubSchema);
+export type NonBodyParameter0 = (HeaderParameterSubSchema);
 // http://swagger.io/v2/schema.json#/definitions/nonBodyParameter/oneOf/1
-export type NonBodyParameterOneOf1 = (FormDataParameterSubSchema);
+export type NonBodyParameter1 = (FormDataParameterSubSchema);
 // http://swagger.io/v2/schema.json#/definitions/nonBodyParameter/oneOf/2
-export type NonBodyParameterOneOf2 = (QueryParameterSubSchema);
+export type NonBodyParameter2 = (QueryParameterSubSchema);
 // http://swagger.io/v2/schema.json#/definitions/nonBodyParameter/oneOf/3
-export type NonBodyParameterOneOf3 = (PathParameterSubSchema);
+export type NonBodyParameter3 = (PathParameterSubSchema);
 // http://swagger.io/v2/schema.json#/definitions/parameter/oneOf/0
-export type ParameterOneOf0 = (BodyParameter);
+export type Parameter0 = (BodyParameter);
 // http://swagger.io/v2/schema.json#/definitions/parameter/oneOf/1
-export type ParameterOneOf1 = (NonBodyParameter);
+export type Parameter1 = (NonBodyParameter);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/$ref
 export type SchemaRef = ((string));
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/format
 export type SchemaFormat = ((string));
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/title
-export type DefinitionsSchemaPropertiesTitle = (Draft04SchemaPropertiesTitle);
+export type SchemaTitle = (Draft04Title);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/description
-export type DefinitionsSchemaPropertiesDescription = (Draft04SchemaPropertiesDescription);
+export type SchemaDescription = (Draft04Description);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/default
-export type DefinitionsSchemaPropertiesDefault = (Draft04SchemaPropertiesDefault);
+export type SchemaDefault = (Draft04Default);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/multipleOf
-export type DefinitionsSchemaPropertiesMultipleOf = (Draft04SchemaPropertiesMultipleOf);
+export type SchemaMultipleOf = (Draft04MultipleOf);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/maximum
-export type DefinitionsSchemaPropertiesMaximum = (Draft04SchemaPropertiesMaximum);
+export type SchemaMaximum = (Draft04Maximum);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/exclusiveMaximum
-export type DefinitionsSchemaPropertiesExclusiveMaximum = (Draft04SchemaPropertiesExclusiveMaximum);
+export type SchemaExclusiveMaximum = (Draft04ExclusiveMaximum);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/minimum
-export type DefinitionsSchemaPropertiesMinimum = (Draft04SchemaPropertiesMinimum);
+export type SchemaMinimum = (Draft04Minimum);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/exclusiveMinimum
-export type DefinitionsSchemaPropertiesExclusiveMinimum = (Draft04SchemaPropertiesExclusiveMinimum);
+export type SchemaExclusiveMinimum = (Draft04ExclusiveMinimum);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/maxLength
-export type SchemaPropertiesMaxLength = (PositiveInteger);
+export type SchemaMaxLength = (PositiveInteger);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/minLength
-export type SchemaPropertiesMinLength = (PositiveIntegerDefault0);
+export type SchemaMinLength = (PositiveIntegerDefault0);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/pattern
-export type DefinitionsSchemaPropertiesPattern = (Draft04SchemaPropertiesPattern);
+export type SchemaPattern = (Draft04Pattern);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/maxItems
-export type SchemaPropertiesMaxItems = (PositiveInteger);
+export type SchemaMaxItems = (PositiveInteger);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/minItems
-export type SchemaPropertiesMinItems = (PositiveIntegerDefault0);
+export type SchemaMinItems = (PositiveIntegerDefault0);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/uniqueItems
-export type DefinitionsSchemaPropertiesUniqueItems = (Draft04SchemaPropertiesUniqueItems);
+export type SchemaUniqueItems = (Draft04UniqueItems);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/maxProperties
 export type MaxProperties = (PositiveInteger);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/minProperties
@@ -1509,15 +1509,15 @@ export type MinProperties = (PositiveIntegerDefault0);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/required
 export type SchemaRequired = (StringArray);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/enum
-export type DefinitionsSchemaPropertiesEnum = (Draft04SchemaPropertiesEnum);
+export type SchemaEnum = (Draft04Enum);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/additionalProperties
-export type SchemaPropertiesAdditionalProperties = ((AdditionalPropertiesAnyOf0) |
+export type PropertiesSchemaAdditionalProperties = ((AdditionalPropertiesAnyOf0) |
 (AdditionalPropertiesAnyOf1) |
 (AdditionalPropertiesAnyOf0 & AdditionalPropertiesAnyOf1));
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/type
-export type DefinitionsSchemaType = (Draft04SchemaType);
+export type SchemaType = (Draft04Type);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/items
-export type SchemaPropertiesItems = ((ItemsAnyOf0) |
+export type SchemaItems = ((ItemsAnyOf0) |
 (ItemsAnyOf1) |
 (ItemsAnyOf0 & ItemsAnyOf1));
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/allOf
@@ -1525,7 +1525,7 @@ export type AllOf = (((AllOfItems)[]));
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/properties
 export type Properties = ((
 {
-[key: string]: PropertiesPropertiesAdditionalProperties,
+[key: string]: PropertiesAdditionalProperties,
 }
 ));
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/discriminator
@@ -1533,23 +1533,23 @@ export type Discriminator = ((string));
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/readOnly
 export type SchemaReadOnly = ((boolean));
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/xml
-export type PropertiesXml = (DefinitionsXml);
+export type SchemaXml = (DefinitionsXml);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/externalDocs
-export type SchemaPropertiesExternalDocs = (DefinitionsExternalDocs);
+export type SchemaExternalDocs = (DefinitionsExternalDocs);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/example
 export type SchemaExample = unknown;
 // http://swagger.io/v2/schema.json#/definitions/schema/additionalProperties
-export type SchemaAdditionalProperties = ((never));
+export type DefinitionsSchemaAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/schema/patternProperties/^x-
-export type SchemaX = (VendorExtension);
+export type SchemaPatternPropertiesX = (VendorExtension);
 // http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/format
 export type FileSchemaFormat = ((string));
 // http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/title
-export type FileSchemaPropertiesTitle = (Draft04SchemaPropertiesTitle);
+export type FileSchemaTitle = (Draft04Title);
 // http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/description
-export type FileSchemaPropertiesDescription = (Draft04SchemaPropertiesDescription);
+export type FileSchemaDescription = (Draft04Description);
 // http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/default
-export type FileSchemaPropertiesDefault = (Draft04SchemaPropertiesDefault);
+export type FileSchemaDefault = (Draft04Default);
 // http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/required
 export type FileSchemaRequired = (StringArray);
 // http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/type
@@ -1557,7 +1557,7 @@ export type FileSchemaType = (("file"));
 // http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/readOnly
 export type FileSchemaReadOnly = ((boolean));
 // http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/externalDocs
-export type FileSchemaPropertiesExternalDocs = (DefinitionsExternalDocs);
+export type FileSchemaExternalDocs = (DefinitionsExternalDocs);
 // http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/example
 export type FileSchemaExample = unknown;
 // http://swagger.io/v2/schema.json#/definitions/fileSchema/additionalProperties
@@ -1573,35 +1573,35 @@ export type PrimitivesItemsType = (("string" |
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/format
 export type PrimitivesItemsFormat = ((string));
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/items
-export type PrimitivesItemsPropertiesItems = (PrimitivesItems);
+export type PrimitivesItemsItems = (PrimitivesItems);
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/collectionFormat
-export type PrimitivesItemsPropertiesCollectionFormat = (DefinitionsCollectionFormat);
+export type PrimitivesItemsCollectionFormat = (DefinitionsCollectionFormat);
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/default
-export type PrimitivesItemsPropertiesDefault = (DefinitionsDefault);
+export type PrimitivesItemsDefault = (DefinitionsDefault);
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/maximum
-export type PrimitivesItemsPropertiesMaximum = (DefinitionsMaximum);
+export type PrimitivesItemsMaximum = (DefinitionsMaximum);
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/exclusiveMaximum
-export type PrimitivesItemsPropertiesExclusiveMaximum = (DefinitionsExclusiveMaximum);
+export type PrimitivesItemsExclusiveMaximum = (DefinitionsExclusiveMaximum);
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/minimum
-export type PrimitivesItemsPropertiesMinimum = (DefinitionsMinimum);
+export type PrimitivesItemsMinimum = (DefinitionsMinimum);
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/exclusiveMinimum
-export type PrimitivesItemsPropertiesExclusiveMinimum = (DefinitionsExclusiveMinimum);
+export type PrimitivesItemsExclusiveMinimum = (DefinitionsExclusiveMinimum);
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/maxLength
-export type PrimitivesItemsPropertiesMaxLength = (DefinitionsMaxLength);
+export type PrimitivesItemsMaxLength = (DefinitionsMaxLength);
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/minLength
-export type PrimitivesItemsPropertiesMinLength = (DefinitionsMinLength);
+export type PrimitivesItemsMinLength = (DefinitionsMinLength);
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/pattern
-export type PrimitivesItemsPropertiesPattern = (DefinitionsPattern);
+export type PrimitivesItemsPattern = (DefinitionsPattern);
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/maxItems
-export type PrimitivesItemsPropertiesMaxItems = (DefinitionsMaxItems);
+export type PrimitivesItemsMaxItems = (DefinitionsMaxItems);
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/minItems
-export type PrimitivesItemsPropertiesMinItems = (DefinitionsMinItems);
+export type PrimitivesItemsMinItems = (DefinitionsMinItems);
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/uniqueItems
-export type PrimitivesItemsPropertiesUniqueItems = (DefinitionsUniqueItems);
+export type PrimitivesItemsUniqueItems = (DefinitionsUniqueItems);
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/enum
-export type PrimitivesItemsPropertiesEnum = (DefinitionsEnum);
+export type PrimitivesItemsEnum = (DefinitionsEnum);
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/multipleOf
-export type PrimitivesItemsPropertiesMultipleOf = (DefinitionsMultipleOf);
+export type PrimitivesItemsMultipleOf = (DefinitionsMultipleOf);
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/additionalProperties
 export type PrimitivesItemsAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/patternProperties/^x-
@@ -1609,7 +1609,7 @@ export type PrimitivesItemsX = (VendorExtension);
 // http://swagger.io/v2/schema.json#/definitions/security/items
 export type SecurityItems = (SecurityRequirement);
 // http://swagger.io/v2/schema.json#/definitions/securityRequirement/additionalProperties
-export type SecurityRequirementAdditionalProperties = (((AdditionalPropertiesItems)[]));
+export type SecurityRequirementAdditionalProperties = (((SecurityRequirementItems)[]));
 // http://swagger.io/v2/schema.json#/definitions/xml/properties/name
 export type XmlName = ((string));
 // http://swagger.io/v2/schema.json#/definitions/xml/properties/namespace
@@ -1627,24 +1627,24 @@ export type XmlX = (VendorExtension);
 // http://swagger.io/v2/schema.json#/definitions/tag/properties/name
 export type TagName = ((string));
 // http://swagger.io/v2/schema.json#/definitions/tag/properties/description
-export type TagPropertiesDescription = ((string));
+export type TagDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/tag/properties/externalDocs
-export type TagPropertiesExternalDocs = (DefinitionsExternalDocs);
+export type TagExternalDocs = (DefinitionsExternalDocs);
 // http://swagger.io/v2/schema.json#/definitions/tag/additionalProperties
 export type TagAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/tag/patternProperties/^x-
 export type TagX = (VendorExtension);
 // http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties
-export type SecurityDefinitionsAdditionalProperties = (AdditionalPropertiesOneOf0 |
-AdditionalPropertiesOneOf1 |
-AdditionalPropertiesOneOf2 |
-AdditionalPropertiesOneOf3 |
-OneOf4 |
-OneOf5);
+export type SecurityDefinitionsAdditionalProperties = (SecurityDefinitions0 |
+SecurityDefinitions1 |
+SecurityDefinitions2 |
+SecurityDefinitions3 |
+SecurityDefinitions4 |
+SecurityDefinitions5);
 // http://swagger.io/v2/schema.json#/definitions/basicAuthenticationSecurity/properties/type
 export type BasicAuthenticationSecurityType = (("basic"));
 // http://swagger.io/v2/schema.json#/definitions/basicAuthenticationSecurity/properties/description
-export type BasicAuthenticationSecurityPropertiesDescription = ((string));
+export type BasicAuthenticationSecurityDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/basicAuthenticationSecurity/additionalProperties
 export type BasicAuthenticationSecurityAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/basicAuthenticationSecurity/patternProperties/^x-
@@ -1657,7 +1657,7 @@ export type ApiKeySecurityName = ((string));
 export type ApiKeySecurityIn = (("header" |
 "query"));
 // http://swagger.io/v2/schema.json#/definitions/apiKeySecurity/properties/description
-export type ApiKeySecurityPropertiesDescription = ((string));
+export type ApiKeySecurityDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/apiKeySecurity/additionalProperties
 export type ApiKeySecurityAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/apiKeySecurity/patternProperties/^x-
@@ -1671,7 +1671,7 @@ export type Oauth2ImplicitSecurityScopes = (Oauth2Scopes);
 // http://swagger.io/v2/schema.json#/definitions/oauth2ImplicitSecurity/properties/authorizationUrl
 export type Oauth2ImplicitSecurityAuthorizationUrl = ((string));
 // http://swagger.io/v2/schema.json#/definitions/oauth2ImplicitSecurity/properties/description
-export type Oauth2ImplicitSecurityPropertiesDescription = ((string));
+export type Oauth2ImplicitSecurityDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/oauth2ImplicitSecurity/additionalProperties
 export type Oauth2ImplicitSecurityAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/oauth2ImplicitSecurity/patternProperties/^x-
@@ -1685,7 +1685,7 @@ export type Oauth2PasswordSecurityScopes = (Oauth2Scopes);
 // http://swagger.io/v2/schema.json#/definitions/oauth2PasswordSecurity/properties/tokenUrl
 export type Oauth2PasswordSecurityTokenUrl = ((string));
 // http://swagger.io/v2/schema.json#/definitions/oauth2PasswordSecurity/properties/description
-export type Oauth2PasswordSecurityPropertiesDescription = ((string));
+export type Oauth2PasswordSecurityDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/oauth2PasswordSecurity/additionalProperties
 export type Oauth2PasswordSecurityAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/oauth2PasswordSecurity/patternProperties/^x-
@@ -1699,7 +1699,7 @@ export type Oauth2ApplicationSecurityScopes = (Oauth2Scopes);
 // http://swagger.io/v2/schema.json#/definitions/oauth2ApplicationSecurity/properties/tokenUrl
 export type Oauth2ApplicationSecurityTokenUrl = ((string));
 // http://swagger.io/v2/schema.json#/definitions/oauth2ApplicationSecurity/properties/description
-export type Oauth2ApplicationSecurityPropertiesDescription = ((string));
+export type Oauth2ApplicationSecurityDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/oauth2ApplicationSecurity/additionalProperties
 export type Oauth2ApplicationSecurityAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/oauth2ApplicationSecurity/patternProperties/^x-
@@ -1715,7 +1715,7 @@ export type Oauth2AccessCodeSecurityAuthorizationUrl = ((string));
 // http://swagger.io/v2/schema.json#/definitions/oauth2AccessCodeSecurity/properties/tokenUrl
 export type Oauth2AccessCodeSecurityTokenUrl = ((string));
 // http://swagger.io/v2/schema.json#/definitions/oauth2AccessCodeSecurity/properties/description
-export type Oauth2AccessCodeSecurityPropertiesDescription = ((string));
+export type Oauth2AccessCodeSecurityDescription = ((string));
 // http://swagger.io/v2/schema.json#/definitions/oauth2AccessCodeSecurity/additionalProperties
 export type Oauth2AccessCodeSecurityAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/oauth2AccessCodeSecurity/patternProperties/^x-
@@ -1725,8 +1725,8 @@ export type Oauth2ScopesAdditionalProperties = ((string));
 // http://swagger.io/v2/schema.json#/definitions/mediaTypeList/items
 export type MediaTypeListItems = (MimeType);
 // http://swagger.io/v2/schema.json#/definitions/parametersList/items
-export type ParametersListItems = (ItemsOneOf0 |
-ItemsOneOf1);
+export type ParametersListItems = (ParametersList0 |
+ParametersList1);
 // http://swagger.io/v2/schema.json#/definitions/parametersList/additionalItems
 export type ParametersListAdditionalItems = ((never));
 // http://swagger.io/v2/schema.json#/definitions/schemesList/items
@@ -1739,25 +1739,25 @@ export type JsonReferenceRef = ((string));
 // http://swagger.io/v2/schema.json#/definitions/jsonReference/additionalProperties
 export type JsonReferenceAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/properties/consumes/allOf/0
-export type SchemaJsonConsumesAllOf0 = (MediaTypeList);
+export type PropertiesAllOfConsumes0 = (MediaTypeList);
 // http://swagger.io/v2/schema.json#/properties/produces/allOf/0
-export type SchemaJsonProducesAllOf0 = (MediaTypeList);
+export type PropertiesAllOfProduces0 = (MediaTypeList);
 // http://swagger.io/v2/schema.json#/properties/tags/items
-export type SchemaJsonTagsItems = (Tag);
+export type PropertiesTagsItems = (Tag);
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/tags/items
 export type OperationTagsItems = ((string));
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/produces/allOf/0
-export type OperationProducesAllOf0 = (MediaTypeList);
+export type OperationAllOfProduces0 = (MediaTypeList);
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/consumes/allOf/0
-export type OperationConsumesAllOf0 = (MediaTypeList);
+export type OperationAllOfConsumes0 = (MediaTypeList);
 // http://swagger.io/v2/schema.json#/definitions/responses/not/additionalProperties
 export type NotAdditionalProperties = ((never));
 // http://swagger.io/v2/schema.json#/definitions/responses/not/patternProperties/^x-
 export type NotX = (VendorExtension);
 // http://swagger.io/v2/schema.json#/definitions/response/properties/schema/oneOf/0
-export type SchemaOneOf0 = (DefinitionsSchema);
+export type Response0 = (DefinitionsSchema);
 // http://swagger.io/v2/schema.json#/definitions/response/properties/schema/oneOf/1
-export type SchemaOneOf1 = (FileSchema);
+export type Response1 = (FileSchema);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/additionalProperties/anyOf/0
 export type AdditionalPropertiesAnyOf0 = (DefinitionsSchema);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/additionalProperties/anyOf/1
@@ -1765,76 +1765,76 @@ export type AdditionalPropertiesAnyOf1 = ((boolean));
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/items/anyOf/0
 export type ItemsAnyOf0 = (DefinitionsSchema);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/items/anyOf/1
-export type ItemsAnyOf1 = (((ItemsAnyOf1Items)[]));
+export type ItemsAnyOf1 = (((Items1AnyOfItems)[]));
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/allOf/items
 export type AllOfItems = (DefinitionsSchema);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/properties/additionalProperties
-export type PropertiesPropertiesAdditionalProperties = (DefinitionsSchema);
+export type PropertiesAdditionalProperties = (DefinitionsSchema);
 // http://swagger.io/v2/schema.json#/definitions/securityRequirement/additionalProperties/items
-export type AdditionalPropertiesItems = ((string));
+export type SecurityRequirementItems = ((string));
 // http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/0
-export type AdditionalPropertiesOneOf0 = (BasicAuthenticationSecurity);
+export type SecurityDefinitions0 = (BasicAuthenticationSecurity);
 // http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/1
-export type AdditionalPropertiesOneOf1 = (ApiKeySecurity);
+export type SecurityDefinitions1 = (ApiKeySecurity);
 // http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/2
-export type AdditionalPropertiesOneOf2 = (Oauth2ImplicitSecurity);
+export type SecurityDefinitions2 = (Oauth2ImplicitSecurity);
 // http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/3
-export type AdditionalPropertiesOneOf3 = (Oauth2PasswordSecurity);
+export type SecurityDefinitions3 = (Oauth2PasswordSecurity);
 // http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/4
-export type OneOf4 = (Oauth2ApplicationSecurity);
+export type SecurityDefinitions4 = (Oauth2ApplicationSecurity);
 // http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/5
-export type OneOf5 = (Oauth2AccessCodeSecurity);
+export type SecurityDefinitions5 = (Oauth2AccessCodeSecurity);
 // http://swagger.io/v2/schema.json#/definitions/parametersList/items/oneOf/0
-export type ItemsOneOf0 = (Parameter);
+export type ParametersList0 = (Parameter);
 // http://swagger.io/v2/schema.json#/definitions/parametersList/items/oneOf/1
-export type ItemsOneOf1 = (JsonReference);
+export type ParametersList1 = (JsonReference);
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/items/anyOf/1/items
-export type ItemsAnyOf1Items = (DefinitionsSchema);
+export type Items1AnyOfItems = (DefinitionsSchema);
 // http://json-schema.org/draft-04/schema#/properties/title
-export type Draft04SchemaPropertiesTitle = ((string));
+export type Draft04Title = ((string));
 // http://json-schema.org/draft-04/schema#/properties/description
-export type Draft04SchemaPropertiesDescription = ((string));
+export type Draft04Description = ((string));
 // http://json-schema.org/draft-04/schema#/properties/default
-export type Draft04SchemaPropertiesDefault = unknown;
+export type Draft04Default = unknown;
 // http://json-schema.org/draft-04/schema#/properties/multipleOf
-export type Draft04SchemaPropertiesMultipleOf = ((number));
+export type Draft04MultipleOf = ((number));
 // http://json-schema.org/draft-04/schema#/properties/maximum
-export type Draft04SchemaPropertiesMaximum = ((number));
+export type Draft04Maximum = ((number));
 // http://json-schema.org/draft-04/schema#/properties/exclusiveMaximum
-export type Draft04SchemaPropertiesExclusiveMaximum = ((boolean));
+export type Draft04ExclusiveMaximum = ((boolean));
 // http://json-schema.org/draft-04/schema#/properties/minimum
-export type Draft04SchemaPropertiesMinimum = ((number));
+export type Draft04Minimum = ((number));
 // http://json-schema.org/draft-04/schema#/properties/exclusiveMinimum
-export type Draft04SchemaPropertiesExclusiveMinimum = ((boolean));
+export type Draft04ExclusiveMinimum = ((boolean));
 // http://json-schema.org/draft-04/schema#/definitions/positiveInteger
 export type PositiveInteger = ((number));
 // http://json-schema.org/draft-04/schema#/definitions/positiveIntegerDefault0
-export type PositiveIntegerDefault0 = (PositiveIntegerDefault0AllOf0 &
-AllOf1);
+export type PositiveIntegerDefault0 = (PositiveIntegerDefault00 &
+PositiveIntegerDefault01);
 // http://json-schema.org/draft-04/schema#/definitions/positiveIntegerDefault0/allOf/0
-export type PositiveIntegerDefault0AllOf0 = (PositiveInteger);
+export type PositiveIntegerDefault00 = (PositiveInteger);
 // http://json-schema.org/draft-04/schema#/definitions/positiveIntegerDefault0/allOf/1
-export type AllOf1 = unknown;
+export type PositiveIntegerDefault01 = unknown;
 // http://json-schema.org/draft-04/schema#/properties/pattern
-export type Draft04SchemaPropertiesPattern = ((string));
+export type Draft04Pattern = ((string));
 // http://json-schema.org/draft-04/schema#/properties/uniqueItems
-export type Draft04SchemaPropertiesUniqueItems = ((boolean));
+export type Draft04UniqueItems = ((boolean));
 // http://json-schema.org/draft-04/schema#/properties/enum
-export type Draft04SchemaPropertiesEnum = ((Array<unknown>));
+export type Draft04Enum = ((Array<unknown>));
 // http://json-schema.org/draft-04/schema#/definitions/stringArray
 export type StringArray = (((StringArrayItems)[]));
 // http://json-schema.org/draft-04/schema#/definitions/stringArray/items
 export type StringArrayItems = ((string));
 // http://json-schema.org/draft-04/schema#/properties/type
-export type Draft04SchemaType = ((TypeAnyOf0) |
+export type Draft04Type = ((TypeAnyOf0) |
 (TypeAnyOf1) |
 (TypeAnyOf0 & TypeAnyOf1));
 // http://json-schema.org/draft-04/schema#/properties/type/anyOf/0
 export type TypeAnyOf0 = (SimpleTypes);
 // http://json-schema.org/draft-04/schema#/properties/type/anyOf/1
-export type TypeAnyOf1 = (((TypeAnyOf1Items)[]));
+export type TypeAnyOf1 = (((Type1AnyOfItems)[]));
 // http://json-schema.org/draft-04/schema#/properties/type/anyOf/1/items
-export type TypeAnyOf1Items = (SimpleTypes);
+export type Type1AnyOfItems = (SimpleTypes);
 // http://json-schema.org/draft-04/schema#/definitions/simpleTypes
 export type SimpleTypes = (("array" |
 "boolean" |

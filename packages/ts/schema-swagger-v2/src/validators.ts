@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.8.21                         -- www.JsonSchema42.org
+// v0.9.0                          -- www.JsonSchema42.org
 import * as types from "./types.js";
 // http://swagger.io/v2/schema.json#
 export function isSchemaJson(value: unknown): value is types.SchemaJson {
@@ -49,17 +49,17 @@ return false;
 }
 continue;
 case "schemes":
-if(!isSchemaJsonSchemes(propertyValue)) {
+if(!isPropertiesSchemes(propertyValue)) {
 return false;
 }
 continue;
 case "consumes":
-if(!isSchemaJsonConsumes(propertyValue)) {
+if(!isPropertiesConsumes(propertyValue)) {
 return false;
 }
 continue;
 case "produces":
-if(!isSchemaJsonProduces(propertyValue)) {
+if(!isPropertiesProduces(propertyValue)) {
 return false;
 }
 continue;
@@ -74,17 +74,17 @@ return false;
 }
 continue;
 case "parameters":
-if(!isSchemaJsonParameters(propertyValue)) {
+if(!isPropertiesParameters(propertyValue)) {
 return false;
 }
 continue;
 case "responses":
-if(!isSchemaJsonPropertiesResponses(propertyValue)) {
+if(!isPropertiesResponses(propertyValue)) {
 return false;
 }
 continue;
 case "security":
-if(!isSchemaJsonPropertiesSecurity(propertyValue)) {
+if(!isPropertiesSecurity(propertyValue)) {
 return false;
 }
 continue;
@@ -94,23 +94,23 @@ return false;
 }
 continue;
 case "tags":
-if(!isSchemaJsonTags(propertyValue)) {
+if(!isPropertiesTags(propertyValue)) {
 return false;
 }
 continue;
 case "externalDocs":
-if(!isSchemaJsonPropertiesExternalDocs(propertyValue)) {
+if(!isPropertiesExternalDocs(propertyValue)) {
 return false;
 }
 continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
-if(!isSchemaJsonX(propertyValue)) {
+if(!isV2PatternPropertiesX(propertyValue)) {
 return false;
 }
 continue;
 }
-if(!isSchemaJsonAdditionalProperties(propertyValue)) {
+if(!isV2AdditionalProperties(propertyValue)) {
 return false;
 }
 continue;
@@ -138,7 +138,7 @@ for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
 switch(propertyName) {
 case "title":
-if(!isInfoPropertiesTitle(propertyValue)) {
+if(!isInfoTitle(propertyValue)) {
 return false;
 }
 continue;
@@ -148,7 +148,7 @@ return false;
 }
 continue;
 case "description":
-if(!isInfoPropertiesDescription(propertyValue)) {
+if(!isInfoDescription(propertyValue)) {
 return false;
 }
 continue;
@@ -158,12 +158,12 @@ return false;
 }
 continue;
 case "contact":
-if(!isPropertiesContact(propertyValue)) {
+if(!isInfoContact(propertyValue)) {
 return false;
 }
 continue;
 case "license":
-if(!isPropertiesLicense(propertyValue)) {
+if(!isInfoLicense(propertyValue)) {
 return false;
 }
 continue;
@@ -375,7 +375,7 @@ for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
 switch(propertyName) {
 case "description":
-if(!isExternalDocsPropertiesDescription(propertyValue)) {
+if(!isExternalDocsDescription(propertyValue)) {
 return false;
 }
 continue;
@@ -459,12 +459,12 @@ return false;
 }
 continue;
 case "description":
-if(!isOperationPropertiesDescription(propertyValue)) {
+if(!isOperationDescription(propertyValue)) {
 return false;
 }
 continue;
 case "externalDocs":
-if(!isOperationPropertiesExternalDocs(propertyValue)) {
+if(!isOperationExternalDocs(propertyValue)) {
 return false;
 }
 continue;
@@ -489,7 +489,7 @@ return false;
 }
 continue;
 case "responses":
-if(!isOperationPropertiesResponses(propertyValue)) {
+if(!isOperationResponses(propertyValue)) {
 return false;
 }
 continue;
@@ -504,7 +504,7 @@ return false;
 }
 continue;
 case "security":
-if(!isOperationPropertiesSecurity(propertyValue)) {
+if(!isOperationSecurity(propertyValue)) {
 return false;
 }
 continue;
@@ -614,7 +614,7 @@ for(const propertyName in value) {
 propertyCount++;
 const propertyValue = value[propertyName as keyof typeof value];
 if(new RegExp("^([0-9]{3})$|^(default)$").test(propertyName)) {
-if(!isPatternProperties093Default(propertyValue)) {
+if(!isResponses093Default(propertyValue)) {
 return false;
 }
 continue;
@@ -650,13 +650,13 @@ return true;
 }
 function _isOneOfResponseValue(value: unknown): value is unknown {
 let validCounter = 0;
-if(isResponseValueOneOf0(value)) {
+if(isResponseValue0(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
 return false
 }
-if(isResponseValueOneOf1(value)) {
+if(isResponseValue1(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
@@ -685,22 +685,22 @@ for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
 switch(propertyName) {
 case "description":
-if(!isResponsePropertiesDescription(propertyValue)) {
+if(!isResponseDescription(propertyValue)) {
 return false;
 }
 continue;
 case "schema":
-if(!isResponsePropertiesSchema(propertyValue)) {
+if(!isResponseSchema(propertyValue)) {
 return false;
 }
 continue;
 case "headers":
-if(!isPropertiesHeaders(propertyValue)) {
+if(!isResponseHeaders(propertyValue)) {
 return false;
 }
 continue;
 case "examples":
-if(!isPropertiesExamples(propertyValue)) {
+if(!isResponseExamples(propertyValue)) {
 return false;
 }
 continue;
@@ -766,82 +766,82 @@ return false;
 }
 continue;
 case "items":
-if(!isHeaderPropertiesItems(propertyValue)) {
+if(!isHeaderItems(propertyValue)) {
 return false;
 }
 continue;
 case "collectionFormat":
-if(!isHeaderPropertiesCollectionFormat(propertyValue)) {
+if(!isHeaderCollectionFormat(propertyValue)) {
 return false;
 }
 continue;
 case "default":
-if(!isHeaderPropertiesDefault(propertyValue)) {
+if(!isHeaderDefault(propertyValue)) {
 return false;
 }
 continue;
 case "maximum":
-if(!isHeaderPropertiesMaximum(propertyValue)) {
+if(!isHeaderMaximum(propertyValue)) {
 return false;
 }
 continue;
 case "exclusiveMaximum":
-if(!isHeaderPropertiesExclusiveMaximum(propertyValue)) {
+if(!isHeaderExclusiveMaximum(propertyValue)) {
 return false;
 }
 continue;
 case "minimum":
-if(!isHeaderPropertiesMinimum(propertyValue)) {
+if(!isHeaderMinimum(propertyValue)) {
 return false;
 }
 continue;
 case "exclusiveMinimum":
-if(!isHeaderPropertiesExclusiveMinimum(propertyValue)) {
+if(!isHeaderExclusiveMinimum(propertyValue)) {
 return false;
 }
 continue;
 case "maxLength":
-if(!isHeaderPropertiesMaxLength(propertyValue)) {
+if(!isHeaderMaxLength(propertyValue)) {
 return false;
 }
 continue;
 case "minLength":
-if(!isHeaderPropertiesMinLength(propertyValue)) {
+if(!isHeaderMinLength(propertyValue)) {
 return false;
 }
 continue;
 case "pattern":
-if(!isHeaderPropertiesPattern(propertyValue)) {
+if(!isHeaderPattern(propertyValue)) {
 return false;
 }
 continue;
 case "maxItems":
-if(!isHeaderPropertiesMaxItems(propertyValue)) {
+if(!isHeaderMaxItems(propertyValue)) {
 return false;
 }
 continue;
 case "minItems":
-if(!isHeaderPropertiesMinItems(propertyValue)) {
+if(!isHeaderMinItems(propertyValue)) {
 return false;
 }
 continue;
 case "uniqueItems":
-if(!isHeaderPropertiesUniqueItems(propertyValue)) {
+if(!isHeaderUniqueItems(propertyValue)) {
 return false;
 }
 continue;
 case "enum":
-if(!isHeaderPropertiesEnum(propertyValue)) {
+if(!isHeaderEnum(propertyValue)) {
 return false;
 }
 continue;
 case "multipleOf":
-if(!isHeaderPropertiesMultipleOf(propertyValue)) {
+if(!isHeaderMultipleOf(propertyValue)) {
 return false;
 }
 continue;
 case "description":
-if(!isHeaderPropertiesDescription(propertyValue)) {
+if(!isHeaderDescription(propertyValue)) {
 return false;
 }
 continue;
@@ -887,7 +887,7 @@ for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
 switch(propertyName) {
 case "description":
-if(!isBodyParameterPropertiesDescription(propertyValue)) {
+if(!isBodyParameterDescription(propertyValue)) {
 return false;
 }
 continue;
@@ -907,7 +907,7 @@ return false;
 }
 continue;
 case "schema":
-if(!isBodyParameterPropertiesSchema(propertyValue)) {
+if(!isBodyParameterSchema(propertyValue)) {
 return false;
 }
 continue;
@@ -950,7 +950,7 @@ return false;
 }
 continue;
 case "description":
-if(!isHeaderParameterSubSchemaPropertiesDescription(propertyValue)) {
+if(!isHeaderParameterSubSchemaDescription(propertyValue)) {
 return false;
 }
 continue;
@@ -970,77 +970,77 @@ return false;
 }
 continue;
 case "items":
-if(!isHeaderParameterSubSchemaPropertiesItems(propertyValue)) {
+if(!isHeaderParameterSubSchemaItems(propertyValue)) {
 return false;
 }
 continue;
 case "collectionFormat":
-if(!isHeaderParameterSubSchemaPropertiesCollectionFormat(propertyValue)) {
+if(!isHeaderParameterSubSchemaCollectionFormat(propertyValue)) {
 return false;
 }
 continue;
 case "default":
-if(!isHeaderParameterSubSchemaPropertiesDefault(propertyValue)) {
+if(!isHeaderParameterSubSchemaDefault(propertyValue)) {
 return false;
 }
 continue;
 case "maximum":
-if(!isHeaderParameterSubSchemaPropertiesMaximum(propertyValue)) {
+if(!isHeaderParameterSubSchemaMaximum(propertyValue)) {
 return false;
 }
 continue;
 case "exclusiveMaximum":
-if(!isHeaderParameterSubSchemaPropertiesExclusiveMaximum(propertyValue)) {
+if(!isHeaderParameterSubSchemaExclusiveMaximum(propertyValue)) {
 return false;
 }
 continue;
 case "minimum":
-if(!isHeaderParameterSubSchemaPropertiesMinimum(propertyValue)) {
+if(!isHeaderParameterSubSchemaMinimum(propertyValue)) {
 return false;
 }
 continue;
 case "exclusiveMinimum":
-if(!isHeaderParameterSubSchemaPropertiesExclusiveMinimum(propertyValue)) {
+if(!isHeaderParameterSubSchemaExclusiveMinimum(propertyValue)) {
 return false;
 }
 continue;
 case "maxLength":
-if(!isHeaderParameterSubSchemaPropertiesMaxLength(propertyValue)) {
+if(!isHeaderParameterSubSchemaMaxLength(propertyValue)) {
 return false;
 }
 continue;
 case "minLength":
-if(!isHeaderParameterSubSchemaPropertiesMinLength(propertyValue)) {
+if(!isHeaderParameterSubSchemaMinLength(propertyValue)) {
 return false;
 }
 continue;
 case "pattern":
-if(!isHeaderParameterSubSchemaPropertiesPattern(propertyValue)) {
+if(!isHeaderParameterSubSchemaPattern(propertyValue)) {
 return false;
 }
 continue;
 case "maxItems":
-if(!isHeaderParameterSubSchemaPropertiesMaxItems(propertyValue)) {
+if(!isHeaderParameterSubSchemaMaxItems(propertyValue)) {
 return false;
 }
 continue;
 case "minItems":
-if(!isHeaderParameterSubSchemaPropertiesMinItems(propertyValue)) {
+if(!isHeaderParameterSubSchemaMinItems(propertyValue)) {
 return false;
 }
 continue;
 case "uniqueItems":
-if(!isHeaderParameterSubSchemaPropertiesUniqueItems(propertyValue)) {
+if(!isHeaderParameterSubSchemaUniqueItems(propertyValue)) {
 return false;
 }
 continue;
 case "enum":
-if(!isHeaderParameterSubSchemaPropertiesEnum(propertyValue)) {
+if(!isHeaderParameterSubSchemaEnum(propertyValue)) {
 return false;
 }
 continue;
 case "multipleOf":
-if(!isHeaderParameterSubSchemaPropertiesMultipleOf(propertyValue)) {
+if(!isHeaderParameterSubSchemaMultipleOf(propertyValue)) {
 return false;
 }
 continue;
@@ -1083,7 +1083,7 @@ return false;
 }
 continue;
 case "description":
-if(!isQueryParameterSubSchemaPropertiesDescription(propertyValue)) {
+if(!isQueryParameterSubSchemaDescription(propertyValue)) {
 return false;
 }
 continue;
@@ -1108,77 +1108,77 @@ return false;
 }
 continue;
 case "items":
-if(!isQueryParameterSubSchemaPropertiesItems(propertyValue)) {
+if(!isQueryParameterSubSchemaItems(propertyValue)) {
 return false;
 }
 continue;
 case "collectionFormat":
-if(!isQueryParameterSubSchemaPropertiesCollectionFormat(propertyValue)) {
+if(!isQueryParameterSubSchemaCollectionFormat(propertyValue)) {
 return false;
 }
 continue;
 case "default":
-if(!isQueryParameterSubSchemaPropertiesDefault(propertyValue)) {
+if(!isQueryParameterSubSchemaDefault(propertyValue)) {
 return false;
 }
 continue;
 case "maximum":
-if(!isQueryParameterSubSchemaPropertiesMaximum(propertyValue)) {
+if(!isQueryParameterSubSchemaMaximum(propertyValue)) {
 return false;
 }
 continue;
 case "exclusiveMaximum":
-if(!isQueryParameterSubSchemaPropertiesExclusiveMaximum(propertyValue)) {
+if(!isQueryParameterSubSchemaExclusiveMaximum(propertyValue)) {
 return false;
 }
 continue;
 case "minimum":
-if(!isQueryParameterSubSchemaPropertiesMinimum(propertyValue)) {
+if(!isQueryParameterSubSchemaMinimum(propertyValue)) {
 return false;
 }
 continue;
 case "exclusiveMinimum":
-if(!isQueryParameterSubSchemaPropertiesExclusiveMinimum(propertyValue)) {
+if(!isQueryParameterSubSchemaExclusiveMinimum(propertyValue)) {
 return false;
 }
 continue;
 case "maxLength":
-if(!isQueryParameterSubSchemaPropertiesMaxLength(propertyValue)) {
+if(!isQueryParameterSubSchemaMaxLength(propertyValue)) {
 return false;
 }
 continue;
 case "minLength":
-if(!isQueryParameterSubSchemaPropertiesMinLength(propertyValue)) {
+if(!isQueryParameterSubSchemaMinLength(propertyValue)) {
 return false;
 }
 continue;
 case "pattern":
-if(!isQueryParameterSubSchemaPropertiesPattern(propertyValue)) {
+if(!isQueryParameterSubSchemaPattern(propertyValue)) {
 return false;
 }
 continue;
 case "maxItems":
-if(!isQueryParameterSubSchemaPropertiesMaxItems(propertyValue)) {
+if(!isQueryParameterSubSchemaMaxItems(propertyValue)) {
 return false;
 }
 continue;
 case "minItems":
-if(!isQueryParameterSubSchemaPropertiesMinItems(propertyValue)) {
+if(!isQueryParameterSubSchemaMinItems(propertyValue)) {
 return false;
 }
 continue;
 case "uniqueItems":
-if(!isQueryParameterSubSchemaPropertiesUniqueItems(propertyValue)) {
+if(!isQueryParameterSubSchemaUniqueItems(propertyValue)) {
 return false;
 }
 continue;
 case "enum":
-if(!isQueryParameterSubSchemaPropertiesEnum(propertyValue)) {
+if(!isQueryParameterSubSchemaEnum(propertyValue)) {
 return false;
 }
 continue;
 case "multipleOf":
-if(!isQueryParameterSubSchemaPropertiesMultipleOf(propertyValue)) {
+if(!isQueryParameterSubSchemaMultipleOf(propertyValue)) {
 return false;
 }
 continue;
@@ -1221,7 +1221,7 @@ return false;
 }
 continue;
 case "description":
-if(!isFormDataParameterSubSchemaPropertiesDescription(propertyValue)) {
+if(!isFormDataParameterSubSchemaDescription(propertyValue)) {
 return false;
 }
 continue;
@@ -1246,77 +1246,77 @@ return false;
 }
 continue;
 case "items":
-if(!isFormDataParameterSubSchemaPropertiesItems(propertyValue)) {
+if(!isFormDataParameterSubSchemaItems(propertyValue)) {
 return false;
 }
 continue;
 case "collectionFormat":
-if(!isFormDataParameterSubSchemaPropertiesCollectionFormat(propertyValue)) {
+if(!isFormDataParameterSubSchemaCollectionFormat(propertyValue)) {
 return false;
 }
 continue;
 case "default":
-if(!isFormDataParameterSubSchemaPropertiesDefault(propertyValue)) {
+if(!isFormDataParameterSubSchemaDefault(propertyValue)) {
 return false;
 }
 continue;
 case "maximum":
-if(!isFormDataParameterSubSchemaPropertiesMaximum(propertyValue)) {
+if(!isFormDataParameterSubSchemaMaximum(propertyValue)) {
 return false;
 }
 continue;
 case "exclusiveMaximum":
-if(!isFormDataParameterSubSchemaPropertiesExclusiveMaximum(propertyValue)) {
+if(!isFormDataParameterSubSchemaExclusiveMaximum(propertyValue)) {
 return false;
 }
 continue;
 case "minimum":
-if(!isFormDataParameterSubSchemaPropertiesMinimum(propertyValue)) {
+if(!isFormDataParameterSubSchemaMinimum(propertyValue)) {
 return false;
 }
 continue;
 case "exclusiveMinimum":
-if(!isFormDataParameterSubSchemaPropertiesExclusiveMinimum(propertyValue)) {
+if(!isFormDataParameterSubSchemaExclusiveMinimum(propertyValue)) {
 return false;
 }
 continue;
 case "maxLength":
-if(!isFormDataParameterSubSchemaPropertiesMaxLength(propertyValue)) {
+if(!isFormDataParameterSubSchemaMaxLength(propertyValue)) {
 return false;
 }
 continue;
 case "minLength":
-if(!isFormDataParameterSubSchemaPropertiesMinLength(propertyValue)) {
+if(!isFormDataParameterSubSchemaMinLength(propertyValue)) {
 return false;
 }
 continue;
 case "pattern":
-if(!isFormDataParameterSubSchemaPropertiesPattern(propertyValue)) {
+if(!isFormDataParameterSubSchemaPattern(propertyValue)) {
 return false;
 }
 continue;
 case "maxItems":
-if(!isFormDataParameterSubSchemaPropertiesMaxItems(propertyValue)) {
+if(!isFormDataParameterSubSchemaMaxItems(propertyValue)) {
 return false;
 }
 continue;
 case "minItems":
-if(!isFormDataParameterSubSchemaPropertiesMinItems(propertyValue)) {
+if(!isFormDataParameterSubSchemaMinItems(propertyValue)) {
 return false;
 }
 continue;
 case "uniqueItems":
-if(!isFormDataParameterSubSchemaPropertiesUniqueItems(propertyValue)) {
+if(!isFormDataParameterSubSchemaUniqueItems(propertyValue)) {
 return false;
 }
 continue;
 case "enum":
-if(!isFormDataParameterSubSchemaPropertiesEnum(propertyValue)) {
+if(!isFormDataParameterSubSchemaEnum(propertyValue)) {
 return false;
 }
 continue;
 case "multipleOf":
-if(!isFormDataParameterSubSchemaPropertiesMultipleOf(propertyValue)) {
+if(!isFormDataParameterSubSchemaMultipleOf(propertyValue)) {
 return false;
 }
 continue;
@@ -1362,7 +1362,7 @@ return false;
 }
 continue;
 case "description":
-if(!isPathParameterSubSchemaPropertiesDescription(propertyValue)) {
+if(!isPathParameterSubSchemaDescription(propertyValue)) {
 return false;
 }
 continue;
@@ -1382,77 +1382,77 @@ return false;
 }
 continue;
 case "items":
-if(!isPathParameterSubSchemaPropertiesItems(propertyValue)) {
+if(!isPathParameterSubSchemaItems(propertyValue)) {
 return false;
 }
 continue;
 case "collectionFormat":
-if(!isPathParameterSubSchemaPropertiesCollectionFormat(propertyValue)) {
+if(!isPathParameterSubSchemaCollectionFormat(propertyValue)) {
 return false;
 }
 continue;
 case "default":
-if(!isPathParameterSubSchemaPropertiesDefault(propertyValue)) {
+if(!isPathParameterSubSchemaDefault(propertyValue)) {
 return false;
 }
 continue;
 case "maximum":
-if(!isPathParameterSubSchemaPropertiesMaximum(propertyValue)) {
+if(!isPathParameterSubSchemaMaximum(propertyValue)) {
 return false;
 }
 continue;
 case "exclusiveMaximum":
-if(!isPathParameterSubSchemaPropertiesExclusiveMaximum(propertyValue)) {
+if(!isPathParameterSubSchemaExclusiveMaximum(propertyValue)) {
 return false;
 }
 continue;
 case "minimum":
-if(!isPathParameterSubSchemaPropertiesMinimum(propertyValue)) {
+if(!isPathParameterSubSchemaMinimum(propertyValue)) {
 return false;
 }
 continue;
 case "exclusiveMinimum":
-if(!isPathParameterSubSchemaPropertiesExclusiveMinimum(propertyValue)) {
+if(!isPathParameterSubSchemaExclusiveMinimum(propertyValue)) {
 return false;
 }
 continue;
 case "maxLength":
-if(!isPathParameterSubSchemaPropertiesMaxLength(propertyValue)) {
+if(!isPathParameterSubSchemaMaxLength(propertyValue)) {
 return false;
 }
 continue;
 case "minLength":
-if(!isPathParameterSubSchemaPropertiesMinLength(propertyValue)) {
+if(!isPathParameterSubSchemaMinLength(propertyValue)) {
 return false;
 }
 continue;
 case "pattern":
-if(!isPathParameterSubSchemaPropertiesPattern(propertyValue)) {
+if(!isPathParameterSubSchemaPattern(propertyValue)) {
 return false;
 }
 continue;
 case "maxItems":
-if(!isPathParameterSubSchemaPropertiesMaxItems(propertyValue)) {
+if(!isPathParameterSubSchemaMaxItems(propertyValue)) {
 return false;
 }
 continue;
 case "minItems":
-if(!isPathParameterSubSchemaPropertiesMinItems(propertyValue)) {
+if(!isPathParameterSubSchemaMinItems(propertyValue)) {
 return false;
 }
 continue;
 case "uniqueItems":
-if(!isPathParameterSubSchemaPropertiesUniqueItems(propertyValue)) {
+if(!isPathParameterSubSchemaUniqueItems(propertyValue)) {
 return false;
 }
 continue;
 case "enum":
-if(!isPathParameterSubSchemaPropertiesEnum(propertyValue)) {
+if(!isPathParameterSubSchemaEnum(propertyValue)) {
 return false;
 }
 continue;
 case "multipleOf":
-if(!isPathParameterSubSchemaPropertiesMultipleOf(propertyValue)) {
+if(!isPathParameterSubSchemaMultipleOf(propertyValue)) {
 return false;
 }
 continue;
@@ -1500,25 +1500,25 @@ return true;
 }
 function _isOneOfNonBodyParameter(value: unknown): value is unknown {
 let validCounter = 0;
-if(isNonBodyParameterOneOf0(value)) {
+if(isNonBodyParameter0(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
 return false
 }
-if(isNonBodyParameterOneOf1(value)) {
+if(isNonBodyParameter1(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
 return false
 }
-if(isNonBodyParameterOneOf2(value)) {
+if(isNonBodyParameter2(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
 return false
 }
-if(isNonBodyParameterOneOf3(value)) {
+if(isNonBodyParameter3(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
@@ -1538,13 +1538,13 @@ return true;
 }
 function _isOneOfParameter(value: unknown): value is unknown {
 let validCounter = 0;
-if(isParameterOneOf0(value)) {
+if(isParameter0(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
 return false
 }
-if(isParameterOneOf1(value)) {
+if(isParameter1(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
@@ -1580,72 +1580,72 @@ return false;
 }
 continue;
 case "title":
-if(!isDefinitionsSchemaPropertiesTitle(propertyValue)) {
+if(!isSchemaTitle(propertyValue)) {
 return false;
 }
 continue;
 case "description":
-if(!isDefinitionsSchemaPropertiesDescription(propertyValue)) {
+if(!isSchemaDescription(propertyValue)) {
 return false;
 }
 continue;
 case "default":
-if(!isDefinitionsSchemaPropertiesDefault(propertyValue)) {
+if(!isSchemaDefault(propertyValue)) {
 return false;
 }
 continue;
 case "multipleOf":
-if(!isDefinitionsSchemaPropertiesMultipleOf(propertyValue)) {
+if(!isSchemaMultipleOf(propertyValue)) {
 return false;
 }
 continue;
 case "maximum":
-if(!isDefinitionsSchemaPropertiesMaximum(propertyValue)) {
+if(!isSchemaMaximum(propertyValue)) {
 return false;
 }
 continue;
 case "exclusiveMaximum":
-if(!isDefinitionsSchemaPropertiesExclusiveMaximum(propertyValue)) {
+if(!isSchemaExclusiveMaximum(propertyValue)) {
 return false;
 }
 continue;
 case "minimum":
-if(!isDefinitionsSchemaPropertiesMinimum(propertyValue)) {
+if(!isSchemaMinimum(propertyValue)) {
 return false;
 }
 continue;
 case "exclusiveMinimum":
-if(!isDefinitionsSchemaPropertiesExclusiveMinimum(propertyValue)) {
+if(!isSchemaExclusiveMinimum(propertyValue)) {
 return false;
 }
 continue;
 case "maxLength":
-if(!isSchemaPropertiesMaxLength(propertyValue)) {
+if(!isSchemaMaxLength(propertyValue)) {
 return false;
 }
 continue;
 case "minLength":
-if(!isSchemaPropertiesMinLength(propertyValue)) {
+if(!isSchemaMinLength(propertyValue)) {
 return false;
 }
 continue;
 case "pattern":
-if(!isDefinitionsSchemaPropertiesPattern(propertyValue)) {
+if(!isSchemaPattern(propertyValue)) {
 return false;
 }
 continue;
 case "maxItems":
-if(!isSchemaPropertiesMaxItems(propertyValue)) {
+if(!isSchemaMaxItems(propertyValue)) {
 return false;
 }
 continue;
 case "minItems":
-if(!isSchemaPropertiesMinItems(propertyValue)) {
+if(!isSchemaMinItems(propertyValue)) {
 return false;
 }
 continue;
 case "uniqueItems":
-if(!isDefinitionsSchemaPropertiesUniqueItems(propertyValue)) {
+if(!isSchemaUniqueItems(propertyValue)) {
 return false;
 }
 continue;
@@ -1665,22 +1665,22 @@ return false;
 }
 continue;
 case "enum":
-if(!isDefinitionsSchemaPropertiesEnum(propertyValue)) {
+if(!isSchemaEnum(propertyValue)) {
 return false;
 }
 continue;
 case "additionalProperties":
-if(!isSchemaPropertiesAdditionalProperties(propertyValue)) {
+if(!isPropertiesSchemaAdditionalProperties(propertyValue)) {
 return false;
 }
 continue;
 case "type":
-if(!isDefinitionsSchemaType(propertyValue)) {
+if(!isSchemaType(propertyValue)) {
 return false;
 }
 continue;
 case "items":
-if(!isSchemaPropertiesItems(propertyValue)) {
+if(!isSchemaItems(propertyValue)) {
 return false;
 }
 continue;
@@ -1705,12 +1705,12 @@ return false;
 }
 continue;
 case "xml":
-if(!isPropertiesXml(propertyValue)) {
+if(!isSchemaXml(propertyValue)) {
 return false;
 }
 continue;
 case "externalDocs":
-if(!isSchemaPropertiesExternalDocs(propertyValue)) {
+if(!isSchemaExternalDocs(propertyValue)) {
 return false;
 }
 continue;
@@ -1721,12 +1721,12 @@ return false;
 continue;
 }
 if(new RegExp("^x-").test(propertyName)) {
-if(!isSchemaX(propertyValue)) {
+if(!isSchemaPatternPropertiesX(propertyValue)) {
 return false;
 }
 continue;
 }
-if(!isSchemaAdditionalProperties(propertyValue)) {
+if(!isDefinitionsSchemaAdditionalProperties(propertyValue)) {
 return false;
 }
 continue;
@@ -1756,17 +1756,17 @@ return false;
 }
 continue;
 case "title":
-if(!isFileSchemaPropertiesTitle(propertyValue)) {
+if(!isFileSchemaTitle(propertyValue)) {
 return false;
 }
 continue;
 case "description":
-if(!isFileSchemaPropertiesDescription(propertyValue)) {
+if(!isFileSchemaDescription(propertyValue)) {
 return false;
 }
 continue;
 case "default":
-if(!isFileSchemaPropertiesDefault(propertyValue)) {
+if(!isFileSchemaDefault(propertyValue)) {
 return false;
 }
 continue;
@@ -1786,7 +1786,7 @@ return false;
 }
 continue;
 case "externalDocs":
-if(!isFileSchemaPropertiesExternalDocs(propertyValue)) {
+if(!isFileSchemaExternalDocs(propertyValue)) {
 return false;
 }
 continue;
@@ -1834,77 +1834,77 @@ return false;
 }
 continue;
 case "items":
-if(!isPrimitivesItemsPropertiesItems(propertyValue)) {
+if(!isPrimitivesItemsItems(propertyValue)) {
 return false;
 }
 continue;
 case "collectionFormat":
-if(!isPrimitivesItemsPropertiesCollectionFormat(propertyValue)) {
+if(!isPrimitivesItemsCollectionFormat(propertyValue)) {
 return false;
 }
 continue;
 case "default":
-if(!isPrimitivesItemsPropertiesDefault(propertyValue)) {
+if(!isPrimitivesItemsDefault(propertyValue)) {
 return false;
 }
 continue;
 case "maximum":
-if(!isPrimitivesItemsPropertiesMaximum(propertyValue)) {
+if(!isPrimitivesItemsMaximum(propertyValue)) {
 return false;
 }
 continue;
 case "exclusiveMaximum":
-if(!isPrimitivesItemsPropertiesExclusiveMaximum(propertyValue)) {
+if(!isPrimitivesItemsExclusiveMaximum(propertyValue)) {
 return false;
 }
 continue;
 case "minimum":
-if(!isPrimitivesItemsPropertiesMinimum(propertyValue)) {
+if(!isPrimitivesItemsMinimum(propertyValue)) {
 return false;
 }
 continue;
 case "exclusiveMinimum":
-if(!isPrimitivesItemsPropertiesExclusiveMinimum(propertyValue)) {
+if(!isPrimitivesItemsExclusiveMinimum(propertyValue)) {
 return false;
 }
 continue;
 case "maxLength":
-if(!isPrimitivesItemsPropertiesMaxLength(propertyValue)) {
+if(!isPrimitivesItemsMaxLength(propertyValue)) {
 return false;
 }
 continue;
 case "minLength":
-if(!isPrimitivesItemsPropertiesMinLength(propertyValue)) {
+if(!isPrimitivesItemsMinLength(propertyValue)) {
 return false;
 }
 continue;
 case "pattern":
-if(!isPrimitivesItemsPropertiesPattern(propertyValue)) {
+if(!isPrimitivesItemsPattern(propertyValue)) {
 return false;
 }
 continue;
 case "maxItems":
-if(!isPrimitivesItemsPropertiesMaxItems(propertyValue)) {
+if(!isPrimitivesItemsMaxItems(propertyValue)) {
 return false;
 }
 continue;
 case "minItems":
-if(!isPrimitivesItemsPropertiesMinItems(propertyValue)) {
+if(!isPrimitivesItemsMinItems(propertyValue)) {
 return false;
 }
 continue;
 case "uniqueItems":
-if(!isPrimitivesItemsPropertiesUniqueItems(propertyValue)) {
+if(!isPrimitivesItemsUniqueItems(propertyValue)) {
 return false;
 }
 continue;
 case "enum":
-if(!isPrimitivesItemsPropertiesEnum(propertyValue)) {
+if(!isPrimitivesItemsEnum(propertyValue)) {
 return false;
 }
 continue;
 case "multipleOf":
-if(!isPrimitivesItemsPropertiesMultipleOf(propertyValue)) {
+if(!isPrimitivesItemsMultipleOf(propertyValue)) {
 return false;
 }
 continue;
@@ -2042,12 +2042,12 @@ return false;
 }
 continue;
 case "description":
-if(!isTagPropertiesDescription(propertyValue)) {
+if(!isTagDescription(propertyValue)) {
 return false;
 }
 continue;
 case "externalDocs":
-if(!isTagPropertiesExternalDocs(propertyValue)) {
+if(!isTagExternalDocs(propertyValue)) {
 return false;
 }
 continue;
@@ -2108,7 +2108,7 @@ return false;
 }
 continue;
 case "description":
-if(!isBasicAuthenticationSecurityPropertiesDescription(propertyValue)) {
+if(!isBasicAuthenticationSecurityDescription(propertyValue)) {
 return false;
 }
 continue;
@@ -2165,7 +2165,7 @@ return false;
 }
 continue;
 case "description":
-if(!isApiKeySecurityPropertiesDescription(propertyValue)) {
+if(!isApiKeySecurityDescription(propertyValue)) {
 return false;
 }
 continue;
@@ -2227,7 +2227,7 @@ return false;
 }
 continue;
 case "description":
-if(!isOauth2ImplicitSecurityPropertiesDescription(propertyValue)) {
+if(!isOauth2ImplicitSecurityDescription(propertyValue)) {
 return false;
 }
 continue;
@@ -2289,7 +2289,7 @@ return false;
 }
 continue;
 case "description":
-if(!isOauth2PasswordSecurityPropertiesDescription(propertyValue)) {
+if(!isOauth2PasswordSecurityDescription(propertyValue)) {
 return false;
 }
 continue;
@@ -2351,7 +2351,7 @@ return false;
 }
 continue;
 case "description":
-if(!isOauth2ApplicationSecurityPropertiesDescription(propertyValue)) {
+if(!isOauth2ApplicationSecurityDescription(propertyValue)) {
 return false;
 }
 continue;
@@ -2421,7 +2421,7 @@ return false;
 }
 continue;
 case "description":
-if(!isOauth2AccessCodeSecurityPropertiesDescription(propertyValue)) {
+if(!isOauth2AccessCodeSecurityDescription(propertyValue)) {
 return false;
 }
 continue;
@@ -2571,7 +2571,7 @@ return false;
 return true;
 }
 function _isReferenceDefinitionsTitle(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesTitle(value)) {
+if(!isDraft04Title(value)) {
 return false;
 }
 return true;
@@ -2584,7 +2584,7 @@ return false;
 return true;
 }
 function _isReferenceDefinitionsDescription(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesDescription(value)) {
+if(!isDraft04Description(value)) {
 return false;
 }
 return true;
@@ -2597,7 +2597,7 @@ return false;
 return true;
 }
 function _isReferenceDefinitionsDefault(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesDefault(value)) {
+if(!isDraft04Default(value)) {
 return false;
 }
 return true;
@@ -2610,7 +2610,7 @@ return false;
 return true;
 }
 function _isReferenceDefinitionsMultipleOf(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesMultipleOf(value)) {
+if(!isDraft04MultipleOf(value)) {
 return false;
 }
 return true;
@@ -2623,7 +2623,7 @@ return false;
 return true;
 }
 function _isReferenceDefinitionsMaximum(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesMaximum(value)) {
+if(!isDraft04Maximum(value)) {
 return false;
 }
 return true;
@@ -2636,7 +2636,7 @@ return false;
 return true;
 }
 function _isReferenceDefinitionsExclusiveMaximum(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesExclusiveMaximum(value)) {
+if(!isDraft04ExclusiveMaximum(value)) {
 return false;
 }
 return true;
@@ -2649,7 +2649,7 @@ return false;
 return true;
 }
 function _isReferenceDefinitionsMinimum(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesMinimum(value)) {
+if(!isDraft04Minimum(value)) {
 return false;
 }
 return true;
@@ -2662,7 +2662,7 @@ return false;
 return true;
 }
 function _isReferenceDefinitionsExclusiveMinimum(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesExclusiveMinimum(value)) {
+if(!isDraft04ExclusiveMinimum(value)) {
 return false;
 }
 return true;
@@ -2701,7 +2701,7 @@ return false;
 return true;
 }
 function _isReferenceDefinitionsPattern(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesPattern(value)) {
+if(!isDraft04Pattern(value)) {
 return false;
 }
 return true;
@@ -2740,7 +2740,7 @@ return false;
 return true;
 }
 function _isReferenceDefinitionsUniqueItems(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesUniqueItems(value)) {
+if(!isDraft04UniqueItems(value)) {
 return false;
 }
 return true;
@@ -2753,7 +2753,7 @@ return false;
 return true;
 }
 function _isReferenceDefinitionsEnum(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesEnum(value)) {
+if(!isDraft04Enum(value)) {
 return false;
 }
 return true;
@@ -2850,40 +2850,40 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/properties/schemes
-export function isSchemaJsonSchemes(value: unknown): value is types.SchemaJsonSchemes {
-if(!_isReferenceSchemaJsonSchemes(value)) {
+export function isPropertiesSchemes(value: unknown): value is types.PropertiesSchemes {
+if(!_isReferencePropertiesSchemes(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaJsonSchemes(value: unknown): value is unknown {
+function _isReferencePropertiesSchemes(value: unknown): value is unknown {
 if(!isSchemesList(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/properties/consumes
-export function isSchemaJsonConsumes(value: unknown): value is types.SchemaJsonConsumes {
-if(!_isAllOfSchemaJsonConsumes(value)) {
+export function isPropertiesConsumes(value: unknown): value is types.PropertiesConsumes {
+if(!_isAllOfPropertiesConsumes(value)) {
 return false;
 }
 return true;
 }
-function _isAllOfSchemaJsonConsumes(value: unknown): value is unknown {
-if(!isSchemaJsonConsumesAllOf0(value)) {
+function _isAllOfPropertiesConsumes(value: unknown): value is unknown {
+if(!isPropertiesAllOfConsumes0(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/properties/produces
-export function isSchemaJsonProduces(value: unknown): value is types.SchemaJsonProduces {
-if(!_isAllOfSchemaJsonProduces(value)) {
+export function isPropertiesProduces(value: unknown): value is types.PropertiesProduces {
+if(!_isAllOfPropertiesProduces(value)) {
 return false;
 }
 return true;
 }
-function _isAllOfSchemaJsonProduces(value: unknown): value is unknown {
-if(!isSchemaJsonProducesAllOf0(value)) {
+function _isAllOfPropertiesProduces(value: unknown): value is unknown {
+if(!isPropertiesAllOfProduces0(value)) {
 return false;
 }
 return true;
@@ -2915,39 +2915,39 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/properties/parameters
-export function isSchemaJsonParameters(value: unknown): value is types.SchemaJsonParameters {
-if(!_isReferenceSchemaJsonParameters(value)) {
+export function isPropertiesParameters(value: unknown): value is types.PropertiesParameters {
+if(!_isReferencePropertiesParameters(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaJsonParameters(value: unknown): value is unknown {
+function _isReferencePropertiesParameters(value: unknown): value is unknown {
 if(!isParameterDefinitions(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/properties/responses
-export function isSchemaJsonPropertiesResponses(value: unknown): value is types.SchemaJsonPropertiesResponses {
-if(!_isReferenceSchemaJsonPropertiesResponses(value)) {
+export function isPropertiesResponses(value: unknown): value is types.PropertiesResponses {
+if(!_isReferencePropertiesResponses(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaJsonPropertiesResponses(value: unknown): value is unknown {
+function _isReferencePropertiesResponses(value: unknown): value is unknown {
 if(!isResponseDefinitions(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/properties/security
-export function isSchemaJsonPropertiesSecurity(value: unknown): value is types.SchemaJsonPropertiesSecurity {
-if(!_isReferenceSchemaJsonPropertiesSecurity(value)) {
+export function isPropertiesSecurity(value: unknown): value is types.PropertiesSecurity {
+if(!_isReferencePropertiesSecurity(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaJsonPropertiesSecurity(value: unknown): value is unknown {
+function _isReferencePropertiesSecurity(value: unknown): value is unknown {
 if(!isDefinitionsSecurity(value)) {
 return false;
 }
@@ -2967,13 +2967,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/properties/tags
-export function isSchemaJsonTags(value: unknown): value is types.SchemaJsonTags {
-if(!_isArraySchemaJsonTags(value)) {
+export function isPropertiesTags(value: unknown): value is types.PropertiesTags {
+if(!_isArrayPropertiesTags(value)) {
 return false;
 }
 return true;
 }
-function _isArraySchemaJsonTags(value: unknown): value is unknown {
+function _isArrayPropertiesTags(value: unknown): value is unknown {
 if(!Array.isArray(value)) {
 return false;
 }
@@ -2984,56 +2984,56 @@ if(elementValueSeen.has(elementValue)) {
 return false;
 }
 elementValueSeen.add(elementValue);
-if(!isSchemaJsonTagsItems(elementValue)) {
+if(!isPropertiesTagsItems(elementValue)) {
 return false;
 }
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/properties/externalDocs
-export function isSchemaJsonPropertiesExternalDocs(value: unknown): value is types.SchemaJsonPropertiesExternalDocs {
-if(!_isReferenceSchemaJsonPropertiesExternalDocs(value)) {
+export function isPropertiesExternalDocs(value: unknown): value is types.PropertiesExternalDocs {
+if(!_isReferencePropertiesExternalDocs(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaJsonPropertiesExternalDocs(value: unknown): value is unknown {
+function _isReferencePropertiesExternalDocs(value: unknown): value is unknown {
 if(!isDefinitionsExternalDocs(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/additionalProperties
-export function isSchemaJsonAdditionalProperties(value: unknown): value is types.SchemaJsonAdditionalProperties {
-if(!_isNeverSchemaJsonAdditionalProperties(value)) {
+export function isV2AdditionalProperties(value: unknown): value is types.V2AdditionalProperties {
+if(!_isNeverV2AdditionalProperties(value)) {
 return false;
 }
 return true;
 }
-function _isNeverSchemaJsonAdditionalProperties(value: unknown): value is unknown {
+function _isNeverV2AdditionalProperties(value: unknown): value is unknown {
 return false;
 }
 // http://swagger.io/v2/schema.json#/patternProperties/^x-
-export function isSchemaJsonX(value: unknown): value is types.SchemaJsonX {
-if(!_isReferenceSchemaJsonX(value)) {
+export function isV2PatternPropertiesX(value: unknown): value is types.V2PatternPropertiesX {
+if(!_isReferenceV2PatternPropertiesX(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaJsonX(value: unknown): value is unknown {
+function _isReferenceV2PatternPropertiesX(value: unknown): value is unknown {
 if(!isVendorExtension(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/info/properties/title
-export function isInfoPropertiesTitle(value: unknown): value is types.InfoPropertiesTitle {
-if(!_isStringInfoPropertiesTitle(value)) {
+export function isInfoTitle(value: unknown): value is types.InfoTitle {
+if(!_isStringInfoTitle(value)) {
 return false;
 }
 return true;
 }
-function _isStringInfoPropertiesTitle(value: unknown): value is unknown {
+function _isStringInfoTitle(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
@@ -3053,13 +3053,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/info/properties/description
-export function isInfoPropertiesDescription(value: unknown): value is types.InfoPropertiesDescription {
-if(!_isStringInfoPropertiesDescription(value)) {
+export function isInfoDescription(value: unknown): value is types.InfoDescription {
+if(!_isStringInfoDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringInfoPropertiesDescription(value: unknown): value is unknown {
+function _isStringInfoDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
@@ -3079,26 +3079,26 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/info/properties/contact
-export function isPropertiesContact(value: unknown): value is types.PropertiesContact {
-if(!_isReferencePropertiesContact(value)) {
+export function isInfoContact(value: unknown): value is types.InfoContact {
+if(!_isReferenceInfoContact(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePropertiesContact(value: unknown): value is unknown {
+function _isReferenceInfoContact(value: unknown): value is unknown {
 if(!isDefinitionsContact(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/info/properties/license
-export function isPropertiesLicense(value: unknown): value is types.PropertiesLicense {
-if(!_isReferencePropertiesLicense(value)) {
+export function isInfoLicense(value: unknown): value is types.InfoLicense {
+if(!_isReferenceInfoLicense(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePropertiesLicense(value: unknown): value is unknown {
+function _isReferenceInfoLicense(value: unknown): value is unknown {
 if(!isDefinitionsLicense(value)) {
 return false;
 }
@@ -3314,13 +3314,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/externalDocs/properties/description
-export function isExternalDocsPropertiesDescription(value: unknown): value is types.ExternalDocsPropertiesDescription {
-if(!_isStringExternalDocsPropertiesDescription(value)) {
+export function isExternalDocsDescription(value: unknown): value is types.ExternalDocsDescription {
+if(!_isStringExternalDocsDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringExternalDocsPropertiesDescription(value: unknown): value is unknown {
+function _isStringExternalDocsDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
@@ -3410,26 +3410,26 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/description
-export function isOperationPropertiesDescription(value: unknown): value is types.OperationPropertiesDescription {
-if(!_isStringOperationPropertiesDescription(value)) {
+export function isOperationDescription(value: unknown): value is types.OperationDescription {
+if(!_isStringOperationDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringOperationPropertiesDescription(value: unknown): value is unknown {
+function _isStringOperationDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/externalDocs
-export function isOperationPropertiesExternalDocs(value: unknown): value is types.OperationPropertiesExternalDocs {
-if(!_isReferenceOperationPropertiesExternalDocs(value)) {
+export function isOperationExternalDocs(value: unknown): value is types.OperationExternalDocs {
+if(!_isReferenceOperationExternalDocs(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceOperationPropertiesExternalDocs(value: unknown): value is unknown {
+function _isReferenceOperationExternalDocs(value: unknown): value is unknown {
 if(!isDefinitionsExternalDocs(value)) {
 return false;
 }
@@ -3456,7 +3456,7 @@ return false;
 return true;
 }
 function _isAllOfOperationProduces(value: unknown): value is unknown {
-if(!isOperationProducesAllOf0(value)) {
+if(!isOperationAllOfProduces0(value)) {
 return false;
 }
 return true;
@@ -3469,7 +3469,7 @@ return false;
 return true;
 }
 function _isAllOfOperationConsumes(value: unknown): value is unknown {
-if(!isOperationConsumesAllOf0(value)) {
+if(!isOperationAllOfConsumes0(value)) {
 return false;
 }
 return true;
@@ -3488,13 +3488,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/responses
-export function isOperationPropertiesResponses(value: unknown): value is types.OperationPropertiesResponses {
-if(!_isReferenceOperationPropertiesResponses(value)) {
+export function isOperationResponses(value: unknown): value is types.OperationResponses {
+if(!_isReferenceOperationResponses(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceOperationPropertiesResponses(value: unknown): value is unknown {
+function _isReferenceOperationResponses(value: unknown): value is unknown {
 if(!isDefinitionsResponses(value)) {
 return false;
 }
@@ -3527,13 +3527,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/security
-export function isOperationPropertiesSecurity(value: unknown): value is types.OperationPropertiesSecurity {
-if(!_isReferenceOperationPropertiesSecurity(value)) {
+export function isOperationSecurity(value: unknown): value is types.OperationSecurity {
+if(!_isReferenceOperationSecurity(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceOperationPropertiesSecurity(value: unknown): value is unknown {
+function _isReferenceOperationSecurity(value: unknown): value is unknown {
 if(!isDefinitionsSecurity(value)) {
 return false;
 }
@@ -3713,13 +3713,13 @@ function _isNeverResponsesAdditionalProperties(value: unknown): value is unknown
 return false;
 }
 // http://swagger.io/v2/schema.json#/definitions/responses/patternProperties/^([0-9]{3})$|^(default)$
-export function isPatternProperties093Default(value: unknown): value is types.PatternProperties093Default {
-if(!_isReferencePatternProperties093Default(value)) {
+export function isResponses093Default(value: unknown): value is types.Responses093Default {
+if(!_isReferenceResponses093Default(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePatternProperties093Default(value: unknown): value is unknown {
+function _isReferenceResponses093Default(value: unknown): value is unknown {
 if(!isResponseValue(value)) {
 return false;
 }
@@ -3765,60 +3765,60 @@ continue;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/responseValue/oneOf/0
-export function isResponseValueOneOf0(value: unknown): value is types.ResponseValueOneOf0 {
-if(!_isReferenceResponseValueOneOf0(value)) {
+export function isResponseValue0(value: unknown): value is types.ResponseValue0 {
+if(!_isReferenceResponseValue0(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceResponseValueOneOf0(value: unknown): value is unknown {
+function _isReferenceResponseValue0(value: unknown): value is unknown {
 if(!isResponse(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/responseValue/oneOf/1
-export function isResponseValueOneOf1(value: unknown): value is types.ResponseValueOneOf1 {
-if(!_isReferenceResponseValueOneOf1(value)) {
+export function isResponseValue1(value: unknown): value is types.ResponseValue1 {
+if(!_isReferenceResponseValue1(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceResponseValueOneOf1(value: unknown): value is unknown {
+function _isReferenceResponseValue1(value: unknown): value is unknown {
 if(!isJsonReference(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/response/properties/description
-export function isResponsePropertiesDescription(value: unknown): value is types.ResponsePropertiesDescription {
-if(!_isStringResponsePropertiesDescription(value)) {
+export function isResponseDescription(value: unknown): value is types.ResponseDescription {
+if(!_isStringResponseDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringResponsePropertiesDescription(value: unknown): value is unknown {
+function _isStringResponseDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/response/properties/schema
-export function isResponsePropertiesSchema(value: unknown): value is types.ResponsePropertiesSchema {
-if(!_isOneOfResponsePropertiesSchema(value)) {
+export function isResponseSchema(value: unknown): value is types.ResponseSchema {
+if(!_isOneOfResponseSchema(value)) {
 return false;
 }
 return true;
 }
-function _isOneOfResponsePropertiesSchema(value: unknown): value is unknown {
+function _isOneOfResponseSchema(value: unknown): value is unknown {
 let validCounter = 0;
-if(isSchemaOneOf0(value)) {
+if(isResponse0(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
 return false
 }
-if(isSchemaOneOf1(value)) {
+if(isResponse1(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
@@ -3830,26 +3830,26 @@ return false
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/response/properties/headers
-export function isPropertiesHeaders(value: unknown): value is types.PropertiesHeaders {
-if(!_isReferencePropertiesHeaders(value)) {
+export function isResponseHeaders(value: unknown): value is types.ResponseHeaders {
+if(!_isReferenceResponseHeaders(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePropertiesHeaders(value: unknown): value is unknown {
+function _isReferenceResponseHeaders(value: unknown): value is unknown {
 if(!isDefinitionsHeaders(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/response/properties/examples
-export function isPropertiesExamples(value: unknown): value is types.PropertiesExamples {
-if(!_isReferencePropertiesExamples(value)) {
+export function isResponseExamples(value: unknown): value is types.ResponseExamples {
+if(!_isReferenceResponseExamples(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePropertiesExamples(value: unknown): value is unknown {
+function _isReferenceResponseExamples(value: unknown): value is unknown {
 if(!isDefinitionsExamples(value)) {
 return false;
 }
@@ -3921,208 +3921,208 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/header/properties/items
-export function isHeaderPropertiesItems(value: unknown): value is types.HeaderPropertiesItems {
-if(!_isReferenceHeaderPropertiesItems(value)) {
+export function isHeaderItems(value: unknown): value is types.HeaderItems {
+if(!_isReferenceHeaderItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderPropertiesItems(value: unknown): value is unknown {
+function _isReferenceHeaderItems(value: unknown): value is unknown {
 if(!isPrimitivesItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/header/properties/collectionFormat
-export function isHeaderPropertiesCollectionFormat(value: unknown): value is types.HeaderPropertiesCollectionFormat {
-if(!_isReferenceHeaderPropertiesCollectionFormat(value)) {
+export function isHeaderCollectionFormat(value: unknown): value is types.HeaderCollectionFormat {
+if(!_isReferenceHeaderCollectionFormat(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderPropertiesCollectionFormat(value: unknown): value is unknown {
+function _isReferenceHeaderCollectionFormat(value: unknown): value is unknown {
 if(!isDefinitionsCollectionFormat(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/header/properties/default
-export function isHeaderPropertiesDefault(value: unknown): value is types.HeaderPropertiesDefault {
-if(!_isReferenceHeaderPropertiesDefault(value)) {
+export function isHeaderDefault(value: unknown): value is types.HeaderDefault {
+if(!_isReferenceHeaderDefault(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderPropertiesDefault(value: unknown): value is unknown {
+function _isReferenceHeaderDefault(value: unknown): value is unknown {
 if(!isDefinitionsDefault(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/header/properties/maximum
-export function isHeaderPropertiesMaximum(value: unknown): value is types.HeaderPropertiesMaximum {
-if(!_isReferenceHeaderPropertiesMaximum(value)) {
+export function isHeaderMaximum(value: unknown): value is types.HeaderMaximum {
+if(!_isReferenceHeaderMaximum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderPropertiesMaximum(value: unknown): value is unknown {
+function _isReferenceHeaderMaximum(value: unknown): value is unknown {
 if(!isDefinitionsMaximum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/header/properties/exclusiveMaximum
-export function isHeaderPropertiesExclusiveMaximum(value: unknown): value is types.HeaderPropertiesExclusiveMaximum {
-if(!_isReferenceHeaderPropertiesExclusiveMaximum(value)) {
+export function isHeaderExclusiveMaximum(value: unknown): value is types.HeaderExclusiveMaximum {
+if(!_isReferenceHeaderExclusiveMaximum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderPropertiesExclusiveMaximum(value: unknown): value is unknown {
+function _isReferenceHeaderExclusiveMaximum(value: unknown): value is unknown {
 if(!isDefinitionsExclusiveMaximum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/header/properties/minimum
-export function isHeaderPropertiesMinimum(value: unknown): value is types.HeaderPropertiesMinimum {
-if(!_isReferenceHeaderPropertiesMinimum(value)) {
+export function isHeaderMinimum(value: unknown): value is types.HeaderMinimum {
+if(!_isReferenceHeaderMinimum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderPropertiesMinimum(value: unknown): value is unknown {
+function _isReferenceHeaderMinimum(value: unknown): value is unknown {
 if(!isDefinitionsMinimum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/header/properties/exclusiveMinimum
-export function isHeaderPropertiesExclusiveMinimum(value: unknown): value is types.HeaderPropertiesExclusiveMinimum {
-if(!_isReferenceHeaderPropertiesExclusiveMinimum(value)) {
+export function isHeaderExclusiveMinimum(value: unknown): value is types.HeaderExclusiveMinimum {
+if(!_isReferenceHeaderExclusiveMinimum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderPropertiesExclusiveMinimum(value: unknown): value is unknown {
+function _isReferenceHeaderExclusiveMinimum(value: unknown): value is unknown {
 if(!isDefinitionsExclusiveMinimum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/header/properties/maxLength
-export function isHeaderPropertiesMaxLength(value: unknown): value is types.HeaderPropertiesMaxLength {
-if(!_isReferenceHeaderPropertiesMaxLength(value)) {
+export function isHeaderMaxLength(value: unknown): value is types.HeaderMaxLength {
+if(!_isReferenceHeaderMaxLength(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderPropertiesMaxLength(value: unknown): value is unknown {
+function _isReferenceHeaderMaxLength(value: unknown): value is unknown {
 if(!isDefinitionsMaxLength(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/header/properties/minLength
-export function isHeaderPropertiesMinLength(value: unknown): value is types.HeaderPropertiesMinLength {
-if(!_isReferenceHeaderPropertiesMinLength(value)) {
+export function isHeaderMinLength(value: unknown): value is types.HeaderMinLength {
+if(!_isReferenceHeaderMinLength(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderPropertiesMinLength(value: unknown): value is unknown {
+function _isReferenceHeaderMinLength(value: unknown): value is unknown {
 if(!isDefinitionsMinLength(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/header/properties/pattern
-export function isHeaderPropertiesPattern(value: unknown): value is types.HeaderPropertiesPattern {
-if(!_isReferenceHeaderPropertiesPattern(value)) {
+export function isHeaderPattern(value: unknown): value is types.HeaderPattern {
+if(!_isReferenceHeaderPattern(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderPropertiesPattern(value: unknown): value is unknown {
+function _isReferenceHeaderPattern(value: unknown): value is unknown {
 if(!isDefinitionsPattern(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/header/properties/maxItems
-export function isHeaderPropertiesMaxItems(value: unknown): value is types.HeaderPropertiesMaxItems {
-if(!_isReferenceHeaderPropertiesMaxItems(value)) {
+export function isHeaderMaxItems(value: unknown): value is types.HeaderMaxItems {
+if(!_isReferenceHeaderMaxItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderPropertiesMaxItems(value: unknown): value is unknown {
+function _isReferenceHeaderMaxItems(value: unknown): value is unknown {
 if(!isDefinitionsMaxItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/header/properties/minItems
-export function isHeaderPropertiesMinItems(value: unknown): value is types.HeaderPropertiesMinItems {
-if(!_isReferenceHeaderPropertiesMinItems(value)) {
+export function isHeaderMinItems(value: unknown): value is types.HeaderMinItems {
+if(!_isReferenceHeaderMinItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderPropertiesMinItems(value: unknown): value is unknown {
+function _isReferenceHeaderMinItems(value: unknown): value is unknown {
 if(!isDefinitionsMinItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/header/properties/uniqueItems
-export function isHeaderPropertiesUniqueItems(value: unknown): value is types.HeaderPropertiesUniqueItems {
-if(!_isReferenceHeaderPropertiesUniqueItems(value)) {
+export function isHeaderUniqueItems(value: unknown): value is types.HeaderUniqueItems {
+if(!_isReferenceHeaderUniqueItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderPropertiesUniqueItems(value: unknown): value is unknown {
+function _isReferenceHeaderUniqueItems(value: unknown): value is unknown {
 if(!isDefinitionsUniqueItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/header/properties/enum
-export function isHeaderPropertiesEnum(value: unknown): value is types.HeaderPropertiesEnum {
-if(!_isReferenceHeaderPropertiesEnum(value)) {
+export function isHeaderEnum(value: unknown): value is types.HeaderEnum {
+if(!_isReferenceHeaderEnum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderPropertiesEnum(value: unknown): value is unknown {
+function _isReferenceHeaderEnum(value: unknown): value is unknown {
 if(!isDefinitionsEnum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/header/properties/multipleOf
-export function isHeaderPropertiesMultipleOf(value: unknown): value is types.HeaderPropertiesMultipleOf {
-if(!_isReferenceHeaderPropertiesMultipleOf(value)) {
+export function isHeaderMultipleOf(value: unknown): value is types.HeaderMultipleOf {
+if(!_isReferenceHeaderMultipleOf(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderPropertiesMultipleOf(value: unknown): value is unknown {
+function _isReferenceHeaderMultipleOf(value: unknown): value is unknown {
 if(!isDefinitionsMultipleOf(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/header/properties/description
-export function isHeaderPropertiesDescription(value: unknown): value is types.HeaderPropertiesDescription {
-if(!_isStringHeaderPropertiesDescription(value)) {
+export function isHeaderDescription(value: unknown): value is types.HeaderDescription {
+if(!_isStringHeaderDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringHeaderPropertiesDescription(value: unknown): value is unknown {
+function _isStringHeaderDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
@@ -4172,13 +4172,13 @@ function _isAnyVendorExtensionAdditionalItems(value: unknown): value is unknown 
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/bodyParameter/properties/description
-export function isBodyParameterPropertiesDescription(value: unknown): value is types.BodyParameterPropertiesDescription {
-if(!_isStringBodyParameterPropertiesDescription(value)) {
+export function isBodyParameterDescription(value: unknown): value is types.BodyParameterDescription {
+if(!_isStringBodyParameterDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringBodyParameterPropertiesDescription(value: unknown): value is unknown {
+function _isStringBodyParameterDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
@@ -4227,13 +4227,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/bodyParameter/properties/schema
-export function isBodyParameterPropertiesSchema(value: unknown): value is types.BodyParameterPropertiesSchema {
-if(!_isReferenceBodyParameterPropertiesSchema(value)) {
+export function isBodyParameterSchema(value: unknown): value is types.BodyParameterSchema {
+if(!_isReferenceBodyParameterSchema(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceBodyParameterPropertiesSchema(value: unknown): value is unknown {
+function _isReferenceBodyParameterSchema(value: unknown): value is unknown {
 if(!isDefinitionsSchema(value)) {
 return false;
 }
@@ -4292,13 +4292,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/description
-export function isHeaderParameterSubSchemaPropertiesDescription(value: unknown): value is types.HeaderParameterSubSchemaPropertiesDescription {
-if(!_isStringHeaderParameterSubSchemaPropertiesDescription(value)) {
+export function isHeaderParameterSubSchemaDescription(value: unknown): value is types.HeaderParameterSubSchemaDescription {
+if(!_isStringHeaderParameterSubSchemaDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringHeaderParameterSubSchemaPropertiesDescription(value: unknown): value is unknown {
+function _isStringHeaderParameterSubSchemaDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
@@ -4347,195 +4347,195 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/items
-export function isHeaderParameterSubSchemaPropertiesItems(value: unknown): value is types.HeaderParameterSubSchemaPropertiesItems {
-if(!_isReferenceHeaderParameterSubSchemaPropertiesItems(value)) {
+export function isHeaderParameterSubSchemaItems(value: unknown): value is types.HeaderParameterSubSchemaItems {
+if(!_isReferenceHeaderParameterSubSchemaItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderParameterSubSchemaPropertiesItems(value: unknown): value is unknown {
+function _isReferenceHeaderParameterSubSchemaItems(value: unknown): value is unknown {
 if(!isPrimitivesItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/collectionFormat
-export function isHeaderParameterSubSchemaPropertiesCollectionFormat(value: unknown): value is types.HeaderParameterSubSchemaPropertiesCollectionFormat {
-if(!_isReferenceHeaderParameterSubSchemaPropertiesCollectionFormat(value)) {
+export function isHeaderParameterSubSchemaCollectionFormat(value: unknown): value is types.HeaderParameterSubSchemaCollectionFormat {
+if(!_isReferenceHeaderParameterSubSchemaCollectionFormat(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderParameterSubSchemaPropertiesCollectionFormat(value: unknown): value is unknown {
+function _isReferenceHeaderParameterSubSchemaCollectionFormat(value: unknown): value is unknown {
 if(!isDefinitionsCollectionFormat(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/default
-export function isHeaderParameterSubSchemaPropertiesDefault(value: unknown): value is types.HeaderParameterSubSchemaPropertiesDefault {
-if(!_isReferenceHeaderParameterSubSchemaPropertiesDefault(value)) {
+export function isHeaderParameterSubSchemaDefault(value: unknown): value is types.HeaderParameterSubSchemaDefault {
+if(!_isReferenceHeaderParameterSubSchemaDefault(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderParameterSubSchemaPropertiesDefault(value: unknown): value is unknown {
+function _isReferenceHeaderParameterSubSchemaDefault(value: unknown): value is unknown {
 if(!isDefinitionsDefault(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/maximum
-export function isHeaderParameterSubSchemaPropertiesMaximum(value: unknown): value is types.HeaderParameterSubSchemaPropertiesMaximum {
-if(!_isReferenceHeaderParameterSubSchemaPropertiesMaximum(value)) {
+export function isHeaderParameterSubSchemaMaximum(value: unknown): value is types.HeaderParameterSubSchemaMaximum {
+if(!_isReferenceHeaderParameterSubSchemaMaximum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderParameterSubSchemaPropertiesMaximum(value: unknown): value is unknown {
+function _isReferenceHeaderParameterSubSchemaMaximum(value: unknown): value is unknown {
 if(!isDefinitionsMaximum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/exclusiveMaximum
-export function isHeaderParameterSubSchemaPropertiesExclusiveMaximum(value: unknown): value is types.HeaderParameterSubSchemaPropertiesExclusiveMaximum {
-if(!_isReferenceHeaderParameterSubSchemaPropertiesExclusiveMaximum(value)) {
+export function isHeaderParameterSubSchemaExclusiveMaximum(value: unknown): value is types.HeaderParameterSubSchemaExclusiveMaximum {
+if(!_isReferenceHeaderParameterSubSchemaExclusiveMaximum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderParameterSubSchemaPropertiesExclusiveMaximum(value: unknown): value is unknown {
+function _isReferenceHeaderParameterSubSchemaExclusiveMaximum(value: unknown): value is unknown {
 if(!isDefinitionsExclusiveMaximum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/minimum
-export function isHeaderParameterSubSchemaPropertiesMinimum(value: unknown): value is types.HeaderParameterSubSchemaPropertiesMinimum {
-if(!_isReferenceHeaderParameterSubSchemaPropertiesMinimum(value)) {
+export function isHeaderParameterSubSchemaMinimum(value: unknown): value is types.HeaderParameterSubSchemaMinimum {
+if(!_isReferenceHeaderParameterSubSchemaMinimum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderParameterSubSchemaPropertiesMinimum(value: unknown): value is unknown {
+function _isReferenceHeaderParameterSubSchemaMinimum(value: unknown): value is unknown {
 if(!isDefinitionsMinimum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/exclusiveMinimum
-export function isHeaderParameterSubSchemaPropertiesExclusiveMinimum(value: unknown): value is types.HeaderParameterSubSchemaPropertiesExclusiveMinimum {
-if(!_isReferenceHeaderParameterSubSchemaPropertiesExclusiveMinimum(value)) {
+export function isHeaderParameterSubSchemaExclusiveMinimum(value: unknown): value is types.HeaderParameterSubSchemaExclusiveMinimum {
+if(!_isReferenceHeaderParameterSubSchemaExclusiveMinimum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderParameterSubSchemaPropertiesExclusiveMinimum(value: unknown): value is unknown {
+function _isReferenceHeaderParameterSubSchemaExclusiveMinimum(value: unknown): value is unknown {
 if(!isDefinitionsExclusiveMinimum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/maxLength
-export function isHeaderParameterSubSchemaPropertiesMaxLength(value: unknown): value is types.HeaderParameterSubSchemaPropertiesMaxLength {
-if(!_isReferenceHeaderParameterSubSchemaPropertiesMaxLength(value)) {
+export function isHeaderParameterSubSchemaMaxLength(value: unknown): value is types.HeaderParameterSubSchemaMaxLength {
+if(!_isReferenceHeaderParameterSubSchemaMaxLength(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderParameterSubSchemaPropertiesMaxLength(value: unknown): value is unknown {
+function _isReferenceHeaderParameterSubSchemaMaxLength(value: unknown): value is unknown {
 if(!isDefinitionsMaxLength(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/minLength
-export function isHeaderParameterSubSchemaPropertiesMinLength(value: unknown): value is types.HeaderParameterSubSchemaPropertiesMinLength {
-if(!_isReferenceHeaderParameterSubSchemaPropertiesMinLength(value)) {
+export function isHeaderParameterSubSchemaMinLength(value: unknown): value is types.HeaderParameterSubSchemaMinLength {
+if(!_isReferenceHeaderParameterSubSchemaMinLength(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderParameterSubSchemaPropertiesMinLength(value: unknown): value is unknown {
+function _isReferenceHeaderParameterSubSchemaMinLength(value: unknown): value is unknown {
 if(!isDefinitionsMinLength(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/pattern
-export function isHeaderParameterSubSchemaPropertiesPattern(value: unknown): value is types.HeaderParameterSubSchemaPropertiesPattern {
-if(!_isReferenceHeaderParameterSubSchemaPropertiesPattern(value)) {
+export function isHeaderParameterSubSchemaPattern(value: unknown): value is types.HeaderParameterSubSchemaPattern {
+if(!_isReferenceHeaderParameterSubSchemaPattern(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderParameterSubSchemaPropertiesPattern(value: unknown): value is unknown {
+function _isReferenceHeaderParameterSubSchemaPattern(value: unknown): value is unknown {
 if(!isDefinitionsPattern(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/maxItems
-export function isHeaderParameterSubSchemaPropertiesMaxItems(value: unknown): value is types.HeaderParameterSubSchemaPropertiesMaxItems {
-if(!_isReferenceHeaderParameterSubSchemaPropertiesMaxItems(value)) {
+export function isHeaderParameterSubSchemaMaxItems(value: unknown): value is types.HeaderParameterSubSchemaMaxItems {
+if(!_isReferenceHeaderParameterSubSchemaMaxItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderParameterSubSchemaPropertiesMaxItems(value: unknown): value is unknown {
+function _isReferenceHeaderParameterSubSchemaMaxItems(value: unknown): value is unknown {
 if(!isDefinitionsMaxItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/minItems
-export function isHeaderParameterSubSchemaPropertiesMinItems(value: unknown): value is types.HeaderParameterSubSchemaPropertiesMinItems {
-if(!_isReferenceHeaderParameterSubSchemaPropertiesMinItems(value)) {
+export function isHeaderParameterSubSchemaMinItems(value: unknown): value is types.HeaderParameterSubSchemaMinItems {
+if(!_isReferenceHeaderParameterSubSchemaMinItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderParameterSubSchemaPropertiesMinItems(value: unknown): value is unknown {
+function _isReferenceHeaderParameterSubSchemaMinItems(value: unknown): value is unknown {
 if(!isDefinitionsMinItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/uniqueItems
-export function isHeaderParameterSubSchemaPropertiesUniqueItems(value: unknown): value is types.HeaderParameterSubSchemaPropertiesUniqueItems {
-if(!_isReferenceHeaderParameterSubSchemaPropertiesUniqueItems(value)) {
+export function isHeaderParameterSubSchemaUniqueItems(value: unknown): value is types.HeaderParameterSubSchemaUniqueItems {
+if(!_isReferenceHeaderParameterSubSchemaUniqueItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderParameterSubSchemaPropertiesUniqueItems(value: unknown): value is unknown {
+function _isReferenceHeaderParameterSubSchemaUniqueItems(value: unknown): value is unknown {
 if(!isDefinitionsUniqueItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/enum
-export function isHeaderParameterSubSchemaPropertiesEnum(value: unknown): value is types.HeaderParameterSubSchemaPropertiesEnum {
-if(!_isReferenceHeaderParameterSubSchemaPropertiesEnum(value)) {
+export function isHeaderParameterSubSchemaEnum(value: unknown): value is types.HeaderParameterSubSchemaEnum {
+if(!_isReferenceHeaderParameterSubSchemaEnum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderParameterSubSchemaPropertiesEnum(value: unknown): value is unknown {
+function _isReferenceHeaderParameterSubSchemaEnum(value: unknown): value is unknown {
 if(!isDefinitionsEnum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/multipleOf
-export function isHeaderParameterSubSchemaPropertiesMultipleOf(value: unknown): value is types.HeaderParameterSubSchemaPropertiesMultipleOf {
-if(!_isReferenceHeaderParameterSubSchemaPropertiesMultipleOf(value)) {
+export function isHeaderParameterSubSchemaMultipleOf(value: unknown): value is types.HeaderParameterSubSchemaMultipleOf {
+if(!_isReferenceHeaderParameterSubSchemaMultipleOf(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceHeaderParameterSubSchemaPropertiesMultipleOf(value: unknown): value is unknown {
+function _isReferenceHeaderParameterSubSchemaMultipleOf(value: unknown): value is unknown {
 if(!isDefinitionsMultipleOf(value)) {
 return false;
 }
@@ -4594,13 +4594,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/description
-export function isQueryParameterSubSchemaPropertiesDescription(value: unknown): value is types.QueryParameterSubSchemaPropertiesDescription {
-if(!_isStringQueryParameterSubSchemaPropertiesDescription(value)) {
+export function isQueryParameterSubSchemaDescription(value: unknown): value is types.QueryParameterSubSchemaDescription {
+if(!_isStringQueryParameterSubSchemaDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringQueryParameterSubSchemaPropertiesDescription(value: unknown): value is unknown {
+function _isStringQueryParameterSubSchemaDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
@@ -4662,195 +4662,195 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/items
-export function isQueryParameterSubSchemaPropertiesItems(value: unknown): value is types.QueryParameterSubSchemaPropertiesItems {
-if(!_isReferenceQueryParameterSubSchemaPropertiesItems(value)) {
+export function isQueryParameterSubSchemaItems(value: unknown): value is types.QueryParameterSubSchemaItems {
+if(!_isReferenceQueryParameterSubSchemaItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceQueryParameterSubSchemaPropertiesItems(value: unknown): value is unknown {
+function _isReferenceQueryParameterSubSchemaItems(value: unknown): value is unknown {
 if(!isPrimitivesItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/collectionFormat
-export function isQueryParameterSubSchemaPropertiesCollectionFormat(value: unknown): value is types.QueryParameterSubSchemaPropertiesCollectionFormat {
-if(!_isReferenceQueryParameterSubSchemaPropertiesCollectionFormat(value)) {
+export function isQueryParameterSubSchemaCollectionFormat(value: unknown): value is types.QueryParameterSubSchemaCollectionFormat {
+if(!_isReferenceQueryParameterSubSchemaCollectionFormat(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceQueryParameterSubSchemaPropertiesCollectionFormat(value: unknown): value is unknown {
+function _isReferenceQueryParameterSubSchemaCollectionFormat(value: unknown): value is unknown {
 if(!isCollectionFormatWithMulti(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/default
-export function isQueryParameterSubSchemaPropertiesDefault(value: unknown): value is types.QueryParameterSubSchemaPropertiesDefault {
-if(!_isReferenceQueryParameterSubSchemaPropertiesDefault(value)) {
+export function isQueryParameterSubSchemaDefault(value: unknown): value is types.QueryParameterSubSchemaDefault {
+if(!_isReferenceQueryParameterSubSchemaDefault(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceQueryParameterSubSchemaPropertiesDefault(value: unknown): value is unknown {
+function _isReferenceQueryParameterSubSchemaDefault(value: unknown): value is unknown {
 if(!isDefinitionsDefault(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/maximum
-export function isQueryParameterSubSchemaPropertiesMaximum(value: unknown): value is types.QueryParameterSubSchemaPropertiesMaximum {
-if(!_isReferenceQueryParameterSubSchemaPropertiesMaximum(value)) {
+export function isQueryParameterSubSchemaMaximum(value: unknown): value is types.QueryParameterSubSchemaMaximum {
+if(!_isReferenceQueryParameterSubSchemaMaximum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceQueryParameterSubSchemaPropertiesMaximum(value: unknown): value is unknown {
+function _isReferenceQueryParameterSubSchemaMaximum(value: unknown): value is unknown {
 if(!isDefinitionsMaximum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/exclusiveMaximum
-export function isQueryParameterSubSchemaPropertiesExclusiveMaximum(value: unknown): value is types.QueryParameterSubSchemaPropertiesExclusiveMaximum {
-if(!_isReferenceQueryParameterSubSchemaPropertiesExclusiveMaximum(value)) {
+export function isQueryParameterSubSchemaExclusiveMaximum(value: unknown): value is types.QueryParameterSubSchemaExclusiveMaximum {
+if(!_isReferenceQueryParameterSubSchemaExclusiveMaximum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceQueryParameterSubSchemaPropertiesExclusiveMaximum(value: unknown): value is unknown {
+function _isReferenceQueryParameterSubSchemaExclusiveMaximum(value: unknown): value is unknown {
 if(!isDefinitionsExclusiveMaximum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/minimum
-export function isQueryParameterSubSchemaPropertiesMinimum(value: unknown): value is types.QueryParameterSubSchemaPropertiesMinimum {
-if(!_isReferenceQueryParameterSubSchemaPropertiesMinimum(value)) {
+export function isQueryParameterSubSchemaMinimum(value: unknown): value is types.QueryParameterSubSchemaMinimum {
+if(!_isReferenceQueryParameterSubSchemaMinimum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceQueryParameterSubSchemaPropertiesMinimum(value: unknown): value is unknown {
+function _isReferenceQueryParameterSubSchemaMinimum(value: unknown): value is unknown {
 if(!isDefinitionsMinimum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/exclusiveMinimum
-export function isQueryParameterSubSchemaPropertiesExclusiveMinimum(value: unknown): value is types.QueryParameterSubSchemaPropertiesExclusiveMinimum {
-if(!_isReferenceQueryParameterSubSchemaPropertiesExclusiveMinimum(value)) {
+export function isQueryParameterSubSchemaExclusiveMinimum(value: unknown): value is types.QueryParameterSubSchemaExclusiveMinimum {
+if(!_isReferenceQueryParameterSubSchemaExclusiveMinimum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceQueryParameterSubSchemaPropertiesExclusiveMinimum(value: unknown): value is unknown {
+function _isReferenceQueryParameterSubSchemaExclusiveMinimum(value: unknown): value is unknown {
 if(!isDefinitionsExclusiveMinimum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/maxLength
-export function isQueryParameterSubSchemaPropertiesMaxLength(value: unknown): value is types.QueryParameterSubSchemaPropertiesMaxLength {
-if(!_isReferenceQueryParameterSubSchemaPropertiesMaxLength(value)) {
+export function isQueryParameterSubSchemaMaxLength(value: unknown): value is types.QueryParameterSubSchemaMaxLength {
+if(!_isReferenceQueryParameterSubSchemaMaxLength(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceQueryParameterSubSchemaPropertiesMaxLength(value: unknown): value is unknown {
+function _isReferenceQueryParameterSubSchemaMaxLength(value: unknown): value is unknown {
 if(!isDefinitionsMaxLength(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/minLength
-export function isQueryParameterSubSchemaPropertiesMinLength(value: unknown): value is types.QueryParameterSubSchemaPropertiesMinLength {
-if(!_isReferenceQueryParameterSubSchemaPropertiesMinLength(value)) {
+export function isQueryParameterSubSchemaMinLength(value: unknown): value is types.QueryParameterSubSchemaMinLength {
+if(!_isReferenceQueryParameterSubSchemaMinLength(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceQueryParameterSubSchemaPropertiesMinLength(value: unknown): value is unknown {
+function _isReferenceQueryParameterSubSchemaMinLength(value: unknown): value is unknown {
 if(!isDefinitionsMinLength(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/pattern
-export function isQueryParameterSubSchemaPropertiesPattern(value: unknown): value is types.QueryParameterSubSchemaPropertiesPattern {
-if(!_isReferenceQueryParameterSubSchemaPropertiesPattern(value)) {
+export function isQueryParameterSubSchemaPattern(value: unknown): value is types.QueryParameterSubSchemaPattern {
+if(!_isReferenceQueryParameterSubSchemaPattern(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceQueryParameterSubSchemaPropertiesPattern(value: unknown): value is unknown {
+function _isReferenceQueryParameterSubSchemaPattern(value: unknown): value is unknown {
 if(!isDefinitionsPattern(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/maxItems
-export function isQueryParameterSubSchemaPropertiesMaxItems(value: unknown): value is types.QueryParameterSubSchemaPropertiesMaxItems {
-if(!_isReferenceQueryParameterSubSchemaPropertiesMaxItems(value)) {
+export function isQueryParameterSubSchemaMaxItems(value: unknown): value is types.QueryParameterSubSchemaMaxItems {
+if(!_isReferenceQueryParameterSubSchemaMaxItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceQueryParameterSubSchemaPropertiesMaxItems(value: unknown): value is unknown {
+function _isReferenceQueryParameterSubSchemaMaxItems(value: unknown): value is unknown {
 if(!isDefinitionsMaxItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/minItems
-export function isQueryParameterSubSchemaPropertiesMinItems(value: unknown): value is types.QueryParameterSubSchemaPropertiesMinItems {
-if(!_isReferenceQueryParameterSubSchemaPropertiesMinItems(value)) {
+export function isQueryParameterSubSchemaMinItems(value: unknown): value is types.QueryParameterSubSchemaMinItems {
+if(!_isReferenceQueryParameterSubSchemaMinItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceQueryParameterSubSchemaPropertiesMinItems(value: unknown): value is unknown {
+function _isReferenceQueryParameterSubSchemaMinItems(value: unknown): value is unknown {
 if(!isDefinitionsMinItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/uniqueItems
-export function isQueryParameterSubSchemaPropertiesUniqueItems(value: unknown): value is types.QueryParameterSubSchemaPropertiesUniqueItems {
-if(!_isReferenceQueryParameterSubSchemaPropertiesUniqueItems(value)) {
+export function isQueryParameterSubSchemaUniqueItems(value: unknown): value is types.QueryParameterSubSchemaUniqueItems {
+if(!_isReferenceQueryParameterSubSchemaUniqueItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceQueryParameterSubSchemaPropertiesUniqueItems(value: unknown): value is unknown {
+function _isReferenceQueryParameterSubSchemaUniqueItems(value: unknown): value is unknown {
 if(!isDefinitionsUniqueItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/enum
-export function isQueryParameterSubSchemaPropertiesEnum(value: unknown): value is types.QueryParameterSubSchemaPropertiesEnum {
-if(!_isReferenceQueryParameterSubSchemaPropertiesEnum(value)) {
+export function isQueryParameterSubSchemaEnum(value: unknown): value is types.QueryParameterSubSchemaEnum {
+if(!_isReferenceQueryParameterSubSchemaEnum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceQueryParameterSubSchemaPropertiesEnum(value: unknown): value is unknown {
+function _isReferenceQueryParameterSubSchemaEnum(value: unknown): value is unknown {
 if(!isDefinitionsEnum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/multipleOf
-export function isQueryParameterSubSchemaPropertiesMultipleOf(value: unknown): value is types.QueryParameterSubSchemaPropertiesMultipleOf {
-if(!_isReferenceQueryParameterSubSchemaPropertiesMultipleOf(value)) {
+export function isQueryParameterSubSchemaMultipleOf(value: unknown): value is types.QueryParameterSubSchemaMultipleOf {
+if(!_isReferenceQueryParameterSubSchemaMultipleOf(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceQueryParameterSubSchemaPropertiesMultipleOf(value: unknown): value is unknown {
+function _isReferenceQueryParameterSubSchemaMultipleOf(value: unknown): value is unknown {
 if(!isDefinitionsMultipleOf(value)) {
 return false;
 }
@@ -4909,13 +4909,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/description
-export function isFormDataParameterSubSchemaPropertiesDescription(value: unknown): value is types.FormDataParameterSubSchemaPropertiesDescription {
-if(!_isStringFormDataParameterSubSchemaPropertiesDescription(value)) {
+export function isFormDataParameterSubSchemaDescription(value: unknown): value is types.FormDataParameterSubSchemaDescription {
+if(!_isStringFormDataParameterSubSchemaDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringFormDataParameterSubSchemaPropertiesDescription(value: unknown): value is unknown {
+function _isStringFormDataParameterSubSchemaDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
@@ -4977,195 +4977,195 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/items
-export function isFormDataParameterSubSchemaPropertiesItems(value: unknown): value is types.FormDataParameterSubSchemaPropertiesItems {
-if(!_isReferenceFormDataParameterSubSchemaPropertiesItems(value)) {
+export function isFormDataParameterSubSchemaItems(value: unknown): value is types.FormDataParameterSubSchemaItems {
+if(!_isReferenceFormDataParameterSubSchemaItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFormDataParameterSubSchemaPropertiesItems(value: unknown): value is unknown {
+function _isReferenceFormDataParameterSubSchemaItems(value: unknown): value is unknown {
 if(!isPrimitivesItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/collectionFormat
-export function isFormDataParameterSubSchemaPropertiesCollectionFormat(value: unknown): value is types.FormDataParameterSubSchemaPropertiesCollectionFormat {
-if(!_isReferenceFormDataParameterSubSchemaPropertiesCollectionFormat(value)) {
+export function isFormDataParameterSubSchemaCollectionFormat(value: unknown): value is types.FormDataParameterSubSchemaCollectionFormat {
+if(!_isReferenceFormDataParameterSubSchemaCollectionFormat(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFormDataParameterSubSchemaPropertiesCollectionFormat(value: unknown): value is unknown {
+function _isReferenceFormDataParameterSubSchemaCollectionFormat(value: unknown): value is unknown {
 if(!isCollectionFormatWithMulti(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/default
-export function isFormDataParameterSubSchemaPropertiesDefault(value: unknown): value is types.FormDataParameterSubSchemaPropertiesDefault {
-if(!_isReferenceFormDataParameterSubSchemaPropertiesDefault(value)) {
+export function isFormDataParameterSubSchemaDefault(value: unknown): value is types.FormDataParameterSubSchemaDefault {
+if(!_isReferenceFormDataParameterSubSchemaDefault(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFormDataParameterSubSchemaPropertiesDefault(value: unknown): value is unknown {
+function _isReferenceFormDataParameterSubSchemaDefault(value: unknown): value is unknown {
 if(!isDefinitionsDefault(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/maximum
-export function isFormDataParameterSubSchemaPropertiesMaximum(value: unknown): value is types.FormDataParameterSubSchemaPropertiesMaximum {
-if(!_isReferenceFormDataParameterSubSchemaPropertiesMaximum(value)) {
+export function isFormDataParameterSubSchemaMaximum(value: unknown): value is types.FormDataParameterSubSchemaMaximum {
+if(!_isReferenceFormDataParameterSubSchemaMaximum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFormDataParameterSubSchemaPropertiesMaximum(value: unknown): value is unknown {
+function _isReferenceFormDataParameterSubSchemaMaximum(value: unknown): value is unknown {
 if(!isDefinitionsMaximum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/exclusiveMaximum
-export function isFormDataParameterSubSchemaPropertiesExclusiveMaximum(value: unknown): value is types.FormDataParameterSubSchemaPropertiesExclusiveMaximum {
-if(!_isReferenceFormDataParameterSubSchemaPropertiesExclusiveMaximum(value)) {
+export function isFormDataParameterSubSchemaExclusiveMaximum(value: unknown): value is types.FormDataParameterSubSchemaExclusiveMaximum {
+if(!_isReferenceFormDataParameterSubSchemaExclusiveMaximum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFormDataParameterSubSchemaPropertiesExclusiveMaximum(value: unknown): value is unknown {
+function _isReferenceFormDataParameterSubSchemaExclusiveMaximum(value: unknown): value is unknown {
 if(!isDefinitionsExclusiveMaximum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/minimum
-export function isFormDataParameterSubSchemaPropertiesMinimum(value: unknown): value is types.FormDataParameterSubSchemaPropertiesMinimum {
-if(!_isReferenceFormDataParameterSubSchemaPropertiesMinimum(value)) {
+export function isFormDataParameterSubSchemaMinimum(value: unknown): value is types.FormDataParameterSubSchemaMinimum {
+if(!_isReferenceFormDataParameterSubSchemaMinimum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFormDataParameterSubSchemaPropertiesMinimum(value: unknown): value is unknown {
+function _isReferenceFormDataParameterSubSchemaMinimum(value: unknown): value is unknown {
 if(!isDefinitionsMinimum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/exclusiveMinimum
-export function isFormDataParameterSubSchemaPropertiesExclusiveMinimum(value: unknown): value is types.FormDataParameterSubSchemaPropertiesExclusiveMinimum {
-if(!_isReferenceFormDataParameterSubSchemaPropertiesExclusiveMinimum(value)) {
+export function isFormDataParameterSubSchemaExclusiveMinimum(value: unknown): value is types.FormDataParameterSubSchemaExclusiveMinimum {
+if(!_isReferenceFormDataParameterSubSchemaExclusiveMinimum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFormDataParameterSubSchemaPropertiesExclusiveMinimum(value: unknown): value is unknown {
+function _isReferenceFormDataParameterSubSchemaExclusiveMinimum(value: unknown): value is unknown {
 if(!isDefinitionsExclusiveMinimum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/maxLength
-export function isFormDataParameterSubSchemaPropertiesMaxLength(value: unknown): value is types.FormDataParameterSubSchemaPropertiesMaxLength {
-if(!_isReferenceFormDataParameterSubSchemaPropertiesMaxLength(value)) {
+export function isFormDataParameterSubSchemaMaxLength(value: unknown): value is types.FormDataParameterSubSchemaMaxLength {
+if(!_isReferenceFormDataParameterSubSchemaMaxLength(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFormDataParameterSubSchemaPropertiesMaxLength(value: unknown): value is unknown {
+function _isReferenceFormDataParameterSubSchemaMaxLength(value: unknown): value is unknown {
 if(!isDefinitionsMaxLength(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/minLength
-export function isFormDataParameterSubSchemaPropertiesMinLength(value: unknown): value is types.FormDataParameterSubSchemaPropertiesMinLength {
-if(!_isReferenceFormDataParameterSubSchemaPropertiesMinLength(value)) {
+export function isFormDataParameterSubSchemaMinLength(value: unknown): value is types.FormDataParameterSubSchemaMinLength {
+if(!_isReferenceFormDataParameterSubSchemaMinLength(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFormDataParameterSubSchemaPropertiesMinLength(value: unknown): value is unknown {
+function _isReferenceFormDataParameterSubSchemaMinLength(value: unknown): value is unknown {
 if(!isDefinitionsMinLength(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/pattern
-export function isFormDataParameterSubSchemaPropertiesPattern(value: unknown): value is types.FormDataParameterSubSchemaPropertiesPattern {
-if(!_isReferenceFormDataParameterSubSchemaPropertiesPattern(value)) {
+export function isFormDataParameterSubSchemaPattern(value: unknown): value is types.FormDataParameterSubSchemaPattern {
+if(!_isReferenceFormDataParameterSubSchemaPattern(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFormDataParameterSubSchemaPropertiesPattern(value: unknown): value is unknown {
+function _isReferenceFormDataParameterSubSchemaPattern(value: unknown): value is unknown {
 if(!isDefinitionsPattern(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/maxItems
-export function isFormDataParameterSubSchemaPropertiesMaxItems(value: unknown): value is types.FormDataParameterSubSchemaPropertiesMaxItems {
-if(!_isReferenceFormDataParameterSubSchemaPropertiesMaxItems(value)) {
+export function isFormDataParameterSubSchemaMaxItems(value: unknown): value is types.FormDataParameterSubSchemaMaxItems {
+if(!_isReferenceFormDataParameterSubSchemaMaxItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFormDataParameterSubSchemaPropertiesMaxItems(value: unknown): value is unknown {
+function _isReferenceFormDataParameterSubSchemaMaxItems(value: unknown): value is unknown {
 if(!isDefinitionsMaxItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/minItems
-export function isFormDataParameterSubSchemaPropertiesMinItems(value: unknown): value is types.FormDataParameterSubSchemaPropertiesMinItems {
-if(!_isReferenceFormDataParameterSubSchemaPropertiesMinItems(value)) {
+export function isFormDataParameterSubSchemaMinItems(value: unknown): value is types.FormDataParameterSubSchemaMinItems {
+if(!_isReferenceFormDataParameterSubSchemaMinItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFormDataParameterSubSchemaPropertiesMinItems(value: unknown): value is unknown {
+function _isReferenceFormDataParameterSubSchemaMinItems(value: unknown): value is unknown {
 if(!isDefinitionsMinItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/uniqueItems
-export function isFormDataParameterSubSchemaPropertiesUniqueItems(value: unknown): value is types.FormDataParameterSubSchemaPropertiesUniqueItems {
-if(!_isReferenceFormDataParameterSubSchemaPropertiesUniqueItems(value)) {
+export function isFormDataParameterSubSchemaUniqueItems(value: unknown): value is types.FormDataParameterSubSchemaUniqueItems {
+if(!_isReferenceFormDataParameterSubSchemaUniqueItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFormDataParameterSubSchemaPropertiesUniqueItems(value: unknown): value is unknown {
+function _isReferenceFormDataParameterSubSchemaUniqueItems(value: unknown): value is unknown {
 if(!isDefinitionsUniqueItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/enum
-export function isFormDataParameterSubSchemaPropertiesEnum(value: unknown): value is types.FormDataParameterSubSchemaPropertiesEnum {
-if(!_isReferenceFormDataParameterSubSchemaPropertiesEnum(value)) {
+export function isFormDataParameterSubSchemaEnum(value: unknown): value is types.FormDataParameterSubSchemaEnum {
+if(!_isReferenceFormDataParameterSubSchemaEnum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFormDataParameterSubSchemaPropertiesEnum(value: unknown): value is unknown {
+function _isReferenceFormDataParameterSubSchemaEnum(value: unknown): value is unknown {
 if(!isDefinitionsEnum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/multipleOf
-export function isFormDataParameterSubSchemaPropertiesMultipleOf(value: unknown): value is types.FormDataParameterSubSchemaPropertiesMultipleOf {
-if(!_isReferenceFormDataParameterSubSchemaPropertiesMultipleOf(value)) {
+export function isFormDataParameterSubSchemaMultipleOf(value: unknown): value is types.FormDataParameterSubSchemaMultipleOf {
+if(!_isReferenceFormDataParameterSubSchemaMultipleOf(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFormDataParameterSubSchemaPropertiesMultipleOf(value: unknown): value is unknown {
+function _isReferenceFormDataParameterSubSchemaMultipleOf(value: unknown): value is unknown {
 if(!isDefinitionsMultipleOf(value)) {
 return false;
 }
@@ -5227,13 +5227,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/description
-export function isPathParameterSubSchemaPropertiesDescription(value: unknown): value is types.PathParameterSubSchemaPropertiesDescription {
-if(!_isStringPathParameterSubSchemaPropertiesDescription(value)) {
+export function isPathParameterSubSchemaDescription(value: unknown): value is types.PathParameterSubSchemaDescription {
+if(!_isStringPathParameterSubSchemaDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringPathParameterSubSchemaPropertiesDescription(value: unknown): value is unknown {
+function _isStringPathParameterSubSchemaDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
@@ -5282,195 +5282,195 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/items
-export function isPathParameterSubSchemaPropertiesItems(value: unknown): value is types.PathParameterSubSchemaPropertiesItems {
-if(!_isReferencePathParameterSubSchemaPropertiesItems(value)) {
+export function isPathParameterSubSchemaItems(value: unknown): value is types.PathParameterSubSchemaItems {
+if(!_isReferencePathParameterSubSchemaItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePathParameterSubSchemaPropertiesItems(value: unknown): value is unknown {
+function _isReferencePathParameterSubSchemaItems(value: unknown): value is unknown {
 if(!isPrimitivesItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/collectionFormat
-export function isPathParameterSubSchemaPropertiesCollectionFormat(value: unknown): value is types.PathParameterSubSchemaPropertiesCollectionFormat {
-if(!_isReferencePathParameterSubSchemaPropertiesCollectionFormat(value)) {
+export function isPathParameterSubSchemaCollectionFormat(value: unknown): value is types.PathParameterSubSchemaCollectionFormat {
+if(!_isReferencePathParameterSubSchemaCollectionFormat(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePathParameterSubSchemaPropertiesCollectionFormat(value: unknown): value is unknown {
+function _isReferencePathParameterSubSchemaCollectionFormat(value: unknown): value is unknown {
 if(!isDefinitionsCollectionFormat(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/default
-export function isPathParameterSubSchemaPropertiesDefault(value: unknown): value is types.PathParameterSubSchemaPropertiesDefault {
-if(!_isReferencePathParameterSubSchemaPropertiesDefault(value)) {
+export function isPathParameterSubSchemaDefault(value: unknown): value is types.PathParameterSubSchemaDefault {
+if(!_isReferencePathParameterSubSchemaDefault(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePathParameterSubSchemaPropertiesDefault(value: unknown): value is unknown {
+function _isReferencePathParameterSubSchemaDefault(value: unknown): value is unknown {
 if(!isDefinitionsDefault(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/maximum
-export function isPathParameterSubSchemaPropertiesMaximum(value: unknown): value is types.PathParameterSubSchemaPropertiesMaximum {
-if(!_isReferencePathParameterSubSchemaPropertiesMaximum(value)) {
+export function isPathParameterSubSchemaMaximum(value: unknown): value is types.PathParameterSubSchemaMaximum {
+if(!_isReferencePathParameterSubSchemaMaximum(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePathParameterSubSchemaPropertiesMaximum(value: unknown): value is unknown {
+function _isReferencePathParameterSubSchemaMaximum(value: unknown): value is unknown {
 if(!isDefinitionsMaximum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/exclusiveMaximum
-export function isPathParameterSubSchemaPropertiesExclusiveMaximum(value: unknown): value is types.PathParameterSubSchemaPropertiesExclusiveMaximum {
-if(!_isReferencePathParameterSubSchemaPropertiesExclusiveMaximum(value)) {
+export function isPathParameterSubSchemaExclusiveMaximum(value: unknown): value is types.PathParameterSubSchemaExclusiveMaximum {
+if(!_isReferencePathParameterSubSchemaExclusiveMaximum(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePathParameterSubSchemaPropertiesExclusiveMaximum(value: unknown): value is unknown {
+function _isReferencePathParameterSubSchemaExclusiveMaximum(value: unknown): value is unknown {
 if(!isDefinitionsExclusiveMaximum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/minimum
-export function isPathParameterSubSchemaPropertiesMinimum(value: unknown): value is types.PathParameterSubSchemaPropertiesMinimum {
-if(!_isReferencePathParameterSubSchemaPropertiesMinimum(value)) {
+export function isPathParameterSubSchemaMinimum(value: unknown): value is types.PathParameterSubSchemaMinimum {
+if(!_isReferencePathParameterSubSchemaMinimum(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePathParameterSubSchemaPropertiesMinimum(value: unknown): value is unknown {
+function _isReferencePathParameterSubSchemaMinimum(value: unknown): value is unknown {
 if(!isDefinitionsMinimum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/exclusiveMinimum
-export function isPathParameterSubSchemaPropertiesExclusiveMinimum(value: unknown): value is types.PathParameterSubSchemaPropertiesExclusiveMinimum {
-if(!_isReferencePathParameterSubSchemaPropertiesExclusiveMinimum(value)) {
+export function isPathParameterSubSchemaExclusiveMinimum(value: unknown): value is types.PathParameterSubSchemaExclusiveMinimum {
+if(!_isReferencePathParameterSubSchemaExclusiveMinimum(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePathParameterSubSchemaPropertiesExclusiveMinimum(value: unknown): value is unknown {
+function _isReferencePathParameterSubSchemaExclusiveMinimum(value: unknown): value is unknown {
 if(!isDefinitionsExclusiveMinimum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/maxLength
-export function isPathParameterSubSchemaPropertiesMaxLength(value: unknown): value is types.PathParameterSubSchemaPropertiesMaxLength {
-if(!_isReferencePathParameterSubSchemaPropertiesMaxLength(value)) {
+export function isPathParameterSubSchemaMaxLength(value: unknown): value is types.PathParameterSubSchemaMaxLength {
+if(!_isReferencePathParameterSubSchemaMaxLength(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePathParameterSubSchemaPropertiesMaxLength(value: unknown): value is unknown {
+function _isReferencePathParameterSubSchemaMaxLength(value: unknown): value is unknown {
 if(!isDefinitionsMaxLength(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/minLength
-export function isPathParameterSubSchemaPropertiesMinLength(value: unknown): value is types.PathParameterSubSchemaPropertiesMinLength {
-if(!_isReferencePathParameterSubSchemaPropertiesMinLength(value)) {
+export function isPathParameterSubSchemaMinLength(value: unknown): value is types.PathParameterSubSchemaMinLength {
+if(!_isReferencePathParameterSubSchemaMinLength(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePathParameterSubSchemaPropertiesMinLength(value: unknown): value is unknown {
+function _isReferencePathParameterSubSchemaMinLength(value: unknown): value is unknown {
 if(!isDefinitionsMinLength(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/pattern
-export function isPathParameterSubSchemaPropertiesPattern(value: unknown): value is types.PathParameterSubSchemaPropertiesPattern {
-if(!_isReferencePathParameterSubSchemaPropertiesPattern(value)) {
+export function isPathParameterSubSchemaPattern(value: unknown): value is types.PathParameterSubSchemaPattern {
+if(!_isReferencePathParameterSubSchemaPattern(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePathParameterSubSchemaPropertiesPattern(value: unknown): value is unknown {
+function _isReferencePathParameterSubSchemaPattern(value: unknown): value is unknown {
 if(!isDefinitionsPattern(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/maxItems
-export function isPathParameterSubSchemaPropertiesMaxItems(value: unknown): value is types.PathParameterSubSchemaPropertiesMaxItems {
-if(!_isReferencePathParameterSubSchemaPropertiesMaxItems(value)) {
+export function isPathParameterSubSchemaMaxItems(value: unknown): value is types.PathParameterSubSchemaMaxItems {
+if(!_isReferencePathParameterSubSchemaMaxItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePathParameterSubSchemaPropertiesMaxItems(value: unknown): value is unknown {
+function _isReferencePathParameterSubSchemaMaxItems(value: unknown): value is unknown {
 if(!isDefinitionsMaxItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/minItems
-export function isPathParameterSubSchemaPropertiesMinItems(value: unknown): value is types.PathParameterSubSchemaPropertiesMinItems {
-if(!_isReferencePathParameterSubSchemaPropertiesMinItems(value)) {
+export function isPathParameterSubSchemaMinItems(value: unknown): value is types.PathParameterSubSchemaMinItems {
+if(!_isReferencePathParameterSubSchemaMinItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePathParameterSubSchemaPropertiesMinItems(value: unknown): value is unknown {
+function _isReferencePathParameterSubSchemaMinItems(value: unknown): value is unknown {
 if(!isDefinitionsMinItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/uniqueItems
-export function isPathParameterSubSchemaPropertiesUniqueItems(value: unknown): value is types.PathParameterSubSchemaPropertiesUniqueItems {
-if(!_isReferencePathParameterSubSchemaPropertiesUniqueItems(value)) {
+export function isPathParameterSubSchemaUniqueItems(value: unknown): value is types.PathParameterSubSchemaUniqueItems {
+if(!_isReferencePathParameterSubSchemaUniqueItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePathParameterSubSchemaPropertiesUniqueItems(value: unknown): value is unknown {
+function _isReferencePathParameterSubSchemaUniqueItems(value: unknown): value is unknown {
 if(!isDefinitionsUniqueItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/enum
-export function isPathParameterSubSchemaPropertiesEnum(value: unknown): value is types.PathParameterSubSchemaPropertiesEnum {
-if(!_isReferencePathParameterSubSchemaPropertiesEnum(value)) {
+export function isPathParameterSubSchemaEnum(value: unknown): value is types.PathParameterSubSchemaEnum {
+if(!_isReferencePathParameterSubSchemaEnum(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePathParameterSubSchemaPropertiesEnum(value: unknown): value is unknown {
+function _isReferencePathParameterSubSchemaEnum(value: unknown): value is unknown {
 if(!isDefinitionsEnum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/multipleOf
-export function isPathParameterSubSchemaPropertiesMultipleOf(value: unknown): value is types.PathParameterSubSchemaPropertiesMultipleOf {
-if(!_isReferencePathParameterSubSchemaPropertiesMultipleOf(value)) {
+export function isPathParameterSubSchemaMultipleOf(value: unknown): value is types.PathParameterSubSchemaMultipleOf {
+if(!_isReferencePathParameterSubSchemaMultipleOf(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePathParameterSubSchemaPropertiesMultipleOf(value: unknown): value is unknown {
+function _isReferencePathParameterSubSchemaMultipleOf(value: unknown): value is unknown {
 if(!isDefinitionsMultipleOf(value)) {
 return false;
 }
@@ -5500,78 +5500,78 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/nonBodyParameter/oneOf/0
-export function isNonBodyParameterOneOf0(value: unknown): value is types.NonBodyParameterOneOf0 {
-if(!_isReferenceNonBodyParameterOneOf0(value)) {
+export function isNonBodyParameter0(value: unknown): value is types.NonBodyParameter0 {
+if(!_isReferenceNonBodyParameter0(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceNonBodyParameterOneOf0(value: unknown): value is unknown {
+function _isReferenceNonBodyParameter0(value: unknown): value is unknown {
 if(!isHeaderParameterSubSchema(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/nonBodyParameter/oneOf/1
-export function isNonBodyParameterOneOf1(value: unknown): value is types.NonBodyParameterOneOf1 {
-if(!_isReferenceNonBodyParameterOneOf1(value)) {
+export function isNonBodyParameter1(value: unknown): value is types.NonBodyParameter1 {
+if(!_isReferenceNonBodyParameter1(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceNonBodyParameterOneOf1(value: unknown): value is unknown {
+function _isReferenceNonBodyParameter1(value: unknown): value is unknown {
 if(!isFormDataParameterSubSchema(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/nonBodyParameter/oneOf/2
-export function isNonBodyParameterOneOf2(value: unknown): value is types.NonBodyParameterOneOf2 {
-if(!_isReferenceNonBodyParameterOneOf2(value)) {
+export function isNonBodyParameter2(value: unknown): value is types.NonBodyParameter2 {
+if(!_isReferenceNonBodyParameter2(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceNonBodyParameterOneOf2(value: unknown): value is unknown {
+function _isReferenceNonBodyParameter2(value: unknown): value is unknown {
 if(!isQueryParameterSubSchema(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/nonBodyParameter/oneOf/3
-export function isNonBodyParameterOneOf3(value: unknown): value is types.NonBodyParameterOneOf3 {
-if(!_isReferenceNonBodyParameterOneOf3(value)) {
+export function isNonBodyParameter3(value: unknown): value is types.NonBodyParameter3 {
+if(!_isReferenceNonBodyParameter3(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceNonBodyParameterOneOf3(value: unknown): value is unknown {
+function _isReferenceNonBodyParameter3(value: unknown): value is unknown {
 if(!isPathParameterSubSchema(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/parameter/oneOf/0
-export function isParameterOneOf0(value: unknown): value is types.ParameterOneOf0 {
-if(!_isReferenceParameterOneOf0(value)) {
+export function isParameter0(value: unknown): value is types.Parameter0 {
+if(!_isReferenceParameter0(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceParameterOneOf0(value: unknown): value is unknown {
+function _isReferenceParameter0(value: unknown): value is unknown {
 if(!isBodyParameter(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/parameter/oneOf/1
-export function isParameterOneOf1(value: unknown): value is types.ParameterOneOf1 {
-if(!_isReferenceParameterOneOf1(value)) {
+export function isParameter1(value: unknown): value is types.Parameter1 {
+if(!_isReferenceParameter1(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceParameterOneOf1(value: unknown): value is unknown {
+function _isReferenceParameter1(value: unknown): value is unknown {
 if(!isNonBodyParameter(value)) {
 return false;
 }
@@ -5604,183 +5604,183 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/title
-export function isDefinitionsSchemaPropertiesTitle(value: unknown): value is types.DefinitionsSchemaPropertiesTitle {
-if(!_isReferenceDefinitionsSchemaPropertiesTitle(value)) {
+export function isSchemaTitle(value: unknown): value is types.SchemaTitle {
+if(!_isReferenceSchemaTitle(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceDefinitionsSchemaPropertiesTitle(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesTitle(value)) {
+function _isReferenceSchemaTitle(value: unknown): value is unknown {
+if(!isDraft04Title(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/description
-export function isDefinitionsSchemaPropertiesDescription(value: unknown): value is types.DefinitionsSchemaPropertiesDescription {
-if(!_isReferenceDefinitionsSchemaPropertiesDescription(value)) {
+export function isSchemaDescription(value: unknown): value is types.SchemaDescription {
+if(!_isReferenceSchemaDescription(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceDefinitionsSchemaPropertiesDescription(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesDescription(value)) {
+function _isReferenceSchemaDescription(value: unknown): value is unknown {
+if(!isDraft04Description(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/default
-export function isDefinitionsSchemaPropertiesDefault(value: unknown): value is types.DefinitionsSchemaPropertiesDefault {
-if(!_isReferenceDefinitionsSchemaPropertiesDefault(value)) {
+export function isSchemaDefault(value: unknown): value is types.SchemaDefault {
+if(!_isReferenceSchemaDefault(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceDefinitionsSchemaPropertiesDefault(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesDefault(value)) {
+function _isReferenceSchemaDefault(value: unknown): value is unknown {
+if(!isDraft04Default(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/multipleOf
-export function isDefinitionsSchemaPropertiesMultipleOf(value: unknown): value is types.DefinitionsSchemaPropertiesMultipleOf {
-if(!_isReferenceDefinitionsSchemaPropertiesMultipleOf(value)) {
+export function isSchemaMultipleOf(value: unknown): value is types.SchemaMultipleOf {
+if(!_isReferenceSchemaMultipleOf(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceDefinitionsSchemaPropertiesMultipleOf(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesMultipleOf(value)) {
+function _isReferenceSchemaMultipleOf(value: unknown): value is unknown {
+if(!isDraft04MultipleOf(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/maximum
-export function isDefinitionsSchemaPropertiesMaximum(value: unknown): value is types.DefinitionsSchemaPropertiesMaximum {
-if(!_isReferenceDefinitionsSchemaPropertiesMaximum(value)) {
+export function isSchemaMaximum(value: unknown): value is types.SchemaMaximum {
+if(!_isReferenceSchemaMaximum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceDefinitionsSchemaPropertiesMaximum(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesMaximum(value)) {
+function _isReferenceSchemaMaximum(value: unknown): value is unknown {
+if(!isDraft04Maximum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/exclusiveMaximum
-export function isDefinitionsSchemaPropertiesExclusiveMaximum(value: unknown): value is types.DefinitionsSchemaPropertiesExclusiveMaximum {
-if(!_isReferenceDefinitionsSchemaPropertiesExclusiveMaximum(value)) {
+export function isSchemaExclusiveMaximum(value: unknown): value is types.SchemaExclusiveMaximum {
+if(!_isReferenceSchemaExclusiveMaximum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceDefinitionsSchemaPropertiesExclusiveMaximum(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesExclusiveMaximum(value)) {
+function _isReferenceSchemaExclusiveMaximum(value: unknown): value is unknown {
+if(!isDraft04ExclusiveMaximum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/minimum
-export function isDefinitionsSchemaPropertiesMinimum(value: unknown): value is types.DefinitionsSchemaPropertiesMinimum {
-if(!_isReferenceDefinitionsSchemaPropertiesMinimum(value)) {
+export function isSchemaMinimum(value: unknown): value is types.SchemaMinimum {
+if(!_isReferenceSchemaMinimum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceDefinitionsSchemaPropertiesMinimum(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesMinimum(value)) {
+function _isReferenceSchemaMinimum(value: unknown): value is unknown {
+if(!isDraft04Minimum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/exclusiveMinimum
-export function isDefinitionsSchemaPropertiesExclusiveMinimum(value: unknown): value is types.DefinitionsSchemaPropertiesExclusiveMinimum {
-if(!_isReferenceDefinitionsSchemaPropertiesExclusiveMinimum(value)) {
+export function isSchemaExclusiveMinimum(value: unknown): value is types.SchemaExclusiveMinimum {
+if(!_isReferenceSchemaExclusiveMinimum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceDefinitionsSchemaPropertiesExclusiveMinimum(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesExclusiveMinimum(value)) {
+function _isReferenceSchemaExclusiveMinimum(value: unknown): value is unknown {
+if(!isDraft04ExclusiveMinimum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/maxLength
-export function isSchemaPropertiesMaxLength(value: unknown): value is types.SchemaPropertiesMaxLength {
-if(!_isReferenceSchemaPropertiesMaxLength(value)) {
+export function isSchemaMaxLength(value: unknown): value is types.SchemaMaxLength {
+if(!_isReferenceSchemaMaxLength(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaPropertiesMaxLength(value: unknown): value is unknown {
+function _isReferenceSchemaMaxLength(value: unknown): value is unknown {
 if(!isPositiveInteger(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/minLength
-export function isSchemaPropertiesMinLength(value: unknown): value is types.SchemaPropertiesMinLength {
-if(!_isReferenceSchemaPropertiesMinLength(value)) {
+export function isSchemaMinLength(value: unknown): value is types.SchemaMinLength {
+if(!_isReferenceSchemaMinLength(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaPropertiesMinLength(value: unknown): value is unknown {
+function _isReferenceSchemaMinLength(value: unknown): value is unknown {
 if(!isPositiveIntegerDefault0(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/pattern
-export function isDefinitionsSchemaPropertiesPattern(value: unknown): value is types.DefinitionsSchemaPropertiesPattern {
-if(!_isReferenceDefinitionsSchemaPropertiesPattern(value)) {
+export function isSchemaPattern(value: unknown): value is types.SchemaPattern {
+if(!_isReferenceSchemaPattern(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceDefinitionsSchemaPropertiesPattern(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesPattern(value)) {
+function _isReferenceSchemaPattern(value: unknown): value is unknown {
+if(!isDraft04Pattern(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/maxItems
-export function isSchemaPropertiesMaxItems(value: unknown): value is types.SchemaPropertiesMaxItems {
-if(!_isReferenceSchemaPropertiesMaxItems(value)) {
+export function isSchemaMaxItems(value: unknown): value is types.SchemaMaxItems {
+if(!_isReferenceSchemaMaxItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaPropertiesMaxItems(value: unknown): value is unknown {
+function _isReferenceSchemaMaxItems(value: unknown): value is unknown {
 if(!isPositiveInteger(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/minItems
-export function isSchemaPropertiesMinItems(value: unknown): value is types.SchemaPropertiesMinItems {
-if(!_isReferenceSchemaPropertiesMinItems(value)) {
+export function isSchemaMinItems(value: unknown): value is types.SchemaMinItems {
+if(!_isReferenceSchemaMinItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaPropertiesMinItems(value: unknown): value is unknown {
+function _isReferenceSchemaMinItems(value: unknown): value is unknown {
 if(!isPositiveIntegerDefault0(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/uniqueItems
-export function isDefinitionsSchemaPropertiesUniqueItems(value: unknown): value is types.DefinitionsSchemaPropertiesUniqueItems {
-if(!_isReferenceDefinitionsSchemaPropertiesUniqueItems(value)) {
+export function isSchemaUniqueItems(value: unknown): value is types.SchemaUniqueItems {
+if(!_isReferenceSchemaUniqueItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceDefinitionsSchemaPropertiesUniqueItems(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesUniqueItems(value)) {
+function _isReferenceSchemaUniqueItems(value: unknown): value is unknown {
+if(!isDraft04UniqueItems(value)) {
 return false;
 }
 return true;
@@ -5825,26 +5825,26 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/enum
-export function isDefinitionsSchemaPropertiesEnum(value: unknown): value is types.DefinitionsSchemaPropertiesEnum {
-if(!_isReferenceDefinitionsSchemaPropertiesEnum(value)) {
+export function isSchemaEnum(value: unknown): value is types.SchemaEnum {
+if(!_isReferenceSchemaEnum(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceDefinitionsSchemaPropertiesEnum(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesEnum(value)) {
+function _isReferenceSchemaEnum(value: unknown): value is unknown {
+if(!isDraft04Enum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/additionalProperties
-export function isSchemaPropertiesAdditionalProperties(value: unknown): value is types.SchemaPropertiesAdditionalProperties {
-if(!_isAnyOfSchemaPropertiesAdditionalProperties(value)) {
+export function isPropertiesSchemaAdditionalProperties(value: unknown): value is types.PropertiesSchemaAdditionalProperties {
+if(!_isAnyOfPropertiesSchemaAdditionalProperties(value)) {
 return false;
 }
 return true;
 }
-function _isAnyOfSchemaPropertiesAdditionalProperties(value: unknown): value is unknown {
+function _isAnyOfPropertiesSchemaAdditionalProperties(value: unknown): value is unknown {
 if(isAdditionalPropertiesAnyOf0(value)) {
 return true;
 }
@@ -5854,26 +5854,26 @@ return true;
 return false;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/type
-export function isDefinitionsSchemaType(value: unknown): value is types.DefinitionsSchemaType {
-if(!_isReferenceDefinitionsSchemaType(value)) {
+export function isSchemaType(value: unknown): value is types.SchemaType {
+if(!_isReferenceSchemaType(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceDefinitionsSchemaType(value: unknown): value is unknown {
-if(!isDraft04SchemaType(value)) {
+function _isReferenceSchemaType(value: unknown): value is unknown {
+if(!isDraft04Type(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/items
-export function isSchemaPropertiesItems(value: unknown): value is types.SchemaPropertiesItems {
-if(!_isAnyOfSchemaPropertiesItems(value)) {
+export function isSchemaItems(value: unknown): value is types.SchemaItems {
+if(!_isAnyOfSchemaItems(value)) {
 return false;
 }
 return true;
 }
-function _isAnyOfSchemaPropertiesItems(value: unknown): value is unknown {
+function _isAnyOfSchemaItems(value: unknown): value is unknown {
 if(isItemsAnyOf0(value)) {
 return true;
 }
@@ -5917,7 +5917,7 @@ return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isPropertiesPropertiesAdditionalProperties(propertyValue)) {
+if(!isPropertiesAdditionalProperties(propertyValue)) {
 return false;
 }
 continue;
@@ -5951,26 +5951,26 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/xml
-export function isPropertiesXml(value: unknown): value is types.PropertiesXml {
-if(!_isReferencePropertiesXml(value)) {
+export function isSchemaXml(value: unknown): value is types.SchemaXml {
+if(!_isReferenceSchemaXml(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePropertiesXml(value: unknown): value is unknown {
+function _isReferenceSchemaXml(value: unknown): value is unknown {
 if(!isDefinitionsXml(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/externalDocs
-export function isSchemaPropertiesExternalDocs(value: unknown): value is types.SchemaPropertiesExternalDocs {
-if(!_isReferenceSchemaPropertiesExternalDocs(value)) {
+export function isSchemaExternalDocs(value: unknown): value is types.SchemaExternalDocs {
+if(!_isReferenceSchemaExternalDocs(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaPropertiesExternalDocs(value: unknown): value is unknown {
+function _isReferenceSchemaExternalDocs(value: unknown): value is unknown {
 if(!isDefinitionsExternalDocs(value)) {
 return false;
 }
@@ -5981,23 +5981,23 @@ export function isSchemaExample(value: unknown): value is types.SchemaExample {
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/additionalProperties
-export function isSchemaAdditionalProperties(value: unknown): value is types.SchemaAdditionalProperties {
-if(!_isNeverSchemaAdditionalProperties(value)) {
+export function isDefinitionsSchemaAdditionalProperties(value: unknown): value is types.DefinitionsSchemaAdditionalProperties {
+if(!_isNeverDefinitionsSchemaAdditionalProperties(value)) {
 return false;
 }
 return true;
 }
-function _isNeverSchemaAdditionalProperties(value: unknown): value is unknown {
+function _isNeverDefinitionsSchemaAdditionalProperties(value: unknown): value is unknown {
 return false;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/patternProperties/^x-
-export function isSchemaX(value: unknown): value is types.SchemaX {
-if(!_isReferenceSchemaX(value)) {
+export function isSchemaPatternPropertiesX(value: unknown): value is types.SchemaPatternPropertiesX {
+if(!_isReferenceSchemaPatternPropertiesX(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaX(value: unknown): value is unknown {
+function _isReferenceSchemaPatternPropertiesX(value: unknown): value is unknown {
 if(!isVendorExtension(value)) {
 return false;
 }
@@ -6017,40 +6017,40 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/title
-export function isFileSchemaPropertiesTitle(value: unknown): value is types.FileSchemaPropertiesTitle {
-if(!_isReferenceFileSchemaPropertiesTitle(value)) {
+export function isFileSchemaTitle(value: unknown): value is types.FileSchemaTitle {
+if(!_isReferenceFileSchemaTitle(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFileSchemaPropertiesTitle(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesTitle(value)) {
+function _isReferenceFileSchemaTitle(value: unknown): value is unknown {
+if(!isDraft04Title(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/description
-export function isFileSchemaPropertiesDescription(value: unknown): value is types.FileSchemaPropertiesDescription {
-if(!_isReferenceFileSchemaPropertiesDescription(value)) {
+export function isFileSchemaDescription(value: unknown): value is types.FileSchemaDescription {
+if(!_isReferenceFileSchemaDescription(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFileSchemaPropertiesDescription(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesDescription(value)) {
+function _isReferenceFileSchemaDescription(value: unknown): value is unknown {
+if(!isDraft04Description(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/default
-export function isFileSchemaPropertiesDefault(value: unknown): value is types.FileSchemaPropertiesDefault {
-if(!_isReferenceFileSchemaPropertiesDefault(value)) {
+export function isFileSchemaDefault(value: unknown): value is types.FileSchemaDefault {
+if(!_isReferenceFileSchemaDefault(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFileSchemaPropertiesDefault(value: unknown): value is unknown {
-if(!isDraft04SchemaPropertiesDefault(value)) {
+function _isReferenceFileSchemaDefault(value: unknown): value is unknown {
+if(!isDraft04Default(value)) {
 return false;
 }
 return true;
@@ -6098,13 +6098,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/externalDocs
-export function isFileSchemaPropertiesExternalDocs(value: unknown): value is types.FileSchemaPropertiesExternalDocs {
-if(!_isReferenceFileSchemaPropertiesExternalDocs(value)) {
+export function isFileSchemaExternalDocs(value: unknown): value is types.FileSchemaExternalDocs {
+if(!_isReferenceFileSchemaExternalDocs(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceFileSchemaPropertiesExternalDocs(value: unknown): value is unknown {
+function _isReferenceFileSchemaExternalDocs(value: unknown): value is unknown {
 if(!isDefinitionsExternalDocs(value)) {
 return false;
 }
@@ -6167,195 +6167,195 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/items
-export function isPrimitivesItemsPropertiesItems(value: unknown): value is types.PrimitivesItemsPropertiesItems {
-if(!_isReferencePrimitivesItemsPropertiesItems(value)) {
+export function isPrimitivesItemsItems(value: unknown): value is types.PrimitivesItemsItems {
+if(!_isReferencePrimitivesItemsItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePrimitivesItemsPropertiesItems(value: unknown): value is unknown {
+function _isReferencePrimitivesItemsItems(value: unknown): value is unknown {
 if(!isPrimitivesItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/collectionFormat
-export function isPrimitivesItemsPropertiesCollectionFormat(value: unknown): value is types.PrimitivesItemsPropertiesCollectionFormat {
-if(!_isReferencePrimitivesItemsPropertiesCollectionFormat(value)) {
+export function isPrimitivesItemsCollectionFormat(value: unknown): value is types.PrimitivesItemsCollectionFormat {
+if(!_isReferencePrimitivesItemsCollectionFormat(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePrimitivesItemsPropertiesCollectionFormat(value: unknown): value is unknown {
+function _isReferencePrimitivesItemsCollectionFormat(value: unknown): value is unknown {
 if(!isDefinitionsCollectionFormat(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/default
-export function isPrimitivesItemsPropertiesDefault(value: unknown): value is types.PrimitivesItemsPropertiesDefault {
-if(!_isReferencePrimitivesItemsPropertiesDefault(value)) {
+export function isPrimitivesItemsDefault(value: unknown): value is types.PrimitivesItemsDefault {
+if(!_isReferencePrimitivesItemsDefault(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePrimitivesItemsPropertiesDefault(value: unknown): value is unknown {
+function _isReferencePrimitivesItemsDefault(value: unknown): value is unknown {
 if(!isDefinitionsDefault(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/maximum
-export function isPrimitivesItemsPropertiesMaximum(value: unknown): value is types.PrimitivesItemsPropertiesMaximum {
-if(!_isReferencePrimitivesItemsPropertiesMaximum(value)) {
+export function isPrimitivesItemsMaximum(value: unknown): value is types.PrimitivesItemsMaximum {
+if(!_isReferencePrimitivesItemsMaximum(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePrimitivesItemsPropertiesMaximum(value: unknown): value is unknown {
+function _isReferencePrimitivesItemsMaximum(value: unknown): value is unknown {
 if(!isDefinitionsMaximum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/exclusiveMaximum
-export function isPrimitivesItemsPropertiesExclusiveMaximum(value: unknown): value is types.PrimitivesItemsPropertiesExclusiveMaximum {
-if(!_isReferencePrimitivesItemsPropertiesExclusiveMaximum(value)) {
+export function isPrimitivesItemsExclusiveMaximum(value: unknown): value is types.PrimitivesItemsExclusiveMaximum {
+if(!_isReferencePrimitivesItemsExclusiveMaximum(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePrimitivesItemsPropertiesExclusiveMaximum(value: unknown): value is unknown {
+function _isReferencePrimitivesItemsExclusiveMaximum(value: unknown): value is unknown {
 if(!isDefinitionsExclusiveMaximum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/minimum
-export function isPrimitivesItemsPropertiesMinimum(value: unknown): value is types.PrimitivesItemsPropertiesMinimum {
-if(!_isReferencePrimitivesItemsPropertiesMinimum(value)) {
+export function isPrimitivesItemsMinimum(value: unknown): value is types.PrimitivesItemsMinimum {
+if(!_isReferencePrimitivesItemsMinimum(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePrimitivesItemsPropertiesMinimum(value: unknown): value is unknown {
+function _isReferencePrimitivesItemsMinimum(value: unknown): value is unknown {
 if(!isDefinitionsMinimum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/exclusiveMinimum
-export function isPrimitivesItemsPropertiesExclusiveMinimum(value: unknown): value is types.PrimitivesItemsPropertiesExclusiveMinimum {
-if(!_isReferencePrimitivesItemsPropertiesExclusiveMinimum(value)) {
+export function isPrimitivesItemsExclusiveMinimum(value: unknown): value is types.PrimitivesItemsExclusiveMinimum {
+if(!_isReferencePrimitivesItemsExclusiveMinimum(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePrimitivesItemsPropertiesExclusiveMinimum(value: unknown): value is unknown {
+function _isReferencePrimitivesItemsExclusiveMinimum(value: unknown): value is unknown {
 if(!isDefinitionsExclusiveMinimum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/maxLength
-export function isPrimitivesItemsPropertiesMaxLength(value: unknown): value is types.PrimitivesItemsPropertiesMaxLength {
-if(!_isReferencePrimitivesItemsPropertiesMaxLength(value)) {
+export function isPrimitivesItemsMaxLength(value: unknown): value is types.PrimitivesItemsMaxLength {
+if(!_isReferencePrimitivesItemsMaxLength(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePrimitivesItemsPropertiesMaxLength(value: unknown): value is unknown {
+function _isReferencePrimitivesItemsMaxLength(value: unknown): value is unknown {
 if(!isDefinitionsMaxLength(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/minLength
-export function isPrimitivesItemsPropertiesMinLength(value: unknown): value is types.PrimitivesItemsPropertiesMinLength {
-if(!_isReferencePrimitivesItemsPropertiesMinLength(value)) {
+export function isPrimitivesItemsMinLength(value: unknown): value is types.PrimitivesItemsMinLength {
+if(!_isReferencePrimitivesItemsMinLength(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePrimitivesItemsPropertiesMinLength(value: unknown): value is unknown {
+function _isReferencePrimitivesItemsMinLength(value: unknown): value is unknown {
 if(!isDefinitionsMinLength(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/pattern
-export function isPrimitivesItemsPropertiesPattern(value: unknown): value is types.PrimitivesItemsPropertiesPattern {
-if(!_isReferencePrimitivesItemsPropertiesPattern(value)) {
+export function isPrimitivesItemsPattern(value: unknown): value is types.PrimitivesItemsPattern {
+if(!_isReferencePrimitivesItemsPattern(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePrimitivesItemsPropertiesPattern(value: unknown): value is unknown {
+function _isReferencePrimitivesItemsPattern(value: unknown): value is unknown {
 if(!isDefinitionsPattern(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/maxItems
-export function isPrimitivesItemsPropertiesMaxItems(value: unknown): value is types.PrimitivesItemsPropertiesMaxItems {
-if(!_isReferencePrimitivesItemsPropertiesMaxItems(value)) {
+export function isPrimitivesItemsMaxItems(value: unknown): value is types.PrimitivesItemsMaxItems {
+if(!_isReferencePrimitivesItemsMaxItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePrimitivesItemsPropertiesMaxItems(value: unknown): value is unknown {
+function _isReferencePrimitivesItemsMaxItems(value: unknown): value is unknown {
 if(!isDefinitionsMaxItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/minItems
-export function isPrimitivesItemsPropertiesMinItems(value: unknown): value is types.PrimitivesItemsPropertiesMinItems {
-if(!_isReferencePrimitivesItemsPropertiesMinItems(value)) {
+export function isPrimitivesItemsMinItems(value: unknown): value is types.PrimitivesItemsMinItems {
+if(!_isReferencePrimitivesItemsMinItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePrimitivesItemsPropertiesMinItems(value: unknown): value is unknown {
+function _isReferencePrimitivesItemsMinItems(value: unknown): value is unknown {
 if(!isDefinitionsMinItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/uniqueItems
-export function isPrimitivesItemsPropertiesUniqueItems(value: unknown): value is types.PrimitivesItemsPropertiesUniqueItems {
-if(!_isReferencePrimitivesItemsPropertiesUniqueItems(value)) {
+export function isPrimitivesItemsUniqueItems(value: unknown): value is types.PrimitivesItemsUniqueItems {
+if(!_isReferencePrimitivesItemsUniqueItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePrimitivesItemsPropertiesUniqueItems(value: unknown): value is unknown {
+function _isReferencePrimitivesItemsUniqueItems(value: unknown): value is unknown {
 if(!isDefinitionsUniqueItems(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/enum
-export function isPrimitivesItemsPropertiesEnum(value: unknown): value is types.PrimitivesItemsPropertiesEnum {
-if(!_isReferencePrimitivesItemsPropertiesEnum(value)) {
+export function isPrimitivesItemsEnum(value: unknown): value is types.PrimitivesItemsEnum {
+if(!_isReferencePrimitivesItemsEnum(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePrimitivesItemsPropertiesEnum(value: unknown): value is unknown {
+function _isReferencePrimitivesItemsEnum(value: unknown): value is unknown {
 if(!isDefinitionsEnum(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/multipleOf
-export function isPrimitivesItemsPropertiesMultipleOf(value: unknown): value is types.PrimitivesItemsPropertiesMultipleOf {
-if(!_isReferencePrimitivesItemsPropertiesMultipleOf(value)) {
+export function isPrimitivesItemsMultipleOf(value: unknown): value is types.PrimitivesItemsMultipleOf {
+if(!_isReferencePrimitivesItemsMultipleOf(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePrimitivesItemsPropertiesMultipleOf(value: unknown): value is unknown {
+function _isReferencePrimitivesItemsMultipleOf(value: unknown): value is unknown {
 if(!isDefinitionsMultipleOf(value)) {
 return false;
 }
@@ -6415,7 +6415,7 @@ if(elementValueSeen.has(elementValue)) {
 return false;
 }
 elementValueSeen.add(elementValue);
-if(!isAdditionalPropertiesItems(elementValue)) {
+if(!isSecurityRequirementItems(elementValue)) {
 return false;
 }
 }
@@ -6523,26 +6523,26 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/tag/properties/description
-export function isTagPropertiesDescription(value: unknown): value is types.TagPropertiesDescription {
-if(!_isStringTagPropertiesDescription(value)) {
+export function isTagDescription(value: unknown): value is types.TagDescription {
+if(!_isStringTagDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringTagPropertiesDescription(value: unknown): value is unknown {
+function _isStringTagDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/tag/properties/externalDocs
-export function isTagPropertiesExternalDocs(value: unknown): value is types.TagPropertiesExternalDocs {
-if(!_isReferenceTagPropertiesExternalDocs(value)) {
+export function isTagExternalDocs(value: unknown): value is types.TagExternalDocs {
+if(!_isReferenceTagExternalDocs(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceTagPropertiesExternalDocs(value: unknown): value is unknown {
+function _isReferenceTagExternalDocs(value: unknown): value is unknown {
 if(!isDefinitionsExternalDocs(value)) {
 return false;
 }
@@ -6580,37 +6580,37 @@ return true;
 }
 function _isOneOfSecurityDefinitionsAdditionalProperties(value: unknown): value is unknown {
 let validCounter = 0;
-if(isAdditionalPropertiesOneOf0(value)) {
+if(isSecurityDefinitions0(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
 return false
 }
-if(isAdditionalPropertiesOneOf1(value)) {
+if(isSecurityDefinitions1(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
 return false
 }
-if(isAdditionalPropertiesOneOf2(value)) {
+if(isSecurityDefinitions2(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
 return false
 }
-if(isAdditionalPropertiesOneOf3(value)) {
+if(isSecurityDefinitions3(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
 return false
 }
-if(isOneOf4(value)) {
+if(isSecurityDefinitions4(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
 return false
 }
-if(isOneOf5(value)) {
+if(isSecurityDefinitions5(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
@@ -6638,13 +6638,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/basicAuthenticationSecurity/properties/description
-export function isBasicAuthenticationSecurityPropertiesDescription(value: unknown): value is types.BasicAuthenticationSecurityPropertiesDescription {
-if(!_isStringBasicAuthenticationSecurityPropertiesDescription(value)) {
+export function isBasicAuthenticationSecurityDescription(value: unknown): value is types.BasicAuthenticationSecurityDescription {
+if(!_isStringBasicAuthenticationSecurityDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringBasicAuthenticationSecurityPropertiesDescription(value: unknown): value is unknown {
+function _isStringBasicAuthenticationSecurityDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
@@ -6719,13 +6719,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/apiKeySecurity/properties/description
-export function isApiKeySecurityPropertiesDescription(value: unknown): value is types.ApiKeySecurityPropertiesDescription {
-if(!_isStringApiKeySecurityPropertiesDescription(value)) {
+export function isApiKeySecurityDescription(value: unknown): value is types.ApiKeySecurityDescription {
+if(!_isStringApiKeySecurityDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringApiKeySecurityPropertiesDescription(value: unknown): value is unknown {
+function _isStringApiKeySecurityDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
@@ -6813,13 +6813,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/oauth2ImplicitSecurity/properties/description
-export function isOauth2ImplicitSecurityPropertiesDescription(value: unknown): value is types.Oauth2ImplicitSecurityPropertiesDescription {
-if(!_isStringOauth2ImplicitSecurityPropertiesDescription(value)) {
+export function isOauth2ImplicitSecurityDescription(value: unknown): value is types.Oauth2ImplicitSecurityDescription {
+if(!_isStringOauth2ImplicitSecurityDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringOauth2ImplicitSecurityPropertiesDescription(value: unknown): value is unknown {
+function _isStringOauth2ImplicitSecurityDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
@@ -6907,13 +6907,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/oauth2PasswordSecurity/properties/description
-export function isOauth2PasswordSecurityPropertiesDescription(value: unknown): value is types.Oauth2PasswordSecurityPropertiesDescription {
-if(!_isStringOauth2PasswordSecurityPropertiesDescription(value)) {
+export function isOauth2PasswordSecurityDescription(value: unknown): value is types.Oauth2PasswordSecurityDescription {
+if(!_isStringOauth2PasswordSecurityDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringOauth2PasswordSecurityPropertiesDescription(value: unknown): value is unknown {
+function _isStringOauth2PasswordSecurityDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
@@ -7001,13 +7001,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/oauth2ApplicationSecurity/properties/description
-export function isOauth2ApplicationSecurityPropertiesDescription(value: unknown): value is types.Oauth2ApplicationSecurityPropertiesDescription {
-if(!_isStringOauth2ApplicationSecurityPropertiesDescription(value)) {
+export function isOauth2ApplicationSecurityDescription(value: unknown): value is types.Oauth2ApplicationSecurityDescription {
+if(!_isStringOauth2ApplicationSecurityDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringOauth2ApplicationSecurityPropertiesDescription(value: unknown): value is unknown {
+function _isStringOauth2ApplicationSecurityDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
@@ -7108,13 +7108,13 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/oauth2AccessCodeSecurity/properties/description
-export function isOauth2AccessCodeSecurityPropertiesDescription(value: unknown): value is types.Oauth2AccessCodeSecurityPropertiesDescription {
-if(!_isStringOauth2AccessCodeSecurityPropertiesDescription(value)) {
+export function isOauth2AccessCodeSecurityDescription(value: unknown): value is types.Oauth2AccessCodeSecurityDescription {
+if(!_isStringOauth2AccessCodeSecurityDescription(value)) {
 return false;
 }
 return true;
 }
-function _isStringOauth2AccessCodeSecurityPropertiesDescription(value: unknown): value is unknown {
+function _isStringOauth2AccessCodeSecurityDescription(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
@@ -7178,13 +7178,13 @@ return true;
 }
 function _isOneOfParametersListItems(value: unknown): value is unknown {
 let validCounter = 0;
-if(isItemsOneOf0(value)) {
+if(isParametersList0(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
 return false
 }
-if(isItemsOneOf1(value)) {
+if(isParametersList1(value)) {
 validCounter++;
 }
 if(validCounter > 1) {
@@ -7245,39 +7245,39 @@ function _isNeverJsonReferenceAdditionalProperties(value: unknown): value is unk
 return false;
 }
 // http://swagger.io/v2/schema.json#/properties/consumes/allOf/0
-export function isSchemaJsonConsumesAllOf0(value: unknown): value is types.SchemaJsonConsumesAllOf0 {
-if(!_isReferenceSchemaJsonConsumesAllOf0(value)) {
+export function isPropertiesAllOfConsumes0(value: unknown): value is types.PropertiesAllOfConsumes0 {
+if(!_isReferencePropertiesAllOfConsumes0(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaJsonConsumesAllOf0(value: unknown): value is unknown {
+function _isReferencePropertiesAllOfConsumes0(value: unknown): value is unknown {
 if(!isMediaTypeList(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/properties/produces/allOf/0
-export function isSchemaJsonProducesAllOf0(value: unknown): value is types.SchemaJsonProducesAllOf0 {
-if(!_isReferenceSchemaJsonProducesAllOf0(value)) {
+export function isPropertiesAllOfProduces0(value: unknown): value is types.PropertiesAllOfProduces0 {
+if(!_isReferencePropertiesAllOfProduces0(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaJsonProducesAllOf0(value: unknown): value is unknown {
+function _isReferencePropertiesAllOfProduces0(value: unknown): value is unknown {
 if(!isMediaTypeList(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/properties/tags/items
-export function isSchemaJsonTagsItems(value: unknown): value is types.SchemaJsonTagsItems {
-if(!_isReferenceSchemaJsonTagsItems(value)) {
+export function isPropertiesTagsItems(value: unknown): value is types.PropertiesTagsItems {
+if(!_isReferencePropertiesTagsItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaJsonTagsItems(value: unknown): value is unknown {
+function _isReferencePropertiesTagsItems(value: unknown): value is unknown {
 if(!isTag(value)) {
 return false;
 }
@@ -7297,26 +7297,26 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/produces/allOf/0
-export function isOperationProducesAllOf0(value: unknown): value is types.OperationProducesAllOf0 {
-if(!_isReferenceOperationProducesAllOf0(value)) {
+export function isOperationAllOfProduces0(value: unknown): value is types.OperationAllOfProduces0 {
+if(!_isReferenceOperationAllOfProduces0(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceOperationProducesAllOf0(value: unknown): value is unknown {
+function _isReferenceOperationAllOfProduces0(value: unknown): value is unknown {
 if(!isMediaTypeList(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/operation/properties/consumes/allOf/0
-export function isOperationConsumesAllOf0(value: unknown): value is types.OperationConsumesAllOf0 {
-if(!_isReferenceOperationConsumesAllOf0(value)) {
+export function isOperationAllOfConsumes0(value: unknown): value is types.OperationAllOfConsumes0 {
+if(!_isReferenceOperationAllOfConsumes0(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceOperationConsumesAllOf0(value: unknown): value is unknown {
+function _isReferenceOperationAllOfConsumes0(value: unknown): value is unknown {
 if(!isMediaTypeList(value)) {
 return false;
 }
@@ -7346,26 +7346,26 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/response/properties/schema/oneOf/0
-export function isSchemaOneOf0(value: unknown): value is types.SchemaOneOf0 {
-if(!_isReferenceSchemaOneOf0(value)) {
+export function isResponse0(value: unknown): value is types.Response0 {
+if(!_isReferenceResponse0(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaOneOf0(value: unknown): value is unknown {
+function _isReferenceResponse0(value: unknown): value is unknown {
 if(!isDefinitionsSchema(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/response/properties/schema/oneOf/1
-export function isSchemaOneOf1(value: unknown): value is types.SchemaOneOf1 {
-if(!_isReferenceSchemaOneOf1(value)) {
+export function isResponse1(value: unknown): value is types.Response1 {
+if(!_isReferenceResponse1(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceSchemaOneOf1(value: unknown): value is unknown {
+function _isReferenceResponse1(value: unknown): value is unknown {
 if(!isFileSchema(value)) {
 return false;
 }
@@ -7426,7 +7426,7 @@ return false;
 }
 for(let elementIndex = 0; elementIndex < value.length; elementIndex ++) {
 const elementValue = value[elementIndex];
-if(!isItemsAnyOf1Items(elementValue)) {
+if(!isItems1AnyOfItems(elementValue)) {
 return false;
 }
 }
@@ -7446,186 +7446,186 @@ return false;
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/properties/additionalProperties
-export function isPropertiesPropertiesAdditionalProperties(value: unknown): value is types.PropertiesPropertiesAdditionalProperties {
-if(!_isReferencePropertiesPropertiesAdditionalProperties(value)) {
+export function isPropertiesAdditionalProperties(value: unknown): value is types.PropertiesAdditionalProperties {
+if(!_isReferencePropertiesAdditionalProperties(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePropertiesPropertiesAdditionalProperties(value: unknown): value is unknown {
+function _isReferencePropertiesAdditionalProperties(value: unknown): value is unknown {
 if(!isDefinitionsSchema(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/securityRequirement/additionalProperties/items
-export function isAdditionalPropertiesItems(value: unknown): value is types.AdditionalPropertiesItems {
-if(!_isStringAdditionalPropertiesItems(value)) {
+export function isSecurityRequirementItems(value: unknown): value is types.SecurityRequirementItems {
+if(!_isStringSecurityRequirementItems(value)) {
 return false;
 }
 return true;
 }
-function _isStringAdditionalPropertiesItems(value: unknown): value is unknown {
+function _isStringSecurityRequirementItems(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/0
-export function isAdditionalPropertiesOneOf0(value: unknown): value is types.AdditionalPropertiesOneOf0 {
-if(!_isReferenceAdditionalPropertiesOneOf0(value)) {
+export function isSecurityDefinitions0(value: unknown): value is types.SecurityDefinitions0 {
+if(!_isReferenceSecurityDefinitions0(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceAdditionalPropertiesOneOf0(value: unknown): value is unknown {
+function _isReferenceSecurityDefinitions0(value: unknown): value is unknown {
 if(!isBasicAuthenticationSecurity(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/1
-export function isAdditionalPropertiesOneOf1(value: unknown): value is types.AdditionalPropertiesOneOf1 {
-if(!_isReferenceAdditionalPropertiesOneOf1(value)) {
+export function isSecurityDefinitions1(value: unknown): value is types.SecurityDefinitions1 {
+if(!_isReferenceSecurityDefinitions1(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceAdditionalPropertiesOneOf1(value: unknown): value is unknown {
+function _isReferenceSecurityDefinitions1(value: unknown): value is unknown {
 if(!isApiKeySecurity(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/2
-export function isAdditionalPropertiesOneOf2(value: unknown): value is types.AdditionalPropertiesOneOf2 {
-if(!_isReferenceAdditionalPropertiesOneOf2(value)) {
+export function isSecurityDefinitions2(value: unknown): value is types.SecurityDefinitions2 {
+if(!_isReferenceSecurityDefinitions2(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceAdditionalPropertiesOneOf2(value: unknown): value is unknown {
+function _isReferenceSecurityDefinitions2(value: unknown): value is unknown {
 if(!isOauth2ImplicitSecurity(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/3
-export function isAdditionalPropertiesOneOf3(value: unknown): value is types.AdditionalPropertiesOneOf3 {
-if(!_isReferenceAdditionalPropertiesOneOf3(value)) {
+export function isSecurityDefinitions3(value: unknown): value is types.SecurityDefinitions3 {
+if(!_isReferenceSecurityDefinitions3(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceAdditionalPropertiesOneOf3(value: unknown): value is unknown {
+function _isReferenceSecurityDefinitions3(value: unknown): value is unknown {
 if(!isOauth2PasswordSecurity(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/4
-export function isOneOf4(value: unknown): value is types.OneOf4 {
-if(!_isReferenceOneOf4(value)) {
+export function isSecurityDefinitions4(value: unknown): value is types.SecurityDefinitions4 {
+if(!_isReferenceSecurityDefinitions4(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceOneOf4(value: unknown): value is unknown {
+function _isReferenceSecurityDefinitions4(value: unknown): value is unknown {
 if(!isOauth2ApplicationSecurity(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/5
-export function isOneOf5(value: unknown): value is types.OneOf5 {
-if(!_isReferenceOneOf5(value)) {
+export function isSecurityDefinitions5(value: unknown): value is types.SecurityDefinitions5 {
+if(!_isReferenceSecurityDefinitions5(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceOneOf5(value: unknown): value is unknown {
+function _isReferenceSecurityDefinitions5(value: unknown): value is unknown {
 if(!isOauth2AccessCodeSecurity(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/parametersList/items/oneOf/0
-export function isItemsOneOf0(value: unknown): value is types.ItemsOneOf0 {
-if(!_isReferenceItemsOneOf0(value)) {
+export function isParametersList0(value: unknown): value is types.ParametersList0 {
+if(!_isReferenceParametersList0(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceItemsOneOf0(value: unknown): value is unknown {
+function _isReferenceParametersList0(value: unknown): value is unknown {
 if(!isParameter(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/parametersList/items/oneOf/1
-export function isItemsOneOf1(value: unknown): value is types.ItemsOneOf1 {
-if(!_isReferenceItemsOneOf1(value)) {
+export function isParametersList1(value: unknown): value is types.ParametersList1 {
+if(!_isReferenceParametersList1(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceItemsOneOf1(value: unknown): value is unknown {
+function _isReferenceParametersList1(value: unknown): value is unknown {
 if(!isJsonReference(value)) {
 return false;
 }
 return true;
 }
 // http://swagger.io/v2/schema.json#/definitions/schema/properties/items/anyOf/1/items
-export function isItemsAnyOf1Items(value: unknown): value is types.ItemsAnyOf1Items {
-if(!_isReferenceItemsAnyOf1Items(value)) {
+export function isItems1AnyOfItems(value: unknown): value is types.Items1AnyOfItems {
+if(!_isReferenceItems1AnyOfItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceItemsAnyOf1Items(value: unknown): value is unknown {
+function _isReferenceItems1AnyOfItems(value: unknown): value is unknown {
 if(!isDefinitionsSchema(value)) {
 return false;
 }
 return true;
 }
 // http://json-schema.org/draft-04/schema#/properties/title
-export function isDraft04SchemaPropertiesTitle(value: unknown): value is types.Draft04SchemaPropertiesTitle {
-if(!_isStringDraft04SchemaPropertiesTitle(value)) {
+export function isDraft04Title(value: unknown): value is types.Draft04Title {
+if(!_isStringDraft04Title(value)) {
 return false;
 }
 return true;
 }
-function _isStringDraft04SchemaPropertiesTitle(value: unknown): value is unknown {
+function _isStringDraft04Title(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
 return true;
 }
 // http://json-schema.org/draft-04/schema#/properties/description
-export function isDraft04SchemaPropertiesDescription(value: unknown): value is types.Draft04SchemaPropertiesDescription {
-if(!_isStringDraft04SchemaPropertiesDescription(value)) {
+export function isDraft04Description(value: unknown): value is types.Draft04Description {
+if(!_isStringDraft04Description(value)) {
 return false;
 }
 return true;
 }
-function _isStringDraft04SchemaPropertiesDescription(value: unknown): value is unknown {
+function _isStringDraft04Description(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
 return true;
 }
 // http://json-schema.org/draft-04/schema#/properties/default
-export function isDraft04SchemaPropertiesDefault(value: unknown): value is types.Draft04SchemaPropertiesDefault {
+export function isDraft04Default(value: unknown): value is types.Draft04Default {
 return true;
 }
 // http://json-schema.org/draft-04/schema#/properties/multipleOf
-export function isDraft04SchemaPropertiesMultipleOf(value: unknown): value is types.Draft04SchemaPropertiesMultipleOf {
-if(!_isNumberDraft04SchemaPropertiesMultipleOf(value)) {
+export function isDraft04MultipleOf(value: unknown): value is types.Draft04MultipleOf {
+if(!_isNumberDraft04MultipleOf(value)) {
 return false;
 }
 return true;
 }
-function _isNumberDraft04SchemaPropertiesMultipleOf(value: unknown): value is unknown {
+function _isNumberDraft04MultipleOf(value: unknown): value is unknown {
 if(typeof value !== "number" || isNaN(value) || value % 1 !== 0) {
 return false;
 }
@@ -7635,52 +7635,52 @@ return false;
 return true;
 }
 // http://json-schema.org/draft-04/schema#/properties/maximum
-export function isDraft04SchemaPropertiesMaximum(value: unknown): value is types.Draft04SchemaPropertiesMaximum {
-if(!_isNumberDraft04SchemaPropertiesMaximum(value)) {
+export function isDraft04Maximum(value: unknown): value is types.Draft04Maximum {
+if(!_isNumberDraft04Maximum(value)) {
 return false;
 }
 return true;
 }
-function _isNumberDraft04SchemaPropertiesMaximum(value: unknown): value is unknown {
+function _isNumberDraft04Maximum(value: unknown): value is unknown {
 if(typeof value !== "number" || isNaN(value) || value % 1 !== 0) {
 return false;
 }
 return true;
 }
 // http://json-schema.org/draft-04/schema#/properties/exclusiveMaximum
-export function isDraft04SchemaPropertiesExclusiveMaximum(value: unknown): value is types.Draft04SchemaPropertiesExclusiveMaximum {
-if(!_isBooleanDraft04SchemaPropertiesExclusiveMaximum(value)) {
+export function isDraft04ExclusiveMaximum(value: unknown): value is types.Draft04ExclusiveMaximum {
+if(!_isBooleanDraft04ExclusiveMaximum(value)) {
 return false;
 }
 return true;
 }
-function _isBooleanDraft04SchemaPropertiesExclusiveMaximum(value: unknown): value is unknown {
+function _isBooleanDraft04ExclusiveMaximum(value: unknown): value is unknown {
 if(typeof value !== "boolean") {
 return false;
 }
 return true;
 }
 // http://json-schema.org/draft-04/schema#/properties/minimum
-export function isDraft04SchemaPropertiesMinimum(value: unknown): value is types.Draft04SchemaPropertiesMinimum {
-if(!_isNumberDraft04SchemaPropertiesMinimum(value)) {
+export function isDraft04Minimum(value: unknown): value is types.Draft04Minimum {
+if(!_isNumberDraft04Minimum(value)) {
 return false;
 }
 return true;
 }
-function _isNumberDraft04SchemaPropertiesMinimum(value: unknown): value is unknown {
+function _isNumberDraft04Minimum(value: unknown): value is unknown {
 if(typeof value !== "number" || isNaN(value) || value % 1 !== 0) {
 return false;
 }
 return true;
 }
 // http://json-schema.org/draft-04/schema#/properties/exclusiveMinimum
-export function isDraft04SchemaPropertiesExclusiveMinimum(value: unknown): value is types.Draft04SchemaPropertiesExclusiveMinimum {
-if(!_isBooleanDraft04SchemaPropertiesExclusiveMinimum(value)) {
+export function isDraft04ExclusiveMinimum(value: unknown): value is types.Draft04ExclusiveMinimum {
+if(!_isBooleanDraft04ExclusiveMinimum(value)) {
 return false;
 }
 return true;
 }
-function _isBooleanDraft04SchemaPropertiesExclusiveMinimum(value: unknown): value is unknown {
+function _isBooleanDraft04ExclusiveMinimum(value: unknown): value is unknown {
 if(typeof value !== "boolean") {
 return false;
 }
@@ -7710,65 +7710,65 @@ return false;
 return true;
 }
 function _isAllOfPositiveIntegerDefault0(value: unknown): value is unknown {
-if(!isPositiveIntegerDefault0AllOf0(value)) {
+if(!isPositiveIntegerDefault00(value)) {
 return false;
 }
-if(!isAllOf1(value)) {
+if(!isPositiveIntegerDefault01(value)) {
 return false;
 }
 return true;
 }
 // http://json-schema.org/draft-04/schema#/definitions/positiveIntegerDefault0/allOf/0
-export function isPositiveIntegerDefault0AllOf0(value: unknown): value is types.PositiveIntegerDefault0AllOf0 {
-if(!_isReferencePositiveIntegerDefault0AllOf0(value)) {
+export function isPositiveIntegerDefault00(value: unknown): value is types.PositiveIntegerDefault00 {
+if(!_isReferencePositiveIntegerDefault00(value)) {
 return false;
 }
 return true;
 }
-function _isReferencePositiveIntegerDefault0AllOf0(value: unknown): value is unknown {
+function _isReferencePositiveIntegerDefault00(value: unknown): value is unknown {
 if(!isPositiveInteger(value)) {
 return false;
 }
 return true;
 }
 // http://json-schema.org/draft-04/schema#/definitions/positiveIntegerDefault0/allOf/1
-export function isAllOf1(value: unknown): value is types.AllOf1 {
+export function isPositiveIntegerDefault01(value: unknown): value is types.PositiveIntegerDefault01 {
 return true;
 }
 // http://json-schema.org/draft-04/schema#/properties/pattern
-export function isDraft04SchemaPropertiesPattern(value: unknown): value is types.Draft04SchemaPropertiesPattern {
-if(!_isStringDraft04SchemaPropertiesPattern(value)) {
+export function isDraft04Pattern(value: unknown): value is types.Draft04Pattern {
+if(!_isStringDraft04Pattern(value)) {
 return false;
 }
 return true;
 }
-function _isStringDraft04SchemaPropertiesPattern(value: unknown): value is unknown {
+function _isStringDraft04Pattern(value: unknown): value is unknown {
 if(typeof value !== "string") {
 return false;
 }
 return true;
 }
 // http://json-schema.org/draft-04/schema#/properties/uniqueItems
-export function isDraft04SchemaPropertiesUniqueItems(value: unknown): value is types.Draft04SchemaPropertiesUniqueItems {
-if(!_isBooleanDraft04SchemaPropertiesUniqueItems(value)) {
+export function isDraft04UniqueItems(value: unknown): value is types.Draft04UniqueItems {
+if(!_isBooleanDraft04UniqueItems(value)) {
 return false;
 }
 return true;
 }
-function _isBooleanDraft04SchemaPropertiesUniqueItems(value: unknown): value is unknown {
+function _isBooleanDraft04UniqueItems(value: unknown): value is unknown {
 if(typeof value !== "boolean") {
 return false;
 }
 return true;
 }
 // http://json-schema.org/draft-04/schema#/properties/enum
-export function isDraft04SchemaPropertiesEnum(value: unknown): value is types.Draft04SchemaPropertiesEnum {
-if(!_isArrayDraft04SchemaPropertiesEnum(value)) {
+export function isDraft04Enum(value: unknown): value is types.Draft04Enum {
+if(!_isArrayDraft04Enum(value)) {
 return false;
 }
 return true;
 }
-function _isArrayDraft04SchemaPropertiesEnum(value: unknown): value is unknown {
+function _isArrayDraft04Enum(value: unknown): value is unknown {
 if(!Array.isArray(value)) {
 return false;
 }
@@ -7826,13 +7826,13 @@ return false;
 return true;
 }
 // http://json-schema.org/draft-04/schema#/properties/type
-export function isDraft04SchemaType(value: unknown): value is types.Draft04SchemaType {
-if(!_isAnyOfDraft04SchemaType(value)) {
+export function isDraft04Type(value: unknown): value is types.Draft04Type {
+if(!_isAnyOfDraft04Type(value)) {
 return false;
 }
 return true;
 }
-function _isAnyOfDraft04SchemaType(value: unknown): value is unknown {
+function _isAnyOfDraft04Type(value: unknown): value is unknown {
 if(isTypeAnyOf0(value)) {
 return true;
 }
@@ -7875,20 +7875,20 @@ if(elementValueSeen.has(elementValue)) {
 return false;
 }
 elementValueSeen.add(elementValue);
-if(!isTypeAnyOf1Items(elementValue)) {
+if(!isType1AnyOfItems(elementValue)) {
 return false;
 }
 }
 return true;
 }
 // http://json-schema.org/draft-04/schema#/properties/type/anyOf/1/items
-export function isTypeAnyOf1Items(value: unknown): value is types.TypeAnyOf1Items {
-if(!_isReferenceTypeAnyOf1Items(value)) {
+export function isType1AnyOfItems(value: unknown): value is types.Type1AnyOfItems {
+if(!_isReferenceType1AnyOfItems(value)) {
 return false;
 }
 return true;
 }
-function _isReferenceTypeAnyOf1Items(value: unknown): value is unknown {
+function _isReferenceType1AnyOfItems(value: unknown): value is unknown {
 if(!isSimpleTypes(value)) {
 return false;
 }

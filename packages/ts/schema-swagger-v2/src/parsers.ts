@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.8.21                         -- www.JsonSchema42.org
+// v0.9.0                          -- www.JsonSchema42.org
 export function parseSchemaJson(value: unknown): unknown {
 return _parseMapSchemaJson(value);
 }
@@ -33,17 +33,17 @@ result[propertyName] = propertyValue;
 break;
 }
 case "schemes": {
-const propertyValue = parseSchemaJsonSchemes(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesSchemes(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "consumes": {
-const propertyValue = parseSchemaJsonConsumes(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesConsumes(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "produces": {
-const propertyValue = parseSchemaJsonProduces(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesProduces(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -58,17 +58,17 @@ result[propertyName] = propertyValue;
 break;
 }
 case "parameters": {
-const propertyValue = parseSchemaJsonParameters(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesParameters(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "responses": {
-const propertyValue = parseSchemaJsonPropertiesResponses(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesResponses(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "security": {
-const propertyValue = parseSchemaJsonPropertiesSecurity(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesSecurity(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -78,17 +78,17 @@ result[propertyName] = propertyValue;
 break;
 }
 case "tags": {
-const propertyValue = parseSchemaJsonTags(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesTags(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "externalDocs": {
-const propertyValue = parseSchemaJsonPropertiesExternalDocs(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesExternalDocs(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 }
-result[propertyName] ??= parseSchemaJsonAdditionalProperties(value[propertyName as keyof typeof value]);
+result[propertyName] ??= parseV2AdditionalProperties(value[propertyName as keyof typeof value]);
 }
 return result;
 }
@@ -103,7 +103,7 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "title": {
-const propertyValue = parseInfoPropertiesTitle(value[propertyName as keyof typeof value]);
+const propertyValue = parseInfoTitle(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -113,7 +113,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "description": {
-const propertyValue = parseInfoPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseInfoDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -123,12 +123,12 @@ result[propertyName] = propertyValue;
 break;
 }
 case "contact": {
-const propertyValue = parsePropertiesContact(value[propertyName as keyof typeof value]);
+const propertyValue = parseInfoContact(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "license": {
-const propertyValue = parsePropertiesLicense(value[propertyName as keyof typeof value]);
+const propertyValue = parseInfoLicense(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -255,7 +255,7 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "description": {
-const propertyValue = parseExternalDocsPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseExternalDocsDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -317,12 +317,12 @@ result[propertyName] = propertyValue;
 break;
 }
 case "description": {
-const propertyValue = parseOperationPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseOperationDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "externalDocs": {
-const propertyValue = parseOperationPropertiesExternalDocs(value[propertyName as keyof typeof value]);
+const propertyValue = parseOperationExternalDocs(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -347,7 +347,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "responses": {
-const propertyValue = parseOperationPropertiesResponses(value[propertyName as keyof typeof value]);
+const propertyValue = parseOperationResponses(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -362,7 +362,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "security": {
-const propertyValue = parseOperationPropertiesSecurity(value[propertyName as keyof typeof value]);
+const propertyValue = parseOperationSecurity(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -453,7 +453,7 @@ export function parseResponseValue(value: unknown): unknown {
 return _parseOneOfResponseValue(value);
 }
 function _parseOneOfResponseValue(value: unknown): unknown {
-return parseResponseValueOneOf0(value) ?? parseResponseValueOneOf1(value);
+return parseResponseValue0(value) ?? parseResponseValue1(value);
 }
 export function parseResponse(value: unknown): unknown {
 return _parseMapResponse(value);
@@ -464,22 +464,22 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "description": {
-const propertyValue = parseResponsePropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseResponseDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "schema": {
-const propertyValue = parseResponsePropertiesSchema(value[propertyName as keyof typeof value]);
+const propertyValue = parseResponseSchema(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "headers": {
-const propertyValue = parsePropertiesHeaders(value[propertyName as keyof typeof value]);
+const propertyValue = parseResponseHeaders(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "examples": {
-const propertyValue = parsePropertiesExamples(value[propertyName as keyof typeof value]);
+const propertyValue = parseResponseExamples(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -522,82 +522,82 @@ result[propertyName] = propertyValue;
 break;
 }
 case "items": {
-const propertyValue = parseHeaderPropertiesItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "collectionFormat": {
-const propertyValue = parseHeaderPropertiesCollectionFormat(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderCollectionFormat(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "default": {
-const propertyValue = parseHeaderPropertiesDefault(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderDefault(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maximum": {
-const propertyValue = parseHeaderPropertiesMaximum(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderMaximum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "exclusiveMaximum": {
-const propertyValue = parseHeaderPropertiesExclusiveMaximum(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderExclusiveMaximum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minimum": {
-const propertyValue = parseHeaderPropertiesMinimum(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderMinimum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "exclusiveMinimum": {
-const propertyValue = parseHeaderPropertiesExclusiveMinimum(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderExclusiveMinimum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maxLength": {
-const propertyValue = parseHeaderPropertiesMaxLength(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderMaxLength(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minLength": {
-const propertyValue = parseHeaderPropertiesMinLength(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderMinLength(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "pattern": {
-const propertyValue = parseHeaderPropertiesPattern(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderPattern(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maxItems": {
-const propertyValue = parseHeaderPropertiesMaxItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderMaxItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minItems": {
-const propertyValue = parseHeaderPropertiesMinItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderMinItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "uniqueItems": {
-const propertyValue = parseHeaderPropertiesUniqueItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderUniqueItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "enum": {
-const propertyValue = parseHeaderPropertiesEnum(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderEnum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "multipleOf": {
-const propertyValue = parseHeaderPropertiesMultipleOf(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderMultipleOf(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "description": {
-const propertyValue = parseHeaderPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -620,7 +620,7 @@ const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
 switch(propertyName) {
 case "description": {
-const propertyValue = parseBodyParameterPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseBodyParameterDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -640,7 +640,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "schema": {
-const propertyValue = parseBodyParameterPropertiesSchema(value[propertyName as keyof typeof value]);
+const propertyValue = parseBodyParameterSchema(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -670,7 +670,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "description": {
-const propertyValue = parseHeaderParameterSubSchemaPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderParameterSubSchemaDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -690,77 +690,77 @@ result[propertyName] = propertyValue;
 break;
 }
 case "items": {
-const propertyValue = parseHeaderParameterSubSchemaPropertiesItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderParameterSubSchemaItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "collectionFormat": {
-const propertyValue = parseHeaderParameterSubSchemaPropertiesCollectionFormat(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderParameterSubSchemaCollectionFormat(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "default": {
-const propertyValue = parseHeaderParameterSubSchemaPropertiesDefault(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderParameterSubSchemaDefault(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maximum": {
-const propertyValue = parseHeaderParameterSubSchemaPropertiesMaximum(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderParameterSubSchemaMaximum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "exclusiveMaximum": {
-const propertyValue = parseHeaderParameterSubSchemaPropertiesExclusiveMaximum(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderParameterSubSchemaExclusiveMaximum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minimum": {
-const propertyValue = parseHeaderParameterSubSchemaPropertiesMinimum(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderParameterSubSchemaMinimum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "exclusiveMinimum": {
-const propertyValue = parseHeaderParameterSubSchemaPropertiesExclusiveMinimum(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderParameterSubSchemaExclusiveMinimum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maxLength": {
-const propertyValue = parseHeaderParameterSubSchemaPropertiesMaxLength(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderParameterSubSchemaMaxLength(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minLength": {
-const propertyValue = parseHeaderParameterSubSchemaPropertiesMinLength(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderParameterSubSchemaMinLength(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "pattern": {
-const propertyValue = parseHeaderParameterSubSchemaPropertiesPattern(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderParameterSubSchemaPattern(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maxItems": {
-const propertyValue = parseHeaderParameterSubSchemaPropertiesMaxItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderParameterSubSchemaMaxItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minItems": {
-const propertyValue = parseHeaderParameterSubSchemaPropertiesMinItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderParameterSubSchemaMinItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "uniqueItems": {
-const propertyValue = parseHeaderParameterSubSchemaPropertiesUniqueItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderParameterSubSchemaUniqueItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "enum": {
-const propertyValue = parseHeaderParameterSubSchemaPropertiesEnum(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderParameterSubSchemaEnum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "multipleOf": {
-const propertyValue = parseHeaderParameterSubSchemaPropertiesMultipleOf(value[propertyName as keyof typeof value]);
+const propertyValue = parseHeaderParameterSubSchemaMultipleOf(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -790,7 +790,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "description": {
-const propertyValue = parseQueryParameterSubSchemaPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseQueryParameterSubSchemaDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -815,77 +815,77 @@ result[propertyName] = propertyValue;
 break;
 }
 case "items": {
-const propertyValue = parseQueryParameterSubSchemaPropertiesItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseQueryParameterSubSchemaItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "collectionFormat": {
-const propertyValue = parseQueryParameterSubSchemaPropertiesCollectionFormat(value[propertyName as keyof typeof value]);
+const propertyValue = parseQueryParameterSubSchemaCollectionFormat(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "default": {
-const propertyValue = parseQueryParameterSubSchemaPropertiesDefault(value[propertyName as keyof typeof value]);
+const propertyValue = parseQueryParameterSubSchemaDefault(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maximum": {
-const propertyValue = parseQueryParameterSubSchemaPropertiesMaximum(value[propertyName as keyof typeof value]);
+const propertyValue = parseQueryParameterSubSchemaMaximum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "exclusiveMaximum": {
-const propertyValue = parseQueryParameterSubSchemaPropertiesExclusiveMaximum(value[propertyName as keyof typeof value]);
+const propertyValue = parseQueryParameterSubSchemaExclusiveMaximum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minimum": {
-const propertyValue = parseQueryParameterSubSchemaPropertiesMinimum(value[propertyName as keyof typeof value]);
+const propertyValue = parseQueryParameterSubSchemaMinimum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "exclusiveMinimum": {
-const propertyValue = parseQueryParameterSubSchemaPropertiesExclusiveMinimum(value[propertyName as keyof typeof value]);
+const propertyValue = parseQueryParameterSubSchemaExclusiveMinimum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maxLength": {
-const propertyValue = parseQueryParameterSubSchemaPropertiesMaxLength(value[propertyName as keyof typeof value]);
+const propertyValue = parseQueryParameterSubSchemaMaxLength(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minLength": {
-const propertyValue = parseQueryParameterSubSchemaPropertiesMinLength(value[propertyName as keyof typeof value]);
+const propertyValue = parseQueryParameterSubSchemaMinLength(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "pattern": {
-const propertyValue = parseQueryParameterSubSchemaPropertiesPattern(value[propertyName as keyof typeof value]);
+const propertyValue = parseQueryParameterSubSchemaPattern(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maxItems": {
-const propertyValue = parseQueryParameterSubSchemaPropertiesMaxItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseQueryParameterSubSchemaMaxItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minItems": {
-const propertyValue = parseQueryParameterSubSchemaPropertiesMinItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseQueryParameterSubSchemaMinItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "uniqueItems": {
-const propertyValue = parseQueryParameterSubSchemaPropertiesUniqueItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseQueryParameterSubSchemaUniqueItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "enum": {
-const propertyValue = parseQueryParameterSubSchemaPropertiesEnum(value[propertyName as keyof typeof value]);
+const propertyValue = parseQueryParameterSubSchemaEnum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "multipleOf": {
-const propertyValue = parseQueryParameterSubSchemaPropertiesMultipleOf(value[propertyName as keyof typeof value]);
+const propertyValue = parseQueryParameterSubSchemaMultipleOf(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -915,7 +915,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "description": {
-const propertyValue = parseFormDataParameterSubSchemaPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseFormDataParameterSubSchemaDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -940,77 +940,77 @@ result[propertyName] = propertyValue;
 break;
 }
 case "items": {
-const propertyValue = parseFormDataParameterSubSchemaPropertiesItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseFormDataParameterSubSchemaItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "collectionFormat": {
-const propertyValue = parseFormDataParameterSubSchemaPropertiesCollectionFormat(value[propertyName as keyof typeof value]);
+const propertyValue = parseFormDataParameterSubSchemaCollectionFormat(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "default": {
-const propertyValue = parseFormDataParameterSubSchemaPropertiesDefault(value[propertyName as keyof typeof value]);
+const propertyValue = parseFormDataParameterSubSchemaDefault(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maximum": {
-const propertyValue = parseFormDataParameterSubSchemaPropertiesMaximum(value[propertyName as keyof typeof value]);
+const propertyValue = parseFormDataParameterSubSchemaMaximum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "exclusiveMaximum": {
-const propertyValue = parseFormDataParameterSubSchemaPropertiesExclusiveMaximum(value[propertyName as keyof typeof value]);
+const propertyValue = parseFormDataParameterSubSchemaExclusiveMaximum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minimum": {
-const propertyValue = parseFormDataParameterSubSchemaPropertiesMinimum(value[propertyName as keyof typeof value]);
+const propertyValue = parseFormDataParameterSubSchemaMinimum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "exclusiveMinimum": {
-const propertyValue = parseFormDataParameterSubSchemaPropertiesExclusiveMinimum(value[propertyName as keyof typeof value]);
+const propertyValue = parseFormDataParameterSubSchemaExclusiveMinimum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maxLength": {
-const propertyValue = parseFormDataParameterSubSchemaPropertiesMaxLength(value[propertyName as keyof typeof value]);
+const propertyValue = parseFormDataParameterSubSchemaMaxLength(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minLength": {
-const propertyValue = parseFormDataParameterSubSchemaPropertiesMinLength(value[propertyName as keyof typeof value]);
+const propertyValue = parseFormDataParameterSubSchemaMinLength(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "pattern": {
-const propertyValue = parseFormDataParameterSubSchemaPropertiesPattern(value[propertyName as keyof typeof value]);
+const propertyValue = parseFormDataParameterSubSchemaPattern(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maxItems": {
-const propertyValue = parseFormDataParameterSubSchemaPropertiesMaxItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseFormDataParameterSubSchemaMaxItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minItems": {
-const propertyValue = parseFormDataParameterSubSchemaPropertiesMinItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseFormDataParameterSubSchemaMinItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "uniqueItems": {
-const propertyValue = parseFormDataParameterSubSchemaPropertiesUniqueItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseFormDataParameterSubSchemaUniqueItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "enum": {
-const propertyValue = parseFormDataParameterSubSchemaPropertiesEnum(value[propertyName as keyof typeof value]);
+const propertyValue = parseFormDataParameterSubSchemaEnum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "multipleOf": {
-const propertyValue = parseFormDataParameterSubSchemaPropertiesMultipleOf(value[propertyName as keyof typeof value]);
+const propertyValue = parseFormDataParameterSubSchemaMultipleOf(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1040,7 +1040,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "description": {
-const propertyValue = parsePathParameterSubSchemaPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parsePathParameterSubSchemaDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1060,77 +1060,77 @@ result[propertyName] = propertyValue;
 break;
 }
 case "items": {
-const propertyValue = parsePathParameterSubSchemaPropertiesItems(value[propertyName as keyof typeof value]);
+const propertyValue = parsePathParameterSubSchemaItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "collectionFormat": {
-const propertyValue = parsePathParameterSubSchemaPropertiesCollectionFormat(value[propertyName as keyof typeof value]);
+const propertyValue = parsePathParameterSubSchemaCollectionFormat(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "default": {
-const propertyValue = parsePathParameterSubSchemaPropertiesDefault(value[propertyName as keyof typeof value]);
+const propertyValue = parsePathParameterSubSchemaDefault(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maximum": {
-const propertyValue = parsePathParameterSubSchemaPropertiesMaximum(value[propertyName as keyof typeof value]);
+const propertyValue = parsePathParameterSubSchemaMaximum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "exclusiveMaximum": {
-const propertyValue = parsePathParameterSubSchemaPropertiesExclusiveMaximum(value[propertyName as keyof typeof value]);
+const propertyValue = parsePathParameterSubSchemaExclusiveMaximum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minimum": {
-const propertyValue = parsePathParameterSubSchemaPropertiesMinimum(value[propertyName as keyof typeof value]);
+const propertyValue = parsePathParameterSubSchemaMinimum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "exclusiveMinimum": {
-const propertyValue = parsePathParameterSubSchemaPropertiesExclusiveMinimum(value[propertyName as keyof typeof value]);
+const propertyValue = parsePathParameterSubSchemaExclusiveMinimum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maxLength": {
-const propertyValue = parsePathParameterSubSchemaPropertiesMaxLength(value[propertyName as keyof typeof value]);
+const propertyValue = parsePathParameterSubSchemaMaxLength(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minLength": {
-const propertyValue = parsePathParameterSubSchemaPropertiesMinLength(value[propertyName as keyof typeof value]);
+const propertyValue = parsePathParameterSubSchemaMinLength(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "pattern": {
-const propertyValue = parsePathParameterSubSchemaPropertiesPattern(value[propertyName as keyof typeof value]);
+const propertyValue = parsePathParameterSubSchemaPattern(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maxItems": {
-const propertyValue = parsePathParameterSubSchemaPropertiesMaxItems(value[propertyName as keyof typeof value]);
+const propertyValue = parsePathParameterSubSchemaMaxItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minItems": {
-const propertyValue = parsePathParameterSubSchemaPropertiesMinItems(value[propertyName as keyof typeof value]);
+const propertyValue = parsePathParameterSubSchemaMinItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "uniqueItems": {
-const propertyValue = parsePathParameterSubSchemaPropertiesUniqueItems(value[propertyName as keyof typeof value]);
+const propertyValue = parsePathParameterSubSchemaUniqueItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "enum": {
-const propertyValue = parsePathParameterSubSchemaPropertiesEnum(value[propertyName as keyof typeof value]);
+const propertyValue = parsePathParameterSubSchemaEnum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "multipleOf": {
-const propertyValue = parsePathParameterSubSchemaPropertiesMultipleOf(value[propertyName as keyof typeof value]);
+const propertyValue = parsePathParameterSubSchemaMultipleOf(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1154,13 +1154,13 @@ return result;
 return undefined;
 }
 function _parseOneOfNonBodyParameter(value: unknown): unknown {
-return parseNonBodyParameterOneOf0(value) ?? parseNonBodyParameterOneOf1(value) ?? parseNonBodyParameterOneOf2(value) ?? parseNonBodyParameterOneOf3(value);
+return parseNonBodyParameter0(value) ?? parseNonBodyParameter1(value) ?? parseNonBodyParameter2(value) ?? parseNonBodyParameter3(value);
 }
 export function parseParameter(value: unknown): unknown {
 return _parseOneOfParameter(value);
 }
 function _parseOneOfParameter(value: unknown): unknown {
-return parseParameterOneOf0(value) ?? parseParameterOneOf1(value);
+return parseParameter0(value) ?? parseParameter1(value);
 }
 export function parseDefinitionsSchema(value: unknown): unknown {
 return _parseMapDefinitionsSchema(value);
@@ -1181,72 +1181,72 @@ result[propertyName] = propertyValue;
 break;
 }
 case "title": {
-const propertyValue = parseDefinitionsSchemaPropertiesTitle(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaTitle(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "description": {
-const propertyValue = parseDefinitionsSchemaPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "default": {
-const propertyValue = parseDefinitionsSchemaPropertiesDefault(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaDefault(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "multipleOf": {
-const propertyValue = parseDefinitionsSchemaPropertiesMultipleOf(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaMultipleOf(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maximum": {
-const propertyValue = parseDefinitionsSchemaPropertiesMaximum(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaMaximum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "exclusiveMaximum": {
-const propertyValue = parseDefinitionsSchemaPropertiesExclusiveMaximum(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaExclusiveMaximum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minimum": {
-const propertyValue = parseDefinitionsSchemaPropertiesMinimum(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaMinimum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "exclusiveMinimum": {
-const propertyValue = parseDefinitionsSchemaPropertiesExclusiveMinimum(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaExclusiveMinimum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maxLength": {
-const propertyValue = parseSchemaPropertiesMaxLength(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaMaxLength(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minLength": {
-const propertyValue = parseSchemaPropertiesMinLength(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaMinLength(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "pattern": {
-const propertyValue = parseDefinitionsSchemaPropertiesPattern(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaPattern(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maxItems": {
-const propertyValue = parseSchemaPropertiesMaxItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaMaxItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minItems": {
-const propertyValue = parseSchemaPropertiesMinItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaMinItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "uniqueItems": {
-const propertyValue = parseDefinitionsSchemaPropertiesUniqueItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaUniqueItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1266,22 +1266,22 @@ result[propertyName] = propertyValue;
 break;
 }
 case "enum": {
-const propertyValue = parseDefinitionsSchemaPropertiesEnum(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaEnum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "additionalProperties": {
-const propertyValue = parseSchemaPropertiesAdditionalProperties(value[propertyName as keyof typeof value]);
+const propertyValue = parsePropertiesSchemaAdditionalProperties(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "type": {
-const propertyValue = parseDefinitionsSchemaType(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaType(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "items": {
-const propertyValue = parseSchemaPropertiesItems(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1306,12 +1306,12 @@ result[propertyName] = propertyValue;
 break;
 }
 case "xml": {
-const propertyValue = parsePropertiesXml(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaXml(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "externalDocs": {
-const propertyValue = parseSchemaPropertiesExternalDocs(value[propertyName as keyof typeof value]);
+const propertyValue = parseSchemaExternalDocs(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1321,7 +1321,7 @@ result[propertyName] = propertyValue;
 break;
 }
 }
-result[propertyName] ??= parseSchemaAdditionalProperties(value[propertyName as keyof typeof value]);
+result[propertyName] ??= parseDefinitionsSchemaAdditionalProperties(value[propertyName as keyof typeof value]);
 }
 return result;
 }
@@ -1341,17 +1341,17 @@ result[propertyName] = propertyValue;
 break;
 }
 case "title": {
-const propertyValue = parseFileSchemaPropertiesTitle(value[propertyName as keyof typeof value]);
+const propertyValue = parseFileSchemaTitle(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "description": {
-const propertyValue = parseFileSchemaPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseFileSchemaDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "default": {
-const propertyValue = parseFileSchemaPropertiesDefault(value[propertyName as keyof typeof value]);
+const propertyValue = parseFileSchemaDefault(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1371,7 +1371,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "externalDocs": {
-const propertyValue = parseFileSchemaPropertiesExternalDocs(value[propertyName as keyof typeof value]);
+const propertyValue = parseFileSchemaExternalDocs(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1406,77 +1406,77 @@ result[propertyName] = propertyValue;
 break;
 }
 case "items": {
-const propertyValue = parsePrimitivesItemsPropertiesItems(value[propertyName as keyof typeof value]);
+const propertyValue = parsePrimitivesItemsItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "collectionFormat": {
-const propertyValue = parsePrimitivesItemsPropertiesCollectionFormat(value[propertyName as keyof typeof value]);
+const propertyValue = parsePrimitivesItemsCollectionFormat(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "default": {
-const propertyValue = parsePrimitivesItemsPropertiesDefault(value[propertyName as keyof typeof value]);
+const propertyValue = parsePrimitivesItemsDefault(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maximum": {
-const propertyValue = parsePrimitivesItemsPropertiesMaximum(value[propertyName as keyof typeof value]);
+const propertyValue = parsePrimitivesItemsMaximum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "exclusiveMaximum": {
-const propertyValue = parsePrimitivesItemsPropertiesExclusiveMaximum(value[propertyName as keyof typeof value]);
+const propertyValue = parsePrimitivesItemsExclusiveMaximum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minimum": {
-const propertyValue = parsePrimitivesItemsPropertiesMinimum(value[propertyName as keyof typeof value]);
+const propertyValue = parsePrimitivesItemsMinimum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "exclusiveMinimum": {
-const propertyValue = parsePrimitivesItemsPropertiesExclusiveMinimum(value[propertyName as keyof typeof value]);
+const propertyValue = parsePrimitivesItemsExclusiveMinimum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maxLength": {
-const propertyValue = parsePrimitivesItemsPropertiesMaxLength(value[propertyName as keyof typeof value]);
+const propertyValue = parsePrimitivesItemsMaxLength(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minLength": {
-const propertyValue = parsePrimitivesItemsPropertiesMinLength(value[propertyName as keyof typeof value]);
+const propertyValue = parsePrimitivesItemsMinLength(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "pattern": {
-const propertyValue = parsePrimitivesItemsPropertiesPattern(value[propertyName as keyof typeof value]);
+const propertyValue = parsePrimitivesItemsPattern(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "maxItems": {
-const propertyValue = parsePrimitivesItemsPropertiesMaxItems(value[propertyName as keyof typeof value]);
+const propertyValue = parsePrimitivesItemsMaxItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "minItems": {
-const propertyValue = parsePrimitivesItemsPropertiesMinItems(value[propertyName as keyof typeof value]);
+const propertyValue = parsePrimitivesItemsMinItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "uniqueItems": {
-const propertyValue = parsePrimitivesItemsPropertiesUniqueItems(value[propertyName as keyof typeof value]);
+const propertyValue = parsePrimitivesItemsUniqueItems(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "enum": {
-const propertyValue = parsePrimitivesItemsPropertiesEnum(value[propertyName as keyof typeof value]);
+const propertyValue = parsePrimitivesItemsEnum(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "multipleOf": {
-const propertyValue = parsePrimitivesItemsPropertiesMultipleOf(value[propertyName as keyof typeof value]);
+const propertyValue = parsePrimitivesItemsMultipleOf(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1567,12 +1567,12 @@ result[propertyName] = propertyValue;
 break;
 }
 case "description": {
-const propertyValue = parseTagPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseTagDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
 case "externalDocs": {
-const propertyValue = parseTagPropertiesExternalDocs(value[propertyName as keyof typeof value]);
+const propertyValue = parseTagExternalDocs(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1610,7 +1610,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "description": {
-const propertyValue = parseBasicAuthenticationSecurityPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseBasicAuthenticationSecurityDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1645,7 +1645,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "description": {
-const propertyValue = parseApiKeySecurityPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseApiKeySecurityDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1685,7 +1685,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "description": {
-const propertyValue = parseOauth2ImplicitSecurityPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseOauth2ImplicitSecurityDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1725,7 +1725,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "description": {
-const propertyValue = parseOauth2PasswordSecurityPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseOauth2PasswordSecurityDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1765,7 +1765,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "description": {
-const propertyValue = parseOauth2ApplicationSecurityPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseOauth2ApplicationSecurityDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1810,7 +1810,7 @@ result[propertyName] = propertyValue;
 break;
 }
 case "description": {
-const propertyValue = parseOauth2AccessCodeSecurityPropertiesDescription(value[propertyName as keyof typeof value]);
+const propertyValue = parseOauth2AccessCodeSecurityDescription(value[propertyName as keyof typeof value]);
 result[propertyName] = propertyValue;
 break;
 }
@@ -1905,49 +1905,49 @@ export function parseDefinitionsTitle(value: unknown): unknown {
 return _parseReferenceDefinitionsTitle(value);
 }
 function _parseReferenceDefinitionsTitle(value: unknown): unknown {
-return parseDraft04SchemaPropertiesTitle(value);
+return parseDraft04Title(value);
 }
 export function parseDefinitionsDescription(value: unknown): unknown {
 return _parseReferenceDefinitionsDescription(value);
 }
 function _parseReferenceDefinitionsDescription(value: unknown): unknown {
-return parseDraft04SchemaPropertiesDescription(value);
+return parseDraft04Description(value);
 }
 export function parseDefinitionsDefault(value: unknown): unknown {
 return _parseReferenceDefinitionsDefault(value);
 }
 function _parseReferenceDefinitionsDefault(value: unknown): unknown {
-return parseDraft04SchemaPropertiesDefault(value);
+return parseDraft04Default(value);
 }
 export function parseDefinitionsMultipleOf(value: unknown): unknown {
 return _parseReferenceDefinitionsMultipleOf(value);
 }
 function _parseReferenceDefinitionsMultipleOf(value: unknown): unknown {
-return parseDraft04SchemaPropertiesMultipleOf(value);
+return parseDraft04MultipleOf(value);
 }
 export function parseDefinitionsMaximum(value: unknown): unknown {
 return _parseReferenceDefinitionsMaximum(value);
 }
 function _parseReferenceDefinitionsMaximum(value: unknown): unknown {
-return parseDraft04SchemaPropertiesMaximum(value);
+return parseDraft04Maximum(value);
 }
 export function parseDefinitionsExclusiveMaximum(value: unknown): unknown {
 return _parseReferenceDefinitionsExclusiveMaximum(value);
 }
 function _parseReferenceDefinitionsExclusiveMaximum(value: unknown): unknown {
-return parseDraft04SchemaPropertiesExclusiveMaximum(value);
+return parseDraft04ExclusiveMaximum(value);
 }
 export function parseDefinitionsMinimum(value: unknown): unknown {
 return _parseReferenceDefinitionsMinimum(value);
 }
 function _parseReferenceDefinitionsMinimum(value: unknown): unknown {
-return parseDraft04SchemaPropertiesMinimum(value);
+return parseDraft04Minimum(value);
 }
 export function parseDefinitionsExclusiveMinimum(value: unknown): unknown {
 return _parseReferenceDefinitionsExclusiveMinimum(value);
 }
 function _parseReferenceDefinitionsExclusiveMinimum(value: unknown): unknown {
-return parseDraft04SchemaPropertiesExclusiveMinimum(value);
+return parseDraft04ExclusiveMinimum(value);
 }
 export function parseDefinitionsMaxLength(value: unknown): unknown {
 return _parseReferenceDefinitionsMaxLength(value);
@@ -1965,7 +1965,7 @@ export function parseDefinitionsPattern(value: unknown): unknown {
 return _parseReferenceDefinitionsPattern(value);
 }
 function _parseReferenceDefinitionsPattern(value: unknown): unknown {
-return parseDraft04SchemaPropertiesPattern(value);
+return parseDraft04Pattern(value);
 }
 export function parseDefinitionsMaxItems(value: unknown): unknown {
 return _parseReferenceDefinitionsMaxItems(value);
@@ -1983,13 +1983,13 @@ export function parseDefinitionsUniqueItems(value: unknown): unknown {
 return _parseReferenceDefinitionsUniqueItems(value);
 }
 function _parseReferenceDefinitionsUniqueItems(value: unknown): unknown {
-return parseDraft04SchemaPropertiesUniqueItems(value);
+return parseDraft04UniqueItems(value);
 }
 export function parseDefinitionsEnum(value: unknown): unknown {
 return _parseReferenceDefinitionsEnum(value);
 }
 function _parseReferenceDefinitionsEnum(value: unknown): unknown {
-return parseDraft04SchemaPropertiesEnum(value);
+return parseDraft04Enum(value);
 }
 export function parseJsonReference(value: unknown): unknown {
 return _parseMapJsonReference(value);
@@ -2059,23 +2059,23 @@ default:
 return undefined;
 }
 }
-export function parseSchemaJsonSchemes(value: unknown): unknown {
-return _parseReferenceSchemaJsonSchemes(value);
+export function parsePropertiesSchemes(value: unknown): unknown {
+return _parseReferencePropertiesSchemes(value);
 }
-function _parseReferenceSchemaJsonSchemes(value: unknown): unknown {
+function _parseReferencePropertiesSchemes(value: unknown): unknown {
 return parseSchemesList(value);
 }
-export function parseSchemaJsonConsumes(value: unknown): unknown {
-return _parseAllOfSchemaJsonConsumes(value);
+export function parsePropertiesConsumes(value: unknown): unknown {
+return _parseAllOfPropertiesConsumes(value);
 }
-function _parseAllOfSchemaJsonConsumes(value: unknown): unknown {
-return parseSchemaJsonConsumesAllOf0(value);
+function _parseAllOfPropertiesConsumes(value: unknown): unknown {
+return parsePropertiesAllOfConsumes0(value);
 }
-export function parseSchemaJsonProduces(value: unknown): unknown {
-return _parseAllOfSchemaJsonProduces(value);
+export function parsePropertiesProduces(value: unknown): unknown {
+return _parseAllOfPropertiesProduces(value);
 }
-function _parseAllOfSchemaJsonProduces(value: unknown): unknown {
-return parseSchemaJsonProducesAllOf0(value);
+function _parseAllOfPropertiesProduces(value: unknown): unknown {
+return parsePropertiesAllOfProduces0(value);
 }
 export function parsePropertiesPaths(value: unknown): unknown {
 return _parseReferencePropertiesPaths(value);
@@ -2089,22 +2089,22 @@ return _parseReferencePropertiesDefinitions(value);
 function _parseReferencePropertiesDefinitions(value: unknown): unknown {
 return parseDefinitionsDefinitions(value);
 }
-export function parseSchemaJsonParameters(value: unknown): unknown {
-return _parseReferenceSchemaJsonParameters(value);
+export function parsePropertiesParameters(value: unknown): unknown {
+return _parseReferencePropertiesParameters(value);
 }
-function _parseReferenceSchemaJsonParameters(value: unknown): unknown {
+function _parseReferencePropertiesParameters(value: unknown): unknown {
 return parseParameterDefinitions(value);
 }
-export function parseSchemaJsonPropertiesResponses(value: unknown): unknown {
-return _parseReferenceSchemaJsonPropertiesResponses(value);
+export function parsePropertiesResponses(value: unknown): unknown {
+return _parseReferencePropertiesResponses(value);
 }
-function _parseReferenceSchemaJsonPropertiesResponses(value: unknown): unknown {
+function _parseReferencePropertiesResponses(value: unknown): unknown {
 return parseResponseDefinitions(value);
 }
-export function parseSchemaJsonPropertiesSecurity(value: unknown): unknown {
-return _parseReferenceSchemaJsonPropertiesSecurity(value);
+export function parsePropertiesSecurity(value: unknown): unknown {
+return _parseReferencePropertiesSecurity(value);
 }
-function _parseReferenceSchemaJsonPropertiesSecurity(value: unknown): unknown {
+function _parseReferencePropertiesSecurity(value: unknown): unknown {
 return parseDefinitionsSecurity(value);
 }
 export function parsePropertiesSecurityDefinitions(value: unknown): unknown {
@@ -2113,41 +2113,41 @@ return _parseReferencePropertiesSecurityDefinitions(value);
 function _parseReferencePropertiesSecurityDefinitions(value: unknown): unknown {
 return parseDefinitionsSecurityDefinitions(value);
 }
-export function parseSchemaJsonTags(value: unknown): unknown {
-return _parseArraySchemaJsonTags(value);
+export function parsePropertiesTags(value: unknown): unknown {
+return _parseArrayPropertiesTags(value);
 }
-function _parseArraySchemaJsonTags(value: unknown): unknown {
+function _parseArrayPropertiesTags(value: unknown): unknown {
 if(Array.isArray(value)) {
 const result = new Array<unknown>(value.length);
 for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseSchemaJsonTagsItems(value[elementIndex]);
+result[elementIndex] = parsePropertiesTagsItems(value[elementIndex]);
 }
 return result;
 }
 return undefined;
 }
-export function parseSchemaJsonPropertiesExternalDocs(value: unknown): unknown {
-return _parseReferenceSchemaJsonPropertiesExternalDocs(value);
+export function parsePropertiesExternalDocs(value: unknown): unknown {
+return _parseReferencePropertiesExternalDocs(value);
 }
-function _parseReferenceSchemaJsonPropertiesExternalDocs(value: unknown): unknown {
+function _parseReferencePropertiesExternalDocs(value: unknown): unknown {
 return parseDefinitionsExternalDocs(value);
 }
-export function parseSchemaJsonAdditionalProperties(value: unknown): unknown {
-return _parseNeverSchemaJsonAdditionalProperties(value);
+export function parseV2AdditionalProperties(value: unknown): unknown {
+return _parseNeverV2AdditionalProperties(value);
 }
-function _parseNeverSchemaJsonAdditionalProperties(value: unknown): unknown {
+function _parseNeverV2AdditionalProperties(value: unknown): unknown {
 return undefined;
 }
-export function parseSchemaJsonX(value: unknown): unknown {
-return _parseReferenceSchemaJsonX(value);
+export function parseV2PatternPropertiesX(value: unknown): unknown {
+return _parseReferenceV2PatternPropertiesX(value);
 }
-function _parseReferenceSchemaJsonX(value: unknown): unknown {
+function _parseReferenceV2PatternPropertiesX(value: unknown): unknown {
 return parseVendorExtension(value);
 }
-export function parseInfoPropertiesTitle(value: unknown): unknown {
-return _parseStringInfoPropertiesTitle(value);
+export function parseInfoTitle(value: unknown): unknown {
+return _parseStringInfoTitle(value);
 }
-function _parseStringInfoPropertiesTitle(value: unknown): unknown {
+function _parseStringInfoTitle(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -2172,10 +2172,10 @@ default:
 return undefined;
 }
 }
-export function parseInfoPropertiesDescription(value: unknown): unknown {
-return _parseStringInfoPropertiesDescription(value);
+export function parseInfoDescription(value: unknown): unknown {
+return _parseStringInfoDescription(value);
 }
-function _parseStringInfoPropertiesDescription(value: unknown): unknown {
+function _parseStringInfoDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -2200,16 +2200,16 @@ default:
 return undefined;
 }
 }
-export function parsePropertiesContact(value: unknown): unknown {
-return _parseReferencePropertiesContact(value);
+export function parseInfoContact(value: unknown): unknown {
+return _parseReferenceInfoContact(value);
 }
-function _parseReferencePropertiesContact(value: unknown): unknown {
+function _parseReferenceInfoContact(value: unknown): unknown {
 return parseDefinitionsContact(value);
 }
-export function parsePropertiesLicense(value: unknown): unknown {
-return _parseReferencePropertiesLicense(value);
+export function parseInfoLicense(value: unknown): unknown {
+return _parseReferenceInfoLicense(value);
 }
-function _parseReferencePropertiesLicense(value: unknown): unknown {
+function _parseReferenceInfoLicense(value: unknown): unknown {
 return parseDefinitionsLicense(value);
 }
 export function parseInfoAdditionalProperties(value: unknown): unknown {
@@ -2354,10 +2354,10 @@ return _parseReferenceResponseDefinitionsAdditionalProperties(value);
 function _parseReferenceResponseDefinitionsAdditionalProperties(value: unknown): unknown {
 return parseResponse(value);
 }
-export function parseExternalDocsPropertiesDescription(value: unknown): unknown {
-return _parseStringExternalDocsPropertiesDescription(value);
+export function parseExternalDocsDescription(value: unknown): unknown {
+return _parseStringExternalDocsDescription(value);
 }
-function _parseStringExternalDocsPropertiesDescription(value: unknown): unknown {
+function _parseStringExternalDocsDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -2427,10 +2427,10 @@ default:
 return undefined;
 }
 }
-export function parseOperationPropertiesDescription(value: unknown): unknown {
-return _parseStringOperationPropertiesDescription(value);
+export function parseOperationDescription(value: unknown): unknown {
+return _parseStringOperationDescription(value);
 }
-function _parseStringOperationPropertiesDescription(value: unknown): unknown {
+function _parseStringOperationDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -2441,10 +2441,10 @@ default:
 return undefined;
 }
 }
-export function parseOperationPropertiesExternalDocs(value: unknown): unknown {
-return _parseReferenceOperationPropertiesExternalDocs(value);
+export function parseOperationExternalDocs(value: unknown): unknown {
+return _parseReferenceOperationExternalDocs(value);
 }
-function _parseReferenceOperationPropertiesExternalDocs(value: unknown): unknown {
+function _parseReferenceOperationExternalDocs(value: unknown): unknown {
 return parseDefinitionsExternalDocs(value);
 }
 export function parseOperationId(value: unknown): unknown {
@@ -2465,13 +2465,13 @@ export function parseOperationProduces(value: unknown): unknown {
 return _parseAllOfOperationProduces(value);
 }
 function _parseAllOfOperationProduces(value: unknown): unknown {
-return parseOperationProducesAllOf0(value);
+return parseOperationAllOfProduces0(value);
 }
 export function parseOperationConsumes(value: unknown): unknown {
 return _parseAllOfOperationConsumes(value);
 }
 function _parseAllOfOperationConsumes(value: unknown): unknown {
-return parseOperationConsumesAllOf0(value);
+return parseOperationAllOfConsumes0(value);
 }
 export function parseOperationParameters(value: unknown): unknown {
 return _parseReferenceOperationParameters(value);
@@ -2479,10 +2479,10 @@ return _parseReferenceOperationParameters(value);
 function _parseReferenceOperationParameters(value: unknown): unknown {
 return parseParametersList(value);
 }
-export function parseOperationPropertiesResponses(value: unknown): unknown {
-return _parseReferenceOperationPropertiesResponses(value);
+export function parseOperationResponses(value: unknown): unknown {
+return _parseReferenceOperationResponses(value);
 }
-function _parseReferenceOperationPropertiesResponses(value: unknown): unknown {
+function _parseReferenceOperationResponses(value: unknown): unknown {
 return parseDefinitionsResponses(value);
 }
 export function parseOperationSchemes(value: unknown): unknown {
@@ -2517,10 +2517,10 @@ return value;
 }
 return undefined;
 }
-export function parseOperationPropertiesSecurity(value: unknown): unknown {
-return _parseReferenceOperationPropertiesSecurity(value);
+export function parseOperationSecurity(value: unknown): unknown {
+return _parseReferenceOperationSecurity(value);
 }
-function _parseReferenceOperationPropertiesSecurity(value: unknown): unknown {
+function _parseReferenceOperationSecurity(value: unknown): unknown {
 return parseDefinitionsSecurity(value);
 }
 export function parseOperationAdditionalProperties(value: unknown): unknown {
@@ -2615,10 +2615,10 @@ return _parseNeverResponsesAdditionalProperties(value);
 function _parseNeverResponsesAdditionalProperties(value: unknown): unknown {
 return undefined;
 }
-export function parsePatternProperties093Default(value: unknown): unknown {
-return _parseReferencePatternProperties093Default(value);
+export function parseResponses093Default(value: unknown): unknown {
+return _parseReferenceResponses093Default(value);
 }
-function _parseReferencePatternProperties093Default(value: unknown): unknown {
+function _parseReferenceResponses093Default(value: unknown): unknown {
 return parseResponseValue(value);
 }
 export function parseResponsesX(value: unknown): unknown {
@@ -2640,22 +2640,22 @@ return result;
 }
 return undefined;
 }
-export function parseResponseValueOneOf0(value: unknown): unknown {
-return _parseReferenceResponseValueOneOf0(value);
+export function parseResponseValue0(value: unknown): unknown {
+return _parseReferenceResponseValue0(value);
 }
-function _parseReferenceResponseValueOneOf0(value: unknown): unknown {
+function _parseReferenceResponseValue0(value: unknown): unknown {
 return parseResponse(value);
 }
-export function parseResponseValueOneOf1(value: unknown): unknown {
-return _parseReferenceResponseValueOneOf1(value);
+export function parseResponseValue1(value: unknown): unknown {
+return _parseReferenceResponseValue1(value);
 }
-function _parseReferenceResponseValueOneOf1(value: unknown): unknown {
+function _parseReferenceResponseValue1(value: unknown): unknown {
 return parseJsonReference(value);
 }
-export function parseResponsePropertiesDescription(value: unknown): unknown {
-return _parseStringResponsePropertiesDescription(value);
+export function parseResponseDescription(value: unknown): unknown {
+return _parseStringResponseDescription(value);
 }
-function _parseStringResponsePropertiesDescription(value: unknown): unknown {
+function _parseStringResponseDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -2666,22 +2666,22 @@ default:
 return undefined;
 }
 }
-export function parseResponsePropertiesSchema(value: unknown): unknown {
-return _parseOneOfResponsePropertiesSchema(value);
+export function parseResponseSchema(value: unknown): unknown {
+return _parseOneOfResponseSchema(value);
 }
-function _parseOneOfResponsePropertiesSchema(value: unknown): unknown {
-return parseSchemaOneOf0(value) ?? parseSchemaOneOf1(value);
+function _parseOneOfResponseSchema(value: unknown): unknown {
+return parseResponse0(value) ?? parseResponse1(value);
 }
-export function parsePropertiesHeaders(value: unknown): unknown {
-return _parseReferencePropertiesHeaders(value);
+export function parseResponseHeaders(value: unknown): unknown {
+return _parseReferenceResponseHeaders(value);
 }
-function _parseReferencePropertiesHeaders(value: unknown): unknown {
+function _parseReferenceResponseHeaders(value: unknown): unknown {
 return parseDefinitionsHeaders(value);
 }
-export function parsePropertiesExamples(value: unknown): unknown {
-return _parseReferencePropertiesExamples(value);
+export function parseResponseExamples(value: unknown): unknown {
+return _parseReferenceResponseExamples(value);
 }
-function _parseReferencePropertiesExamples(value: unknown): unknown {
+function _parseReferenceResponseExamples(value: unknown): unknown {
 return parseDefinitionsExamples(value);
 }
 export function parseResponseAdditionalProperties(value: unknown): unknown {
@@ -2730,100 +2730,100 @@ default:
 return undefined;
 }
 }
-export function parseHeaderPropertiesItems(value: unknown): unknown {
-return _parseReferenceHeaderPropertiesItems(value);
+export function parseHeaderItems(value: unknown): unknown {
+return _parseReferenceHeaderItems(value);
 }
-function _parseReferenceHeaderPropertiesItems(value: unknown): unknown {
+function _parseReferenceHeaderItems(value: unknown): unknown {
 return parsePrimitivesItems(value);
 }
-export function parseHeaderPropertiesCollectionFormat(value: unknown): unknown {
-return _parseReferenceHeaderPropertiesCollectionFormat(value);
+export function parseHeaderCollectionFormat(value: unknown): unknown {
+return _parseReferenceHeaderCollectionFormat(value);
 }
-function _parseReferenceHeaderPropertiesCollectionFormat(value: unknown): unknown {
+function _parseReferenceHeaderCollectionFormat(value: unknown): unknown {
 return parseDefinitionsCollectionFormat(value);
 }
-export function parseHeaderPropertiesDefault(value: unknown): unknown {
-return _parseReferenceHeaderPropertiesDefault(value);
+export function parseHeaderDefault(value: unknown): unknown {
+return _parseReferenceHeaderDefault(value);
 }
-function _parseReferenceHeaderPropertiesDefault(value: unknown): unknown {
+function _parseReferenceHeaderDefault(value: unknown): unknown {
 return parseDefinitionsDefault(value);
 }
-export function parseHeaderPropertiesMaximum(value: unknown): unknown {
-return _parseReferenceHeaderPropertiesMaximum(value);
+export function parseHeaderMaximum(value: unknown): unknown {
+return _parseReferenceHeaderMaximum(value);
 }
-function _parseReferenceHeaderPropertiesMaximum(value: unknown): unknown {
+function _parseReferenceHeaderMaximum(value: unknown): unknown {
 return parseDefinitionsMaximum(value);
 }
-export function parseHeaderPropertiesExclusiveMaximum(value: unknown): unknown {
-return _parseReferenceHeaderPropertiesExclusiveMaximum(value);
+export function parseHeaderExclusiveMaximum(value: unknown): unknown {
+return _parseReferenceHeaderExclusiveMaximum(value);
 }
-function _parseReferenceHeaderPropertiesExclusiveMaximum(value: unknown): unknown {
+function _parseReferenceHeaderExclusiveMaximum(value: unknown): unknown {
 return parseDefinitionsExclusiveMaximum(value);
 }
-export function parseHeaderPropertiesMinimum(value: unknown): unknown {
-return _parseReferenceHeaderPropertiesMinimum(value);
+export function parseHeaderMinimum(value: unknown): unknown {
+return _parseReferenceHeaderMinimum(value);
 }
-function _parseReferenceHeaderPropertiesMinimum(value: unknown): unknown {
+function _parseReferenceHeaderMinimum(value: unknown): unknown {
 return parseDefinitionsMinimum(value);
 }
-export function parseHeaderPropertiesExclusiveMinimum(value: unknown): unknown {
-return _parseReferenceHeaderPropertiesExclusiveMinimum(value);
+export function parseHeaderExclusiveMinimum(value: unknown): unknown {
+return _parseReferenceHeaderExclusiveMinimum(value);
 }
-function _parseReferenceHeaderPropertiesExclusiveMinimum(value: unknown): unknown {
+function _parseReferenceHeaderExclusiveMinimum(value: unknown): unknown {
 return parseDefinitionsExclusiveMinimum(value);
 }
-export function parseHeaderPropertiesMaxLength(value: unknown): unknown {
-return _parseReferenceHeaderPropertiesMaxLength(value);
+export function parseHeaderMaxLength(value: unknown): unknown {
+return _parseReferenceHeaderMaxLength(value);
 }
-function _parseReferenceHeaderPropertiesMaxLength(value: unknown): unknown {
+function _parseReferenceHeaderMaxLength(value: unknown): unknown {
 return parseDefinitionsMaxLength(value);
 }
-export function parseHeaderPropertiesMinLength(value: unknown): unknown {
-return _parseReferenceHeaderPropertiesMinLength(value);
+export function parseHeaderMinLength(value: unknown): unknown {
+return _parseReferenceHeaderMinLength(value);
 }
-function _parseReferenceHeaderPropertiesMinLength(value: unknown): unknown {
+function _parseReferenceHeaderMinLength(value: unknown): unknown {
 return parseDefinitionsMinLength(value);
 }
-export function parseHeaderPropertiesPattern(value: unknown): unknown {
-return _parseReferenceHeaderPropertiesPattern(value);
+export function parseHeaderPattern(value: unknown): unknown {
+return _parseReferenceHeaderPattern(value);
 }
-function _parseReferenceHeaderPropertiesPattern(value: unknown): unknown {
+function _parseReferenceHeaderPattern(value: unknown): unknown {
 return parseDefinitionsPattern(value);
 }
-export function parseHeaderPropertiesMaxItems(value: unknown): unknown {
-return _parseReferenceHeaderPropertiesMaxItems(value);
+export function parseHeaderMaxItems(value: unknown): unknown {
+return _parseReferenceHeaderMaxItems(value);
 }
-function _parseReferenceHeaderPropertiesMaxItems(value: unknown): unknown {
+function _parseReferenceHeaderMaxItems(value: unknown): unknown {
 return parseDefinitionsMaxItems(value);
 }
-export function parseHeaderPropertiesMinItems(value: unknown): unknown {
-return _parseReferenceHeaderPropertiesMinItems(value);
+export function parseHeaderMinItems(value: unknown): unknown {
+return _parseReferenceHeaderMinItems(value);
 }
-function _parseReferenceHeaderPropertiesMinItems(value: unknown): unknown {
+function _parseReferenceHeaderMinItems(value: unknown): unknown {
 return parseDefinitionsMinItems(value);
 }
-export function parseHeaderPropertiesUniqueItems(value: unknown): unknown {
-return _parseReferenceHeaderPropertiesUniqueItems(value);
+export function parseHeaderUniqueItems(value: unknown): unknown {
+return _parseReferenceHeaderUniqueItems(value);
 }
-function _parseReferenceHeaderPropertiesUniqueItems(value: unknown): unknown {
+function _parseReferenceHeaderUniqueItems(value: unknown): unknown {
 return parseDefinitionsUniqueItems(value);
 }
-export function parseHeaderPropertiesEnum(value: unknown): unknown {
-return _parseReferenceHeaderPropertiesEnum(value);
+export function parseHeaderEnum(value: unknown): unknown {
+return _parseReferenceHeaderEnum(value);
 }
-function _parseReferenceHeaderPropertiesEnum(value: unknown): unknown {
+function _parseReferenceHeaderEnum(value: unknown): unknown {
 return parseDefinitionsEnum(value);
 }
-export function parseHeaderPropertiesMultipleOf(value: unknown): unknown {
-return _parseReferenceHeaderPropertiesMultipleOf(value);
+export function parseHeaderMultipleOf(value: unknown): unknown {
+return _parseReferenceHeaderMultipleOf(value);
 }
-function _parseReferenceHeaderPropertiesMultipleOf(value: unknown): unknown {
+function _parseReferenceHeaderMultipleOf(value: unknown): unknown {
 return parseDefinitionsMultipleOf(value);
 }
-export function parseHeaderPropertiesDescription(value: unknown): unknown {
-return _parseStringHeaderPropertiesDescription(value);
+export function parseHeaderDescription(value: unknown): unknown {
+return _parseStringHeaderDescription(value);
 }
-function _parseStringHeaderPropertiesDescription(value: unknown): unknown {
+function _parseStringHeaderDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -2858,10 +2858,10 @@ return _parseAnyVendorExtensionAdditionalItems(value);
 function _parseAnyVendorExtensionAdditionalItems(value: unknown): unknown {
 return value;
 }
-export function parseBodyParameterPropertiesDescription(value: unknown): unknown {
-return _parseStringBodyParameterPropertiesDescription(value);
+export function parseBodyParameterDescription(value: unknown): unknown {
+return _parseStringBodyParameterDescription(value);
 }
-function _parseStringBodyParameterPropertiesDescription(value: unknown): unknown {
+function _parseStringBodyParameterDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -2926,10 +2926,10 @@ return value;
 }
 return undefined;
 }
-export function parseBodyParameterPropertiesSchema(value: unknown): unknown {
-return _parseReferenceBodyParameterPropertiesSchema(value);
+export function parseBodyParameterSchema(value: unknown): unknown {
+return _parseReferenceBodyParameterSchema(value);
 }
-function _parseReferenceBodyParameterPropertiesSchema(value: unknown): unknown {
+function _parseReferenceBodyParameterSchema(value: unknown): unknown {
 return parseDefinitionsSchema(value);
 }
 export function parseBodyParameterAdditionalProperties(value: unknown): unknown {
@@ -2984,10 +2984,10 @@ default:
 return undefined;
 }
 }
-export function parseHeaderParameterSubSchemaPropertiesDescription(value: unknown): unknown {
-return _parseStringHeaderParameterSubSchemaPropertiesDescription(value);
+export function parseHeaderParameterSubSchemaDescription(value: unknown): unknown {
+return _parseStringHeaderParameterSubSchemaDescription(value);
 }
-function _parseStringHeaderParameterSubSchemaPropertiesDescription(value: unknown): unknown {
+function _parseStringHeaderParameterSubSchemaDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3040,94 +3040,94 @@ default:
 return undefined;
 }
 }
-export function parseHeaderParameterSubSchemaPropertiesItems(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaPropertiesItems(value);
+export function parseHeaderParameterSubSchemaItems(value: unknown): unknown {
+return _parseReferenceHeaderParameterSubSchemaItems(value);
 }
-function _parseReferenceHeaderParameterSubSchemaPropertiesItems(value: unknown): unknown {
+function _parseReferenceHeaderParameterSubSchemaItems(value: unknown): unknown {
 return parsePrimitivesItems(value);
 }
-export function parseHeaderParameterSubSchemaPropertiesCollectionFormat(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaPropertiesCollectionFormat(value);
+export function parseHeaderParameterSubSchemaCollectionFormat(value: unknown): unknown {
+return _parseReferenceHeaderParameterSubSchemaCollectionFormat(value);
 }
-function _parseReferenceHeaderParameterSubSchemaPropertiesCollectionFormat(value: unknown): unknown {
+function _parseReferenceHeaderParameterSubSchemaCollectionFormat(value: unknown): unknown {
 return parseDefinitionsCollectionFormat(value);
 }
-export function parseHeaderParameterSubSchemaPropertiesDefault(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaPropertiesDefault(value);
+export function parseHeaderParameterSubSchemaDefault(value: unknown): unknown {
+return _parseReferenceHeaderParameterSubSchemaDefault(value);
 }
-function _parseReferenceHeaderParameterSubSchemaPropertiesDefault(value: unknown): unknown {
+function _parseReferenceHeaderParameterSubSchemaDefault(value: unknown): unknown {
 return parseDefinitionsDefault(value);
 }
-export function parseHeaderParameterSubSchemaPropertiesMaximum(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaPropertiesMaximum(value);
+export function parseHeaderParameterSubSchemaMaximum(value: unknown): unknown {
+return _parseReferenceHeaderParameterSubSchemaMaximum(value);
 }
-function _parseReferenceHeaderParameterSubSchemaPropertiesMaximum(value: unknown): unknown {
+function _parseReferenceHeaderParameterSubSchemaMaximum(value: unknown): unknown {
 return parseDefinitionsMaximum(value);
 }
-export function parseHeaderParameterSubSchemaPropertiesExclusiveMaximum(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaPropertiesExclusiveMaximum(value);
+export function parseHeaderParameterSubSchemaExclusiveMaximum(value: unknown): unknown {
+return _parseReferenceHeaderParameterSubSchemaExclusiveMaximum(value);
 }
-function _parseReferenceHeaderParameterSubSchemaPropertiesExclusiveMaximum(value: unknown): unknown {
+function _parseReferenceHeaderParameterSubSchemaExclusiveMaximum(value: unknown): unknown {
 return parseDefinitionsExclusiveMaximum(value);
 }
-export function parseHeaderParameterSubSchemaPropertiesMinimum(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaPropertiesMinimum(value);
+export function parseHeaderParameterSubSchemaMinimum(value: unknown): unknown {
+return _parseReferenceHeaderParameterSubSchemaMinimum(value);
 }
-function _parseReferenceHeaderParameterSubSchemaPropertiesMinimum(value: unknown): unknown {
+function _parseReferenceHeaderParameterSubSchemaMinimum(value: unknown): unknown {
 return parseDefinitionsMinimum(value);
 }
-export function parseHeaderParameterSubSchemaPropertiesExclusiveMinimum(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaPropertiesExclusiveMinimum(value);
+export function parseHeaderParameterSubSchemaExclusiveMinimum(value: unknown): unknown {
+return _parseReferenceHeaderParameterSubSchemaExclusiveMinimum(value);
 }
-function _parseReferenceHeaderParameterSubSchemaPropertiesExclusiveMinimum(value: unknown): unknown {
+function _parseReferenceHeaderParameterSubSchemaExclusiveMinimum(value: unknown): unknown {
 return parseDefinitionsExclusiveMinimum(value);
 }
-export function parseHeaderParameterSubSchemaPropertiesMaxLength(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaPropertiesMaxLength(value);
+export function parseHeaderParameterSubSchemaMaxLength(value: unknown): unknown {
+return _parseReferenceHeaderParameterSubSchemaMaxLength(value);
 }
-function _parseReferenceHeaderParameterSubSchemaPropertiesMaxLength(value: unknown): unknown {
+function _parseReferenceHeaderParameterSubSchemaMaxLength(value: unknown): unknown {
 return parseDefinitionsMaxLength(value);
 }
-export function parseHeaderParameterSubSchemaPropertiesMinLength(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaPropertiesMinLength(value);
+export function parseHeaderParameterSubSchemaMinLength(value: unknown): unknown {
+return _parseReferenceHeaderParameterSubSchemaMinLength(value);
 }
-function _parseReferenceHeaderParameterSubSchemaPropertiesMinLength(value: unknown): unknown {
+function _parseReferenceHeaderParameterSubSchemaMinLength(value: unknown): unknown {
 return parseDefinitionsMinLength(value);
 }
-export function parseHeaderParameterSubSchemaPropertiesPattern(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaPropertiesPattern(value);
+export function parseHeaderParameterSubSchemaPattern(value: unknown): unknown {
+return _parseReferenceHeaderParameterSubSchemaPattern(value);
 }
-function _parseReferenceHeaderParameterSubSchemaPropertiesPattern(value: unknown): unknown {
+function _parseReferenceHeaderParameterSubSchemaPattern(value: unknown): unknown {
 return parseDefinitionsPattern(value);
 }
-export function parseHeaderParameterSubSchemaPropertiesMaxItems(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaPropertiesMaxItems(value);
+export function parseHeaderParameterSubSchemaMaxItems(value: unknown): unknown {
+return _parseReferenceHeaderParameterSubSchemaMaxItems(value);
 }
-function _parseReferenceHeaderParameterSubSchemaPropertiesMaxItems(value: unknown): unknown {
+function _parseReferenceHeaderParameterSubSchemaMaxItems(value: unknown): unknown {
 return parseDefinitionsMaxItems(value);
 }
-export function parseHeaderParameterSubSchemaPropertiesMinItems(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaPropertiesMinItems(value);
+export function parseHeaderParameterSubSchemaMinItems(value: unknown): unknown {
+return _parseReferenceHeaderParameterSubSchemaMinItems(value);
 }
-function _parseReferenceHeaderParameterSubSchemaPropertiesMinItems(value: unknown): unknown {
+function _parseReferenceHeaderParameterSubSchemaMinItems(value: unknown): unknown {
 return parseDefinitionsMinItems(value);
 }
-export function parseHeaderParameterSubSchemaPropertiesUniqueItems(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaPropertiesUniqueItems(value);
+export function parseHeaderParameterSubSchemaUniqueItems(value: unknown): unknown {
+return _parseReferenceHeaderParameterSubSchemaUniqueItems(value);
 }
-function _parseReferenceHeaderParameterSubSchemaPropertiesUniqueItems(value: unknown): unknown {
+function _parseReferenceHeaderParameterSubSchemaUniqueItems(value: unknown): unknown {
 return parseDefinitionsUniqueItems(value);
 }
-export function parseHeaderParameterSubSchemaPropertiesEnum(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaPropertiesEnum(value);
+export function parseHeaderParameterSubSchemaEnum(value: unknown): unknown {
+return _parseReferenceHeaderParameterSubSchemaEnum(value);
 }
-function _parseReferenceHeaderParameterSubSchemaPropertiesEnum(value: unknown): unknown {
+function _parseReferenceHeaderParameterSubSchemaEnum(value: unknown): unknown {
 return parseDefinitionsEnum(value);
 }
-export function parseHeaderParameterSubSchemaPropertiesMultipleOf(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaPropertiesMultipleOf(value);
+export function parseHeaderParameterSubSchemaMultipleOf(value: unknown): unknown {
+return _parseReferenceHeaderParameterSubSchemaMultipleOf(value);
 }
-function _parseReferenceHeaderParameterSubSchemaPropertiesMultipleOf(value: unknown): unknown {
+function _parseReferenceHeaderParameterSubSchemaMultipleOf(value: unknown): unknown {
 return parseDefinitionsMultipleOf(value);
 }
 export function parseHeaderParameterSubSchemaAdditionalProperties(value: unknown): unknown {
@@ -3182,10 +3182,10 @@ default:
 return undefined;
 }
 }
-export function parseQueryParameterSubSchemaPropertiesDescription(value: unknown): unknown {
-return _parseStringQueryParameterSubSchemaPropertiesDescription(value);
+export function parseQueryParameterSubSchemaDescription(value: unknown): unknown {
+return _parseStringQueryParameterSubSchemaDescription(value);
 }
-function _parseStringQueryParameterSubSchemaPropertiesDescription(value: unknown): unknown {
+function _parseStringQueryParameterSubSchemaDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3264,94 +3264,94 @@ default:
 return undefined;
 }
 }
-export function parseQueryParameterSubSchemaPropertiesItems(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaPropertiesItems(value);
+export function parseQueryParameterSubSchemaItems(value: unknown): unknown {
+return _parseReferenceQueryParameterSubSchemaItems(value);
 }
-function _parseReferenceQueryParameterSubSchemaPropertiesItems(value: unknown): unknown {
+function _parseReferenceQueryParameterSubSchemaItems(value: unknown): unknown {
 return parsePrimitivesItems(value);
 }
-export function parseQueryParameterSubSchemaPropertiesCollectionFormat(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaPropertiesCollectionFormat(value);
+export function parseQueryParameterSubSchemaCollectionFormat(value: unknown): unknown {
+return _parseReferenceQueryParameterSubSchemaCollectionFormat(value);
 }
-function _parseReferenceQueryParameterSubSchemaPropertiesCollectionFormat(value: unknown): unknown {
+function _parseReferenceQueryParameterSubSchemaCollectionFormat(value: unknown): unknown {
 return parseCollectionFormatWithMulti(value);
 }
-export function parseQueryParameterSubSchemaPropertiesDefault(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaPropertiesDefault(value);
+export function parseQueryParameterSubSchemaDefault(value: unknown): unknown {
+return _parseReferenceQueryParameterSubSchemaDefault(value);
 }
-function _parseReferenceQueryParameterSubSchemaPropertiesDefault(value: unknown): unknown {
+function _parseReferenceQueryParameterSubSchemaDefault(value: unknown): unknown {
 return parseDefinitionsDefault(value);
 }
-export function parseQueryParameterSubSchemaPropertiesMaximum(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaPropertiesMaximum(value);
+export function parseQueryParameterSubSchemaMaximum(value: unknown): unknown {
+return _parseReferenceQueryParameterSubSchemaMaximum(value);
 }
-function _parseReferenceQueryParameterSubSchemaPropertiesMaximum(value: unknown): unknown {
+function _parseReferenceQueryParameterSubSchemaMaximum(value: unknown): unknown {
 return parseDefinitionsMaximum(value);
 }
-export function parseQueryParameterSubSchemaPropertiesExclusiveMaximum(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaPropertiesExclusiveMaximum(value);
+export function parseQueryParameterSubSchemaExclusiveMaximum(value: unknown): unknown {
+return _parseReferenceQueryParameterSubSchemaExclusiveMaximum(value);
 }
-function _parseReferenceQueryParameterSubSchemaPropertiesExclusiveMaximum(value: unknown): unknown {
+function _parseReferenceQueryParameterSubSchemaExclusiveMaximum(value: unknown): unknown {
 return parseDefinitionsExclusiveMaximum(value);
 }
-export function parseQueryParameterSubSchemaPropertiesMinimum(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaPropertiesMinimum(value);
+export function parseQueryParameterSubSchemaMinimum(value: unknown): unknown {
+return _parseReferenceQueryParameterSubSchemaMinimum(value);
 }
-function _parseReferenceQueryParameterSubSchemaPropertiesMinimum(value: unknown): unknown {
+function _parseReferenceQueryParameterSubSchemaMinimum(value: unknown): unknown {
 return parseDefinitionsMinimum(value);
 }
-export function parseQueryParameterSubSchemaPropertiesExclusiveMinimum(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaPropertiesExclusiveMinimum(value);
+export function parseQueryParameterSubSchemaExclusiveMinimum(value: unknown): unknown {
+return _parseReferenceQueryParameterSubSchemaExclusiveMinimum(value);
 }
-function _parseReferenceQueryParameterSubSchemaPropertiesExclusiveMinimum(value: unknown): unknown {
+function _parseReferenceQueryParameterSubSchemaExclusiveMinimum(value: unknown): unknown {
 return parseDefinitionsExclusiveMinimum(value);
 }
-export function parseQueryParameterSubSchemaPropertiesMaxLength(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaPropertiesMaxLength(value);
+export function parseQueryParameterSubSchemaMaxLength(value: unknown): unknown {
+return _parseReferenceQueryParameterSubSchemaMaxLength(value);
 }
-function _parseReferenceQueryParameterSubSchemaPropertiesMaxLength(value: unknown): unknown {
+function _parseReferenceQueryParameterSubSchemaMaxLength(value: unknown): unknown {
 return parseDefinitionsMaxLength(value);
 }
-export function parseQueryParameterSubSchemaPropertiesMinLength(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaPropertiesMinLength(value);
+export function parseQueryParameterSubSchemaMinLength(value: unknown): unknown {
+return _parseReferenceQueryParameterSubSchemaMinLength(value);
 }
-function _parseReferenceQueryParameterSubSchemaPropertiesMinLength(value: unknown): unknown {
+function _parseReferenceQueryParameterSubSchemaMinLength(value: unknown): unknown {
 return parseDefinitionsMinLength(value);
 }
-export function parseQueryParameterSubSchemaPropertiesPattern(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaPropertiesPattern(value);
+export function parseQueryParameterSubSchemaPattern(value: unknown): unknown {
+return _parseReferenceQueryParameterSubSchemaPattern(value);
 }
-function _parseReferenceQueryParameterSubSchemaPropertiesPattern(value: unknown): unknown {
+function _parseReferenceQueryParameterSubSchemaPattern(value: unknown): unknown {
 return parseDefinitionsPattern(value);
 }
-export function parseQueryParameterSubSchemaPropertiesMaxItems(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaPropertiesMaxItems(value);
+export function parseQueryParameterSubSchemaMaxItems(value: unknown): unknown {
+return _parseReferenceQueryParameterSubSchemaMaxItems(value);
 }
-function _parseReferenceQueryParameterSubSchemaPropertiesMaxItems(value: unknown): unknown {
+function _parseReferenceQueryParameterSubSchemaMaxItems(value: unknown): unknown {
 return parseDefinitionsMaxItems(value);
 }
-export function parseQueryParameterSubSchemaPropertiesMinItems(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaPropertiesMinItems(value);
+export function parseQueryParameterSubSchemaMinItems(value: unknown): unknown {
+return _parseReferenceQueryParameterSubSchemaMinItems(value);
 }
-function _parseReferenceQueryParameterSubSchemaPropertiesMinItems(value: unknown): unknown {
+function _parseReferenceQueryParameterSubSchemaMinItems(value: unknown): unknown {
 return parseDefinitionsMinItems(value);
 }
-export function parseQueryParameterSubSchemaPropertiesUniqueItems(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaPropertiesUniqueItems(value);
+export function parseQueryParameterSubSchemaUniqueItems(value: unknown): unknown {
+return _parseReferenceQueryParameterSubSchemaUniqueItems(value);
 }
-function _parseReferenceQueryParameterSubSchemaPropertiesUniqueItems(value: unknown): unknown {
+function _parseReferenceQueryParameterSubSchemaUniqueItems(value: unknown): unknown {
 return parseDefinitionsUniqueItems(value);
 }
-export function parseQueryParameterSubSchemaPropertiesEnum(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaPropertiesEnum(value);
+export function parseQueryParameterSubSchemaEnum(value: unknown): unknown {
+return _parseReferenceQueryParameterSubSchemaEnum(value);
 }
-function _parseReferenceQueryParameterSubSchemaPropertiesEnum(value: unknown): unknown {
+function _parseReferenceQueryParameterSubSchemaEnum(value: unknown): unknown {
 return parseDefinitionsEnum(value);
 }
-export function parseQueryParameterSubSchemaPropertiesMultipleOf(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaPropertiesMultipleOf(value);
+export function parseQueryParameterSubSchemaMultipleOf(value: unknown): unknown {
+return _parseReferenceQueryParameterSubSchemaMultipleOf(value);
 }
-function _parseReferenceQueryParameterSubSchemaPropertiesMultipleOf(value: unknown): unknown {
+function _parseReferenceQueryParameterSubSchemaMultipleOf(value: unknown): unknown {
 return parseDefinitionsMultipleOf(value);
 }
 export function parseQueryParameterSubSchemaAdditionalProperties(value: unknown): unknown {
@@ -3406,10 +3406,10 @@ default:
 return undefined;
 }
 }
-export function parseFormDataParameterSubSchemaPropertiesDescription(value: unknown): unknown {
-return _parseStringFormDataParameterSubSchemaPropertiesDescription(value);
+export function parseFormDataParameterSubSchemaDescription(value: unknown): unknown {
+return _parseStringFormDataParameterSubSchemaDescription(value);
 }
-function _parseStringFormDataParameterSubSchemaPropertiesDescription(value: unknown): unknown {
+function _parseStringFormDataParameterSubSchemaDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3488,94 +3488,94 @@ default:
 return undefined;
 }
 }
-export function parseFormDataParameterSubSchemaPropertiesItems(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaPropertiesItems(value);
+export function parseFormDataParameterSubSchemaItems(value: unknown): unknown {
+return _parseReferenceFormDataParameterSubSchemaItems(value);
 }
-function _parseReferenceFormDataParameterSubSchemaPropertiesItems(value: unknown): unknown {
+function _parseReferenceFormDataParameterSubSchemaItems(value: unknown): unknown {
 return parsePrimitivesItems(value);
 }
-export function parseFormDataParameterSubSchemaPropertiesCollectionFormat(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaPropertiesCollectionFormat(value);
+export function parseFormDataParameterSubSchemaCollectionFormat(value: unknown): unknown {
+return _parseReferenceFormDataParameterSubSchemaCollectionFormat(value);
 }
-function _parseReferenceFormDataParameterSubSchemaPropertiesCollectionFormat(value: unknown): unknown {
+function _parseReferenceFormDataParameterSubSchemaCollectionFormat(value: unknown): unknown {
 return parseCollectionFormatWithMulti(value);
 }
-export function parseFormDataParameterSubSchemaPropertiesDefault(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaPropertiesDefault(value);
+export function parseFormDataParameterSubSchemaDefault(value: unknown): unknown {
+return _parseReferenceFormDataParameterSubSchemaDefault(value);
 }
-function _parseReferenceFormDataParameterSubSchemaPropertiesDefault(value: unknown): unknown {
+function _parseReferenceFormDataParameterSubSchemaDefault(value: unknown): unknown {
 return parseDefinitionsDefault(value);
 }
-export function parseFormDataParameterSubSchemaPropertiesMaximum(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaPropertiesMaximum(value);
+export function parseFormDataParameterSubSchemaMaximum(value: unknown): unknown {
+return _parseReferenceFormDataParameterSubSchemaMaximum(value);
 }
-function _parseReferenceFormDataParameterSubSchemaPropertiesMaximum(value: unknown): unknown {
+function _parseReferenceFormDataParameterSubSchemaMaximum(value: unknown): unknown {
 return parseDefinitionsMaximum(value);
 }
-export function parseFormDataParameterSubSchemaPropertiesExclusiveMaximum(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaPropertiesExclusiveMaximum(value);
+export function parseFormDataParameterSubSchemaExclusiveMaximum(value: unknown): unknown {
+return _parseReferenceFormDataParameterSubSchemaExclusiveMaximum(value);
 }
-function _parseReferenceFormDataParameterSubSchemaPropertiesExclusiveMaximum(value: unknown): unknown {
+function _parseReferenceFormDataParameterSubSchemaExclusiveMaximum(value: unknown): unknown {
 return parseDefinitionsExclusiveMaximum(value);
 }
-export function parseFormDataParameterSubSchemaPropertiesMinimum(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaPropertiesMinimum(value);
+export function parseFormDataParameterSubSchemaMinimum(value: unknown): unknown {
+return _parseReferenceFormDataParameterSubSchemaMinimum(value);
 }
-function _parseReferenceFormDataParameterSubSchemaPropertiesMinimum(value: unknown): unknown {
+function _parseReferenceFormDataParameterSubSchemaMinimum(value: unknown): unknown {
 return parseDefinitionsMinimum(value);
 }
-export function parseFormDataParameterSubSchemaPropertiesExclusiveMinimum(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaPropertiesExclusiveMinimum(value);
+export function parseFormDataParameterSubSchemaExclusiveMinimum(value: unknown): unknown {
+return _parseReferenceFormDataParameterSubSchemaExclusiveMinimum(value);
 }
-function _parseReferenceFormDataParameterSubSchemaPropertiesExclusiveMinimum(value: unknown): unknown {
+function _parseReferenceFormDataParameterSubSchemaExclusiveMinimum(value: unknown): unknown {
 return parseDefinitionsExclusiveMinimum(value);
 }
-export function parseFormDataParameterSubSchemaPropertiesMaxLength(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaPropertiesMaxLength(value);
+export function parseFormDataParameterSubSchemaMaxLength(value: unknown): unknown {
+return _parseReferenceFormDataParameterSubSchemaMaxLength(value);
 }
-function _parseReferenceFormDataParameterSubSchemaPropertiesMaxLength(value: unknown): unknown {
+function _parseReferenceFormDataParameterSubSchemaMaxLength(value: unknown): unknown {
 return parseDefinitionsMaxLength(value);
 }
-export function parseFormDataParameterSubSchemaPropertiesMinLength(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaPropertiesMinLength(value);
+export function parseFormDataParameterSubSchemaMinLength(value: unknown): unknown {
+return _parseReferenceFormDataParameterSubSchemaMinLength(value);
 }
-function _parseReferenceFormDataParameterSubSchemaPropertiesMinLength(value: unknown): unknown {
+function _parseReferenceFormDataParameterSubSchemaMinLength(value: unknown): unknown {
 return parseDefinitionsMinLength(value);
 }
-export function parseFormDataParameterSubSchemaPropertiesPattern(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaPropertiesPattern(value);
+export function parseFormDataParameterSubSchemaPattern(value: unknown): unknown {
+return _parseReferenceFormDataParameterSubSchemaPattern(value);
 }
-function _parseReferenceFormDataParameterSubSchemaPropertiesPattern(value: unknown): unknown {
+function _parseReferenceFormDataParameterSubSchemaPattern(value: unknown): unknown {
 return parseDefinitionsPattern(value);
 }
-export function parseFormDataParameterSubSchemaPropertiesMaxItems(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaPropertiesMaxItems(value);
+export function parseFormDataParameterSubSchemaMaxItems(value: unknown): unknown {
+return _parseReferenceFormDataParameterSubSchemaMaxItems(value);
 }
-function _parseReferenceFormDataParameterSubSchemaPropertiesMaxItems(value: unknown): unknown {
+function _parseReferenceFormDataParameterSubSchemaMaxItems(value: unknown): unknown {
 return parseDefinitionsMaxItems(value);
 }
-export function parseFormDataParameterSubSchemaPropertiesMinItems(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaPropertiesMinItems(value);
+export function parseFormDataParameterSubSchemaMinItems(value: unknown): unknown {
+return _parseReferenceFormDataParameterSubSchemaMinItems(value);
 }
-function _parseReferenceFormDataParameterSubSchemaPropertiesMinItems(value: unknown): unknown {
+function _parseReferenceFormDataParameterSubSchemaMinItems(value: unknown): unknown {
 return parseDefinitionsMinItems(value);
 }
-export function parseFormDataParameterSubSchemaPropertiesUniqueItems(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaPropertiesUniqueItems(value);
+export function parseFormDataParameterSubSchemaUniqueItems(value: unknown): unknown {
+return _parseReferenceFormDataParameterSubSchemaUniqueItems(value);
 }
-function _parseReferenceFormDataParameterSubSchemaPropertiesUniqueItems(value: unknown): unknown {
+function _parseReferenceFormDataParameterSubSchemaUniqueItems(value: unknown): unknown {
 return parseDefinitionsUniqueItems(value);
 }
-export function parseFormDataParameterSubSchemaPropertiesEnum(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaPropertiesEnum(value);
+export function parseFormDataParameterSubSchemaEnum(value: unknown): unknown {
+return _parseReferenceFormDataParameterSubSchemaEnum(value);
 }
-function _parseReferenceFormDataParameterSubSchemaPropertiesEnum(value: unknown): unknown {
+function _parseReferenceFormDataParameterSubSchemaEnum(value: unknown): unknown {
 return parseDefinitionsEnum(value);
 }
-export function parseFormDataParameterSubSchemaPropertiesMultipleOf(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaPropertiesMultipleOf(value);
+export function parseFormDataParameterSubSchemaMultipleOf(value: unknown): unknown {
+return _parseReferenceFormDataParameterSubSchemaMultipleOf(value);
 }
-function _parseReferenceFormDataParameterSubSchemaPropertiesMultipleOf(value: unknown): unknown {
+function _parseReferenceFormDataParameterSubSchemaMultipleOf(value: unknown): unknown {
 return parseDefinitionsMultipleOf(value);
 }
 export function parseFormDataParameterSubSchemaAdditionalProperties(value: unknown): unknown {
@@ -3630,10 +3630,10 @@ default:
 return undefined;
 }
 }
-export function parsePathParameterSubSchemaPropertiesDescription(value: unknown): unknown {
-return _parseStringPathParameterSubSchemaPropertiesDescription(value);
+export function parsePathParameterSubSchemaDescription(value: unknown): unknown {
+return _parseStringPathParameterSubSchemaDescription(value);
 }
-function _parseStringPathParameterSubSchemaPropertiesDescription(value: unknown): unknown {
+function _parseStringPathParameterSubSchemaDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3686,94 +3686,94 @@ default:
 return undefined;
 }
 }
-export function parsePathParameterSubSchemaPropertiesItems(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaPropertiesItems(value);
+export function parsePathParameterSubSchemaItems(value: unknown): unknown {
+return _parseReferencePathParameterSubSchemaItems(value);
 }
-function _parseReferencePathParameterSubSchemaPropertiesItems(value: unknown): unknown {
+function _parseReferencePathParameterSubSchemaItems(value: unknown): unknown {
 return parsePrimitivesItems(value);
 }
-export function parsePathParameterSubSchemaPropertiesCollectionFormat(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaPropertiesCollectionFormat(value);
+export function parsePathParameterSubSchemaCollectionFormat(value: unknown): unknown {
+return _parseReferencePathParameterSubSchemaCollectionFormat(value);
 }
-function _parseReferencePathParameterSubSchemaPropertiesCollectionFormat(value: unknown): unknown {
+function _parseReferencePathParameterSubSchemaCollectionFormat(value: unknown): unknown {
 return parseDefinitionsCollectionFormat(value);
 }
-export function parsePathParameterSubSchemaPropertiesDefault(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaPropertiesDefault(value);
+export function parsePathParameterSubSchemaDefault(value: unknown): unknown {
+return _parseReferencePathParameterSubSchemaDefault(value);
 }
-function _parseReferencePathParameterSubSchemaPropertiesDefault(value: unknown): unknown {
+function _parseReferencePathParameterSubSchemaDefault(value: unknown): unknown {
 return parseDefinitionsDefault(value);
 }
-export function parsePathParameterSubSchemaPropertiesMaximum(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaPropertiesMaximum(value);
+export function parsePathParameterSubSchemaMaximum(value: unknown): unknown {
+return _parseReferencePathParameterSubSchemaMaximum(value);
 }
-function _parseReferencePathParameterSubSchemaPropertiesMaximum(value: unknown): unknown {
+function _parseReferencePathParameterSubSchemaMaximum(value: unknown): unknown {
 return parseDefinitionsMaximum(value);
 }
-export function parsePathParameterSubSchemaPropertiesExclusiveMaximum(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaPropertiesExclusiveMaximum(value);
+export function parsePathParameterSubSchemaExclusiveMaximum(value: unknown): unknown {
+return _parseReferencePathParameterSubSchemaExclusiveMaximum(value);
 }
-function _parseReferencePathParameterSubSchemaPropertiesExclusiveMaximum(value: unknown): unknown {
+function _parseReferencePathParameterSubSchemaExclusiveMaximum(value: unknown): unknown {
 return parseDefinitionsExclusiveMaximum(value);
 }
-export function parsePathParameterSubSchemaPropertiesMinimum(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaPropertiesMinimum(value);
+export function parsePathParameterSubSchemaMinimum(value: unknown): unknown {
+return _parseReferencePathParameterSubSchemaMinimum(value);
 }
-function _parseReferencePathParameterSubSchemaPropertiesMinimum(value: unknown): unknown {
+function _parseReferencePathParameterSubSchemaMinimum(value: unknown): unknown {
 return parseDefinitionsMinimum(value);
 }
-export function parsePathParameterSubSchemaPropertiesExclusiveMinimum(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaPropertiesExclusiveMinimum(value);
+export function parsePathParameterSubSchemaExclusiveMinimum(value: unknown): unknown {
+return _parseReferencePathParameterSubSchemaExclusiveMinimum(value);
 }
-function _parseReferencePathParameterSubSchemaPropertiesExclusiveMinimum(value: unknown): unknown {
+function _parseReferencePathParameterSubSchemaExclusiveMinimum(value: unknown): unknown {
 return parseDefinitionsExclusiveMinimum(value);
 }
-export function parsePathParameterSubSchemaPropertiesMaxLength(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaPropertiesMaxLength(value);
+export function parsePathParameterSubSchemaMaxLength(value: unknown): unknown {
+return _parseReferencePathParameterSubSchemaMaxLength(value);
 }
-function _parseReferencePathParameterSubSchemaPropertiesMaxLength(value: unknown): unknown {
+function _parseReferencePathParameterSubSchemaMaxLength(value: unknown): unknown {
 return parseDefinitionsMaxLength(value);
 }
-export function parsePathParameterSubSchemaPropertiesMinLength(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaPropertiesMinLength(value);
+export function parsePathParameterSubSchemaMinLength(value: unknown): unknown {
+return _parseReferencePathParameterSubSchemaMinLength(value);
 }
-function _parseReferencePathParameterSubSchemaPropertiesMinLength(value: unknown): unknown {
+function _parseReferencePathParameterSubSchemaMinLength(value: unknown): unknown {
 return parseDefinitionsMinLength(value);
 }
-export function parsePathParameterSubSchemaPropertiesPattern(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaPropertiesPattern(value);
+export function parsePathParameterSubSchemaPattern(value: unknown): unknown {
+return _parseReferencePathParameterSubSchemaPattern(value);
 }
-function _parseReferencePathParameterSubSchemaPropertiesPattern(value: unknown): unknown {
+function _parseReferencePathParameterSubSchemaPattern(value: unknown): unknown {
 return parseDefinitionsPattern(value);
 }
-export function parsePathParameterSubSchemaPropertiesMaxItems(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaPropertiesMaxItems(value);
+export function parsePathParameterSubSchemaMaxItems(value: unknown): unknown {
+return _parseReferencePathParameterSubSchemaMaxItems(value);
 }
-function _parseReferencePathParameterSubSchemaPropertiesMaxItems(value: unknown): unknown {
+function _parseReferencePathParameterSubSchemaMaxItems(value: unknown): unknown {
 return parseDefinitionsMaxItems(value);
 }
-export function parsePathParameterSubSchemaPropertiesMinItems(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaPropertiesMinItems(value);
+export function parsePathParameterSubSchemaMinItems(value: unknown): unknown {
+return _parseReferencePathParameterSubSchemaMinItems(value);
 }
-function _parseReferencePathParameterSubSchemaPropertiesMinItems(value: unknown): unknown {
+function _parseReferencePathParameterSubSchemaMinItems(value: unknown): unknown {
 return parseDefinitionsMinItems(value);
 }
-export function parsePathParameterSubSchemaPropertiesUniqueItems(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaPropertiesUniqueItems(value);
+export function parsePathParameterSubSchemaUniqueItems(value: unknown): unknown {
+return _parseReferencePathParameterSubSchemaUniqueItems(value);
 }
-function _parseReferencePathParameterSubSchemaPropertiesUniqueItems(value: unknown): unknown {
+function _parseReferencePathParameterSubSchemaUniqueItems(value: unknown): unknown {
 return parseDefinitionsUniqueItems(value);
 }
-export function parsePathParameterSubSchemaPropertiesEnum(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaPropertiesEnum(value);
+export function parsePathParameterSubSchemaEnum(value: unknown): unknown {
+return _parseReferencePathParameterSubSchemaEnum(value);
 }
-function _parseReferencePathParameterSubSchemaPropertiesEnum(value: unknown): unknown {
+function _parseReferencePathParameterSubSchemaEnum(value: unknown): unknown {
 return parseDefinitionsEnum(value);
 }
-export function parsePathParameterSubSchemaPropertiesMultipleOf(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaPropertiesMultipleOf(value);
+export function parsePathParameterSubSchemaMultipleOf(value: unknown): unknown {
+return _parseReferencePathParameterSubSchemaMultipleOf(value);
 }
-function _parseReferencePathParameterSubSchemaPropertiesMultipleOf(value: unknown): unknown {
+function _parseReferencePathParameterSubSchemaMultipleOf(value: unknown): unknown {
 return parseDefinitionsMultipleOf(value);
 }
 export function parsePathParameterSubSchemaAdditionalProperties(value: unknown): unknown {
@@ -3788,40 +3788,40 @@ return _parseReferencePathParameterSubSchemaX(value);
 function _parseReferencePathParameterSubSchemaX(value: unknown): unknown {
 return parseVendorExtension(value);
 }
-export function parseNonBodyParameterOneOf0(value: unknown): unknown {
-return _parseReferenceNonBodyParameterOneOf0(value);
+export function parseNonBodyParameter0(value: unknown): unknown {
+return _parseReferenceNonBodyParameter0(value);
 }
-function _parseReferenceNonBodyParameterOneOf0(value: unknown): unknown {
+function _parseReferenceNonBodyParameter0(value: unknown): unknown {
 return parseHeaderParameterSubSchema(value);
 }
-export function parseNonBodyParameterOneOf1(value: unknown): unknown {
-return _parseReferenceNonBodyParameterOneOf1(value);
+export function parseNonBodyParameter1(value: unknown): unknown {
+return _parseReferenceNonBodyParameter1(value);
 }
-function _parseReferenceNonBodyParameterOneOf1(value: unknown): unknown {
+function _parseReferenceNonBodyParameter1(value: unknown): unknown {
 return parseFormDataParameterSubSchema(value);
 }
-export function parseNonBodyParameterOneOf2(value: unknown): unknown {
-return _parseReferenceNonBodyParameterOneOf2(value);
+export function parseNonBodyParameter2(value: unknown): unknown {
+return _parseReferenceNonBodyParameter2(value);
 }
-function _parseReferenceNonBodyParameterOneOf2(value: unknown): unknown {
+function _parseReferenceNonBodyParameter2(value: unknown): unknown {
 return parseQueryParameterSubSchema(value);
 }
-export function parseNonBodyParameterOneOf3(value: unknown): unknown {
-return _parseReferenceNonBodyParameterOneOf3(value);
+export function parseNonBodyParameter3(value: unknown): unknown {
+return _parseReferenceNonBodyParameter3(value);
 }
-function _parseReferenceNonBodyParameterOneOf3(value: unknown): unknown {
+function _parseReferenceNonBodyParameter3(value: unknown): unknown {
 return parsePathParameterSubSchema(value);
 }
-export function parseParameterOneOf0(value: unknown): unknown {
-return _parseReferenceParameterOneOf0(value);
+export function parseParameter0(value: unknown): unknown {
+return _parseReferenceParameter0(value);
 }
-function _parseReferenceParameterOneOf0(value: unknown): unknown {
+function _parseReferenceParameter0(value: unknown): unknown {
 return parseBodyParameter(value);
 }
-export function parseParameterOneOf1(value: unknown): unknown {
-return _parseReferenceParameterOneOf1(value);
+export function parseParameter1(value: unknown): unknown {
+return _parseReferenceParameter1(value);
 }
-function _parseReferenceParameterOneOf1(value: unknown): unknown {
+function _parseReferenceParameter1(value: unknown): unknown {
 return parseNonBodyParameter(value);
 }
 export function parseSchemaRef(value: unknown): unknown {
@@ -3852,89 +3852,89 @@ default:
 return undefined;
 }
 }
-export function parseDefinitionsSchemaPropertiesTitle(value: unknown): unknown {
-return _parseReferenceDefinitionsSchemaPropertiesTitle(value);
+export function parseSchemaTitle(value: unknown): unknown {
+return _parseReferenceSchemaTitle(value);
 }
-function _parseReferenceDefinitionsSchemaPropertiesTitle(value: unknown): unknown {
-return parseDraft04SchemaPropertiesTitle(value);
+function _parseReferenceSchemaTitle(value: unknown): unknown {
+return parseDraft04Title(value);
 }
-export function parseDefinitionsSchemaPropertiesDescription(value: unknown): unknown {
-return _parseReferenceDefinitionsSchemaPropertiesDescription(value);
+export function parseSchemaDescription(value: unknown): unknown {
+return _parseReferenceSchemaDescription(value);
 }
-function _parseReferenceDefinitionsSchemaPropertiesDescription(value: unknown): unknown {
-return parseDraft04SchemaPropertiesDescription(value);
+function _parseReferenceSchemaDescription(value: unknown): unknown {
+return parseDraft04Description(value);
 }
-export function parseDefinitionsSchemaPropertiesDefault(value: unknown): unknown {
-return _parseReferenceDefinitionsSchemaPropertiesDefault(value);
+export function parseSchemaDefault(value: unknown): unknown {
+return _parseReferenceSchemaDefault(value);
 }
-function _parseReferenceDefinitionsSchemaPropertiesDefault(value: unknown): unknown {
-return parseDraft04SchemaPropertiesDefault(value);
+function _parseReferenceSchemaDefault(value: unknown): unknown {
+return parseDraft04Default(value);
 }
-export function parseDefinitionsSchemaPropertiesMultipleOf(value: unknown): unknown {
-return _parseReferenceDefinitionsSchemaPropertiesMultipleOf(value);
+export function parseSchemaMultipleOf(value: unknown): unknown {
+return _parseReferenceSchemaMultipleOf(value);
 }
-function _parseReferenceDefinitionsSchemaPropertiesMultipleOf(value: unknown): unknown {
-return parseDraft04SchemaPropertiesMultipleOf(value);
+function _parseReferenceSchemaMultipleOf(value: unknown): unknown {
+return parseDraft04MultipleOf(value);
 }
-export function parseDefinitionsSchemaPropertiesMaximum(value: unknown): unknown {
-return _parseReferenceDefinitionsSchemaPropertiesMaximum(value);
+export function parseSchemaMaximum(value: unknown): unknown {
+return _parseReferenceSchemaMaximum(value);
 }
-function _parseReferenceDefinitionsSchemaPropertiesMaximum(value: unknown): unknown {
-return parseDraft04SchemaPropertiesMaximum(value);
+function _parseReferenceSchemaMaximum(value: unknown): unknown {
+return parseDraft04Maximum(value);
 }
-export function parseDefinitionsSchemaPropertiesExclusiveMaximum(value: unknown): unknown {
-return _parseReferenceDefinitionsSchemaPropertiesExclusiveMaximum(value);
+export function parseSchemaExclusiveMaximum(value: unknown): unknown {
+return _parseReferenceSchemaExclusiveMaximum(value);
 }
-function _parseReferenceDefinitionsSchemaPropertiesExclusiveMaximum(value: unknown): unknown {
-return parseDraft04SchemaPropertiesExclusiveMaximum(value);
+function _parseReferenceSchemaExclusiveMaximum(value: unknown): unknown {
+return parseDraft04ExclusiveMaximum(value);
 }
-export function parseDefinitionsSchemaPropertiesMinimum(value: unknown): unknown {
-return _parseReferenceDefinitionsSchemaPropertiesMinimum(value);
+export function parseSchemaMinimum(value: unknown): unknown {
+return _parseReferenceSchemaMinimum(value);
 }
-function _parseReferenceDefinitionsSchemaPropertiesMinimum(value: unknown): unknown {
-return parseDraft04SchemaPropertiesMinimum(value);
+function _parseReferenceSchemaMinimum(value: unknown): unknown {
+return parseDraft04Minimum(value);
 }
-export function parseDefinitionsSchemaPropertiesExclusiveMinimum(value: unknown): unknown {
-return _parseReferenceDefinitionsSchemaPropertiesExclusiveMinimum(value);
+export function parseSchemaExclusiveMinimum(value: unknown): unknown {
+return _parseReferenceSchemaExclusiveMinimum(value);
 }
-function _parseReferenceDefinitionsSchemaPropertiesExclusiveMinimum(value: unknown): unknown {
-return parseDraft04SchemaPropertiesExclusiveMinimum(value);
+function _parseReferenceSchemaExclusiveMinimum(value: unknown): unknown {
+return parseDraft04ExclusiveMinimum(value);
 }
-export function parseSchemaPropertiesMaxLength(value: unknown): unknown {
-return _parseReferenceSchemaPropertiesMaxLength(value);
+export function parseSchemaMaxLength(value: unknown): unknown {
+return _parseReferenceSchemaMaxLength(value);
 }
-function _parseReferenceSchemaPropertiesMaxLength(value: unknown): unknown {
+function _parseReferenceSchemaMaxLength(value: unknown): unknown {
 return parsePositiveInteger(value);
 }
-export function parseSchemaPropertiesMinLength(value: unknown): unknown {
-return _parseReferenceSchemaPropertiesMinLength(value);
+export function parseSchemaMinLength(value: unknown): unknown {
+return _parseReferenceSchemaMinLength(value);
 }
-function _parseReferenceSchemaPropertiesMinLength(value: unknown): unknown {
+function _parseReferenceSchemaMinLength(value: unknown): unknown {
 return parsePositiveIntegerDefault0(value);
 }
-export function parseDefinitionsSchemaPropertiesPattern(value: unknown): unknown {
-return _parseReferenceDefinitionsSchemaPropertiesPattern(value);
+export function parseSchemaPattern(value: unknown): unknown {
+return _parseReferenceSchemaPattern(value);
 }
-function _parseReferenceDefinitionsSchemaPropertiesPattern(value: unknown): unknown {
-return parseDraft04SchemaPropertiesPattern(value);
+function _parseReferenceSchemaPattern(value: unknown): unknown {
+return parseDraft04Pattern(value);
 }
-export function parseSchemaPropertiesMaxItems(value: unknown): unknown {
-return _parseReferenceSchemaPropertiesMaxItems(value);
+export function parseSchemaMaxItems(value: unknown): unknown {
+return _parseReferenceSchemaMaxItems(value);
 }
-function _parseReferenceSchemaPropertiesMaxItems(value: unknown): unknown {
+function _parseReferenceSchemaMaxItems(value: unknown): unknown {
 return parsePositiveInteger(value);
 }
-export function parseSchemaPropertiesMinItems(value: unknown): unknown {
-return _parseReferenceSchemaPropertiesMinItems(value);
+export function parseSchemaMinItems(value: unknown): unknown {
+return _parseReferenceSchemaMinItems(value);
 }
-function _parseReferenceSchemaPropertiesMinItems(value: unknown): unknown {
+function _parseReferenceSchemaMinItems(value: unknown): unknown {
 return parsePositiveIntegerDefault0(value);
 }
-export function parseDefinitionsSchemaPropertiesUniqueItems(value: unknown): unknown {
-return _parseReferenceDefinitionsSchemaPropertiesUniqueItems(value);
+export function parseSchemaUniqueItems(value: unknown): unknown {
+return _parseReferenceSchemaUniqueItems(value);
 }
-function _parseReferenceDefinitionsSchemaPropertiesUniqueItems(value: unknown): unknown {
-return parseDraft04SchemaPropertiesUniqueItems(value);
+function _parseReferenceSchemaUniqueItems(value: unknown): unknown {
+return parseDraft04UniqueItems(value);
 }
 export function parseMaxProperties(value: unknown): unknown {
 return _parseReferenceMaxProperties(value);
@@ -3954,28 +3954,28 @@ return _parseReferenceSchemaRequired(value);
 function _parseReferenceSchemaRequired(value: unknown): unknown {
 return parseStringArray(value);
 }
-export function parseDefinitionsSchemaPropertiesEnum(value: unknown): unknown {
-return _parseReferenceDefinitionsSchemaPropertiesEnum(value);
+export function parseSchemaEnum(value: unknown): unknown {
+return _parseReferenceSchemaEnum(value);
 }
-function _parseReferenceDefinitionsSchemaPropertiesEnum(value: unknown): unknown {
-return parseDraft04SchemaPropertiesEnum(value);
+function _parseReferenceSchemaEnum(value: unknown): unknown {
+return parseDraft04Enum(value);
 }
-export function parseSchemaPropertiesAdditionalProperties(value: unknown): unknown {
-return _parseAnyOfSchemaPropertiesAdditionalProperties(value);
+export function parsePropertiesSchemaAdditionalProperties(value: unknown): unknown {
+return _parseAnyOfPropertiesSchemaAdditionalProperties(value);
 }
-function _parseAnyOfSchemaPropertiesAdditionalProperties(value: unknown): unknown {
+function _parseAnyOfPropertiesSchemaAdditionalProperties(value: unknown): unknown {
 return parseAdditionalPropertiesAnyOf0(value) ?? parseAdditionalPropertiesAnyOf1(value);
 }
-export function parseDefinitionsSchemaType(value: unknown): unknown {
-return _parseReferenceDefinitionsSchemaType(value);
+export function parseSchemaType(value: unknown): unknown {
+return _parseReferenceSchemaType(value);
 }
-function _parseReferenceDefinitionsSchemaType(value: unknown): unknown {
-return parseDraft04SchemaType(value);
+function _parseReferenceSchemaType(value: unknown): unknown {
+return parseDraft04Type(value);
 }
-export function parseSchemaPropertiesItems(value: unknown): unknown {
-return _parseAnyOfSchemaPropertiesItems(value);
+export function parseSchemaItems(value: unknown): unknown {
+return _parseAnyOfSchemaItems(value);
 }
-function _parseAnyOfSchemaPropertiesItems(value: unknown): unknown {
+function _parseAnyOfSchemaItems(value: unknown): unknown {
 return parseItemsAnyOf0(value) ?? parseItemsAnyOf1(value);
 }
 export function parseAllOf(value: unknown): unknown {
@@ -3998,7 +3998,7 @@ function _parseMapProperties(value: unknown): unknown {
 if(typeof value === "object" && value !== null && !Array.isArray(value)) {
 const result = {} as Record<string, unknown>;
 for(const propertyName in value) {
-result[propertyName] ??= parsePropertiesPropertiesAdditionalProperties(value[propertyName as keyof typeof value]);
+result[propertyName] ??= parsePropertiesAdditionalProperties(value[propertyName as keyof typeof value]);
 }
 return result;
 }
@@ -4044,31 +4044,31 @@ return value;
 }
 return undefined;
 }
-export function parsePropertiesXml(value: unknown): unknown {
-return _parseReferencePropertiesXml(value);
+export function parseSchemaXml(value: unknown): unknown {
+return _parseReferenceSchemaXml(value);
 }
-function _parseReferencePropertiesXml(value: unknown): unknown {
+function _parseReferenceSchemaXml(value: unknown): unknown {
 return parseDefinitionsXml(value);
 }
-export function parseSchemaPropertiesExternalDocs(value: unknown): unknown {
-return _parseReferenceSchemaPropertiesExternalDocs(value);
+export function parseSchemaExternalDocs(value: unknown): unknown {
+return _parseReferenceSchemaExternalDocs(value);
 }
-function _parseReferenceSchemaPropertiesExternalDocs(value: unknown): unknown {
+function _parseReferenceSchemaExternalDocs(value: unknown): unknown {
 return parseDefinitionsExternalDocs(value);
 }
 export function parseSchemaExample(value: unknown): unknown {
 return ;
 }
-export function parseSchemaAdditionalProperties(value: unknown): unknown {
-return _parseNeverSchemaAdditionalProperties(value);
+export function parseDefinitionsSchemaAdditionalProperties(value: unknown): unknown {
+return _parseNeverDefinitionsSchemaAdditionalProperties(value);
 }
-function _parseNeverSchemaAdditionalProperties(value: unknown): unknown {
+function _parseNeverDefinitionsSchemaAdditionalProperties(value: unknown): unknown {
 return undefined;
 }
-export function parseSchemaX(value: unknown): unknown {
-return _parseReferenceSchemaX(value);
+export function parseSchemaPatternPropertiesX(value: unknown): unknown {
+return _parseReferenceSchemaPatternPropertiesX(value);
 }
-function _parseReferenceSchemaX(value: unknown): unknown {
+function _parseReferenceSchemaPatternPropertiesX(value: unknown): unknown {
 return parseVendorExtension(value);
 }
 export function parseFileSchemaFormat(value: unknown): unknown {
@@ -4085,23 +4085,23 @@ default:
 return undefined;
 }
 }
-export function parseFileSchemaPropertiesTitle(value: unknown): unknown {
-return _parseReferenceFileSchemaPropertiesTitle(value);
+export function parseFileSchemaTitle(value: unknown): unknown {
+return _parseReferenceFileSchemaTitle(value);
 }
-function _parseReferenceFileSchemaPropertiesTitle(value: unknown): unknown {
-return parseDraft04SchemaPropertiesTitle(value);
+function _parseReferenceFileSchemaTitle(value: unknown): unknown {
+return parseDraft04Title(value);
 }
-export function parseFileSchemaPropertiesDescription(value: unknown): unknown {
-return _parseReferenceFileSchemaPropertiesDescription(value);
+export function parseFileSchemaDescription(value: unknown): unknown {
+return _parseReferenceFileSchemaDescription(value);
 }
-function _parseReferenceFileSchemaPropertiesDescription(value: unknown): unknown {
-return parseDraft04SchemaPropertiesDescription(value);
+function _parseReferenceFileSchemaDescription(value: unknown): unknown {
+return parseDraft04Description(value);
 }
-export function parseFileSchemaPropertiesDefault(value: unknown): unknown {
-return _parseReferenceFileSchemaPropertiesDefault(value);
+export function parseFileSchemaDefault(value: unknown): unknown {
+return _parseReferenceFileSchemaDefault(value);
 }
-function _parseReferenceFileSchemaPropertiesDefault(value: unknown): unknown {
-return parseDraft04SchemaPropertiesDefault(value);
+function _parseReferenceFileSchemaDefault(value: unknown): unknown {
+return parseDraft04Default(value);
 }
 export function parseFileSchemaRequired(value: unknown): unknown {
 return _parseReferenceFileSchemaRequired(value);
@@ -4149,10 +4149,10 @@ return value;
 }
 return undefined;
 }
-export function parseFileSchemaPropertiesExternalDocs(value: unknown): unknown {
-return _parseReferenceFileSchemaPropertiesExternalDocs(value);
+export function parseFileSchemaExternalDocs(value: unknown): unknown {
+return _parseReferenceFileSchemaExternalDocs(value);
 }
-function _parseReferenceFileSchemaPropertiesExternalDocs(value: unknown): unknown {
+function _parseReferenceFileSchemaExternalDocs(value: unknown): unknown {
 return parseDefinitionsExternalDocs(value);
 }
 export function parseFileSchemaExample(value: unknown): unknown {
@@ -4198,94 +4198,94 @@ default:
 return undefined;
 }
 }
-export function parsePrimitivesItemsPropertiesItems(value: unknown): unknown {
-return _parseReferencePrimitivesItemsPropertiesItems(value);
+export function parsePrimitivesItemsItems(value: unknown): unknown {
+return _parseReferencePrimitivesItemsItems(value);
 }
-function _parseReferencePrimitivesItemsPropertiesItems(value: unknown): unknown {
+function _parseReferencePrimitivesItemsItems(value: unknown): unknown {
 return parsePrimitivesItems(value);
 }
-export function parsePrimitivesItemsPropertiesCollectionFormat(value: unknown): unknown {
-return _parseReferencePrimitivesItemsPropertiesCollectionFormat(value);
+export function parsePrimitivesItemsCollectionFormat(value: unknown): unknown {
+return _parseReferencePrimitivesItemsCollectionFormat(value);
 }
-function _parseReferencePrimitivesItemsPropertiesCollectionFormat(value: unknown): unknown {
+function _parseReferencePrimitivesItemsCollectionFormat(value: unknown): unknown {
 return parseDefinitionsCollectionFormat(value);
 }
-export function parsePrimitivesItemsPropertiesDefault(value: unknown): unknown {
-return _parseReferencePrimitivesItemsPropertiesDefault(value);
+export function parsePrimitivesItemsDefault(value: unknown): unknown {
+return _parseReferencePrimitivesItemsDefault(value);
 }
-function _parseReferencePrimitivesItemsPropertiesDefault(value: unknown): unknown {
+function _parseReferencePrimitivesItemsDefault(value: unknown): unknown {
 return parseDefinitionsDefault(value);
 }
-export function parsePrimitivesItemsPropertiesMaximum(value: unknown): unknown {
-return _parseReferencePrimitivesItemsPropertiesMaximum(value);
+export function parsePrimitivesItemsMaximum(value: unknown): unknown {
+return _parseReferencePrimitivesItemsMaximum(value);
 }
-function _parseReferencePrimitivesItemsPropertiesMaximum(value: unknown): unknown {
+function _parseReferencePrimitivesItemsMaximum(value: unknown): unknown {
 return parseDefinitionsMaximum(value);
 }
-export function parsePrimitivesItemsPropertiesExclusiveMaximum(value: unknown): unknown {
-return _parseReferencePrimitivesItemsPropertiesExclusiveMaximum(value);
+export function parsePrimitivesItemsExclusiveMaximum(value: unknown): unknown {
+return _parseReferencePrimitivesItemsExclusiveMaximum(value);
 }
-function _parseReferencePrimitivesItemsPropertiesExclusiveMaximum(value: unknown): unknown {
+function _parseReferencePrimitivesItemsExclusiveMaximum(value: unknown): unknown {
 return parseDefinitionsExclusiveMaximum(value);
 }
-export function parsePrimitivesItemsPropertiesMinimum(value: unknown): unknown {
-return _parseReferencePrimitivesItemsPropertiesMinimum(value);
+export function parsePrimitivesItemsMinimum(value: unknown): unknown {
+return _parseReferencePrimitivesItemsMinimum(value);
 }
-function _parseReferencePrimitivesItemsPropertiesMinimum(value: unknown): unknown {
+function _parseReferencePrimitivesItemsMinimum(value: unknown): unknown {
 return parseDefinitionsMinimum(value);
 }
-export function parsePrimitivesItemsPropertiesExclusiveMinimum(value: unknown): unknown {
-return _parseReferencePrimitivesItemsPropertiesExclusiveMinimum(value);
+export function parsePrimitivesItemsExclusiveMinimum(value: unknown): unknown {
+return _parseReferencePrimitivesItemsExclusiveMinimum(value);
 }
-function _parseReferencePrimitivesItemsPropertiesExclusiveMinimum(value: unknown): unknown {
+function _parseReferencePrimitivesItemsExclusiveMinimum(value: unknown): unknown {
 return parseDefinitionsExclusiveMinimum(value);
 }
-export function parsePrimitivesItemsPropertiesMaxLength(value: unknown): unknown {
-return _parseReferencePrimitivesItemsPropertiesMaxLength(value);
+export function parsePrimitivesItemsMaxLength(value: unknown): unknown {
+return _parseReferencePrimitivesItemsMaxLength(value);
 }
-function _parseReferencePrimitivesItemsPropertiesMaxLength(value: unknown): unknown {
+function _parseReferencePrimitivesItemsMaxLength(value: unknown): unknown {
 return parseDefinitionsMaxLength(value);
 }
-export function parsePrimitivesItemsPropertiesMinLength(value: unknown): unknown {
-return _parseReferencePrimitivesItemsPropertiesMinLength(value);
+export function parsePrimitivesItemsMinLength(value: unknown): unknown {
+return _parseReferencePrimitivesItemsMinLength(value);
 }
-function _parseReferencePrimitivesItemsPropertiesMinLength(value: unknown): unknown {
+function _parseReferencePrimitivesItemsMinLength(value: unknown): unknown {
 return parseDefinitionsMinLength(value);
 }
-export function parsePrimitivesItemsPropertiesPattern(value: unknown): unknown {
-return _parseReferencePrimitivesItemsPropertiesPattern(value);
+export function parsePrimitivesItemsPattern(value: unknown): unknown {
+return _parseReferencePrimitivesItemsPattern(value);
 }
-function _parseReferencePrimitivesItemsPropertiesPattern(value: unknown): unknown {
+function _parseReferencePrimitivesItemsPattern(value: unknown): unknown {
 return parseDefinitionsPattern(value);
 }
-export function parsePrimitivesItemsPropertiesMaxItems(value: unknown): unknown {
-return _parseReferencePrimitivesItemsPropertiesMaxItems(value);
+export function parsePrimitivesItemsMaxItems(value: unknown): unknown {
+return _parseReferencePrimitivesItemsMaxItems(value);
 }
-function _parseReferencePrimitivesItemsPropertiesMaxItems(value: unknown): unknown {
+function _parseReferencePrimitivesItemsMaxItems(value: unknown): unknown {
 return parseDefinitionsMaxItems(value);
 }
-export function parsePrimitivesItemsPropertiesMinItems(value: unknown): unknown {
-return _parseReferencePrimitivesItemsPropertiesMinItems(value);
+export function parsePrimitivesItemsMinItems(value: unknown): unknown {
+return _parseReferencePrimitivesItemsMinItems(value);
 }
-function _parseReferencePrimitivesItemsPropertiesMinItems(value: unknown): unknown {
+function _parseReferencePrimitivesItemsMinItems(value: unknown): unknown {
 return parseDefinitionsMinItems(value);
 }
-export function parsePrimitivesItemsPropertiesUniqueItems(value: unknown): unknown {
-return _parseReferencePrimitivesItemsPropertiesUniqueItems(value);
+export function parsePrimitivesItemsUniqueItems(value: unknown): unknown {
+return _parseReferencePrimitivesItemsUniqueItems(value);
 }
-function _parseReferencePrimitivesItemsPropertiesUniqueItems(value: unknown): unknown {
+function _parseReferencePrimitivesItemsUniqueItems(value: unknown): unknown {
 return parseDefinitionsUniqueItems(value);
 }
-export function parsePrimitivesItemsPropertiesEnum(value: unknown): unknown {
-return _parseReferencePrimitivesItemsPropertiesEnum(value);
+export function parsePrimitivesItemsEnum(value: unknown): unknown {
+return _parseReferencePrimitivesItemsEnum(value);
 }
-function _parseReferencePrimitivesItemsPropertiesEnum(value: unknown): unknown {
+function _parseReferencePrimitivesItemsEnum(value: unknown): unknown {
 return parseDefinitionsEnum(value);
 }
-export function parsePrimitivesItemsPropertiesMultipleOf(value: unknown): unknown {
-return _parseReferencePrimitivesItemsPropertiesMultipleOf(value);
+export function parsePrimitivesItemsMultipleOf(value: unknown): unknown {
+return _parseReferencePrimitivesItemsMultipleOf(value);
 }
-function _parseReferencePrimitivesItemsPropertiesMultipleOf(value: unknown): unknown {
+function _parseReferencePrimitivesItemsMultipleOf(value: unknown): unknown {
 return parseDefinitionsMultipleOf(value);
 }
 export function parsePrimitivesItemsAdditionalProperties(value: unknown): unknown {
@@ -4313,7 +4313,7 @@ function _parseArraySecurityRequirementAdditionalProperties(value: unknown): unk
 if(Array.isArray(value)) {
 const result = new Array<unknown>(value.length);
 for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseAdditionalPropertiesItems(value[elementIndex]);
+result[elementIndex] = parseSecurityRequirementItems(value[elementIndex]);
 }
 return result;
 }
@@ -4439,10 +4439,10 @@ default:
 return undefined;
 }
 }
-export function parseTagPropertiesDescription(value: unknown): unknown {
-return _parseStringTagPropertiesDescription(value);
+export function parseTagDescription(value: unknown): unknown {
+return _parseStringTagDescription(value);
 }
-function _parseStringTagPropertiesDescription(value: unknown): unknown {
+function _parseStringTagDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -4453,10 +4453,10 @@ default:
 return undefined;
 }
 }
-export function parseTagPropertiesExternalDocs(value: unknown): unknown {
-return _parseReferenceTagPropertiesExternalDocs(value);
+export function parseTagExternalDocs(value: unknown): unknown {
+return _parseReferenceTagExternalDocs(value);
 }
-function _parseReferenceTagPropertiesExternalDocs(value: unknown): unknown {
+function _parseReferenceTagExternalDocs(value: unknown): unknown {
 return parseDefinitionsExternalDocs(value);
 }
 export function parseTagAdditionalProperties(value: unknown): unknown {
@@ -4475,7 +4475,7 @@ export function parseSecurityDefinitionsAdditionalProperties(value: unknown): un
 return _parseOneOfSecurityDefinitionsAdditionalProperties(value);
 }
 function _parseOneOfSecurityDefinitionsAdditionalProperties(value: unknown): unknown {
-return parseAdditionalPropertiesOneOf0(value) ?? parseAdditionalPropertiesOneOf1(value) ?? parseAdditionalPropertiesOneOf2(value) ?? parseAdditionalPropertiesOneOf3(value) ?? parseOneOf4(value) ?? parseOneOf5(value);
+return parseSecurityDefinitions0(value) ?? parseSecurityDefinitions1(value) ?? parseSecurityDefinitions2(value) ?? parseSecurityDefinitions3(value) ?? parseSecurityDefinitions4(value) ?? parseSecurityDefinitions5(value);
 }
 export function parseBasicAuthenticationSecurityType(value: unknown): unknown {
 return _parseStringBasicAuthenticationSecurityType(value);
@@ -4491,10 +4491,10 @@ default:
 return undefined;
 }
 }
-export function parseBasicAuthenticationSecurityPropertiesDescription(value: unknown): unknown {
-return _parseStringBasicAuthenticationSecurityPropertiesDescription(value);
+export function parseBasicAuthenticationSecurityDescription(value: unknown): unknown {
+return _parseStringBasicAuthenticationSecurityDescription(value);
 }
-function _parseStringBasicAuthenticationSecurityPropertiesDescription(value: unknown): unknown {
+function _parseStringBasicAuthenticationSecurityDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -4559,10 +4559,10 @@ default:
 return undefined;
 }
 }
-export function parseApiKeySecurityPropertiesDescription(value: unknown): unknown {
-return _parseStringApiKeySecurityPropertiesDescription(value);
+export function parseApiKeySecurityDescription(value: unknown): unknown {
+return _parseStringApiKeySecurityDescription(value);
 }
-function _parseStringApiKeySecurityPropertiesDescription(value: unknown): unknown {
+function _parseStringApiKeySecurityDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -4633,10 +4633,10 @@ default:
 return undefined;
 }
 }
-export function parseOauth2ImplicitSecurityPropertiesDescription(value: unknown): unknown {
-return _parseStringOauth2ImplicitSecurityPropertiesDescription(value);
+export function parseOauth2ImplicitSecurityDescription(value: unknown): unknown {
+return _parseStringOauth2ImplicitSecurityDescription(value);
 }
-function _parseStringOauth2ImplicitSecurityPropertiesDescription(value: unknown): unknown {
+function _parseStringOauth2ImplicitSecurityDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -4707,10 +4707,10 @@ default:
 return undefined;
 }
 }
-export function parseOauth2PasswordSecurityPropertiesDescription(value: unknown): unknown {
-return _parseStringOauth2PasswordSecurityPropertiesDescription(value);
+export function parseOauth2PasswordSecurityDescription(value: unknown): unknown {
+return _parseStringOauth2PasswordSecurityDescription(value);
 }
-function _parseStringOauth2PasswordSecurityPropertiesDescription(value: unknown): unknown {
+function _parseStringOauth2PasswordSecurityDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -4781,10 +4781,10 @@ default:
 return undefined;
 }
 }
-export function parseOauth2ApplicationSecurityPropertiesDescription(value: unknown): unknown {
-return _parseStringOauth2ApplicationSecurityPropertiesDescription(value);
+export function parseOauth2ApplicationSecurityDescription(value: unknown): unknown {
+return _parseStringOauth2ApplicationSecurityDescription(value);
 }
-function _parseStringOauth2ApplicationSecurityPropertiesDescription(value: unknown): unknown {
+function _parseStringOauth2ApplicationSecurityDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -4869,10 +4869,10 @@ default:
 return undefined;
 }
 }
-export function parseOauth2AccessCodeSecurityPropertiesDescription(value: unknown): unknown {
-return _parseStringOauth2AccessCodeSecurityPropertiesDescription(value);
+export function parseOauth2AccessCodeSecurityDescription(value: unknown): unknown {
+return _parseStringOauth2AccessCodeSecurityDescription(value);
 }
-function _parseStringOauth2AccessCodeSecurityPropertiesDescription(value: unknown): unknown {
+function _parseStringOauth2AccessCodeSecurityDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -4919,7 +4919,7 @@ export function parseParametersListItems(value: unknown): unknown {
 return _parseOneOfParametersListItems(value);
 }
 function _parseOneOfParametersListItems(value: unknown): unknown {
-return parseItemsOneOf0(value) ?? parseItemsOneOf1(value);
+return parseParametersList0(value) ?? parseParametersList1(value);
 }
 export function parseParametersListAdditionalItems(value: unknown): unknown {
 return _parseNeverParametersListAdditionalItems(value);
@@ -4961,22 +4961,22 @@ return _parseNeverJsonReferenceAdditionalProperties(value);
 function _parseNeverJsonReferenceAdditionalProperties(value: unknown): unknown {
 return undefined;
 }
-export function parseSchemaJsonConsumesAllOf0(value: unknown): unknown {
-return _parseReferenceSchemaJsonConsumesAllOf0(value);
+export function parsePropertiesAllOfConsumes0(value: unknown): unknown {
+return _parseReferencePropertiesAllOfConsumes0(value);
 }
-function _parseReferenceSchemaJsonConsumesAllOf0(value: unknown): unknown {
+function _parseReferencePropertiesAllOfConsumes0(value: unknown): unknown {
 return parseMediaTypeList(value);
 }
-export function parseSchemaJsonProducesAllOf0(value: unknown): unknown {
-return _parseReferenceSchemaJsonProducesAllOf0(value);
+export function parsePropertiesAllOfProduces0(value: unknown): unknown {
+return _parseReferencePropertiesAllOfProduces0(value);
 }
-function _parseReferenceSchemaJsonProducesAllOf0(value: unknown): unknown {
+function _parseReferencePropertiesAllOfProduces0(value: unknown): unknown {
 return parseMediaTypeList(value);
 }
-export function parseSchemaJsonTagsItems(value: unknown): unknown {
-return _parseReferenceSchemaJsonTagsItems(value);
+export function parsePropertiesTagsItems(value: unknown): unknown {
+return _parseReferencePropertiesTagsItems(value);
 }
-function _parseReferenceSchemaJsonTagsItems(value: unknown): unknown {
+function _parseReferencePropertiesTagsItems(value: unknown): unknown {
 return parseTag(value);
 }
 export function parseOperationTagsItems(value: unknown): unknown {
@@ -4993,16 +4993,16 @@ default:
 return undefined;
 }
 }
-export function parseOperationProducesAllOf0(value: unknown): unknown {
-return _parseReferenceOperationProducesAllOf0(value);
+export function parseOperationAllOfProduces0(value: unknown): unknown {
+return _parseReferenceOperationAllOfProduces0(value);
 }
-function _parseReferenceOperationProducesAllOf0(value: unknown): unknown {
+function _parseReferenceOperationAllOfProduces0(value: unknown): unknown {
 return parseMediaTypeList(value);
 }
-export function parseOperationConsumesAllOf0(value: unknown): unknown {
-return _parseReferenceOperationConsumesAllOf0(value);
+export function parseOperationAllOfConsumes0(value: unknown): unknown {
+return _parseReferenceOperationAllOfConsumes0(value);
 }
-function _parseReferenceOperationConsumesAllOf0(value: unknown): unknown {
+function _parseReferenceOperationAllOfConsumes0(value: unknown): unknown {
 return parseMediaTypeList(value);
 }
 export function parseNotAdditionalProperties(value: unknown): unknown {
@@ -5017,16 +5017,16 @@ return _parseReferenceNotX(value);
 function _parseReferenceNotX(value: unknown): unknown {
 return parseVendorExtension(value);
 }
-export function parseSchemaOneOf0(value: unknown): unknown {
-return _parseReferenceSchemaOneOf0(value);
+export function parseResponse0(value: unknown): unknown {
+return _parseReferenceResponse0(value);
 }
-function _parseReferenceSchemaOneOf0(value: unknown): unknown {
+function _parseReferenceResponse0(value: unknown): unknown {
 return parseDefinitionsSchema(value);
 }
-export function parseSchemaOneOf1(value: unknown): unknown {
-return _parseReferenceSchemaOneOf1(value);
+export function parseResponse1(value: unknown): unknown {
+return _parseReferenceResponse1(value);
 }
-function _parseReferenceSchemaOneOf1(value: unknown): unknown {
+function _parseReferenceResponse1(value: unknown): unknown {
 return parseFileSchema(value);
 }
 export function parseAdditionalPropertiesAnyOf0(value: unknown): unknown {
@@ -5074,7 +5074,7 @@ function _parseArrayItemsAnyOf1(value: unknown): unknown {
 if(Array.isArray(value)) {
 const result = new Array<unknown>(value.length);
 for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseItemsAnyOf1Items(value[elementIndex]);
+result[elementIndex] = parseItems1AnyOfItems(value[elementIndex]);
 }
 return result;
 }
@@ -5086,16 +5086,16 @@ return _parseReferenceAllOfItems(value);
 function _parseReferenceAllOfItems(value: unknown): unknown {
 return parseDefinitionsSchema(value);
 }
-export function parsePropertiesPropertiesAdditionalProperties(value: unknown): unknown {
-return _parseReferencePropertiesPropertiesAdditionalProperties(value);
+export function parsePropertiesAdditionalProperties(value: unknown): unknown {
+return _parseReferencePropertiesAdditionalProperties(value);
 }
-function _parseReferencePropertiesPropertiesAdditionalProperties(value: unknown): unknown {
+function _parseReferencePropertiesAdditionalProperties(value: unknown): unknown {
 return parseDefinitionsSchema(value);
 }
-export function parseAdditionalPropertiesItems(value: unknown): unknown {
-return _parseStringAdditionalPropertiesItems(value);
+export function parseSecurityRequirementItems(value: unknown): unknown {
+return _parseStringSecurityRequirementItems(value);
 }
-function _parseStringAdditionalPropertiesItems(value: unknown): unknown {
+function _parseStringSecurityRequirementItems(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -5106,64 +5106,64 @@ default:
 return undefined;
 }
 }
-export function parseAdditionalPropertiesOneOf0(value: unknown): unknown {
-return _parseReferenceAdditionalPropertiesOneOf0(value);
+export function parseSecurityDefinitions0(value: unknown): unknown {
+return _parseReferenceSecurityDefinitions0(value);
 }
-function _parseReferenceAdditionalPropertiesOneOf0(value: unknown): unknown {
+function _parseReferenceSecurityDefinitions0(value: unknown): unknown {
 return parseBasicAuthenticationSecurity(value);
 }
-export function parseAdditionalPropertiesOneOf1(value: unknown): unknown {
-return _parseReferenceAdditionalPropertiesOneOf1(value);
+export function parseSecurityDefinitions1(value: unknown): unknown {
+return _parseReferenceSecurityDefinitions1(value);
 }
-function _parseReferenceAdditionalPropertiesOneOf1(value: unknown): unknown {
+function _parseReferenceSecurityDefinitions1(value: unknown): unknown {
 return parseApiKeySecurity(value);
 }
-export function parseAdditionalPropertiesOneOf2(value: unknown): unknown {
-return _parseReferenceAdditionalPropertiesOneOf2(value);
+export function parseSecurityDefinitions2(value: unknown): unknown {
+return _parseReferenceSecurityDefinitions2(value);
 }
-function _parseReferenceAdditionalPropertiesOneOf2(value: unknown): unknown {
+function _parseReferenceSecurityDefinitions2(value: unknown): unknown {
 return parseOauth2ImplicitSecurity(value);
 }
-export function parseAdditionalPropertiesOneOf3(value: unknown): unknown {
-return _parseReferenceAdditionalPropertiesOneOf3(value);
+export function parseSecurityDefinitions3(value: unknown): unknown {
+return _parseReferenceSecurityDefinitions3(value);
 }
-function _parseReferenceAdditionalPropertiesOneOf3(value: unknown): unknown {
+function _parseReferenceSecurityDefinitions3(value: unknown): unknown {
 return parseOauth2PasswordSecurity(value);
 }
-export function parseOneOf4(value: unknown): unknown {
-return _parseReferenceOneOf4(value);
+export function parseSecurityDefinitions4(value: unknown): unknown {
+return _parseReferenceSecurityDefinitions4(value);
 }
-function _parseReferenceOneOf4(value: unknown): unknown {
+function _parseReferenceSecurityDefinitions4(value: unknown): unknown {
 return parseOauth2ApplicationSecurity(value);
 }
-export function parseOneOf5(value: unknown): unknown {
-return _parseReferenceOneOf5(value);
+export function parseSecurityDefinitions5(value: unknown): unknown {
+return _parseReferenceSecurityDefinitions5(value);
 }
-function _parseReferenceOneOf5(value: unknown): unknown {
+function _parseReferenceSecurityDefinitions5(value: unknown): unknown {
 return parseOauth2AccessCodeSecurity(value);
 }
-export function parseItemsOneOf0(value: unknown): unknown {
-return _parseReferenceItemsOneOf0(value);
+export function parseParametersList0(value: unknown): unknown {
+return _parseReferenceParametersList0(value);
 }
-function _parseReferenceItemsOneOf0(value: unknown): unknown {
+function _parseReferenceParametersList0(value: unknown): unknown {
 return parseParameter(value);
 }
-export function parseItemsOneOf1(value: unknown): unknown {
-return _parseReferenceItemsOneOf1(value);
+export function parseParametersList1(value: unknown): unknown {
+return _parseReferenceParametersList1(value);
 }
-function _parseReferenceItemsOneOf1(value: unknown): unknown {
+function _parseReferenceParametersList1(value: unknown): unknown {
 return parseJsonReference(value);
 }
-export function parseItemsAnyOf1Items(value: unknown): unknown {
-return _parseReferenceItemsAnyOf1Items(value);
+export function parseItems1AnyOfItems(value: unknown): unknown {
+return _parseReferenceItems1AnyOfItems(value);
 }
-function _parseReferenceItemsAnyOf1Items(value: unknown): unknown {
+function _parseReferenceItems1AnyOfItems(value: unknown): unknown {
 return parseDefinitionsSchema(value);
 }
-export function parseDraft04SchemaPropertiesTitle(value: unknown): unknown {
-return _parseStringDraft04SchemaPropertiesTitle(value);
+export function parseDraft04Title(value: unknown): unknown {
+return _parseStringDraft04Title(value);
 }
-function _parseStringDraft04SchemaPropertiesTitle(value: unknown): unknown {
+function _parseStringDraft04Title(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -5174,10 +5174,10 @@ default:
 return undefined;
 }
 }
-export function parseDraft04SchemaPropertiesDescription(value: unknown): unknown {
-return _parseStringDraft04SchemaPropertiesDescription(value);
+export function parseDraft04Description(value: unknown): unknown {
+return _parseStringDraft04Description(value);
 }
-function _parseStringDraft04SchemaPropertiesDescription(value: unknown): unknown {
+function _parseStringDraft04Description(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -5188,13 +5188,13 @@ default:
 return undefined;
 }
 }
-export function parseDraft04SchemaPropertiesDefault(value: unknown): unknown {
+export function parseDraft04Default(value: unknown): unknown {
 return ;
 }
-export function parseDraft04SchemaPropertiesMultipleOf(value: unknown): unknown {
-return _parseNumberDraft04SchemaPropertiesMultipleOf(value);
+export function parseDraft04MultipleOf(value: unknown): unknown {
+return _parseNumberDraft04MultipleOf(value);
 }
-function _parseNumberDraft04SchemaPropertiesMultipleOf(value: unknown): unknown {
+function _parseNumberDraft04MultipleOf(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return Number(value);
@@ -5205,10 +5205,10 @@ return value ? 1 : 0;
 }
 return undefined;
 }
-export function parseDraft04SchemaPropertiesMaximum(value: unknown): unknown {
-return _parseNumberDraft04SchemaPropertiesMaximum(value);
+export function parseDraft04Maximum(value: unknown): unknown {
+return _parseNumberDraft04Maximum(value);
 }
-function _parseNumberDraft04SchemaPropertiesMaximum(value: unknown): unknown {
+function _parseNumberDraft04Maximum(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return Number(value);
@@ -5219,10 +5219,10 @@ return value ? 1 : 0;
 }
 return undefined;
 }
-export function parseDraft04SchemaPropertiesExclusiveMaximum(value: unknown): unknown {
-return _parseBooleanDraft04SchemaPropertiesExclusiveMaximum(value);
+export function parseDraft04ExclusiveMaximum(value: unknown): unknown {
+return _parseBooleanDraft04ExclusiveMaximum(value);
 }
-function _parseBooleanDraft04SchemaPropertiesExclusiveMaximum(value: unknown): unknown {
+function _parseBooleanDraft04ExclusiveMaximum(value: unknown): unknown {
 if(value == null) {
 return false;
 }
@@ -5245,10 +5245,10 @@ return value;
 }
 return undefined;
 }
-export function parseDraft04SchemaPropertiesMinimum(value: unknown): unknown {
-return _parseNumberDraft04SchemaPropertiesMinimum(value);
+export function parseDraft04Minimum(value: unknown): unknown {
+return _parseNumberDraft04Minimum(value);
 }
-function _parseNumberDraft04SchemaPropertiesMinimum(value: unknown): unknown {
+function _parseNumberDraft04Minimum(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return Number(value);
@@ -5259,10 +5259,10 @@ return value ? 1 : 0;
 }
 return undefined;
 }
-export function parseDraft04SchemaPropertiesExclusiveMinimum(value: unknown): unknown {
-return _parseBooleanDraft04SchemaPropertiesExclusiveMinimum(value);
+export function parseDraft04ExclusiveMinimum(value: unknown): unknown {
+return _parseBooleanDraft04ExclusiveMinimum(value);
 }
-function _parseBooleanDraft04SchemaPropertiesExclusiveMinimum(value: unknown): unknown {
+function _parseBooleanDraft04ExclusiveMinimum(value: unknown): unknown {
 if(value == null) {
 return false;
 }
@@ -5303,21 +5303,21 @@ export function parsePositiveIntegerDefault0(value: unknown): unknown {
 return _parseAllOfPositiveIntegerDefault0(value);
 }
 function _parseAllOfPositiveIntegerDefault0(value: unknown): unknown {
-return parsePositiveIntegerDefault0AllOf0(value) ?? parseAllOf1(value);
+return parsePositiveIntegerDefault00(value) ?? parsePositiveIntegerDefault01(value);
 }
-export function parsePositiveIntegerDefault0AllOf0(value: unknown): unknown {
-return _parseReferencePositiveIntegerDefault0AllOf0(value);
+export function parsePositiveIntegerDefault00(value: unknown): unknown {
+return _parseReferencePositiveIntegerDefault00(value);
 }
-function _parseReferencePositiveIntegerDefault0AllOf0(value: unknown): unknown {
+function _parseReferencePositiveIntegerDefault00(value: unknown): unknown {
 return parsePositiveInteger(value);
 }
-export function parseAllOf1(value: unknown): unknown {
+export function parsePositiveIntegerDefault01(value: unknown): unknown {
 return ;
 }
-export function parseDraft04SchemaPropertiesPattern(value: unknown): unknown {
-return _parseStringDraft04SchemaPropertiesPattern(value);
+export function parseDraft04Pattern(value: unknown): unknown {
+return _parseStringDraft04Pattern(value);
 }
-function _parseStringDraft04SchemaPropertiesPattern(value: unknown): unknown {
+function _parseStringDraft04Pattern(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -5328,10 +5328,10 @@ default:
 return undefined;
 }
 }
-export function parseDraft04SchemaPropertiesUniqueItems(value: unknown): unknown {
-return _parseBooleanDraft04SchemaPropertiesUniqueItems(value);
+export function parseDraft04UniqueItems(value: unknown): unknown {
+return _parseBooleanDraft04UniqueItems(value);
 }
-function _parseBooleanDraft04SchemaPropertiesUniqueItems(value: unknown): unknown {
+function _parseBooleanDraft04UniqueItems(value: unknown): unknown {
 if(value == null) {
 return false;
 }
@@ -5354,10 +5354,10 @@ return value;
 }
 return undefined;
 }
-export function parseDraft04SchemaPropertiesEnum(value: unknown): unknown {
-return _parseArrayDraft04SchemaPropertiesEnum(value);
+export function parseDraft04Enum(value: unknown): unknown {
+return _parseArrayDraft04Enum(value);
 }
-function _parseArrayDraft04SchemaPropertiesEnum(value: unknown): unknown {
+function _parseArrayDraft04Enum(value: unknown): unknown {
 if(Array.isArray(value)) {
 const result = new Array<unknown>(value.length);
 for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
@@ -5394,10 +5394,10 @@ default:
 return undefined;
 }
 }
-export function parseDraft04SchemaType(value: unknown): unknown {
-return _parseAnyOfDraft04SchemaType(value);
+export function parseDraft04Type(value: unknown): unknown {
+return _parseAnyOfDraft04Type(value);
 }
-function _parseAnyOfDraft04SchemaType(value: unknown): unknown {
+function _parseAnyOfDraft04Type(value: unknown): unknown {
 return parseTypeAnyOf0(value) ?? parseTypeAnyOf1(value);
 }
 export function parseTypeAnyOf0(value: unknown): unknown {
@@ -5413,16 +5413,16 @@ function _parseArrayTypeAnyOf1(value: unknown): unknown {
 if(Array.isArray(value)) {
 const result = new Array<unknown>(value.length);
 for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseTypeAnyOf1Items(value[elementIndex]);
+result[elementIndex] = parseType1AnyOfItems(value[elementIndex]);
 }
 return result;
 }
 return undefined;
 }
-export function parseTypeAnyOf1Items(value: unknown): unknown {
-return _parseReferenceTypeAnyOf1Items(value);
+export function parseType1AnyOfItems(value: unknown): unknown {
+return _parseReferenceType1AnyOfItems(value);
 }
-function _parseReferenceTypeAnyOf1Items(value: unknown): unknown {
+function _parseReferenceType1AnyOfItems(value: unknown): unknown {
 return parseSimpleTypes(value);
 }
 export function parseSimpleTypes(value: unknown): unknown {
