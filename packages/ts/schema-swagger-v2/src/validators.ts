@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.9.0                          -- www.JsonSchema42.org
+// v0.9.6                          -- www.JsonSchema42.org
 import * as types from "./types.js";
 // http://swagger.io/v2/schema.json#
 export function isSchemaJson(value: unknown): value is types.SchemaJson {

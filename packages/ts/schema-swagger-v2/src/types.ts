@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.9.0                          -- www.JsonSchema42.org
+// v0.9.6                          -- www.JsonSchema42.org
 // http://swagger.io/v2/schema.json#
 /**
 A JSON Schema for Swagger 2.0 API.
@@ -1820,7 +1820,7 @@ export type Draft04Pattern = ((string));
 // http://json-schema.org/draft-04/schema#/properties/uniqueItems
 export type Draft04UniqueItems = ((boolean));
 // http://json-schema.org/draft-04/schema#/properties/enum
-export type Draft04Enum = ((Array<unknown>));
+export type Draft04Enum = ((unknown[]));
 // http://json-schema.org/draft-04/schema#/definitions/stringArray
 export type StringArray = (((StringArrayItems)[]));
 // http://json-schema.org/draft-04/schema#/definitions/stringArray/items

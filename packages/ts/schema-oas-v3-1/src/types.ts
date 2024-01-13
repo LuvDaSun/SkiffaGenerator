@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.9.0                          -- www.JsonSchema42.org
+// v0.9.6                          -- www.JsonSchema42.org
 // https://spec.openapis.org/oas/3.1/schema/2022-10-07
 /**
 The description of OpenAPI v3.1.x documents without schema validation, as defined by https://spec.openapis.org/oas/v3.1.0
