@@ -16,20 +16,17 @@ export interface PackageOptions {
   packageName: string;
   packageVersion: string;
   packageDirectoryPath: string;
-  anyOfHack: boolean;
 }
 
 export function generatePackage(apiModel: models.Api, options: PackageOptions) {
-  const { anyOfHack, packageDirectoryPath, packageName, packageVersion } = options;
+  const { packageDirectoryPath, packageName, packageVersion } = options;
 
   fs.mkdirSync(packageDirectoryPath, { recursive: true });
 
   const specification = {
     names: apiModel.names,
     nodes: apiModel.schemas,
-    options: {
-      anyOfHack,
-    },
+    options: {},
   };
 
   {

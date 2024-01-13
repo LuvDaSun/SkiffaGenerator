@@ -37,11 +37,6 @@ export function configurePackageProgram(argv: yargs.Argv) {
           description: "maximum number of iterations for finding unique names",
           type: "number",
           default: 5,
-        })
-        .option("any-of-hack", {
-          description: "quick-fix to make any of work with many types",
-          type: "boolean",
-          default: false,
         }),
     (argv) => main(argv as MainOptions),
   );
@@ -54,7 +49,6 @@ interface MainOptions {
   packageVersion: string;
   defaultName: string;
   namerMaximumIterations: number;
-  anyOfHack: boolean;
 }
 
 async function main(options: MainOptions) {
@@ -67,14 +61,13 @@ async function main(options: MainOptions) {
     specificationUrl = new URL("file://" + path.resolve(process.cwd(), options.specificationUrl));
   }
   const packageDirectoryPath = path.resolve(options.packageDirectory);
-  const { packageName, packageVersion, defaultName, namerMaximumIterations, anyOfHack } = options;
+  const { packageName, packageVersion, defaultName, namerMaximumIterations } = options;
 
   // setup document context
 
   const documentContext = new DocumentContext({
     defaultName,
     namerMaximumIterations,
-    anyOfHack,
   });
   documentContext.registerFactory(swagger2.factory);
   documentContext.registerFactory(oas30.factory);
@@ -92,6 +85,5 @@ async function main(options: MainOptions) {
     packageDirectoryPath,
     packageName,
     packageVersion,
-    anyOfHack,
   });
 }
