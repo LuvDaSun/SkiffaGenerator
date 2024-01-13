@@ -1,0 +1,20 @@
+{
+  "folders": [
+    {
+      "name": "fixtures",
+      "path": "./fixtures",
+    },
+    {
+      "name": "ts/oa42-lib",
+      "path": "./packages/ts/oa42-lib",
+    },
+    {
+      "name": "ts/oa42-generator",
+      "path": "./packages/ts/oa42-generator",
+    },
+  ],
+  "settings": {
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "window.title": "OpenApi42",
+  }
+}

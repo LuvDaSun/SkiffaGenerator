@@ -9,7 +9,7 @@
       "args": [],
       "cwd": "${workspaceFolder}",
       "sourceMaps": true,
-      "outFiles": ["${workspaceFolder}/out/**/*.js"],
+      "outFiles": ["${workspaceFolder}/../*/out/**/*.js"],
       "preLaunchTask": "build",
       "outputCapture": "std"
     },
@@ -22,77 +22,18 @@
         "package",
         "${file}",
         "--package-directory",
-        ".package/file",
+        ".package/file/${fileBasenameNoExtension}",
         "--package-name",
-        "file",
-        "--package-version",
-        "0.0.0"
+        "${fileBasenameNoExtension}"
       ],
+      "env": {
+        "NODE_ENV": "development"
+      },
       "cwd": "${workspaceFolder}",
       "sourceMaps": true,
-      "outFiles": ["${workspaceFolder}/out/**/*.js"],
-      "preLaunchTask": "build"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "package docker",
-      "program": "${workspaceFolder}/src/program.ts",
-      "args": [
-        "package",
-        "../../../fixtures/specifications/docker.yaml",
-        "--package-directory",
-        ".package/specifications/docker",
-        "--package-name",
-        "docker",
-        "--package-version",
-        "0.0.0"
-      ],
-      "cwd": "${workspaceFolder}",
-      "sourceMaps": true,
-      "outFiles": ["${workspaceFolder}/out/**/*.js"],
-      "preLaunchTask": "build"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "package github",
-      "program": "${workspaceFolder}/src/program.ts",
-      "args": [
-        "package",
-        "../../../fixtures/specifications/github.json",
-        "--package-directory",
-        ".package/specifications/github",
-        "--package-name",
-        "github",
-        "--package-version",
-        "0.0.0",
-        "--any-of-hack"
-      ],
-      "cwd": "${workspaceFolder}",
-      "sourceMaps": true,
-      "outFiles": ["${workspaceFolder}/out/**/*.js"],
-      "preLaunchTask": "build"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "package petstore",
-      "program": "${workspaceFolder}/src/program.ts",
-      "args": [
-        "package",
-        "../../../fixtures/specifications/petstore.yaml",
-        "--package-directory",
-        ".package/specifications/petstore",
-        "--package-name",
-        "petstore",
-        "--package-version",
-        "0.0.0"
-      ],
-      "cwd": "${workspaceFolder}",
-      "sourceMaps": true,
-      "outFiles": ["${workspaceFolder}/out/**/*.js"],
-      "preLaunchTask": "build"
+      "outFiles": ["${workspaceFolder}/../*/out/**/*.js"],
+      "preLaunchTask": "build",
+      "outputCapture": "std"
     }
   ]
 }
