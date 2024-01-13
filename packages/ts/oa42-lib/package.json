@@ -38,12 +38,12 @@
     "library"
   ],
   "dependencies": {
-    "@types/node": "^20.10.3",
+    "@types/node": "^20.11.0",
     "tslib": "^2.6.2",
-    "type-fest": "^4.8.3"
+    "type-fest": "^4.9.0"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.3"
   }
 }
