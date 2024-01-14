@@ -14,7 +14,6 @@
     "./src/**/*"
   ],
   "scripts": {
-    "prepack": "npm install --no-workspaces",
     "prepare": "tsc --build",
     "build": "tsc --build",
     "clean": "rm -rf out",
