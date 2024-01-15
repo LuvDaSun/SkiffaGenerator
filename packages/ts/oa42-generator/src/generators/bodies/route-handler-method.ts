@@ -87,7 +87,7 @@ export function* generateRouteHandlerMethodBody(
           if (parameterTypeName == null) {
             return `
               ${parameterName}: 
-                lib.getParameterValue(pathParameters, ${JSON.stringify(parameterModel.name)}),
+                lib.getParameterValues(pathParameters, ${JSON.stringify(parameterModel.name)}),
             `;
           }
 
@@ -95,7 +95,7 @@ export function* generateRouteHandlerMethodBody(
 
           return `
             ${parameterName}: 
-              parsers.${parseParameterFunction}(lib.getParameterValue(pathParameters, ${JSON.stringify(
+              parsers.${parseParameterFunction}(lib.getParameterValues(pathParameters, ${JSON.stringify(
                 parameterModel.name,
               )})),
           `;
@@ -108,7 +108,7 @@ export function* generateRouteHandlerMethodBody(
           if (parameterTypeName == null) {
             return `
               ${parameterName}: 
-                lib.getParameterValue(pathParameters, ${JSON.stringify(parameterModel.name)}),
+                lib.getParameterValues(pathParameters, ${JSON.stringify(parameterModel.name)}),
             `;
           }
 
@@ -116,7 +116,7 @@ export function* generateRouteHandlerMethodBody(
 
           return `
           ${parameterName}: 
-              parsers.${parseParameterFunction}(lib.getParameterValue(serverIncomingRequest.headers, ${JSON.stringify(
+              parsers.${parseParameterFunction}(lib.getParameterValues(serverIncomingRequest.headers, ${JSON.stringify(
                 parameterModel.name,
               )})),
           `;
@@ -129,7 +129,7 @@ export function* generateRouteHandlerMethodBody(
           if (parameterTypeName == null) {
             return `
             ${parameterName}: 
-                lib.getParameterValue(queryParameters, ${JSON.stringify(parameterModel.name)}),
+                lib.getParameterValues(queryParameters, ${JSON.stringify(parameterModel.name)}),
             `;
           }
 
@@ -137,7 +137,7 @@ export function* generateRouteHandlerMethodBody(
 
           return `
           ${parameterName}: 
-              parsers.${parseParameterFunction}(lib.getParameterValue(queryParameters, ${JSON.stringify(
+              parsers.${parseParameterFunction}(lib.getParameterValues(queryParameters, ${JSON.stringify(
                 parameterModel.name,
               )})),
           `;
@@ -150,7 +150,7 @@ export function* generateRouteHandlerMethodBody(
           if (parameterTypeName == null) {
             return `
               ${parameterName}: 
-                lib.getParameterValue(cookieParameters, ${JSON.stringify(parameterModel.name)}),
+                lib.getParameterValues(cookieParameters, ${JSON.stringify(parameterModel.name)}),
             `;
           }
 
@@ -158,7 +158,7 @@ export function* generateRouteHandlerMethodBody(
 
           return `
             ${parameterName}: 
-              parsers.${parseParameterFunction}(lib.getParameterValue(cookieParameters, ${JSON.stringify(
+              parsers.${parseParameterFunction}(lib.getParameterValues(cookieParameters, ${JSON.stringify(
                 parameterModel.name,
               )})),
           `;
