@@ -159,7 +159,7 @@ function* generateOperationTest(
         {
           const parameterValue = incomingRequest.parameters.${toCamel(parameterModel.name)};
           const valid = main.${validateFunctionName}(parameterValue);
-          // assert.equal(valid, true);
+          assert.equal(valid, true);
         }
       `;
     }
@@ -296,7 +296,7 @@ function* generateOperationTest(
         {
           const parameterValue = operationResult.parameters.${toCamel(parameterModel.name)};
           const valid = main.${validateFunctionName}(parameterValue);
-          // assert.equal(valid, true);
+          assert.equal(valid, true);
         }
       `;
     }
