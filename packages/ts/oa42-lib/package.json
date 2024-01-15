@@ -12,8 +12,8 @@
     }
   },
   "files": [
-    "./out/**/*",
-    "./src/**/*"
+    "./out/**",
+    "./src/**"
   ],
   "scripts": {
     "prepare": "tsc --build",
