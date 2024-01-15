@@ -137,18 +137,42 @@ function* generateOperationTest(
   }
 
   function* generateServerOperationHandler() {
-    if (requestBodyModel == null) {
-    } else {
+    for (const parameterModel of [
+      ...operationModel.cookieParameters,
+      ...operationModel.headerParameters,
+      ...operationModel.pathParameters,
+      ...operationModel.queryParameters,
+    ]) {
+      if (parameterModel.schemaId == null) {
+        continue;
+      }
+
+      const validateFunctionName = toCamel("is", names[parameterModel.schemaId]);
+
+      yield itt`
+        {
+          const parameterValue = incomingRequest.parameters.${toCamel(parameterModel.name)};
+          const valid = main.${validateFunctionName}(parameterValue);
+          assert.equal(valid, true);
+        }
+      `;
+    }
+
+    if (requestBodyModel != null) {
       assert(requestBodyModel.schemaId != null);
 
       const validateFunctionName = toCamel("is", names[requestBodyModel.schemaId]);
 
       yield itt`
         assert.equal(incomingRequest.contentType, ${JSON.stringify(requestBodyModel.contentType)})
+      `;
 
-        const entity = await incomingRequest.entity();
-        const valid = main.${validateFunctionName}(entity);
-        assert.equal(valid, true);
+      yield itt`
+        {
+          const entity = await incomingRequest.entity();
+          const valid = main.${validateFunctionName}(entity);
+          assert.equal(valid, true);
+        }
       `;
     }
 
@@ -156,7 +180,9 @@ function* generateOperationTest(
       yield itt`
         return {
           status: ${JSON.stringify(operationResultModel.statusCodes[0])},
-          parameters: {},
+          parameters: {
+            ${generateResponseParametersMockBody()}
+          },
           contentType: null,
         }
       `;
@@ -168,7 +194,9 @@ function* generateOperationTest(
       yield itt`
         return {
           status: ${JSON.stringify(operationResultModel.statusCodes[0])},
-          parameters: {},
+          parameters: {
+            ${generateResponseParametersMockBody()}
+          },
           contentType: ${JSON.stringify(responseBodyModel.contentType)},
           entity: () => main.${mockFunctionName}(),
         }
@@ -183,7 +211,7 @@ function* generateOperationTest(
         const operationResult = await main.${callMethodFunctionName}(
           {
             contentType: null,
-            parameters: {},
+            parameters: {${generateRequestParametersMockBody()}},
           },
           {},
         );
@@ -197,7 +225,7 @@ function* generateOperationTest(
         const operationResult = await main.${callMethodFunctionName}(
           {
             contentType: ${JSON.stringify(requestBodyModel.contentType)},
-            parameters: {},
+            parameters: {${generateRequestParametersMockBody()}},
             entity: () => main.${mockFunctionName}(),
           },
           {},
@@ -212,26 +240,76 @@ function* generateOperationTest(
       `;
     }
 
-    if (responseBodyModel == null) {
-      yield itt`
-        assert.ifError(lastError);
+    yield itt`
+      assert.ifError(lastError);
+    `;
 
-        assert(operationResult.status === ${JSON.stringify(operationResultModel.statusCodes[0])})
+    yield itt`
+      assert(operationResult.status === ${JSON.stringify(operationResultModel.statusCodes[0])})
+    `;
+
+    for (const parameterModel of operationResultModel.headerParameters) {
+      if (parameterModel.schemaId == null) {
+        continue;
+      }
+
+      const validateFunctionName = toCamel("is", names[parameterModel.schemaId]);
+
+      yield itt`
+        {
+          const parameterValue = operationResult.parameters.${toCamel(parameterModel.name)};
+          const valid = main.${validateFunctionName}(parameterValue);
+          assert.equal(valid, true);
+        }
       `;
-    } else {
+    }
+
+    if (responseBodyModel != null) {
       assert(responseBodyModel.schemaId != null);
 
       const validateFunctionName = toCamel("is", names[responseBodyModel.schemaId]);
 
       yield itt`
-        assert.ifError(lastError);
-
-        assert(operationResult.status === ${JSON.stringify(operationResultModel.statusCodes[0])})
         assert(operationResult.contentType === ${JSON.stringify(responseBodyModel.contentType)})
+      `;
 
-        const entity = await operationResult.entity();
-        const valid = main.${validateFunctionName}(entity);
-        assert.equal(valid, true);
+      yield itt`
+        { 
+          const entity = await operationResult.entity();
+          const valid = main.${validateFunctionName}(entity);
+          assert.equal(valid, true);
+        }
+      `;
+    }
+  }
+
+  function* generateRequestParametersMockBody() {
+    for (const parameterModel of [
+      ...operationModel.cookieParameters,
+      ...operationModel.headerParameters,
+      ...operationModel.pathParameters,
+      ...operationModel.queryParameters,
+    ]) {
+      if (parameterModel.schemaId == null) {
+        continue;
+      }
+
+      const mockFunctionName = toCamel("mock", names[parameterModel.schemaId]);
+      yield itt`
+        ${toCamel(parameterModel.name)}: main.${mockFunctionName}(),
+      `;
+    }
+  }
+
+  function* generateResponseParametersMockBody() {
+    for (const parameterModel of operationResultModel.headerParameters) {
+      if (parameterModel.schemaId == null) {
+        continue;
+      }
+
+      const mockFunctionName = toCamel("mock", names[parameterModel.schemaId]);
+      yield itt`
+        ${toCamel(parameterModel.name)}: main.${mockFunctionName}(),
       `;
     }
   }
