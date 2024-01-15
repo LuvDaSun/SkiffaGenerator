@@ -1,6 +1,6 @@
 {
   "version": "0.2",
-  "words": ["camelcase", "endregion", "urlencoding", "Promisable", "goodrouter"],
+  "words": ["AZAZ", "camelcase", "endregion", "goodrouter", "Promisable", "urlencoding"],
   "useGitignore": true,
   "files": ["packages/ts/oa42-generator/src/**", "packages/ts/oa42-lib/src/**"]
 }

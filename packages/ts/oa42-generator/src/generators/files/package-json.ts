@@ -5,38 +5,40 @@ export function generatePackageJsonData(name: string, version: string) {
   const content: PackageJson = {
     name: name,
     version: version,
-    sideEffects: false,
     type: "module",
-    main: "./main.js",
-    types: "./main.d.ts",
-    files: ["*"],
+    main: "./out/main.js",
+    types: "./out/main.d.ts",
+    files: ["./src/*", "./out/*"],
     exports: {
       ".": {
-        default: "./main.js",
-        browser: "./browser.js",
+        default: "./out/main.js",
+        browser: "./out/browser.js",
       },
       "./types": {
-        default: "./types.js",
+        default: "./out/types.js",
       },
       "./validators": {
-        default: "./validators.js",
+        default: "./out/validators.js",
       },
       "./parsers": {
-        default: "./parsers.js",
+        default: "./out/parsers.js",
       },
       "./parameters": {
-        default: "./parameters.js",
+        default: "./out/parameters.js",
       },
       "./client": {
-        default: "./client.js",
+        default: "./out/client.js",
       },
       "./server": {
-        default: "./server.js",
+        default: "./out/server.js",
       },
     },
     scripts: {
-      prepare: "tsc",
-      test: "node --test ./*.test.js",
+      pretest: "tsc --build",
+      prepare: "tsc --build",
+      build: "tsc --build",
+      clean: "rm -rf ./out && tsc --build --clean",
+      test: "node --test ./out/*.test.js",
     },
     author: "",
     license: "ISC",

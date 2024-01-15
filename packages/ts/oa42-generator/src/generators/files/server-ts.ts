@@ -43,7 +43,7 @@ export function* generateServerTsCode(apiModel: models.Api) {
     const router = new Router({
       parameterValueDecoder: value => value,
       parameterValueEncoder: value => value,
-    }).loadFromJson(${JSON.stringify(apiModel.router.saveToJson(RouterMode.Server))});
+    }).loadFromJson(${JSON.stringify(apiModel.router.saveToJson(RouterMode.Bidirectional))});
   `;
 
   yield* generateServerAuthenticationType(apiModel);
@@ -54,7 +54,7 @@ export function* generateServerTsCode(apiModel: models.Api) {
 
     yield itt`
       export type ${handlerTypeName}<A extends ServerAuthentication> =
-        (credential: string) => A[${JSON.stringify(toCamel(authenticationModel.name))}];
+        (credential: string) => A[${JSON.stringify(toCamel(authenticationModel.name))}] | Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}]>;
     `;
   }
 

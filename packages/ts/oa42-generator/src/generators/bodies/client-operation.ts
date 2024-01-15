@@ -140,7 +140,7 @@ export function* generateClientOperationFunctionBody(
       requestHeaders.append("set-cookie", cookie);
     }
 
-    const url = new URL(baseUrl, path);
+    const url = new URL(path, baseUrl);
     let body: BodyInit | null;  
     `;
 
@@ -157,7 +157,7 @@ export function* generateClientOperationFunctionBody(
   yield itt`
     const requestInit: RequestInit = {
       headers: requestHeaders,
-      method: "PUT",
+      method: ${JSON.stringify(operationModel.method.toUpperCase())},
       redirect: "manual",
       body,
     };
@@ -342,7 +342,7 @@ function* generateRequestContentTypeCodeBody(
         else {
           throw new lib.Unreachable();
         }
-        body = lib.toReadableStream(stream);
+        body = await lib.collectStream(stream);
       `;
       break;
     }
@@ -389,7 +389,7 @@ function* generateRequestContentTypeCodeBody(
         else {
           throw new lib.Unreachable();
         }
-        body = lib.toReadableStream(stream);
+        body = await lib.collectStream(stream);
       `;
       break;
     }
@@ -403,7 +403,7 @@ function* generateRequestContentTypeCodeBody(
         else {
           throw new lib.Unreachable();
         }
-        body = lib.toReadableStream(stream);
+        body = await lib.collectStream(stream);
       `;
     }
   }

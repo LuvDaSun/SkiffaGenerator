@@ -16,6 +16,6 @@ export function* generateOperationHandlerType(operationModel: models.Operation) 
       (
         incomingRequest: ${operationIncomingRequestName},
         authentication: ${operationAuthenticationName}<A>,
-      ) => ${operationOutgoingResponseName}
+      ) => ${operationOutgoingResponseName} | Promise<${operationOutgoingResponseName}>
   `;
 }

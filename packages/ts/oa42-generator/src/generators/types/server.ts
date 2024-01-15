@@ -47,9 +47,9 @@ function* generateServerBody(apiModel: models.Api) {
   `;
 
   yield itt`
-    public routeHandler(
+    public async routeHandler(
       serverIncomingRequest: lib.ServerIncomingRequest,
-    ): lib.ServerOutgoingResponse {
+    ): Promise<lib.ServerOutgoingResponse> {
       ${generateCommonRouteHandlerMethodBody(apiModel)}
     }
   `;
@@ -62,8 +62,6 @@ function* generateServerBody(apiModel: models.Api) {
     );
     const handlerTypeName = toPascal(authenticationModel.name, "authentication", "handler");
     const handlerPropertyName = toCamel(authenticationModel.name, "authentication", "handler");
-
-    // TODO add JsDoc
 
     yield itt`
       private ${handlerPropertyName}?: ${handlerTypeName}<A>;
@@ -89,17 +87,29 @@ function* generateServerBody(apiModel: models.Api) {
         private ${handlerPropertyName}?: ${handlerTypeName}<A>;
       `;
 
+      const jsDoc = [
+        operationModel.deprecated ? "@deprecated" : "",
+        operationModel.summary,
+        operationModel.description,
+      ]
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0)
+        .join("\n");
+
       yield itt`
+        /**
+         ${jsDoc}
+         */
         public ${registerHandlerMethodName}(operationHandler: ${handlerTypeName}<A>) {
           this.${handlerPropertyName} = operationHandler;
         }
       `;
 
       yield itt`
-        private ${routeHandlerName}(
+        private async ${routeHandlerName}(
           pathParameters: Record<string, string>,
           serverIncomingRequest: lib.ServerIncomingRequest,
-        ): lib.ServerOutgoingResponse {
+        ): Promise<lib.ServerOutgoingResponse> {
           ${generateRouteHandlerMethodBody(apiModel, operationModel)}
         }
       `;

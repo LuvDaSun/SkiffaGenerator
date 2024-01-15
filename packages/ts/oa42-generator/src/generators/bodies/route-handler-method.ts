@@ -9,15 +9,10 @@ export function* generateRouteHandlerMethodBody(
   operationModel: models.Operation,
 ) {
   const operationHandlerName = toCamel(operationModel.name, "operation", "handler");
-
   const operationIncomingRequestName = toPascal(operationModel.name, "incoming", "request");
-
   const requestParametersName = toPascal(operationModel.name, "request", "parameters");
-
   const isRequestParametersFunction = toCamel("is", operationModel.name, "request", "parameters");
-
   const isOperationAuthenticationName = toCamel("is", operationModel.name, "authentication");
-
   const authenticationNames = Array.from(
     new Set(
       operationModel.authenticationRequirements.flatMap((requirements) =>
@@ -206,11 +201,10 @@ export function* generateRouteHandlerMethodBody(
    */
 
   yield itt`
-    const outgoingResponse =
-      this.${operationHandlerName}?.(
-        incomingRequest,
-        authentication,
-      );
+    const outgoingResponse = await this.${operationHandlerName}?.(
+      incomingRequest,
+      authentication,
+    );
     if (outgoingResponse == null) {
       throw new lib.OperationNotImplemented();
     }
@@ -265,13 +259,13 @@ function* generateRequestContentTypeCodeBody(apiModel: models.Api, bodyModel?: m
           parameters: requestParameters,
           contentType: requestContentType,
           stream(signal) {
-            return incomingRequest.stream(signal);
+            return serverIncomingRequest.stream(signal);
           },
           lines(signal) {
-            return lib.deserializeTextLines(incomingRequest.stream, signal));
+            return lib.deserializeTextLines(serverIncomingRequest.stream, signal));
           },
           value() {
-            return lib.deserializeTextValue(incomingRequest.stream);
+            return lib.deserializeTextValue(serverIncomingRequest.stream);
           },
         };
       `;
@@ -303,11 +297,11 @@ function* generateRequestContentTypeCodeBody(apiModel: models.Api, bodyModel?: m
           parameters: requestParameters,
           contentType: requestContentType,
           stream(signal) {
-            return incomingRequest.stream(signal);
+            return serverIncomingRequest.stream(signal);
           },
           entities(signal) {
             let entities = lib.deserializeJsonEntities(
-              incomingRequest.stream,
+              serverIncomingRequest.stream,
               signal,
             ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
             if(validateIncomingEntity) {
@@ -317,7 +311,7 @@ function* generateRequestContentTypeCodeBody(apiModel: models.Api, bodyModel?: m
           },
           entity() {
             let entity = lib.deserializeJsonEntity(
-              incomingRequest.stream
+              serverIncomingRequest.stream
             ) as Promise<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
             if(validateIncomingEntity) {
               entity = lib.mapPromisable(entity, mapAssertEntity);
@@ -335,7 +329,7 @@ function* generateRequestContentTypeCodeBody(apiModel: models.Api, bodyModel?: m
           parameters: requestParameters,
           contentType: requestContentType,
           stream(signal) {
-            return incomingRequest.stream(signal);
+            return serverIncomingRequest.stream(signal);
           },
         };
       `;
