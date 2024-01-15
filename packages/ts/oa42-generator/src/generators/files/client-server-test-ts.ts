@@ -1,7 +1,6 @@
-import assert from "assert";
 import * as models from "../../models/index.js";
 import { banner, toCamel } from "../../utils/index.js";
-import { itt } from "../../utils/iterable-text-template.js";
+import { NestedText, itt } from "../../utils/iterable-text-template.js";
 
 export function* generateClientServerTestTsCode(apiModel: models.Api) {
   yield banner;
@@ -64,6 +63,13 @@ function* generateOperationTest(
   operationResultModel: models.OperationResult,
   responseBodyModel: models.Body | null,
 ) {
+  if (requestBodyModel != null && requestBodyModel.contentType !== "application/json") {
+    return;
+  }
+  if (responseBodyModel != null && responseBodyModel.contentType !== "application/json") {
+    return;
+  }
+
   const { names } = apiModel;
   const registerHandlerMethodName = toCamel("register", operationModel.name, "operation");
 
@@ -84,20 +90,6 @@ function* generateOperationTest(
   `;
 
   function* generateTestBody() {
-    if (
-      requestBodyModel != null &&
-      !(requestBodyModel.schemaId != null && requestBodyModel.contentType === "application/json")
-    ) {
-      return;
-    }
-
-    if (
-      responseBodyModel != null &&
-      !(responseBodyModel.schemaId != null && responseBodyModel.contentType === "application/json")
-    ) {
-      return;
-    }
-
     yield itt`
       const server = new main.Server({
         validateIncomingParameters: false,
@@ -159,21 +151,26 @@ function* generateOperationTest(
     }
 
     if (requestBodyModel != null) {
-      assert(requestBodyModel.schemaId != null);
-
-      const validateFunctionName = toCamel("is", names[requestBodyModel.schemaId]);
-
       yield itt`
         assert.equal(incomingRequest.contentType, ${JSON.stringify(requestBodyModel.contentType)})
       `;
 
-      yield itt`
-        {
-          const entity = await incomingRequest.entity();
-          const valid = main.${validateFunctionName}(entity);
-          assert.equal(valid, true);
+      switch (requestBodyModel.contentType) {
+        case "application/json": {
+          if (requestBodyModel.schemaId != null) {
+            const validateFunctionName = toCamel("is", names[requestBodyModel.schemaId]);
+
+            yield itt`
+              {
+                const entity = await incomingRequest.entity();
+                const valid = main.${validateFunctionName}(entity);
+                assert.equal(valid, true);
+              }
+            `;
+          }
+          break;
         }
-      `;
+      }
     }
 
     if (responseBodyModel == null) {
@@ -187,20 +184,29 @@ function* generateOperationTest(
         }
       `;
     } else {
-      assert(responseBodyModel.schemaId != null);
+      switch (responseBodyModel.contentType) {
+        case "application/json": {
+          let entityExpression: NestedText;
+          if (responseBodyModel.schemaId == null) {
+            entityExpression = itt`{}`;
+          } else {
+            const mockFunctionName = toCamel("mock", names[responseBodyModel.schemaId]);
+            entityExpression = itt`main.${mockFunctionName}()`;
+          }
 
-      const mockFunctionName = toCamel("mock", names[responseBodyModel.schemaId]);
-
-      yield itt`
-        return {
-          status: ${JSON.stringify(operationResultModel.statusCodes[0])},
-          parameters: {
-            ${generateResponseParametersMockBody()}
-          },
-          contentType: ${JSON.stringify(responseBodyModel.contentType)},
-          entity: () => main.${mockFunctionName}(),
+          yield itt`
+            return {
+              status: ${JSON.stringify(operationResultModel.statusCodes[0])},
+              parameters: {
+                ${generateResponseParametersMockBody()}
+              },
+              contentType: ${JSON.stringify(responseBodyModel.contentType)},
+              entity: () => ${entityExpression},
+            }
+          `;
+          break;
         }
-      `;
+      }
     }
   }
 
@@ -217,27 +223,37 @@ function* generateOperationTest(
         );
       `;
     } else {
-      assert(requestBodyModel.schemaId != null);
+      switch (requestBodyModel.contentType) {
+        case "application/json": {
+          let entityExpression: NestedText;
+          if (requestBodyModel.schemaId == null) {
+            entityExpression = itt`{}`;
+          } else {
+            const mockFunctionName = toCamel("mock", names[requestBodyModel.schemaId]);
+            entityExpression = itt`main.${mockFunctionName}()`;
+          }
 
-      const mockFunctionName = toCamel("mock", names[requestBodyModel.schemaId]);
+          yield itt`
+            const operationResult = await main.${callMethodFunctionName}(
+              {
+                contentType: ${JSON.stringify(requestBodyModel.contentType)},
+                parameters: {${generateRequestParametersMockBody()}},
+                entity: () => ${entityExpression},
+              },
+              {},
+              {
+                baseUrl,
+                validateIncomingParameters: false,
+                validateIncomingEntity: false,
+                validateOutgoingParameters: false,
+                validateOutgoingEntity: false,
+              },
+            );
+          `;
 
-      yield itt`
-        const operationResult = await main.${callMethodFunctionName}(
-          {
-            contentType: ${JSON.stringify(requestBodyModel.contentType)},
-            parameters: {${generateRequestParametersMockBody()}},
-            entity: () => main.${mockFunctionName}(),
-          },
-          {},
-          {
-            baseUrl,
-            validateIncomingParameters: false,
-            validateIncomingEntity: false,
-            validateOutgoingParameters: false,
-            validateOutgoingEntity: false,
-          },
-        );
-      `;
+          break;
+        }
+      }
     }
 
     yield itt`
@@ -265,21 +281,25 @@ function* generateOperationTest(
     }
 
     if (responseBodyModel != null) {
-      assert(responseBodyModel.schemaId != null);
-
-      const validateFunctionName = toCamel("is", names[responseBodyModel.schemaId]);
-
       yield itt`
         assert(operationResult.contentType === ${JSON.stringify(responseBodyModel.contentType)})
       `;
 
-      yield itt`
-        { 
-          const entity = await operationResult.entity();
-          const valid = main.${validateFunctionName}(entity);
-          assert.equal(valid, true);
+      switch (responseBodyModel.contentType) {
+        case "application/json": {
+          if (responseBodyModel.schemaId != null) {
+            const validateFunctionName = toCamel("is", names[responseBodyModel.schemaId]);
+            yield itt`
+              { 
+                const entity = await operationResult.entity();
+                const valid = main.${validateFunctionName}(entity);
+                assert.equal(valid, true);
+              }
+            `;
+          }
+          break;
         }
-      `;
+      }
     }
   }
 
