@@ -87,20 +87,6 @@ export function* parametersToEntries(parameters: Parameters): Iterable<[string, 
   }
 }
 
-export function getParameterValue(parameters: Parameters, name: string): string | undefined {
-  let value = parameters[name];
-
-  if (parameters[name] == null) return;
-
-  if (Array.isArray(value)) {
-    if (value.length === 0) return;
-    // if (value.length > 1) throw new TypeError("expected only one parameter");
-    [value] = value;
-  }
-
-  return value;
-}
-
 export function getParameterValues(parameters: Parameters, name: string): string[] {
   let value = parameters[name];
 
