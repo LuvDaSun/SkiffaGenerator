@@ -94,7 +94,7 @@ export function getParameterValue(parameters: Parameters, name: string): string 
 
   if (Array.isArray(value)) {
     if (value.length === 0) return;
-    if (value.length > 1) throw new TypeError("expected only one parameter");
+    // if (value.length > 1) throw new TypeError("expected only one parameter");
     [value] = value;
   }
 

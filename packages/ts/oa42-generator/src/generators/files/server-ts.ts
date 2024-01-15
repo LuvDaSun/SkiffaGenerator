@@ -43,7 +43,7 @@ export function* generateServerTsCode(apiModel: models.Api) {
     const router = new Router({
       parameterValueDecoder: value => value,
       parameterValueEncoder: value => value,
-    }).loadFromJson(${JSON.stringify(apiModel.router.saveToJson(RouterMode.Server))});
+    }).loadFromJson(${JSON.stringify(apiModel.router.saveToJson(RouterMode.Bidirectional))});
   `;
 
   yield* generateServerAuthenticationType(apiModel);

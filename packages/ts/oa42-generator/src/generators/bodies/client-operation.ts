@@ -157,7 +157,7 @@ export function* generateClientOperationFunctionBody(
   yield itt`
     const requestInit: RequestInit = {
       headers: requestHeaders,
-      method: "PUT",
+      method: ${JSON.stringify(operationModel.method.toUpperCase())},
       redirect: "manual",
       body,
     };

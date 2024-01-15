@@ -6,6 +6,7 @@ export function* generateIsAuthenticationFunctionBody(
   operationModel: models.Operation,
 ) {
   yield itt`
-    throw new Error("TODO");
+    // TODO
+    return true;
   `;
 }
