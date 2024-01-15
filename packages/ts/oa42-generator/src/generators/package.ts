@@ -4,8 +4,8 @@ import path from "path";
 import * as models from "../models/index.js";
 import { NestedText, flattenNestedText, splitIterableText } from "../utils/index.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
+import { generateClientServerTestTsCode } from "./files/client-server-test-ts.js";
 import { generateClientTsCode } from "./files/client-ts.js";
-import { generateMainTestTsCode } from "./files/main-test-ts.js";
 import { generateMainTsCode } from "./files/main-ts.js";
 import { generatePackageJsonData } from "./files/package-json.js";
 import { generateParametersTsCode } from "./files/parameters-ts.js";
@@ -79,6 +79,24 @@ export function generatePackage(apiModel: models.Api, options: PackageOptions) {
   }
 
   {
+    const code = jns42generator.generateMocksTsCode(specification);
+    const filePath = path.join(packageDirectoryPath, "mocks.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
+    const code = jns42generator.generateExamplesTestTsCode(specification);
+    const filePath = path.join(packageDirectoryPath, "examples.test.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
+    const code = jns42generator.generateMocksTestTsCode(specification);
+    const filePath = path.join(packageDirectoryPath, "mocks.test.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
     const code = generateClientTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "client.ts");
     writeCodeToFile(filePath, code);
@@ -91,8 +109,8 @@ export function generatePackage(apiModel: models.Api, options: PackageOptions) {
   }
 
   {
-    const code = generateMainTestTsCode(apiModel);
-    const filePath = path.join(packageDirectoryPath, "main.test.ts");
+    const code = generateClientServerTestTsCode(apiModel);
+    const filePath = path.join(packageDirectoryPath, "client-server.test.ts");
     writeCodeToFile(filePath, code);
   }
 }
