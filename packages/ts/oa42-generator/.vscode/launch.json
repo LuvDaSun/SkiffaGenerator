@@ -24,7 +24,9 @@
         "--package-directory",
         ".package/file/${fileBasenameNoExtension}",
         "--package-name",
-        "${fileBasenameNoExtension}"
+        "${fileBasenameNoExtension}",
+        "--package-version",
+        "0.0.0"
       ],
       "env": {
         "NODE_ENV": "development"
