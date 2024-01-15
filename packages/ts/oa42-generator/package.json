@@ -1,6 +1,6 @@
 {
   "name": "oa42-generator",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "sideEffects": false,
   "description": "",
   "type": "module",
@@ -55,7 +55,7 @@
     "@tsconfig/node20": "^20.1.2",
     "typescript": "^5.3.3"
   },
-  "bundleDependencies": [
+  "bundledDependencies": [
     "schema-oas-v3-0",
     "schema-oas-v3-1",
     "schema-swagger-v2"

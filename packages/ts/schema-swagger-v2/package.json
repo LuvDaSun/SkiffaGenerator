@@ -1,5 +1,6 @@
 {
   "name": "schema-swagger-v2",
+  "version": "0.0.0",
   "sideEffects": false,
   "type": "module",
   "main": "./out/main.js",
