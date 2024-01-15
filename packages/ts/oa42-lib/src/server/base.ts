@@ -2,7 +2,6 @@ import assert from "assert";
 import * as http from "http";
 import * as http2 from "http2";
 import { Readable, Writable, finished } from "stream";
-import { Promisable } from "type-fest";
 import { Parameters, StatusCode } from "../utils/index.js";
 
 export interface ServerIncomingRequest {
@@ -26,7 +25,7 @@ export interface RequestListenerOptions {
 export abstract class ServerBase {
   protected abstract routeHandler(
     incomingRequest: ServerIncomingRequest,
-  ): Promisable<ServerOutgoingResponse>;
+  ): Promise<ServerOutgoingResponse>;
 
   public asRequestListener(
     options: RequestListenerOptions = {},

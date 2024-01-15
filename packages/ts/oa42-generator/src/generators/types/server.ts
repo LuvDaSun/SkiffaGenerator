@@ -47,9 +47,9 @@ function* generateServerBody(apiModel: models.Api) {
   `;
 
   yield itt`
-    public routeHandler(
+    public async routeHandler(
       serverIncomingRequest: lib.ServerIncomingRequest,
-    ): lib.ServerOutgoingResponse {
+    ): Promise<lib.ServerOutgoingResponse> {
       ${generateCommonRouteHandlerMethodBody(apiModel)}
     }
   `;
@@ -106,10 +106,10 @@ function* generateServerBody(apiModel: models.Api) {
       `;
 
       yield itt`
-        private ${routeHandlerName}(
+        private async ${routeHandlerName}(
           pathParameters: Record<string, string>,
           serverIncomingRequest: lib.ServerIncomingRequest,
-        ): lib.ServerOutgoingResponse {
+        ): Promise<lib.ServerOutgoingResponse> {
           ${generateRouteHandlerMethodBody(apiModel, operationModel)}
         }
       `;
