@@ -17,6 +17,8 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
   public async getApiModel(): Promise<models.Api> {
     const uri = this.documentUri;
 
+    const { defaultName, namerMaximumIterations, transformMaximumIterations } = this.options;
+
     const paths = [...this.getPathModels()];
     const authentication = [...this.getAuthenticationModels()];
     const schemas = Object.fromEntries(await this.getSchemas());
@@ -25,7 +27,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       router.insertRoute(pathModel.id, pathModel.pattern);
     }
 
-    const namer = new Namer(this.options.defaultName, this.options.namerMaximumIterations);
+    const namer = new Namer(defaultName, namerMaximumIterations);
     for (const nodeId in schemas) {
       const nodeUrl = new URL(nodeId);
       const path = nodeUrl.pathname + nodeUrl.hash.replace(/^#/g, "");
@@ -34,6 +36,14 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
 
     const names = namer.getNames();
 
+    const types = jns42generator.transformSchema(
+      {
+        $schema: "https://schema.JsonSchema42.org/jns42-intermediate/schema.json",
+        schemas,
+      },
+      transformMaximumIterations,
+    );
+
     const apiModel: models.Api = {
       uri,
       paths,
@@ -41,6 +51,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       schemas,
       names,
       router,
+      types,
     };
     return apiModel;
   }

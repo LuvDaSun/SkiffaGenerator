@@ -26,7 +26,7 @@ export function generatePackage(apiModel: models.Api, options: PackageOptions) {
   const specification = {
     names: apiModel.names,
     nodes: apiModel.schemas,
-    types: {},
+    types: apiModel.types,
     options: {},
   };
 
