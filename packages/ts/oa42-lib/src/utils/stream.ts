@@ -46,3 +46,11 @@ export async function* fromReadableStream(
     signal?.removeEventListener("abort", onAbort);
   }
 }
+
+export async function collectStream(iterable: AsyncIterable<Uint8Array>) {
+  const collected = new Array<number>();
+  for await (const bytes of iterable) {
+    collected.push(...bytes);
+  }
+  return Uint8Array.from(collected);
+}

@@ -220,7 +220,14 @@ function* generateOperationTest(
             parameters: {${generateRequestParametersMockBody()}},
           },
           {},
-        );
+          {
+            baseUrl,
+            validateIncomingParameters: false,
+            validateIncomingEntity: false,
+            validateOutgoingParameters: false,
+            validateOutgoingEntity: false,
+          },
+    );
       `;
     } else {
       switch (requestBodyModel.contentType) {
