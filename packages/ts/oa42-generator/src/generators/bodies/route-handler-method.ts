@@ -206,11 +206,10 @@ export function* generateRouteHandlerMethodBody(
    */
 
   yield itt`
-    const outgoingResponse =
-      this.${operationHandlerName}?.(
-        incomingRequest,
-        authentication,
-      );
+    const outgoingResponse = await this.${operationHandlerName}?.(
+      incomingRequest,
+      authentication,
+    );
     if (outgoingResponse == null) {
       throw new lib.OperationNotImplemented();
     }
