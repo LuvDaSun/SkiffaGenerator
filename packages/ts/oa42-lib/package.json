@@ -19,7 +19,7 @@
     "prepare": "tsc --build",
     "build": "tsc --build ",
     "clean": "rm -rf out",
-    "test": "node --test ./out/**/*.test.js",
+    "test": "node --test ./out/*.test.js ./out/*/*.test.js ./out/*/*/*.test.js",
     "lint": "prettier --check *",
     "spelling": "cspell ."
   },
