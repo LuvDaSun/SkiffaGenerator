@@ -1,12 +1,16 @@
 export type Parameters = Record<string, string | string[]>;
 
 export function parseParameters(
-  str: string,
+  strs: string[],
   prefix = "?",
   separator = "&",
   assignment = "=",
 ): Parameters {
-  return parametersFromEntries(parseParameterEntries(str, prefix, separator, assignment));
+  const entries = new Array<[string, string][]>();
+  for (const str of strs) {
+    entries.push(parseParameterEntries(str, prefix, separator, assignment));
+  }
+  return parametersFromEntries(entries.flat());
 }
 
 export function stringifyParameters(
@@ -85,20 +89,6 @@ export function* parametersToEntries(parameters: Parameters): Iterable<[string, 
   for (const name of Object.keys(parameters)) {
     yield* getParameterValues(parameters, name).map((value) => [name, value]);
   }
-}
-
-export function getParameterValue(parameters: Parameters, name: string): string | undefined {
-  let value = parameters[name];
-
-  if (parameters[name] == null) return;
-
-  if (Array.isArray(value)) {
-    if (value.length === 0) return;
-    // if (value.length > 1) throw new TypeError("expected only one parameter");
-    [value] = value;
-  }
-
-  return value;
 }
 
 export function getParameterValues(parameters: Parameters, name: string): string[] {

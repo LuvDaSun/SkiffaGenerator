@@ -36,11 +36,11 @@ export function* generateRouteHandlerMethodBody(
 
   yield itt`
     const cookie =
-      lib.getParameterValue(serverIncomingRequest.headers, "cookie");
+      lib.getParameterValues(serverIncomingRequest.headers, "cookie");
     const accept =
-      lib.getParameterValue(serverIncomingRequest.headers, "accept");
+      lib.getParameterValues(serverIncomingRequest.headers, "accept");
     const requestContentType =
-      lib.getParameterValue(serverIncomingRequest.headers, "content-type");
+      lib.first(lib.getParameterValues(serverIncomingRequest.headers, "content-type"));
   `;
 
   /**
@@ -50,9 +50,9 @@ export function* generateRouteHandlerMethodBody(
 
   yield itt`
     const queryParameters =
-      lib.parseParameters(serverIncomingRequest.query, "?", "&", "=");
-    const cookieParameters =
-      lib.parseParameters(cookie ?? "", "", "; ", "=");
+      lib.parseParameters([serverIncomingRequest.query], "?", "&", "=");
+    const cookieParameters = 
+      lib.parseParameters(cookie, "", "; ", "=");
   `;
 
   /**
@@ -87,7 +87,7 @@ export function* generateRouteHandlerMethodBody(
           if (parameterTypeName == null) {
             return `
               ${parameterName}: 
-                lib.getParameterValue(pathParameters, ${JSON.stringify(parameterModel.name)}),
+                lib.first(lib.getParameterValues(pathParameters, ${JSON.stringify(parameterModel.name)})),
             `;
           }
 
@@ -95,7 +95,7 @@ export function* generateRouteHandlerMethodBody(
 
           return `
             ${parameterName}: 
-              parsers.${parseParameterFunction}(lib.getParameterValue(pathParameters, ${JSON.stringify(
+              parsers.${parseParameterFunction}(lib.getParameterValues(pathParameters, ${JSON.stringify(
                 parameterModel.name,
               )})),
           `;
@@ -108,7 +108,7 @@ export function* generateRouteHandlerMethodBody(
           if (parameterTypeName == null) {
             return `
               ${parameterName}: 
-                lib.getParameterValue(pathParameters, ${JSON.stringify(parameterModel.name)}),
+              lib.first(lib.getParameterValues(pathParameters, ${JSON.stringify(parameterModel.name)})),
             `;
           }
 
@@ -116,7 +116,7 @@ export function* generateRouteHandlerMethodBody(
 
           return `
           ${parameterName}: 
-              parsers.${parseParameterFunction}(lib.getParameterValue(serverIncomingRequest.headers, ${JSON.stringify(
+              parsers.${parseParameterFunction}(lib.getParameterValues(serverIncomingRequest.headers, ${JSON.stringify(
                 parameterModel.name,
               )})),
           `;
@@ -129,7 +129,7 @@ export function* generateRouteHandlerMethodBody(
           if (parameterTypeName == null) {
             return `
             ${parameterName}: 
-                lib.getParameterValue(queryParameters, ${JSON.stringify(parameterModel.name)}),
+            lib.first(lib.getParameterValues(queryParameters, ${JSON.stringify(parameterModel.name)})),
             `;
           }
 
@@ -137,7 +137,7 @@ export function* generateRouteHandlerMethodBody(
 
           return `
           ${parameterName}: 
-              parsers.${parseParameterFunction}(lib.getParameterValue(queryParameters, ${JSON.stringify(
+              parsers.${parseParameterFunction}(lib.getParameterValues(queryParameters, ${JSON.stringify(
                 parameterModel.name,
               )})),
           `;
@@ -150,7 +150,7 @@ export function* generateRouteHandlerMethodBody(
           if (parameterTypeName == null) {
             return `
               ${parameterName}: 
-                lib.getParameterValue(cookieParameters, ${JSON.stringify(parameterModel.name)}),
+              lib.first(lib.getParameterValues(cookieParameters, ${JSON.stringify(parameterModel.name)})),
             `;
           }
 
@@ -158,7 +158,7 @@ export function* generateRouteHandlerMethodBody(
 
           return `
             ${parameterName}: 
-              parsers.${parseParameterFunction}(lib.getParameterValue(cookieParameters, ${JSON.stringify(
+              parsers.${parseParameterFunction}(lib.getParameterValues(cookieParameters, ${JSON.stringify(
                 parameterModel.name,
               )})),
           `;

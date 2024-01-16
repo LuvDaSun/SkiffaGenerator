@@ -16,3 +16,10 @@ export async function mapPromisable<T, R>(
   const value = await promisable;
   return mapper(value);
 }
+
+export function first<T>(iterable: Iterable<T>): T | undefined {
+  for (const item of iterable) {
+    return item;
+  }
+  return undefined;
+}
