@@ -26,7 +26,14 @@
     },
   ],
   "settings": {
-    "typescript.tsdk": "node_modules/typescript/lib",
     "window.title": "OpenApi42",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "always",
+      "source.organizeImports": "always",
+    },
+    "editor.rulers": [100],
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "typescript.tsdk": "node_modules/typescript/lib",
   },
 }

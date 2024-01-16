@@ -31,7 +31,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^20.11.1"
+    "@types/node": "^20.11.4"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",

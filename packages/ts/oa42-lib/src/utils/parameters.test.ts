@@ -1,6 +1,6 @@
 import assert from "assert";
 import test from "node:test";
-import { getParameterValue, parseParameters } from "./parameters.js";
+import { getParameterValues, parseParameters } from "./parameters.js";
 
 test("read-parameter", () => {
   const parameters = {
@@ -10,24 +10,34 @@ test("read-parameter", () => {
   };
 
   {
-    const actual = getParameterValue(parameters, "string");
-    const expected = "hi";
-    assert.equal(actual, expected);
+    const actual = getParameterValues(parameters, "string");
+    const expected = ["hi"];
+    assert.deepEqual(actual, expected);
   }
   {
-    const actual = getParameterValue(parameters, "no");
-    const expected = undefined;
-    assert.equal(actual, expected);
+    const actual = getParameterValues(parameters, "no");
+    const expected: string[] = [];
+    assert.deepEqual(actual, expected);
   }
 });
 
 test("parse-parameters", () => {
-  assert.deepEqual(parseParameters("a:1,b:2", "", ",", ":"), {
+  assert.deepEqual(parseParameters(["a:1,b:2"], "", ",", ":"), {
     a: "1",
     b: "2",
   });
 
-  assert.deepEqual(parseParameters("a,1,b,2", "", ",", ","), {
+  assert.deepEqual(parseParameters(["a,1,b,2"], "", ",", ","), {
+    a: "1",
+    b: "2",
+  });
+
+  assert.deepEqual(parseParameters(["a:1", "b:2"], "", ",", ":"), {
+    a: "1",
+    b: "2",
+  });
+
+  assert.deepEqual(parseParameters(["a,1", "b,2"], "", ",", ","), {
     a: "1",
     b: "2",
   });
