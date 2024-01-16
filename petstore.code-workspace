@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "packages/ts/petstore"
+		},
+		{
+			"path": "packages/ts/oa42-lib"
+		}
+	],
+	"settings": {}
+}
