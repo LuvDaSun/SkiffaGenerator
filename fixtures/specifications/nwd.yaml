@@ -19,7 +19,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/message-container"
-      responses: 
+      responses:
         "200":
           description: |-
             A response
@@ -29,7 +29,7 @@ paths:
                 $ref: "#/components/schemas/message-container"
 
 components:
-  schemas: 
+  schemas:
     message-container:
       type: object
       properties:

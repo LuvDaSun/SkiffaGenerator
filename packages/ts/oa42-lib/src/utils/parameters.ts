@@ -1,13 +1,13 @@
 export type Parameters = Record<string, string | string[]>;
 
 export function parseParameters(
-  strs: string[],
+  strings: string[],
   prefix = "?",
   separator = "&",
   assignment = "=",
 ): Parameters {
   const entries = new Array<[string, string][]>();
-  for (const str of strs) {
+  for (const str of strings) {
     entries.push(parseParameterEntries(str, prefix, separator, assignment));
   }
   return parametersFromEntries(entries.flat());
