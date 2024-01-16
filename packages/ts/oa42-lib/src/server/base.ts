@@ -22,10 +22,30 @@ export interface RequestListenerOptions {
   onError?: (error: unknown) => void;
 }
 
+export interface ServerMiddleware {
+  (
+    this: ServerBase,
+    request: ServerIncomingRequest,
+    next: (request: ServerIncomingRequest) => Promise<ServerOutgoingResponse>,
+  ): Promise<ServerOutgoingResponse>;
+}
+
 export abstract class ServerBase {
+  private middleware: ServerMiddleware = (request, next) => next(request);
+
   protected abstract routeHandler(
     incomingRequest: ServerIncomingRequest,
   ): Promise<ServerOutgoingResponse>;
+
+  public registerMiddleware(middleware: ServerMiddleware) {
+    const nextMiddleware = this.middleware;
+
+    this.middleware = (request, next) => {
+      return middleware.call(this, request, (request) => {
+        return nextMiddleware.call(this, request, next);
+      });
+    };
+  }
 
   public asRequestListener(
     options: RequestListenerOptions = {},
@@ -81,7 +101,9 @@ export abstract class ServerBase {
           },
         };
 
-        const outgoingResponse = await this.routeHandler(incomingRequest);
+        const outgoingResponse = await this.middleware(incomingRequest, (incomingRequest) => {
+          return this.routeHandler(incomingRequest);
+        });
 
         response.statusCode = outgoingResponse.status;
         for (const [headerName, headerValue] of Object.entries(outgoingResponse.headers)) {
