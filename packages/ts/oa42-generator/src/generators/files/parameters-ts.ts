@@ -14,9 +14,40 @@ export function* generateParametersTsCode(apiModel: models.Api) {
   yield banner;
 
   yield itt`
-  import * as types from "./types.js";
-  import * as validators from "./validators.js";
-  import * as parsers from "./parsers.js";
+    import * as types from "./types.js";
+    import * as validators from "./validators.js";
+    import * as parsers from "./parsers.js";
+  `;
+
+  yield itt`
+    export interface ParameterValidationError {
+      parameterName: string;
+      path: string;
+      rule: string;
+      typeName?: string;
+    }
+
+    let lastParameterValidationError: ParameterValidationError | undefined;
+    export function getLastParameterValidationError() {
+      if(lastParameterValidationError == null) {
+        throw new TypeError("no validation errors");
+      }
+      return lastParameterValidationError;
+    }
+
+    function recordError(
+      parameterName: string,
+      path: string,
+      rule: string,
+      typeName?: string
+    ) {
+      lastParameterValidationError = {
+        parameterName,
+        path,
+        rule,
+        typeName,
+      }
+    }
   `;
 
   for (const pathModel of apiModel.paths) {
