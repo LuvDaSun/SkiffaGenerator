@@ -27,31 +27,49 @@ export class UnexpectedClientResponseContentType extends ClientError {
 export class ClientRequestParameterValidationFailed extends ClientError {
   public readonly name = "ClientRequestParameterValidationFailed";
 
-  constructor() {
-    super(`Client request parameter validation failed`);
+  constructor(
+    public readonly parameterName: string,
+    public readonly path: string,
+    public readonly rule: string,
+  ) {
+    super(
+      `Client request parameter validation failed for parameter ${parameterName} path, ${path}, rule ${rule}`,
+    );
   }
 }
 
 export class ClientResponseParameterValidationFailed extends ClientError {
   public readonly name = "ClientResponseParameterValidationFailed";
 
-  constructor() {
-    super(`Client response parameter validation failed`);
+  constructor(
+    public readonly parameterName: string,
+    public readonly path: string,
+    public readonly rule: string,
+  ) {
+    super(
+      `Client response parameter validation failed for parameter ${parameterName} path, ${path}, rule ${rule}`,
+    );
   }
 }
 
 export class ClientRequestEntityValidationFailed extends ClientError {
   public readonly name = "ClientRequestEntityValidationFailed";
 
-  constructor() {
-    super(`Client request entity validation failed`);
+  constructor(
+    public readonly path: string,
+    public readonly rule: string,
+  ) {
+    super(`Client request entity validation failed for path ${path}, rule ${rule}`);
   }
 }
 
 export class ClientResponseEntityValidationFailed extends ClientError {
   public readonly name = "ClientResponseEntityValidationFailed";
 
-  constructor() {
-    super(`Client response entity validation failed`);
+  constructor(
+    public readonly path: string,
+    public readonly rule: string,
+  ) {
+    super(`Client response entity validation failed for path ${path}, rule ${rule}`);
   }
 }

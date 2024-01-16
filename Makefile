@@ -7,6 +7,15 @@ build: \
 
 	npm install
 
+rebuild: \
+	clean build
+
+clean: \
+
+	rm --recursive --force packages/ts/schema-swagger-v2 \
+	rm --recursive --force packages/ts/schema-oas-v3-0 \
+	rm --recursive --force packages/ts/schema-oas-v3-1 \
+
 out/schema-swagger-v2:
 	npx --yes jns42-generator package http://swagger.io/v2/schema.json\# \
 		--package-directory $@ \

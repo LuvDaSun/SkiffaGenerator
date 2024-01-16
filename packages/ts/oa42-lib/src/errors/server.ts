@@ -59,31 +59,49 @@ export class UnexpectedServerRequestContentType extends ServerError {
 export class ServerRequestParameterValidationFailed extends ServerError {
   public readonly name = "ServerRequestParameterValidationFailed";
 
-  constructor() {
-    super(`Server request parameter validation failed`);
+  constructor(
+    public readonly parameterName: string,
+    public readonly path: string,
+    public readonly rule: string,
+  ) {
+    super(
+      `Server request parameter validation failed for parameter ${parameterName} path, ${path}, rule ${rule}`,
+    );
   }
 }
 
 export class ServerResponseParameterValidationFailed extends ServerError {
   public readonly name = "ServerResponseParameterValidationFailed";
 
-  constructor() {
-    super(`Server response parameter validation failed`);
+  constructor(
+    public readonly parameterName: string,
+    public readonly path: string,
+    public readonly rule: string,
+  ) {
+    super(
+      `Server response parameter validation failed for parameter ${parameterName}, path ${path}, rule ${rule}`,
+    );
   }
 }
 
 export class ServerRequestEntityValidationFailed extends ServerError {
   public readonly name = "ServerRequestEntityValidationFailed";
 
-  constructor() {
-    super(`Server request entity validation failed`);
+  constructor(
+    public readonly path: string,
+    public readonly rule: string,
+  ) {
+    super(`Server request entity validation failed for path ${path}, rule ${rule}`);
   }
 }
 
 export class ServerResponseEntityValidationFailed extends ServerError {
   public readonly name = "ServerResponseEntityValidationFailed";
 
-  constructor() {
-    super(`Server response entity validation failed`);
+  constructor(
+    public readonly path: string,
+    public readonly rule: string,
+  ) {
+    super(`Server response entity validation failed for path ${path}, rule ${rule}`);
   }
 }

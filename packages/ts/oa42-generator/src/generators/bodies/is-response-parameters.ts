@@ -22,11 +22,23 @@ export function* generateIsResponseParametersFunctionBody(
     if (parameterModel.required) {
       yield itt`
         if(parameters.${parameterPropertyName} === undefined) {
+          recordError(
+            ${JSON.stringify(parameterPropertyName)},
+            "",
+            "required"
+          );
           return false;
         }
         if(!validators.${isParameterFunction}(
           parameters.${parameterPropertyName}
         )) {
+          const lastValidationError = validators.getLastValidationError();
+          recordError(
+            ${JSON.stringify(parameterPropertyName)},
+            lastValidationError.path,
+            lastValidationError.rule,
+            lastValidationError.typeName,
+          );
           return false;
         }
       `;
@@ -35,6 +47,13 @@ export function* generateIsResponseParametersFunctionBody(
         if(parameters.${parameterPropertyName} !== undefined && !validators.${isParameterFunction}(
           parameters.${parameterPropertyName}
         )) {
+          const lastValidationError = validators.getLastValidationError();
+          recordError(
+            ${JSON.stringify(parameterPropertyName)},
+            lastValidationError.path,
+            lastValidationError.rule,
+            lastValidationError.typeName,
+          );
           return false;
         }
       `;
