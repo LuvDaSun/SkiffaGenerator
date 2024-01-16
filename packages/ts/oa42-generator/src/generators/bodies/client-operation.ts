@@ -459,7 +459,7 @@ function* generateOperationResultContentTypeBody(apiModel: models.Api, bodyModel
             return stream(signal)
           },
           lines(signal) {
-            return lib.deserializeTextLines(stream, signal));
+            return lib.deserializeTextLines(stream, signal);
           },
           value() {
             return lib.deserializeTextValue(stream);

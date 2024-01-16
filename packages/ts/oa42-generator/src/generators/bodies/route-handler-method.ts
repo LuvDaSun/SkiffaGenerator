@@ -267,7 +267,7 @@ function* generateRequestContentTypeCodeBody(apiModel: models.Api, bodyModel?: m
             return serverIncomingRequest.stream(signal);
           },
           lines(signal) {
-            return lib.deserializeTextLines(serverIncomingRequest.stream, signal));
+            return lib.deserializeTextLines(serverIncomingRequest.stream, signal);
           },
           value() {
             return lib.deserializeTextValue(serverIncomingRequest.stream);
