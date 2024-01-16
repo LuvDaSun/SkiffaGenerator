@@ -159,7 +159,7 @@ function* generateOperationTest(
         {
           const parameterValue = incomingRequest.parameters.${toCamel(parameterModel.name)};
           const valid = main.${validateFunctionName}(parameterValue);
-          assert.equal(valid, true, main.getLastValidationError().path);
+          assert.equal(valid, true);
         }
       `;
     }
@@ -178,7 +178,7 @@ function* generateOperationTest(
               {
                 const entity = await incomingRequest.entity();
                 const valid = main.${validateFunctionName}(entity);
-                assert.equal(valid, true, main.getLastValidationError().path);
+                assert.equal(valid, true);
               }
             `;
           }
@@ -296,7 +296,7 @@ function* generateOperationTest(
         {
           const parameterValue = operationResult.parameters.${toCamel(parameterModel.name)};
           const valid = main.${validateFunctionName}(parameterValue);
-          assert.equal(valid, true, main.getLastValidationError().path);
+          assert.equal(valid, true);
         }
       `;
     }
@@ -314,7 +314,7 @@ function* generateOperationTest(
               { 
                 const entity = await operationResult.entity();
                 const valid = main.${validateFunctionName}(entity);
-                assert.equal(valid, true, main.getLastValidationError().path);
+                assert.equal(valid, true);
               }
             `;
           }
