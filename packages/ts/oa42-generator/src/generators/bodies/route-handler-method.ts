@@ -168,7 +168,12 @@ export function* generateRouteHandlerMethodBody(
 
     if(validateIncomingParameters) {
       if(!parameters.${isRequestParametersFunction}(requestParameters)) {
-        throw new lib.ServerRequestParameterValidationFailed();
+        const lastError = parameters.getLastParameterValidationError();
+        throw new lib.ServerRequestParameterValidationFailed(
+          lastError.parameterName,
+          lastError.path,
+          lastError.rule
+        );
       }
     }
   `;
@@ -284,7 +289,11 @@ function* generateRequestContentTypeCodeBody(apiModel: models.Api, bodyModel?: m
               ? ""
               : itt`
             if(!validators.${isBodyTypeFunction}(entity)) {
-              throw new lib.ServerRequestEntityValidationFailed();
+              const lastError = validators.getLastValidationError();
+              throw new lib.ServerRequestEntityValidationFailed(
+                lastError.path,
+                lastError.rule,
+              );
             }
           `
           }
@@ -384,7 +393,12 @@ function* generateOperationResultBody(
   yield itt`
     if(validateOutgoingParameters) {
       if(!parameters.${isResponseParametersFunction}(outgoingResponse.parameters)) {
-        throw new lib.ServerResponseParameterValidationFailed();
+        const lastError = parameters.getLastParameterValidationError();
+        throw new lib.ServerResponseParameterValidationFailed(
+          lastError.parameterName,
+          lastError.path,
+          lastError.rule,
+        );
       }
     }
   `;
@@ -496,7 +510,11 @@ function* generateOperationResultContentTypeBody(apiModel: models.Api, bodyModel
               ? ""
               : itt`
             if(!validators.${isBodyTypeFunction}(entity)) {
-              throw new lib.ServerResponseEntityValidationFailed();
+              const lastError = validators.getLastValidationError();
+              throw new lib.ServerResponseEntityValidationFailed(
+                lastError.path,
+                lastError.rule,
+              );
             }
           `
           }
