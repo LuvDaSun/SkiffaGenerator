@@ -24,7 +24,7 @@ export function* generateOperationParametersTypes(
           parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
 
         return itt`
-          ${camelcase(parameterModel.name)}${parameterModel.required ? "?" : ""}:
+          ${camelcase(parameterModel.name)}${parameterModel.required ? "" : "?"}:
             ${parameterTypeName == null ? "unknown" : `types.${parameterTypeName}`}
         `;
       })}
