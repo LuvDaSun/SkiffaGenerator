@@ -1,5 +1,14 @@
 SHELL:=$(PREFIX)/bin/sh
 
+rebuild: \
+	clean build
+
+clean: \
+
+	rm --recursive --force packages/ts/schema-swagger-v2 \
+	rm --recursive --force packages/ts/schema-oas-v3-0 \
+	rm --recursive --force packages/ts/schema-oas-v3-1 \
+
 build: \
 	packages/ts/schema-swagger-v2 \
 	packages/ts/schema-oas-v3-0 \
