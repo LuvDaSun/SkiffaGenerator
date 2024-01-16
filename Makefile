@@ -1,5 +1,12 @@
 SHELL:=$(PREFIX)/bin/sh
 
+build: \
+	packages/ts/schema-swagger-v2 \
+	packages/ts/schema-oas-v3-0 \
+	packages/ts/schema-oas-v3-1 \
+
+	npm install
+
 rebuild: \
 	clean build
 
@@ -8,13 +15,6 @@ clean: \
 	rm --recursive --force packages/ts/schema-swagger-v2 \
 	rm --recursive --force packages/ts/schema-oas-v3-0 \
 	rm --recursive --force packages/ts/schema-oas-v3-1 \
-
-build: \
-	packages/ts/schema-swagger-v2 \
-	packages/ts/schema-oas-v3-0 \
-	packages/ts/schema-oas-v3-1 \
-
-	npm install
 
 out/schema-swagger-v2:
 	npx --yes jns42-generator package http://swagger.io/v2/schema.json\# \
