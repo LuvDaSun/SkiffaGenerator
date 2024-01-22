@@ -59,10 +59,5 @@
     "schema-oas-v3-0",
     "schema-oas-v3-1",
     "schema-swagger-v2"
-  ],
-  "bundleDependencies": [
-    "schema-oas-v3-0",
-    "schema-oas-v3-1",
-    "schema-swagger-v2"
   ]
 }
