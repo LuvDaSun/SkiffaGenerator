@@ -1,6 +1,5 @@
 import { Router } from "goodrouter";
 import * as jns42generator from "jns42-generator";
-import { Namer } from "jns42-generator";
 import { Method, StatusCode, methods, statusCodes } from "oa42-lib";
 import * as oas from "schema-oas-v3-0";
 import * as models from "../../models/index.js";
@@ -27,31 +26,25 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       router.insertRoute(pathModel.id, pathModel.pattern);
     }
 
-    const namer = new Namer(defaultName, nameMaximumIterations);
-    for (const nodeId in schemas) {
-      const nodeUrl = new URL(nodeId);
-      const path = nodeUrl.pathname + nodeUrl.hash.replace(/^#/g, "");
-      namer.registerPath(nodeId, path);
-    }
-
-    const names = namer.getNames();
-
-    const types = jns42generator.transformSchema(
-      {
-        $schema: "https://schema.JsonSchema42.org/jns42-intermediate/schema.json",
-        schemas,
-      },
+    const document = {
+      $schema: "https://schema.JsonSchema42.org/jns42-intermediate/schema.json" as const,
+      schemas,
+    };
+    const specification = jns42generator.loadSpecification(document, {
+      defaultTypeName: defaultName,
+      nameMaximumIterations,
       transformMaximumIterations,
-    );
+    });
 
     const apiModel: models.Api = {
       uri,
       paths,
       authentication,
-      schemas,
-      names,
       router,
-      types,
+      document: specification.document,
+      names: specification.names,
+      typesArena: specification.typesArena,
+      validatorsArena: specification.validatorsArena,
     };
     return apiModel;
   }

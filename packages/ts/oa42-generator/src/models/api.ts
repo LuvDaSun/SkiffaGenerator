@@ -7,8 +7,9 @@ export interface Api {
   uri: URL;
   paths: Array<Path>;
   authentication: Array<Authentication>;
-  schemas: Record<string, any>;
-  names: Record<string, string>;
   router: Router<number>;
-  types: Record<string, jns42generator.Item | jns42generator.Alias>;
+  document: jns42generator.Specification["document"];
+  names: jns42generator.Specification["names"];
+  typesArena: jns42generator.Specification["typesArena"];
+  validatorsArena: jns42generator.Specification["validatorsArena"];
 }

@@ -24,13 +24,6 @@ export function generatePackage(apiModel: models.Api, options: PackageOptions) {
   fs.mkdirSync(packageDirectoryPath, { recursive: true });
   fs.mkdirSync(path.join(packageDirectoryPath, "src"), { recursive: true });
 
-  const specification = {
-    names: apiModel.names,
-    nodes: apiModel.schemas,
-    types: apiModel.types,
-    options: {},
-  };
-
   {
     const data = generatePackageJsonData(packageName, packageVersion);
     const filePath = path.join(packageDirectoryPath, "package.json");
@@ -62,37 +55,37 @@ export function generatePackage(apiModel: models.Api, options: PackageOptions) {
   }
 
   {
-    const code = jns42generator.generateTypesTsCode(specification);
+    const code = jns42generator.generateTypesTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "types.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = jns42generator.generateValidatorsTsCode(specification);
+    const code = jns42generator.generateValidatorsTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "validators.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = jns42generator.generateParsersTsCode(specification);
+    const code = jns42generator.generateParsersTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "parsers.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = jns42generator.generateMocksTsCode(specification);
+    const code = jns42generator.generateMocksTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "mocks.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = jns42generator.generateExamplesTestTsCode(specification);
+    const code = jns42generator.generateExamplesTestTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "examples.test.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = jns42generator.generateMocksTestTsCode(specification);
+    const code = jns42generator.generateMocksTestTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "mocks.test.ts");
     writeCodeToFile(filePath, code);
   }
