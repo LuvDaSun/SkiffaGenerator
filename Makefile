@@ -46,8 +46,8 @@ packages/ts/%: out/%
 	rm -rf $@
 	mv $< $@
 
-	npm install --workspace $(notdir $(basename $@))
-	npm run build --workspace $(notdir $(basename $@))
+	npm install --workspace $@
+	npm run build --workspace $@
 
 .PHONY: \
 	build \
