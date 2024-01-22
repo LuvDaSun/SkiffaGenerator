@@ -37,7 +37,7 @@ export function configurePackageProgram(argv: yargs.Argv) {
           type: "string",
           default: "schema-document",
         })
-        .option("namer-maximum-iterations", {
+        .option("name-maximum-iterations", {
           description: "maximum number of iterations for finding unique names",
           type: "number",
           default: 5,
@@ -57,7 +57,7 @@ interface MainOptions {
   packageName: string;
   packageVersion: string;
   defaultName: string;
-  namerMaximumIterations: number;
+  nameMaximumIterations: number;
   transformMaximumIterations: number;
 }
 
@@ -75,7 +75,7 @@ async function main(options: MainOptions) {
     packageName,
     packageVersion,
     defaultName,
-    namerMaximumIterations,
+    nameMaximumIterations,
     transformMaximumIterations,
   } = options;
 
@@ -83,7 +83,7 @@ async function main(options: MainOptions) {
 
   const documentContext = new DocumentContext({
     defaultName,
-    namerMaximumIterations,
+    nameMaximumIterations: nameMaximumIterations,
     transformMaximumIterations,
   });
   documentContext.registerFactory(swagger2.factory);

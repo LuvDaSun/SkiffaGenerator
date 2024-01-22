@@ -17,7 +17,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
   public async getApiModel(): Promise<models.Api> {
     const uri = this.documentUri;
 
-    const { defaultName, namerMaximumIterations, transformMaximumIterations } = this.options;
+    const { defaultName, nameMaximumIterations, transformMaximumIterations } = this.options;
 
     const paths = [...this.getPathModels()];
     const authentication = [...this.getAuthenticationModels()];
@@ -27,7 +27,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       router.insertRoute(pathModel.id, pathModel.pattern);
     }
 
-    const namer = new Namer(defaultName, namerMaximumIterations);
+    const namer = new Namer(defaultName, nameMaximumIterations);
     for (const nodeId in schemas) {
       const nodeUrl = new URL(nodeId);
       const path = nodeUrl.pathname + nodeUrl.hash.replace(/^#/g, "");
