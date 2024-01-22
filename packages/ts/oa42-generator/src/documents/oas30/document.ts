@@ -41,7 +41,6 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       paths,
       authentication,
       router,
-      document: specification.document,
       names: specification.names,
       typesArena: specification.typesArena,
       validatorsArena: specification.validatorsArena,
