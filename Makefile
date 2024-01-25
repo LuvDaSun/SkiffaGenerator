@@ -47,6 +47,7 @@ packages/ts/%: out/%
 	mv $< $@
 
 	npm install --workspace $@
+	npm run clean --workspace $@
 	npm run build --workspace $@
 
 .PHONY: \
