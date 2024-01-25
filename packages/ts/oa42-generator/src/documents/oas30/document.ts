@@ -87,7 +87,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
 
   private *getOperationModels(pathUri: URL, pathPattern: string, pathItem: oas.PathItem) {
     for (const method of methods) {
-      const operationItem = pathItem[method];
+      const operationItem = pathItem[method as keyof oas.PathItem];
 
       if (oas.isOperation(operationItem)) {
         yield this.getOperationModel(
@@ -109,13 +109,18 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     operationItem: oas.Operation,
   ) {
     const allParameters = [
-      ...(pathItem.parameters ?? []).map(
-        (item, index) => [appendToUriHash(pathUri, "parameters", index), item.name, item] as const,
-      ),
-      ...(operationItem.parameters ?? []).map(
-        (item, index) =>
-          [appendToUriHash(operationUri, "parameters", index), item.name, item] as const,
-      ),
+      ...(pathItem.parameters ?? [])
+        .map((item) => this.dereference(item))
+        .map(
+          (item, index) =>
+            [appendToUriHash(pathUri, "parameters", index), item.name, item] as const,
+        ),
+      ...(operationItem.parameters ?? [])
+        .map((item) => this.dereference(item))
+        .map(
+          (item, index) =>
+            [appendToUriHash(operationUri, "parameters", index), item.name, item] as const,
+        ),
     ];
 
     const queryParameters = allParameters
@@ -142,13 +147,13 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       })),
     );
 
+    const requestBody = this.dereference(operationItem.requestBody);
     const bodies =
-      operationItem.requestBody?.content != null &&
-      oas.isRequestBodyContent(operationItem.requestBody?.content)
+      requestBody?.content != null
         ? [
             ...this.getBodyModels(
               appendToUriHash(operationUri, "requestBody", "content"),
-              operationItem.requestBody.content,
+              requestBody.content,
             ),
           ]
         : [];
@@ -205,7 +210,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     const statusKinds = Object.keys(operationItem.responses ?? {}).sort(statusKindComparer);
 
     for (const statusKind of statusKinds) {
-      const responseItem = operationItem.responses![statusKind];
+      const responseItem = operationItem.responses[statusKind as keyof oas.DefinitionsResponses];
 
       if (!oas.isResponse(responseItem)) {
         continue;
@@ -343,5 +348,12 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       contentType,
       schemaId,
     };
+  }
+
+  private dereference<T>(target: T | oas.Reference): T {
+    if (oas.isReference(target)) {
+      throw new Error();
+    }
+    return target;
   }
 }

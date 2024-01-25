@@ -1,3 +1,4 @@
+import assert from "assert";
 import { methods } from "oa42-lib";
 import * as oas from "schema-oas-v3-0";
 import { appendToPointer } from "../../utils/pointer.js";
@@ -7,6 +8,7 @@ export function selectSchemas(pointer: string, document: oas.SchemaDocument) {
 
   function* selectFromDocument(pointer: string) {
     for (const [path, pathObject] of Object.entries(document.paths)) {
+      assert(oas.isPathItem(pathObject));
       yield* selectFromPath(appendToPointer(pointer, "paths", path), pathObject);
     }
 
@@ -27,6 +29,10 @@ export function selectSchemas(pointer: string, document: oas.SchemaDocument) {
     }
 
     for (const [response, responseObject] of Object.entries(document.components?.responses ?? {})) {
+      if (oas.isReference(responseObject)) {
+        throw "TODO";
+      }
+
       yield* selectFromResponse(
         appendToPointer(pointer, "components", "responses", response),
         responseObject,
@@ -50,15 +56,7 @@ export function selectSchemas(pointer: string, document: oas.SchemaDocument) {
     }
   }
 
-  function* selectFromPath(pointer: string, pathObject: unknown) {
-    if (oas.isReference(pathObject)) {
-      return;
-    }
-
-    if (!oas.isPathItem(pathObject)) {
-      return;
-    }
-
+  function* selectFromPath(pointer: string, pathObject: oas.PathItem) {
     for (const [parameter, parameterObject] of Object.entries(pathObject.parameters ?? {})) {
       yield* selectFromParameter(
         appendToPointer(pointer, "parameters", parameter),
@@ -67,13 +65,14 @@ export function selectSchemas(pointer: string, document: oas.SchemaDocument) {
     }
 
     for (const method of Object.values(methods)) {
-      const operationObject = pathObject[method];
+      const operationObject = pathObject[method as keyof oas.PathItem];
+      assert(oas.isOperation(operationObject));
 
       yield* selectFromOperation(appendToPointer(pointer, method), operationObject);
     }
   }
 
-  function* selectFromOperation(pointer: string, operationObject: unknown) {
+  function* selectFromOperation(pointer: string, operationObject: oas.Operation) {
     if (!oas.isOperation(operationObject)) {
       return;
     }
@@ -86,6 +85,10 @@ export function selectSchemas(pointer: string, document: oas.SchemaDocument) {
     }
 
     for (const [response, responseObject] of Object.entries(operationObject.responses ?? {})) {
+      if (oas.isReference(responseObject)) {
+        throw "TODO";
+      }
+
       yield* selectFromResponse(appendToPointer(pointer, "responses", response), responseObject);
     }
 
@@ -121,15 +124,7 @@ export function selectSchemas(pointer: string, document: oas.SchemaDocument) {
     yield* selectFromSchema(appendToPointer(pointer, "schema"), mediaTypeObject.schema);
   }
 
-  function* selectFromResponse(responsePointer: string, responseObject: unknown) {
-    if (oas.isReference(responseObject)) {
-      return;
-    }
-
-    if (!oas.isResponse(responseObject)) {
-      return;
-    }
-
+  function* selectFromResponse(responsePointer: string, responseObject: oas.Response) {
     for (const [contentType, contentObject] of Object.entries(responseObject.content ?? {})) {
       yield* selectFromSchema(
         appendToPointer(responsePointer, "content", contentType, "schema"),

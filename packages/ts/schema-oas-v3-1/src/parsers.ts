@@ -3,2207 +3,2208 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.9.6                          -- www.JsonSchema42.org
-export function parseSchemaDocument(value: unknown): unknown {
-return _parseMapSchemaDocument(value) ?? _parseReferenceSchemaDocument(value) ?? _parseAnyOfSchemaDocument(value);
-}
-function _parseMapSchemaDocument(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "openapi": {
-const propertyValue = parseOpenapi(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "info": {
-const propertyValue = parsePropertiesInfo(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "jsonSchemaDialect": {
-const propertyValue = parseJsonSchemaDialect(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "servers": {
-const propertyValue = parsePropertiesServers(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "paths": {
-const propertyValue = parsePropertiesPaths(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "webhooks": {
-const propertyValue = parseWebhooks(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "components": {
-const propertyValue = parsePropertiesComponents(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "security": {
-const propertyValue = parsePropertiesSecurity(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "tags": {
-const propertyValue = parsePropertiesTags(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "externalDocs": {
-const propertyValue = parsePropertiesExternalDocs(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceSchemaDocument(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-function _parseAnyOfSchemaDocument(value: unknown): unknown {
-return parseAnyOf0(value) ?? parseAnyOf1(value) ?? parseAnyOf2(value);
-}
-export function parseInfo(value: unknown): unknown {
-return _parseMapInfo(value) ?? _parseReferenceInfo(value);
-}
-function _parseMapInfo(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "title": {
-const propertyValue = parseTitle(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "summary": {
-const propertyValue = parseInfoSummary(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseInfoDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "termsOfService": {
-const propertyValue = parseTermsOfService(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "contact": {
-const propertyValue = parseInfoContact(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "license": {
-const propertyValue = parseInfoLicense(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "version": {
-const propertyValue = parseVersion(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceInfo(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseContact(value: unknown): unknown {
-return _parseMapContact(value) ?? _parseReferenceContact(value);
-}
-function _parseMapContact(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "name": {
-const propertyValue = parseContactName(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "url": {
-const propertyValue = parseContactUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "email": {
-const propertyValue = parseEmail(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceContact(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseLicense(value: unknown): unknown {
-return _parseMapLicense(value) ?? _parseReferenceLicense(value);
-}
-function _parseMapLicense(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "name": {
-const propertyValue = parseLicenseName(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "identifier": {
-const propertyValue = parseIdentifier(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "url": {
-const propertyValue = parseLicenseUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceLicense(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseServer(value: unknown): unknown {
-return _parseMapServer(value) ?? _parseReferenceServer(value);
-}
-function _parseMapServer(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "url": {
-const propertyValue = parseServerUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseServerDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "variables": {
-const propertyValue = parseVariables(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceServer(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseServerVariable(value: unknown): unknown {
-return _parseMapServerVariable(value) ?? _parseReferenceServerVariable(value);
-}
-function _parseMapServerVariable(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "enum": {
-const propertyValue = parseEnum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "default": {
-const propertyValue = parseServerVariableDefault(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseServerVariableDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceServerVariable(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseComponents(value: unknown): unknown {
-return _parseMapComponents(value) ?? _parseReferenceComponents(value);
-}
-function _parseMapComponents(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "schemas": {
-const propertyValue = parseSchemas(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "responses": {
-const propertyValue = parseComponentsResponses(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "parameters": {
-const propertyValue = parseComponentsParameters(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "examples": {
-const propertyValue = parseComponentsExamples(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "requestBodies": {
-const propertyValue = parseRequestBodies(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "headers": {
-const propertyValue = parseComponentsHeaders(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "securitySchemes": {
-const propertyValue = parseSecuritySchemes(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "links": {
-const propertyValue = parseComponentsLinks(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "callbacks": {
-const propertyValue = parseComponentsCallbacks(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "pathItems": {
-const propertyValue = parsePathItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceComponents(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parsePaths(value: unknown): unknown {
-return _parseMapPaths(value) ?? _parseReferencePaths(value);
-}
-function _parseMapPaths(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-function _parseReferencePaths(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parsePathItem(value: unknown): unknown {
-return _parseMapPathItem(value) ?? _parseReferencePathItem(value);
-}
-function _parseMapPathItem(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "summary": {
-const propertyValue = parsePathItemSummary(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parsePathItemDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "servers": {
-const propertyValue = parsePathItemServers(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "parameters": {
-const propertyValue = parsePathItemParameters(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "get": {
-const propertyValue = parseGet(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "put": {
-const propertyValue = parsePut(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "post": {
-const propertyValue = parsePost(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "delete": {
-const propertyValue = parseDelete(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "options": {
-const propertyValue = parseOptions(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "head": {
-const propertyValue = parseHead(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "patch": {
-const propertyValue = parsePatch(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "trace": {
-const propertyValue = parseTrace(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferencePathItem(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parsePathItemOrReference(value: unknown): unknown {
-return _parseIfPathItemOrReference(value);
-}
-function _parseIfPathItemOrReference(value: unknown): unknown {
-return parsePathItemOrReferenceIf(value) ?? parsePathItemOrReferenceThen(value) ?? parsePathItemOrReferenceElse(value);
-}
-export function parseOperation(value: unknown): unknown {
-return _parseMapOperation(value) ?? _parseReferenceOperation(value);
-}
-function _parseMapOperation(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "tags": {
-const propertyValue = parseOperationTags(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "summary": {
-const propertyValue = parseOperationSummary(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseOperationDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "externalDocs": {
-const propertyValue = parseOperationExternalDocs(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "operationId": {
-const propertyValue = parseOperationOperationId(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "parameters": {
-const propertyValue = parseOperationParameters(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "requestBody": {
-const propertyValue = parseOperationRequestBody(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "responses": {
-const propertyValue = parseOperationResponses(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "callbacks": {
-const propertyValue = parseOperationCallbacks(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "deprecated": {
-const propertyValue = parseOperationDeprecated(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "security": {
-const propertyValue = parseOperationSecurity(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "servers": {
-const propertyValue = parseOperationServers(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceOperation(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseExternalDocumentation(value: unknown): unknown {
-return _parseMapExternalDocumentation(value) ?? _parseReferenceExternalDocumentation(value);
-}
-function _parseMapExternalDocumentation(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "description": {
-const propertyValue = parseExternalDocumentationDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "url": {
-const propertyValue = parseExternalDocumentationUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceExternalDocumentation(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseParameter(value: unknown): unknown {
-return _parseMapParameter(value) ?? _parseReferenceParameter(value) ?? _parseOneOfParameter(value) ?? _parseIfParameter(value);
-}
-function _parseMapParameter(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "name": {
-const propertyValue = parseParameterName(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "in": {
-const propertyValue = parsePropertiesParameterIn(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseParameterDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "required": {
-const propertyValue = parseParameterRequired(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "deprecated": {
-const propertyValue = parseParameterDeprecated(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "schema": {
-const propertyValue = parseParameterSchema(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "content": {
-const propertyValue = parseParameterContent(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceParameter(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-function _parseOneOfParameter(value: unknown): unknown {
-return parseParameterOneOf0(value) ?? parseParameterOneOf1(value);
-}
-function _parseIfParameter(value: unknown): unknown {
-return parseParameterIf(value) ?? parseParameterThen(value);
-}
-export function parseParameterOrReference(value: unknown): unknown {
-return _parseIfParameterOrReference(value);
-}
-function _parseIfParameterOrReference(value: unknown): unknown {
-return parseParameterOrReferenceIf(value) ?? parseParameterOrReferenceThen(value) ?? parseParameterOrReferenceElse(value);
-}
-export function parseRequestBody(value: unknown): unknown {
-return _parseMapRequestBody(value) ?? _parseReferenceRequestBody(value);
-}
-function _parseMapRequestBody(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "description": {
-const propertyValue = parseRequestBodyDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "content": {
-const propertyValue = parseRequestBodyContent(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "required": {
-const propertyValue = parseRequestBodyRequired(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceRequestBody(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseRequestBodyOrReference(value: unknown): unknown {
-return _parseIfRequestBodyOrReference(value);
-}
-function _parseIfRequestBodyOrReference(value: unknown): unknown {
-return parseRequestBodyOrReferenceIf(value) ?? parseRequestBodyOrReferenceThen(value) ?? parseRequestBodyOrReferenceElse(value);
-}
-export function parseContent(value: unknown): unknown {
-return _parseMapContent(value);
-}
-function _parseMapContent(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseContentPropertyNames(value[propertyName as keyof typeof value]);
-result[propertyName] ??= parseContentAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseMediaType(value: unknown): unknown {
-return _parseMapMediaType(value) ?? _parseAllOfMediaType(value);
-}
-function _parseMapMediaType(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "schema": {
-const propertyValue = parseMediaTypeSchema(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "encoding": {
-const propertyValue = parseMediaTypeEncoding(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseAllOfMediaType(value: unknown): unknown {
-return parseMediaType0(value) ?? parseMediaType1(value);
-}
-export function parseEncoding(value: unknown): unknown {
-return _parseMapEncoding(value) ?? _parseAllOfEncoding(value);
-}
-function _parseMapEncoding(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "contentType": {
-const propertyValue = parseContentType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "headers": {
-const propertyValue = parseEncodingHeaders(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "style": {
-const propertyValue = parseEncodingStyle(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "explode": {
-const propertyValue = parseEncodingExplode(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "allowReserved": {
-const propertyValue = parseAllowReserved(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseAllOfEncoding(value: unknown): unknown {
-return parseEncodingAllOf0(value) ?? parseEncodingAllOf1(value);
-}
-export function parseResponses(value: unknown): unknown {
-return _parseMapResponses(value) ?? _parseReferenceResponses(value);
-}
-function _parseMapResponses(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "default": {
-const propertyValue = parseResponsesDefault(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceResponses(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseResponse(value: unknown): unknown {
-return _parseMapResponse(value) ?? _parseReferenceResponse(value);
-}
-function _parseMapResponse(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "description": {
-const propertyValue = parseResponseDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "headers": {
-const propertyValue = parseResponseHeaders(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "content": {
-const propertyValue = parseResponseContent(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "links": {
-const propertyValue = parseResponseLinks(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceResponse(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseResponseOrReference(value: unknown): unknown {
-return _parseIfResponseOrReference(value);
-}
-function _parseIfResponseOrReference(value: unknown): unknown {
-return parseResponseOrReferenceIf(value) ?? parseResponseOrReferenceThen(value) ?? parseResponseOrReferenceElse(value);
-}
-export function parseCallbacks(value: unknown): unknown {
-return _parseMapCallbacks(value) ?? _parseReferenceCallbacks(value);
-}
-function _parseMapCallbacks(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseCallbacksAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceCallbacks(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseCallbacksOrReference(value: unknown): unknown {
-return _parseIfCallbacksOrReference(value);
-}
-function _parseIfCallbacksOrReference(value: unknown): unknown {
-return parseCallbacksOrReferenceIf(value) ?? parseCallbacksOrReferenceThen(value) ?? parseCallbacksOrReferenceElse(value);
-}
-export function parseExample(value: unknown): unknown {
-return _parseMapExample(value) ?? _parseReferenceExample(value) ?? _parseNotExample(value);
-}
-function _parseMapExample(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "summary": {
-const propertyValue = parseExampleSummary(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseExampleDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "value": {
-const propertyValue = parseValue(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "externalValue": {
-const propertyValue = parseExternalValue(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceExample(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-function _parseNotExample(value: unknown): unknown {
-return parseNot(value);
-}
-export function parseExampleOrReference(value: unknown): unknown {
-return _parseIfExampleOrReference(value);
-}
-function _parseIfExampleOrReference(value: unknown): unknown {
-return parseExampleOrReferenceIf(value) ?? parseExampleOrReferenceThen(value) ?? parseExampleOrReferenceElse(value);
-}
-export function parseLink(value: unknown): unknown {
-return _parseMapLink(value) ?? _parseReferenceLink(value) ?? _parseOneOfLink(value);
-}
-function _parseMapLink(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "operationRef": {
-const propertyValue = parseOperationRef(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "operationId": {
-const propertyValue = parseLinkOperationId(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "parameters": {
-const propertyValue = parseLinkParameters(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "requestBody": {
-const propertyValue = parseLinkRequestBody(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseLinkDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "body": {
-const propertyValue = parseBody(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceLink(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-function _parseOneOfLink(value: unknown): unknown {
-return parseLinkOneOf0(value) ?? parseLinkOneOf1(value);
-}
-export function parseLinkOrReference(value: unknown): unknown {
-return _parseIfLinkOrReference(value);
-}
-function _parseIfLinkOrReference(value: unknown): unknown {
-return parseLinkOrReferenceIf(value) ?? parseLinkOrReferenceThen(value) ?? parseLinkOrReferenceElse(value);
-}
-export function parseHeader(value: unknown): unknown {
-return _parseMapHeader(value) ?? _parseReferenceHeader(value) ?? _parseOneOfHeader(value);
-}
-function _parseMapHeader(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "description": {
-const propertyValue = parseHeaderDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "required": {
-const propertyValue = parseHeaderRequired(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "deprecated": {
-const propertyValue = parseHeaderDeprecated(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "schema": {
-const propertyValue = parseHeaderSchema(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "content": {
-const propertyValue = parseHeaderContent(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceHeader(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-function _parseOneOfHeader(value: unknown): unknown {
-return parseHeaderOneOf0(value) ?? parseHeaderOneOf1(value);
-}
-export function parseHeaderOrReference(value: unknown): unknown {
-return _parseIfHeaderOrReference(value);
-}
-function _parseIfHeaderOrReference(value: unknown): unknown {
-return parseHeaderOrReferenceIf(value) ?? parseHeaderOrReferenceThen(value) ?? parseHeaderOrReferenceElse(value);
-}
-export function parseTag(value: unknown): unknown {
-return _parseMapTag(value) ?? _parseReferenceTag(value);
-}
-function _parseMapTag(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "name": {
-const propertyValue = parseTagName(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseTagDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "externalDocs": {
-const propertyValue = parseTagExternalDocs(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceTag(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseReference(value: unknown): unknown {
-return _parseMapReference(value);
-}
-function _parseMapReference(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "$ref": {
-const propertyValue = parseRef(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "summary": {
-const propertyValue = parseReferenceSummary(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseReferenceDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-export function parseSchema(value: unknown): unknown {
-return _parseMapSchema(value) ?? _parseBooleanSchema(value);
-}
-function _parseMapSchema(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-function _parseBooleanSchema(value: unknown): unknown {
+// v0.12.7                         -- www.JsonSchema42.org
+//
+import * as types from "./types.js";
+export interface ParserGeneratorOptions {
+trueStringValues?: string[];
+falseStringValues?: string[];
+}
+const defaultParserGeneratorOptions = {
+trueStringValues: ["", "true", "yes", "on", "1"],
+falseStringValues: ["false", "no", "off", "0"],
+}
+/**
+* @description The description of OpenAPI v3.1.x documents without schema validation, as defined by https://spec.openapis.org/oas/v3.1.0
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07}
+*/
+export function parseSchemaDocument(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info}
+*/
+export function parseInfo(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "title":
+return [
+name,
+parseTitle(value, configuration),
+]
+case "summary":
+return [
+name,
+parseInfoSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parseInfoDescription(value, configuration),
+]
+case "termsOfService":
+return [
+name,
+parseTermsOfService(value, configuration),
+]
+case "contact":
+return [
+name,
+parseInfoContact(value, configuration),
+]
+case "license":
+return [
+name,
+parseInfoLicense(value, configuration),
+]
+case "version":
+return [
+name,
+parseVersion(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact}
+*/
+export function parseContact(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "name":
+return [
+name,
+parseContactName(value, configuration),
+]
+case "url":
+return [
+name,
+parseContactUrl(value, configuration),
+]
+case "email":
+return [
+name,
+parseEmail(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license}
+*/
+export function parseLicense(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "name":
+return [
+name,
+parseLicenseName(value, configuration),
+]
+case "identifier":
+return [
+name,
+parseIdentifier(value, configuration),
+]
+case "url":
+return [
+name,
+parseLicenseUrl(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server}
+*/
+export function parseServer(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "url":
+return [
+name,
+parseServerUrl(value, configuration),
+]
+case "description":
+return [
+name,
+parseServerDescription(value, configuration),
+]
+case "variables":
+return [
+name,
+parseVariables(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable}
+*/
+export function parseServerVariable(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "enum":
+return [
+name,
+parseEnum(value, configuration),
+]
+case "default":
+return [
+name,
+parseServerVariableDefault(value, configuration),
+]
+case "description":
+return [
+name,
+parseServerVariableDescription(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components}
+*/
+export function parseComponents(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "schemas":
+return [
+name,
+parseSchemas(value, configuration),
+]
+case "responses":
+return [
+name,
+parseComponentsResponses(value, configuration),
+]
+case "parameters":
+return [
+name,
+parseComponentsParameters(value, configuration),
+]
+case "examples":
+return [
+name,
+parseComponentsExamples(value, configuration),
+]
+case "requestBodies":
+return [
+name,
+parseRequestBodies(value, configuration),
+]
+case "headers":
+return [
+name,
+parseComponentsHeaders(value, configuration),
+]
+case "securitySchemes":
+return [
+name,
+parseSecuritySchemes(value, configuration),
+]
+case "links":
+return [
+name,
+parseComponentsLinks(value, configuration),
+]
+case "callbacks":
+return [
+name,
+parseComponentsCallbacks(value, configuration),
+]
+case "pathItems":
+return [
+name,
+parsePathItems(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/paths}
+*/
+export function parsePaths(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item}
+*/
+export function parsePathItem(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "summary":
+return [
+name,
+parsePathItemSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parsePathItemDescription(value, configuration),
+]
+case "servers":
+return [
+name,
+parsePathItemServers(value, configuration),
+]
+case "parameters":
+return [
+name,
+parsePathItemParameters(value, configuration),
+]
+case "get":
+return [
+name,
+parseGet(value, configuration),
+]
+case "put":
+return [
+name,
+parsePut(value, configuration),
+]
+case "post":
+return [
+name,
+parsePost(value, configuration),
+]
+case "delete":
+return [
+name,
+parseDelete(value, configuration),
+]
+case "options":
+return [
+name,
+parseOptions(value, configuration),
+]
+case "head":
+return [
+name,
+parseHead(value, configuration),
+]
+case "patch":
+return [
+name,
+parsePatch(value, configuration),
+]
+case "trace":
+return [
+name,
+parseTrace(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference}
+*/
+export function parsePathItemOrReference(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "$ref":
+return [
+name,
+parseRef(value, configuration),
+]
+case "summary":
+return [
+name,
+parseReferenceSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parseReferenceDescription(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "summary":
+return [
+name,
+parsePathItemSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parsePathItemDescription(value, configuration),
+]
+case "servers":
+return [
+name,
+parsePathItemServers(value, configuration),
+]
+case "parameters":
+return [
+name,
+parsePathItemParameters(value, configuration),
+]
+case "get":
+return [
+name,
+parseGet(value, configuration),
+]
+case "put":
+return [
+name,
+parsePut(value, configuration),
+]
+case "post":
+return [
+name,
+parsePost(value, configuration),
+]
+case "delete":
+return [
+name,
+parseDelete(value, configuration),
+]
+case "options":
+return [
+name,
+parseOptions(value, configuration),
+]
+case "head":
+return [
+name,
+parseHead(value, configuration),
+]
+case "patch":
+return [
+name,
+parsePatch(value, configuration),
+]
+case "trace":
+return [
+name,
+parseTrace(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation}
+*/
+export function parseOperation(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "tags":
+return [
+name,
+parseOperationTags(value, configuration),
+]
+case "summary":
+return [
+name,
+parseOperationSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parseOperationDescription(value, configuration),
+]
+case "externalDocs":
+return [
+name,
+parseOperationExternalDocs(value, configuration),
+]
+case "operationId":
+return [
+name,
+parseOperationOperationId(value, configuration),
+]
+case "parameters":
+return [
+name,
+parseOperationParameters(value, configuration),
+]
+case "requestBody":
+return [
+name,
+parseOperationRequestBody(value, configuration),
+]
+case "responses":
+return [
+name,
+parseOperationResponses(value, configuration),
+]
+case "callbacks":
+return [
+name,
+parseOperationCallbacks(value, configuration),
+]
+case "deprecated":
+return [
+name,
+parseOperationDeprecated(value, configuration),
+]
+case "security":
+return [
+name,
+parseOperationSecurity(value, configuration),
+]
+case "servers":
+return [
+name,
+parseOperationServers(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation}
+*/
+export function parseExternalDocumentation(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "description":
+return [
+name,
+parseExternalDocumentationDescription(value, configuration),
+]
+case "url":
+return [
+name,
+parseExternalDocumentationUrl(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter}
+*/
+export function parseParameter(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "in":
+return [
+name,
+(value),
+]
+case "allowEmptyValue":
+return [
+name,
+parseAllowEmptyValue(value, configuration),
+]
+case "name":
+return [
+name,
+parseParameterName(value, configuration),
+]
+case "description":
+return [
+name,
+parseParameterDescription(value, configuration),
+]
+case "required":
+return [
+name,
+parseParameterRequired(value, configuration),
+]
+case "deprecated":
+return [
+name,
+parseParameterDeprecated(value, configuration),
+]
+case "schema":
+return [
+name,
+parseParameterSchema(value, configuration),
+]
+case "content":
+return [
+name,
+parseParameterContent(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "in":
+return [
+name,
+(value),
+]
+case "allowEmptyValue":
+return [
+name,
+parseAllowEmptyValue(value, configuration),
+]
+case "name":
+return [
+name,
+parseParameterName(value, configuration),
+]
+case "description":
+return [
+name,
+parseParameterDescription(value, configuration),
+]
+case "required":
+return [
+name,
+parseParameterRequired(value, configuration),
+]
+case "deprecated":
+return [
+name,
+parseParameterDeprecated(value, configuration),
+]
+case "schema":
+return [
+name,
+parseParameterSchema(value, configuration),
+]
+case "content":
+return [
+name,
+parseParameterContent(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference}
+*/
+export function parseParameterOrReference(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "$ref":
+return [
+name,
+parseRef(value, configuration),
+]
+case "summary":
+return [
+name,
+parseReferenceSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parseReferenceDescription(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "in":
+return [
+name,
+(value),
+]
+case "allowEmptyValue":
+return [
+name,
+parseAllowEmptyValue(value, configuration),
+]
+case "name":
+return [
+name,
+parseParameterName(value, configuration),
+]
+case "description":
+return [
+name,
+parseParameterDescription(value, configuration),
+]
+case "required":
+return [
+name,
+parseParameterRequired(value, configuration),
+]
+case "deprecated":
+return [
+name,
+parseParameterDeprecated(value, configuration),
+]
+case "schema":
+return [
+name,
+parseParameterSchema(value, configuration),
+]
+case "content":
+return [
+name,
+parseParameterContent(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "in":
+return [
+name,
+(value),
+]
+case "allowEmptyValue":
+return [
+name,
+parseAllowEmptyValue(value, configuration),
+]
+case "name":
+return [
+name,
+parseParameterName(value, configuration),
+]
+case "description":
+return [
+name,
+parseParameterDescription(value, configuration),
+]
+case "required":
+return [
+name,
+parseParameterRequired(value, configuration),
+]
+case "deprecated":
+return [
+name,
+parseParameterDeprecated(value, configuration),
+]
+case "schema":
+return [
+name,
+parseParameterSchema(value, configuration),
+]
+case "content":
+return [
+name,
+parseParameterContent(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body}
+*/
+export function parseRequestBody(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "description":
+return [
+name,
+parseRequestBodyDescription(value, configuration),
+]
+case "content":
+return [
+name,
+parseRequestBodyContent(value, configuration),
+]
+case "required":
+return [
+name,
+parseRequestBodyRequired(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference}
+*/
+export function parseRequestBodyOrReference(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "$ref":
+return [
+name,
+parseRef(value, configuration),
+]
+case "summary":
+return [
+name,
+parseReferenceSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parseReferenceDescription(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "description":
+return [
+name,
+parseRequestBodyDescription(value, configuration),
+]
+case "content":
+return [
+name,
+parseRequestBodyContent(value, configuration),
+]
+case "required":
+return [
+name,
+parseRequestBodyRequired(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content}
+*/
+export function parseContent(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseContentAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type}
+*/
+export function parseMediaType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "example":
+return [
+name,
+parseExamplesExample(value, configuration),
+]
+case "examples":
+return [
+name,
+parseExamplesExamples(value, configuration),
+]
+case "schema":
+return [
+name,
+parseMediaTypeSchema(value, configuration),
+]
+case "encoding":
+return [
+name,
+parseMediaTypeEncoding(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding}
+*/
+export function parseEncoding(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "contentType":
+return [
+name,
+parseContentType(value, configuration),
+]
+case "headers":
+return [
+name,
+parseEncodingHeaders(value, configuration),
+]
+case "style":
+return [
+name,
+(value),
+]
+case "explode":
+return [
+name,
+(
+((value: unknown) => {
 if(value == null) {
 return false;
 }
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
 return true;
 }
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
 case "number":
 return Boolean(value);
 case "boolean":
 return value;
 }
 return undefined;
-}
-export function parseSecurityScheme(value: unknown): unknown {
-return _parseMapSecurityScheme(value) ?? _parseAllOfSecurityScheme(value);
-}
-function _parseMapSecurityScheme(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "type": {
-const propertyValue = parseSecuritySchemeType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseSecuritySchemeDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseAllOfSecurityScheme(value: unknown): unknown {
-return parseSecuritySchemeAllOf0(value) ?? parseSecuritySchemeAllOf1(value) ?? parseAllOf2(value) ?? parseAllOf3(value) ?? parseAllOf4(value) ?? parseAllOf5(value);
-}
-export function parseSecuritySchemeOrReference(value: unknown): unknown {
-return _parseIfSecuritySchemeOrReference(value);
-}
-function _parseIfSecuritySchemeOrReference(value: unknown): unknown {
-return parseSecuritySchemeOrReferenceIf(value) ?? parseSecuritySchemeOrReferenceThen(value) ?? parseSecuritySchemeOrReferenceElse(value);
-}
-export function parseOauthFlows(value: unknown): unknown {
-return _parseMapOauthFlows(value) ?? _parseReferenceOauthFlows(value);
-}
-function _parseMapOauthFlows(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "implicit": {
-const propertyValue = parsePropertiesOauthFlowsImplicit(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "password": {
-const propertyValue = parsePropertiesOauthFlowsPassword(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "clientCredentials": {
-const propertyValue = parsePropertiesOauthFlowsClientCredentials(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "authorizationCode": {
-const propertyValue = parsePropertiesOauthFlowsAuthorizationCode(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceOauthFlows(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseSecurityRequirement(value: unknown): unknown {
-return _parseMapSecurityRequirement(value);
-}
-function _parseMapSecurityRequirement(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseSecurityRequirementAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseSpecificationExtensions(value: unknown): unknown {
-return ;
-}
-export function parseExamples(value: unknown): unknown {
-return _parseMapExamples(value);
-}
-function _parseMapExamples(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "example": {
-const propertyValue = parseExamplesExample(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "examples": {
-const propertyValue = parseExamplesExamples(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-export function parseMapOfStrings(value: unknown): unknown {
-return _parseMapMapOfStrings(value);
-}
-function _parseMapMapOfStrings(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseMapOfStringsAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseOpenapi(value: unknown): unknown {
-return _parseStringOpenapi(value);
-}
-function _parseStringOpenapi(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
+})(value)
+),
+]
+case "allowReserved":
+return [
+name,
+parseAllowReserved(value, configuration),
+]
 default:
-return undefined;
-}
-}
-export function parsePropertiesInfo(value: unknown): unknown {
-return _parseReferencePropertiesInfo(value);
-}
-function _parseReferencePropertiesInfo(value: unknown): unknown {
-return parseInfo(value);
-}
-export function parseJsonSchemaDialect(value: unknown): unknown {
-return _parseStringJsonSchemaDialect(value);
-}
-function _parseStringJsonSchemaDialect(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parsePropertiesServers(value: unknown): unknown {
-return _parseArrayPropertiesServers(value);
-}
-function _parseArrayPropertiesServers(value: unknown): unknown {
-if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parsePropertiesServersItems(value[elementIndex]);
-}
-return result;
-}
-return undefined;
-}
-export function parsePropertiesPaths(value: unknown): unknown {
-return _parseReferencePropertiesPaths(value);
-}
-function _parseReferencePropertiesPaths(value: unknown): unknown {
-return parsePaths(value);
-}
-export function parseWebhooks(value: unknown): unknown {
-return _parseMapWebhooks(value);
-}
-function _parseMapWebhooks(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseWebhooksAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parsePropertiesComponents(value: unknown): unknown {
-return _parseReferencePropertiesComponents(value);
-}
-function _parseReferencePropertiesComponents(value: unknown): unknown {
-return parseComponents(value);
-}
-export function parsePropertiesSecurity(value: unknown): unknown {
-return _parseArrayPropertiesSecurity(value);
-}
-function _parseArrayPropertiesSecurity(value: unknown): unknown {
-if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parsePropertiesSecurityItems(value[elementIndex]);
-}
-return result;
-}
-return undefined;
-}
-export function parsePropertiesTags(value: unknown): unknown {
-return _parseArrayPropertiesTags(value);
-}
-function _parseArrayPropertiesTags(value: unknown): unknown {
-if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parsePropertiesTagsItems(value[elementIndex]);
-}
-return result;
-}
-return undefined;
-}
-export function parsePropertiesExternalDocs(value: unknown): unknown {
-return _parseReferencePropertiesExternalDocs(value);
-}
-function _parseReferencePropertiesExternalDocs(value: unknown): unknown {
-return parseExternalDocumentation(value);
-}
-export function parseAnyOf0(value: unknown): unknown {
-return _parseMapAnyOf0(value);
-}
-function _parseMapAnyOf0(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseAnyOf1(value: unknown): unknown {
-return _parseMapAnyOf1(value);
-}
-function _parseMapAnyOf1(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseAnyOf2(value: unknown): unknown {
-return _parseMapAnyOf2(value);
-}
-function _parseMapAnyOf2(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseTitle(value: unknown): unknown {
-return _parseStringTitle(value);
-}
-function _parseStringTitle(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseInfoSummary(value: unknown): unknown {
-return _parseStringInfoSummary(value);
-}
-function _parseStringInfoSummary(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseInfoDescription(value: unknown): unknown {
-return _parseStringInfoDescription(value);
-}
-function _parseStringInfoDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseTermsOfService(value: unknown): unknown {
-return _parseStringTermsOfService(value);
-}
-function _parseStringTermsOfService(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseInfoContact(value: unknown): unknown {
-return _parseReferenceInfoContact(value);
-}
-function _parseReferenceInfoContact(value: unknown): unknown {
-return parseContact(value);
-}
-export function parseInfoLicense(value: unknown): unknown {
-return _parseReferenceInfoLicense(value);
-}
-function _parseReferenceInfoLicense(value: unknown): unknown {
-return parseLicense(value);
-}
-export function parseVersion(value: unknown): unknown {
-return _parseStringVersion(value);
-}
-function _parseStringVersion(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseContactName(value: unknown): unknown {
-return _parseStringContactName(value);
-}
-function _parseStringContactName(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseContactUrl(value: unknown): unknown {
-return _parseStringContactUrl(value);
-}
-function _parseStringContactUrl(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseEmail(value: unknown): unknown {
-return _parseStringEmail(value);
-}
-function _parseStringEmail(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseLicenseName(value: unknown): unknown {
-return _parseStringLicenseName(value);
-}
-function _parseStringLicenseName(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseIdentifier(value: unknown): unknown {
-return _parseStringIdentifier(value);
-}
-function _parseStringIdentifier(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseLicenseUrl(value: unknown): unknown {
-return _parseStringLicenseUrl(value);
-}
-function _parseStringLicenseUrl(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseServerUrl(value: unknown): unknown {
-return _parseStringServerUrl(value);
-}
-function _parseStringServerUrl(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseServerDescription(value: unknown): unknown {
-return _parseStringServerDescription(value);
-}
-function _parseStringServerDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseVariables(value: unknown): unknown {
-return _parseMapVariables(value);
-}
-function _parseMapVariables(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseVariablesAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseEnum(value: unknown): unknown {
-return _parseArrayEnum(value);
-}
-function _parseArrayEnum(value: unknown): unknown {
-if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseEnumItems(value[elementIndex]);
-}
-return result;
-}
-return undefined;
-}
-export function parseServerVariableDefault(value: unknown): unknown {
-return _parseStringServerVariableDefault(value);
-}
-function _parseStringServerVariableDefault(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseServerVariableDescription(value: unknown): unknown {
-return _parseStringServerVariableDescription(value);
-}
-function _parseStringServerVariableDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseSchemas(value: unknown): unknown {
-return _parseMapSchemas(value);
-}
-function _parseMapSchemas(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseSchemasAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseComponentsResponses(value: unknown): unknown {
-return _parseMapComponentsResponses(value);
-}
-function _parseMapComponentsResponses(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseResponsesAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseComponentsParameters(value: unknown): unknown {
-return _parseMapComponentsParameters(value);
-}
-function _parseMapComponentsParameters(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseParametersAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseComponentsExamples(value: unknown): unknown {
-return _parseMapComponentsExamples(value);
-}
-function _parseMapComponentsExamples(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseComponentsExamplesAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseRequestBodies(value: unknown): unknown {
-return _parseMapRequestBodies(value);
-}
-function _parseMapRequestBodies(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseRequestBodiesAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseComponentsHeaders(value: unknown): unknown {
-return _parseMapComponentsHeaders(value);
-}
-function _parseMapComponentsHeaders(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseComponentsHeadersAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseSecuritySchemes(value: unknown): unknown {
-return _parseMapSecuritySchemes(value);
-}
-function _parseMapSecuritySchemes(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseSecuritySchemesAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseComponentsLinks(value: unknown): unknown {
-return _parseMapComponentsLinks(value);
-}
-function _parseMapComponentsLinks(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseComponentsLinksAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseComponentsCallbacks(value: unknown): unknown {
-return _parseMapComponentsCallbacks(value);
-}
-function _parseMapComponentsCallbacks(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseComponentsCallbacksAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parsePathItems(value: unknown): unknown {
-return _parseMapPathItems(value);
-}
-function _parseMapPathItems(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parsePathItemsAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseSchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItems(value: unknown): unknown {
-return ;
-}
-export function parsePatternProperties(value: unknown): unknown {
-return _parseReferencePatternProperties(value);
-}
-function _parseReferencePatternProperties(value: unknown): unknown {
-return parsePathItem(value);
-}
-export function parsePathItemSummary(value: unknown): unknown {
-return _parseStringPathItemSummary(value);
-}
-function _parseStringPathItemSummary(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parsePathItemDescription(value: unknown): unknown {
-return _parseStringPathItemDescription(value);
-}
-function _parseStringPathItemDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parsePathItemServers(value: unknown): unknown {
-return _parseArrayPathItemServers(value);
-}
-function _parseArrayPathItemServers(value: unknown): unknown {
-if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parsePathItemServersItems(value[elementIndex]);
-}
-return result;
-}
-return undefined;
-}
-export function parsePathItemParameters(value: unknown): unknown {
-return _parseArrayPathItemParameters(value);
-}
-function _parseArrayPathItemParameters(value: unknown): unknown {
-if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parsePathItemParametersItems(value[elementIndex]);
-}
-return result;
-}
-return undefined;
-}
-export function parseGet(value: unknown): unknown {
-return _parseReferenceGet(value);
-}
-function _parseReferenceGet(value: unknown): unknown {
-return parseOperation(value);
-}
-export function parsePut(value: unknown): unknown {
-return _parseReferencePut(value);
-}
-function _parseReferencePut(value: unknown): unknown {
-return parseOperation(value);
-}
-export function parsePost(value: unknown): unknown {
-return _parseReferencePost(value);
-}
-function _parseReferencePost(value: unknown): unknown {
-return parseOperation(value);
-}
-export function parseDelete(value: unknown): unknown {
-return _parseReferenceDelete(value);
-}
-function _parseReferenceDelete(value: unknown): unknown {
-return parseOperation(value);
-}
-export function parseOptions(value: unknown): unknown {
-return _parseReferenceOptions(value);
-}
-function _parseReferenceOptions(value: unknown): unknown {
-return parseOperation(value);
-}
-export function parseHead(value: unknown): unknown {
-return _parseReferenceHead(value);
-}
-function _parseReferenceHead(value: unknown): unknown {
-return parseOperation(value);
-}
-export function parsePatch(value: unknown): unknown {
-return _parseReferencePatch(value);
-}
-function _parseReferencePatch(value: unknown): unknown {
-return parseOperation(value);
-}
-export function parseTrace(value: unknown): unknown {
-return _parseReferenceTrace(value);
-}
-function _parseReferenceTrace(value: unknown): unknown {
-return parseOperation(value);
-}
-export function parsePathItemOrReferenceIf(value: unknown): unknown {
-return _parseMapPathItemOrReferenceIf(value);
-}
-function _parseMapPathItemOrReferenceIf(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parsePathItemOrReferenceThen(value: unknown): unknown {
-return _parseReferencePathItemOrReferenceThen(value);
-}
-function _parseReferencePathItemOrReferenceThen(value: unknown): unknown {
-return parseReference(value);
-}
-export function parsePathItemOrReferenceElse(value: unknown): unknown {
-return _parseReferencePathItemOrReferenceElse(value);
-}
-function _parseReferencePathItemOrReferenceElse(value: unknown): unknown {
-return parsePathItem(value);
-}
-export function parseOperationTags(value: unknown): unknown {
-return _parseArrayOperationTags(value);
-}
-function _parseArrayOperationTags(value: unknown): unknown {
-if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseOperationTagsItems(value[elementIndex]);
-}
-return result;
-}
-return undefined;
-}
-export function parseOperationSummary(value: unknown): unknown {
-return _parseStringOperationSummary(value);
-}
-function _parseStringOperationSummary(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOperationDescription(value: unknown): unknown {
-return _parseStringOperationDescription(value);
-}
-function _parseStringOperationDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOperationExternalDocs(value: unknown): unknown {
-return _parseReferenceOperationExternalDocs(value);
-}
-function _parseReferenceOperationExternalDocs(value: unknown): unknown {
-return parseExternalDocumentation(value);
-}
-export function parseOperationOperationId(value: unknown): unknown {
-return _parseStringOperationOperationId(value);
-}
-function _parseStringOperationOperationId(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOperationParameters(value: unknown): unknown {
-return _parseArrayOperationParameters(value);
-}
-function _parseArrayOperationParameters(value: unknown): unknown {
-if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseOperationParametersItems(value[elementIndex]);
-}
-return result;
-}
-return undefined;
-}
-export function parseOperationRequestBody(value: unknown): unknown {
-return _parseReferenceOperationRequestBody(value);
-}
-function _parseReferenceOperationRequestBody(value: unknown): unknown {
-return parseRequestBodyOrReference(value);
-}
-export function parseOperationResponses(value: unknown): unknown {
-return _parseReferenceOperationResponses(value);
-}
-function _parseReferenceOperationResponses(value: unknown): unknown {
-return parseResponses(value);
-}
-export function parseOperationCallbacks(value: unknown): unknown {
-return _parseMapOperationCallbacks(value);
-}
-function _parseMapOperationCallbacks(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseOperationCallbacksAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseOperationDeprecated(value: unknown): unknown {
-return _parseBooleanOperationDeprecated(value);
-}
-function _parseBooleanOperationDeprecated(value: unknown): unknown {
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "contentType":
+return [
+name,
+parseContentType(value, configuration),
+]
+case "headers":
+return [
+name,
+parseEncodingHeaders(value, configuration),
+]
+case "style":
+return [
+name,
+parseEncodingStyle(value, configuration),
+]
+case "explode":
+return [
+name,
+(
+((value: unknown) => {
 if(value == null) {
 return false;
 }
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
 return true;
 }
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
 case "number":
 return Boolean(value);
 case "boolean":
 return value;
 }
 return undefined;
+})(value)
+),
+]
+case "allowReserved":
+return [
+name,
+parseAllowReserved(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
 }
-export function parseOperationSecurity(value: unknown): unknown {
-return _parseArrayOperationSecurity(value);
+})
+) :
+undefined
+)
+);
 }
-function _parseArrayOperationSecurity(value: unknown): unknown {
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/responses}
+*/
+export function parseResponses(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "default":
+return [
+name,
+parseResponsesDefault(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response}
+*/
+export function parseResponse(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "description":
+return [
+name,
+parseResponseDescription(value, configuration),
+]
+case "headers":
+return [
+name,
+parseResponseHeaders(value, configuration),
+]
+case "content":
+return [
+name,
+parseResponseContent(value, configuration),
+]
+case "links":
+return [
+name,
+parseResponseLinks(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference}
+*/
+export function parseResponseOrReference(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "$ref":
+return [
+name,
+parseRef(value, configuration),
+]
+case "summary":
+return [
+name,
+parseReferenceSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parseReferenceDescription(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "description":
+return [
+name,
+parseResponseDescription(value, configuration),
+]
+case "headers":
+return [
+name,
+parseResponseHeaders(value, configuration),
+]
+case "content":
+return [
+name,
+parseResponseContent(value, configuration),
+]
+case "links":
+return [
+name,
+parseResponseLinks(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks}
+*/
+export function parseCallbacks(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseCallbacksAdditionalProperties(value, configuration) ??
+parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference}
+*/
+export function parseCallbacksOrReference(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "$ref":
+return [
+name,
+parseRef(value, configuration),
+]
+case "summary":
+return [
+name,
+parseReferenceSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parseReferenceDescription(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseCallbacksAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example}
+*/
+export function parseExample(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "summary":
+return [
+name,
+parseExampleSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parseExampleDescription(value, configuration),
+]
+case "value":
+return [
+name,
+parseValue(value, configuration),
+]
+case "externalValue":
+return [
+name,
+parseExternalValue(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference}
+*/
+export function parseExampleOrReference(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "$ref":
+return [
+name,
+parseRef(value, configuration),
+]
+case "summary":
+return [
+name,
+parseReferenceSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parseReferenceDescription(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "summary":
+return [
+name,
+parseExampleSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parseExampleDescription(value, configuration),
+]
+case "value":
+return [
+name,
+parseValue(value, configuration),
+]
+case "externalValue":
+return [
+name,
+parseExternalValue(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link}
+*/
+export function parseLink(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "operationRef":
+return [
+name,
+parseOperationRef(value, configuration),
+]
+case "operationId":
+return [
+name,
+parseLinkOperationId(value, configuration),
+]
+case "parameters":
+return [
+name,
+parseLinkParameters(value, configuration),
+]
+case "requestBody":
+return [
+name,
+parseLinkRequestBody(value, configuration),
+]
+case "description":
+return [
+name,
+parseLinkDescription(value, configuration),
+]
+case "body":
+return [
+name,
+parseBody(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "operationRef":
+return [
+name,
+parseOperationRef(value, configuration),
+]
+case "operationId":
+return [
+name,
+parseLinkOperationId(value, configuration),
+]
+case "parameters":
+return [
+name,
+parseLinkParameters(value, configuration),
+]
+case "requestBody":
+return [
+name,
+parseLinkRequestBody(value, configuration),
+]
+case "description":
+return [
+name,
+parseLinkDescription(value, configuration),
+]
+case "body":
+return [
+name,
+parseBody(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference}
+*/
+export function parseLinkOrReference(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "$ref":
+return [
+name,
+parseRef(value, configuration),
+]
+case "summary":
+return [
+name,
+parseReferenceSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parseReferenceDescription(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "operationRef":
+return [
+name,
+parseOperationRef(value, configuration),
+]
+case "operationId":
+return [
+name,
+parseLinkOperationId(value, configuration),
+]
+case "parameters":
+return [
+name,
+parseLinkParameters(value, configuration),
+]
+case "requestBody":
+return [
+name,
+parseLinkRequestBody(value, configuration),
+]
+case "description":
+return [
+name,
+parseLinkDescription(value, configuration),
+]
+case "body":
+return [
+name,
+parseBody(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "operationRef":
+return [
+name,
+parseOperationRef(value, configuration),
+]
+case "operationId":
+return [
+name,
+parseLinkOperationId(value, configuration),
+]
+case "parameters":
+return [
+name,
+parseLinkParameters(value, configuration),
+]
+case "requestBody":
+return [
+name,
+parseLinkRequestBody(value, configuration),
+]
+case "description":
+return [
+name,
+parseLinkDescription(value, configuration),
+]
+case "body":
+return [
+name,
+parseBody(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header}
+*/
+export function parseHeader(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "description":
+return [
+name,
+parseHeaderDescription(value, configuration),
+]
+case "required":
+return [
+name,
+parseHeaderRequired(value, configuration),
+]
+case "deprecated":
+return [
+name,
+parseHeaderDeprecated(value, configuration),
+]
+case "schema":
+return [
+name,
+parseHeaderSchema(value, configuration),
+]
+case "content":
+return [
+name,
+parseHeaderContent(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "description":
+return [
+name,
+parseHeaderDescription(value, configuration),
+]
+case "required":
+return [
+name,
+parseHeaderRequired(value, configuration),
+]
+case "deprecated":
+return [
+name,
+parseHeaderDeprecated(value, configuration),
+]
+case "schema":
+return [
+name,
+parseHeaderSchema(value, configuration),
+]
+case "content":
+return [
+name,
+parseHeaderContent(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference}
+*/
+export function parseHeaderOrReference(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "$ref":
+return [
+name,
+parseRef(value, configuration),
+]
+case "summary":
+return [
+name,
+parseReferenceSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parseReferenceDescription(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "description":
+return [
+name,
+parseHeaderDescription(value, configuration),
+]
+case "required":
+return [
+name,
+parseHeaderRequired(value, configuration),
+]
+case "deprecated":
+return [
+name,
+parseHeaderDeprecated(value, configuration),
+]
+case "schema":
+return [
+name,
+parseHeaderSchema(value, configuration),
+]
+case "content":
+return [
+name,
+parseHeaderContent(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "description":
+return [
+name,
+parseHeaderDescription(value, configuration),
+]
+case "required":
+return [
+name,
+parseHeaderRequired(value, configuration),
+]
+case "deprecated":
+return [
+name,
+parseHeaderDeprecated(value, configuration),
+]
+case "schema":
+return [
+name,
+parseHeaderSchema(value, configuration),
+]
+case "content":
+return [
+name,
+parseHeaderContent(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag}
+*/
+export function parseTag(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "name":
+return [
+name,
+parseTagName(value, configuration),
+]
+case "description":
+return [
+name,
+parseTagDescription(value, configuration),
+]
+case "externalDocs":
+return [
+name,
+parseTagExternalDocs(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference}
+*/
+export function parseReference(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "$ref":
+return [
+name,
+parseRef(value, configuration),
+]
+case "summary":
+return [
+name,
+parseReferenceSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parseReferenceDescription(value, configuration),
+]
+default:
+return value;
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/schema}
+*/
+export function parseSchema(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return value;
+}
+})
+) :
+undefined
+)
+??
+(
+((value: unknown) => {
+if(value == null) {
+return false;
+}
 if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseOperationSecurityItems(value[elementIndex]);
-}
-return result;
-}
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
 return undefined;
 }
-export function parseOperationServers(value: unknown): unknown {
-return _parseArrayOperationServers(value);
 }
-function _parseArrayOperationServers(value: unknown): unknown {
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme}
+*/
+export function parseSecurityScheme(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "type":
+return [
+name,
+(value),
+]
+case "name":
+return [
+name,
+parseTypeApikeyName(value, configuration),
+]
+case "in":
+return [
+name,
+parseTypeApikeyIn(value, configuration),
+]
+case "scheme":
+return [
+name,
+(
+((value: unknown) => {
 if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseOperationServersItems(value[elementIndex]);
-}
-return result;
-}
-return undefined;
-}
-export function parseExternalDocumentationDescription(value: unknown): unknown {
-return _parseStringExternalDocumentationDescription(value);
-}
-function _parseStringExternalDocumentationDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseExternalDocumentationUrl(value: unknown): unknown {
-return _parseStringExternalDocumentationUrl(value);
-}
-function _parseStringExternalDocumentationUrl(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseParameterName(value: unknown): unknown {
-return _parseStringParameterName(value);
-}
-function _parseStringParameterName(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parsePropertiesParameterIn(value: unknown): unknown {
-return _parseStringPropertiesParameterIn(value);
-}
-function _parseStringPropertiesParameterIn(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseParameterDescription(value: unknown): unknown {
-return _parseStringParameterDescription(value);
-}
-function _parseStringParameterDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseParameterRequired(value: unknown): unknown {
-return _parseBooleanParameterRequired(value);
-}
-function _parseBooleanParameterRequired(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseParameterDeprecated(value: unknown): unknown {
-return _parseBooleanParameterDeprecated(value);
-}
-function _parseBooleanParameterDeprecated(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseParameterSchema(value: unknown): unknown {
-return _parseReferenceParameterSchema(value);
-}
-function _parseReferenceParameterSchema(value: unknown): unknown {
-return parseSchema(value);
-}
-export function parseParameterContent(value: unknown): unknown {
-return _parseMapParameterContent(value) ?? _parseReferenceParameterContent(value);
-}
-function _parseMapParameterContent(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceParameterContent(value: unknown): unknown {
-return parseContent(value);
-}
-export function parseParameterOneOf0(value: unknown): unknown {
-return _parseMapParameterOneOf0(value);
-}
-function _parseMapParameterOneOf0(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseParameterOneOf1(value: unknown): unknown {
-return _parseMapParameterOneOf1(value);
-}
-function _parseMapParameterOneOf1(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseParameterIf(value: unknown): unknown {
-return _parseMapParameterIf(value);
-}
-function _parseMapParameterIf(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "in": {
-const propertyValue = parseIfParameterIn(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+switch(value.length) {
+case 1:
+[value] = value
 break;
-}
-}
-}
-return result;
-}
+default:
 return undefined;
 }
-export function parseParameterThen(value: unknown): unknown {
-return _parseMapParameterThen(value);
 }
-function _parseMapParameterThen(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "allowEmptyValue": {
-const propertyValue = parseAllowEmptyValue(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-export function parseParameterOrReferenceIf(value: unknown): unknown {
-return _parseMapParameterOrReferenceIf(value);
-}
-function _parseMapParameterOrReferenceIf(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseParameterOrReferenceThen(value: unknown): unknown {
-return _parseReferenceParameterOrReferenceThen(value);
-}
-function _parseReferenceParameterOrReferenceThen(value: unknown): unknown {
-return parseReference(value);
-}
-export function parseParameterOrReferenceElse(value: unknown): unknown {
-return _parseReferenceParameterOrReferenceElse(value);
-}
-function _parseReferenceParameterOrReferenceElse(value: unknown): unknown {
-return parseParameter(value);
-}
-export function parseRequestBodyDescription(value: unknown): unknown {
-return _parseStringRequestBodyDescription(value);
-}
-function _parseStringRequestBodyDescription(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -2213,1057 +2214,111 @@ return String(value);
 default:
 return undefined;
 }
-}
-export function parseRequestBodyContent(value: unknown): unknown {
-return _parseReferenceRequestBodyContent(value);
-}
-function _parseReferenceRequestBodyContent(value: unknown): unknown {
-return parseContent(value);
-}
-export function parseRequestBodyRequired(value: unknown): unknown {
-return _parseBooleanRequestBodyRequired(value);
-}
-function _parseBooleanRequestBodyRequired(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
+})(value)
+),
+]
+case "bearerFormat":
+return [
+name,
+parseBearerFormat(value, configuration),
+]
+case "flows":
+return [
+name,
+parseFlows(value, configuration),
+]
+case "openIdConnectUrl":
+return [
+name,
+parseOpenIdConnectUrl(value, configuration),
+]
+case "description":
+return [
+name,
+parseSecuritySchemeDescription(value, configuration),
+]
 default:
-return true;
+return [
+name,
+(parseX(value, configuration)),
+]
 }
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
+})
+) :
+undefined
+);
 }
-return undefined;
-}
-export function parseRequestBodyOrReferenceIf(value: unknown): unknown {
-return _parseMapRequestBodyOrReferenceIf(value);
-}
-function _parseMapRequestBodyOrReferenceIf(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseRequestBodyOrReferenceThen(value: unknown): unknown {
-return _parseReferenceRequestBodyOrReferenceThen(value);
-}
-function _parseReferenceRequestBodyOrReferenceThen(value: unknown): unknown {
-return parseReference(value);
-}
-export function parseRequestBodyOrReferenceElse(value: unknown): unknown {
-return _parseReferenceRequestBodyOrReferenceElse(value);
-}
-function _parseReferenceRequestBodyOrReferenceElse(value: unknown): unknown {
-return parseRequestBody(value);
-}
-export function parseContentAdditionalProperties(value: unknown): unknown {
-return _parseReferenceContentAdditionalProperties(value);
-}
-function _parseReferenceContentAdditionalProperties(value: unknown): unknown {
-return parseMediaType(value);
-}
-export function parseContentPropertyNames(value: unknown): unknown {
-return _parseStringContentPropertyNames(value);
-}
-function _parseStringContentPropertyNames(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference}
+*/
+export function parseSecuritySchemeOrReference(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "$ref":
+return [
+name,
+parseRef(value, configuration),
+]
+case "summary":
+return [
+name,
+parseReferenceSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parseReferenceDescription(value, configuration),
+]
 default:
-return undefined;
-}
-}
-export function parseMediaTypeSchema(value: unknown): unknown {
-return _parseReferenceMediaTypeSchema(value);
-}
-function _parseReferenceMediaTypeSchema(value: unknown): unknown {
-return parseSchema(value);
-}
-export function parseMediaTypeEncoding(value: unknown): unknown {
-return _parseMapMediaTypeEncoding(value);
-}
-function _parseMapMediaTypeEncoding(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseMediaTypeAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseMediaType0(value: unknown): unknown {
-return _parseReferenceMediaType0(value);
-}
-function _parseReferenceMediaType0(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseMediaType1(value: unknown): unknown {
-return _parseReferenceMediaType1(value);
-}
-function _parseReferenceMediaType1(value: unknown): unknown {
-return parseExamples(value);
-}
-export function parseExplodeDefault(value: unknown): unknown {
-return _parseIfExplodeDefault(value);
-}
-function _parseIfExplodeDefault(value: unknown): unknown {
-return parseExplodeDefaultIf(value) ?? parseExplodeDefaultThen(value) ?? parseExplodeDefaultElse(value);
-}
-export function parseContentType(value: unknown): unknown {
-return _parseStringContentType(value);
-}
-function _parseStringContentType(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseEncodingHeaders(value: unknown): unknown {
-return _parseMapEncodingHeaders(value);
-}
-function _parseMapEncodingHeaders(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseEncodingHeadersAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseEncodingStyle(value: unknown): unknown {
-return _parseStringEncodingStyle(value);
-}
-function _parseStringEncodingStyle(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseEncodingExplode(value: unknown): unknown {
-return _parseBooleanEncodingExplode(value);
-}
-function _parseBooleanEncodingExplode(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
 return value;
 }
-return undefined;
-}
-export function parseAllowReserved(value: unknown): unknown {
-return _parseBooleanAllowReserved(value);
-}
-function _parseBooleanAllowReserved(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseEncodingAllOf0(value: unknown): unknown {
-return _parseReferenceEncodingAllOf0(value);
-}
-function _parseReferenceEncodingAllOf0(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseEncodingAllOf1(value: unknown): unknown {
-return _parseReferenceEncodingAllOf1(value);
-}
-function _parseReferenceEncodingAllOf1(value: unknown): unknown {
-return parseExplodeDefault(value);
-}
-export function parseResponsesDefault(value: unknown): unknown {
-return _parseReferenceResponsesDefault(value);
-}
-function _parseReferenceResponsesDefault(value: unknown): unknown {
-return parseResponseOrReference(value);
-}
-export function parsePatternProperties15092Xx(value: unknown): unknown {
-return _parseReferencePatternProperties15092Xx(value);
-}
-function _parseReferencePatternProperties15092Xx(value: unknown): unknown {
-return parseResponseOrReference(value);
-}
-export function parseResponseDescription(value: unknown): unknown {
-return _parseStringResponseDescription(value);
-}
-function _parseStringResponseDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseResponseHeaders(value: unknown): unknown {
-return _parseMapResponseHeaders(value);
-}
-function _parseMapResponseHeaders(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseResponseHeadersAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseResponseContent(value: unknown): unknown {
-return _parseReferenceResponseContent(value);
-}
-function _parseReferenceResponseContent(value: unknown): unknown {
-return parseContent(value);
-}
-export function parseResponseLinks(value: unknown): unknown {
-return _parseMapResponseLinks(value);
-}
-function _parseMapResponseLinks(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseResponseLinksAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseResponseOrReferenceIf(value: unknown): unknown {
-return _parseMapResponseOrReferenceIf(value);
-}
-function _parseMapResponseOrReferenceIf(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseResponseOrReferenceThen(value: unknown): unknown {
-return _parseReferenceResponseOrReferenceThen(value);
-}
-function _parseReferenceResponseOrReferenceThen(value: unknown): unknown {
-return parseReference(value);
-}
-export function parseResponseOrReferenceElse(value: unknown): unknown {
-return _parseReferenceResponseOrReferenceElse(value);
-}
-function _parseReferenceResponseOrReferenceElse(value: unknown): unknown {
-return parseResponse(value);
-}
-export function parseCallbacksAdditionalProperties(value: unknown): unknown {
-return _parseReferenceCallbacksAdditionalProperties(value);
-}
-function _parseReferenceCallbacksAdditionalProperties(value: unknown): unknown {
-return parsePathItemOrReference(value);
-}
-export function parseCallbacksOrReferenceIf(value: unknown): unknown {
-return _parseMapCallbacksOrReferenceIf(value);
-}
-function _parseMapCallbacksOrReferenceIf(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseCallbacksOrReferenceThen(value: unknown): unknown {
-return _parseReferenceCallbacksOrReferenceThen(value);
-}
-function _parseReferenceCallbacksOrReferenceThen(value: unknown): unknown {
-return parseReference(value);
-}
-export function parseCallbacksOrReferenceElse(value: unknown): unknown {
-return _parseReferenceCallbacksOrReferenceElse(value);
-}
-function _parseReferenceCallbacksOrReferenceElse(value: unknown): unknown {
-return parseCallbacks(value);
-}
-export function parseExampleSummary(value: unknown): unknown {
-return _parseStringExampleSummary(value);
-}
-function _parseStringExampleSummary(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseExampleDescription(value: unknown): unknown {
-return _parseStringExampleDescription(value);
-}
-function _parseStringExampleDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseValue(value: unknown): unknown {
-return _parseAnyValue(value);
-}
-function _parseAnyValue(value: unknown): unknown {
-return value;
-}
-export function parseExternalValue(value: unknown): unknown {
-return _parseStringExternalValue(value);
-}
-function _parseStringExternalValue(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseNot(value: unknown): unknown {
-return _parseMapNot(value);
-}
-function _parseMapNot(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseExampleOrReferenceIf(value: unknown): unknown {
-return _parseMapExampleOrReferenceIf(value);
-}
-function _parseMapExampleOrReferenceIf(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseExampleOrReferenceThen(value: unknown): unknown {
-return _parseReferenceExampleOrReferenceThen(value);
-}
-function _parseReferenceExampleOrReferenceThen(value: unknown): unknown {
-return parseReference(value);
-}
-export function parseExampleOrReferenceElse(value: unknown): unknown {
-return _parseReferenceExampleOrReferenceElse(value);
-}
-function _parseReferenceExampleOrReferenceElse(value: unknown): unknown {
-return parseExample(value);
-}
-export function parseOperationRef(value: unknown): unknown {
-return _parseStringOperationRef(value);
-}
-function _parseStringOperationRef(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseLinkOperationId(value: unknown): unknown {
-return _parseStringLinkOperationId(value);
-}
-function _parseStringLinkOperationId(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseLinkParameters(value: unknown): unknown {
-return _parseReferenceLinkParameters(value);
-}
-function _parseReferenceLinkParameters(value: unknown): unknown {
-return parseMapOfStrings(value);
-}
-export function parseLinkRequestBody(value: unknown): unknown {
-return _parseAnyLinkRequestBody(value);
-}
-function _parseAnyLinkRequestBody(value: unknown): unknown {
-return value;
-}
-export function parseLinkDescription(value: unknown): unknown {
-return _parseStringLinkDescription(value);
-}
-function _parseStringLinkDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseBody(value: unknown): unknown {
-return _parseReferenceBody(value);
-}
-function _parseReferenceBody(value: unknown): unknown {
-return parseServer(value);
-}
-export function parseLinkOneOf0(value: unknown): unknown {
-return _parseMapLinkOneOf0(value);
-}
-function _parseMapLinkOneOf0(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseLinkOneOf1(value: unknown): unknown {
-return _parseMapLinkOneOf1(value);
-}
-function _parseMapLinkOneOf1(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseLinkOrReferenceIf(value: unknown): unknown {
-return _parseMapLinkOrReferenceIf(value);
-}
-function _parseMapLinkOrReferenceIf(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseLinkOrReferenceThen(value: unknown): unknown {
-return _parseReferenceLinkOrReferenceThen(value);
-}
-function _parseReferenceLinkOrReferenceThen(value: unknown): unknown {
-return parseReference(value);
-}
-export function parseLinkOrReferenceElse(value: unknown): unknown {
-return _parseReferenceLinkOrReferenceElse(value);
-}
-function _parseReferenceLinkOrReferenceElse(value: unknown): unknown {
-return parseLink(value);
-}
-export function parseHeaderDescription(value: unknown): unknown {
-return _parseStringHeaderDescription(value);
-}
-function _parseStringHeaderDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseHeaderRequired(value: unknown): unknown {
-return _parseBooleanHeaderRequired(value);
-}
-function _parseBooleanHeaderRequired(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseHeaderDeprecated(value: unknown): unknown {
-return _parseBooleanHeaderDeprecated(value);
-}
-function _parseBooleanHeaderDeprecated(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseHeaderSchema(value: unknown): unknown {
-return _parseReferenceHeaderSchema(value);
-}
-function _parseReferenceHeaderSchema(value: unknown): unknown {
-return parseSchema(value);
-}
-export function parseHeaderContent(value: unknown): unknown {
-return _parseMapHeaderContent(value) ?? _parseReferenceHeaderContent(value);
-}
-function _parseMapHeaderContent(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceHeaderContent(value: unknown): unknown {
-return parseContent(value);
-}
-export function parseHeaderOneOf0(value: unknown): unknown {
-return _parseMapHeaderOneOf0(value);
-}
-function _parseMapHeaderOneOf0(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseHeaderOneOf1(value: unknown): unknown {
-return _parseMapHeaderOneOf1(value);
-}
-function _parseMapHeaderOneOf1(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseHeaderOrReferenceIf(value: unknown): unknown {
-return _parseMapHeaderOrReferenceIf(value);
-}
-function _parseMapHeaderOrReferenceIf(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseHeaderOrReferenceThen(value: unknown): unknown {
-return _parseReferenceHeaderOrReferenceThen(value);
-}
-function _parseReferenceHeaderOrReferenceThen(value: unknown): unknown {
-return parseReference(value);
-}
-export function parseHeaderOrReferenceElse(value: unknown): unknown {
-return _parseReferenceHeaderOrReferenceElse(value);
-}
-function _parseReferenceHeaderOrReferenceElse(value: unknown): unknown {
-return parseHeader(value);
-}
-export function parseTagName(value: unknown): unknown {
-return _parseStringTagName(value);
-}
-function _parseStringTagName(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseTagDescription(value: unknown): unknown {
-return _parseStringTagDescription(value);
-}
-function _parseStringTagDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseTagExternalDocs(value: unknown): unknown {
-return _parseReferenceTagExternalDocs(value);
-}
-function _parseReferenceTagExternalDocs(value: unknown): unknown {
-return parseExternalDocumentation(value);
-}
-export function parseRef(value: unknown): unknown {
-return _parseStringRef(value);
-}
-function _parseStringRef(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseReferenceSummary(value: unknown): unknown {
-return _parseStringReferenceSummary(value);
-}
-function _parseStringReferenceSummary(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseReferenceDescription(value: unknown): unknown {
-return _parseStringReferenceDescription(value);
-}
-function _parseStringReferenceDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseTypeApikey(value: unknown): unknown {
-return _parseIfTypeApikey(value);
-}
-function _parseIfTypeApikey(value: unknown): unknown {
-return parseTypeApikeyIf(value) ?? parseTypeApikeyThen(value);
-}
-export function parseTypeHttp(value: unknown): unknown {
-return _parseIfTypeHttp(value);
-}
-function _parseIfTypeHttp(value: unknown): unknown {
-return parseTypeHttpIf(value) ?? parseTypeHttpThen(value);
-}
-export function parseTypeHttpBearer(value: unknown): unknown {
-return _parseIfTypeHttpBearer(value);
-}
-function _parseIfTypeHttpBearer(value: unknown): unknown {
-return parseTypeHttpBearerIf(value) ?? parseTypeHttpBearerThen(value);
-}
-export function parseTypeOauth2(value: unknown): unknown {
-return _parseIfTypeOauth2(value);
-}
-function _parseIfTypeOauth2(value: unknown): unknown {
-return parseTypeOauth2If(value) ?? parseTypeOauth2Then(value);
-}
-export function parseTypeOidc(value: unknown): unknown {
-return _parseIfTypeOidc(value);
-}
-function _parseIfTypeOidc(value: unknown): unknown {
-return parseTypeOidcIf(value) ?? parseTypeOidcThen(value);
-}
-export function parseSecuritySchemeType(value: unknown): unknown {
-return _parseStringSecuritySchemeType(value);
-}
-function _parseStringSecuritySchemeType(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseSecuritySchemeDescription(value: unknown): unknown {
-return _parseStringSecuritySchemeDescription(value);
-}
-function _parseStringSecuritySchemeDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseSecuritySchemeAllOf0(value: unknown): unknown {
-return _parseReferenceSecuritySchemeAllOf0(value);
-}
-function _parseReferenceSecuritySchemeAllOf0(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseSecuritySchemeAllOf1(value: unknown): unknown {
-return _parseReferenceSecuritySchemeAllOf1(value);
-}
-function _parseReferenceSecuritySchemeAllOf1(value: unknown): unknown {
-return parseTypeApikey(value);
-}
-export function parseAllOf2(value: unknown): unknown {
-return _parseReferenceAllOf2(value);
-}
-function _parseReferenceAllOf2(value: unknown): unknown {
-return parseTypeHttp(value);
-}
-export function parseAllOf3(value: unknown): unknown {
-return _parseReferenceAllOf3(value);
-}
-function _parseReferenceAllOf3(value: unknown): unknown {
-return parseTypeHttpBearer(value);
-}
-export function parseAllOf4(value: unknown): unknown {
-return _parseReferenceAllOf4(value);
-}
-function _parseReferenceAllOf4(value: unknown): unknown {
-return parseTypeOauth2(value);
-}
-export function parseAllOf5(value: unknown): unknown {
-return _parseReferenceAllOf5(value);
-}
-function _parseReferenceAllOf5(value: unknown): unknown {
-return parseTypeOidc(value);
-}
-export function parseSecuritySchemeOrReferenceIf(value: unknown): unknown {
-return _parseMapSecuritySchemeOrReferenceIf(value);
-}
-function _parseMapSecuritySchemeOrReferenceIf(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-export function parseSecuritySchemeOrReferenceThen(value: unknown): unknown {
-return _parseReferenceSecuritySchemeOrReferenceThen(value);
-}
-function _parseReferenceSecuritySchemeOrReferenceThen(value: unknown): unknown {
-return parseReference(value);
-}
-export function parseSecuritySchemeOrReferenceElse(value: unknown): unknown {
-return _parseReferenceSecuritySchemeOrReferenceElse(value);
-}
-function _parseReferenceSecuritySchemeOrReferenceElse(value: unknown): unknown {
-return parseSecurityScheme(value);
-}
-export function parseDefsOauthFlowsImplicit(value: unknown): unknown {
-return _parseMapDefsOauthFlowsImplicit(value) ?? _parseReferenceDefsOauthFlowsImplicit(value);
-}
-function _parseMapDefsOauthFlowsImplicit(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "authorizationUrl": {
-const propertyValue = parseImplicitAuthorizationUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "refreshUrl": {
-const propertyValue = parseImplicitRefreshUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "scopes": {
-const propertyValue = parseImplicitScopes(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceDefsOauthFlowsImplicit(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseDefsOauthFlowsPassword(value: unknown): unknown {
-return _parseMapDefsOauthFlowsPassword(value) ?? _parseReferenceDefsOauthFlowsPassword(value);
-}
-function _parseMapDefsOauthFlowsPassword(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "tokenUrl": {
-const propertyValue = parsePasswordTokenUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "refreshUrl": {
-const propertyValue = parsePasswordRefreshUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "scopes": {
-const propertyValue = parsePasswordScopes(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceDefsOauthFlowsPassword(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseDefsOauthFlowsClientCredentials(value: unknown): unknown {
-return _parseMapDefsOauthFlowsClientCredentials(value) ?? _parseReferenceDefsOauthFlowsClientCredentials(value);
-}
-function _parseMapDefsOauthFlowsClientCredentials(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "tokenUrl": {
-const propertyValue = parseClientCredentialsTokenUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "refreshUrl": {
-const propertyValue = parseClientCredentialsRefreshUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "scopes": {
-const propertyValue = parseClientCredentialsScopes(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceDefsOauthFlowsClientCredentials(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parseDefsOauthFlowsAuthorizationCode(value: unknown): unknown {
-return _parseMapDefsOauthFlowsAuthorizationCode(value) ?? _parseReferenceDefsOauthFlowsAuthorizationCode(value);
-}
-function _parseMapDefsOauthFlowsAuthorizationCode(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "authorizationUrl": {
-const propertyValue = parseAuthorizationCodeAuthorizationUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "tokenUrl": {
-const propertyValue = parseAuthorizationCodeTokenUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "refreshUrl": {
-const propertyValue = parseAuthorizationCodeRefreshUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "scopes": {
-const propertyValue = parseAuthorizationCodeScopes(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-}
-return result;
-}
-return undefined;
-}
-function _parseReferenceDefsOauthFlowsAuthorizationCode(value: unknown): unknown {
-return parseSpecificationExtensions(value);
-}
-export function parsePropertiesOauthFlowsImplicit(value: unknown): unknown {
-return _parseReferencePropertiesOauthFlowsImplicit(value);
-}
-function _parseReferencePropertiesOauthFlowsImplicit(value: unknown): unknown {
-return parseDefsOauthFlowsImplicit(value);
-}
-export function parsePropertiesOauthFlowsPassword(value: unknown): unknown {
-return _parseReferencePropertiesOauthFlowsPassword(value);
-}
-function _parseReferencePropertiesOauthFlowsPassword(value: unknown): unknown {
-return parseDefsOauthFlowsPassword(value);
-}
-export function parsePropertiesOauthFlowsClientCredentials(value: unknown): unknown {
-return _parseReferencePropertiesOauthFlowsClientCredentials(value);
-}
-function _parseReferencePropertiesOauthFlowsClientCredentials(value: unknown): unknown {
-return parseDefsOauthFlowsClientCredentials(value);
-}
-export function parsePropertiesOauthFlowsAuthorizationCode(value: unknown): unknown {
-return _parseReferencePropertiesOauthFlowsAuthorizationCode(value);
-}
-function _parseReferencePropertiesOauthFlowsAuthorizationCode(value: unknown): unknown {
-return parseDefsOauthFlowsAuthorizationCode(value);
-}
-export function parseSecurityRequirementAdditionalProperties(value: unknown): unknown {
-return _parseArraySecurityRequirementAdditionalProperties(value);
-}
-function _parseArraySecurityRequirementAdditionalProperties(value: unknown): unknown {
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "type":
+return [
+name,
+(value),
+]
+case "name":
+return [
+name,
+parseTypeApikeyName(value, configuration),
+]
+case "in":
+return [
+name,
+parseTypeApikeyIn(value, configuration),
+]
+case "scheme":
+return [
+name,
+(
+((value: unknown) => {
 if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseSecurityRequirementItems(value[elementIndex]);
-}
-return result;
-}
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
 return undefined;
 }
-export function parseX(value: unknown): unknown {
-return _parseAnyX(value);
 }
-function _parseAnyX(value: unknown): unknown {
-return value;
-}
-export function parseExamplesExample(value: unknown): unknown {
-return _parseAnyExamplesExample(value);
-}
-function _parseAnyExamplesExample(value: unknown): unknown {
-return value;
-}
-export function parseExamplesExamples(value: unknown): unknown {
-return _parseMapExamplesExamples(value);
-}
-function _parseMapExamplesExamples(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseExamplesExamplesAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseMapOfStringsAdditionalProperties(value: unknown): unknown {
-return _parseStringMapOfStringsAdditionalProperties(value);
-}
-function _parseStringMapOfStringsAdditionalProperties(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3273,41 +2328,169 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+),
+]
+case "bearerFormat":
+return [
+name,
+parseBearerFormat(value, configuration),
+]
+case "flows":
+return [
+name,
+parseFlows(value, configuration),
+]
+case "openIdConnectUrl":
+return [
+name,
+parseOpenIdConnectUrl(value, configuration),
+]
+case "description":
+return [
+name,
+parseSecuritySchemeDescription(value, configuration),
+]
+default:
+return value;
 }
-export function parsePropertiesServersItems(value: unknown): unknown {
-return _parseReferencePropertiesServersItems(value);
+})
+) :
+undefined
+)
+);
 }
-function _parseReferencePropertiesServersItems(value: unknown): unknown {
-return parseServer(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows}
+*/
+export function parseOauthFlows(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "implicit":
+return [
+name,
+parsePropertiesOauthFlowsImplicit(value, configuration),
+]
+case "password":
+return [
+name,
+parsePropertiesOauthFlowsPassword(value, configuration),
+]
+case "clientCredentials":
+return [
+name,
+parsePropertiesOauthFlowsClientCredentials(value, configuration),
+]
+case "authorizationCode":
+return [
+name,
+parsePropertiesOauthFlowsAuthorizationCode(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
 }
-export function parseWebhooksAdditionalProperties(value: unknown): unknown {
-return _parseReferenceWebhooksAdditionalProperties(value);
+})
+) :
+undefined
+);
 }
-function _parseReferenceWebhooksAdditionalProperties(value: unknown): unknown {
-return parsePathItemOrReference(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement}
+*/
+export function parseSecurityRequirement(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseSecurityRequirementAdditionalProperties(value, configuration)),
+]
 }
-export function parsePropertiesSecurityItems(value: unknown): unknown {
-return _parseReferencePropertiesSecurityItems(value);
+})
+) :
+undefined
+);
 }
-function _parseReferencePropertiesSecurityItems(value: unknown): unknown {
-return parseSecurityRequirement(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions}
+*/
+export function parseSpecificationExtensions(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
 }
-export function parsePropertiesTagsItems(value: unknown): unknown {
-return _parseReferencePropertiesTagsItems(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples}
+*/
+export function parseExamples(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
 }
-function _parseReferencePropertiesTagsItems(value: unknown): unknown {
-return parseTag(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/map-of-strings}
+*/
+export function parseMapOfStrings(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseMapOfStringsAdditionalProperties(value, configuration)),
+]
 }
-export function parseVariablesAdditionalProperties(value: unknown): unknown {
-return _parseReferenceVariablesAdditionalProperties(value);
+})
+) :
+undefined
+);
 }
-function _parseReferenceVariablesAdditionalProperties(value: unknown): unknown {
-return parseServerVariable(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/openapi}
+*/
+export function parseOpenapi(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-export function parseEnumItems(value: unknown): unknown {
-return _parseStringEnumItems(value);
 }
-function _parseStringEnumItems(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3317,71 +2500,38 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseSchemasAdditionalProperties(value: unknown): unknown {
-return _parseReferenceSchemasAdditionalProperties(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/info}
+*/
+export function parsePropertiesInfo(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseInfo(value, configuration));
 }
-function _parseReferenceSchemasAdditionalProperties(value: unknown): unknown {
-return parseSchema(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/jsonSchemaDialect}
+*/
+export function parseJsonSchemaDialect(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-export function parseResponsesAdditionalProperties(value: unknown): unknown {
-return _parseReferenceResponsesAdditionalProperties(value);
 }
-function _parseReferenceResponsesAdditionalProperties(value: unknown): unknown {
-return parseResponseOrReference(value);
-}
-export function parseParametersAdditionalProperties(value: unknown): unknown {
-return _parseReferenceParametersAdditionalProperties(value);
-}
-function _parseReferenceParametersAdditionalProperties(value: unknown): unknown {
-return parseParameterOrReference(value);
-}
-export function parseComponentsExamplesAdditionalProperties(value: unknown): unknown {
-return _parseReferenceComponentsExamplesAdditionalProperties(value);
-}
-function _parseReferenceComponentsExamplesAdditionalProperties(value: unknown): unknown {
-return parseExampleOrReference(value);
-}
-export function parseRequestBodiesAdditionalProperties(value: unknown): unknown {
-return _parseReferenceRequestBodiesAdditionalProperties(value);
-}
-function _parseReferenceRequestBodiesAdditionalProperties(value: unknown): unknown {
-return parseRequestBodyOrReference(value);
-}
-export function parseComponentsHeadersAdditionalProperties(value: unknown): unknown {
-return _parseReferenceComponentsHeadersAdditionalProperties(value);
-}
-function _parseReferenceComponentsHeadersAdditionalProperties(value: unknown): unknown {
-return parseHeaderOrReference(value);
-}
-export function parseSecuritySchemesAdditionalProperties(value: unknown): unknown {
-return _parseReferenceSecuritySchemesAdditionalProperties(value);
-}
-function _parseReferenceSecuritySchemesAdditionalProperties(value: unknown): unknown {
-return parseSecuritySchemeOrReference(value);
-}
-export function parseComponentsLinksAdditionalProperties(value: unknown): unknown {
-return _parseReferenceComponentsLinksAdditionalProperties(value);
-}
-function _parseReferenceComponentsLinksAdditionalProperties(value: unknown): unknown {
-return parseLinkOrReference(value);
-}
-export function parseComponentsCallbacksAdditionalProperties(value: unknown): unknown {
-return _parseReferenceComponentsCallbacksAdditionalProperties(value);
-}
-function _parseReferenceComponentsCallbacksAdditionalProperties(value: unknown): unknown {
-return parseCallbacksOrReference(value);
-}
-export function parsePathItemsAdditionalProperties(value: unknown): unknown {
-return _parseReferencePathItemsAdditionalProperties(value);
-}
-function _parseReferencePathItemsAdditionalProperties(value: unknown): unknown {
-return parsePathItemOrReference(value);
-}
-export function parseSchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItemsPropertyNames(value: unknown): unknown {
-return _parseStringSchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItemsPropertyNames(value);
-}
-function _parseStringSchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItemsPropertyNames(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3391,23 +2541,169 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parsePathItemServersItems(value: unknown): unknown {
-return _parseReferencePathItemServersItems(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/servers}
+*/
+export function parsePropertiesServers(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parsePropertiesServersItems(value, configuration)
 }
-function _parseReferencePathItemServersItems(value: unknown): unknown {
-return parseServer(value);
+}) :
+undefined
+);
 }
-export function parsePathItemParametersItems(value: unknown): unknown {
-return _parseReferencePathItemParametersItems(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/paths}
+*/
+export function parsePropertiesPaths(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePaths(value, configuration));
 }
-function _parseReferencePathItemParametersItems(value: unknown): unknown {
-return parseParameterOrReference(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/webhooks}
+*/
+export function parseWebhooks(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseWebhooksAdditionalProperties(value, configuration)),
+]
 }
-export function parseOperationTagsItems(value: unknown): unknown {
-return _parseStringOperationTagsItems(value);
+})
+) :
+undefined
+);
 }
-function _parseStringOperationTagsItems(value: unknown): unknown {
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/components}
+*/
+export function parsePropertiesComponents(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseComponents(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/security}
+*/
+export function parsePropertiesSecurity(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parsePropertiesSecurityItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/tags}
+*/
+export function parsePropertiesTags(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parsePropertiesTagsItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/externalDocs}
+*/
+export function parsePropertiesExternalDocs(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseExternalDocumentation(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/0}
+*/
+export function parseAnyOf0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/1}
+*/
+export function parseAnyOf1(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/2}
+*/
+export function parseAnyOf2(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/title}
+*/
+export function parseTitle(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -3417,35 +2713,28 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseOperationParametersItems(value: unknown): unknown {
-return _parseReferenceOperationParametersItems(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/summary}
+*/
+export function parseInfoSummary(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-function _parseReferenceOperationParametersItems(value: unknown): unknown {
-return parseParameterOrReference(value);
 }
-export function parseOperationCallbacksAdditionalProperties(value: unknown): unknown {
-return _parseReferenceOperationCallbacksAdditionalProperties(value);
-}
-function _parseReferenceOperationCallbacksAdditionalProperties(value: unknown): unknown {
-return parseCallbacksOrReference(value);
-}
-export function parseOperationSecurityItems(value: unknown): unknown {
-return _parseReferenceOperationSecurityItems(value);
-}
-function _parseReferenceOperationSecurityItems(value: unknown): unknown {
-return parseSecurityRequirement(value);
-}
-export function parseOperationServersItems(value: unknown): unknown {
-return _parseReferenceOperationServersItems(value);
-}
-function _parseReferenceOperationServersItems(value: unknown): unknown {
-return parseServer(value);
-}
-export function parseIfParameterIn(value: unknown): unknown {
-return _parseStringIfParameterIn(value);
-}
-function _parseStringIfParameterIn(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3455,318 +2744,2237 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseAllowEmptyValue(value: unknown): unknown {
-return _parseBooleanAllowEmptyValue(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/description}
+*/
+export function parseInfoDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-function _parseBooleanAllowEmptyValue(value: unknown): unknown {
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/termsOfService}
+*/
+export function parseTermsOfService(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/contact}
+*/
+export function parseInfoContact(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseContact(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/license}
+*/
+export function parseInfoLicense(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseLicense(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/version}
+*/
+export function parseVersion(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/name}
+*/
+export function parseContactName(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/url}
+*/
+export function parseContactUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/email}
+*/
+export function parseEmail(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/name}
+*/
+export function parseLicenseName(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/identifier}
+*/
+export function parseIdentifier(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/url}
+*/
+export function parseLicenseUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/url}
+*/
+export function parseServerUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/description}
+*/
+export function parseServerDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/variables}
+*/
+export function parseVariables(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseVariablesAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/enum}
+*/
+export function parseEnum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parseEnumItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/default}
+*/
+export function parseServerVariableDefault(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/description}
+*/
+export function parseServerVariableDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/schemas}
+*/
+export function parseSchemas(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseSchemasAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/responses}
+*/
+export function parseComponentsResponses(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseResponsesAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/parameters}
+*/
+export function parseComponentsParameters(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseParametersAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/examples}
+*/
+export function parseComponentsExamples(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseComponentsExamplesAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/requestBodies}
+*/
+export function parseRequestBodies(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseRequestBodiesAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/headers}
+*/
+export function parseComponentsHeaders(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseComponentsHeadersAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/securitySchemes}
+*/
+export function parseSecuritySchemes(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseSecuritySchemesAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/links}
+*/
+export function parseComponentsLinks(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseComponentsLinksAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/callbacks}
+*/
+export function parseComponentsCallbacks(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseComponentsCallbacksAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/pathItems}
+*/
+export function parsePathItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parsePathItemsAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/patternProperties/^(schemas|responses|parameters|examples|requestBodies|headers|securitySchemes|links|callbacks|pathItems)$}
+*/
+export function parseSchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/paths/patternProperties/^/}
+*/
+export function parsePatternProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePathItem(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/summary}
+*/
+export function parsePathItemSummary(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/description}
+*/
+export function parsePathItemDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/servers}
+*/
+export function parsePathItemServers(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parsePathItemServersItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/parameters}
+*/
+export function parsePathItemParameters(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parsePathItemParametersItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/get}
+*/
+export function parseGet(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperation(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/put}
+*/
+export function parsePut(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperation(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/post}
+*/
+export function parsePost(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperation(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/delete}
+*/
+export function parseDelete(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperation(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/options}
+*/
+export function parseOptions(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperation(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/head}
+*/
+export function parseHead(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperation(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/patch}
+*/
+export function parsePatch(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperation(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/trace}
+*/
+export function parseTrace(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperation(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference/if}
+*/
+export function parsePathItemOrReferenceIf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return value;
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference/then}
+*/
+export function parsePathItemOrReferenceThen(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference/else}
+*/
+export function parsePathItemOrReferenceElse(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePathItem(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/tags}
+*/
+export function parseOperationTags(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parseOperationTagsItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/summary}
+*/
+export function parseOperationSummary(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/description}
+*/
+export function parseOperationDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/externalDocs}
+*/
+export function parseOperationExternalDocs(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseExternalDocumentation(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/operationId}
+*/
+export function parseOperationOperationId(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/parameters}
+*/
+export function parseOperationParameters(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parseOperationParametersItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/requestBody}
+*/
+export function parseOperationRequestBody(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseRequestBodyOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/responses}
+*/
+export function parseOperationResponses(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseResponses(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/callbacks}
+*/
+export function parseOperationCallbacks(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseOperationCallbacksAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/deprecated}
+*/
+export function parseOperationDeprecated(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
 if(value == null) {
 return false;
 }
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
 return true;
 }
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
 case "number":
 return Boolean(value);
 case "boolean":
 return value;
 }
 return undefined;
+})(value)
+);
 }
-export function parseMediaTypeAdditionalProperties(value: unknown): unknown {
-return _parseReferenceMediaTypeAdditionalProperties(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/security}
+*/
+export function parseOperationSecurity(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parseOperationSecurityItems(value, configuration)
 }
-function _parseReferenceMediaTypeAdditionalProperties(value: unknown): unknown {
-return parseEncoding(value);
+}) :
+undefined
+);
 }
-export function parseExplodeDefaultIf(value: unknown): unknown {
-return _parseMapExplodeDefaultIf(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/servers}
+*/
+export function parseOperationServers(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parseOperationServersItems(value, configuration)
 }
-function _parseMapExplodeDefaultIf(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "style": {
-const propertyValue = parseExplodeDefaultStyle(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+}) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation/properties/description}
+*/
+export function parseExternalDocumentationDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
 break;
-}
-}
-}
-return result;
-}
+default:
 return undefined;
 }
-export function parseExplodeDefaultThen(value: unknown): unknown {
-return _parseMapExplodeDefaultThen(value);
 }
-function _parseMapExplodeDefaultThen(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "explode": {
-const propertyValue = parseEncodingExplodeDefaultExplode(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation/properties/url}
+*/
+export function parseExternalDocumentationUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
 break;
-}
-}
-}
-return result;
-}
+default:
 return undefined;
 }
-export function parseExplodeDefaultElse(value: unknown): unknown {
-return _parseMapExplodeDefaultElse(value);
 }
-function _parseMapExplodeDefaultElse(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "explode": {
-const propertyValue = parseElseExplodeDefaultExplode(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/name}
+*/
+export function parseParameterName(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
 break;
-}
-}
-}
-return result;
-}
+default:
 return undefined;
 }
-export function parseEncodingHeadersAdditionalProperties(value: unknown): unknown {
-return _parseReferenceEncodingHeadersAdditionalProperties(value);
 }
-function _parseReferenceEncodingHeadersAdditionalProperties(value: unknown): unknown {
-return parseHeaderOrReference(value);
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
 }
-export function parseResponseHeadersAdditionalProperties(value: unknown): unknown {
-return _parseReferenceResponseHeadersAdditionalProperties(value);
+})(value)
+);
 }
-function _parseReferenceResponseHeadersAdditionalProperties(value: unknown): unknown {
-return parseHeaderOrReference(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/in}
+*/
+export function parsePropertiesParameterIn(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
 }
-export function parseResponseLinksAdditionalProperties(value: unknown): unknown {
-return _parseReferenceResponseLinksAdditionalProperties(value);
-}
-function _parseReferenceResponseLinksAdditionalProperties(value: unknown): unknown {
-return parseLinkOrReference(value);
-}
-export function parseTypeApikeyIf(value: unknown): unknown {
-return _parseMapTypeApikeyIf(value);
-}
-function _parseMapTypeApikeyIf(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "type": {
-const propertyValue = parseTypeApikeyType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/description}
+*/
+export function parseParameterDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
 break;
-}
-}
-}
-return result;
-}
+default:
 return undefined;
 }
-export function parseTypeApikeyThen(value: unknown): unknown {
-return _parseMapTypeApikeyThen(value);
 }
-function _parseMapTypeApikeyThen(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "name": {
-const propertyValue = parseTypeApikeyName(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/required}
+*/
+export function parseParameterRequired(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
 break;
+default:
+return undefined;
 }
-case "in": {
-const propertyValue = parseTypeApikeyIn(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+}
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/deprecated}
+*/
+export function parseParameterDeprecated(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
 break;
-}
-}
-}
-return result;
-}
+default:
 return undefined;
 }
-export function parseTypeHttpIf(value: unknown): unknown {
-return _parseMapTypeHttpIf(value);
 }
-function _parseMapTypeHttpIf(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "type": {
-const propertyValue = parseTypeHttpType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/schema}
+*/
+export function parseParameterSchema(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseSchema(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/content}
+*/
+export function parseParameterContent(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseContentAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/oneOf/0}
+*/
+export function parseParameterOneOf0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/oneOf/1}
+*/
+export function parseParameterOneOf1(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/if}
+*/
+export function parseParameterIf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/then}
+*/
+export function parseParameterThen(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference/if}
+*/
+export function parseParameterOrReferenceIf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return value;
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference/then}
+*/
+export function parseParameterOrReferenceThen(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference/else}
+*/
+export function parseParameterOrReferenceElse(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseParameter(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/description}
+*/
+export function parseRequestBodyDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
 break;
-}
-}
-}
-return result;
-}
+default:
 return undefined;
 }
-export function parseTypeHttpThen(value: unknown): unknown {
-return _parseMapTypeHttpThen(value);
 }
-function _parseMapTypeHttpThen(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "scheme": {
-const propertyValue = parseTypeHttpScheme(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/content}
+*/
+export function parseRequestBodyContent(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseContent(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/required}
+*/
+export function parseRequestBodyRequired(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
 break;
-}
-}
-}
-return result;
-}
+default:
 return undefined;
 }
-export function parseTypeHttpBearerIf(value: unknown): unknown {
-return _parseMapTypeHttpBearerIf(value);
 }
-function _parseMapTypeHttpBearerIf(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "type": {
-const propertyValue = parseTypeHttpBearerType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference/if}
+*/
+export function parseRequestBodyOrReferenceIf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return value;
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference/then}
+*/
+export function parseRequestBodyOrReferenceThen(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference/else}
+*/
+export function parseRequestBodyOrReferenceElse(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseRequestBody(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content/additionalProperties}
+*/
+export function parseContentAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseMediaType(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content/propertyNames}
+*/
+export function parseContentPropertyNames(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
 break;
+default:
+return undefined;
 }
-case "scheme": {
-const propertyValue = parseTypeHttpBearerScheme(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/schema}
+*/
+export function parseMediaTypeSchema(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseSchema(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/encoding}
+*/
+export function parseMediaTypeEncoding(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseMediaTypeAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/allOf/0}
+*/
+export function parseMediaType0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseSpecificationExtensions(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/allOf/1}
+*/
+export function parseMediaType1(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseExamples(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default}
+*/
+export function parseExplodeDefault(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(value)
+??
+(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/contentType}
+*/
+export function parseContentType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
 break;
-}
-}
-}
-return result;
-}
+default:
 return undefined;
 }
-export function parseTypeHttpBearerThen(value: unknown): unknown {
-return _parseMapTypeHttpBearerThen(value);
 }
-function _parseMapTypeHttpBearerThen(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "bearerFormat": {
-const propertyValue = parseBearerFormat(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/headers}
+*/
+export function parseEncodingHeaders(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseEncodingHeadersAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/style}
+*/
+export function parseEncodingStyle(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/explode}
+*/
+export function parseEncodingExplode(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
 break;
-}
-}
-}
-return result;
-}
+default:
 return undefined;
 }
-export function parseTypeOauth2If(value: unknown): unknown {
-return _parseMapTypeOauth2If(value);
 }
-function _parseMapTypeOauth2If(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "type": {
-const propertyValue = parseTypeOauth2Type(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/allowReserved}
+*/
+export function parseAllowReserved(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
 break;
-}
-}
-}
-return result;
-}
+default:
 return undefined;
 }
-export function parseTypeOauth2Then(value: unknown): unknown {
-return _parseMapTypeOauth2Then(value);
 }
-function _parseMapTypeOauth2Then(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "flows": {
-const propertyValue = parseFlows(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/allOf/0}
+*/
+export function parseEncodingAllOf0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseSpecificationExtensions(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/allOf/1}
+*/
+export function parseEncodingAllOf1(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseExplodeDefault(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/responses/properties/default}
+*/
+export function parseResponsesDefault(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseResponseOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/responses/patternProperties/^[1-5](?:[0-9]{2}|XX)$}
+*/
+export function parsePatternProperties15092Xx(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseResponseOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/description}
+*/
+export function parseResponseDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
 break;
-}
-}
-}
-return result;
-}
+default:
 return undefined;
 }
-export function parseTypeOidcIf(value: unknown): unknown {
-return _parseMapTypeOidcIf(value);
 }
-function _parseMapTypeOidcIf(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "type": {
-const propertyValue = parseTypeOidcType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/headers}
+*/
+export function parseResponseHeaders(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseResponseHeadersAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/content}
+*/
+export function parseResponseContent(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseContent(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/links}
+*/
+export function parseResponseLinks(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseResponseLinksAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference/if}
+*/
+export function parseResponseOrReferenceIf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return value;
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference/then}
+*/
+export function parseResponseOrReferenceThen(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference/else}
+*/
+export function parseResponseOrReferenceElse(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseResponse(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks/additionalProperties}
+*/
+export function parseCallbacksAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePathItemOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference/if}
+*/
+export function parseCallbacksOrReferenceIf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return value;
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference/then}
+*/
+export function parseCallbacksOrReferenceThen(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference/else}
+*/
+export function parseCallbacksOrReferenceElse(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseCallbacks(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/summary}
+*/
+export function parseExampleSummary(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
 break;
-}
-}
-}
-return result;
-}
+default:
 return undefined;
 }
-export function parseTypeOidcThen(value: unknown): unknown {
-return _parseMapTypeOidcThen(value);
 }
-function _parseMapTypeOidcThen(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "openIdConnectUrl": {
-const propertyValue = parseOpenIdConnectUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/description}
+*/
+export function parseExampleDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
 break;
-}
-}
-}
-return result;
-}
+default:
 return undefined;
 }
-export function parseImplicitAuthorizationUrl(value: unknown): unknown {
-return _parseStringImplicitAuthorizationUrl(value);
 }
-function _parseStringImplicitAuthorizationUrl(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3776,11 +4984,38 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseImplicitRefreshUrl(value: unknown): unknown {
-return _parseStringImplicitRefreshUrl(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/value}
+*/
+export function parseValue(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
 }
-function _parseStringImplicitRefreshUrl(value: unknown): unknown {
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/externalValue}
+*/
+export function parseExternalValue(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -3790,17 +5025,79 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseImplicitScopes(value: unknown): unknown {
-return _parseReferenceImplicitScopes(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/not}
+*/
+export function parseNot(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
 }
-function _parseReferenceImplicitScopes(value: unknown): unknown {
-return parseMapOfStrings(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference/if}
+*/
+export function parseExampleOrReferenceIf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return value;
 }
-export function parsePasswordTokenUrl(value: unknown): unknown {
-return _parseStringPasswordTokenUrl(value);
+})
+) :
+undefined
+);
 }
-function _parseStringPasswordTokenUrl(value: unknown): unknown {
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference/then}
+*/
+export function parseExampleOrReferenceThen(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference/else}
+*/
+export function parseExampleOrReferenceElse(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseExample(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/operationRef}
+*/
+export function parseOperationRef(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -3810,11 +5107,28 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parsePasswordRefreshUrl(value: unknown): unknown {
-return _parseStringPasswordRefreshUrl(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/operationId}
+*/
+export function parseLinkOperationId(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-function _parseStringPasswordRefreshUrl(value: unknown): unknown {
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -3824,17 +5138,48 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parsePasswordScopes(value: unknown): unknown {
-return _parseReferencePasswordScopes(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/parameters}
+*/
+export function parseLinkParameters(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseMapOfStrings(value, configuration));
 }
-function _parseReferencePasswordScopes(value: unknown): unknown {
-return parseMapOfStrings(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/requestBody}
+*/
+export function parseLinkRequestBody(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
 }
-export function parseClientCredentialsTokenUrl(value: unknown): unknown {
-return _parseStringClientCredentialsTokenUrl(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/description}
+*/
+export function parseLinkDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-function _parseStringClientCredentialsTokenUrl(value: unknown): unknown {
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -3844,11 +5189,99 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseClientCredentialsRefreshUrl(value: unknown): unknown {
-return _parseStringClientCredentialsRefreshUrl(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/body}
+*/
+export function parseBody(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseServer(value, configuration));
 }
-function _parseStringClientCredentialsRefreshUrl(value: unknown): unknown {
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/oneOf/0}
+*/
+export function parseLinkOneOf0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/oneOf/1}
+*/
+export function parseLinkOneOf1(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference/if}
+*/
+export function parseLinkOrReferenceIf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return value;
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference/then}
+*/
+export function parseLinkOrReferenceThen(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference/else}
+*/
+export function parseLinkOrReferenceElse(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseLink(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/description}
+*/
+export function parseHeaderDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -3858,17 +5291,217 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseClientCredentialsScopes(value: unknown): unknown {
-return _parseReferenceClientCredentialsScopes(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/required}
+*/
+export function parseHeaderRequired(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
 }
-function _parseReferenceClientCredentialsScopes(value: unknown): unknown {
-return parseMapOfStrings(value);
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-export function parseAuthorizationCodeAuthorizationUrl(value: unknown): unknown {
-return _parseStringAuthorizationCodeAuthorizationUrl(value);
 }
-function _parseStringAuthorizationCodeAuthorizationUrl(value: unknown): unknown {
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/deprecated}
+*/
+export function parseHeaderDeprecated(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/schema}
+*/
+export function parseHeaderSchema(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseSchema(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/content}
+*/
+export function parseHeaderContent(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseContentAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/oneOf/0}
+*/
+export function parseHeaderOneOf0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/oneOf/1}
+*/
+export function parseHeaderOneOf1(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference/if}
+*/
+export function parseHeaderOrReferenceIf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return value;
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference/then}
+*/
+export function parseHeaderOrReferenceThen(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference/else}
+*/
+export function parseHeaderOrReferenceElse(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseHeader(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/name}
+*/
+export function parseTagName(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -3878,11 +5511,28 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseAuthorizationCodeTokenUrl(value: unknown): unknown {
-return _parseStringAuthorizationCodeTokenUrl(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/description}
+*/
+export function parseTagDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-function _parseStringAuthorizationCodeTokenUrl(value: unknown): unknown {
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -3892,11 +5542,38 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseAuthorizationCodeRefreshUrl(value: unknown): unknown {
-return _parseStringAuthorizationCodeRefreshUrl(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/externalDocs}
+*/
+export function parseTagExternalDocs(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseExternalDocumentation(value, configuration));
 }
-function _parseStringAuthorizationCodeRefreshUrl(value: unknown): unknown {
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/$ref}
+*/
+export function parseRef(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -3906,17 +5583,28 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseAuthorizationCodeScopes(value: unknown): unknown {
-return _parseReferenceAuthorizationCodeScopes(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/summary}
+*/
+export function parseReferenceSummary(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-function _parseReferenceAuthorizationCodeScopes(value: unknown): unknown {
-return parseMapOfStrings(value);
 }
-export function parseSecurityRequirementItems(value: unknown): unknown {
-return _parseStringSecurityRequirementItems(value);
-}
-function _parseStringSecurityRequirementItems(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3926,17 +5614,28 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseExamplesExamplesAdditionalProperties(value: unknown): unknown {
-return _parseReferenceExamplesExamplesAdditionalProperties(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/description}
+*/
+export function parseReferenceDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-function _parseReferenceExamplesExamplesAdditionalProperties(value: unknown): unknown {
-return parseExampleOrReference(value);
 }
-export function parseExplodeDefaultStyle(value: unknown): unknown {
-return _parseStringExplodeDefaultStyle(value);
-}
-function _parseStringExplodeDefaultStyle(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -3946,17 +5645,88 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseEncodingExplodeDefaultExplode(value: unknown): unknown {
-return ;
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey}
+*/
+export function parseTypeApikey(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return ((value));
 }
-export function parseElseExplodeDefaultExplode(value: unknown): unknown {
-return ;
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http}
+*/
+export function parseTypeHttp(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return ((value));
 }
-export function parseTypeApikeyType(value: unknown): unknown {
-return _parseStringTypeApikeyType(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer}
+*/
+export function parseTypeHttpBearer(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return ((value));
 }
-function _parseStringTypeApikeyType(value: unknown): unknown {
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2}
+*/
+export function parseTypeOauth2(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return ((value));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc}
+*/
+export function parseTypeOidc(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return ((value));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/properties/type}
+*/
+export function parseSecuritySchemeType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/properties/description}
+*/
+export function parseSecuritySchemeDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -3966,11 +5736,393 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseTypeApikeyName(value: unknown): unknown {
-return _parseStringTypeApikeyName(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/0}
+*/
+export function parseSecuritySchemeAllOf0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseSpecificationExtensions(value, configuration));
 }
-function _parseStringTypeApikeyName(value: unknown): unknown {
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/1}
+*/
+export function parseSecuritySchemeAllOf1(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseTypeApikey(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/2}
+*/
+export function parseAllOf2(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseTypeHttp(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/3}
+*/
+export function parseAllOf3(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseTypeHttpBearer(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/4}
+*/
+export function parseAllOf4(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseTypeOauth2(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/5}
+*/
+export function parseAllOf5(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseTypeOidc(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference/if}
+*/
+export function parseSecuritySchemeOrReferenceIf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return value;
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference/then}
+*/
+export function parseSecuritySchemeOrReferenceThen(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference/else}
+*/
+export function parseSecuritySchemeOrReferenceElse(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseSecurityScheme(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit}
+*/
+export function parseDefsOauthFlowsImplicit(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "authorizationUrl":
+return [
+name,
+parseImplicitAuthorizationUrl(value, configuration),
+]
+case "refreshUrl":
+return [
+name,
+parseImplicitRefreshUrl(value, configuration),
+]
+case "scopes":
+return [
+name,
+parseImplicitScopes(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password}
+*/
+export function parseDefsOauthFlowsPassword(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "tokenUrl":
+return [
+name,
+parsePasswordTokenUrl(value, configuration),
+]
+case "refreshUrl":
+return [
+name,
+parsePasswordRefreshUrl(value, configuration),
+]
+case "scopes":
+return [
+name,
+parsePasswordScopes(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials}
+*/
+export function parseDefsOauthFlowsClientCredentials(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "tokenUrl":
+return [
+name,
+parseClientCredentialsTokenUrl(value, configuration),
+]
+case "refreshUrl":
+return [
+name,
+parseClientCredentialsRefreshUrl(value, configuration),
+]
+case "scopes":
+return [
+name,
+parseClientCredentialsScopes(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code}
+*/
+export function parseDefsOauthFlowsAuthorizationCode(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "authorizationUrl":
+return [
+name,
+parseAuthorizationCodeAuthorizationUrl(value, configuration),
+]
+case "tokenUrl":
+return [
+name,
+parseAuthorizationCodeTokenUrl(value, configuration),
+]
+case "refreshUrl":
+return [
+name,
+parseAuthorizationCodeRefreshUrl(value, configuration),
+]
+case "scopes":
+return [
+name,
+parseAuthorizationCodeScopes(value, configuration),
+]
+default:
+return [
+name,
+(parseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/implicit}
+*/
+export function parsePropertiesOauthFlowsImplicit(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefsOauthFlowsImplicit(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/password}
+*/
+export function parsePropertiesOauthFlowsPassword(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefsOauthFlowsPassword(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/clientCredentials}
+*/
+export function parsePropertiesOauthFlowsClientCredentials(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefsOauthFlowsClientCredentials(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/authorizationCode}
+*/
+export function parsePropertiesOauthFlowsAuthorizationCode(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefsOauthFlowsAuthorizationCode(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement/additionalProperties}
+*/
+export function parseSecurityRequirementAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parseSecurityRequirementItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions/patternProperties/^x-}
+*/
+export function parseX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples/properties/example}
+*/
+export function parseExamplesExample(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples/properties/examples}
+*/
+export function parseExamplesExamples(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseExamplesExamplesAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/map-of-strings/additionalProperties}
+*/
+export function parseMapOfStringsAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -3980,11 +6132,78 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseTypeApikeyIn(value: unknown): unknown {
-return _parseStringTypeApikeyIn(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/servers/items}
+*/
+export function parsePropertiesServersItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseServer(value, configuration));
 }
-function _parseStringTypeApikeyIn(value: unknown): unknown {
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/webhooks/additionalProperties}
+*/
+export function parseWebhooksAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePathItemOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/security/items}
+*/
+export function parsePropertiesSecurityItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseSecurityRequirement(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/tags/items}
+*/
+export function parsePropertiesTagsItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseTag(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/variables/additionalProperties}
+*/
+export function parseVariablesAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseServerVariable(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/enum/items}
+*/
+export function parseEnumItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -3994,11 +6213,128 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseTypeHttpType(value: unknown): unknown {
-return _parseStringTypeHttpType(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/schemas/additionalProperties}
+*/
+export function parseSchemasAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseSchema(value, configuration));
 }
-function _parseStringTypeHttpType(value: unknown): unknown {
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/responses/additionalProperties}
+*/
+export function parseResponsesAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseResponseOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/parameters/additionalProperties}
+*/
+export function parseParametersAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseParameterOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/examples/additionalProperties}
+*/
+export function parseComponentsExamplesAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseExampleOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/requestBodies/additionalProperties}
+*/
+export function parseRequestBodiesAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseRequestBodyOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/headers/additionalProperties}
+*/
+export function parseComponentsHeadersAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseHeaderOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/securitySchemes/additionalProperties}
+*/
+export function parseSecuritySchemesAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseSecuritySchemeOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/links/additionalProperties}
+*/
+export function parseComponentsLinksAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseLinkOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/callbacks/additionalProperties}
+*/
+export function parseComponentsCallbacksAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseCallbacksOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/pathItems/additionalProperties}
+*/
+export function parsePathItemsAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePathItemOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/patternProperties/^(schemas|responses|parameters|examples|requestBodies|headers|securitySchemes|links|callbacks|pathItems)$/propertyNames}
+*/
+export function parseSchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItemsPropertyNames(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -4008,11 +6344,48 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseTypeHttpScheme(value: unknown): unknown {
-return _parseStringTypeHttpScheme(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/servers/items}
+*/
+export function parsePathItemServersItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseServer(value, configuration));
 }
-function _parseStringTypeHttpScheme(value: unknown): unknown {
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/parameters/items}
+*/
+export function parsePathItemParametersItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseParameterOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/tags/items}
+*/
+export function parseOperationTagsItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -4022,11 +6395,295 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseTypeHttpBearerType(value: unknown): unknown {
-return _parseStringTypeHttpBearerType(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/parameters/items}
+*/
+export function parseOperationParametersItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseParameterOrReference(value, configuration));
 }
-function _parseStringTypeHttpBearerType(value: unknown): unknown {
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/callbacks/additionalProperties}
+*/
+export function parseOperationCallbacksAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseCallbacksOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/security/items}
+*/
+export function parseOperationSecurityItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseSecurityRequirement(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/servers/items}
+*/
+export function parseOperationServersItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseServer(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/if/properties/in}
+*/
+export function parseIfParameterIn(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/then/properties/allowEmptyValue}
+*/
+export function parseAllowEmptyValue(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/encoding/additionalProperties}
+*/
+export function parseMediaTypeAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseEncoding(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/if}
+*/
+export function parseExplodeDefaultIf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/then}
+*/
+export function parseExplodeDefaultThen(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/else}
+*/
+export function parseExplodeDefaultElse(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/headers/additionalProperties}
+*/
+export function parseEncodingHeadersAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseHeaderOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/headers/additionalProperties}
+*/
+export function parseResponseHeadersAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseHeaderOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/links/additionalProperties}
+*/
+export function parseResponseLinksAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseLinkOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/if}
+*/
+export function parseTypeApikeyIf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/then}
+*/
+export function parseTypeApikeyThen(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http/if}
+*/
+export function parseTypeHttpIf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http/then}
+*/
+export function parseTypeHttpThen(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/if}
+*/
+export function parseTypeHttpBearerIf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/then}
+*/
+export function parseTypeHttpBearerThen(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2/if}
+*/
+export function parseTypeOauth2If(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2/then}
+*/
+export function parseTypeOauth2Then(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc/if}
+*/
+export function parseTypeOidcIf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc/then}
+*/
+export function parseTypeOidcThen(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/authorizationUrl}
+*/
+export function parseImplicitAuthorizationUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -4036,11 +6693,28 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseTypeHttpBearerScheme(value: unknown): unknown {
-return _parseStringTypeHttpBearerScheme(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/refreshUrl}
+*/
+export function parseImplicitRefreshUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-function _parseStringTypeHttpBearerScheme(value: unknown): unknown {
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -4050,11 +6724,38 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseBearerFormat(value: unknown): unknown {
-return _parseStringBearerFormat(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/scopes}
+*/
+export function parseImplicitScopes(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseMapOfStrings(value, configuration));
 }
-function _parseStringBearerFormat(value: unknown): unknown {
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/tokenUrl}
+*/
+export function parsePasswordTokenUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -4064,11 +6765,28 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseTypeOauth2Type(value: unknown): unknown {
-return _parseStringTypeOauth2Type(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/refreshUrl}
+*/
+export function parsePasswordRefreshUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-function _parseStringTypeOauth2Type(value: unknown): unknown {
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -4078,17 +6796,38 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseFlows(value: unknown): unknown {
-return _parseReferenceFlows(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/scopes}
+*/
+export function parsePasswordScopes(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseMapOfStrings(value, configuration));
 }
-function _parseReferenceFlows(value: unknown): unknown {
-return parseOauthFlows(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/tokenUrl}
+*/
+export function parseClientCredentialsTokenUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-export function parseTypeOidcType(value: unknown): unknown {
-return _parseStringTypeOidcType(value);
 }
-function _parseStringTypeOidcType(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -4098,11 +6837,28 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseOpenIdConnectUrl(value: unknown): unknown {
-return _parseStringOpenIdConnectUrl(value);
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/refreshUrl}
+*/
+export function parseClientCredentialsRefreshUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-function _parseStringOpenIdConnectUrl(value: unknown): unknown {
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -4112,4 +6868,415 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/scopes}
+*/
+export function parseClientCredentialsScopes(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseMapOfStrings(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/authorizationUrl}
+*/
+export function parseAuthorizationCodeAuthorizationUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/tokenUrl}
+*/
+export function parseAuthorizationCodeTokenUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/refreshUrl}
+*/
+export function parseAuthorizationCodeRefreshUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/scopes}
+*/
+export function parseAuthorizationCodeScopes(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseMapOfStrings(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement/additionalProperties/items}
+*/
+export function parseSecurityRequirementItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples/properties/examples/additionalProperties}
+*/
+export function parseExamplesExamplesAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseExampleOrReference(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/if/properties/style}
+*/
+export function parseExplodeDefaultStyle(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/then/properties/explode}
+*/
+export function parseEncodingExplodeDefaultExplode(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/else/properties/explode}
+*/
+export function parseElseExplodeDefaultExplode(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/if/properties/type}
+*/
+export function parseTypeApikeyType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/then/properties/name}
+*/
+export function parseTypeApikeyName(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/then/properties/in}
+*/
+export function parseTypeApikeyIn(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http/if/properties/type}
+*/
+export function parseTypeHttpType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http/then/properties/scheme}
+*/
+export function parseTypeHttpScheme(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/if/properties/type}
+*/
+export function parseTypeHttpBearerType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/if/properties/scheme}
+*/
+export function parseTypeHttpBearerScheme(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/then/properties/bearerFormat}
+*/
+export function parseBearerFormat(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2/if/properties/type}
+*/
+export function parseTypeOauth2Type(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2/then/properties/flows}
+*/
+export function parseFlows(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOauthFlows(value, configuration));
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc/if/properties/type}
+*/
+export function parseTypeOidcType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc/then/properties/openIdConnectUrl}
+*/
+export function parseOpenIdConnectUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
 }

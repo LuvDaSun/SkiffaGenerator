@@ -3,2018 +3,2836 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.9.6                          -- www.JsonSchema42.org
-export function parseSchemaJson(value: unknown): unknown {
-return _parseMapSchemaJson(value);
-}
-function _parseMapSchemaJson(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "swagger": {
-const propertyValue = parseSwagger(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "info": {
-const propertyValue = parsePropertiesInfo(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "host": {
-const propertyValue = parseHost(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "basePath": {
-const propertyValue = parseBasePath(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "schemes": {
-const propertyValue = parsePropertiesSchemes(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "consumes": {
-const propertyValue = parsePropertiesConsumes(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "produces": {
-const propertyValue = parsePropertiesProduces(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "paths": {
-const propertyValue = parsePropertiesPaths(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "definitions": {
-const propertyValue = parsePropertiesDefinitions(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "parameters": {
-const propertyValue = parsePropertiesParameters(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "responses": {
-const propertyValue = parsePropertiesResponses(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "security": {
-const propertyValue = parsePropertiesSecurity(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "securityDefinitions": {
-const propertyValue = parsePropertiesSecurityDefinitions(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "tags": {
-const propertyValue = parsePropertiesTags(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "externalDocs": {
-const propertyValue = parsePropertiesExternalDocs(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseV2AdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseDefinitionsInfo(value: unknown): unknown {
-return _parseMapDefinitionsInfo(value);
-}
-function _parseMapDefinitionsInfo(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "title": {
-const propertyValue = parseInfoTitle(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "version": {
-const propertyValue = parseVersion(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseInfoDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "termsOfService": {
-const propertyValue = parseTermsOfService(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "contact": {
-const propertyValue = parseInfoContact(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "license": {
-const propertyValue = parseInfoLicense(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseInfoAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseDefinitionsContact(value: unknown): unknown {
-return _parseMapDefinitionsContact(value);
-}
-function _parseMapDefinitionsContact(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "name": {
-const propertyValue = parseContactName(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "url": {
-const propertyValue = parseContactUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "email": {
-const propertyValue = parseEmail(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseContactAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseDefinitionsLicense(value: unknown): unknown {
-return _parseMapDefinitionsLicense(value);
-}
-function _parseMapDefinitionsLicense(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "name": {
-const propertyValue = parseLicenseName(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "url": {
-const propertyValue = parseLicenseUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseLicenseAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseDefinitionsPaths(value: unknown): unknown {
-return _parseMapDefinitionsPaths(value);
-}
-function _parseMapDefinitionsPaths(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parsePathsAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseDefinitionsDefinitions(value: unknown): unknown {
-return _parseMapDefinitionsDefinitions(value);
-}
-function _parseMapDefinitionsDefinitions(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseDefinitionsAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseParameterDefinitions(value: unknown): unknown {
-return _parseMapParameterDefinitions(value);
-}
-function _parseMapParameterDefinitions(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseParameterDefinitionsAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseResponseDefinitions(value: unknown): unknown {
-return _parseMapResponseDefinitions(value);
-}
-function _parseMapResponseDefinitions(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseResponseDefinitionsAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseDefinitionsExternalDocs(value: unknown): unknown {
-return _parseMapDefinitionsExternalDocs(value);
-}
-function _parseMapDefinitionsExternalDocs(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "description": {
-const propertyValue = parseExternalDocsDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "url": {
-const propertyValue = parseExternalDocsUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseExternalDocsAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseDefinitionsExamples(value: unknown): unknown {
-return _parseMapDefinitionsExamples(value);
-}
-function _parseMapDefinitionsExamples(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseExamplesAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseMimeType(value: unknown): unknown {
-return _parseStringMimeType(value);
-}
-function _parseStringMimeType(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
+// v0.12.7                         -- www.JsonSchema42.org
+//
+import * as types from "./types.js";
+export interface ParserGeneratorOptions {
+trueStringValues?: string[];
+falseStringValues?: string[];
+}
+const defaultParserGeneratorOptions = {
+trueStringValues: ["", "true", "yes", "on", "1"],
+falseStringValues: ["false", "no", "off", "0"],
+}
+/**
+* @summary A JSON Schema for Swagger 2.0 API.
+* @see {@link http://swagger.io/v2/schema.json#}
+*/
+export function parseSchemaJson(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "swagger":
+return [
+name,
+parseSwagger(value, configuration),
+]
+case "info":
+return [
+name,
+parsePropertiesInfo(value, configuration),
+]
+case "host":
+return [
+name,
+parseHost(value, configuration),
+]
+case "basePath":
+return [
+name,
+parseBasePath(value, configuration),
+]
+case "schemes":
+return [
+name,
+parsePropertiesSchemes(value, configuration),
+]
+case "consumes":
+return [
+name,
+parsePropertiesConsumes(value, configuration),
+]
+case "produces":
+return [
+name,
+parsePropertiesProduces(value, configuration),
+]
+case "paths":
+return [
+name,
+parsePropertiesPaths(value, configuration),
+]
+case "definitions":
+return [
+name,
+parsePropertiesDefinitions(value, configuration),
+]
+case "parameters":
+return [
+name,
+parsePropertiesParameters(value, configuration),
+]
+case "responses":
+return [
+name,
+parsePropertiesResponses(value, configuration),
+]
+case "security":
+return [
+name,
+parsePropertiesSecurity(value, configuration),
+]
+case "securityDefinitions":
+return [
+name,
+parsePropertiesSecurityDefinitions(value, configuration),
+]
+case "tags":
+return [
+name,
+parsePropertiesTags(value, configuration),
+]
+case "externalDocs":
+return [
+name,
+parsePropertiesExternalDocs(value, configuration),
+]
 default:
-return undefined;
-}
-}
-export function parseOperation(value: unknown): unknown {
-return _parseMapOperation(value);
-}
-function _parseMapOperation(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "tags": {
-const propertyValue = parseOperationTags(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "summary": {
-const propertyValue = parseSummary(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseOperationDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "externalDocs": {
-const propertyValue = parseOperationExternalDocs(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "operationId": {
-const propertyValue = parseOperationId(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "produces": {
-const propertyValue = parseOperationProduces(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "consumes": {
-const propertyValue = parseOperationConsumes(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "parameters": {
-const propertyValue = parseOperationParameters(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "responses": {
-const propertyValue = parseOperationResponses(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "schemes": {
-const propertyValue = parseOperationSchemes(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "deprecated": {
-const propertyValue = parseDeprecated(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "security": {
-const propertyValue = parseOperationSecurity(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseOperationAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parsePathItem(value: unknown): unknown {
-return _parseMapPathItem(value);
-}
-function _parseMapPathItem(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "$ref": {
-const propertyValue = parsePathItemRef(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "get": {
-const propertyValue = parseGet(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "put": {
-const propertyValue = parsePut(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "post": {
-const propertyValue = parsePost(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "delete": {
-const propertyValue = parseDelete(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "options": {
-const propertyValue = parseOptions(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "head": {
-const propertyValue = parseHead(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "patch": {
-const propertyValue = parsePatch(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "parameters": {
-const propertyValue = parsePathItemParameters(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parsePathItemAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseDefinitionsResponses(value: unknown): unknown {
-return _parseMapDefinitionsResponses(value) ?? _parseNotDefinitionsResponses(value);
-}
-function _parseMapDefinitionsResponses(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseResponsesAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-function _parseNotDefinitionsResponses(value: unknown): unknown {
-return parseNot(value);
-}
-export function parseResponseValue(value: unknown): unknown {
-return _parseOneOfResponseValue(value);
-}
-function _parseOneOfResponseValue(value: unknown): unknown {
-return parseResponseValue0(value) ?? parseResponseValue1(value);
-}
-export function parseResponse(value: unknown): unknown {
-return _parseMapResponse(value);
-}
-function _parseMapResponse(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "description": {
-const propertyValue = parseResponseDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "schema": {
-const propertyValue = parseResponseSchema(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "headers": {
-const propertyValue = parseResponseHeaders(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "examples": {
-const propertyValue = parseResponseExamples(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseResponseAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseDefinitionsHeaders(value: unknown): unknown {
-return _parseMapDefinitionsHeaders(value);
-}
-function _parseMapDefinitionsHeaders(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseHeadersAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseHeader(value: unknown): unknown {
-return _parseMapHeader(value);
-}
-function _parseMapHeader(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "type": {
-const propertyValue = parseHeaderType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "format": {
-const propertyValue = parseHeaderFormat(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "items": {
-const propertyValue = parseHeaderItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "collectionFormat": {
-const propertyValue = parseHeaderCollectionFormat(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "default": {
-const propertyValue = parseHeaderDefault(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maximum": {
-const propertyValue = parseHeaderMaximum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "exclusiveMaximum": {
-const propertyValue = parseHeaderExclusiveMaximum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minimum": {
-const propertyValue = parseHeaderMinimum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "exclusiveMinimum": {
-const propertyValue = parseHeaderExclusiveMinimum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maxLength": {
-const propertyValue = parseHeaderMaxLength(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minLength": {
-const propertyValue = parseHeaderMinLength(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "pattern": {
-const propertyValue = parseHeaderPattern(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maxItems": {
-const propertyValue = parseHeaderMaxItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minItems": {
-const propertyValue = parseHeaderMinItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "uniqueItems": {
-const propertyValue = parseHeaderUniqueItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "enum": {
-const propertyValue = parseHeaderEnum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "multipleOf": {
-const propertyValue = parseHeaderMultipleOf(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseHeaderDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseHeaderAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseVendorExtension(value: unknown): unknown {
-return ;
-}
-export function parseBodyParameter(value: unknown): unknown {
-return _parseMapBodyParameter(value);
-}
-function _parseMapBodyParameter(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "description": {
-const propertyValue = parseBodyParameterDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "name": {
-const propertyValue = parseBodyParameterName(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "in": {
-const propertyValue = parseBodyParameterIn(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "required": {
-const propertyValue = parseBodyParameterRequired(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "schema": {
-const propertyValue = parseBodyParameterSchema(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseBodyParameterAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseHeaderParameterSubSchema(value: unknown): unknown {
-return _parseMapHeaderParameterSubSchema(value);
-}
-function _parseMapHeaderParameterSubSchema(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "required": {
-const propertyValue = parseHeaderParameterSubSchemaRequired(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "in": {
-const propertyValue = parseHeaderParameterSubSchemaIn(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseHeaderParameterSubSchemaDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "name": {
-const propertyValue = parseHeaderParameterSubSchemaName(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "type": {
-const propertyValue = parseHeaderParameterSubSchemaType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "format": {
-const propertyValue = parseHeaderParameterSubSchemaFormat(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "items": {
-const propertyValue = parseHeaderParameterSubSchemaItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "collectionFormat": {
-const propertyValue = parseHeaderParameterSubSchemaCollectionFormat(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "default": {
-const propertyValue = parseHeaderParameterSubSchemaDefault(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maximum": {
-const propertyValue = parseHeaderParameterSubSchemaMaximum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "exclusiveMaximum": {
-const propertyValue = parseHeaderParameterSubSchemaExclusiveMaximum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minimum": {
-const propertyValue = parseHeaderParameterSubSchemaMinimum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "exclusiveMinimum": {
-const propertyValue = parseHeaderParameterSubSchemaExclusiveMinimum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maxLength": {
-const propertyValue = parseHeaderParameterSubSchemaMaxLength(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minLength": {
-const propertyValue = parseHeaderParameterSubSchemaMinLength(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "pattern": {
-const propertyValue = parseHeaderParameterSubSchemaPattern(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maxItems": {
-const propertyValue = parseHeaderParameterSubSchemaMaxItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minItems": {
-const propertyValue = parseHeaderParameterSubSchemaMinItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "uniqueItems": {
-const propertyValue = parseHeaderParameterSubSchemaUniqueItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "enum": {
-const propertyValue = parseHeaderParameterSubSchemaEnum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "multipleOf": {
-const propertyValue = parseHeaderParameterSubSchemaMultipleOf(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseHeaderParameterSubSchemaAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseQueryParameterSubSchema(value: unknown): unknown {
-return _parseMapQueryParameterSubSchema(value);
-}
-function _parseMapQueryParameterSubSchema(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "required": {
-const propertyValue = parseQueryParameterSubSchemaRequired(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "in": {
-const propertyValue = parseQueryParameterSubSchemaIn(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseQueryParameterSubSchemaDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "name": {
-const propertyValue = parseQueryParameterSubSchemaName(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "allowEmptyValue": {
-const propertyValue = parseQueryParameterSubSchemaAllowEmptyValue(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "type": {
-const propertyValue = parseQueryParameterSubSchemaType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "format": {
-const propertyValue = parseQueryParameterSubSchemaFormat(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "items": {
-const propertyValue = parseQueryParameterSubSchemaItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "collectionFormat": {
-const propertyValue = parseQueryParameterSubSchemaCollectionFormat(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "default": {
-const propertyValue = parseQueryParameterSubSchemaDefault(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maximum": {
-const propertyValue = parseQueryParameterSubSchemaMaximum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "exclusiveMaximum": {
-const propertyValue = parseQueryParameterSubSchemaExclusiveMaximum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minimum": {
-const propertyValue = parseQueryParameterSubSchemaMinimum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "exclusiveMinimum": {
-const propertyValue = parseQueryParameterSubSchemaExclusiveMinimum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maxLength": {
-const propertyValue = parseQueryParameterSubSchemaMaxLength(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minLength": {
-const propertyValue = parseQueryParameterSubSchemaMinLength(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "pattern": {
-const propertyValue = parseQueryParameterSubSchemaPattern(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maxItems": {
-const propertyValue = parseQueryParameterSubSchemaMaxItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minItems": {
-const propertyValue = parseQueryParameterSubSchemaMinItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "uniqueItems": {
-const propertyValue = parseQueryParameterSubSchemaUniqueItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "enum": {
-const propertyValue = parseQueryParameterSubSchemaEnum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "multipleOf": {
-const propertyValue = parseQueryParameterSubSchemaMultipleOf(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseQueryParameterSubSchemaAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseFormDataParameterSubSchema(value: unknown): unknown {
-return _parseMapFormDataParameterSubSchema(value);
-}
-function _parseMapFormDataParameterSubSchema(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "required": {
-const propertyValue = parseFormDataParameterSubSchemaRequired(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "in": {
-const propertyValue = parseFormDataParameterSubSchemaIn(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseFormDataParameterSubSchemaDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "name": {
-const propertyValue = parseFormDataParameterSubSchemaName(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "allowEmptyValue": {
-const propertyValue = parseFormDataParameterSubSchemaAllowEmptyValue(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "type": {
-const propertyValue = parseFormDataParameterSubSchemaType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "format": {
-const propertyValue = parseFormDataParameterSubSchemaFormat(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "items": {
-const propertyValue = parseFormDataParameterSubSchemaItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "collectionFormat": {
-const propertyValue = parseFormDataParameterSubSchemaCollectionFormat(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "default": {
-const propertyValue = parseFormDataParameterSubSchemaDefault(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maximum": {
-const propertyValue = parseFormDataParameterSubSchemaMaximum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "exclusiveMaximum": {
-const propertyValue = parseFormDataParameterSubSchemaExclusiveMaximum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minimum": {
-const propertyValue = parseFormDataParameterSubSchemaMinimum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "exclusiveMinimum": {
-const propertyValue = parseFormDataParameterSubSchemaExclusiveMinimum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maxLength": {
-const propertyValue = parseFormDataParameterSubSchemaMaxLength(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minLength": {
-const propertyValue = parseFormDataParameterSubSchemaMinLength(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "pattern": {
-const propertyValue = parseFormDataParameterSubSchemaPattern(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maxItems": {
-const propertyValue = parseFormDataParameterSubSchemaMaxItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minItems": {
-const propertyValue = parseFormDataParameterSubSchemaMinItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "uniqueItems": {
-const propertyValue = parseFormDataParameterSubSchemaUniqueItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "enum": {
-const propertyValue = parseFormDataParameterSubSchemaEnum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "multipleOf": {
-const propertyValue = parseFormDataParameterSubSchemaMultipleOf(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseFormDataParameterSubSchemaAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parsePathParameterSubSchema(value: unknown): unknown {
-return _parseMapPathParameterSubSchema(value);
-}
-function _parseMapPathParameterSubSchema(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "required": {
-const propertyValue = parsePathParameterSubSchemaRequired(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "in": {
-const propertyValue = parsePathParameterSubSchemaIn(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parsePathParameterSubSchemaDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "name": {
-const propertyValue = parsePathParameterSubSchemaName(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "type": {
-const propertyValue = parsePathParameterSubSchemaType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "format": {
-const propertyValue = parsePathParameterSubSchemaFormat(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "items": {
-const propertyValue = parsePathParameterSubSchemaItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "collectionFormat": {
-const propertyValue = parsePathParameterSubSchemaCollectionFormat(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "default": {
-const propertyValue = parsePathParameterSubSchemaDefault(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maximum": {
-const propertyValue = parsePathParameterSubSchemaMaximum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "exclusiveMaximum": {
-const propertyValue = parsePathParameterSubSchemaExclusiveMaximum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minimum": {
-const propertyValue = parsePathParameterSubSchemaMinimum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "exclusiveMinimum": {
-const propertyValue = parsePathParameterSubSchemaExclusiveMinimum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maxLength": {
-const propertyValue = parsePathParameterSubSchemaMaxLength(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minLength": {
-const propertyValue = parsePathParameterSubSchemaMinLength(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "pattern": {
-const propertyValue = parsePathParameterSubSchemaPattern(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maxItems": {
-const propertyValue = parsePathParameterSubSchemaMaxItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minItems": {
-const propertyValue = parsePathParameterSubSchemaMinItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "uniqueItems": {
-const propertyValue = parsePathParameterSubSchemaUniqueItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "enum": {
-const propertyValue = parsePathParameterSubSchemaEnum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "multipleOf": {
-const propertyValue = parsePathParameterSubSchemaMultipleOf(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parsePathParameterSubSchemaAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseNonBodyParameter(value: unknown): unknown {
-return _parseMapNonBodyParameter(value) ?? _parseOneOfNonBodyParameter(value);
-}
-function _parseMapNonBodyParameter(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-}
-return result;
-}
-return undefined;
-}
-function _parseOneOfNonBodyParameter(value: unknown): unknown {
-return parseNonBodyParameter0(value) ?? parseNonBodyParameter1(value) ?? parseNonBodyParameter2(value) ?? parseNonBodyParameter3(value);
-}
-export function parseParameter(value: unknown): unknown {
-return _parseOneOfParameter(value);
-}
-function _parseOneOfParameter(value: unknown): unknown {
-return parseParameter0(value) ?? parseParameter1(value);
-}
-export function parseDefinitionsSchema(value: unknown): unknown {
-return _parseMapDefinitionsSchema(value);
-}
-function _parseMapDefinitionsSchema(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "$ref": {
-const propertyValue = parseSchemaRef(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "format": {
-const propertyValue = parseSchemaFormat(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "title": {
-const propertyValue = parseSchemaTitle(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseSchemaDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "default": {
-const propertyValue = parseSchemaDefault(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "multipleOf": {
-const propertyValue = parseSchemaMultipleOf(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maximum": {
-const propertyValue = parseSchemaMaximum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "exclusiveMaximum": {
-const propertyValue = parseSchemaExclusiveMaximum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minimum": {
-const propertyValue = parseSchemaMinimum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "exclusiveMinimum": {
-const propertyValue = parseSchemaExclusiveMinimum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maxLength": {
-const propertyValue = parseSchemaMaxLength(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minLength": {
-const propertyValue = parseSchemaMinLength(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "pattern": {
-const propertyValue = parseSchemaPattern(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maxItems": {
-const propertyValue = parseSchemaMaxItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minItems": {
-const propertyValue = parseSchemaMinItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "uniqueItems": {
-const propertyValue = parseSchemaUniqueItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maxProperties": {
-const propertyValue = parseMaxProperties(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minProperties": {
-const propertyValue = parseMinProperties(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "required": {
-const propertyValue = parseSchemaRequired(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "enum": {
-const propertyValue = parseSchemaEnum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "additionalProperties": {
-const propertyValue = parsePropertiesSchemaAdditionalProperties(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "type": {
-const propertyValue = parseSchemaType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "items": {
-const propertyValue = parseSchemaItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "allOf": {
-const propertyValue = parseAllOf(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "properties": {
-const propertyValue = parseProperties(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "discriminator": {
-const propertyValue = parseDiscriminator(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "readOnly": {
-const propertyValue = parseSchemaReadOnly(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "xml": {
-const propertyValue = parseSchemaXml(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "externalDocs": {
-const propertyValue = parseSchemaExternalDocs(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "example": {
-const propertyValue = parseSchemaExample(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseDefinitionsSchemaAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseFileSchema(value: unknown): unknown {
-return _parseMapFileSchema(value);
-}
-function _parseMapFileSchema(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "format": {
-const propertyValue = parseFileSchemaFormat(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "title": {
-const propertyValue = parseFileSchemaTitle(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseFileSchemaDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "default": {
-const propertyValue = parseFileSchemaDefault(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "required": {
-const propertyValue = parseFileSchemaRequired(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "type": {
-const propertyValue = parseFileSchemaType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "readOnly": {
-const propertyValue = parseFileSchemaReadOnly(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "externalDocs": {
-const propertyValue = parseFileSchemaExternalDocs(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "example": {
-const propertyValue = parseFileSchemaExample(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseFileSchemaAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parsePrimitivesItems(value: unknown): unknown {
-return _parseMapPrimitivesItems(value);
-}
-function _parseMapPrimitivesItems(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "type": {
-const propertyValue = parsePrimitivesItemsType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "format": {
-const propertyValue = parsePrimitivesItemsFormat(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "items": {
-const propertyValue = parsePrimitivesItemsItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "collectionFormat": {
-const propertyValue = parsePrimitivesItemsCollectionFormat(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "default": {
-const propertyValue = parsePrimitivesItemsDefault(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maximum": {
-const propertyValue = parsePrimitivesItemsMaximum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "exclusiveMaximum": {
-const propertyValue = parsePrimitivesItemsExclusiveMaximum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minimum": {
-const propertyValue = parsePrimitivesItemsMinimum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "exclusiveMinimum": {
-const propertyValue = parsePrimitivesItemsExclusiveMinimum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maxLength": {
-const propertyValue = parsePrimitivesItemsMaxLength(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minLength": {
-const propertyValue = parsePrimitivesItemsMinLength(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "pattern": {
-const propertyValue = parsePrimitivesItemsPattern(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "maxItems": {
-const propertyValue = parsePrimitivesItemsMaxItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "minItems": {
-const propertyValue = parsePrimitivesItemsMinItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "uniqueItems": {
-const propertyValue = parsePrimitivesItemsUniqueItems(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "enum": {
-const propertyValue = parsePrimitivesItemsEnum(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "multipleOf": {
-const propertyValue = parsePrimitivesItemsMultipleOf(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parsePrimitivesItemsAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseDefinitionsSecurity(value: unknown): unknown {
-return _parseArrayDefinitionsSecurity(value);
-}
-function _parseArrayDefinitionsSecurity(value: unknown): unknown {
+return [
+name,
+(parseV2AdditionalProperties(value, configuration) ??
+parseV2PatternPropertiesX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @description General information about the API.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/info}
+*/
+export function parseDefinitionsInfo(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "title":
+return [
+name,
+parseInfoTitle(value, configuration),
+]
+case "version":
+return [
+name,
+parseVersion(value, configuration),
+]
+case "description":
+return [
+name,
+parseInfoDescription(value, configuration),
+]
+case "termsOfService":
+return [
+name,
+parseTermsOfService(value, configuration),
+]
+case "contact":
+return [
+name,
+parseInfoContact(value, configuration),
+]
+case "license":
+return [
+name,
+parseInfoLicense(value, configuration),
+]
+default:
+return [
+name,
+(parseInfoAdditionalProperties(value, configuration) ??
+parseInfoX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @description Contact information for the owners of the API.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/contact}
+*/
+export function parseDefinitionsContact(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "name":
+return [
+name,
+parseContactName(value, configuration),
+]
+case "url":
+return [
+name,
+parseContactUrl(value, configuration),
+]
+case "email":
+return [
+name,
+parseEmail(value, configuration),
+]
+default:
+return [
+name,
+(parseContactAdditionalProperties(value, configuration) ??
+parseContactX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/license}
+*/
+export function parseDefinitionsLicense(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "name":
+return [
+name,
+parseLicenseName(value, configuration),
+]
+case "url":
+return [
+name,
+parseLicenseUrl(value, configuration),
+]
+default:
+return [
+name,
+(parseLicenseAdditionalProperties(value, configuration) ??
+parseLicenseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @description Relative paths to the individual endpoints. They must be relative to the &apos;basePath&apos;.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/paths}
+*/
+export function parseDefinitionsPaths(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parsePathsAdditionalProperties(value, configuration) ??
+parsePathsX(value, configuration) ??
+parsePatternProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @description One or more JSON objects describing the schemas being consumed and produced by the API.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/definitions}
+*/
+export function parseDefinitionsDefinitions(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseDefinitionsAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @description One or more JSON representations for parameters
+* @see {@link http://swagger.io/v2/schema.json#/definitions/parameterDefinitions}
+*/
+export function parseParameterDefinitions(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseParameterDefinitionsAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @description One or more JSON representations for parameters
+* @see {@link http://swagger.io/v2/schema.json#/definitions/responseDefinitions}
+*/
+export function parseResponseDefinitions(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseResponseDefinitionsAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @description information about external documentation
+* @see {@link http://swagger.io/v2/schema.json#/definitions/externalDocs}
+*/
+export function parseDefinitionsExternalDocs(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "description":
+return [
+name,
+parseExternalDocsDescription(value, configuration),
+]
+case "url":
+return [
+name,
+parseExternalDocsUrl(value, configuration),
+]
+default:
+return [
+name,
+(parseExternalDocsAdditionalProperties(value, configuration) ??
+parseExternalDocsX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/examples}
+*/
+export function parseDefinitionsExamples(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseExamplesAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @description The MIME type of the HTTP message.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/mimeType}
+*/
+export function parseMimeType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
 if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseSecurityItems(value[elementIndex]);
-}
-return result;
-}
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
 return undefined;
 }
-export function parseSecurityRequirement(value: unknown): unknown {
-return _parseMapSecurityRequirement(value);
 }
-function _parseMapSecurityRequirement(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseSecurityRequirementAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
 return undefined;
 }
-export function parseDefinitionsXml(value: unknown): unknown {
-return _parseMapDefinitionsXml(value);
-}
-function _parseMapDefinitionsXml(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "name": {
-const propertyValue = parseXmlName(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "namespace": {
-const propertyValue = parseNamespace(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "prefix": {
-const propertyValue = parsePrefix(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "attribute": {
-const propertyValue = parseAttribute(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "wrapped": {
-const propertyValue = parseWrapped(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseXmlAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseTag(value: unknown): unknown {
-return _parseMapTag(value);
-}
-function _parseMapTag(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "name": {
-const propertyValue = parseTagName(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseTagDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "externalDocs": {
-const propertyValue = parseTagExternalDocs(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseTagAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseDefinitionsSecurityDefinitions(value: unknown): unknown {
-return _parseMapDefinitionsSecurityDefinitions(value);
-}
-function _parseMapDefinitionsSecurityDefinitions(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseSecurityDefinitionsAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseBasicAuthenticationSecurity(value: unknown): unknown {
-return _parseMapBasicAuthenticationSecurity(value);
-}
-function _parseMapBasicAuthenticationSecurity(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "type": {
-const propertyValue = parseBasicAuthenticationSecurityType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseBasicAuthenticationSecurityDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseBasicAuthenticationSecurityAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseApiKeySecurity(value: unknown): unknown {
-return _parseMapApiKeySecurity(value);
-}
-function _parseMapApiKeySecurity(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "type": {
-const propertyValue = parseApiKeySecurityType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "name": {
-const propertyValue = parseApiKeySecurityName(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "in": {
-const propertyValue = parseApiKeySecurityIn(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseApiKeySecurityDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseApiKeySecurityAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseOauth2ImplicitSecurity(value: unknown): unknown {
-return _parseMapOauth2ImplicitSecurity(value);
-}
-function _parseMapOauth2ImplicitSecurity(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "type": {
-const propertyValue = parseOauth2ImplicitSecurityType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "flow": {
-const propertyValue = parseOauth2ImplicitSecurityFlow(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "scopes": {
-const propertyValue = parseOauth2ImplicitSecurityScopes(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "authorizationUrl": {
-const propertyValue = parseOauth2ImplicitSecurityAuthorizationUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseOauth2ImplicitSecurityDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseOauth2ImplicitSecurityAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseOauth2PasswordSecurity(value: unknown): unknown {
-return _parseMapOauth2PasswordSecurity(value);
-}
-function _parseMapOauth2PasswordSecurity(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "type": {
-const propertyValue = parseOauth2PasswordSecurityType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "flow": {
-const propertyValue = parseOauth2PasswordSecurityFlow(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "scopes": {
-const propertyValue = parseOauth2PasswordSecurityScopes(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "tokenUrl": {
-const propertyValue = parseOauth2PasswordSecurityTokenUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseOauth2PasswordSecurityDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseOauth2PasswordSecurityAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseOauth2ApplicationSecurity(value: unknown): unknown {
-return _parseMapOauth2ApplicationSecurity(value);
-}
-function _parseMapOauth2ApplicationSecurity(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "type": {
-const propertyValue = parseOauth2ApplicationSecurityType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "flow": {
-const propertyValue = parseOauth2ApplicationSecurityFlow(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "scopes": {
-const propertyValue = parseOauth2ApplicationSecurityScopes(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "tokenUrl": {
-const propertyValue = parseOauth2ApplicationSecurityTokenUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseOauth2ApplicationSecurityDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseOauth2ApplicationSecurityAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseOauth2AccessCodeSecurity(value: unknown): unknown {
-return _parseMapOauth2AccessCodeSecurity(value);
-}
-function _parseMapOauth2AccessCodeSecurity(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "type": {
-const propertyValue = parseOauth2AccessCodeSecurityType(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "flow": {
-const propertyValue = parseOauth2AccessCodeSecurityFlow(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "scopes": {
-const propertyValue = parseOauth2AccessCodeSecurityScopes(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "authorizationUrl": {
-const propertyValue = parseOauth2AccessCodeSecurityAuthorizationUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "tokenUrl": {
-const propertyValue = parseOauth2AccessCodeSecurityTokenUrl(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-case "description": {
-const propertyValue = parseOauth2AccessCodeSecurityDescription(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
-break;
-}
-}
-result[propertyName] ??= parseOauth2AccessCodeSecurityAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseOauth2Scopes(value: unknown): unknown {
-return _parseMapOauth2Scopes(value);
-}
-function _parseMapOauth2Scopes(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseOauth2ScopesAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseMediaTypeList(value: unknown): unknown {
-return _parseArrayMediaTypeList(value);
-}
-function _parseArrayMediaTypeList(value: unknown): unknown {
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation}
+*/
+export function parseOperation(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "tags":
+return [
+name,
+parseOperationTags(value, configuration),
+]
+case "summary":
+return [
+name,
+parseSummary(value, configuration),
+]
+case "description":
+return [
+name,
+parseOperationDescription(value, configuration),
+]
+case "externalDocs":
+return [
+name,
+parseOperationExternalDocs(value, configuration),
+]
+case "operationId":
+return [
+name,
+parseOperationId(value, configuration),
+]
+case "produces":
+return [
+name,
+parseOperationProduces(value, configuration),
+]
+case "consumes":
+return [
+name,
+parseOperationConsumes(value, configuration),
+]
+case "parameters":
+return [
+name,
+parseOperationParameters(value, configuration),
+]
+case "responses":
+return [
+name,
+parseOperationResponses(value, configuration),
+]
+case "schemes":
+return [
+name,
+parseOperationSchemes(value, configuration),
+]
+case "deprecated":
+return [
+name,
+parseDeprecated(value, configuration),
+]
+case "security":
+return [
+name,
+parseOperationSecurity(value, configuration),
+]
+default:
+return [
+name,
+(parseOperationAdditionalProperties(value, configuration) ??
+parseOperationX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathItem}
+*/
+export function parsePathItem(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "$ref":
+return [
+name,
+parsePathItemRef(value, configuration),
+]
+case "get":
+return [
+name,
+parseGet(value, configuration),
+]
+case "put":
+return [
+name,
+parsePut(value, configuration),
+]
+case "post":
+return [
+name,
+parsePost(value, configuration),
+]
+case "delete":
+return [
+name,
+parseDelete(value, configuration),
+]
+case "options":
+return [
+name,
+parseOptions(value, configuration),
+]
+case "head":
+return [
+name,
+parseHead(value, configuration),
+]
+case "patch":
+return [
+name,
+parsePatch(value, configuration),
+]
+case "parameters":
+return [
+name,
+parsePathItemParameters(value, configuration),
+]
+default:
+return [
+name,
+(parsePathItemAdditionalProperties(value, configuration) ??
+parsePathItemX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @description Response objects names can either be any valid HTTP status code or &apos;default&apos;.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/responses}
+*/
+export function parseDefinitionsResponses(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseResponsesAdditionalProperties(value, configuration) ??
+parseResponses093Default(value, configuration) ??
+parseResponsesX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/responseValue}
+*/
+export function parseResponseValue(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+parseResponseValue0(value, configuration)
+??
+parseResponseValue1(value, configuration)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/response}
+*/
+export function parseResponse(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "description":
+return [
+name,
+parseResponseDescription(value, configuration),
+]
+case "schema":
+return [
+name,
+parseResponseSchema(value, configuration),
+]
+case "headers":
+return [
+name,
+parseResponseHeaders(value, configuration),
+]
+case "examples":
+return [
+name,
+parseResponseExamples(value, configuration),
+]
+default:
+return [
+name,
+(parseResponseAdditionalProperties(value, configuration) ??
+parseResponseX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headers}
+*/
+export function parseDefinitionsHeaders(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseHeadersAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header}
+*/
+export function parseHeader(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "type":
+return [
+name,
+parseHeaderType(value, configuration),
+]
+case "format":
+return [
+name,
+parseHeaderFormat(value, configuration),
+]
+case "items":
+return [
+name,
+parseHeaderItems(value, configuration),
+]
+case "collectionFormat":
+return [
+name,
+parseHeaderCollectionFormat(value, configuration),
+]
+case "default":
+return [
+name,
+parseHeaderDefault(value, configuration),
+]
+case "maximum":
+return [
+name,
+parseHeaderMaximum(value, configuration),
+]
+case "exclusiveMaximum":
+return [
+name,
+parseHeaderExclusiveMaximum(value, configuration),
+]
+case "minimum":
+return [
+name,
+parseHeaderMinimum(value, configuration),
+]
+case "exclusiveMinimum":
+return [
+name,
+parseHeaderExclusiveMinimum(value, configuration),
+]
+case "maxLength":
+return [
+name,
+parseHeaderMaxLength(value, configuration),
+]
+case "minLength":
+return [
+name,
+parseHeaderMinLength(value, configuration),
+]
+case "pattern":
+return [
+name,
+parseHeaderPattern(value, configuration),
+]
+case "maxItems":
+return [
+name,
+parseHeaderMaxItems(value, configuration),
+]
+case "minItems":
+return [
+name,
+parseHeaderMinItems(value, configuration),
+]
+case "uniqueItems":
+return [
+name,
+parseHeaderUniqueItems(value, configuration),
+]
+case "enum":
+return [
+name,
+parseHeaderEnum(value, configuration),
+]
+case "multipleOf":
+return [
+name,
+parseHeaderMultipleOf(value, configuration),
+]
+case "description":
+return [
+name,
+parseHeaderDescription(value, configuration),
+]
+default:
+return [
+name,
+(parseHeaderAdditionalProperties(value, configuration) ??
+parseHeaderX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @description Any property starting with x- is valid.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/vendorExtension}
+*/
+export function parseVendorExtension(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/bodyParameter}
+*/
+export function parseBodyParameter(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "description":
+return [
+name,
+parseBodyParameterDescription(value, configuration),
+]
+case "name":
+return [
+name,
+parseBodyParameterName(value, configuration),
+]
+case "in":
+return [
+name,
+parseBodyParameterIn(value, configuration),
+]
+case "required":
+return [
+name,
+parseBodyParameterRequired(value, configuration),
+]
+case "schema":
+return [
+name,
+parseBodyParameterSchema(value, configuration),
+]
+default:
+return [
+name,
+(parseBodyParameterAdditionalProperties(value, configuration) ??
+parseBodyParameterX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema}
+*/
+export function parseHeaderParameterSubSchema(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema}
+*/
+export function parseQueryParameterSubSchema(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema}
+*/
+export function parseFormDataParameterSubSchema(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema}
+*/
+export function parsePathParameterSubSchema(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/nonBodyParameter}
+*/
+export function parseNonBodyParameter(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "required":
+return [
+name,
+parseHeaderParameterSubSchemaRequired(value, configuration),
+]
+case "in":
+return [
+name,
+parseHeaderParameterSubSchemaIn(value, configuration),
+]
+case "description":
+return [
+name,
+parseHeaderParameterSubSchemaDescription(value, configuration),
+]
+case "name":
+return [
+name,
+parseHeaderParameterSubSchemaName(value, configuration),
+]
+case "type":
+return [
+name,
+parseHeaderParameterSubSchemaType(value, configuration),
+]
+case "format":
+return [
+name,
+parseHeaderParameterSubSchemaFormat(value, configuration),
+]
+case "items":
+return [
+name,
+parseHeaderParameterSubSchemaItems(value, configuration),
+]
+case "collectionFormat":
+return [
+name,
+parseHeaderParameterSubSchemaCollectionFormat(value, configuration),
+]
+case "default":
+return [
+name,
+parseHeaderParameterSubSchemaDefault(value, configuration),
+]
+case "maximum":
+return [
+name,
+parseHeaderParameterSubSchemaMaximum(value, configuration),
+]
+case "exclusiveMaximum":
+return [
+name,
+parseHeaderParameterSubSchemaExclusiveMaximum(value, configuration),
+]
+case "minimum":
+return [
+name,
+parseHeaderParameterSubSchemaMinimum(value, configuration),
+]
+case "exclusiveMinimum":
+return [
+name,
+parseHeaderParameterSubSchemaExclusiveMinimum(value, configuration),
+]
+case "maxLength":
+return [
+name,
+parseHeaderParameterSubSchemaMaxLength(value, configuration),
+]
+case "minLength":
+return [
+name,
+parseHeaderParameterSubSchemaMinLength(value, configuration),
+]
+case "pattern":
+return [
+name,
+parseHeaderParameterSubSchemaPattern(value, configuration),
+]
+case "maxItems":
+return [
+name,
+parseHeaderParameterSubSchemaMaxItems(value, configuration),
+]
+case "minItems":
+return [
+name,
+parseHeaderParameterSubSchemaMinItems(value, configuration),
+]
+case "uniqueItems":
+return [
+name,
+parseHeaderParameterSubSchemaUniqueItems(value, configuration),
+]
+case "enum":
+return [
+name,
+parseHeaderParameterSubSchemaEnum(value, configuration),
+]
+case "multipleOf":
+return [
+name,
+parseHeaderParameterSubSchemaMultipleOf(value, configuration),
+]
+default:
+return [
+name,
+(parseHeaderParameterSubSchemaAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "required":
+return [
+name,
+parseFormDataParameterSubSchemaRequired(value, configuration),
+]
+case "in":
+return [
+name,
+parseFormDataParameterSubSchemaIn(value, configuration),
+]
+case "description":
+return [
+name,
+parseFormDataParameterSubSchemaDescription(value, configuration),
+]
+case "name":
+return [
+name,
+parseFormDataParameterSubSchemaName(value, configuration),
+]
+case "allowEmptyValue":
+return [
+name,
+parseFormDataParameterSubSchemaAllowEmptyValue(value, configuration),
+]
+case "type":
+return [
+name,
+parseFormDataParameterSubSchemaType(value, configuration),
+]
+case "format":
+return [
+name,
+parseFormDataParameterSubSchemaFormat(value, configuration),
+]
+case "items":
+return [
+name,
+parseFormDataParameterSubSchemaItems(value, configuration),
+]
+case "collectionFormat":
+return [
+name,
+parseFormDataParameterSubSchemaCollectionFormat(value, configuration),
+]
+case "default":
+return [
+name,
+parseFormDataParameterSubSchemaDefault(value, configuration),
+]
+case "maximum":
+return [
+name,
+parseFormDataParameterSubSchemaMaximum(value, configuration),
+]
+case "exclusiveMaximum":
+return [
+name,
+parseFormDataParameterSubSchemaExclusiveMaximum(value, configuration),
+]
+case "minimum":
+return [
+name,
+parseFormDataParameterSubSchemaMinimum(value, configuration),
+]
+case "exclusiveMinimum":
+return [
+name,
+parseFormDataParameterSubSchemaExclusiveMinimum(value, configuration),
+]
+case "maxLength":
+return [
+name,
+parseFormDataParameterSubSchemaMaxLength(value, configuration),
+]
+case "minLength":
+return [
+name,
+parseFormDataParameterSubSchemaMinLength(value, configuration),
+]
+case "pattern":
+return [
+name,
+parseFormDataParameterSubSchemaPattern(value, configuration),
+]
+case "maxItems":
+return [
+name,
+parseFormDataParameterSubSchemaMaxItems(value, configuration),
+]
+case "minItems":
+return [
+name,
+parseFormDataParameterSubSchemaMinItems(value, configuration),
+]
+case "uniqueItems":
+return [
+name,
+parseFormDataParameterSubSchemaUniqueItems(value, configuration),
+]
+case "enum":
+return [
+name,
+parseFormDataParameterSubSchemaEnum(value, configuration),
+]
+case "multipleOf":
+return [
+name,
+parseFormDataParameterSubSchemaMultipleOf(value, configuration),
+]
+default:
+return [
+name,
+(parseFormDataParameterSubSchemaAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "required":
+return [
+name,
+parseQueryParameterSubSchemaRequired(value, configuration),
+]
+case "in":
+return [
+name,
+parseQueryParameterSubSchemaIn(value, configuration),
+]
+case "description":
+return [
+name,
+parseQueryParameterSubSchemaDescription(value, configuration),
+]
+case "name":
+return [
+name,
+parseQueryParameterSubSchemaName(value, configuration),
+]
+case "allowEmptyValue":
+return [
+name,
+parseQueryParameterSubSchemaAllowEmptyValue(value, configuration),
+]
+case "type":
+return [
+name,
+parseQueryParameterSubSchemaType(value, configuration),
+]
+case "format":
+return [
+name,
+parseQueryParameterSubSchemaFormat(value, configuration),
+]
+case "items":
+return [
+name,
+parseQueryParameterSubSchemaItems(value, configuration),
+]
+case "collectionFormat":
+return [
+name,
+parseQueryParameterSubSchemaCollectionFormat(value, configuration),
+]
+case "default":
+return [
+name,
+parseQueryParameterSubSchemaDefault(value, configuration),
+]
+case "maximum":
+return [
+name,
+parseQueryParameterSubSchemaMaximum(value, configuration),
+]
+case "exclusiveMaximum":
+return [
+name,
+parseQueryParameterSubSchemaExclusiveMaximum(value, configuration),
+]
+case "minimum":
+return [
+name,
+parseQueryParameterSubSchemaMinimum(value, configuration),
+]
+case "exclusiveMinimum":
+return [
+name,
+parseQueryParameterSubSchemaExclusiveMinimum(value, configuration),
+]
+case "maxLength":
+return [
+name,
+parseQueryParameterSubSchemaMaxLength(value, configuration),
+]
+case "minLength":
+return [
+name,
+parseQueryParameterSubSchemaMinLength(value, configuration),
+]
+case "pattern":
+return [
+name,
+parseQueryParameterSubSchemaPattern(value, configuration),
+]
+case "maxItems":
+return [
+name,
+parseQueryParameterSubSchemaMaxItems(value, configuration),
+]
+case "minItems":
+return [
+name,
+parseQueryParameterSubSchemaMinItems(value, configuration),
+]
+case "uniqueItems":
+return [
+name,
+parseQueryParameterSubSchemaUniqueItems(value, configuration),
+]
+case "enum":
+return [
+name,
+parseQueryParameterSubSchemaEnum(value, configuration),
+]
+case "multipleOf":
+return [
+name,
+parseQueryParameterSubSchemaMultipleOf(value, configuration),
+]
+default:
+return [
+name,
+(parseQueryParameterSubSchemaAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "required":
+return [
+name,
+parsePathParameterSubSchemaRequired(value, configuration),
+]
+case "in":
+return [
+name,
+parsePathParameterSubSchemaIn(value, configuration),
+]
+case "description":
+return [
+name,
+parsePathParameterSubSchemaDescription(value, configuration),
+]
+case "name":
+return [
+name,
+parsePathParameterSubSchemaName(value, configuration),
+]
+case "type":
+return [
+name,
+parsePathParameterSubSchemaType(value, configuration),
+]
+case "format":
+return [
+name,
+parsePathParameterSubSchemaFormat(value, configuration),
+]
+case "items":
+return [
+name,
+parsePathParameterSubSchemaItems(value, configuration),
+]
+case "collectionFormat":
+return [
+name,
+parsePathParameterSubSchemaCollectionFormat(value, configuration),
+]
+case "default":
+return [
+name,
+parsePathParameterSubSchemaDefault(value, configuration),
+]
+case "maximum":
+return [
+name,
+parsePathParameterSubSchemaMaximum(value, configuration),
+]
+case "exclusiveMaximum":
+return [
+name,
+parsePathParameterSubSchemaExclusiveMaximum(value, configuration),
+]
+case "minimum":
+return [
+name,
+parsePathParameterSubSchemaMinimum(value, configuration),
+]
+case "exclusiveMinimum":
+return [
+name,
+parsePathParameterSubSchemaExclusiveMinimum(value, configuration),
+]
+case "maxLength":
+return [
+name,
+parsePathParameterSubSchemaMaxLength(value, configuration),
+]
+case "minLength":
+return [
+name,
+parsePathParameterSubSchemaMinLength(value, configuration),
+]
+case "pattern":
+return [
+name,
+parsePathParameterSubSchemaPattern(value, configuration),
+]
+case "maxItems":
+return [
+name,
+parsePathParameterSubSchemaMaxItems(value, configuration),
+]
+case "minItems":
+return [
+name,
+parsePathParameterSubSchemaMinItems(value, configuration),
+]
+case "uniqueItems":
+return [
+name,
+parsePathParameterSubSchemaUniqueItems(value, configuration),
+]
+case "enum":
+return [
+name,
+parsePathParameterSubSchemaEnum(value, configuration),
+]
+case "multipleOf":
+return [
+name,
+parsePathParameterSubSchemaMultipleOf(value, configuration),
+]
+default:
+return [
+name,
+(parsePathParameterSubSchemaAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/parameter}
+*/
+export function parseParameter(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+parseParameter0(value, configuration)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "required":
+return [
+name,
+parseHeaderParameterSubSchemaRequired(value, configuration),
+]
+case "in":
+return [
+name,
+parseHeaderParameterSubSchemaIn(value, configuration),
+]
+case "description":
+return [
+name,
+parseHeaderParameterSubSchemaDescription(value, configuration),
+]
+case "name":
+return [
+name,
+parseHeaderParameterSubSchemaName(value, configuration),
+]
+case "type":
+return [
+name,
+parseHeaderParameterSubSchemaType(value, configuration),
+]
+case "format":
+return [
+name,
+parseHeaderParameterSubSchemaFormat(value, configuration),
+]
+case "items":
+return [
+name,
+parseHeaderParameterSubSchemaItems(value, configuration),
+]
+case "collectionFormat":
+return [
+name,
+parseHeaderParameterSubSchemaCollectionFormat(value, configuration),
+]
+case "default":
+return [
+name,
+parseHeaderParameterSubSchemaDefault(value, configuration),
+]
+case "maximum":
+return [
+name,
+parseHeaderParameterSubSchemaMaximum(value, configuration),
+]
+case "exclusiveMaximum":
+return [
+name,
+parseHeaderParameterSubSchemaExclusiveMaximum(value, configuration),
+]
+case "minimum":
+return [
+name,
+parseHeaderParameterSubSchemaMinimum(value, configuration),
+]
+case "exclusiveMinimum":
+return [
+name,
+parseHeaderParameterSubSchemaExclusiveMinimum(value, configuration),
+]
+case "maxLength":
+return [
+name,
+parseHeaderParameterSubSchemaMaxLength(value, configuration),
+]
+case "minLength":
+return [
+name,
+parseHeaderParameterSubSchemaMinLength(value, configuration),
+]
+case "pattern":
+return [
+name,
+parseHeaderParameterSubSchemaPattern(value, configuration),
+]
+case "maxItems":
+return [
+name,
+parseHeaderParameterSubSchemaMaxItems(value, configuration),
+]
+case "minItems":
+return [
+name,
+parseHeaderParameterSubSchemaMinItems(value, configuration),
+]
+case "uniqueItems":
+return [
+name,
+parseHeaderParameterSubSchemaUniqueItems(value, configuration),
+]
+case "enum":
+return [
+name,
+parseHeaderParameterSubSchemaEnum(value, configuration),
+]
+case "multipleOf":
+return [
+name,
+parseHeaderParameterSubSchemaMultipleOf(value, configuration),
+]
+default:
+return [
+name,
+(parseHeaderParameterSubSchemaAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "required":
+return [
+name,
+parseFormDataParameterSubSchemaRequired(value, configuration),
+]
+case "in":
+return [
+name,
+parseFormDataParameterSubSchemaIn(value, configuration),
+]
+case "description":
+return [
+name,
+parseFormDataParameterSubSchemaDescription(value, configuration),
+]
+case "name":
+return [
+name,
+parseFormDataParameterSubSchemaName(value, configuration),
+]
+case "allowEmptyValue":
+return [
+name,
+parseFormDataParameterSubSchemaAllowEmptyValue(value, configuration),
+]
+case "type":
+return [
+name,
+parseFormDataParameterSubSchemaType(value, configuration),
+]
+case "format":
+return [
+name,
+parseFormDataParameterSubSchemaFormat(value, configuration),
+]
+case "items":
+return [
+name,
+parseFormDataParameterSubSchemaItems(value, configuration),
+]
+case "collectionFormat":
+return [
+name,
+parseFormDataParameterSubSchemaCollectionFormat(value, configuration),
+]
+case "default":
+return [
+name,
+parseFormDataParameterSubSchemaDefault(value, configuration),
+]
+case "maximum":
+return [
+name,
+parseFormDataParameterSubSchemaMaximum(value, configuration),
+]
+case "exclusiveMaximum":
+return [
+name,
+parseFormDataParameterSubSchemaExclusiveMaximum(value, configuration),
+]
+case "minimum":
+return [
+name,
+parseFormDataParameterSubSchemaMinimum(value, configuration),
+]
+case "exclusiveMinimum":
+return [
+name,
+parseFormDataParameterSubSchemaExclusiveMinimum(value, configuration),
+]
+case "maxLength":
+return [
+name,
+parseFormDataParameterSubSchemaMaxLength(value, configuration),
+]
+case "minLength":
+return [
+name,
+parseFormDataParameterSubSchemaMinLength(value, configuration),
+]
+case "pattern":
+return [
+name,
+parseFormDataParameterSubSchemaPattern(value, configuration),
+]
+case "maxItems":
+return [
+name,
+parseFormDataParameterSubSchemaMaxItems(value, configuration),
+]
+case "minItems":
+return [
+name,
+parseFormDataParameterSubSchemaMinItems(value, configuration),
+]
+case "uniqueItems":
+return [
+name,
+parseFormDataParameterSubSchemaUniqueItems(value, configuration),
+]
+case "enum":
+return [
+name,
+parseFormDataParameterSubSchemaEnum(value, configuration),
+]
+case "multipleOf":
+return [
+name,
+parseFormDataParameterSubSchemaMultipleOf(value, configuration),
+]
+default:
+return [
+name,
+(parseFormDataParameterSubSchemaAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "required":
+return [
+name,
+parseQueryParameterSubSchemaRequired(value, configuration),
+]
+case "in":
+return [
+name,
+parseQueryParameterSubSchemaIn(value, configuration),
+]
+case "description":
+return [
+name,
+parseQueryParameterSubSchemaDescription(value, configuration),
+]
+case "name":
+return [
+name,
+parseQueryParameterSubSchemaName(value, configuration),
+]
+case "allowEmptyValue":
+return [
+name,
+parseQueryParameterSubSchemaAllowEmptyValue(value, configuration),
+]
+case "type":
+return [
+name,
+parseQueryParameterSubSchemaType(value, configuration),
+]
+case "format":
+return [
+name,
+parseQueryParameterSubSchemaFormat(value, configuration),
+]
+case "items":
+return [
+name,
+parseQueryParameterSubSchemaItems(value, configuration),
+]
+case "collectionFormat":
+return [
+name,
+parseQueryParameterSubSchemaCollectionFormat(value, configuration),
+]
+case "default":
+return [
+name,
+parseQueryParameterSubSchemaDefault(value, configuration),
+]
+case "maximum":
+return [
+name,
+parseQueryParameterSubSchemaMaximum(value, configuration),
+]
+case "exclusiveMaximum":
+return [
+name,
+parseQueryParameterSubSchemaExclusiveMaximum(value, configuration),
+]
+case "minimum":
+return [
+name,
+parseQueryParameterSubSchemaMinimum(value, configuration),
+]
+case "exclusiveMinimum":
+return [
+name,
+parseQueryParameterSubSchemaExclusiveMinimum(value, configuration),
+]
+case "maxLength":
+return [
+name,
+parseQueryParameterSubSchemaMaxLength(value, configuration),
+]
+case "minLength":
+return [
+name,
+parseQueryParameterSubSchemaMinLength(value, configuration),
+]
+case "pattern":
+return [
+name,
+parseQueryParameterSubSchemaPattern(value, configuration),
+]
+case "maxItems":
+return [
+name,
+parseQueryParameterSubSchemaMaxItems(value, configuration),
+]
+case "minItems":
+return [
+name,
+parseQueryParameterSubSchemaMinItems(value, configuration),
+]
+case "uniqueItems":
+return [
+name,
+parseQueryParameterSubSchemaUniqueItems(value, configuration),
+]
+case "enum":
+return [
+name,
+parseQueryParameterSubSchemaEnum(value, configuration),
+]
+case "multipleOf":
+return [
+name,
+parseQueryParameterSubSchemaMultipleOf(value, configuration),
+]
+default:
+return [
+name,
+(parseQueryParameterSubSchemaAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "required":
+return [
+name,
+parsePathParameterSubSchemaRequired(value, configuration),
+]
+case "in":
+return [
+name,
+parsePathParameterSubSchemaIn(value, configuration),
+]
+case "description":
+return [
+name,
+parsePathParameterSubSchemaDescription(value, configuration),
+]
+case "name":
+return [
+name,
+parsePathParameterSubSchemaName(value, configuration),
+]
+case "type":
+return [
+name,
+parsePathParameterSubSchemaType(value, configuration),
+]
+case "format":
+return [
+name,
+parsePathParameterSubSchemaFormat(value, configuration),
+]
+case "items":
+return [
+name,
+parsePathParameterSubSchemaItems(value, configuration),
+]
+case "collectionFormat":
+return [
+name,
+parsePathParameterSubSchemaCollectionFormat(value, configuration),
+]
+case "default":
+return [
+name,
+parsePathParameterSubSchemaDefault(value, configuration),
+]
+case "maximum":
+return [
+name,
+parsePathParameterSubSchemaMaximum(value, configuration),
+]
+case "exclusiveMaximum":
+return [
+name,
+parsePathParameterSubSchemaExclusiveMaximum(value, configuration),
+]
+case "minimum":
+return [
+name,
+parsePathParameterSubSchemaMinimum(value, configuration),
+]
+case "exclusiveMinimum":
+return [
+name,
+parsePathParameterSubSchemaExclusiveMinimum(value, configuration),
+]
+case "maxLength":
+return [
+name,
+parsePathParameterSubSchemaMaxLength(value, configuration),
+]
+case "minLength":
+return [
+name,
+parsePathParameterSubSchemaMinLength(value, configuration),
+]
+case "pattern":
+return [
+name,
+parsePathParameterSubSchemaPattern(value, configuration),
+]
+case "maxItems":
+return [
+name,
+parsePathParameterSubSchemaMaxItems(value, configuration),
+]
+case "minItems":
+return [
+name,
+parsePathParameterSubSchemaMinItems(value, configuration),
+]
+case "uniqueItems":
+return [
+name,
+parsePathParameterSubSchemaUniqueItems(value, configuration),
+]
+case "enum":
+return [
+name,
+parsePathParameterSubSchemaEnum(value, configuration),
+]
+case "multipleOf":
+return [
+name,
+parsePathParameterSubSchemaMultipleOf(value, configuration),
+]
+default:
+return [
+name,
+(parsePathParameterSubSchemaAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+);
+}
+/**
+* @description A deterministic version of a JSON Schema object.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema}
+*/
+export function parseDefinitionsSchema(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "$ref":
+return [
+name,
+parseSchemaRef(value, configuration),
+]
+case "format":
+return [
+name,
+parseSchemaFormat(value, configuration),
+]
+case "title":
+return [
+name,
+parseSchemaTitle(value, configuration),
+]
+case "description":
+return [
+name,
+parseSchemaDescription(value, configuration),
+]
+case "default":
+return [
+name,
+parseSchemaDefault(value, configuration),
+]
+case "multipleOf":
+return [
+name,
+parseSchemaMultipleOf(value, configuration),
+]
+case "maximum":
+return [
+name,
+parseSchemaMaximum(value, configuration),
+]
+case "exclusiveMaximum":
+return [
+name,
+parseSchemaExclusiveMaximum(value, configuration),
+]
+case "minimum":
+return [
+name,
+parseSchemaMinimum(value, configuration),
+]
+case "exclusiveMinimum":
+return [
+name,
+parseSchemaExclusiveMinimum(value, configuration),
+]
+case "maxLength":
+return [
+name,
+parseSchemaMaxLength(value, configuration),
+]
+case "minLength":
+return [
+name,
+parseSchemaMinLength(value, configuration),
+]
+case "pattern":
+return [
+name,
+parseSchemaPattern(value, configuration),
+]
+case "maxItems":
+return [
+name,
+parseSchemaMaxItems(value, configuration),
+]
+case "minItems":
+return [
+name,
+parseSchemaMinItems(value, configuration),
+]
+case "uniqueItems":
+return [
+name,
+parseSchemaUniqueItems(value, configuration),
+]
+case "maxProperties":
+return [
+name,
+parseMaxProperties(value, configuration),
+]
+case "minProperties":
+return [
+name,
+parseMinProperties(value, configuration),
+]
+case "required":
+return [
+name,
+parseSchemaRequired(value, configuration),
+]
+case "enum":
+return [
+name,
+parseSchemaEnum(value, configuration),
+]
+case "additionalProperties":
+return [
+name,
+parsePropertiesSchemaAdditionalProperties(value, configuration),
+]
+case "type":
+return [
+name,
+parseSchemaType(value, configuration),
+]
+case "items":
+return [
+name,
+parseSchemaItems(value, configuration),
+]
+case "allOf":
+return [
+name,
+parseAllOf(value, configuration),
+]
+case "properties":
+return [
+name,
+parseProperties(value, configuration),
+]
+case "discriminator":
+return [
+name,
+parseDiscriminator(value, configuration),
+]
+case "readOnly":
+return [
+name,
+parseSchemaReadOnly(value, configuration),
+]
+case "xml":
+return [
+name,
+parseSchemaXml(value, configuration),
+]
+case "externalDocs":
+return [
+name,
+parseSchemaExternalDocs(value, configuration),
+]
+case "example":
+return [
+name,
+parseSchemaExample(value, configuration),
+]
+default:
+return [
+name,
+(parseDefinitionsSchemaAdditionalProperties(value, configuration) ??
+parseSchemaPatternPropertiesX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @description A deterministic version of a JSON Schema object.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/fileSchema}
+*/
+export function parseFileSchema(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "format":
+return [
+name,
+parseFileSchemaFormat(value, configuration),
+]
+case "title":
+return [
+name,
+parseFileSchemaTitle(value, configuration),
+]
+case "description":
+return [
+name,
+parseFileSchemaDescription(value, configuration),
+]
+case "default":
+return [
+name,
+parseFileSchemaDefault(value, configuration),
+]
+case "required":
+return [
+name,
+parseFileSchemaRequired(value, configuration),
+]
+case "type":
+return [
+name,
+parseFileSchemaType(value, configuration),
+]
+case "readOnly":
+return [
+name,
+parseFileSchemaReadOnly(value, configuration),
+]
+case "externalDocs":
+return [
+name,
+parseFileSchemaExternalDocs(value, configuration),
+]
+case "example":
+return [
+name,
+parseFileSchemaExample(value, configuration),
+]
+default:
+return [
+name,
+(parseFileSchemaAdditionalProperties(value, configuration) ??
+parseFileSchemaX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems}
+*/
+export function parsePrimitivesItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "type":
+return [
+name,
+parsePrimitivesItemsType(value, configuration),
+]
+case "format":
+return [
+name,
+parsePrimitivesItemsFormat(value, configuration),
+]
+case "items":
+return [
+name,
+parsePrimitivesItemsItems(value, configuration),
+]
+case "collectionFormat":
+return [
+name,
+parsePrimitivesItemsCollectionFormat(value, configuration),
+]
+case "default":
+return [
+name,
+parsePrimitivesItemsDefault(value, configuration),
+]
+case "maximum":
+return [
+name,
+parsePrimitivesItemsMaximum(value, configuration),
+]
+case "exclusiveMaximum":
+return [
+name,
+parsePrimitivesItemsExclusiveMaximum(value, configuration),
+]
+case "minimum":
+return [
+name,
+parsePrimitivesItemsMinimum(value, configuration),
+]
+case "exclusiveMinimum":
+return [
+name,
+parsePrimitivesItemsExclusiveMinimum(value, configuration),
+]
+case "maxLength":
+return [
+name,
+parsePrimitivesItemsMaxLength(value, configuration),
+]
+case "minLength":
+return [
+name,
+parsePrimitivesItemsMinLength(value, configuration),
+]
+case "pattern":
+return [
+name,
+parsePrimitivesItemsPattern(value, configuration),
+]
+case "maxItems":
+return [
+name,
+parsePrimitivesItemsMaxItems(value, configuration),
+]
+case "minItems":
+return [
+name,
+parsePrimitivesItemsMinItems(value, configuration),
+]
+case "uniqueItems":
+return [
+name,
+parsePrimitivesItemsUniqueItems(value, configuration),
+]
+case "enum":
+return [
+name,
+parsePrimitivesItemsEnum(value, configuration),
+]
+case "multipleOf":
+return [
+name,
+parsePrimitivesItemsMultipleOf(value, configuration),
+]
+default:
+return [
+name,
+(parsePrimitivesItemsAdditionalProperties(value, configuration) ??
+parsePrimitivesItemsX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/security}
+*/
+export function parseDefinitionsSecurity(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parseSecurityItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/securityRequirement}
+*/
+export function parseSecurityRequirement(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseSecurityRequirementAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/xml}
+*/
+export function parseDefinitionsXml(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "name":
+return [
+name,
+parseXmlName(value, configuration),
+]
+case "namespace":
+return [
+name,
+parseNamespace(value, configuration),
+]
+case "prefix":
+return [
+name,
+parsePrefix(value, configuration),
+]
+case "attribute":
+return [
+name,
+parseAttribute(value, configuration),
+]
+case "wrapped":
+return [
+name,
+parseWrapped(value, configuration),
+]
+default:
+return [
+name,
+(parseXmlAdditionalProperties(value, configuration) ??
+parseXmlX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/tag}
+*/
+export function parseTag(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "name":
+return [
+name,
+parseTagName(value, configuration),
+]
+case "description":
+return [
+name,
+parseTagDescription(value, configuration),
+]
+case "externalDocs":
+return [
+name,
+parseTagExternalDocs(value, configuration),
+]
+default:
+return [
+name,
+(parseTagAdditionalProperties(value, configuration) ??
+parseTagX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/securityDefinitions}
+*/
+export function parseDefinitionsSecurityDefinitions(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseSecurityDefinitionsAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/basicAuthenticationSecurity}
+*/
+export function parseBasicAuthenticationSecurity(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "type":
+return [
+name,
+parseBasicAuthenticationSecurityType(value, configuration),
+]
+case "description":
+return [
+name,
+parseBasicAuthenticationSecurityDescription(value, configuration),
+]
+default:
+return [
+name,
+(parseBasicAuthenticationSecurityAdditionalProperties(value, configuration) ??
+parseBasicAuthenticationSecurityX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/apiKeySecurity}
+*/
+export function parseApiKeySecurity(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "type":
+return [
+name,
+parseApiKeySecurityType(value, configuration),
+]
+case "name":
+return [
+name,
+parseApiKeySecurityName(value, configuration),
+]
+case "in":
+return [
+name,
+parseApiKeySecurityIn(value, configuration),
+]
+case "description":
+return [
+name,
+parseApiKeySecurityDescription(value, configuration),
+]
+default:
+return [
+name,
+(parseApiKeySecurityAdditionalProperties(value, configuration) ??
+parseApiKeySecurityX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2ImplicitSecurity}
+*/
+export function parseOauth2ImplicitSecurity(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "type":
+return [
+name,
+parseOauth2ImplicitSecurityType(value, configuration),
+]
+case "flow":
+return [
+name,
+parseOauth2ImplicitSecurityFlow(value, configuration),
+]
+case "scopes":
+return [
+name,
+parseOauth2ImplicitSecurityScopes(value, configuration),
+]
+case "authorizationUrl":
+return [
+name,
+parseOauth2ImplicitSecurityAuthorizationUrl(value, configuration),
+]
+case "description":
+return [
+name,
+parseOauth2ImplicitSecurityDescription(value, configuration),
+]
+default:
+return [
+name,
+(parseOauth2ImplicitSecurityAdditionalProperties(value, configuration) ??
+parseOauth2ImplicitSecurityX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2PasswordSecurity}
+*/
+export function parseOauth2PasswordSecurity(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "type":
+return [
+name,
+parseOauth2PasswordSecurityType(value, configuration),
+]
+case "flow":
+return [
+name,
+parseOauth2PasswordSecurityFlow(value, configuration),
+]
+case "scopes":
+return [
+name,
+parseOauth2PasswordSecurityScopes(value, configuration),
+]
+case "tokenUrl":
+return [
+name,
+parseOauth2PasswordSecurityTokenUrl(value, configuration),
+]
+case "description":
+return [
+name,
+parseOauth2PasswordSecurityDescription(value, configuration),
+]
+default:
+return [
+name,
+(parseOauth2PasswordSecurityAdditionalProperties(value, configuration) ??
+parseOauth2PasswordSecurityX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2ApplicationSecurity}
+*/
+export function parseOauth2ApplicationSecurity(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "type":
+return [
+name,
+parseOauth2ApplicationSecurityType(value, configuration),
+]
+case "flow":
+return [
+name,
+parseOauth2ApplicationSecurityFlow(value, configuration),
+]
+case "scopes":
+return [
+name,
+parseOauth2ApplicationSecurityScopes(value, configuration),
+]
+case "tokenUrl":
+return [
+name,
+parseOauth2ApplicationSecurityTokenUrl(value, configuration),
+]
+case "description":
+return [
+name,
+parseOauth2ApplicationSecurityDescription(value, configuration),
+]
+default:
+return [
+name,
+(parseOauth2ApplicationSecurityAdditionalProperties(value, configuration) ??
+parseOauth2ApplicationSecurityX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2AccessCodeSecurity}
+*/
+export function parseOauth2AccessCodeSecurity(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "type":
+return [
+name,
+parseOauth2AccessCodeSecurityType(value, configuration),
+]
+case "flow":
+return [
+name,
+parseOauth2AccessCodeSecurityFlow(value, configuration),
+]
+case "scopes":
+return [
+name,
+parseOauth2AccessCodeSecurityScopes(value, configuration),
+]
+case "authorizationUrl":
+return [
+name,
+parseOauth2AccessCodeSecurityAuthorizationUrl(value, configuration),
+]
+case "tokenUrl":
+return [
+name,
+parseOauth2AccessCodeSecurityTokenUrl(value, configuration),
+]
+case "description":
+return [
+name,
+parseOauth2AccessCodeSecurityDescription(value, configuration),
+]
+default:
+return [
+name,
+(parseOauth2AccessCodeSecurityAdditionalProperties(value, configuration) ??
+parseOauth2AccessCodeSecurityX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2Scopes}
+*/
+export function parseOauth2Scopes(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parseOauth2ScopesAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/mediaTypeList}
+*/
+export function parseMediaTypeList(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parseMediaTypeListItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @description The parameters needed to send a valid API call.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/parametersList}
+*/
+export function parseParametersList(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parseParametersListItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @description The transfer protocol of the API.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schemesList}
+*/
+export function parseSchemesList(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parseSchemesListItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/collectionFormat}
+*/
+export function parseDefinitionsCollectionFormat(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
 if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseMediaTypeListItems(value[elementIndex]);
-}
-return result;
-}
-return undefined;
-}
-export function parseParametersList(value: unknown): unknown {
-return _parseArrayParametersList(value);
-}
-function _parseArrayParametersList(value: unknown): unknown {
-if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseParametersListItems(value[elementIndex]);
-}
-return result;
-}
-return undefined;
-}
-export function parseSchemesList(value: unknown): unknown {
-return _parseArraySchemesList(value);
-}
-function _parseArraySchemesList(value: unknown): unknown {
-if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseSchemesListItems(value[elementIndex]);
-}
-return result;
-}
-return undefined;
-}
-export function parseDefinitionsCollectionFormat(value: unknown): unknown {
-return _parseStringDefinitionsCollectionFormat(value);
-}
-function _parseStringDefinitionsCollectionFormat(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseCollectionFormatWithMulti(value: unknown): unknown {
-return _parseStringCollectionFormatWithMulti(value);
-}
-function _parseStringCollectionFormatWithMulti(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseDefinitionsTitle(value: unknown): unknown {
-return _parseReferenceDefinitionsTitle(value);
-}
-function _parseReferenceDefinitionsTitle(value: unknown): unknown {
-return parseDraft04Title(value);
-}
-export function parseDefinitionsDescription(value: unknown): unknown {
-return _parseReferenceDefinitionsDescription(value);
-}
-function _parseReferenceDefinitionsDescription(value: unknown): unknown {
-return parseDraft04Description(value);
-}
-export function parseDefinitionsDefault(value: unknown): unknown {
-return _parseReferenceDefinitionsDefault(value);
-}
-function _parseReferenceDefinitionsDefault(value: unknown): unknown {
-return parseDraft04Default(value);
-}
-export function parseDefinitionsMultipleOf(value: unknown): unknown {
-return _parseReferenceDefinitionsMultipleOf(value);
-}
-function _parseReferenceDefinitionsMultipleOf(value: unknown): unknown {
-return parseDraft04MultipleOf(value);
-}
-export function parseDefinitionsMaximum(value: unknown): unknown {
-return _parseReferenceDefinitionsMaximum(value);
-}
-function _parseReferenceDefinitionsMaximum(value: unknown): unknown {
-return parseDraft04Maximum(value);
-}
-export function parseDefinitionsExclusiveMaximum(value: unknown): unknown {
-return _parseReferenceDefinitionsExclusiveMaximum(value);
-}
-function _parseReferenceDefinitionsExclusiveMaximum(value: unknown): unknown {
-return parseDraft04ExclusiveMaximum(value);
-}
-export function parseDefinitionsMinimum(value: unknown): unknown {
-return _parseReferenceDefinitionsMinimum(value);
-}
-function _parseReferenceDefinitionsMinimum(value: unknown): unknown {
-return parseDraft04Minimum(value);
-}
-export function parseDefinitionsExclusiveMinimum(value: unknown): unknown {
-return _parseReferenceDefinitionsExclusiveMinimum(value);
-}
-function _parseReferenceDefinitionsExclusiveMinimum(value: unknown): unknown {
-return parseDraft04ExclusiveMinimum(value);
-}
-export function parseDefinitionsMaxLength(value: unknown): unknown {
-return _parseReferenceDefinitionsMaxLength(value);
-}
-function _parseReferenceDefinitionsMaxLength(value: unknown): unknown {
-return parsePositiveInteger(value);
-}
-export function parseDefinitionsMinLength(value: unknown): unknown {
-return _parseReferenceDefinitionsMinLength(value);
-}
-function _parseReferenceDefinitionsMinLength(value: unknown): unknown {
-return parsePositiveIntegerDefault0(value);
-}
-export function parseDefinitionsPattern(value: unknown): unknown {
-return _parseReferenceDefinitionsPattern(value);
-}
-function _parseReferenceDefinitionsPattern(value: unknown): unknown {
-return parseDraft04Pattern(value);
-}
-export function parseDefinitionsMaxItems(value: unknown): unknown {
-return _parseReferenceDefinitionsMaxItems(value);
-}
-function _parseReferenceDefinitionsMaxItems(value: unknown): unknown {
-return parsePositiveInteger(value);
-}
-export function parseDefinitionsMinItems(value: unknown): unknown {
-return _parseReferenceDefinitionsMinItems(value);
-}
-function _parseReferenceDefinitionsMinItems(value: unknown): unknown {
-return parsePositiveIntegerDefault0(value);
-}
-export function parseDefinitionsUniqueItems(value: unknown): unknown {
-return _parseReferenceDefinitionsUniqueItems(value);
-}
-function _parseReferenceDefinitionsUniqueItems(value: unknown): unknown {
-return parseDraft04UniqueItems(value);
-}
-export function parseDefinitionsEnum(value: unknown): unknown {
-return _parseReferenceDefinitionsEnum(value);
-}
-function _parseReferenceDefinitionsEnum(value: unknown): unknown {
-return parseDraft04Enum(value);
-}
-export function parseJsonReference(value: unknown): unknown {
-return _parseMapJsonReference(value);
-}
-function _parseMapJsonReference(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-switch(propertyName) {
-case "$ref": {
-const propertyValue = parseJsonReferenceRef(value[propertyName as keyof typeof value]);
-result[propertyName] = propertyValue;
+switch(value.length) {
+case 1:
+[value] = value
 break;
-}
-}
-result[propertyName] ??= parseJsonReferenceAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
+default:
 return undefined;
 }
-export function parseSwagger(value: unknown): unknown {
-return _parseStringSwagger(value);
 }
-function _parseStringSwagger(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -2024,130 +2842,28 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parsePropertiesInfo(value: unknown): unknown {
-return _parseReferencePropertiesInfo(value);
-}
-function _parseReferencePropertiesInfo(value: unknown): unknown {
-return parseDefinitionsInfo(value);
-}
-export function parseHost(value: unknown): unknown {
-return _parseStringHost(value);
-}
-function _parseStringHost(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseBasePath(value: unknown): unknown {
-return _parseStringBasePath(value);
-}
-function _parseStringBasePath(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parsePropertiesSchemes(value: unknown): unknown {
-return _parseReferencePropertiesSchemes(value);
-}
-function _parseReferencePropertiesSchemes(value: unknown): unknown {
-return parseSchemesList(value);
-}
-export function parsePropertiesConsumes(value: unknown): unknown {
-return _parseAllOfPropertiesConsumes(value);
-}
-function _parseAllOfPropertiesConsumes(value: unknown): unknown {
-return parsePropertiesAllOfConsumes0(value);
-}
-export function parsePropertiesProduces(value: unknown): unknown {
-return _parseAllOfPropertiesProduces(value);
-}
-function _parseAllOfPropertiesProduces(value: unknown): unknown {
-return parsePropertiesAllOfProduces0(value);
-}
-export function parsePropertiesPaths(value: unknown): unknown {
-return _parseReferencePropertiesPaths(value);
-}
-function _parseReferencePropertiesPaths(value: unknown): unknown {
-return parseDefinitionsPaths(value);
-}
-export function parsePropertiesDefinitions(value: unknown): unknown {
-return _parseReferencePropertiesDefinitions(value);
-}
-function _parseReferencePropertiesDefinitions(value: unknown): unknown {
-return parseDefinitionsDefinitions(value);
-}
-export function parsePropertiesParameters(value: unknown): unknown {
-return _parseReferencePropertiesParameters(value);
-}
-function _parseReferencePropertiesParameters(value: unknown): unknown {
-return parseParameterDefinitions(value);
-}
-export function parsePropertiesResponses(value: unknown): unknown {
-return _parseReferencePropertiesResponses(value);
-}
-function _parseReferencePropertiesResponses(value: unknown): unknown {
-return parseResponseDefinitions(value);
-}
-export function parsePropertiesSecurity(value: unknown): unknown {
-return _parseReferencePropertiesSecurity(value);
-}
-function _parseReferencePropertiesSecurity(value: unknown): unknown {
-return parseDefinitionsSecurity(value);
-}
-export function parsePropertiesSecurityDefinitions(value: unknown): unknown {
-return _parseReferencePropertiesSecurityDefinitions(value);
-}
-function _parseReferencePropertiesSecurityDefinitions(value: unknown): unknown {
-return parseDefinitionsSecurityDefinitions(value);
-}
-export function parsePropertiesTags(value: unknown): unknown {
-return _parseArrayPropertiesTags(value);
-}
-function _parseArrayPropertiesTags(value: unknown): unknown {
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/collectionFormatWithMulti}
+*/
+export function parseCollectionFormatWithMulti(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
 if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parsePropertiesTagsItems(value[elementIndex]);
-}
-return result;
-}
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
 return undefined;
 }
-export function parsePropertiesExternalDocs(value: unknown): unknown {
-return _parseReferencePropertiesExternalDocs(value);
 }
-function _parseReferencePropertiesExternalDocs(value: unknown): unknown {
-return parseDefinitionsExternalDocs(value);
-}
-export function parseV2AdditionalProperties(value: unknown): unknown {
-return _parseNeverV2AdditionalProperties(value);
-}
-function _parseNeverV2AdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseV2PatternPropertiesX(value: unknown): unknown {
-return _parseReferenceV2PatternPropertiesX(value);
-}
-function _parseReferenceV2PatternPropertiesX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseInfoTitle(value: unknown): unknown {
-return _parseStringInfoTitle(value);
-}
-function _parseStringInfoTitle(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -2157,266 +2873,208 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseVersion(value: unknown): unknown {
-return _parseStringVersion(value);
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/title}
+*/
+export function parseDefinitionsTitle(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Title(value, configuration));
 }
-function _parseStringVersion(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/description}
+*/
+export function parseDefinitionsDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Description(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/default}
+*/
+export function parseDefinitionsDefault(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Default(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/multipleOf}
+*/
+export function parseDefinitionsMultipleOf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04MultipleOf(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/maximum}
+*/
+export function parseDefinitionsMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Maximum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/exclusiveMaximum}
+*/
+export function parseDefinitionsExclusiveMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04ExclusiveMaximum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/minimum}
+*/
+export function parseDefinitionsMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Minimum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/exclusiveMinimum}
+*/
+export function parseDefinitionsExclusiveMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04ExclusiveMinimum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/maxLength}
+*/
+export function parseDefinitionsMaxLength(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePositiveInteger(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/minLength}
+*/
+export function parseDefinitionsMinLength(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePositiveIntegerDefault0(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pattern}
+*/
+export function parseDefinitionsPattern(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Pattern(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/maxItems}
+*/
+export function parseDefinitionsMaxItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePositiveInteger(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/minItems}
+*/
+export function parseDefinitionsMinItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePositiveIntegerDefault0(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/uniqueItems}
+*/
+export function parseDefinitionsUniqueItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04UniqueItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/enum}
+*/
+export function parseDefinitionsEnum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Enum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/jsonReference}
+*/
+export function parseJsonReference(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "$ref":
+return [
+name,
+parseJsonReferenceRef(value, configuration),
+]
 default:
-return undefined;
-}
-}
-export function parseInfoDescription(value: unknown): unknown {
-return _parseStringInfoDescription(value);
-}
-function _parseStringInfoDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseTermsOfService(value: unknown): unknown {
-return _parseStringTermsOfService(value);
-}
-function _parseStringTermsOfService(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseInfoContact(value: unknown): unknown {
-return _parseReferenceInfoContact(value);
-}
-function _parseReferenceInfoContact(value: unknown): unknown {
-return parseDefinitionsContact(value);
-}
-export function parseInfoLicense(value: unknown): unknown {
-return _parseReferenceInfoLicense(value);
-}
-function _parseReferenceInfoLicense(value: unknown): unknown {
-return parseDefinitionsLicense(value);
-}
-export function parseInfoAdditionalProperties(value: unknown): unknown {
-return _parseNeverInfoAdditionalProperties(value);
-}
-function _parseNeverInfoAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseInfoX(value: unknown): unknown {
-return _parseReferenceInfoX(value);
-}
-function _parseReferenceInfoX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseContactName(value: unknown): unknown {
-return _parseStringContactName(value);
-}
-function _parseStringContactName(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseContactUrl(value: unknown): unknown {
-return _parseStringContactUrl(value);
-}
-function _parseStringContactUrl(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseEmail(value: unknown): unknown {
-return _parseStringEmail(value);
-}
-function _parseStringEmail(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseContactAdditionalProperties(value: unknown): unknown {
-return _parseNeverContactAdditionalProperties(value);
-}
-function _parseNeverContactAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseContactX(value: unknown): unknown {
-return _parseReferenceContactX(value);
-}
-function _parseReferenceContactX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseLicenseName(value: unknown): unknown {
-return _parseStringLicenseName(value);
-}
-function _parseStringLicenseName(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseLicenseUrl(value: unknown): unknown {
-return _parseStringLicenseUrl(value);
-}
-function _parseStringLicenseUrl(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseLicenseAdditionalProperties(value: unknown): unknown {
-return _parseNeverLicenseAdditionalProperties(value);
-}
-function _parseNeverLicenseAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseLicenseX(value: unknown): unknown {
-return _parseReferenceLicenseX(value);
-}
-function _parseReferenceLicenseX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parsePathsAdditionalProperties(value: unknown): unknown {
-return _parseNeverPathsAdditionalProperties(value);
-}
-function _parseNeverPathsAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parsePathsX(value: unknown): unknown {
-return _parseReferencePathsX(value);
-}
-function _parseReferencePathsX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parsePatternProperties(value: unknown): unknown {
-return _parseReferencePatternProperties(value);
-}
-function _parseReferencePatternProperties(value: unknown): unknown {
-return parsePathItem(value);
-}
-export function parseDefinitionsAdditionalProperties(value: unknown): unknown {
-return _parseReferenceDefinitionsAdditionalProperties(value);
-}
-function _parseReferenceDefinitionsAdditionalProperties(value: unknown): unknown {
-return parseDefinitionsSchema(value);
-}
-export function parseParameterDefinitionsAdditionalProperties(value: unknown): unknown {
-return _parseReferenceParameterDefinitionsAdditionalProperties(value);
-}
-function _parseReferenceParameterDefinitionsAdditionalProperties(value: unknown): unknown {
-return parseParameter(value);
-}
-export function parseResponseDefinitionsAdditionalProperties(value: unknown): unknown {
-return _parseReferenceResponseDefinitionsAdditionalProperties(value);
-}
-function _parseReferenceResponseDefinitionsAdditionalProperties(value: unknown): unknown {
-return parseResponse(value);
-}
-export function parseExternalDocsDescription(value: unknown): unknown {
-return _parseStringExternalDocsDescription(value);
-}
-function _parseStringExternalDocsDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseExternalDocsUrl(value: unknown): unknown {
-return _parseStringExternalDocsUrl(value);
-}
-function _parseStringExternalDocsUrl(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseExternalDocsAdditionalProperties(value: unknown): unknown {
-return _parseNeverExternalDocsAdditionalProperties(value);
-}
-function _parseNeverExternalDocsAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseExternalDocsX(value: unknown): unknown {
-return _parseReferenceExternalDocsX(value);
-}
-function _parseReferenceExternalDocsX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseExamplesAdditionalProperties(value: unknown): unknown {
-return _parseAnyExamplesAdditionalProperties(value);
-}
-function _parseAnyExamplesAdditionalProperties(value: unknown): unknown {
-return value;
-}
-export function parseOperationTags(value: unknown): unknown {
-return _parseArrayOperationTags(value);
-}
-function _parseArrayOperationTags(value: unknown): unknown {
+return [
+name,
+(parseJsonReferenceAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @description The Swagger version of this document.
+* @see {@link http://swagger.io/v2/schema.json#/properties/swagger}
+*/
+export function parseSwagger(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
 if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseOperationTagsItems(value[elementIndex]);
-}
-return result;
-}
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
 return undefined;
 }
-export function parseSummary(value: unknown): unknown {
-return _parseStringSummary(value);
 }
-function _parseStringSummary(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -2426,1588 +3084,39 @@ return String(value);
 default:
 return undefined;
 }
-}
-export function parseOperationDescription(value: unknown): unknown {
-return _parseStringOperationDescription(value);
-}
-function _parseStringOperationDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOperationExternalDocs(value: unknown): unknown {
-return _parseReferenceOperationExternalDocs(value);
-}
-function _parseReferenceOperationExternalDocs(value: unknown): unknown {
-return parseDefinitionsExternalDocs(value);
-}
-export function parseOperationId(value: unknown): unknown {
-return _parseStringOperationId(value);
-}
-function _parseStringOperationId(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOperationProduces(value: unknown): unknown {
-return _parseAllOfOperationProduces(value);
-}
-function _parseAllOfOperationProduces(value: unknown): unknown {
-return parseOperationAllOfProduces0(value);
-}
-export function parseOperationConsumes(value: unknown): unknown {
-return _parseAllOfOperationConsumes(value);
-}
-function _parseAllOfOperationConsumes(value: unknown): unknown {
-return parseOperationAllOfConsumes0(value);
-}
-export function parseOperationParameters(value: unknown): unknown {
-return _parseReferenceOperationParameters(value);
-}
-function _parseReferenceOperationParameters(value: unknown): unknown {
-return parseParametersList(value);
-}
-export function parseOperationResponses(value: unknown): unknown {
-return _parseReferenceOperationResponses(value);
-}
-function _parseReferenceOperationResponses(value: unknown): unknown {
-return parseDefinitionsResponses(value);
-}
-export function parseOperationSchemes(value: unknown): unknown {
-return _parseReferenceOperationSchemes(value);
-}
-function _parseReferenceOperationSchemes(value: unknown): unknown {
-return parseSchemesList(value);
-}
-export function parseDeprecated(value: unknown): unknown {
-return _parseBooleanDeprecated(value);
-}
-function _parseBooleanDeprecated(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseOperationSecurity(value: unknown): unknown {
-return _parseReferenceOperationSecurity(value);
-}
-function _parseReferenceOperationSecurity(value: unknown): unknown {
-return parseDefinitionsSecurity(value);
-}
-export function parseOperationAdditionalProperties(value: unknown): unknown {
-return _parseNeverOperationAdditionalProperties(value);
-}
-function _parseNeverOperationAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseOperationX(value: unknown): unknown {
-return _parseReferenceOperationX(value);
-}
-function _parseReferenceOperationX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parsePathItemRef(value: unknown): unknown {
-return _parseStringPathItemRef(value);
-}
-function _parseStringPathItemRef(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseGet(value: unknown): unknown {
-return _parseReferenceGet(value);
-}
-function _parseReferenceGet(value: unknown): unknown {
-return parseOperation(value);
-}
-export function parsePut(value: unknown): unknown {
-return _parseReferencePut(value);
-}
-function _parseReferencePut(value: unknown): unknown {
-return parseOperation(value);
-}
-export function parsePost(value: unknown): unknown {
-return _parseReferencePost(value);
-}
-function _parseReferencePost(value: unknown): unknown {
-return parseOperation(value);
-}
-export function parseDelete(value: unknown): unknown {
-return _parseReferenceDelete(value);
-}
-function _parseReferenceDelete(value: unknown): unknown {
-return parseOperation(value);
-}
-export function parseOptions(value: unknown): unknown {
-return _parseReferenceOptions(value);
-}
-function _parseReferenceOptions(value: unknown): unknown {
-return parseOperation(value);
-}
-export function parseHead(value: unknown): unknown {
-return _parseReferenceHead(value);
-}
-function _parseReferenceHead(value: unknown): unknown {
-return parseOperation(value);
-}
-export function parsePatch(value: unknown): unknown {
-return _parseReferencePatch(value);
-}
-function _parseReferencePatch(value: unknown): unknown {
-return parseOperation(value);
-}
-export function parsePathItemParameters(value: unknown): unknown {
-return _parseReferencePathItemParameters(value);
-}
-function _parseReferencePathItemParameters(value: unknown): unknown {
-return parseParametersList(value);
-}
-export function parsePathItemAdditionalProperties(value: unknown): unknown {
-return _parseNeverPathItemAdditionalProperties(value);
-}
-function _parseNeverPathItemAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parsePathItemX(value: unknown): unknown {
-return _parseReferencePathItemX(value);
-}
-function _parseReferencePathItemX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseResponsesAdditionalProperties(value: unknown): unknown {
-return _parseNeverResponsesAdditionalProperties(value);
-}
-function _parseNeverResponsesAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseResponses093Default(value: unknown): unknown {
-return _parseReferenceResponses093Default(value);
-}
-function _parseReferenceResponses093Default(value: unknown): unknown {
-return parseResponseValue(value);
-}
-export function parseResponsesX(value: unknown): unknown {
-return _parseReferenceResponsesX(value);
-}
-function _parseReferenceResponsesX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseNot(value: unknown): unknown {
-return _parseMapNot(value);
-}
-function _parseMapNot(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parseNotAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseResponseValue0(value: unknown): unknown {
-return _parseReferenceResponseValue0(value);
-}
-function _parseReferenceResponseValue0(value: unknown): unknown {
-return parseResponse(value);
-}
-export function parseResponseValue1(value: unknown): unknown {
-return _parseReferenceResponseValue1(value);
-}
-function _parseReferenceResponseValue1(value: unknown): unknown {
-return parseJsonReference(value);
-}
-export function parseResponseDescription(value: unknown): unknown {
-return _parseStringResponseDescription(value);
-}
-function _parseStringResponseDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseResponseSchema(value: unknown): unknown {
-return _parseOneOfResponseSchema(value);
-}
-function _parseOneOfResponseSchema(value: unknown): unknown {
-return parseResponse0(value) ?? parseResponse1(value);
-}
-export function parseResponseHeaders(value: unknown): unknown {
-return _parseReferenceResponseHeaders(value);
-}
-function _parseReferenceResponseHeaders(value: unknown): unknown {
-return parseDefinitionsHeaders(value);
-}
-export function parseResponseExamples(value: unknown): unknown {
-return _parseReferenceResponseExamples(value);
-}
-function _parseReferenceResponseExamples(value: unknown): unknown {
-return parseDefinitionsExamples(value);
-}
-export function parseResponseAdditionalProperties(value: unknown): unknown {
-return _parseNeverResponseAdditionalProperties(value);
-}
-function _parseNeverResponseAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseResponseX(value: unknown): unknown {
-return _parseReferenceResponseX(value);
-}
-function _parseReferenceResponseX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseHeadersAdditionalProperties(value: unknown): unknown {
-return _parseReferenceHeadersAdditionalProperties(value);
-}
-function _parseReferenceHeadersAdditionalProperties(value: unknown): unknown {
-return parseHeader(value);
-}
-export function parseHeaderType(value: unknown): unknown {
-return _parseStringHeaderType(value);
-}
-function _parseStringHeaderType(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseHeaderFormat(value: unknown): unknown {
-return _parseStringHeaderFormat(value);
-}
-function _parseStringHeaderFormat(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseHeaderItems(value: unknown): unknown {
-return _parseReferenceHeaderItems(value);
-}
-function _parseReferenceHeaderItems(value: unknown): unknown {
-return parsePrimitivesItems(value);
-}
-export function parseHeaderCollectionFormat(value: unknown): unknown {
-return _parseReferenceHeaderCollectionFormat(value);
-}
-function _parseReferenceHeaderCollectionFormat(value: unknown): unknown {
-return parseDefinitionsCollectionFormat(value);
-}
-export function parseHeaderDefault(value: unknown): unknown {
-return _parseReferenceHeaderDefault(value);
-}
-function _parseReferenceHeaderDefault(value: unknown): unknown {
-return parseDefinitionsDefault(value);
-}
-export function parseHeaderMaximum(value: unknown): unknown {
-return _parseReferenceHeaderMaximum(value);
-}
-function _parseReferenceHeaderMaximum(value: unknown): unknown {
-return parseDefinitionsMaximum(value);
-}
-export function parseHeaderExclusiveMaximum(value: unknown): unknown {
-return _parseReferenceHeaderExclusiveMaximum(value);
-}
-function _parseReferenceHeaderExclusiveMaximum(value: unknown): unknown {
-return parseDefinitionsExclusiveMaximum(value);
-}
-export function parseHeaderMinimum(value: unknown): unknown {
-return _parseReferenceHeaderMinimum(value);
-}
-function _parseReferenceHeaderMinimum(value: unknown): unknown {
-return parseDefinitionsMinimum(value);
-}
-export function parseHeaderExclusiveMinimum(value: unknown): unknown {
-return _parseReferenceHeaderExclusiveMinimum(value);
-}
-function _parseReferenceHeaderExclusiveMinimum(value: unknown): unknown {
-return parseDefinitionsExclusiveMinimum(value);
-}
-export function parseHeaderMaxLength(value: unknown): unknown {
-return _parseReferenceHeaderMaxLength(value);
-}
-function _parseReferenceHeaderMaxLength(value: unknown): unknown {
-return parseDefinitionsMaxLength(value);
-}
-export function parseHeaderMinLength(value: unknown): unknown {
-return _parseReferenceHeaderMinLength(value);
-}
-function _parseReferenceHeaderMinLength(value: unknown): unknown {
-return parseDefinitionsMinLength(value);
-}
-export function parseHeaderPattern(value: unknown): unknown {
-return _parseReferenceHeaderPattern(value);
-}
-function _parseReferenceHeaderPattern(value: unknown): unknown {
-return parseDefinitionsPattern(value);
-}
-export function parseHeaderMaxItems(value: unknown): unknown {
-return _parseReferenceHeaderMaxItems(value);
-}
-function _parseReferenceHeaderMaxItems(value: unknown): unknown {
-return parseDefinitionsMaxItems(value);
-}
-export function parseHeaderMinItems(value: unknown): unknown {
-return _parseReferenceHeaderMinItems(value);
-}
-function _parseReferenceHeaderMinItems(value: unknown): unknown {
-return parseDefinitionsMinItems(value);
-}
-export function parseHeaderUniqueItems(value: unknown): unknown {
-return _parseReferenceHeaderUniqueItems(value);
-}
-function _parseReferenceHeaderUniqueItems(value: unknown): unknown {
-return parseDefinitionsUniqueItems(value);
-}
-export function parseHeaderEnum(value: unknown): unknown {
-return _parseReferenceHeaderEnum(value);
-}
-function _parseReferenceHeaderEnum(value: unknown): unknown {
-return parseDefinitionsEnum(value);
-}
-export function parseHeaderMultipleOf(value: unknown): unknown {
-return _parseReferenceHeaderMultipleOf(value);
-}
-function _parseReferenceHeaderMultipleOf(value: unknown): unknown {
-return parseDefinitionsMultipleOf(value);
-}
-export function parseHeaderDescription(value: unknown): unknown {
-return _parseStringHeaderDescription(value);
-}
-function _parseStringHeaderDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseHeaderAdditionalProperties(value: unknown): unknown {
-return _parseNeverHeaderAdditionalProperties(value);
-}
-function _parseNeverHeaderAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseHeaderX(value: unknown): unknown {
-return _parseReferenceHeaderX(value);
-}
-function _parseReferenceHeaderX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseVendorExtensionAdditionalProperties(value: unknown): unknown {
-return _parseAnyVendorExtensionAdditionalProperties(value);
-}
-function _parseAnyVendorExtensionAdditionalProperties(value: unknown): unknown {
-return value;
-}
-export function parseVendorExtensionAdditionalItems(value: unknown): unknown {
-return _parseAnyVendorExtensionAdditionalItems(value);
-}
-function _parseAnyVendorExtensionAdditionalItems(value: unknown): unknown {
-return value;
-}
-export function parseBodyParameterDescription(value: unknown): unknown {
-return _parseStringBodyParameterDescription(value);
-}
-function _parseStringBodyParameterDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseBodyParameterName(value: unknown): unknown {
-return _parseStringBodyParameterName(value);
-}
-function _parseStringBodyParameterName(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseBodyParameterIn(value: unknown): unknown {
-return _parseStringBodyParameterIn(value);
-}
-function _parseStringBodyParameterIn(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseBodyParameterRequired(value: unknown): unknown {
-return _parseBooleanBodyParameterRequired(value);
-}
-function _parseBooleanBodyParameterRequired(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseBodyParameterSchema(value: unknown): unknown {
-return _parseReferenceBodyParameterSchema(value);
-}
-function _parseReferenceBodyParameterSchema(value: unknown): unknown {
-return parseDefinitionsSchema(value);
-}
-export function parseBodyParameterAdditionalProperties(value: unknown): unknown {
-return _parseNeverBodyParameterAdditionalProperties(value);
-}
-function _parseNeverBodyParameterAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseBodyParameterX(value: unknown): unknown {
-return _parseReferenceBodyParameterX(value);
-}
-function _parseReferenceBodyParameterX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseHeaderParameterSubSchemaRequired(value: unknown): unknown {
-return _parseBooleanHeaderParameterSubSchemaRequired(value);
-}
-function _parseBooleanHeaderParameterSubSchemaRequired(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseHeaderParameterSubSchemaIn(value: unknown): unknown {
-return _parseStringHeaderParameterSubSchemaIn(value);
-}
-function _parseStringHeaderParameterSubSchemaIn(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseHeaderParameterSubSchemaDescription(value: unknown): unknown {
-return _parseStringHeaderParameterSubSchemaDescription(value);
-}
-function _parseStringHeaderParameterSubSchemaDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseHeaderParameterSubSchemaName(value: unknown): unknown {
-return _parseStringHeaderParameterSubSchemaName(value);
-}
-function _parseStringHeaderParameterSubSchemaName(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseHeaderParameterSubSchemaType(value: unknown): unknown {
-return _parseStringHeaderParameterSubSchemaType(value);
-}
-function _parseStringHeaderParameterSubSchemaType(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseHeaderParameterSubSchemaFormat(value: unknown): unknown {
-return _parseStringHeaderParameterSubSchemaFormat(value);
-}
-function _parseStringHeaderParameterSubSchemaFormat(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseHeaderParameterSubSchemaItems(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaItems(value);
-}
-function _parseReferenceHeaderParameterSubSchemaItems(value: unknown): unknown {
-return parsePrimitivesItems(value);
-}
-export function parseHeaderParameterSubSchemaCollectionFormat(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaCollectionFormat(value);
-}
-function _parseReferenceHeaderParameterSubSchemaCollectionFormat(value: unknown): unknown {
-return parseDefinitionsCollectionFormat(value);
-}
-export function parseHeaderParameterSubSchemaDefault(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaDefault(value);
-}
-function _parseReferenceHeaderParameterSubSchemaDefault(value: unknown): unknown {
-return parseDefinitionsDefault(value);
-}
-export function parseHeaderParameterSubSchemaMaximum(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaMaximum(value);
-}
-function _parseReferenceHeaderParameterSubSchemaMaximum(value: unknown): unknown {
-return parseDefinitionsMaximum(value);
-}
-export function parseHeaderParameterSubSchemaExclusiveMaximum(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaExclusiveMaximum(value);
-}
-function _parseReferenceHeaderParameterSubSchemaExclusiveMaximum(value: unknown): unknown {
-return parseDefinitionsExclusiveMaximum(value);
-}
-export function parseHeaderParameterSubSchemaMinimum(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaMinimum(value);
-}
-function _parseReferenceHeaderParameterSubSchemaMinimum(value: unknown): unknown {
-return parseDefinitionsMinimum(value);
-}
-export function parseHeaderParameterSubSchemaExclusiveMinimum(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaExclusiveMinimum(value);
-}
-function _parseReferenceHeaderParameterSubSchemaExclusiveMinimum(value: unknown): unknown {
-return parseDefinitionsExclusiveMinimum(value);
-}
-export function parseHeaderParameterSubSchemaMaxLength(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaMaxLength(value);
-}
-function _parseReferenceHeaderParameterSubSchemaMaxLength(value: unknown): unknown {
-return parseDefinitionsMaxLength(value);
-}
-export function parseHeaderParameterSubSchemaMinLength(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaMinLength(value);
-}
-function _parseReferenceHeaderParameterSubSchemaMinLength(value: unknown): unknown {
-return parseDefinitionsMinLength(value);
-}
-export function parseHeaderParameterSubSchemaPattern(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaPattern(value);
-}
-function _parseReferenceHeaderParameterSubSchemaPattern(value: unknown): unknown {
-return parseDefinitionsPattern(value);
-}
-export function parseHeaderParameterSubSchemaMaxItems(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaMaxItems(value);
-}
-function _parseReferenceHeaderParameterSubSchemaMaxItems(value: unknown): unknown {
-return parseDefinitionsMaxItems(value);
-}
-export function parseHeaderParameterSubSchemaMinItems(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaMinItems(value);
-}
-function _parseReferenceHeaderParameterSubSchemaMinItems(value: unknown): unknown {
-return parseDefinitionsMinItems(value);
-}
-export function parseHeaderParameterSubSchemaUniqueItems(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaUniqueItems(value);
-}
-function _parseReferenceHeaderParameterSubSchemaUniqueItems(value: unknown): unknown {
-return parseDefinitionsUniqueItems(value);
-}
-export function parseHeaderParameterSubSchemaEnum(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaEnum(value);
-}
-function _parseReferenceHeaderParameterSubSchemaEnum(value: unknown): unknown {
-return parseDefinitionsEnum(value);
-}
-export function parseHeaderParameterSubSchemaMultipleOf(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaMultipleOf(value);
-}
-function _parseReferenceHeaderParameterSubSchemaMultipleOf(value: unknown): unknown {
-return parseDefinitionsMultipleOf(value);
-}
-export function parseHeaderParameterSubSchemaAdditionalProperties(value: unknown): unknown {
-return _parseNeverHeaderParameterSubSchemaAdditionalProperties(value);
-}
-function _parseNeverHeaderParameterSubSchemaAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseHeaderParameterSubSchemaX(value: unknown): unknown {
-return _parseReferenceHeaderParameterSubSchemaX(value);
-}
-function _parseReferenceHeaderParameterSubSchemaX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseQueryParameterSubSchemaRequired(value: unknown): unknown {
-return _parseBooleanQueryParameterSubSchemaRequired(value);
-}
-function _parseBooleanQueryParameterSubSchemaRequired(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseQueryParameterSubSchemaIn(value: unknown): unknown {
-return _parseStringQueryParameterSubSchemaIn(value);
-}
-function _parseStringQueryParameterSubSchemaIn(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseQueryParameterSubSchemaDescription(value: unknown): unknown {
-return _parseStringQueryParameterSubSchemaDescription(value);
-}
-function _parseStringQueryParameterSubSchemaDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseQueryParameterSubSchemaName(value: unknown): unknown {
-return _parseStringQueryParameterSubSchemaName(value);
-}
-function _parseStringQueryParameterSubSchemaName(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseQueryParameterSubSchemaAllowEmptyValue(value: unknown): unknown {
-return _parseBooleanQueryParameterSubSchemaAllowEmptyValue(value);
-}
-function _parseBooleanQueryParameterSubSchemaAllowEmptyValue(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseQueryParameterSubSchemaType(value: unknown): unknown {
-return _parseStringQueryParameterSubSchemaType(value);
-}
-function _parseStringQueryParameterSubSchemaType(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseQueryParameterSubSchemaFormat(value: unknown): unknown {
-return _parseStringQueryParameterSubSchemaFormat(value);
-}
-function _parseStringQueryParameterSubSchemaFormat(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseQueryParameterSubSchemaItems(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaItems(value);
-}
-function _parseReferenceQueryParameterSubSchemaItems(value: unknown): unknown {
-return parsePrimitivesItems(value);
-}
-export function parseQueryParameterSubSchemaCollectionFormat(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaCollectionFormat(value);
-}
-function _parseReferenceQueryParameterSubSchemaCollectionFormat(value: unknown): unknown {
-return parseCollectionFormatWithMulti(value);
-}
-export function parseQueryParameterSubSchemaDefault(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaDefault(value);
-}
-function _parseReferenceQueryParameterSubSchemaDefault(value: unknown): unknown {
-return parseDefinitionsDefault(value);
-}
-export function parseQueryParameterSubSchemaMaximum(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaMaximum(value);
-}
-function _parseReferenceQueryParameterSubSchemaMaximum(value: unknown): unknown {
-return parseDefinitionsMaximum(value);
-}
-export function parseQueryParameterSubSchemaExclusiveMaximum(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaExclusiveMaximum(value);
-}
-function _parseReferenceQueryParameterSubSchemaExclusiveMaximum(value: unknown): unknown {
-return parseDefinitionsExclusiveMaximum(value);
-}
-export function parseQueryParameterSubSchemaMinimum(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaMinimum(value);
-}
-function _parseReferenceQueryParameterSubSchemaMinimum(value: unknown): unknown {
-return parseDefinitionsMinimum(value);
-}
-export function parseQueryParameterSubSchemaExclusiveMinimum(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaExclusiveMinimum(value);
-}
-function _parseReferenceQueryParameterSubSchemaExclusiveMinimum(value: unknown): unknown {
-return parseDefinitionsExclusiveMinimum(value);
-}
-export function parseQueryParameterSubSchemaMaxLength(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaMaxLength(value);
-}
-function _parseReferenceQueryParameterSubSchemaMaxLength(value: unknown): unknown {
-return parseDefinitionsMaxLength(value);
-}
-export function parseQueryParameterSubSchemaMinLength(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaMinLength(value);
-}
-function _parseReferenceQueryParameterSubSchemaMinLength(value: unknown): unknown {
-return parseDefinitionsMinLength(value);
-}
-export function parseQueryParameterSubSchemaPattern(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaPattern(value);
-}
-function _parseReferenceQueryParameterSubSchemaPattern(value: unknown): unknown {
-return parseDefinitionsPattern(value);
-}
-export function parseQueryParameterSubSchemaMaxItems(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaMaxItems(value);
-}
-function _parseReferenceQueryParameterSubSchemaMaxItems(value: unknown): unknown {
-return parseDefinitionsMaxItems(value);
-}
-export function parseQueryParameterSubSchemaMinItems(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaMinItems(value);
-}
-function _parseReferenceQueryParameterSubSchemaMinItems(value: unknown): unknown {
-return parseDefinitionsMinItems(value);
-}
-export function parseQueryParameterSubSchemaUniqueItems(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaUniqueItems(value);
-}
-function _parseReferenceQueryParameterSubSchemaUniqueItems(value: unknown): unknown {
-return parseDefinitionsUniqueItems(value);
-}
-export function parseQueryParameterSubSchemaEnum(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaEnum(value);
-}
-function _parseReferenceQueryParameterSubSchemaEnum(value: unknown): unknown {
-return parseDefinitionsEnum(value);
-}
-export function parseQueryParameterSubSchemaMultipleOf(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaMultipleOf(value);
-}
-function _parseReferenceQueryParameterSubSchemaMultipleOf(value: unknown): unknown {
-return parseDefinitionsMultipleOf(value);
-}
-export function parseQueryParameterSubSchemaAdditionalProperties(value: unknown): unknown {
-return _parseNeverQueryParameterSubSchemaAdditionalProperties(value);
-}
-function _parseNeverQueryParameterSubSchemaAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseQueryParameterSubSchemaX(value: unknown): unknown {
-return _parseReferenceQueryParameterSubSchemaX(value);
-}
-function _parseReferenceQueryParameterSubSchemaX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseFormDataParameterSubSchemaRequired(value: unknown): unknown {
-return _parseBooleanFormDataParameterSubSchemaRequired(value);
-}
-function _parseBooleanFormDataParameterSubSchemaRequired(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseFormDataParameterSubSchemaIn(value: unknown): unknown {
-return _parseStringFormDataParameterSubSchemaIn(value);
-}
-function _parseStringFormDataParameterSubSchemaIn(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseFormDataParameterSubSchemaDescription(value: unknown): unknown {
-return _parseStringFormDataParameterSubSchemaDescription(value);
-}
-function _parseStringFormDataParameterSubSchemaDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseFormDataParameterSubSchemaName(value: unknown): unknown {
-return _parseStringFormDataParameterSubSchemaName(value);
-}
-function _parseStringFormDataParameterSubSchemaName(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseFormDataParameterSubSchemaAllowEmptyValue(value: unknown): unknown {
-return _parseBooleanFormDataParameterSubSchemaAllowEmptyValue(value);
-}
-function _parseBooleanFormDataParameterSubSchemaAllowEmptyValue(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseFormDataParameterSubSchemaType(value: unknown): unknown {
-return _parseStringFormDataParameterSubSchemaType(value);
-}
-function _parseStringFormDataParameterSubSchemaType(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseFormDataParameterSubSchemaFormat(value: unknown): unknown {
-return _parseStringFormDataParameterSubSchemaFormat(value);
-}
-function _parseStringFormDataParameterSubSchemaFormat(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseFormDataParameterSubSchemaItems(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaItems(value);
-}
-function _parseReferenceFormDataParameterSubSchemaItems(value: unknown): unknown {
-return parsePrimitivesItems(value);
-}
-export function parseFormDataParameterSubSchemaCollectionFormat(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaCollectionFormat(value);
-}
-function _parseReferenceFormDataParameterSubSchemaCollectionFormat(value: unknown): unknown {
-return parseCollectionFormatWithMulti(value);
-}
-export function parseFormDataParameterSubSchemaDefault(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaDefault(value);
-}
-function _parseReferenceFormDataParameterSubSchemaDefault(value: unknown): unknown {
-return parseDefinitionsDefault(value);
-}
-export function parseFormDataParameterSubSchemaMaximum(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaMaximum(value);
-}
-function _parseReferenceFormDataParameterSubSchemaMaximum(value: unknown): unknown {
-return parseDefinitionsMaximum(value);
-}
-export function parseFormDataParameterSubSchemaExclusiveMaximum(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaExclusiveMaximum(value);
-}
-function _parseReferenceFormDataParameterSubSchemaExclusiveMaximum(value: unknown): unknown {
-return parseDefinitionsExclusiveMaximum(value);
-}
-export function parseFormDataParameterSubSchemaMinimum(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaMinimum(value);
-}
-function _parseReferenceFormDataParameterSubSchemaMinimum(value: unknown): unknown {
-return parseDefinitionsMinimum(value);
-}
-export function parseFormDataParameterSubSchemaExclusiveMinimum(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaExclusiveMinimum(value);
-}
-function _parseReferenceFormDataParameterSubSchemaExclusiveMinimum(value: unknown): unknown {
-return parseDefinitionsExclusiveMinimum(value);
-}
-export function parseFormDataParameterSubSchemaMaxLength(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaMaxLength(value);
-}
-function _parseReferenceFormDataParameterSubSchemaMaxLength(value: unknown): unknown {
-return parseDefinitionsMaxLength(value);
-}
-export function parseFormDataParameterSubSchemaMinLength(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaMinLength(value);
-}
-function _parseReferenceFormDataParameterSubSchemaMinLength(value: unknown): unknown {
-return parseDefinitionsMinLength(value);
-}
-export function parseFormDataParameterSubSchemaPattern(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaPattern(value);
-}
-function _parseReferenceFormDataParameterSubSchemaPattern(value: unknown): unknown {
-return parseDefinitionsPattern(value);
-}
-export function parseFormDataParameterSubSchemaMaxItems(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaMaxItems(value);
-}
-function _parseReferenceFormDataParameterSubSchemaMaxItems(value: unknown): unknown {
-return parseDefinitionsMaxItems(value);
-}
-export function parseFormDataParameterSubSchemaMinItems(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaMinItems(value);
-}
-function _parseReferenceFormDataParameterSubSchemaMinItems(value: unknown): unknown {
-return parseDefinitionsMinItems(value);
-}
-export function parseFormDataParameterSubSchemaUniqueItems(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaUniqueItems(value);
-}
-function _parseReferenceFormDataParameterSubSchemaUniqueItems(value: unknown): unknown {
-return parseDefinitionsUniqueItems(value);
-}
-export function parseFormDataParameterSubSchemaEnum(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaEnum(value);
-}
-function _parseReferenceFormDataParameterSubSchemaEnum(value: unknown): unknown {
-return parseDefinitionsEnum(value);
-}
-export function parseFormDataParameterSubSchemaMultipleOf(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaMultipleOf(value);
-}
-function _parseReferenceFormDataParameterSubSchemaMultipleOf(value: unknown): unknown {
-return parseDefinitionsMultipleOf(value);
-}
-export function parseFormDataParameterSubSchemaAdditionalProperties(value: unknown): unknown {
-return _parseNeverFormDataParameterSubSchemaAdditionalProperties(value);
-}
-function _parseNeverFormDataParameterSubSchemaAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseFormDataParameterSubSchemaX(value: unknown): unknown {
-return _parseReferenceFormDataParameterSubSchemaX(value);
-}
-function _parseReferenceFormDataParameterSubSchemaX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parsePathParameterSubSchemaRequired(value: unknown): unknown {
-return _parseBooleanPathParameterSubSchemaRequired(value);
-}
-function _parseBooleanPathParameterSubSchemaRequired(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parsePathParameterSubSchemaIn(value: unknown): unknown {
-return _parseStringPathParameterSubSchemaIn(value);
-}
-function _parseStringPathParameterSubSchemaIn(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parsePathParameterSubSchemaDescription(value: unknown): unknown {
-return _parseStringPathParameterSubSchemaDescription(value);
-}
-function _parseStringPathParameterSubSchemaDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parsePathParameterSubSchemaName(value: unknown): unknown {
-return _parseStringPathParameterSubSchemaName(value);
-}
-function _parseStringPathParameterSubSchemaName(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parsePathParameterSubSchemaType(value: unknown): unknown {
-return _parseStringPathParameterSubSchemaType(value);
-}
-function _parseStringPathParameterSubSchemaType(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parsePathParameterSubSchemaFormat(value: unknown): unknown {
-return _parseStringPathParameterSubSchemaFormat(value);
-}
-function _parseStringPathParameterSubSchemaFormat(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parsePathParameterSubSchemaItems(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaItems(value);
-}
-function _parseReferencePathParameterSubSchemaItems(value: unknown): unknown {
-return parsePrimitivesItems(value);
-}
-export function parsePathParameterSubSchemaCollectionFormat(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaCollectionFormat(value);
-}
-function _parseReferencePathParameterSubSchemaCollectionFormat(value: unknown): unknown {
-return parseDefinitionsCollectionFormat(value);
-}
-export function parsePathParameterSubSchemaDefault(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaDefault(value);
-}
-function _parseReferencePathParameterSubSchemaDefault(value: unknown): unknown {
-return parseDefinitionsDefault(value);
-}
-export function parsePathParameterSubSchemaMaximum(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaMaximum(value);
-}
-function _parseReferencePathParameterSubSchemaMaximum(value: unknown): unknown {
-return parseDefinitionsMaximum(value);
-}
-export function parsePathParameterSubSchemaExclusiveMaximum(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaExclusiveMaximum(value);
-}
-function _parseReferencePathParameterSubSchemaExclusiveMaximum(value: unknown): unknown {
-return parseDefinitionsExclusiveMaximum(value);
-}
-export function parsePathParameterSubSchemaMinimum(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaMinimum(value);
-}
-function _parseReferencePathParameterSubSchemaMinimum(value: unknown): unknown {
-return parseDefinitionsMinimum(value);
-}
-export function parsePathParameterSubSchemaExclusiveMinimum(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaExclusiveMinimum(value);
-}
-function _parseReferencePathParameterSubSchemaExclusiveMinimum(value: unknown): unknown {
-return parseDefinitionsExclusiveMinimum(value);
-}
-export function parsePathParameterSubSchemaMaxLength(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaMaxLength(value);
-}
-function _parseReferencePathParameterSubSchemaMaxLength(value: unknown): unknown {
-return parseDefinitionsMaxLength(value);
-}
-export function parsePathParameterSubSchemaMinLength(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaMinLength(value);
-}
-function _parseReferencePathParameterSubSchemaMinLength(value: unknown): unknown {
-return parseDefinitionsMinLength(value);
-}
-export function parsePathParameterSubSchemaPattern(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaPattern(value);
-}
-function _parseReferencePathParameterSubSchemaPattern(value: unknown): unknown {
-return parseDefinitionsPattern(value);
-}
-export function parsePathParameterSubSchemaMaxItems(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaMaxItems(value);
-}
-function _parseReferencePathParameterSubSchemaMaxItems(value: unknown): unknown {
-return parseDefinitionsMaxItems(value);
-}
-export function parsePathParameterSubSchemaMinItems(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaMinItems(value);
-}
-function _parseReferencePathParameterSubSchemaMinItems(value: unknown): unknown {
-return parseDefinitionsMinItems(value);
-}
-export function parsePathParameterSubSchemaUniqueItems(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaUniqueItems(value);
-}
-function _parseReferencePathParameterSubSchemaUniqueItems(value: unknown): unknown {
-return parseDefinitionsUniqueItems(value);
-}
-export function parsePathParameterSubSchemaEnum(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaEnum(value);
-}
-function _parseReferencePathParameterSubSchemaEnum(value: unknown): unknown {
-return parseDefinitionsEnum(value);
-}
-export function parsePathParameterSubSchemaMultipleOf(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaMultipleOf(value);
-}
-function _parseReferencePathParameterSubSchemaMultipleOf(value: unknown): unknown {
-return parseDefinitionsMultipleOf(value);
-}
-export function parsePathParameterSubSchemaAdditionalProperties(value: unknown): unknown {
-return _parseNeverPathParameterSubSchemaAdditionalProperties(value);
-}
-function _parseNeverPathParameterSubSchemaAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parsePathParameterSubSchemaX(value: unknown): unknown {
-return _parseReferencePathParameterSubSchemaX(value);
-}
-function _parseReferencePathParameterSubSchemaX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseNonBodyParameter0(value: unknown): unknown {
-return _parseReferenceNonBodyParameter0(value);
-}
-function _parseReferenceNonBodyParameter0(value: unknown): unknown {
-return parseHeaderParameterSubSchema(value);
-}
-export function parseNonBodyParameter1(value: unknown): unknown {
-return _parseReferenceNonBodyParameter1(value);
-}
-function _parseReferenceNonBodyParameter1(value: unknown): unknown {
-return parseFormDataParameterSubSchema(value);
-}
-export function parseNonBodyParameter2(value: unknown): unknown {
-return _parseReferenceNonBodyParameter2(value);
-}
-function _parseReferenceNonBodyParameter2(value: unknown): unknown {
-return parseQueryParameterSubSchema(value);
-}
-export function parseNonBodyParameter3(value: unknown): unknown {
-return _parseReferenceNonBodyParameter3(value);
-}
-function _parseReferenceNonBodyParameter3(value: unknown): unknown {
-return parsePathParameterSubSchema(value);
-}
-export function parseParameter0(value: unknown): unknown {
-return _parseReferenceParameter0(value);
-}
-function _parseReferenceParameter0(value: unknown): unknown {
-return parseBodyParameter(value);
-}
-export function parseParameter1(value: unknown): unknown {
-return _parseReferenceParameter1(value);
-}
-function _parseReferenceParameter1(value: unknown): unknown {
-return parseNonBodyParameter(value);
-}
-export function parseSchemaRef(value: unknown): unknown {
-return _parseStringSchemaRef(value);
-}
-function _parseStringSchemaRef(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseSchemaFormat(value: unknown): unknown {
-return _parseStringSchemaFormat(value);
-}
-function _parseStringSchemaFormat(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseSchemaTitle(value: unknown): unknown {
-return _parseReferenceSchemaTitle(value);
-}
-function _parseReferenceSchemaTitle(value: unknown): unknown {
-return parseDraft04Title(value);
-}
-export function parseSchemaDescription(value: unknown): unknown {
-return _parseReferenceSchemaDescription(value);
-}
-function _parseReferenceSchemaDescription(value: unknown): unknown {
-return parseDraft04Description(value);
-}
-export function parseSchemaDefault(value: unknown): unknown {
-return _parseReferenceSchemaDefault(value);
-}
-function _parseReferenceSchemaDefault(value: unknown): unknown {
-return parseDraft04Default(value);
-}
-export function parseSchemaMultipleOf(value: unknown): unknown {
-return _parseReferenceSchemaMultipleOf(value);
-}
-function _parseReferenceSchemaMultipleOf(value: unknown): unknown {
-return parseDraft04MultipleOf(value);
-}
-export function parseSchemaMaximum(value: unknown): unknown {
-return _parseReferenceSchemaMaximum(value);
-}
-function _parseReferenceSchemaMaximum(value: unknown): unknown {
-return parseDraft04Maximum(value);
-}
-export function parseSchemaExclusiveMaximum(value: unknown): unknown {
-return _parseReferenceSchemaExclusiveMaximum(value);
-}
-function _parseReferenceSchemaExclusiveMaximum(value: unknown): unknown {
-return parseDraft04ExclusiveMaximum(value);
-}
-export function parseSchemaMinimum(value: unknown): unknown {
-return _parseReferenceSchemaMinimum(value);
-}
-function _parseReferenceSchemaMinimum(value: unknown): unknown {
-return parseDraft04Minimum(value);
-}
-export function parseSchemaExclusiveMinimum(value: unknown): unknown {
-return _parseReferenceSchemaExclusiveMinimum(value);
-}
-function _parseReferenceSchemaExclusiveMinimum(value: unknown): unknown {
-return parseDraft04ExclusiveMinimum(value);
-}
-export function parseSchemaMaxLength(value: unknown): unknown {
-return _parseReferenceSchemaMaxLength(value);
-}
-function _parseReferenceSchemaMaxLength(value: unknown): unknown {
-return parsePositiveInteger(value);
-}
-export function parseSchemaMinLength(value: unknown): unknown {
-return _parseReferenceSchemaMinLength(value);
-}
-function _parseReferenceSchemaMinLength(value: unknown): unknown {
-return parsePositiveIntegerDefault0(value);
-}
-export function parseSchemaPattern(value: unknown): unknown {
-return _parseReferenceSchemaPattern(value);
-}
-function _parseReferenceSchemaPattern(value: unknown): unknown {
-return parseDraft04Pattern(value);
-}
-export function parseSchemaMaxItems(value: unknown): unknown {
-return _parseReferenceSchemaMaxItems(value);
-}
-function _parseReferenceSchemaMaxItems(value: unknown): unknown {
-return parsePositiveInteger(value);
-}
-export function parseSchemaMinItems(value: unknown): unknown {
-return _parseReferenceSchemaMinItems(value);
-}
-function _parseReferenceSchemaMinItems(value: unknown): unknown {
-return parsePositiveIntegerDefault0(value);
-}
-export function parseSchemaUniqueItems(value: unknown): unknown {
-return _parseReferenceSchemaUniqueItems(value);
-}
-function _parseReferenceSchemaUniqueItems(value: unknown): unknown {
-return parseDraft04UniqueItems(value);
-}
-export function parseMaxProperties(value: unknown): unknown {
-return _parseReferenceMaxProperties(value);
-}
-function _parseReferenceMaxProperties(value: unknown): unknown {
-return parsePositiveInteger(value);
-}
-export function parseMinProperties(value: unknown): unknown {
-return _parseReferenceMinProperties(value);
-}
-function _parseReferenceMinProperties(value: unknown): unknown {
-return parsePositiveIntegerDefault0(value);
-}
-export function parseSchemaRequired(value: unknown): unknown {
-return _parseReferenceSchemaRequired(value);
-}
-function _parseReferenceSchemaRequired(value: unknown): unknown {
-return parseStringArray(value);
-}
-export function parseSchemaEnum(value: unknown): unknown {
-return _parseReferenceSchemaEnum(value);
-}
-function _parseReferenceSchemaEnum(value: unknown): unknown {
-return parseDraft04Enum(value);
-}
-export function parsePropertiesSchemaAdditionalProperties(value: unknown): unknown {
-return _parseAnyOfPropertiesSchemaAdditionalProperties(value);
-}
-function _parseAnyOfPropertiesSchemaAdditionalProperties(value: unknown): unknown {
-return parseAdditionalPropertiesAnyOf0(value) ?? parseAdditionalPropertiesAnyOf1(value);
-}
-export function parseSchemaType(value: unknown): unknown {
-return _parseReferenceSchemaType(value);
-}
-function _parseReferenceSchemaType(value: unknown): unknown {
-return parseDraft04Type(value);
-}
-export function parseSchemaItems(value: unknown): unknown {
-return _parseAnyOfSchemaItems(value);
-}
-function _parseAnyOfSchemaItems(value: unknown): unknown {
-return parseItemsAnyOf0(value) ?? parseItemsAnyOf1(value);
-}
-export function parseAllOf(value: unknown): unknown {
-return _parseArrayAllOf(value);
-}
-function _parseArrayAllOf(value: unknown): unknown {
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/properties/info}
+*/
+export function parsePropertiesInfo(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsInfo(value, configuration));
+}
+/**
+* @description The host (name or ip) of the API. Example: &apos;swagger.io&apos;
+* @see {@link http://swagger.io/v2/schema.json#/properties/host}
+*/
+export function parseHost(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
 if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseAllOfItems(value[elementIndex]);
-}
-return result;
-}
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
 return undefined;
 }
-export function parseProperties(value: unknown): unknown {
-return _parseMapProperties(value);
 }
-function _parseMapProperties(value: unknown): unknown {
-if(typeof value === "object" && value !== null && !Array.isArray(value)) {
-const result = {} as Record<string, unknown>;
-for(const propertyName in value) {
-result[propertyName] ??= parsePropertiesAdditionalProperties(value[propertyName as keyof typeof value]);
-}
-return result;
-}
-return undefined;
-}
-export function parseDiscriminator(value: unknown): unknown {
-return _parseStringDiscriminator(value);
-}
-function _parseStringDiscriminator(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -4017,312 +3126,29 @@ return String(value);
 default:
 return undefined;
 }
-}
-export function parseSchemaReadOnly(value: unknown): unknown {
-return _parseBooleanSchemaReadOnly(value);
-}
-function _parseBooleanSchemaReadOnly(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseSchemaXml(value: unknown): unknown {
-return _parseReferenceSchemaXml(value);
-}
-function _parseReferenceSchemaXml(value: unknown): unknown {
-return parseDefinitionsXml(value);
-}
-export function parseSchemaExternalDocs(value: unknown): unknown {
-return _parseReferenceSchemaExternalDocs(value);
-}
-function _parseReferenceSchemaExternalDocs(value: unknown): unknown {
-return parseDefinitionsExternalDocs(value);
-}
-export function parseSchemaExample(value: unknown): unknown {
-return ;
-}
-export function parseDefinitionsSchemaAdditionalProperties(value: unknown): unknown {
-return _parseNeverDefinitionsSchemaAdditionalProperties(value);
-}
-function _parseNeverDefinitionsSchemaAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseSchemaPatternPropertiesX(value: unknown): unknown {
-return _parseReferenceSchemaPatternPropertiesX(value);
-}
-function _parseReferenceSchemaPatternPropertiesX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseFileSchemaFormat(value: unknown): unknown {
-return _parseStringFileSchemaFormat(value);
-}
-function _parseStringFileSchemaFormat(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseFileSchemaTitle(value: unknown): unknown {
-return _parseReferenceFileSchemaTitle(value);
-}
-function _parseReferenceFileSchemaTitle(value: unknown): unknown {
-return parseDraft04Title(value);
-}
-export function parseFileSchemaDescription(value: unknown): unknown {
-return _parseReferenceFileSchemaDescription(value);
-}
-function _parseReferenceFileSchemaDescription(value: unknown): unknown {
-return parseDraft04Description(value);
-}
-export function parseFileSchemaDefault(value: unknown): unknown {
-return _parseReferenceFileSchemaDefault(value);
-}
-function _parseReferenceFileSchemaDefault(value: unknown): unknown {
-return parseDraft04Default(value);
-}
-export function parseFileSchemaRequired(value: unknown): unknown {
-return _parseReferenceFileSchemaRequired(value);
-}
-function _parseReferenceFileSchemaRequired(value: unknown): unknown {
-return parseStringArray(value);
-}
-export function parseFileSchemaType(value: unknown): unknown {
-return _parseStringFileSchemaType(value);
-}
-function _parseStringFileSchemaType(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseFileSchemaReadOnly(value: unknown): unknown {
-return _parseBooleanFileSchemaReadOnly(value);
-}
-function _parseBooleanFileSchemaReadOnly(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseFileSchemaExternalDocs(value: unknown): unknown {
-return _parseReferenceFileSchemaExternalDocs(value);
-}
-function _parseReferenceFileSchemaExternalDocs(value: unknown): unknown {
-return parseDefinitionsExternalDocs(value);
-}
-export function parseFileSchemaExample(value: unknown): unknown {
-return ;
-}
-export function parseFileSchemaAdditionalProperties(value: unknown): unknown {
-return _parseNeverFileSchemaAdditionalProperties(value);
-}
-function _parseNeverFileSchemaAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseFileSchemaX(value: unknown): unknown {
-return _parseReferenceFileSchemaX(value);
-}
-function _parseReferenceFileSchemaX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parsePrimitivesItemsType(value: unknown): unknown {
-return _parseStringPrimitivesItemsType(value);
-}
-function _parseStringPrimitivesItemsType(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parsePrimitivesItemsFormat(value: unknown): unknown {
-return _parseStringPrimitivesItemsFormat(value);
-}
-function _parseStringPrimitivesItemsFormat(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parsePrimitivesItemsItems(value: unknown): unknown {
-return _parseReferencePrimitivesItemsItems(value);
-}
-function _parseReferencePrimitivesItemsItems(value: unknown): unknown {
-return parsePrimitivesItems(value);
-}
-export function parsePrimitivesItemsCollectionFormat(value: unknown): unknown {
-return _parseReferencePrimitivesItemsCollectionFormat(value);
-}
-function _parseReferencePrimitivesItemsCollectionFormat(value: unknown): unknown {
-return parseDefinitionsCollectionFormat(value);
-}
-export function parsePrimitivesItemsDefault(value: unknown): unknown {
-return _parseReferencePrimitivesItemsDefault(value);
-}
-function _parseReferencePrimitivesItemsDefault(value: unknown): unknown {
-return parseDefinitionsDefault(value);
-}
-export function parsePrimitivesItemsMaximum(value: unknown): unknown {
-return _parseReferencePrimitivesItemsMaximum(value);
-}
-function _parseReferencePrimitivesItemsMaximum(value: unknown): unknown {
-return parseDefinitionsMaximum(value);
-}
-export function parsePrimitivesItemsExclusiveMaximum(value: unknown): unknown {
-return _parseReferencePrimitivesItemsExclusiveMaximum(value);
-}
-function _parseReferencePrimitivesItemsExclusiveMaximum(value: unknown): unknown {
-return parseDefinitionsExclusiveMaximum(value);
-}
-export function parsePrimitivesItemsMinimum(value: unknown): unknown {
-return _parseReferencePrimitivesItemsMinimum(value);
-}
-function _parseReferencePrimitivesItemsMinimum(value: unknown): unknown {
-return parseDefinitionsMinimum(value);
-}
-export function parsePrimitivesItemsExclusiveMinimum(value: unknown): unknown {
-return _parseReferencePrimitivesItemsExclusiveMinimum(value);
-}
-function _parseReferencePrimitivesItemsExclusiveMinimum(value: unknown): unknown {
-return parseDefinitionsExclusiveMinimum(value);
-}
-export function parsePrimitivesItemsMaxLength(value: unknown): unknown {
-return _parseReferencePrimitivesItemsMaxLength(value);
-}
-function _parseReferencePrimitivesItemsMaxLength(value: unknown): unknown {
-return parseDefinitionsMaxLength(value);
-}
-export function parsePrimitivesItemsMinLength(value: unknown): unknown {
-return _parseReferencePrimitivesItemsMinLength(value);
-}
-function _parseReferencePrimitivesItemsMinLength(value: unknown): unknown {
-return parseDefinitionsMinLength(value);
-}
-export function parsePrimitivesItemsPattern(value: unknown): unknown {
-return _parseReferencePrimitivesItemsPattern(value);
-}
-function _parseReferencePrimitivesItemsPattern(value: unknown): unknown {
-return parseDefinitionsPattern(value);
-}
-export function parsePrimitivesItemsMaxItems(value: unknown): unknown {
-return _parseReferencePrimitivesItemsMaxItems(value);
-}
-function _parseReferencePrimitivesItemsMaxItems(value: unknown): unknown {
-return parseDefinitionsMaxItems(value);
-}
-export function parsePrimitivesItemsMinItems(value: unknown): unknown {
-return _parseReferencePrimitivesItemsMinItems(value);
-}
-function _parseReferencePrimitivesItemsMinItems(value: unknown): unknown {
-return parseDefinitionsMinItems(value);
-}
-export function parsePrimitivesItemsUniqueItems(value: unknown): unknown {
-return _parseReferencePrimitivesItemsUniqueItems(value);
-}
-function _parseReferencePrimitivesItemsUniqueItems(value: unknown): unknown {
-return parseDefinitionsUniqueItems(value);
-}
-export function parsePrimitivesItemsEnum(value: unknown): unknown {
-return _parseReferencePrimitivesItemsEnum(value);
-}
-function _parseReferencePrimitivesItemsEnum(value: unknown): unknown {
-return parseDefinitionsEnum(value);
-}
-export function parsePrimitivesItemsMultipleOf(value: unknown): unknown {
-return _parseReferencePrimitivesItemsMultipleOf(value);
-}
-function _parseReferencePrimitivesItemsMultipleOf(value: unknown): unknown {
-return parseDefinitionsMultipleOf(value);
-}
-export function parsePrimitivesItemsAdditionalProperties(value: unknown): unknown {
-return _parseNeverPrimitivesItemsAdditionalProperties(value);
-}
-function _parseNeverPrimitivesItemsAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parsePrimitivesItemsX(value: unknown): unknown {
-return _parseReferencePrimitivesItemsX(value);
-}
-function _parseReferencePrimitivesItemsX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseSecurityItems(value: unknown): unknown {
-return _parseReferenceSecurityItems(value);
-}
-function _parseReferenceSecurityItems(value: unknown): unknown {
-return parseSecurityRequirement(value);
-}
-export function parseSecurityRequirementAdditionalProperties(value: unknown): unknown {
-return _parseArraySecurityRequirementAdditionalProperties(value);
-}
-function _parseArraySecurityRequirementAdditionalProperties(value: unknown): unknown {
+})(value)
+);
+}
+/**
+* @description The base path to the API. Example: &apos;/api&apos;.
+* @see {@link http://swagger.io/v2/schema.json#/properties/basePath}
+*/
+export function parseBasePath(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
 if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseSecurityRequirementItems(value[elementIndex]);
-}
-return result;
-}
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
 return undefined;
 }
-export function parseXmlName(value: unknown): unknown {
-return _parseStringXmlName(value);
 }
-function _parseStringXmlName(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -4332,770 +3158,170 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseNamespace(value: unknown): unknown {
-return _parseStringNamespace(value);
+/**
+* @see {@link http://swagger.io/v2/schema.json#/properties/schemes}
+*/
+export function parsePropertiesSchemes(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseSchemesList(value, configuration));
 }
-function _parseStringNamespace(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
+/**
+* @description A list of MIME types accepted by the API.
+* @see {@link http://swagger.io/v2/schema.json#/properties/consumes}
+*/
+export function parsePropertiesConsumes(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePropertiesAllOfConsumes0(value, configuration));
+}
+/**
+* @description A list of MIME types the API can produce.
+* @see {@link http://swagger.io/v2/schema.json#/properties/produces}
+*/
+export function parsePropertiesProduces(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePropertiesAllOfProduces0(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/properties/paths}
+*/
+export function parsePropertiesPaths(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsPaths(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/properties/definitions}
+*/
+export function parsePropertiesDefinitions(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsDefinitions(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/properties/parameters}
+*/
+export function parsePropertiesParameters(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseParameterDefinitions(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/properties/responses}
+*/
+export function parsePropertiesResponses(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseResponseDefinitions(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/properties/security}
+*/
+export function parsePropertiesSecurity(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsSecurity(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/properties/securityDefinitions}
+*/
+export function parsePropertiesSecurityDefinitions(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsSecurityDefinitions(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/properties/tags}
+*/
+export function parsePropertiesTags(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
 default:
-return undefined;
-}
-}
-export function parsePrefix(value: unknown): unknown {
-return _parseStringPrefix(value);
-}
-function _parseStringPrefix(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseAttribute(value: unknown): unknown {
-return _parseBooleanAttribute(value);
-}
-function _parseBooleanAttribute(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseWrapped(value: unknown): unknown {
-return _parseBooleanWrapped(value);
-}
-function _parseBooleanWrapped(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseXmlAdditionalProperties(value: unknown): unknown {
-return _parseNeverXmlAdditionalProperties(value);
-}
-function _parseNeverXmlAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseXmlX(value: unknown): unknown {
-return _parseReferenceXmlX(value);
-}
-function _parseReferenceXmlX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseTagName(value: unknown): unknown {
-return _parseStringTagName(value);
-}
-function _parseStringTagName(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseTagDescription(value: unknown): unknown {
-return _parseStringTagDescription(value);
-}
-function _parseStringTagDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseTagExternalDocs(value: unknown): unknown {
-return _parseReferenceTagExternalDocs(value);
-}
-function _parseReferenceTagExternalDocs(value: unknown): unknown {
-return parseDefinitionsExternalDocs(value);
-}
-export function parseTagAdditionalProperties(value: unknown): unknown {
-return _parseNeverTagAdditionalProperties(value);
-}
-function _parseNeverTagAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseTagX(value: unknown): unknown {
-return _parseReferenceTagX(value);
-}
-function _parseReferenceTagX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseSecurityDefinitionsAdditionalProperties(value: unknown): unknown {
-return _parseOneOfSecurityDefinitionsAdditionalProperties(value);
-}
-function _parseOneOfSecurityDefinitionsAdditionalProperties(value: unknown): unknown {
-return parseSecurityDefinitions0(value) ?? parseSecurityDefinitions1(value) ?? parseSecurityDefinitions2(value) ?? parseSecurityDefinitions3(value) ?? parseSecurityDefinitions4(value) ?? parseSecurityDefinitions5(value);
-}
-export function parseBasicAuthenticationSecurityType(value: unknown): unknown {
-return _parseStringBasicAuthenticationSecurityType(value);
-}
-function _parseStringBasicAuthenticationSecurityType(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseBasicAuthenticationSecurityDescription(value: unknown): unknown {
-return _parseStringBasicAuthenticationSecurityDescription(value);
-}
-function _parseStringBasicAuthenticationSecurityDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseBasicAuthenticationSecurityAdditionalProperties(value: unknown): unknown {
-return _parseNeverBasicAuthenticationSecurityAdditionalProperties(value);
-}
-function _parseNeverBasicAuthenticationSecurityAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseBasicAuthenticationSecurityX(value: unknown): unknown {
-return _parseReferenceBasicAuthenticationSecurityX(value);
-}
-function _parseReferenceBasicAuthenticationSecurityX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseApiKeySecurityType(value: unknown): unknown {
-return _parseStringApiKeySecurityType(value);
-}
-function _parseStringApiKeySecurityType(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseApiKeySecurityName(value: unknown): unknown {
-return _parseStringApiKeySecurityName(value);
-}
-function _parseStringApiKeySecurityName(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseApiKeySecurityIn(value: unknown): unknown {
-return _parseStringApiKeySecurityIn(value);
-}
-function _parseStringApiKeySecurityIn(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseApiKeySecurityDescription(value: unknown): unknown {
-return _parseStringApiKeySecurityDescription(value);
-}
-function _parseStringApiKeySecurityDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseApiKeySecurityAdditionalProperties(value: unknown): unknown {
-return _parseNeverApiKeySecurityAdditionalProperties(value);
-}
-function _parseNeverApiKeySecurityAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseApiKeySecurityX(value: unknown): unknown {
-return _parseReferenceApiKeySecurityX(value);
-}
-function _parseReferenceApiKeySecurityX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseOauth2ImplicitSecurityType(value: unknown): unknown {
-return _parseStringOauth2ImplicitSecurityType(value);
-}
-function _parseStringOauth2ImplicitSecurityType(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2ImplicitSecurityFlow(value: unknown): unknown {
-return _parseStringOauth2ImplicitSecurityFlow(value);
-}
-function _parseStringOauth2ImplicitSecurityFlow(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2ImplicitSecurityScopes(value: unknown): unknown {
-return _parseReferenceOauth2ImplicitSecurityScopes(value);
-}
-function _parseReferenceOauth2ImplicitSecurityScopes(value: unknown): unknown {
-return parseOauth2Scopes(value);
-}
-export function parseOauth2ImplicitSecurityAuthorizationUrl(value: unknown): unknown {
-return _parseStringOauth2ImplicitSecurityAuthorizationUrl(value);
-}
-function _parseStringOauth2ImplicitSecurityAuthorizationUrl(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2ImplicitSecurityDescription(value: unknown): unknown {
-return _parseStringOauth2ImplicitSecurityDescription(value);
-}
-function _parseStringOauth2ImplicitSecurityDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2ImplicitSecurityAdditionalProperties(value: unknown): unknown {
-return _parseNeverOauth2ImplicitSecurityAdditionalProperties(value);
-}
-function _parseNeverOauth2ImplicitSecurityAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseOauth2ImplicitSecurityX(value: unknown): unknown {
-return _parseReferenceOauth2ImplicitSecurityX(value);
-}
-function _parseReferenceOauth2ImplicitSecurityX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseOauth2PasswordSecurityType(value: unknown): unknown {
-return _parseStringOauth2PasswordSecurityType(value);
-}
-function _parseStringOauth2PasswordSecurityType(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2PasswordSecurityFlow(value: unknown): unknown {
-return _parseStringOauth2PasswordSecurityFlow(value);
-}
-function _parseStringOauth2PasswordSecurityFlow(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2PasswordSecurityScopes(value: unknown): unknown {
-return _parseReferenceOauth2PasswordSecurityScopes(value);
-}
-function _parseReferenceOauth2PasswordSecurityScopes(value: unknown): unknown {
-return parseOauth2Scopes(value);
-}
-export function parseOauth2PasswordSecurityTokenUrl(value: unknown): unknown {
-return _parseStringOauth2PasswordSecurityTokenUrl(value);
-}
-function _parseStringOauth2PasswordSecurityTokenUrl(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2PasswordSecurityDescription(value: unknown): unknown {
-return _parseStringOauth2PasswordSecurityDescription(value);
-}
-function _parseStringOauth2PasswordSecurityDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2PasswordSecurityAdditionalProperties(value: unknown): unknown {
-return _parseNeverOauth2PasswordSecurityAdditionalProperties(value);
-}
-function _parseNeverOauth2PasswordSecurityAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseOauth2PasswordSecurityX(value: unknown): unknown {
-return _parseReferenceOauth2PasswordSecurityX(value);
-}
-function _parseReferenceOauth2PasswordSecurityX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseOauth2ApplicationSecurityType(value: unknown): unknown {
-return _parseStringOauth2ApplicationSecurityType(value);
-}
-function _parseStringOauth2ApplicationSecurityType(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2ApplicationSecurityFlow(value: unknown): unknown {
-return _parseStringOauth2ApplicationSecurityFlow(value);
-}
-function _parseStringOauth2ApplicationSecurityFlow(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2ApplicationSecurityScopes(value: unknown): unknown {
-return _parseReferenceOauth2ApplicationSecurityScopes(value);
-}
-function _parseReferenceOauth2ApplicationSecurityScopes(value: unknown): unknown {
-return parseOauth2Scopes(value);
-}
-export function parseOauth2ApplicationSecurityTokenUrl(value: unknown): unknown {
-return _parseStringOauth2ApplicationSecurityTokenUrl(value);
-}
-function _parseStringOauth2ApplicationSecurityTokenUrl(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2ApplicationSecurityDescription(value: unknown): unknown {
-return _parseStringOauth2ApplicationSecurityDescription(value);
-}
-function _parseStringOauth2ApplicationSecurityDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2ApplicationSecurityAdditionalProperties(value: unknown): unknown {
-return _parseNeverOauth2ApplicationSecurityAdditionalProperties(value);
-}
-function _parseNeverOauth2ApplicationSecurityAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseOauth2ApplicationSecurityX(value: unknown): unknown {
-return _parseReferenceOauth2ApplicationSecurityX(value);
-}
-function _parseReferenceOauth2ApplicationSecurityX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseOauth2AccessCodeSecurityType(value: unknown): unknown {
-return _parseStringOauth2AccessCodeSecurityType(value);
-}
-function _parseStringOauth2AccessCodeSecurityType(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2AccessCodeSecurityFlow(value: unknown): unknown {
-return _parseStringOauth2AccessCodeSecurityFlow(value);
-}
-function _parseStringOauth2AccessCodeSecurityFlow(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2AccessCodeSecurityScopes(value: unknown): unknown {
-return _parseReferenceOauth2AccessCodeSecurityScopes(value);
-}
-function _parseReferenceOauth2AccessCodeSecurityScopes(value: unknown): unknown {
-return parseOauth2Scopes(value);
-}
-export function parseOauth2AccessCodeSecurityAuthorizationUrl(value: unknown): unknown {
-return _parseStringOauth2AccessCodeSecurityAuthorizationUrl(value);
-}
-function _parseStringOauth2AccessCodeSecurityAuthorizationUrl(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2AccessCodeSecurityTokenUrl(value: unknown): unknown {
-return _parseStringOauth2AccessCodeSecurityTokenUrl(value);
-}
-function _parseStringOauth2AccessCodeSecurityTokenUrl(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2AccessCodeSecurityDescription(value: unknown): unknown {
-return _parseStringOauth2AccessCodeSecurityDescription(value);
-}
-function _parseStringOauth2AccessCodeSecurityDescription(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOauth2AccessCodeSecurityAdditionalProperties(value: unknown): unknown {
-return _parseNeverOauth2AccessCodeSecurityAdditionalProperties(value);
-}
-function _parseNeverOauth2AccessCodeSecurityAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseOauth2AccessCodeSecurityX(value: unknown): unknown {
-return _parseReferenceOauth2AccessCodeSecurityX(value);
-}
-function _parseReferenceOauth2AccessCodeSecurityX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseOauth2ScopesAdditionalProperties(value: unknown): unknown {
-return _parseStringOauth2ScopesAdditionalProperties(value);
-}
-function _parseStringOauth2ScopesAdditionalProperties(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseMediaTypeListItems(value: unknown): unknown {
-return _parseReferenceMediaTypeListItems(value);
-}
-function _parseReferenceMediaTypeListItems(value: unknown): unknown {
-return parseMimeType(value);
-}
-export function parseParametersListItems(value: unknown): unknown {
-return _parseOneOfParametersListItems(value);
-}
-function _parseOneOfParametersListItems(value: unknown): unknown {
-return parseParametersList0(value) ?? parseParametersList1(value);
-}
-export function parseParametersListAdditionalItems(value: unknown): unknown {
-return _parseNeverParametersListAdditionalItems(value);
-}
-function _parseNeverParametersListAdditionalItems(value: unknown): unknown {
-return undefined;
-}
-export function parseSchemesListItems(value: unknown): unknown {
-return _parseStringSchemesListItems(value);
-}
-function _parseStringSchemesListItems(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseJsonReferenceRef(value: unknown): unknown {
-return _parseStringJsonReferenceRef(value);
-}
-function _parseStringJsonReferenceRef(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseJsonReferenceAdditionalProperties(value: unknown): unknown {
-return _parseNeverJsonReferenceAdditionalProperties(value);
-}
-function _parseNeverJsonReferenceAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parsePropertiesAllOfConsumes0(value: unknown): unknown {
-return _parseReferencePropertiesAllOfConsumes0(value);
-}
-function _parseReferencePropertiesAllOfConsumes0(value: unknown): unknown {
-return parseMediaTypeList(value);
-}
-export function parsePropertiesAllOfProduces0(value: unknown): unknown {
-return _parseReferencePropertiesAllOfProduces0(value);
-}
-function _parseReferencePropertiesAllOfProduces0(value: unknown): unknown {
-return parseMediaTypeList(value);
-}
-export function parsePropertiesTagsItems(value: unknown): unknown {
-return _parseReferencePropertiesTagsItems(value);
-}
-function _parseReferencePropertiesTagsItems(value: unknown): unknown {
-return parseTag(value);
-}
-export function parseOperationTagsItems(value: unknown): unknown {
-return _parseStringOperationTagsItems(value);
-}
-function _parseStringOperationTagsItems(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
-default:
-return undefined;
-}
-}
-export function parseOperationAllOfProduces0(value: unknown): unknown {
-return _parseReferenceOperationAllOfProduces0(value);
-}
-function _parseReferenceOperationAllOfProduces0(value: unknown): unknown {
-return parseMediaTypeList(value);
-}
-export function parseOperationAllOfConsumes0(value: unknown): unknown {
-return _parseReferenceOperationAllOfConsumes0(value);
-}
-function _parseReferenceOperationAllOfConsumes0(value: unknown): unknown {
-return parseMediaTypeList(value);
-}
-export function parseNotAdditionalProperties(value: unknown): unknown {
-return _parseNeverNotAdditionalProperties(value);
-}
-function _parseNeverNotAdditionalProperties(value: unknown): unknown {
-return undefined;
-}
-export function parseNotX(value: unknown): unknown {
-return _parseReferenceNotX(value);
-}
-function _parseReferenceNotX(value: unknown): unknown {
-return parseVendorExtension(value);
-}
-export function parseResponse0(value: unknown): unknown {
-return _parseReferenceResponse0(value);
-}
-function _parseReferenceResponse0(value: unknown): unknown {
-return parseDefinitionsSchema(value);
-}
-export function parseResponse1(value: unknown): unknown {
-return _parseReferenceResponse1(value);
-}
-function _parseReferenceResponse1(value: unknown): unknown {
-return parseFileSchema(value);
-}
-export function parseAdditionalPropertiesAnyOf0(value: unknown): unknown {
-return _parseReferenceAdditionalPropertiesAnyOf0(value);
-}
-function _parseReferenceAdditionalPropertiesAnyOf0(value: unknown): unknown {
-return parseDefinitionsSchema(value);
-}
-export function parseAdditionalPropertiesAnyOf1(value: unknown): unknown {
-return _parseBooleanAdditionalPropertiesAnyOf1(value);
-}
-function _parseBooleanAdditionalPropertiesAnyOf1(value: unknown): unknown {
-if(value == null) {
-return false;
-}
-switch(typeof value) {
-case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
-return true;
-}
-case "number":
-return Boolean(value);
-case "boolean":
-return value;
-}
-return undefined;
-}
-export function parseItemsAnyOf0(value: unknown): unknown {
-return _parseReferenceItemsAnyOf0(value);
-}
-function _parseReferenceItemsAnyOf0(value: unknown): unknown {
-return parseDefinitionsSchema(value);
-}
-export function parseItemsAnyOf1(value: unknown): unknown {
-return _parseArrayItemsAnyOf1(value);
-}
-function _parseArrayItemsAnyOf1(value: unknown): unknown {
+return parsePropertiesTagsItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/properties/externalDocs}
+*/
+export function parsePropertiesExternalDocs(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExternalDocs(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/additionalProperties}
+*/
+export function parseV2AdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/patternProperties/^x-}
+*/
+export function parseV2PatternPropertiesX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @description A unique and precise title of the API.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/info/properties/title}
+*/
+export function parseInfoTitle(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
 if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseItems1AnyOfItems(value[elementIndex]);
-}
-return result;
-}
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
 return undefined;
 }
-export function parseAllOfItems(value: unknown): unknown {
-return _parseReferenceAllOfItems(value);
 }
-function _parseReferenceAllOfItems(value: unknown): unknown {
-return parseDefinitionsSchema(value);
-}
-export function parsePropertiesAdditionalProperties(value: unknown): unknown {
-return _parseReferencePropertiesAdditionalProperties(value);
-}
-function _parseReferencePropertiesAdditionalProperties(value: unknown): unknown {
-return parseDefinitionsSchema(value);
-}
-export function parseSecurityRequirementItems(value: unknown): unknown {
-return _parseStringSecurityRequirementItems(value);
-}
-function _parseStringSecurityRequirementItems(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -5105,65 +3331,29 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseSecurityDefinitions0(value: unknown): unknown {
-return _parseReferenceSecurityDefinitions0(value);
+/**
+* @description A semantic version number of the API.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/info/properties/version}
+*/
+export function parseVersion(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-function _parseReferenceSecurityDefinitions0(value: unknown): unknown {
-return parseBasicAuthenticationSecurity(value);
 }
-export function parseSecurityDefinitions1(value: unknown): unknown {
-return _parseReferenceSecurityDefinitions1(value);
-}
-function _parseReferenceSecurityDefinitions1(value: unknown): unknown {
-return parseApiKeySecurity(value);
-}
-export function parseSecurityDefinitions2(value: unknown): unknown {
-return _parseReferenceSecurityDefinitions2(value);
-}
-function _parseReferenceSecurityDefinitions2(value: unknown): unknown {
-return parseOauth2ImplicitSecurity(value);
-}
-export function parseSecurityDefinitions3(value: unknown): unknown {
-return _parseReferenceSecurityDefinitions3(value);
-}
-function _parseReferenceSecurityDefinitions3(value: unknown): unknown {
-return parseOauth2PasswordSecurity(value);
-}
-export function parseSecurityDefinitions4(value: unknown): unknown {
-return _parseReferenceSecurityDefinitions4(value);
-}
-function _parseReferenceSecurityDefinitions4(value: unknown): unknown {
-return parseOauth2ApplicationSecurity(value);
-}
-export function parseSecurityDefinitions5(value: unknown): unknown {
-return _parseReferenceSecurityDefinitions5(value);
-}
-function _parseReferenceSecurityDefinitions5(value: unknown): unknown {
-return parseOauth2AccessCodeSecurity(value);
-}
-export function parseParametersList0(value: unknown): unknown {
-return _parseReferenceParametersList0(value);
-}
-function _parseReferenceParametersList0(value: unknown): unknown {
-return parseParameter(value);
-}
-export function parseParametersList1(value: unknown): unknown {
-return _parseReferenceParametersList1(value);
-}
-function _parseReferenceParametersList1(value: unknown): unknown {
-return parseJsonReference(value);
-}
-export function parseItems1AnyOfItems(value: unknown): unknown {
-return _parseReferenceItems1AnyOfItems(value);
-}
-function _parseReferenceItems1AnyOfItems(value: unknown): unknown {
-return parseDefinitionsSchema(value);
-}
-export function parseDraft04Title(value: unknown): unknown {
-return _parseStringDraft04Title(value);
-}
-function _parseStringDraft04Title(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -5173,11 +3363,29 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseDraft04Description(value: unknown): unknown {
-return _parseStringDraft04Description(value);
+/**
+* @description A longer description of the API. Should be different from the title.  GitHub Flavored Markdown is allowed.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/info/properties/description}
+*/
+export function parseInfoDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-function _parseStringDraft04Description(value: unknown): unknown {
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -5187,14 +3395,6270 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseDraft04Default(value: unknown): unknown {
-return ;
+/**
+* @description The terms of service for the API.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/info/properties/termsOfService}
+*/
+export function parseTermsOfService(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-export function parseDraft04MultipleOf(value: unknown): unknown {
-return _parseNumberDraft04MultipleOf(value);
 }
-function _parseNumberDraft04MultipleOf(value: unknown): unknown {
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/info/properties/contact}
+*/
+export function parseInfoContact(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsContact(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/info/properties/license}
+*/
+export function parseInfoLicense(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsLicense(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/info/additionalProperties}
+*/
+export function parseInfoAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/info/patternProperties/^x-}
+*/
+export function parseInfoX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @description The identifying name of the contact person/organization.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/contact/properties/name}
+*/
+export function parseContactName(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description The URL pointing to the contact information.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/contact/properties/url}
+*/
+export function parseContactUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description The email address of the contact person/organization.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/contact/properties/email}
+*/
+export function parseEmail(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/contact/additionalProperties}
+*/
+export function parseContactAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/contact/patternProperties/^x-}
+*/
+export function parseContactX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @description The name of the license type. It&apos;s encouraged to use an OSI compatible license.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/license/properties/name}
+*/
+export function parseLicenseName(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description The URL pointing to the license.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/license/properties/url}
+*/
+export function parseLicenseUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/license/additionalProperties}
+*/
+export function parseLicenseAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/license/patternProperties/^x-}
+*/
+export function parseLicenseX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/paths/additionalProperties}
+*/
+export function parsePathsAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/paths/patternProperties/^x-}
+*/
+export function parsePathsX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/paths/patternProperties/^/}
+*/
+export function parsePatternProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePathItem(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/definitions/additionalProperties}
+*/
+export function parseDefinitionsAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsSchema(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/parameterDefinitions/additionalProperties}
+*/
+export function parseParameterDefinitionsAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseParameter(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/responseDefinitions/additionalProperties}
+*/
+export function parseResponseDefinitionsAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseResponse(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/externalDocs/properties/description}
+*/
+export function parseExternalDocsDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/externalDocs/properties/url}
+*/
+export function parseExternalDocsUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/externalDocs/additionalProperties}
+*/
+export function parseExternalDocsAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/externalDocs/patternProperties/^x-}
+*/
+export function parseExternalDocsX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/examples/additionalProperties}
+*/
+export function parseExamplesAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/properties/tags}
+*/
+export function parseOperationTags(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parseOperationTagsItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @description A brief summary of the operation.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/properties/summary}
+*/
+export function parseSummary(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description A longer description of the operation, GitHub Flavored Markdown is allowed.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/properties/description}
+*/
+export function parseOperationDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/properties/externalDocs}
+*/
+export function parseOperationExternalDocs(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExternalDocs(value, configuration));
+}
+/**
+* @description A unique identifier of the operation.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/properties/operationId}
+*/
+export function parseOperationId(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description A list of MIME types the API can produce.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/properties/produces}
+*/
+export function parseOperationProduces(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperationAllOfProduces0(value, configuration));
+}
+/**
+* @description A list of MIME types the API can consume.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/properties/consumes}
+*/
+export function parseOperationConsumes(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperationAllOfConsumes0(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/properties/parameters}
+*/
+export function parseOperationParameters(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseParametersList(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/properties/responses}
+*/
+export function parseOperationResponses(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsResponses(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/properties/schemes}
+*/
+export function parseOperationSchemes(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseSchemesList(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/properties/deprecated}
+*/
+export function parseDeprecated(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/properties/security}
+*/
+export function parseOperationSecurity(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsSecurity(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/additionalProperties}
+*/
+export function parseOperationAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/patternProperties/^x-}
+*/
+export function parseOperationX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathItem/properties/$ref}
+*/
+export function parsePathItemRef(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathItem/properties/get}
+*/
+export function parseGet(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperation(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathItem/properties/put}
+*/
+export function parsePut(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperation(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathItem/properties/post}
+*/
+export function parsePost(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperation(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathItem/properties/delete}
+*/
+export function parseDelete(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperation(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathItem/properties/options}
+*/
+export function parseOptions(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperation(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathItem/properties/head}
+*/
+export function parseHead(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperation(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathItem/properties/patch}
+*/
+export function parsePatch(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOperation(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathItem/properties/parameters}
+*/
+export function parsePathItemParameters(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseParametersList(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathItem/additionalProperties}
+*/
+export function parsePathItemAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathItem/patternProperties/^x-}
+*/
+export function parsePathItemX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/responses/additionalProperties}
+*/
+export function parseResponsesAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/responses/patternProperties/^([0-9]{3})$|^(default)$}
+*/
+export function parseResponses093Default(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseResponseValue(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/responses/patternProperties/^x-}
+*/
+export function parseResponsesX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/responses/not}
+*/
+export function parseNot(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+((value) ??
+parseNotX(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/responseValue/oneOf/0}
+*/
+export function parseResponseValue0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseResponse(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/responseValue/oneOf/1}
+*/
+export function parseResponseValue1(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseJsonReference(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/response/properties/description}
+*/
+export function parseResponseDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/response/properties/schema}
+*/
+export function parseResponseSchema(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+parseResponse0(value, configuration)
+??
+parseResponse1(value, configuration)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/response/properties/headers}
+*/
+export function parseResponseHeaders(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsHeaders(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/response/properties/examples}
+*/
+export function parseResponseExamples(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExamples(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/response/additionalProperties}
+*/
+export function parseResponseAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/response/patternProperties/^x-}
+*/
+export function parseResponseX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headers/additionalProperties}
+*/
+export function parseHeadersAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseHeader(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/type}
+*/
+export function parseHeaderType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/format}
+*/
+export function parseHeaderFormat(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/items}
+*/
+export function parseHeaderItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePrimitivesItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/collectionFormat}
+*/
+export function parseHeaderCollectionFormat(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsCollectionFormat(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/default}
+*/
+export function parseHeaderDefault(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsDefault(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/maximum}
+*/
+export function parseHeaderMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaximum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/exclusiveMaximum}
+*/
+export function parseHeaderExclusiveMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExclusiveMaximum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/minimum}
+*/
+export function parseHeaderMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinimum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/exclusiveMinimum}
+*/
+export function parseHeaderExclusiveMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExclusiveMinimum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/maxLength}
+*/
+export function parseHeaderMaxLength(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaxLength(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/minLength}
+*/
+export function parseHeaderMinLength(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinLength(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/pattern}
+*/
+export function parseHeaderPattern(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsPattern(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/maxItems}
+*/
+export function parseHeaderMaxItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaxItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/minItems}
+*/
+export function parseHeaderMinItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/uniqueItems}
+*/
+export function parseHeaderUniqueItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsUniqueItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/enum}
+*/
+export function parseHeaderEnum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsEnum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/multipleOf}
+*/
+export function parseHeaderMultipleOf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMultipleOf(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/properties/description}
+*/
+export function parseHeaderDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/additionalProperties}
+*/
+export function parseHeaderAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/header/patternProperties/^x-}
+*/
+export function parseHeaderX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/vendorExtension/additionalProperties}
+*/
+export function parseVendorExtensionAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/vendorExtension/additionalItems}
+*/
+export function parseVendorExtensionAdditionalItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @description A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/bodyParameter/properties/description}
+*/
+export function parseBodyParameterDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description The name of the parameter.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/bodyParameter/properties/name}
+*/
+export function parseBodyParameterName(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description Determines the location of the parameter.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/bodyParameter/properties/in}
+*/
+export function parseBodyParameterIn(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description Determines whether or not this parameter is required or optional.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/bodyParameter/properties/required}
+*/
+export function parseBodyParameterRequired(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/bodyParameter/properties/schema}
+*/
+export function parseBodyParameterSchema(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsSchema(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/bodyParameter/additionalProperties}
+*/
+export function parseBodyParameterAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/bodyParameter/patternProperties/^x-}
+*/
+export function parseBodyParameterX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @description Determines whether or not this parameter is required or optional.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/required}
+*/
+export function parseHeaderParameterSubSchemaRequired(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @description Determines the location of the parameter.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/in}
+*/
+export function parseHeaderParameterSubSchemaIn(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/description}
+*/
+export function parseHeaderParameterSubSchemaDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description The name of the parameter.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/name}
+*/
+export function parseHeaderParameterSubSchemaName(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/type}
+*/
+export function parseHeaderParameterSubSchemaType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/format}
+*/
+export function parseHeaderParameterSubSchemaFormat(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/items}
+*/
+export function parseHeaderParameterSubSchemaItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePrimitivesItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/collectionFormat}
+*/
+export function parseHeaderParameterSubSchemaCollectionFormat(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsCollectionFormat(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/default}
+*/
+export function parseHeaderParameterSubSchemaDefault(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsDefault(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/maximum}
+*/
+export function parseHeaderParameterSubSchemaMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaximum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/exclusiveMaximum}
+*/
+export function parseHeaderParameterSubSchemaExclusiveMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExclusiveMaximum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/minimum}
+*/
+export function parseHeaderParameterSubSchemaMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinimum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/exclusiveMinimum}
+*/
+export function parseHeaderParameterSubSchemaExclusiveMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExclusiveMinimum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/maxLength}
+*/
+export function parseHeaderParameterSubSchemaMaxLength(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaxLength(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/minLength}
+*/
+export function parseHeaderParameterSubSchemaMinLength(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinLength(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/pattern}
+*/
+export function parseHeaderParameterSubSchemaPattern(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsPattern(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/maxItems}
+*/
+export function parseHeaderParameterSubSchemaMaxItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaxItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/minItems}
+*/
+export function parseHeaderParameterSubSchemaMinItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/uniqueItems}
+*/
+export function parseHeaderParameterSubSchemaUniqueItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsUniqueItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/enum}
+*/
+export function parseHeaderParameterSubSchemaEnum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsEnum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/properties/multipleOf}
+*/
+export function parseHeaderParameterSubSchemaMultipleOf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMultipleOf(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/additionalProperties}
+*/
+export function parseHeaderParameterSubSchemaAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/headerParameterSubSchema/patternProperties/^x-}
+*/
+export function parseHeaderParameterSubSchemaX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @description Determines whether or not this parameter is required or optional.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/required}
+*/
+export function parseQueryParameterSubSchemaRequired(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @description Determines the location of the parameter.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/in}
+*/
+export function parseQueryParameterSubSchemaIn(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/description}
+*/
+export function parseQueryParameterSubSchemaDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description The name of the parameter.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/name}
+*/
+export function parseQueryParameterSubSchemaName(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description allows sending a parameter by name only or with an empty value.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/allowEmptyValue}
+*/
+export function parseQueryParameterSubSchemaAllowEmptyValue(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/type}
+*/
+export function parseQueryParameterSubSchemaType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/format}
+*/
+export function parseQueryParameterSubSchemaFormat(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/items}
+*/
+export function parseQueryParameterSubSchemaItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePrimitivesItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/collectionFormat}
+*/
+export function parseQueryParameterSubSchemaCollectionFormat(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseCollectionFormatWithMulti(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/default}
+*/
+export function parseQueryParameterSubSchemaDefault(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsDefault(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/maximum}
+*/
+export function parseQueryParameterSubSchemaMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaximum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/exclusiveMaximum}
+*/
+export function parseQueryParameterSubSchemaExclusiveMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExclusiveMaximum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/minimum}
+*/
+export function parseQueryParameterSubSchemaMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinimum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/exclusiveMinimum}
+*/
+export function parseQueryParameterSubSchemaExclusiveMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExclusiveMinimum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/maxLength}
+*/
+export function parseQueryParameterSubSchemaMaxLength(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaxLength(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/minLength}
+*/
+export function parseQueryParameterSubSchemaMinLength(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinLength(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/pattern}
+*/
+export function parseQueryParameterSubSchemaPattern(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsPattern(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/maxItems}
+*/
+export function parseQueryParameterSubSchemaMaxItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaxItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/minItems}
+*/
+export function parseQueryParameterSubSchemaMinItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/uniqueItems}
+*/
+export function parseQueryParameterSubSchemaUniqueItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsUniqueItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/enum}
+*/
+export function parseQueryParameterSubSchemaEnum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsEnum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/properties/multipleOf}
+*/
+export function parseQueryParameterSubSchemaMultipleOf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMultipleOf(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/additionalProperties}
+*/
+export function parseQueryParameterSubSchemaAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/queryParameterSubSchema/patternProperties/^x-}
+*/
+export function parseQueryParameterSubSchemaX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @description Determines whether or not this parameter is required or optional.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/required}
+*/
+export function parseFormDataParameterSubSchemaRequired(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @description Determines the location of the parameter.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/in}
+*/
+export function parseFormDataParameterSubSchemaIn(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/description}
+*/
+export function parseFormDataParameterSubSchemaDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description The name of the parameter.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/name}
+*/
+export function parseFormDataParameterSubSchemaName(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description allows sending a parameter by name only or with an empty value.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/allowEmptyValue}
+*/
+export function parseFormDataParameterSubSchemaAllowEmptyValue(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/type}
+*/
+export function parseFormDataParameterSubSchemaType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/format}
+*/
+export function parseFormDataParameterSubSchemaFormat(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/items}
+*/
+export function parseFormDataParameterSubSchemaItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePrimitivesItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/collectionFormat}
+*/
+export function parseFormDataParameterSubSchemaCollectionFormat(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseCollectionFormatWithMulti(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/default}
+*/
+export function parseFormDataParameterSubSchemaDefault(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsDefault(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/maximum}
+*/
+export function parseFormDataParameterSubSchemaMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaximum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/exclusiveMaximum}
+*/
+export function parseFormDataParameterSubSchemaExclusiveMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExclusiveMaximum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/minimum}
+*/
+export function parseFormDataParameterSubSchemaMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinimum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/exclusiveMinimum}
+*/
+export function parseFormDataParameterSubSchemaExclusiveMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExclusiveMinimum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/maxLength}
+*/
+export function parseFormDataParameterSubSchemaMaxLength(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaxLength(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/minLength}
+*/
+export function parseFormDataParameterSubSchemaMinLength(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinLength(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/pattern}
+*/
+export function parseFormDataParameterSubSchemaPattern(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsPattern(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/maxItems}
+*/
+export function parseFormDataParameterSubSchemaMaxItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaxItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/minItems}
+*/
+export function parseFormDataParameterSubSchemaMinItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/uniqueItems}
+*/
+export function parseFormDataParameterSubSchemaUniqueItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsUniqueItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/enum}
+*/
+export function parseFormDataParameterSubSchemaEnum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsEnum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/properties/multipleOf}
+*/
+export function parseFormDataParameterSubSchemaMultipleOf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMultipleOf(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/additionalProperties}
+*/
+export function parseFormDataParameterSubSchemaAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/formDataParameterSubSchema/patternProperties/^x-}
+*/
+export function parseFormDataParameterSubSchemaX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @description Determines whether or not this parameter is required or optional.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/required}
+*/
+export function parsePathParameterSubSchemaRequired(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @description Determines the location of the parameter.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/in}
+*/
+export function parsePathParameterSubSchemaIn(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description A brief description of the parameter. This could contain examples of use.  GitHub Flavored Markdown is allowed.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/description}
+*/
+export function parsePathParameterSubSchemaDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @description The name of the parameter.
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/name}
+*/
+export function parsePathParameterSubSchemaName(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/type}
+*/
+export function parsePathParameterSubSchemaType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/format}
+*/
+export function parsePathParameterSubSchemaFormat(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/items}
+*/
+export function parsePathParameterSubSchemaItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePrimitivesItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/collectionFormat}
+*/
+export function parsePathParameterSubSchemaCollectionFormat(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsCollectionFormat(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/default}
+*/
+export function parsePathParameterSubSchemaDefault(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsDefault(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/maximum}
+*/
+export function parsePathParameterSubSchemaMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaximum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/exclusiveMaximum}
+*/
+export function parsePathParameterSubSchemaExclusiveMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExclusiveMaximum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/minimum}
+*/
+export function parsePathParameterSubSchemaMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinimum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/exclusiveMinimum}
+*/
+export function parsePathParameterSubSchemaExclusiveMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExclusiveMinimum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/maxLength}
+*/
+export function parsePathParameterSubSchemaMaxLength(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaxLength(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/minLength}
+*/
+export function parsePathParameterSubSchemaMinLength(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinLength(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/pattern}
+*/
+export function parsePathParameterSubSchemaPattern(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsPattern(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/maxItems}
+*/
+export function parsePathParameterSubSchemaMaxItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaxItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/minItems}
+*/
+export function parsePathParameterSubSchemaMinItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/uniqueItems}
+*/
+export function parsePathParameterSubSchemaUniqueItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsUniqueItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/enum}
+*/
+export function parsePathParameterSubSchemaEnum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsEnum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/properties/multipleOf}
+*/
+export function parsePathParameterSubSchemaMultipleOf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMultipleOf(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/additionalProperties}
+*/
+export function parsePathParameterSubSchemaAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/pathParameterSubSchema/patternProperties/^x-}
+*/
+export function parsePathParameterSubSchemaX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/nonBodyParameter/oneOf/0}
+*/
+export function parseNonBodyParameter0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseHeaderParameterSubSchema(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/nonBodyParameter/oneOf/1}
+*/
+export function parseNonBodyParameter1(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseFormDataParameterSubSchema(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/nonBodyParameter/oneOf/2}
+*/
+export function parseNonBodyParameter2(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseQueryParameterSubSchema(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/nonBodyParameter/oneOf/3}
+*/
+export function parseNonBodyParameter3(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePathParameterSubSchema(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/parameter/oneOf/0}
+*/
+export function parseParameter0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseBodyParameter(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/parameter/oneOf/1}
+*/
+export function parseParameter1(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseNonBodyParameter(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/$ref}
+*/
+export function parseSchemaRef(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/format}
+*/
+export function parseSchemaFormat(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/title}
+*/
+export function parseSchemaTitle(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Title(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/description}
+*/
+export function parseSchemaDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Description(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/default}
+*/
+export function parseSchemaDefault(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Default(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/multipleOf}
+*/
+export function parseSchemaMultipleOf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04MultipleOf(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/maximum}
+*/
+export function parseSchemaMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Maximum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/exclusiveMaximum}
+*/
+export function parseSchemaExclusiveMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04ExclusiveMaximum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/minimum}
+*/
+export function parseSchemaMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Minimum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/exclusiveMinimum}
+*/
+export function parseSchemaExclusiveMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04ExclusiveMinimum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/maxLength}
+*/
+export function parseSchemaMaxLength(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePositiveInteger(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/minLength}
+*/
+export function parseSchemaMinLength(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePositiveIntegerDefault0(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/pattern}
+*/
+export function parseSchemaPattern(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Pattern(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/maxItems}
+*/
+export function parseSchemaMaxItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePositiveInteger(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/minItems}
+*/
+export function parseSchemaMinItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePositiveIntegerDefault0(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/uniqueItems}
+*/
+export function parseSchemaUniqueItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04UniqueItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/maxProperties}
+*/
+export function parseMaxProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePositiveInteger(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/minProperties}
+*/
+export function parseMinProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePositiveIntegerDefault0(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/required}
+*/
+export function parseSchemaRequired(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseStringArray(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/enum}
+*/
+export function parseSchemaEnum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Enum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/additionalProperties}
+*/
+export function parsePropertiesSchemaAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+parseAdditionalPropertiesAnyOf0(value, configuration)
+??
+parseAdditionalPropertiesAnyOf1(value, configuration)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/type}
+*/
+export function parseSchemaType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Type(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/items}
+*/
+export function parseSchemaItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+parseItemsAnyOf0(value, configuration)
+??
+parseItemsAnyOf1(value, configuration)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/allOf}
+*/
+export function parseAllOf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parseAllOfItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/properties}
+*/
+export function parseProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+default:
+return [
+name,
+(parsePropertiesAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/discriminator}
+*/
+export function parseDiscriminator(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/readOnly}
+*/
+export function parseSchemaReadOnly(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/xml}
+*/
+export function parseSchemaXml(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsXml(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/externalDocs}
+*/
+export function parseSchemaExternalDocs(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExternalDocs(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/example}
+*/
+export function parseSchemaExample(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/additionalProperties}
+*/
+export function parseDefinitionsSchemaAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/patternProperties/^x-}
+*/
+export function parseSchemaPatternPropertiesX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/format}
+*/
+export function parseFileSchemaFormat(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/title}
+*/
+export function parseFileSchemaTitle(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Title(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/description}
+*/
+export function parseFileSchemaDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Description(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/default}
+*/
+export function parseFileSchemaDefault(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDraft04Default(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/required}
+*/
+export function parseFileSchemaRequired(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseStringArray(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/type}
+*/
+export function parseFileSchemaType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/readOnly}
+*/
+export function parseFileSchemaReadOnly(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/externalDocs}
+*/
+export function parseFileSchemaExternalDocs(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExternalDocs(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/fileSchema/properties/example}
+*/
+export function parseFileSchemaExample(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/fileSchema/additionalProperties}
+*/
+export function parseFileSchemaAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/fileSchema/patternProperties/^x-}
+*/
+export function parseFileSchemaX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/type}
+*/
+export function parsePrimitivesItemsType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/format}
+*/
+export function parsePrimitivesItemsFormat(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/items}
+*/
+export function parsePrimitivesItemsItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePrimitivesItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/collectionFormat}
+*/
+export function parsePrimitivesItemsCollectionFormat(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsCollectionFormat(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/default}
+*/
+export function parsePrimitivesItemsDefault(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsDefault(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/maximum}
+*/
+export function parsePrimitivesItemsMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaximum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/exclusiveMaximum}
+*/
+export function parsePrimitivesItemsExclusiveMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExclusiveMaximum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/minimum}
+*/
+export function parsePrimitivesItemsMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinimum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/exclusiveMinimum}
+*/
+export function parsePrimitivesItemsExclusiveMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExclusiveMinimum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/maxLength}
+*/
+export function parsePrimitivesItemsMaxLength(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaxLength(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/minLength}
+*/
+export function parsePrimitivesItemsMinLength(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinLength(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/pattern}
+*/
+export function parsePrimitivesItemsPattern(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsPattern(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/maxItems}
+*/
+export function parsePrimitivesItemsMaxItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMaxItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/minItems}
+*/
+export function parsePrimitivesItemsMinItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMinItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/uniqueItems}
+*/
+export function parsePrimitivesItemsUniqueItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsUniqueItems(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/enum}
+*/
+export function parsePrimitivesItemsEnum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsEnum(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/properties/multipleOf}
+*/
+export function parsePrimitivesItemsMultipleOf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsMultipleOf(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/additionalProperties}
+*/
+export function parsePrimitivesItemsAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/primitivesItems/patternProperties/^x-}
+*/
+export function parsePrimitivesItemsX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/security/items}
+*/
+export function parseSecurityItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseSecurityRequirement(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/securityRequirement/additionalProperties}
+*/
+export function parseSecurityRequirementAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parseSecurityRequirementItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/xml/properties/name}
+*/
+export function parseXmlName(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/xml/properties/namespace}
+*/
+export function parseNamespace(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/xml/properties/prefix}
+*/
+export function parsePrefix(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/xml/properties/attribute}
+*/
+export function parseAttribute(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/xml/properties/wrapped}
+*/
+export function parseWrapped(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/xml/additionalProperties}
+*/
+export function parseXmlAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/xml/patternProperties/^x-}
+*/
+export function parseXmlX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/tag/properties/name}
+*/
+export function parseTagName(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/tag/properties/description}
+*/
+export function parseTagDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/tag/properties/externalDocs}
+*/
+export function parseTagExternalDocs(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsExternalDocs(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/tag/additionalProperties}
+*/
+export function parseTagAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/tag/patternProperties/^x-}
+*/
+export function parseTagX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties}
+*/
+export function parseSecurityDefinitionsAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+parseSecurityDefinitions0(value, configuration)
+??
+parseSecurityDefinitions1(value, configuration)
+??
+parseSecurityDefinitions2(value, configuration)
+??
+parseSecurityDefinitions3(value, configuration)
+??
+parseSecurityDefinitions4(value, configuration)
+??
+parseSecurityDefinitions5(value, configuration)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/basicAuthenticationSecurity/properties/type}
+*/
+export function parseBasicAuthenticationSecurityType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/basicAuthenticationSecurity/properties/description}
+*/
+export function parseBasicAuthenticationSecurityDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/basicAuthenticationSecurity/additionalProperties}
+*/
+export function parseBasicAuthenticationSecurityAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/basicAuthenticationSecurity/patternProperties/^x-}
+*/
+export function parseBasicAuthenticationSecurityX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/apiKeySecurity/properties/type}
+*/
+export function parseApiKeySecurityType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/apiKeySecurity/properties/name}
+*/
+export function parseApiKeySecurityName(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/apiKeySecurity/properties/in}
+*/
+export function parseApiKeySecurityIn(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/apiKeySecurity/properties/description}
+*/
+export function parseApiKeySecurityDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/apiKeySecurity/additionalProperties}
+*/
+export function parseApiKeySecurityAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/apiKeySecurity/patternProperties/^x-}
+*/
+export function parseApiKeySecurityX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2ImplicitSecurity/properties/type}
+*/
+export function parseOauth2ImplicitSecurityType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2ImplicitSecurity/properties/flow}
+*/
+export function parseOauth2ImplicitSecurityFlow(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2ImplicitSecurity/properties/scopes}
+*/
+export function parseOauth2ImplicitSecurityScopes(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOauth2Scopes(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2ImplicitSecurity/properties/authorizationUrl}
+*/
+export function parseOauth2ImplicitSecurityAuthorizationUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2ImplicitSecurity/properties/description}
+*/
+export function parseOauth2ImplicitSecurityDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2ImplicitSecurity/additionalProperties}
+*/
+export function parseOauth2ImplicitSecurityAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2ImplicitSecurity/patternProperties/^x-}
+*/
+export function parseOauth2ImplicitSecurityX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2PasswordSecurity/properties/type}
+*/
+export function parseOauth2PasswordSecurityType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2PasswordSecurity/properties/flow}
+*/
+export function parseOauth2PasswordSecurityFlow(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2PasswordSecurity/properties/scopes}
+*/
+export function parseOauth2PasswordSecurityScopes(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOauth2Scopes(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2PasswordSecurity/properties/tokenUrl}
+*/
+export function parseOauth2PasswordSecurityTokenUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2PasswordSecurity/properties/description}
+*/
+export function parseOauth2PasswordSecurityDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2PasswordSecurity/additionalProperties}
+*/
+export function parseOauth2PasswordSecurityAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2PasswordSecurity/patternProperties/^x-}
+*/
+export function parseOauth2PasswordSecurityX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2ApplicationSecurity/properties/type}
+*/
+export function parseOauth2ApplicationSecurityType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2ApplicationSecurity/properties/flow}
+*/
+export function parseOauth2ApplicationSecurityFlow(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2ApplicationSecurity/properties/scopes}
+*/
+export function parseOauth2ApplicationSecurityScopes(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOauth2Scopes(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2ApplicationSecurity/properties/tokenUrl}
+*/
+export function parseOauth2ApplicationSecurityTokenUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2ApplicationSecurity/properties/description}
+*/
+export function parseOauth2ApplicationSecurityDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2ApplicationSecurity/additionalProperties}
+*/
+export function parseOauth2ApplicationSecurityAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2ApplicationSecurity/patternProperties/^x-}
+*/
+export function parseOauth2ApplicationSecurityX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2AccessCodeSecurity/properties/type}
+*/
+export function parseOauth2AccessCodeSecurityType(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2AccessCodeSecurity/properties/flow}
+*/
+export function parseOauth2AccessCodeSecurityFlow(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2AccessCodeSecurity/properties/scopes}
+*/
+export function parseOauth2AccessCodeSecurityScopes(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOauth2Scopes(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2AccessCodeSecurity/properties/authorizationUrl}
+*/
+export function parseOauth2AccessCodeSecurityAuthorizationUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2AccessCodeSecurity/properties/tokenUrl}
+*/
+export function parseOauth2AccessCodeSecurityTokenUrl(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2AccessCodeSecurity/properties/description}
+*/
+export function parseOauth2AccessCodeSecurityDescription(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2AccessCodeSecurity/additionalProperties}
+*/
+export function parseOauth2AccessCodeSecurityAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2AccessCodeSecurity/patternProperties/^x-}
+*/
+export function parseOauth2AccessCodeSecurityX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/oauth2Scopes/additionalProperties}
+*/
+export function parseOauth2ScopesAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/mediaTypeList/items}
+*/
+export function parseMediaTypeListItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseMimeType(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/parametersList/items}
+*/
+export function parseParametersListItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+parseParameter0(value, configuration)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "required":
+return [
+name,
+parseHeaderParameterSubSchemaRequired(value, configuration),
+]
+case "in":
+return [
+name,
+parseHeaderParameterSubSchemaIn(value, configuration),
+]
+case "description":
+return [
+name,
+parseHeaderParameterSubSchemaDescription(value, configuration),
+]
+case "name":
+return [
+name,
+parseHeaderParameterSubSchemaName(value, configuration),
+]
+case "type":
+return [
+name,
+parseHeaderParameterSubSchemaType(value, configuration),
+]
+case "format":
+return [
+name,
+parseHeaderParameterSubSchemaFormat(value, configuration),
+]
+case "items":
+return [
+name,
+parseHeaderParameterSubSchemaItems(value, configuration),
+]
+case "collectionFormat":
+return [
+name,
+parseHeaderParameterSubSchemaCollectionFormat(value, configuration),
+]
+case "default":
+return [
+name,
+parseHeaderParameterSubSchemaDefault(value, configuration),
+]
+case "maximum":
+return [
+name,
+parseHeaderParameterSubSchemaMaximum(value, configuration),
+]
+case "exclusiveMaximum":
+return [
+name,
+parseHeaderParameterSubSchemaExclusiveMaximum(value, configuration),
+]
+case "minimum":
+return [
+name,
+parseHeaderParameterSubSchemaMinimum(value, configuration),
+]
+case "exclusiveMinimum":
+return [
+name,
+parseHeaderParameterSubSchemaExclusiveMinimum(value, configuration),
+]
+case "maxLength":
+return [
+name,
+parseHeaderParameterSubSchemaMaxLength(value, configuration),
+]
+case "minLength":
+return [
+name,
+parseHeaderParameterSubSchemaMinLength(value, configuration),
+]
+case "pattern":
+return [
+name,
+parseHeaderParameterSubSchemaPattern(value, configuration),
+]
+case "maxItems":
+return [
+name,
+parseHeaderParameterSubSchemaMaxItems(value, configuration),
+]
+case "minItems":
+return [
+name,
+parseHeaderParameterSubSchemaMinItems(value, configuration),
+]
+case "uniqueItems":
+return [
+name,
+parseHeaderParameterSubSchemaUniqueItems(value, configuration),
+]
+case "enum":
+return [
+name,
+parseHeaderParameterSubSchemaEnum(value, configuration),
+]
+case "multipleOf":
+return [
+name,
+parseHeaderParameterSubSchemaMultipleOf(value, configuration),
+]
+default:
+return [
+name,
+(parseHeaderParameterSubSchemaAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "required":
+return [
+name,
+parseFormDataParameterSubSchemaRequired(value, configuration),
+]
+case "in":
+return [
+name,
+parseFormDataParameterSubSchemaIn(value, configuration),
+]
+case "description":
+return [
+name,
+parseFormDataParameterSubSchemaDescription(value, configuration),
+]
+case "name":
+return [
+name,
+parseFormDataParameterSubSchemaName(value, configuration),
+]
+case "allowEmptyValue":
+return [
+name,
+parseFormDataParameterSubSchemaAllowEmptyValue(value, configuration),
+]
+case "type":
+return [
+name,
+parseFormDataParameterSubSchemaType(value, configuration),
+]
+case "format":
+return [
+name,
+parseFormDataParameterSubSchemaFormat(value, configuration),
+]
+case "items":
+return [
+name,
+parseFormDataParameterSubSchemaItems(value, configuration),
+]
+case "collectionFormat":
+return [
+name,
+parseFormDataParameterSubSchemaCollectionFormat(value, configuration),
+]
+case "default":
+return [
+name,
+parseFormDataParameterSubSchemaDefault(value, configuration),
+]
+case "maximum":
+return [
+name,
+parseFormDataParameterSubSchemaMaximum(value, configuration),
+]
+case "exclusiveMaximum":
+return [
+name,
+parseFormDataParameterSubSchemaExclusiveMaximum(value, configuration),
+]
+case "minimum":
+return [
+name,
+parseFormDataParameterSubSchemaMinimum(value, configuration),
+]
+case "exclusiveMinimum":
+return [
+name,
+parseFormDataParameterSubSchemaExclusiveMinimum(value, configuration),
+]
+case "maxLength":
+return [
+name,
+parseFormDataParameterSubSchemaMaxLength(value, configuration),
+]
+case "minLength":
+return [
+name,
+parseFormDataParameterSubSchemaMinLength(value, configuration),
+]
+case "pattern":
+return [
+name,
+parseFormDataParameterSubSchemaPattern(value, configuration),
+]
+case "maxItems":
+return [
+name,
+parseFormDataParameterSubSchemaMaxItems(value, configuration),
+]
+case "minItems":
+return [
+name,
+parseFormDataParameterSubSchemaMinItems(value, configuration),
+]
+case "uniqueItems":
+return [
+name,
+parseFormDataParameterSubSchemaUniqueItems(value, configuration),
+]
+case "enum":
+return [
+name,
+parseFormDataParameterSubSchemaEnum(value, configuration),
+]
+case "multipleOf":
+return [
+name,
+parseFormDataParameterSubSchemaMultipleOf(value, configuration),
+]
+default:
+return [
+name,
+(parseFormDataParameterSubSchemaAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "required":
+return [
+name,
+parseQueryParameterSubSchemaRequired(value, configuration),
+]
+case "in":
+return [
+name,
+parseQueryParameterSubSchemaIn(value, configuration),
+]
+case "description":
+return [
+name,
+parseQueryParameterSubSchemaDescription(value, configuration),
+]
+case "name":
+return [
+name,
+parseQueryParameterSubSchemaName(value, configuration),
+]
+case "allowEmptyValue":
+return [
+name,
+parseQueryParameterSubSchemaAllowEmptyValue(value, configuration),
+]
+case "type":
+return [
+name,
+parseQueryParameterSubSchemaType(value, configuration),
+]
+case "format":
+return [
+name,
+parseQueryParameterSubSchemaFormat(value, configuration),
+]
+case "items":
+return [
+name,
+parseQueryParameterSubSchemaItems(value, configuration),
+]
+case "collectionFormat":
+return [
+name,
+parseQueryParameterSubSchemaCollectionFormat(value, configuration),
+]
+case "default":
+return [
+name,
+parseQueryParameterSubSchemaDefault(value, configuration),
+]
+case "maximum":
+return [
+name,
+parseQueryParameterSubSchemaMaximum(value, configuration),
+]
+case "exclusiveMaximum":
+return [
+name,
+parseQueryParameterSubSchemaExclusiveMaximum(value, configuration),
+]
+case "minimum":
+return [
+name,
+parseQueryParameterSubSchemaMinimum(value, configuration),
+]
+case "exclusiveMinimum":
+return [
+name,
+parseQueryParameterSubSchemaExclusiveMinimum(value, configuration),
+]
+case "maxLength":
+return [
+name,
+parseQueryParameterSubSchemaMaxLength(value, configuration),
+]
+case "minLength":
+return [
+name,
+parseQueryParameterSubSchemaMinLength(value, configuration),
+]
+case "pattern":
+return [
+name,
+parseQueryParameterSubSchemaPattern(value, configuration),
+]
+case "maxItems":
+return [
+name,
+parseQueryParameterSubSchemaMaxItems(value, configuration),
+]
+case "minItems":
+return [
+name,
+parseQueryParameterSubSchemaMinItems(value, configuration),
+]
+case "uniqueItems":
+return [
+name,
+parseQueryParameterSubSchemaUniqueItems(value, configuration),
+]
+case "enum":
+return [
+name,
+parseQueryParameterSubSchemaEnum(value, configuration),
+]
+case "multipleOf":
+return [
+name,
+parseQueryParameterSubSchemaMultipleOf(value, configuration),
+]
+default:
+return [
+name,
+(parseQueryParameterSubSchemaAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+??
+(
+(typeof value === "object" && value !== null && !Array.isArray(value)) ?
+Object.fromEntries(
+Object.entries(value).map(([name, value]) => {
+switch(name) {
+case "required":
+return [
+name,
+parsePathParameterSubSchemaRequired(value, configuration),
+]
+case "in":
+return [
+name,
+parsePathParameterSubSchemaIn(value, configuration),
+]
+case "description":
+return [
+name,
+parsePathParameterSubSchemaDescription(value, configuration),
+]
+case "name":
+return [
+name,
+parsePathParameterSubSchemaName(value, configuration),
+]
+case "type":
+return [
+name,
+parsePathParameterSubSchemaType(value, configuration),
+]
+case "format":
+return [
+name,
+parsePathParameterSubSchemaFormat(value, configuration),
+]
+case "items":
+return [
+name,
+parsePathParameterSubSchemaItems(value, configuration),
+]
+case "collectionFormat":
+return [
+name,
+parsePathParameterSubSchemaCollectionFormat(value, configuration),
+]
+case "default":
+return [
+name,
+parsePathParameterSubSchemaDefault(value, configuration),
+]
+case "maximum":
+return [
+name,
+parsePathParameterSubSchemaMaximum(value, configuration),
+]
+case "exclusiveMaximum":
+return [
+name,
+parsePathParameterSubSchemaExclusiveMaximum(value, configuration),
+]
+case "minimum":
+return [
+name,
+parsePathParameterSubSchemaMinimum(value, configuration),
+]
+case "exclusiveMinimum":
+return [
+name,
+parsePathParameterSubSchemaExclusiveMinimum(value, configuration),
+]
+case "maxLength":
+return [
+name,
+parsePathParameterSubSchemaMaxLength(value, configuration),
+]
+case "minLength":
+return [
+name,
+parsePathParameterSubSchemaMinLength(value, configuration),
+]
+case "pattern":
+return [
+name,
+parsePathParameterSubSchemaPattern(value, configuration),
+]
+case "maxItems":
+return [
+name,
+parsePathParameterSubSchemaMaxItems(value, configuration),
+]
+case "minItems":
+return [
+name,
+parsePathParameterSubSchemaMinItems(value, configuration),
+]
+case "uniqueItems":
+return [
+name,
+parsePathParameterSubSchemaUniqueItems(value, configuration),
+]
+case "enum":
+return [
+name,
+parsePathParameterSubSchemaEnum(value, configuration),
+]
+case "multipleOf":
+return [
+name,
+parsePathParameterSubSchemaMultipleOf(value, configuration),
+]
+default:
+return [
+name,
+(parsePathParameterSubSchemaAdditionalProperties(value, configuration)),
+]
+}
+})
+) :
+undefined
+)
+??
+parseParametersList1(value, configuration)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/parametersList/additionalItems}
+*/
+export function parseParametersListAdditionalItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schemesList/items}
+*/
+export function parseSchemesListItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/jsonReference/properties/$ref}
+*/
+export function parseJsonReferenceRef(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/jsonReference/additionalProperties}
+*/
+export function parseJsonReferenceAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/properties/consumes/allOf/0}
+*/
+export function parsePropertiesAllOfConsumes0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/properties/produces/allOf/0}
+*/
+export function parsePropertiesAllOfProduces0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/properties/tags/items}
+*/
+export function parsePropertiesTagsItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseTag(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/properties/tags/items}
+*/
+export function parseOperationTagsItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/properties/produces/allOf/0}
+*/
+export function parseOperationAllOfProduces0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/operation/properties/consumes/allOf/0}
+*/
+export function parseOperationAllOfConsumes0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/responses/not/additionalProperties}
+*/
+export function parseNotAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/responses/not/patternProperties/^x-}
+*/
+export function parseNotX(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseVendorExtension(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/response/properties/schema/oneOf/0}
+*/
+export function parseResponse0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsSchema(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/response/properties/schema/oneOf/1}
+*/
+export function parseResponse1(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseFileSchema(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/additionalProperties/anyOf/0}
+*/
+export function parseAdditionalPropertiesAnyOf0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsSchema(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/additionalProperties/anyOf/1}
+*/
+export function parseAdditionalPropertiesAnyOf1(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(value == null) {
+return false;
+}
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
+return true;
+}
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
+case "number":
+return Boolean(value);
+case "boolean":
+return value;
+}
+return undefined;
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/items/anyOf/0}
+*/
+export function parseItemsAnyOf0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsSchema(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/items/anyOf/1}
+*/
+export function parseItemsAnyOf1(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parseItems1AnyOfItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/allOf/items}
+*/
+export function parseAllOfItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsSchema(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/properties/additionalProperties}
+*/
+export function parsePropertiesAdditionalProperties(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsSchema(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/securityRequirement/additionalProperties/items}
+*/
+export function parseSecurityRequirementItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/0}
+*/
+export function parseSecurityDefinitions0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseBasicAuthenticationSecurity(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/1}
+*/
+export function parseSecurityDefinitions1(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseApiKeySecurity(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/2}
+*/
+export function parseSecurityDefinitions2(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOauth2ImplicitSecurity(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/3}
+*/
+export function parseSecurityDefinitions3(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOauth2PasswordSecurity(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/4}
+*/
+export function parseSecurityDefinitions4(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOauth2ApplicationSecurity(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/securityDefinitions/additionalProperties/oneOf/5}
+*/
+export function parseSecurityDefinitions5(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseOauth2AccessCodeSecurity(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/parametersList/items/oneOf/0}
+*/
+export function parseParametersList0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseParameter(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/parametersList/items/oneOf/1}
+*/
+export function parseParametersList1(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseJsonReference(value, configuration));
+}
+/**
+* @see {@link http://swagger.io/v2/schema.json#/definitions/schema/properties/items/anyOf/1/items}
+*/
+export function parseItems1AnyOfItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseDefinitionsSchema(value, configuration));
+}
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/properties/title}
+*/
+export function parseDraft04Title(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/properties/description}
+*/
+export function parseDraft04Description(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
+switch(typeof value) {
+case "string":
+return value;
+case "number":
+case "boolean":
+return String(value);
+default:
+return undefined;
+}
+})(value)
+);
+}
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/properties/default}
+*/
+export function parseDraft04Default(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
+}
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/properties/multipleOf}
+*/
+export function parseDraft04MultipleOf(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
 return Number(value);
@@ -5204,11 +9668,28 @@ case "boolean":
 return value ? 1 : 0;
 }
 return undefined;
+})(value)
+);
 }
-export function parseDraft04Maximum(value: unknown): unknown {
-return _parseNumberDraft04Maximum(value);
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/properties/maximum}
+*/
+export function parseDraft04Maximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-function _parseNumberDraft04Maximum(value: unknown): unknown {
+}
 switch(typeof value) {
 case "string":
 return Number(value);
@@ -5218,37 +9699,75 @@ case "boolean":
 return value ? 1 : 0;
 }
 return undefined;
+})(value)
+);
 }
-export function parseDraft04ExclusiveMaximum(value: unknown): unknown {
-return _parseBooleanDraft04ExclusiveMaximum(value);
-}
-function _parseBooleanDraft04ExclusiveMaximum(value: unknown): unknown {
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/properties/exclusiveMaximum}
+*/
+export function parseDraft04ExclusiveMaximum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
 if(value == null) {
 return false;
 }
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
 return true;
 }
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
 case "number":
 return Boolean(value);
 case "boolean":
 return value;
 }
 return undefined;
+})(value)
+);
 }
-export function parseDraft04Minimum(value: unknown): unknown {
-return _parseNumberDraft04Minimum(value);
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/properties/minimum}
+*/
+export function parseDraft04Minimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-function _parseNumberDraft04Minimum(value: unknown): unknown {
+}
 switch(typeof value) {
 case "string":
 return Number(value);
@@ -5258,37 +9777,75 @@ case "boolean":
 return value ? 1 : 0;
 }
 return undefined;
+})(value)
+);
 }
-export function parseDraft04ExclusiveMinimum(value: unknown): unknown {
-return _parseBooleanDraft04ExclusiveMinimum(value);
-}
-function _parseBooleanDraft04ExclusiveMinimum(value: unknown): unknown {
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/properties/exclusiveMinimum}
+*/
+export function parseDraft04ExclusiveMinimum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
 if(value == null) {
 return false;
 }
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
 return true;
 }
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
 case "number":
 return Boolean(value);
 case "boolean":
 return value;
 }
 return undefined;
+})(value)
+);
 }
-export function parsePositiveInteger(value: unknown): unknown {
-return _parseIntegerPositiveInteger(value);
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/definitions/positiveInteger}
+*/
+export function parsePositiveInteger(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-function _parseIntegerPositiveInteger(value: unknown): unknown {
+}
 switch(typeof value) {
 case "string":
 return Number(value);
@@ -5298,26 +9855,79 @@ case "boolean":
 return value ? 1 : 0;
 }
 return undefined;
+})(value)
+);
 }
-export function parsePositiveIntegerDefault0(value: unknown): unknown {
-return _parseAllOfPositiveIntegerDefault0(value);
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/definitions/positiveIntegerDefault0}
+*/
+export function parsePositiveIntegerDefault0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
 }
-function _parseAllOfPositiveIntegerDefault0(value: unknown): unknown {
-return parsePositiveIntegerDefault00(value) ?? parsePositiveIntegerDefault01(value);
 }
-export function parsePositiveIntegerDefault00(value: unknown): unknown {
-return _parseReferencePositiveIntegerDefault00(value);
+switch(typeof value) {
+case "string":
+return Number(value);
+case "number":
+return value;
+case "boolean":
+return value ? 1 : 0;
 }
-function _parseReferencePositiveIntegerDefault00(value: unknown): unknown {
-return parsePositiveInteger(value);
+return undefined;
+})(value)
+);
 }
-export function parsePositiveIntegerDefault01(value: unknown): unknown {
-return ;
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/definitions/positiveIntegerDefault0/allOf/0}
+*/
+export function parsePositiveIntegerDefault00(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parsePositiveInteger(value, configuration));
 }
-export function parseDraft04Pattern(value: unknown): unknown {
-return _parseStringDraft04Pattern(value);
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/definitions/positiveIntegerDefault0/allOf/1}
+*/
+export function parsePositiveIntegerDefault01(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
 }
-function _parseStringDraft04Pattern(value: unknown): unknown {
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/properties/pattern}
+*/
+export function parseDraft04Pattern(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
+if(Array.isArray(value)) {
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
 return value;
@@ -5327,63 +9937,113 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseDraft04UniqueItems(value: unknown): unknown {
-return _parseBooleanDraft04UniqueItems(value);
-}
-function _parseBooleanDraft04UniqueItems(value: unknown): unknown {
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/properties/uniqueItems}
+*/
+export function parseDraft04UniqueItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
 if(value == null) {
 return false;
 }
+if(Array.isArray(value)) {
+switch(value.length) {
+case 0:
+return false;
+case 1:
+[value] = value
+break;
+default:
+return undefined;
+}
+}
 switch(typeof value) {
 case "string":
-switch(value.trim()) {
-case "":
-case "no":
-case "off":
-case "false":
-case "0":
-return false;
-default:
+value = value.trim();
+for(const trueStringValue of configuration.trueStringValues) {
+if(value === trueStringValue) {
 return true;
 }
+}
+for(const falseStringValue of configuration.falseStringValues) {
+if(value === falseStringValue) {
+return false;
+}
+}
+return undefined;
 case "number":
 return Boolean(value);
 case "boolean":
 return value;
 }
 return undefined;
+})(value)
+);
 }
-export function parseDraft04Enum(value: unknown): unknown {
-return _parseArrayDraft04Enum(value);
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/properties/enum}
+*/
+export function parseDraft04Enum(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return value;
 }
-function _parseArrayDraft04Enum(value: unknown): unknown {
+}) :
+undefined
+);
+}
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/definitions/stringArray}
+*/
+export function parseStringArray(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
+default:
+return parseStringArrayItems(value, configuration)
+}
+}) :
+undefined
+);
+}
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/definitions/stringArray/items}
+*/
+export function parseStringArrayItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+((value: unknown) => {
 if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = value[elementIndex];
-}
-return result;
-}
+switch(value.length) {
+case 1:
+[value] = value
+break;
+default:
 return undefined;
 }
-export function parseStringArray(value: unknown): unknown {
-return _parseArrayStringArray(value);
 }
-function _parseArrayStringArray(value: unknown): unknown {
-if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseStringArrayItems(value[elementIndex]);
-}
-return result;
-}
-return undefined;
-}
-export function parseStringArrayItems(value: unknown): unknown {
-return _parseStringStringArrayItems(value);
-}
-function _parseStringStringArrayItems(value: unknown): unknown {
 switch(typeof value) {
 case "string":
 return value;
@@ -5393,49 +10053,65 @@ return String(value);
 default:
 return undefined;
 }
+})(value)
+);
 }
-export function parseDraft04Type(value: unknown): unknown {
-return _parseAnyOfDraft04Type(value);
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/properties/type}
+*/
+export function parseDraft04Type(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
 }
-function _parseAnyOfDraft04Type(value: unknown): unknown {
-return parseTypeAnyOf0(value) ?? parseTypeAnyOf1(value);
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/properties/type/anyOf/0}
+*/
+export function parseTypeAnyOf0(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseSimpleTypes(value, configuration));
 }
-export function parseTypeAnyOf0(value: unknown): unknown {
-return _parseReferenceTypeAnyOf0(value);
-}
-function _parseReferenceTypeAnyOf0(value: unknown): unknown {
-return parseSimpleTypes(value);
-}
-export function parseTypeAnyOf1(value: unknown): unknown {
-return _parseArrayTypeAnyOf1(value);
-}
-function _parseArrayTypeAnyOf1(value: unknown): unknown {
-if(Array.isArray(value)) {
-const result = new Array<unknown>(value.length);
-for(let elementIndex = 0; elementIndex < value.length; elementIndex++) {
-result[elementIndex] = parseType1AnyOfItems(value[elementIndex]);
-}
-return result;
-}
-return undefined;
-}
-export function parseType1AnyOfItems(value: unknown): unknown {
-return _parseReferenceType1AnyOfItems(value);
-}
-function _parseReferenceType1AnyOfItems(value: unknown): unknown {
-return parseSimpleTypes(value);
-}
-export function parseSimpleTypes(value: unknown): unknown {
-return _parseStringSimpleTypes(value);
-}
-function _parseStringSimpleTypes(value: unknown): unknown {
-switch(typeof value) {
-case "string":
-return value;
-case "number":
-case "boolean":
-return String(value);
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/properties/type/anyOf/1}
+*/
+export function parseTypeAnyOf1(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (
+Array.isArray(value) ?
+value.map((value, index) => {
+switch(index) {
 default:
-return undefined;
+return parseType1AnyOfItems(value, configuration)
 }
+}) :
+undefined
+);
+}
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/properties/type/anyOf/1/items}
+*/
+export function parseType1AnyOfItems(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (parseSimpleTypes(value, configuration));
+}
+/**
+* @see {@link http://json-schema.org/draft-04/schema#/definitions/simpleTypes}
+*/
+export function parseSimpleTypes(value: unknown, options: ParserGeneratorOptions = {}): unknown {
+const configuration = {
+...defaultParserGeneratorOptions,
+...options,
+};
+return (value);
 }
