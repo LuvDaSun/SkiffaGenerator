@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.12.7                         -- www.JsonSchema42.org
+// v0.12.8                         -- www.JsonSchema42.org
 //
 import * as types from "./types.js";
 export interface ValidationError {
@@ -206,6 +206,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isAdditionalProperties(propertyValue)
@@ -409,6 +410,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isInfoAdditionalProperties(propertyValue)
@@ -505,6 +507,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isContactAdditionalProperties(propertyValue)
@@ -597,6 +600,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isLicenseAdditionalProperties(propertyValue)
@@ -700,6 +704,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isServerAdditionalProperties(propertyValue)
@@ -803,6 +808,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isServerVariableAdditionalProperties(propertyValue)
@@ -965,6 +971,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isComponentsAdditionalProperties(propertyValue)
@@ -1413,6 +1420,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isDefinitionsSchemaAdditionalProperties(propertyValue)
@@ -1602,6 +1610,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isXmlAdditionalProperties(propertyValue)
@@ -1716,6 +1725,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isResponseAdditionalProperties(propertyValue)
@@ -1823,6 +1833,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isDefinitionsMediaTypeAdditionalProperties(propertyValue)
@@ -1940,6 +1951,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isExampleAdditionalProperties(propertyValue)
@@ -2124,6 +2136,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isHeaderAdditionalProperties(propertyValue)
@@ -2200,6 +2213,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 new RegExp("^x-").test(propertyName) &&
@@ -2211,6 +2225,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isPathsAdditionalProperties(propertyValue)
@@ -2329,6 +2344,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 new RegExp("^x-").test(propertyName) &&
@@ -2340,6 +2356,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isPathItemAdditionalProperties(propertyValue)
@@ -2542,6 +2559,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isOperationAdditionalProperties(propertyValue)
@@ -2618,6 +2636,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 new RegExp("^x-").test(propertyName) &&
@@ -2629,6 +2648,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isResponsesAdditionalProperties(propertyValue)
@@ -2788,6 +2808,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isTagAdditionalProperties(propertyValue)
@@ -2880,6 +2901,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isExternalDocumentationAdditionalProperties(propertyValue)
@@ -3159,6 +3181,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isParameterAdditionalProperties(propertyValue)
@@ -3316,6 +3339,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isRequestBodyAdditionalProperties(propertyValue)
@@ -3481,6 +3505,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isApiKeySecuritySchemeAdditionalProperties(propertyValue)
@@ -3602,6 +3627,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isHttpSecuritySchemeAdditionalProperties(propertyValue)
@@ -3725,6 +3751,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isOauth2SecuritySchemeAdditionalProperties(propertyValue)
@@ -3835,6 +3862,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isOpenIdConnectSecuritySchemeAdditionalProperties(propertyValue)
@@ -3942,6 +3970,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isOauthFlowsAdditionalProperties(propertyValue)
@@ -4052,6 +4081,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isDefinitionsImplicitOauthFlowAdditionalProperties(propertyValue)
@@ -4162,6 +4192,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isDefinitionsPasswordOauthFlowAdditionalProperties(propertyValue)
@@ -4272,6 +4303,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isDefinitionsClientCredentialsFlowAdditionalProperties(propertyValue)
@@ -4400,6 +4432,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isDefinitionsAuthorizationCodeOauthFlowAdditionalProperties(propertyValue)
@@ -4529,6 +4562,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isDefinitionsLinkAdditionalProperties(propertyValue)
@@ -4596,6 +4630,7 @@ return true;
 })) {
 return false
 }
+else
 if(!withPath(propertyName, () => {
 if(
 !isCallbackAdditionalProperties(propertyValue)
