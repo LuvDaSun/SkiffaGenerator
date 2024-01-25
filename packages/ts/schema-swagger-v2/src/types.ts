@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.12.9                         -- www.JsonSchema42.org
+// v0.12.10                        -- www.JsonSchema42.org
 //
 /**
 * @summary A JSON Schema for Swagger 2.0 API.
@@ -26,6 +26,26 @@ export type SchemaJson = (
 "securityDefinitions"?: PropertiesSecurityDefinitions,
 "tags"?: PropertiesTags,
 "externalDocs"?: PropertiesExternalDocs,
+[
+name: string
+]: V2AdditionalProperties |
+V2PatternPropertiesX |
+Swagger |
+PropertiesInfo |
+Host |
+BasePath |
+PropertiesSchemes |
+PropertiesConsumes |
+PropertiesProduces |
+PropertiesPaths |
+PropertiesDefinitions |
+PropertiesParameters |
+PropertiesResponses |
+PropertiesSecurity |
+PropertiesSecurityDefinitions |
+PropertiesTags |
+PropertiesExternalDocs |
+undefined
 }
 );
 /**
@@ -40,6 +60,17 @@ export type DefinitionsInfo = (
 "termsOfService"?: TermsOfService,
 "contact"?: InfoContact,
 "license"?: InfoLicense,
+[
+name: string
+]: InfoAdditionalProperties |
+InfoX |
+InfoTitle |
+Version |
+InfoDescription |
+TermsOfService |
+InfoContact |
+InfoLicense |
+undefined
 }
 );
 /**
@@ -51,6 +82,14 @@ export type DefinitionsContact = (
 "name"?: ContactName,
 "url"?: ContactUrl,
 "email"?: Email,
+[
+name: string
+]: ContactAdditionalProperties |
+ContactX |
+ContactName |
+ContactUrl |
+Email |
+undefined
 }
 );
 /**
@@ -60,6 +99,13 @@ export type DefinitionsLicense = (
 {
 "name": LicenseName,
 "url"?: LicenseUrl,
+[
+name: string
+]: LicenseAdditionalProperties |
+LicenseX |
+LicenseName |
+LicenseUrl |
+undefined
 }
 );
 /**
@@ -116,6 +162,13 @@ export type DefinitionsExternalDocs = (
 {
 "description"?: ExternalDocsDescription,
 "url": ExternalDocsUrl,
+[
+name: string
+]: ExternalDocsAdditionalProperties |
+ExternalDocsX |
+ExternalDocsDescription |
+ExternalDocsUrl |
+undefined
 }
 );
 /**
@@ -150,6 +203,23 @@ export type Operation = (
 "schemes"?: OperationSchemes,
 "deprecated"?: Deprecated,
 "security"?: OperationSecurity,
+[
+name: string
+]: OperationAdditionalProperties |
+OperationX |
+OperationTags |
+Summary |
+OperationDescription |
+OperationExternalDocs |
+OperationId |
+OperationProduces |
+OperationConsumes |
+OperationParameters |
+OperationResponses |
+OperationSchemes |
+Deprecated |
+OperationSecurity |
+undefined
 }
 );
 /**
@@ -166,6 +236,20 @@ export type PathItem = (
 "head"?: Head,
 "patch"?: Patch,
 "parameters"?: PathItemParameters,
+[
+name: string
+]: PathItemAdditionalProperties |
+PathItemX |
+PathItemRef |
+Get |
+Put |
+Post |
+Delete |
+Options |
+Head |
+Patch |
+PathItemParameters |
+undefined
 }
 );
 /**
@@ -198,6 +282,15 @@ export type Response = (
 "schema"?: ResponseSchema,
 "headers"?: ResponseHeaders,
 "examples"?: ResponseExamples,
+[
+name: string
+]: ResponseAdditionalProperties |
+ResponseX |
+ResponseDescription |
+ResponseSchema |
+ResponseHeaders |
+ResponseExamples |
+undefined
 }
 );
 /**
@@ -233,6 +326,29 @@ export type Header = (
 "enum"?: HeaderEnum,
 "multipleOf"?: HeaderMultipleOf,
 "description"?: HeaderDescription,
+[
+name: string
+]: HeaderAdditionalProperties |
+HeaderX |
+HeaderType |
+HeaderFormat |
+HeaderItems |
+HeaderCollectionFormat |
+HeaderDefault |
+HeaderMaximum |
+HeaderExclusiveMaximum |
+HeaderMinimum |
+HeaderExclusiveMinimum |
+HeaderMaxLength |
+HeaderMinLength |
+HeaderPattern |
+HeaderMaxItems |
+HeaderMinItems |
+HeaderUniqueItems |
+HeaderEnum |
+HeaderMultipleOf |
+HeaderDescription |
+undefined
 }
 );
 /**
@@ -250,6 +366,16 @@ export type BodyParameter = (
 "in": BodyParameterIn,
 "required"?: BodyParameterRequired,
 "schema": BodyParameterSchema,
+[
+name: string
+]: BodyParameterAdditionalProperties |
+BodyParameterX |
+BodyParameterDescription |
+BodyParameterName |
+BodyParameterIn |
+BodyParameterRequired |
+BodyParameterSchema |
+undefined
 }
 );
 /**
@@ -295,6 +421,31 @@ export type NonBodyParameter = (
 "uniqueItems"?: HeaderParameterSubSchemaUniqueItems,
 "enum"?: HeaderParameterSubSchemaEnum,
 "multipleOf"?: HeaderParameterSubSchemaMultipleOf,
+[
+name: string
+]: HeaderParameterSubSchemaAdditionalProperties |
+HeaderParameterSubSchemaRequired |
+HeaderParameterSubSchemaIn |
+HeaderParameterSubSchemaDescription |
+HeaderParameterSubSchemaName |
+HeaderParameterSubSchemaType |
+HeaderParameterSubSchemaFormat |
+HeaderParameterSubSchemaItems |
+HeaderParameterSubSchemaCollectionFormat |
+HeaderParameterSubSchemaDefault |
+HeaderParameterSubSchemaMaximum |
+HeaderParameterSubSchemaExclusiveMaximum |
+HeaderParameterSubSchemaMinimum |
+HeaderParameterSubSchemaExclusiveMinimum |
+HeaderParameterSubSchemaMaxLength |
+HeaderParameterSubSchemaMinLength |
+HeaderParameterSubSchemaPattern |
+HeaderParameterSubSchemaMaxItems |
+HeaderParameterSubSchemaMinItems |
+HeaderParameterSubSchemaUniqueItems |
+HeaderParameterSubSchemaEnum |
+HeaderParameterSubSchemaMultipleOf |
+undefined
 }
 )
 |
@@ -322,6 +473,32 @@ export type NonBodyParameter = (
 "uniqueItems"?: FormDataParameterSubSchemaUniqueItems,
 "enum"?: FormDataParameterSubSchemaEnum,
 "multipleOf"?: FormDataParameterSubSchemaMultipleOf,
+[
+name: string
+]: FormDataParameterSubSchemaAdditionalProperties |
+FormDataParameterSubSchemaRequired |
+FormDataParameterSubSchemaIn |
+FormDataParameterSubSchemaDescription |
+FormDataParameterSubSchemaName |
+FormDataParameterSubSchemaAllowEmptyValue |
+FormDataParameterSubSchemaType |
+FormDataParameterSubSchemaFormat |
+FormDataParameterSubSchemaItems |
+FormDataParameterSubSchemaCollectionFormat |
+FormDataParameterSubSchemaDefault |
+FormDataParameterSubSchemaMaximum |
+FormDataParameterSubSchemaExclusiveMaximum |
+FormDataParameterSubSchemaMinimum |
+FormDataParameterSubSchemaExclusiveMinimum |
+FormDataParameterSubSchemaMaxLength |
+FormDataParameterSubSchemaMinLength |
+FormDataParameterSubSchemaPattern |
+FormDataParameterSubSchemaMaxItems |
+FormDataParameterSubSchemaMinItems |
+FormDataParameterSubSchemaUniqueItems |
+FormDataParameterSubSchemaEnum |
+FormDataParameterSubSchemaMultipleOf |
+undefined
 }
 )
 |
@@ -349,6 +526,32 @@ export type NonBodyParameter = (
 "uniqueItems"?: QueryParameterSubSchemaUniqueItems,
 "enum"?: QueryParameterSubSchemaEnum,
 "multipleOf"?: QueryParameterSubSchemaMultipleOf,
+[
+name: string
+]: QueryParameterSubSchemaAdditionalProperties |
+QueryParameterSubSchemaRequired |
+QueryParameterSubSchemaIn |
+QueryParameterSubSchemaDescription |
+QueryParameterSubSchemaName |
+QueryParameterSubSchemaAllowEmptyValue |
+QueryParameterSubSchemaType |
+QueryParameterSubSchemaFormat |
+QueryParameterSubSchemaItems |
+QueryParameterSubSchemaCollectionFormat |
+QueryParameterSubSchemaDefault |
+QueryParameterSubSchemaMaximum |
+QueryParameterSubSchemaExclusiveMaximum |
+QueryParameterSubSchemaMinimum |
+QueryParameterSubSchemaExclusiveMinimum |
+QueryParameterSubSchemaMaxLength |
+QueryParameterSubSchemaMinLength |
+QueryParameterSubSchemaPattern |
+QueryParameterSubSchemaMaxItems |
+QueryParameterSubSchemaMinItems |
+QueryParameterSubSchemaUniqueItems |
+QueryParameterSubSchemaEnum |
+QueryParameterSubSchemaMultipleOf |
+undefined
 }
 )
 |
@@ -375,6 +578,31 @@ export type NonBodyParameter = (
 "uniqueItems"?: PathParameterSubSchemaUniqueItems,
 "enum"?: PathParameterSubSchemaEnum,
 "multipleOf"?: PathParameterSubSchemaMultipleOf,
+[
+name: string
+]: PathParameterSubSchemaAdditionalProperties |
+PathParameterSubSchemaRequired |
+PathParameterSubSchemaIn |
+PathParameterSubSchemaDescription |
+PathParameterSubSchemaName |
+PathParameterSubSchemaType |
+PathParameterSubSchemaFormat |
+PathParameterSubSchemaItems |
+PathParameterSubSchemaCollectionFormat |
+PathParameterSubSchemaDefault |
+PathParameterSubSchemaMaximum |
+PathParameterSubSchemaExclusiveMaximum |
+PathParameterSubSchemaMinimum |
+PathParameterSubSchemaExclusiveMinimum |
+PathParameterSubSchemaMaxLength |
+PathParameterSubSchemaMinLength |
+PathParameterSubSchemaPattern |
+PathParameterSubSchemaMaxItems |
+PathParameterSubSchemaMinItems |
+PathParameterSubSchemaUniqueItems |
+PathParameterSubSchemaEnum |
+PathParameterSubSchemaMultipleOf |
+undefined
 }
 )
 );
@@ -407,6 +635,31 @@ Parameter0
 "uniqueItems"?: HeaderParameterSubSchemaUniqueItems,
 "enum"?: HeaderParameterSubSchemaEnum,
 "multipleOf"?: HeaderParameterSubSchemaMultipleOf,
+[
+name: string
+]: HeaderParameterSubSchemaAdditionalProperties |
+HeaderParameterSubSchemaRequired |
+HeaderParameterSubSchemaIn |
+HeaderParameterSubSchemaDescription |
+HeaderParameterSubSchemaName |
+HeaderParameterSubSchemaType |
+HeaderParameterSubSchemaFormat |
+HeaderParameterSubSchemaItems |
+HeaderParameterSubSchemaCollectionFormat |
+HeaderParameterSubSchemaDefault |
+HeaderParameterSubSchemaMaximum |
+HeaderParameterSubSchemaExclusiveMaximum |
+HeaderParameterSubSchemaMinimum |
+HeaderParameterSubSchemaExclusiveMinimum |
+HeaderParameterSubSchemaMaxLength |
+HeaderParameterSubSchemaMinLength |
+HeaderParameterSubSchemaPattern |
+HeaderParameterSubSchemaMaxItems |
+HeaderParameterSubSchemaMinItems |
+HeaderParameterSubSchemaUniqueItems |
+HeaderParameterSubSchemaEnum |
+HeaderParameterSubSchemaMultipleOf |
+undefined
 }
 )
 |
@@ -434,6 +687,32 @@ Parameter0
 "uniqueItems"?: FormDataParameterSubSchemaUniqueItems,
 "enum"?: FormDataParameterSubSchemaEnum,
 "multipleOf"?: FormDataParameterSubSchemaMultipleOf,
+[
+name: string
+]: FormDataParameterSubSchemaAdditionalProperties |
+FormDataParameterSubSchemaRequired |
+FormDataParameterSubSchemaIn |
+FormDataParameterSubSchemaDescription |
+FormDataParameterSubSchemaName |
+FormDataParameterSubSchemaAllowEmptyValue |
+FormDataParameterSubSchemaType |
+FormDataParameterSubSchemaFormat |
+FormDataParameterSubSchemaItems |
+FormDataParameterSubSchemaCollectionFormat |
+FormDataParameterSubSchemaDefault |
+FormDataParameterSubSchemaMaximum |
+FormDataParameterSubSchemaExclusiveMaximum |
+FormDataParameterSubSchemaMinimum |
+FormDataParameterSubSchemaExclusiveMinimum |
+FormDataParameterSubSchemaMaxLength |
+FormDataParameterSubSchemaMinLength |
+FormDataParameterSubSchemaPattern |
+FormDataParameterSubSchemaMaxItems |
+FormDataParameterSubSchemaMinItems |
+FormDataParameterSubSchemaUniqueItems |
+FormDataParameterSubSchemaEnum |
+FormDataParameterSubSchemaMultipleOf |
+undefined
 }
 )
 |
@@ -461,6 +740,32 @@ Parameter0
 "uniqueItems"?: QueryParameterSubSchemaUniqueItems,
 "enum"?: QueryParameterSubSchemaEnum,
 "multipleOf"?: QueryParameterSubSchemaMultipleOf,
+[
+name: string
+]: QueryParameterSubSchemaAdditionalProperties |
+QueryParameterSubSchemaRequired |
+QueryParameterSubSchemaIn |
+QueryParameterSubSchemaDescription |
+QueryParameterSubSchemaName |
+QueryParameterSubSchemaAllowEmptyValue |
+QueryParameterSubSchemaType |
+QueryParameterSubSchemaFormat |
+QueryParameterSubSchemaItems |
+QueryParameterSubSchemaCollectionFormat |
+QueryParameterSubSchemaDefault |
+QueryParameterSubSchemaMaximum |
+QueryParameterSubSchemaExclusiveMaximum |
+QueryParameterSubSchemaMinimum |
+QueryParameterSubSchemaExclusiveMinimum |
+QueryParameterSubSchemaMaxLength |
+QueryParameterSubSchemaMinLength |
+QueryParameterSubSchemaPattern |
+QueryParameterSubSchemaMaxItems |
+QueryParameterSubSchemaMinItems |
+QueryParameterSubSchemaUniqueItems |
+QueryParameterSubSchemaEnum |
+QueryParameterSubSchemaMultipleOf |
+undefined
 }
 )
 |
@@ -487,6 +792,31 @@ Parameter0
 "uniqueItems"?: PathParameterSubSchemaUniqueItems,
 "enum"?: PathParameterSubSchemaEnum,
 "multipleOf"?: PathParameterSubSchemaMultipleOf,
+[
+name: string
+]: PathParameterSubSchemaAdditionalProperties |
+PathParameterSubSchemaRequired |
+PathParameterSubSchemaIn |
+PathParameterSubSchemaDescription |
+PathParameterSubSchemaName |
+PathParameterSubSchemaType |
+PathParameterSubSchemaFormat |
+PathParameterSubSchemaItems |
+PathParameterSubSchemaCollectionFormat |
+PathParameterSubSchemaDefault |
+PathParameterSubSchemaMaximum |
+PathParameterSubSchemaExclusiveMaximum |
+PathParameterSubSchemaMinimum |
+PathParameterSubSchemaExclusiveMinimum |
+PathParameterSubSchemaMaxLength |
+PathParameterSubSchemaMinLength |
+PathParameterSubSchemaPattern |
+PathParameterSubSchemaMaxItems |
+PathParameterSubSchemaMinItems |
+PathParameterSubSchemaUniqueItems |
+PathParameterSubSchemaEnum |
+PathParameterSubSchemaMultipleOf |
+undefined
 }
 )
 );
@@ -526,6 +856,41 @@ export type DefinitionsSchema = (
 "xml"?: SchemaXml,
 "externalDocs"?: SchemaExternalDocs,
 "example"?: SchemaExample,
+[
+name: string
+]: DefinitionsSchemaAdditionalProperties |
+SchemaPatternPropertiesX |
+SchemaRef |
+SchemaFormat |
+SchemaTitle |
+SchemaDescription |
+SchemaDefault |
+SchemaMultipleOf |
+SchemaMaximum |
+SchemaExclusiveMaximum |
+SchemaMinimum |
+SchemaExclusiveMinimum |
+SchemaMaxLength |
+SchemaMinLength |
+SchemaPattern |
+SchemaMaxItems |
+SchemaMinItems |
+SchemaUniqueItems |
+MaxProperties |
+MinProperties |
+SchemaRequired |
+SchemaEnum |
+PropertiesSchemaAdditionalProperties |
+SchemaType |
+SchemaItems |
+AllOf |
+Properties |
+Discriminator |
+SchemaReadOnly |
+SchemaXml |
+SchemaExternalDocs |
+SchemaExample |
+undefined
 }
 );
 /**
@@ -543,6 +908,20 @@ export type FileSchema = (
 "readOnly"?: FileSchemaReadOnly,
 "externalDocs"?: FileSchemaExternalDocs,
 "example"?: FileSchemaExample,
+[
+name: string
+]: FileSchemaAdditionalProperties |
+FileSchemaX |
+FileSchemaFormat |
+FileSchemaTitle |
+FileSchemaDescription |
+FileSchemaDefault |
+FileSchemaRequired |
+FileSchemaType |
+FileSchemaReadOnly |
+FileSchemaExternalDocs |
+FileSchemaExample |
+undefined
 }
 );
 /**
@@ -567,6 +946,28 @@ export type PrimitivesItems = (
 "uniqueItems"?: PrimitivesItemsUniqueItems,
 "enum"?: PrimitivesItemsEnum,
 "multipleOf"?: PrimitivesItemsMultipleOf,
+[
+name: string
+]: PrimitivesItemsAdditionalProperties |
+PrimitivesItemsX |
+PrimitivesItemsType |
+PrimitivesItemsFormat |
+PrimitivesItemsItems |
+PrimitivesItemsCollectionFormat |
+PrimitivesItemsDefault |
+PrimitivesItemsMaximum |
+PrimitivesItemsExclusiveMaximum |
+PrimitivesItemsMinimum |
+PrimitivesItemsExclusiveMinimum |
+PrimitivesItemsMaxLength |
+PrimitivesItemsMinLength |
+PrimitivesItemsPattern |
+PrimitivesItemsMaxItems |
+PrimitivesItemsMinItems |
+PrimitivesItemsUniqueItems |
+PrimitivesItemsEnum |
+PrimitivesItemsMultipleOf |
+undefined
 }
 );
 /**
@@ -597,6 +998,16 @@ export type DefinitionsXml = (
 "prefix"?: Prefix,
 "attribute"?: Attribute,
 "wrapped"?: Wrapped,
+[
+name: string
+]: XmlAdditionalProperties |
+XmlX |
+XmlName |
+Namespace |
+Prefix |
+Attribute |
+Wrapped |
+undefined
 }
 );
 /**
@@ -607,6 +1018,14 @@ export type Tag = (
 "name": TagName,
 "description"?: TagDescription,
 "externalDocs"?: TagExternalDocs,
+[
+name: string
+]: TagAdditionalProperties |
+TagX |
+TagName |
+TagDescription |
+TagExternalDocs |
+undefined
 }
 );
 /**
@@ -626,6 +1045,13 @@ export type BasicAuthenticationSecurity = (
 {
 "type": BasicAuthenticationSecurityType,
 "description"?: BasicAuthenticationSecurityDescription,
+[
+name: string
+]: BasicAuthenticationSecurityAdditionalProperties |
+BasicAuthenticationSecurityX |
+BasicAuthenticationSecurityType |
+BasicAuthenticationSecurityDescription |
+undefined
 }
 );
 /**
@@ -637,6 +1063,15 @@ export type ApiKeySecurity = (
 "name": ApiKeySecurityName,
 "in": ApiKeySecurityIn,
 "description"?: ApiKeySecurityDescription,
+[
+name: string
+]: ApiKeySecurityAdditionalProperties |
+ApiKeySecurityX |
+ApiKeySecurityType |
+ApiKeySecurityName |
+ApiKeySecurityIn |
+ApiKeySecurityDescription |
+undefined
 }
 );
 /**
@@ -649,6 +1084,16 @@ export type Oauth2ImplicitSecurity = (
 "scopes"?: Oauth2ImplicitSecurityScopes,
 "authorizationUrl": Oauth2ImplicitSecurityAuthorizationUrl,
 "description"?: Oauth2ImplicitSecurityDescription,
+[
+name: string
+]: Oauth2ImplicitSecurityAdditionalProperties |
+Oauth2ImplicitSecurityX |
+Oauth2ImplicitSecurityType |
+Oauth2ImplicitSecurityFlow |
+Oauth2ImplicitSecurityScopes |
+Oauth2ImplicitSecurityAuthorizationUrl |
+Oauth2ImplicitSecurityDescription |
+undefined
 }
 );
 /**
@@ -661,6 +1106,16 @@ export type Oauth2PasswordSecurity = (
 "scopes"?: Oauth2PasswordSecurityScopes,
 "tokenUrl": Oauth2PasswordSecurityTokenUrl,
 "description"?: Oauth2PasswordSecurityDescription,
+[
+name: string
+]: Oauth2PasswordSecurityAdditionalProperties |
+Oauth2PasswordSecurityX |
+Oauth2PasswordSecurityType |
+Oauth2PasswordSecurityFlow |
+Oauth2PasswordSecurityScopes |
+Oauth2PasswordSecurityTokenUrl |
+Oauth2PasswordSecurityDescription |
+undefined
 }
 );
 /**
@@ -673,6 +1128,16 @@ export type Oauth2ApplicationSecurity = (
 "scopes"?: Oauth2ApplicationSecurityScopes,
 "tokenUrl": Oauth2ApplicationSecurityTokenUrl,
 "description"?: Oauth2ApplicationSecurityDescription,
+[
+name: string
+]: Oauth2ApplicationSecurityAdditionalProperties |
+Oauth2ApplicationSecurityX |
+Oauth2ApplicationSecurityType |
+Oauth2ApplicationSecurityFlow |
+Oauth2ApplicationSecurityScopes |
+Oauth2ApplicationSecurityTokenUrl |
+Oauth2ApplicationSecurityDescription |
+undefined
 }
 );
 /**
@@ -686,6 +1151,17 @@ export type Oauth2AccessCodeSecurity = (
 "authorizationUrl": Oauth2AccessCodeSecurityAuthorizationUrl,
 "tokenUrl": Oauth2AccessCodeSecurityTokenUrl,
 "description"?: Oauth2AccessCodeSecurityDescription,
+[
+name: string
+]: Oauth2AccessCodeSecurityAdditionalProperties |
+Oauth2AccessCodeSecurityX |
+Oauth2AccessCodeSecurityType |
+Oauth2AccessCodeSecurityFlow |
+Oauth2AccessCodeSecurityScopes |
+Oauth2AccessCodeSecurityAuthorizationUrl |
+Oauth2AccessCodeSecurityTokenUrl |
+Oauth2AccessCodeSecurityDescription |
+undefined
 }
 );
 /**
@@ -805,6 +1281,10 @@ export type DefinitionsEnum = (Draft04Enum);
 export type JsonReference = (
 {
 "$ref": JsonReferenceRef,
+[
+name: string
+]: JsonReferenceAdditionalProperties |
+JsonReferenceRef
 }
 );
 /**
@@ -2276,6 +2756,31 @@ Parameter0
 "uniqueItems"?: HeaderParameterSubSchemaUniqueItems,
 "enum"?: HeaderParameterSubSchemaEnum,
 "multipleOf"?: HeaderParameterSubSchemaMultipleOf,
+[
+name: string
+]: HeaderParameterSubSchemaAdditionalProperties |
+HeaderParameterSubSchemaRequired |
+HeaderParameterSubSchemaIn |
+HeaderParameterSubSchemaDescription |
+HeaderParameterSubSchemaName |
+HeaderParameterSubSchemaType |
+HeaderParameterSubSchemaFormat |
+HeaderParameterSubSchemaItems |
+HeaderParameterSubSchemaCollectionFormat |
+HeaderParameterSubSchemaDefault |
+HeaderParameterSubSchemaMaximum |
+HeaderParameterSubSchemaExclusiveMaximum |
+HeaderParameterSubSchemaMinimum |
+HeaderParameterSubSchemaExclusiveMinimum |
+HeaderParameterSubSchemaMaxLength |
+HeaderParameterSubSchemaMinLength |
+HeaderParameterSubSchemaPattern |
+HeaderParameterSubSchemaMaxItems |
+HeaderParameterSubSchemaMinItems |
+HeaderParameterSubSchemaUniqueItems |
+HeaderParameterSubSchemaEnum |
+HeaderParameterSubSchemaMultipleOf |
+undefined
 }
 )
 |
@@ -2303,6 +2808,32 @@ Parameter0
 "uniqueItems"?: FormDataParameterSubSchemaUniqueItems,
 "enum"?: FormDataParameterSubSchemaEnum,
 "multipleOf"?: FormDataParameterSubSchemaMultipleOf,
+[
+name: string
+]: FormDataParameterSubSchemaAdditionalProperties |
+FormDataParameterSubSchemaRequired |
+FormDataParameterSubSchemaIn |
+FormDataParameterSubSchemaDescription |
+FormDataParameterSubSchemaName |
+FormDataParameterSubSchemaAllowEmptyValue |
+FormDataParameterSubSchemaType |
+FormDataParameterSubSchemaFormat |
+FormDataParameterSubSchemaItems |
+FormDataParameterSubSchemaCollectionFormat |
+FormDataParameterSubSchemaDefault |
+FormDataParameterSubSchemaMaximum |
+FormDataParameterSubSchemaExclusiveMaximum |
+FormDataParameterSubSchemaMinimum |
+FormDataParameterSubSchemaExclusiveMinimum |
+FormDataParameterSubSchemaMaxLength |
+FormDataParameterSubSchemaMinLength |
+FormDataParameterSubSchemaPattern |
+FormDataParameterSubSchemaMaxItems |
+FormDataParameterSubSchemaMinItems |
+FormDataParameterSubSchemaUniqueItems |
+FormDataParameterSubSchemaEnum |
+FormDataParameterSubSchemaMultipleOf |
+undefined
 }
 )
 |
@@ -2330,6 +2861,32 @@ Parameter0
 "uniqueItems"?: QueryParameterSubSchemaUniqueItems,
 "enum"?: QueryParameterSubSchemaEnum,
 "multipleOf"?: QueryParameterSubSchemaMultipleOf,
+[
+name: string
+]: QueryParameterSubSchemaAdditionalProperties |
+QueryParameterSubSchemaRequired |
+QueryParameterSubSchemaIn |
+QueryParameterSubSchemaDescription |
+QueryParameterSubSchemaName |
+QueryParameterSubSchemaAllowEmptyValue |
+QueryParameterSubSchemaType |
+QueryParameterSubSchemaFormat |
+QueryParameterSubSchemaItems |
+QueryParameterSubSchemaCollectionFormat |
+QueryParameterSubSchemaDefault |
+QueryParameterSubSchemaMaximum |
+QueryParameterSubSchemaExclusiveMaximum |
+QueryParameterSubSchemaMinimum |
+QueryParameterSubSchemaExclusiveMinimum |
+QueryParameterSubSchemaMaxLength |
+QueryParameterSubSchemaMinLength |
+QueryParameterSubSchemaPattern |
+QueryParameterSubSchemaMaxItems |
+QueryParameterSubSchemaMinItems |
+QueryParameterSubSchemaUniqueItems |
+QueryParameterSubSchemaEnum |
+QueryParameterSubSchemaMultipleOf |
+undefined
 }
 )
 |
@@ -2356,6 +2913,31 @@ Parameter0
 "uniqueItems"?: PathParameterSubSchemaUniqueItems,
 "enum"?: PathParameterSubSchemaEnum,
 "multipleOf"?: PathParameterSubSchemaMultipleOf,
+[
+name: string
+]: PathParameterSubSchemaAdditionalProperties |
+PathParameterSubSchemaRequired |
+PathParameterSubSchemaIn |
+PathParameterSubSchemaDescription |
+PathParameterSubSchemaName |
+PathParameterSubSchemaType |
+PathParameterSubSchemaFormat |
+PathParameterSubSchemaItems |
+PathParameterSubSchemaCollectionFormat |
+PathParameterSubSchemaDefault |
+PathParameterSubSchemaMaximum |
+PathParameterSubSchemaExclusiveMaximum |
+PathParameterSubSchemaMinimum |
+PathParameterSubSchemaExclusiveMinimum |
+PathParameterSubSchemaMaxLength |
+PathParameterSubSchemaMinLength |
+PathParameterSubSchemaPattern |
+PathParameterSubSchemaMaxItems |
+PathParameterSubSchemaMinItems |
+PathParameterSubSchemaUniqueItems |
+PathParameterSubSchemaEnum |
+PathParameterSubSchemaMultipleOf |
+undefined
 }
 )
 |

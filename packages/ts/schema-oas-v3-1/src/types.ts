@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.12.9                         -- www.JsonSchema42.org
+// v0.12.10                        -- www.JsonSchema42.org
 //
 /**
 * @description The description of OpenAPI v3.1.x documents without schema validation, as defined by https://spec.openapis.org/oas/v3.1.0
@@ -22,6 +22,17 @@ export type Info = (
 "contact"?: InfoContact,
 "license"?: InfoLicense,
 "version": Version,
+[
+name: string
+]: X |
+Title |
+InfoSummary |
+InfoDescription |
+TermsOfService |
+InfoContact |
+InfoLicense |
+Version |
+undefined
 }
 );
 /**
@@ -32,6 +43,13 @@ export type Contact = (
 "name"?: ContactName,
 "url"?: ContactUrl,
 "email"?: Email,
+[
+name: string
+]: X |
+ContactName |
+ContactUrl |
+Email |
+undefined
 }
 );
 /**
@@ -42,6 +60,13 @@ export type License = (
 "name": LicenseName,
 "identifier"?: Identifier,
 "url"?: LicenseUrl,
+[
+name: string
+]: X |
+LicenseName |
+Identifier |
+LicenseUrl |
+undefined
 }
 );
 /**
@@ -52,6 +77,13 @@ export type Server = (
 "url": ServerUrl,
 "description"?: ServerDescription,
 "variables"?: Variables,
+[
+name: string
+]: X |
+ServerUrl |
+ServerDescription |
+Variables |
+undefined
 }
 );
 /**
@@ -62,6 +94,13 @@ export type ServerVariable = (
 "enum"?: Enum,
 "default": ServerVariableDefault,
 "description"?: ServerVariableDescription,
+[
+name: string
+]: X |
+Enum |
+ServerVariableDefault |
+ServerVariableDescription |
+undefined
 }
 );
 /**
@@ -79,6 +118,20 @@ export type Components = (
 "links"?: ComponentsLinks,
 "callbacks"?: ComponentsCallbacks,
 "pathItems"?: PathItems,
+[
+name: string
+]: X |
+Schemas |
+ComponentsResponses |
+ComponentsParameters |
+ComponentsExamples |
+RequestBodies |
+ComponentsHeaders |
+SecuritySchemes |
+ComponentsLinks |
+ComponentsCallbacks |
+PathItems |
+undefined
 }
 );
 /**
@@ -108,6 +161,22 @@ export type PathItem = (
 "head"?: Head,
 "patch"?: Patch,
 "trace"?: Trace,
+[
+name: string
+]: X |
+PathItemSummary |
+PathItemDescription |
+PathItemServers |
+PathItemParameters |
+Get |
+Put |
+Post |
+Delete |
+Options |
+Head |
+Patch |
+Trace |
+undefined
 }
 );
 /**
@@ -119,6 +188,9 @@ export type PathItemOrReference = (
 "$ref": Ref,
 "summary"?: ReferenceSummary,
 "description"?: ReferenceDescription,
+[
+name: string
+]: any
 }
 )
 |
@@ -136,6 +208,9 @@ export type PathItemOrReference = (
 "head"?: Head,
 "patch"?: Patch,
 "trace"?: Trace,
+[
+name: string
+]: any
 }
 )
 );
@@ -156,6 +231,22 @@ export type Operation = (
 "deprecated"?: OperationDeprecated,
 "security"?: OperationSecurity,
 "servers"?: OperationServers,
+[
+name: string
+]: X |
+OperationTags |
+OperationSummary |
+OperationDescription |
+OperationExternalDocs |
+OperationOperationId |
+OperationParameters |
+OperationRequestBody |
+OperationResponses |
+OperationCallbacks |
+OperationDeprecated |
+OperationSecurity |
+OperationServers |
+undefined
 }
 );
 /**
@@ -165,6 +256,12 @@ export type ExternalDocumentation = (
 {
 "description"?: ExternalDocumentationDescription,
 "url": ExternalDocumentationUrl,
+[
+name: string
+]: X |
+ExternalDocumentationDescription |
+ExternalDocumentationUrl |
+undefined
 }
 );
 /**
@@ -181,6 +278,18 @@ export type Parameter = (
 "deprecated"?: ParameterDeprecated,
 "schema": ParameterSchema,
 "content"?: ParameterContent,
+[
+name: string
+]: X |
+("query") |
+AllowEmptyValue |
+ParameterName |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterSchema |
+ParameterContent |
+undefined
 }
 )
 |
@@ -194,6 +303,18 @@ export type Parameter = (
 "deprecated"?: ParameterDeprecated,
 "schema"?: ParameterSchema,
 "content": ParameterContent,
+[
+name: string
+]: X |
+("query") |
+AllowEmptyValue |
+ParameterName |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterSchema |
+ParameterContent |
+undefined
 }
 )
 );
@@ -206,6 +327,9 @@ export type ParameterOrReference = (
 "$ref": Ref,
 "summary"?: ReferenceSummary,
 "description"?: ReferenceDescription,
+[
+name: string
+]: any
 }
 )
 |
@@ -219,6 +343,9 @@ export type ParameterOrReference = (
 "deprecated"?: ParameterDeprecated,
 "schema": ParameterSchema,
 "content"?: ParameterContent,
+[
+name: string
+]: any
 }
 )
 |
@@ -232,6 +359,9 @@ export type ParameterOrReference = (
 "deprecated"?: ParameterDeprecated,
 "schema"?: ParameterSchema,
 "content": ParameterContent,
+[
+name: string
+]: any
 }
 )
 );
@@ -243,6 +373,13 @@ export type RequestBody = (
 "description"?: RequestBodyDescription,
 "content": RequestBodyContent,
 "required"?: RequestBodyRequired,
+[
+name: string
+]: X |
+RequestBodyDescription |
+RequestBodyContent |
+RequestBodyRequired |
+undefined
 }
 );
 /**
@@ -254,6 +391,9 @@ export type RequestBodyOrReference = (
 "$ref": Ref,
 "summary"?: ReferenceSummary,
 "description"?: ReferenceDescription,
+[
+name: string
+]: any
 }
 )
 |
@@ -262,6 +402,9 @@ export type RequestBodyOrReference = (
 "description"?: RequestBodyDescription,
 "content": RequestBodyContent,
 "required"?: RequestBodyRequired,
+[
+name: string
+]: any
 }
 )
 );
@@ -284,6 +427,14 @@ export type MediaType = (
 "examples"?: ExamplesExamples,
 "schema"?: MediaTypeSchema,
 "encoding"?: MediaTypeEncoding,
+[
+name: string
+]: X |
+ExamplesExample |
+ExamplesExamples |
+MediaTypeSchema |
+MediaTypeEncoding |
+undefined
 }
 );
 /**
@@ -297,6 +448,15 @@ export type Encoding = (
 "style": ("form"),
 "explode"?: (boolean),
 "allowReserved"?: AllowReserved,
+[
+name: string
+]: X |
+ContentType |
+EncodingHeaders |
+("form") |
+(boolean) |
+AllowReserved |
+undefined
 }
 )
 |
@@ -307,6 +467,15 @@ export type Encoding = (
 "style"?: EncodingStyle,
 "explode"?: (boolean),
 "allowReserved"?: AllowReserved,
+[
+name: string
+]: X |
+ContentType |
+EncodingHeaders |
+EncodingStyle |
+(boolean) |
+AllowReserved |
+undefined
 }
 )
 );
@@ -316,6 +485,11 @@ export type Encoding = (
 export type Responses = (
 {
 "default"?: ResponsesDefault,
+[
+name: string
+]: X |
+ResponsesDefault |
+undefined
 }
 );
 /**
@@ -327,6 +501,14 @@ export type Response = (
 "headers"?: ResponseHeaders,
 "content"?: ResponseContent,
 "links"?: ResponseLinks,
+[
+name: string
+]: X |
+ResponseDescription |
+ResponseHeaders |
+ResponseContent |
+ResponseLinks |
+undefined
 }
 );
 /**
@@ -338,6 +520,9 @@ export type ResponseOrReference = (
 "$ref": Ref,
 "summary"?: ReferenceSummary,
 "description"?: ReferenceDescription,
+[
+name: string
+]: any
 }
 )
 |
@@ -347,6 +532,9 @@ export type ResponseOrReference = (
 "headers"?: ResponseHeaders,
 "content"?: ResponseContent,
 "links"?: ResponseLinks,
+[
+name: string
+]: any
 }
 )
 );
@@ -370,6 +558,9 @@ export type CallbacksOrReference = (
 "$ref": Ref,
 "summary"?: ReferenceSummary,
 "description"?: ReferenceDescription,
+[
+name: string
+]: any
 }
 )
 |
@@ -390,6 +581,14 @@ export type Example = (
 "description"?: ExampleDescription,
 "value"?: Value,
 "externalValue"?: ExternalValue,
+[
+name: string
+]: X |
+ExampleSummary |
+ExampleDescription |
+Value |
+ExternalValue |
+undefined
 }
 );
 /**
@@ -401,6 +600,9 @@ export type ExampleOrReference = (
 "$ref": Ref,
 "summary"?: ReferenceSummary,
 "description"?: ReferenceDescription,
+[
+name: string
+]: any
 }
 )
 |
@@ -410,6 +612,9 @@ export type ExampleOrReference = (
 "description"?: ExampleDescription,
 "value"?: Value,
 "externalValue"?: ExternalValue,
+[
+name: string
+]: any
 }
 )
 );
@@ -425,6 +630,16 @@ export type Link = (
 "requestBody"?: LinkRequestBody,
 "description"?: LinkDescription,
 "body"?: Body,
+[
+name: string
+]: X |
+OperationRef |
+LinkOperationId |
+LinkParameters |
+LinkRequestBody |
+LinkDescription |
+Body |
+undefined
 }
 )
 |
@@ -436,6 +651,16 @@ export type Link = (
 "requestBody"?: LinkRequestBody,
 "description"?: LinkDescription,
 "body"?: Body,
+[
+name: string
+]: X |
+OperationRef |
+LinkOperationId |
+LinkParameters |
+LinkRequestBody |
+LinkDescription |
+Body |
+undefined
 }
 )
 );
@@ -448,6 +673,9 @@ export type LinkOrReference = (
 "$ref": Ref,
 "summary"?: ReferenceSummary,
 "description"?: ReferenceDescription,
+[
+name: string
+]: any
 }
 )
 |
@@ -459,6 +687,9 @@ export type LinkOrReference = (
 "requestBody"?: LinkRequestBody,
 "description"?: LinkDescription,
 "body"?: Body,
+[
+name: string
+]: any
 }
 )
 |
@@ -470,6 +701,9 @@ export type LinkOrReference = (
 "requestBody"?: LinkRequestBody,
 "description"?: LinkDescription,
 "body"?: Body,
+[
+name: string
+]: any
 }
 )
 );
@@ -484,6 +718,15 @@ export type Header = (
 "deprecated"?: HeaderDeprecated,
 "schema": HeaderSchema,
 "content"?: HeaderContent,
+[
+name: string
+]: X |
+HeaderDescription |
+HeaderRequired |
+HeaderDeprecated |
+HeaderSchema |
+HeaderContent |
+undefined
 }
 )
 |
@@ -494,6 +737,15 @@ export type Header = (
 "deprecated"?: HeaderDeprecated,
 "schema"?: HeaderSchema,
 "content": HeaderContent,
+[
+name: string
+]: X |
+HeaderDescription |
+HeaderRequired |
+HeaderDeprecated |
+HeaderSchema |
+HeaderContent |
+undefined
 }
 )
 );
@@ -506,6 +758,9 @@ export type HeaderOrReference = (
 "$ref": Ref,
 "summary"?: ReferenceSummary,
 "description"?: ReferenceDescription,
+[
+name: string
+]: any
 }
 )
 |
@@ -516,6 +771,9 @@ export type HeaderOrReference = (
 "deprecated"?: HeaderDeprecated,
 "schema": HeaderSchema,
 "content"?: HeaderContent,
+[
+name: string
+]: any
 }
 )
 |
@@ -526,6 +784,9 @@ export type HeaderOrReference = (
 "deprecated"?: HeaderDeprecated,
 "schema"?: HeaderSchema,
 "content": HeaderContent,
+[
+name: string
+]: any
 }
 )
 );
@@ -537,6 +798,13 @@ export type Tag = (
 "name": TagName,
 "description"?: TagDescription,
 "externalDocs"?: TagExternalDocs,
+[
+name: string
+]: X |
+TagName |
+TagDescription |
+TagExternalDocs |
+undefined
 }
 );
 /**
@@ -547,6 +815,9 @@ export type Reference = (
 "$ref"?: Ref,
 "summary"?: ReferenceSummary,
 "description"?: ReferenceDescription,
+[
+name: string
+]: any
 }
 );
 /**
@@ -576,6 +847,18 @@ export type SecurityScheme = (
 "flows": Flows,
 "openIdConnectUrl": OpenIdConnectUrl,
 "description"?: SecuritySchemeDescription,
+[
+name: string
+]: X |
+(unknown) |
+TypeApikeyName |
+TypeApikeyIn |
+(string) |
+BearerFormat |
+Flows |
+OpenIdConnectUrl |
+SecuritySchemeDescription |
+undefined
 }
 );
 /**
@@ -587,6 +870,9 @@ export type SecuritySchemeOrReference = (
 "$ref": Ref,
 "summary"?: ReferenceSummary,
 "description"?: ReferenceDescription,
+[
+name: string
+]: any
 }
 )
 |
@@ -600,6 +886,9 @@ export type SecuritySchemeOrReference = (
 "flows": Flows,
 "openIdConnectUrl": OpenIdConnectUrl,
 "description"?: SecuritySchemeDescription,
+[
+name: string
+]: any
 }
 )
 );
@@ -612,6 +901,14 @@ export type OauthFlows = (
 "password"?: PropertiesOauthFlowsPassword,
 "clientCredentials"?: PropertiesOauthFlowsClientCredentials,
 "authorizationCode"?: PropertiesOauthFlowsAuthorizationCode,
+[
+name: string
+]: X |
+PropertiesOauthFlowsImplicit |
+PropertiesOauthFlowsPassword |
+PropertiesOauthFlowsClientCredentials |
+PropertiesOauthFlowsAuthorizationCode |
+undefined
 }
 );
 /**
@@ -968,6 +1265,9 @@ export type Trace = (Operation);
 export type PathItemOrReferenceIf = (
 {
 "$ref": any,
+[
+name: string
+]: any
 }
 );
 /**
@@ -1115,6 +1415,9 @@ export type ParameterThen = (unknown);
 export type ParameterOrReferenceIf = (
 {
 "$ref": any,
+[
+name: string
+]: any
 }
 );
 /**
@@ -1143,6 +1446,9 @@ export type RequestBodyRequired = (boolean);
 export type RequestBodyOrReferenceIf = (
 {
 "$ref": any,
+[
+name: string
+]: any
 }
 );
 /**
@@ -1270,6 +1576,9 @@ name: string
 export type ResponseOrReferenceIf = (
 {
 "$ref": any,
+[
+name: string
+]: any
 }
 );
 /**
@@ -1290,6 +1599,9 @@ export type CallbacksAdditionalProperties = (PathItemOrReference);
 export type CallbacksOrReferenceIf = (
 {
 "$ref": any,
+[
+name: string
+]: any
 }
 );
 /**
@@ -1326,6 +1638,9 @@ export type Not = (unknown);
 export type ExampleOrReferenceIf = (
 {
 "$ref": any,
+[
+name: string
+]: any
 }
 );
 /**
@@ -1374,6 +1689,9 @@ export type LinkOneOf1 = (unknown);
 export type LinkOrReferenceIf = (
 {
 "$ref": any,
+[
+name: string
+]: any
 }
 );
 /**
@@ -1424,6 +1742,9 @@ export type HeaderOneOf1 = (unknown);
 export type HeaderOrReferenceIf = (
 {
 "$ref": any,
+[
+name: string
+]: any
 }
 );
 /**
@@ -1520,6 +1841,9 @@ export type AllOf5 = (TypeOidc);
 export type SecuritySchemeOrReferenceIf = (
 {
 "$ref": any,
+[
+name: string
+]: any
 }
 );
 /**
@@ -1538,6 +1862,13 @@ export type DefsOauthFlowsImplicit = (
 "authorizationUrl": ImplicitAuthorizationUrl,
 "refreshUrl"?: ImplicitRefreshUrl,
 "scopes": ImplicitScopes,
+[
+name: string
+]: X |
+ImplicitAuthorizationUrl |
+ImplicitRefreshUrl |
+ImplicitScopes |
+undefined
 }
 );
 /**
@@ -1548,6 +1879,13 @@ export type DefsOauthFlowsPassword = (
 "tokenUrl": PasswordTokenUrl,
 "refreshUrl"?: PasswordRefreshUrl,
 "scopes": PasswordScopes,
+[
+name: string
+]: X |
+PasswordTokenUrl |
+PasswordRefreshUrl |
+PasswordScopes |
+undefined
 }
 );
 /**
@@ -1558,6 +1896,13 @@ export type DefsOauthFlowsClientCredentials = (
 "tokenUrl": ClientCredentialsTokenUrl,
 "refreshUrl"?: ClientCredentialsRefreshUrl,
 "scopes": ClientCredentialsScopes,
+[
+name: string
+]: X |
+ClientCredentialsTokenUrl |
+ClientCredentialsRefreshUrl |
+ClientCredentialsScopes |
+undefined
 }
 );
 /**
@@ -1569,6 +1914,14 @@ export type DefsOauthFlowsAuthorizationCode = (
 "tokenUrl": AuthorizationCodeTokenUrl,
 "refreshUrl"?: AuthorizationCodeRefreshUrl,
 "scopes": AuthorizationCodeScopes,
+[
+name: string
+]: X |
+AuthorizationCodeAuthorizationUrl |
+AuthorizationCodeTokenUrl |
+AuthorizationCodeRefreshUrl |
+AuthorizationCodeScopes |
+undefined
 }
 );
 /**

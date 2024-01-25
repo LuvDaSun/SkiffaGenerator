@@ -1,3 +1,4 @@
+import assert from "assert";
 import { Router } from "goodrouter";
 import * as jns42generator from "jns42-generator";
 import { Method, StatusCode, methods, statusCodes } from "oa42-lib";
@@ -87,17 +88,21 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
 
   private *getOperationModels(pathUri: URL, pathPattern: string, pathItem: oas.PathItem) {
     for (const method of methods) {
-      const operationItem = pathItem[method as keyof oas.PathItem];
+      const operationItem = pathItem[method];
 
-      if (oas.isOperation(operationItem)) {
-        yield this.getOperationModel(
-          pathUri,
-          pathItem,
-          appendToUriHash(pathUri, method),
-          method,
-          operationItem,
-        );
+      if (oas.isReference(operationItem)) {
+        throw "TODO";
       }
+
+      assert(oas.isOperation(operationItem));
+
+      yield this.getOperationModel(
+        pathUri,
+        pathItem,
+        appendToUriHash(pathUri, method),
+        method,
+        operationItem,
+      );
     }
   }
 
@@ -127,13 +132,13 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       .filter(([, , parameterItem]) => parameterItem.in === "query")
       .map((args) => this.getParameterModel(...args));
     const headerParameters = allParameters
-      .filter(([, , parameterItem]) => (parameterItem.in as string) === "header")
+      .filter(([, , parameterItem]) => parameterItem.in === "header")
       .map((args) => this.getParameterModel(...args));
     const pathParameters = allParameters
-      .filter(([, , parameterItem]) => (parameterItem.in as string) === "path")
+      .filter(([, , parameterItem]) => parameterItem.in === "path")
       .map((args) => this.getParameterModel(...args));
     const cookieParameters = allParameters
-      .filter(([, , parameterItem]) => (parameterItem.in as string) === "cookie")
+      .filter(([, , parameterItem]) => parameterItem.in === "cookie")
       .map((args) => this.getParameterModel(...args));
 
     const authenticationRequirements = (
@@ -210,7 +215,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     const statusKinds = Object.keys(operationItem.responses ?? {}).sort(statusKindComparer);
 
     for (const statusKind of statusKinds) {
-      const responseItem = operationItem.responses[statusKind as keyof oas.DefinitionsResponses];
+      const responseItem = operationItem.responses[statusKind];
 
       if (!oas.isResponse(responseItem)) {
         continue;
@@ -321,7 +326,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     requestBodyItem: oas.RequestBodyContent | oas.ResponseContent,
   ) {
     for (const contentType in requestBodyItem) {
-      const mediaTypeItem = requestBodyItem[contentType as keyof typeof requestBodyItem];
+      const mediaTypeItem = requestBodyItem[contentType];
 
       if (!oas.isMediaType(mediaTypeItem)) {
         continue;

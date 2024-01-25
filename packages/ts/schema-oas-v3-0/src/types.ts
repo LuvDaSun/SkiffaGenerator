@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.12.9                         -- www.JsonSchema42.org
+// v0.12.10                        -- www.JsonSchema42.org
 //
 /**
 * @description The description of OpenAPI v3.0.x documents, as defined by https://spec.openapis.org/oas/v3.0.3
@@ -19,6 +19,19 @@ export type SchemaDocument = (
 "tags"?: PropertiesTags,
 "paths": PropertiesPaths,
 "components"?: PropertiesComponents,
+[
+name: string
+]: AdditionalProperties |
+PatternPropertiesX |
+Openapi |
+PropertiesInfo |
+PropertiesExternalDocs |
+PropertiesServers |
+PropertiesSecurity |
+PropertiesTags |
+PropertiesPaths |
+PropertiesComponents |
+undefined
 }
 );
 /**
@@ -27,6 +40,9 @@ export type SchemaDocument = (
 export type Reference = (
 {
 "$ref": any,
+[
+name: string
+]: ReferenceRef
 }
 );
 /**
@@ -40,6 +56,17 @@ export type DefinitionsInfo = (
 "contact"?: InfoContact,
 "license"?: InfoLicense,
 "version": Version,
+[
+name: string
+]: InfoAdditionalProperties |
+InfoX |
+InfoTitle |
+InfoDescription |
+TermsOfService |
+InfoContact |
+InfoLicense |
+Version |
+undefined
 }
 );
 /**
@@ -50,6 +77,14 @@ export type DefinitionsContact = (
 "name"?: ContactName,
 "url"?: ContactUrl,
 "email"?: Email,
+[
+name: string
+]: ContactAdditionalProperties |
+ContactX |
+ContactName |
+ContactUrl |
+Email |
+undefined
 }
 );
 /**
@@ -59,6 +94,13 @@ export type DefinitionsLicense = (
 {
 "name": LicenseName,
 "url"?: LicenseUrl,
+[
+name: string
+]: LicenseAdditionalProperties |
+LicenseX |
+LicenseName |
+LicenseUrl |
+undefined
 }
 );
 /**
@@ -69,6 +111,14 @@ export type DefinitionsServer = (
 "url": ServerUrl,
 "description"?: ServerDescription,
 "variables"?: Variables,
+[
+name: string
+]: ServerAdditionalProperties |
+ServerX |
+ServerUrl |
+ServerDescription |
+Variables |
+undefined
 }
 );
 /**
@@ -79,6 +129,14 @@ export type ServerVariable = (
 "enum"?: ServerVariableEnum,
 "default": ServerVariableDefault,
 "description"?: ServerVariableDescription,
+[
+name: string
+]: ServerVariableAdditionalProperties |
+ServerVariableX |
+ServerVariableEnum |
+ServerVariableDefault |
+ServerVariableDescription |
+undefined
 }
 );
 /**
@@ -95,6 +153,20 @@ export type DefinitionsComponents = (
 "securitySchemes"?: SecuritySchemes,
 "links"?: ComponentsLinks,
 "callbacks"?: ComponentsCallbacks,
+[
+name: string
+]: ComponentsAdditionalProperties |
+ComponentsX |
+Schemas |
+ComponentsResponses |
+ComponentsParameters |
+ComponentsExamples |
+RequestBodies |
+ComponentsHeaders |
+SecuritySchemes |
+ComponentsLinks |
+ComponentsCallbacks |
+undefined
 }
 );
 /**
@@ -137,6 +209,46 @@ export type DefinitionsSchema = (
 "externalDocs"?: SchemaExternalDocs,
 "deprecated"?: SchemaDeprecated,
 "xml"?: SchemaXml,
+[
+name: string
+]: DefinitionsSchemaAdditionalProperties |
+SchemaPatternPropertiesX |
+SchemaTitle |
+MultipleOf |
+Maximum |
+ExclusiveMaximum |
+Minimum |
+ExclusiveMinimum |
+MaxLength |
+MinLength |
+Pattern |
+MaxItems |
+MinItems |
+UniqueItems |
+MaxProperties |
+MinProperties |
+SchemaRequired |
+SchemaEnum |
+SchemaType |
+SchemaNot |
+AllOf |
+OneOf |
+AnyOf |
+PropertiesSchemaItems |
+Properties |
+PropertiesSchemaAdditionalProperties |
+SchemaDescription |
+Format |
+SchemaDefault |
+Nullable |
+SchemaDiscriminator |
+ReadOnly |
+WriteOnly |
+SchemaExample |
+SchemaExternalDocs |
+SchemaDeprecated |
+SchemaXml |
+undefined
 }
 );
 /**
@@ -146,6 +258,9 @@ export type DefinitionsDiscriminator = (
 {
 "propertyName": PropertyName,
 "mapping"?: Mapping,
+[
+name: string
+]: any
 }
 );
 /**
@@ -158,6 +273,16 @@ export type DefinitionsXml = (
 "prefix"?: Prefix,
 "attribute"?: Attribute,
 "wrapped"?: Wrapped,
+[
+name: string
+]: XmlAdditionalProperties |
+XmlX |
+XmlName |
+Namespace |
+Prefix |
+Attribute |
+Wrapped |
+undefined
 }
 );
 /**
@@ -169,6 +294,15 @@ export type Response = (
 "headers"?: ResponseHeaders,
 "content"?: ResponseContent,
 "links"?: ResponseLinks,
+[
+name: string
+]: ResponseAdditionalProperties |
+ResponseX |
+ResponseDescription |
+ResponseHeaders |
+ResponseContent |
+ResponseLinks |
+undefined
 }
 );
 /**
@@ -180,6 +314,14 @@ export type MediaType = (
 "example"?: MediaTypeExample,
 "examples"?: MediaTypeExamples,
 "encoding"?: MediaTypeEncoding,
+[
+name: string
+]: DefinitionsMediaTypeAdditionalProperties |
+MediaTypeSchema |
+MediaTypeExample |
+MediaTypeExamples |
+MediaTypeEncoding |
+undefined
 }
 );
 /**
@@ -191,6 +333,15 @@ export type DefinitionsExample = (
 "description"?: ExampleDescription,
 "value"?: Value,
 "externalValue"?: ExternalValue,
+[
+name: string
+]: ExampleAdditionalProperties |
+ExampleX |
+ExampleSummary |
+ExampleDescription |
+Value |
+ExternalValue |
+undefined
 }
 );
 /**
@@ -210,6 +361,21 @@ export type Header = (
 "content"?: HeaderContent,
 "example"?: HeaderExample,
 "examples"?: HeaderExamples,
+[
+name: string
+]: HeaderAdditionalProperties |
+HeaderDescription |
+HeaderRequired |
+HeaderDeprecated |
+HeaderAllowEmptyValue |
+HeaderStyle |
+HeaderExplode |
+HeaderAllowReserved |
+HeaderSchema |
+HeaderContent |
+HeaderExample |
+HeaderExamples |
+undefined
 }
 )
 |
@@ -226,6 +392,21 @@ export type Header = (
 "content": HeaderContent,
 "example"?: HeaderExample,
 "examples"?: HeaderExamples,
+[
+name: string
+]: HeaderAdditionalProperties |
+HeaderDescription |
+HeaderRequired |
+HeaderDeprecated |
+HeaderAllowEmptyValue |
+HeaderStyle |
+HeaderExplode |
+HeaderAllowReserved |
+HeaderSchema |
+HeaderContent |
+HeaderExample |
+HeaderExamples |
+undefined
 }
 )
 );
@@ -251,6 +432,17 @@ export type PathItem = (
 "description"?: PathItemDescription,
 "servers"?: PathItemServers,
 "parameters"?: PathItemParameters,
+[
+name: string
+]: PathItemAdditionalProperties |
+GetPutPostDeleteOptionsHeadPatchTrace |
+PathItemX |
+PathItemRef |
+PathItemSummary |
+PathItemDescription |
+PathItemServers |
+PathItemParameters |
+undefined
 }
 );
 /**
@@ -270,6 +462,23 @@ export type Operation = (
 "deprecated"?: OperationDeprecated,
 "security"?: OperationSecurity,
 "servers"?: OperationServers,
+[
+name: string
+]: OperationAdditionalProperties |
+OperationX |
+OperationTags |
+OperationSummary |
+OperationDescription |
+OperationExternalDocs |
+OperationOperationId |
+OperationParameters |
+OperationRequestBody |
+OperationResponses |
+OperationCallbacks |
+OperationDeprecated |
+OperationSecurity |
+OperationServers |
+undefined
 }
 );
 /**
@@ -278,6 +487,13 @@ export type Operation = (
 export type DefinitionsResponses = (
 {
 "default"?: ResponsesDefault,
+[
+name: string
+]: ResponsesAdditionalProperties |
+Responses15D2Xx |
+ResponsesX |
+ResponsesDefault |
+undefined
 }
 );
 /**
@@ -298,6 +514,14 @@ export type Tag = (
 "name": TagName,
 "description"?: TagDescription,
 "externalDocs"?: TagExternalDocs,
+[
+name: string
+]: TagAdditionalProperties |
+TagX |
+TagName |
+TagDescription |
+TagExternalDocs |
+undefined
 }
 );
 /**
@@ -307,6 +531,13 @@ export type ExternalDocumentation = (
 {
 "description"?: ExternalDocumentationDescription,
 "url": ExternalDocumentationUrl,
+[
+name: string
+]: ExternalDocumentationAdditionalProperties |
+ExternalDocumentationX |
+ExternalDocumentationDescription |
+ExternalDocumentationUrl |
+undefined
 }
 );
 /**
@@ -342,6 +573,23 @@ export type Parameter = (
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+ParameterIn |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+ParameterStyle |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -360,6 +608,23 @@ export type Parameter = (
 "content": ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+ParameterIn |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+ParameterStyle |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -380,6 +645,25 @@ export type Parameter = (
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+("path") |
+ParameterDescription |
+(true) |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+("matrix" |
+"label" |
+"simple") |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -401,6 +685,26 @@ export type Parameter = (
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+("query") |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+("form" |
+"spaceDelimited" |
+"pipeDelimited" |
+"deepObject") |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -419,6 +723,23 @@ export type Parameter = (
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+("header") |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+("simple") |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -437,6 +758,23 @@ export type Parameter = (
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+("cookie") |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+("form") |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 );
@@ -461,6 +799,14 @@ export type DefinitionsRequestBody = (
 "description"?: RequestBodyDescription,
 "content": RequestBodyContent,
 "required"?: RequestBodyRequired,
+[
+name: string
+]: RequestBodyAdditionalProperties |
+RequestBodyX |
+RequestBodyDescription |
+RequestBodyContent |
+RequestBodyRequired |
+undefined
 }
 );
 /**
@@ -475,6 +821,15 @@ SecurityScheme0
 "bearerFormat"?: BearerFormat,
 "description"?: HttpSecuritySchemeDescription,
 "type": HttpSecuritySchemeType,
+[
+name: string
+]: HttpSecuritySchemeAdditionalProperties |
+HttpSecuritySchemeX |
+(string) |
+BearerFormat |
+HttpSecuritySchemeDescription |
+HttpSecuritySchemeType |
+undefined
 }
 )
 |
@@ -484,6 +839,15 @@ SecurityScheme0
 "bearerFormat"?: BearerFormat,
 "description"?: HttpSecuritySchemeDescription,
 "type": HttpSecuritySchemeType,
+[
+name: string
+]: HttpSecuritySchemeAdditionalProperties |
+HttpSecuritySchemeX |
+(string) |
+BearerFormat |
+HttpSecuritySchemeDescription |
+HttpSecuritySchemeType |
+undefined
 }
 )
 |
@@ -500,6 +864,15 @@ export type ApiKeySecurityScheme = (
 "name": ApiKeySecuritySchemeName,
 "in": ApiKeySecuritySchemeIn,
 "description"?: ApiKeySecuritySchemeDescription,
+[
+name: string
+]: ApiKeySecuritySchemeAdditionalProperties |
+ApiKeySecuritySchemeX |
+ApiKeySecuritySchemeType |
+ApiKeySecuritySchemeName |
+ApiKeySecuritySchemeIn |
+ApiKeySecuritySchemeDescription |
+undefined
 }
 );
 /**
@@ -512,6 +885,15 @@ export type HttpSecurityScheme = (
 "bearerFormat"?: BearerFormat,
 "description"?: HttpSecuritySchemeDescription,
 "type": HttpSecuritySchemeType,
+[
+name: string
+]: HttpSecuritySchemeAdditionalProperties |
+HttpSecuritySchemeX |
+(string) |
+BearerFormat |
+HttpSecuritySchemeDescription |
+HttpSecuritySchemeType |
+undefined
 }
 )
 |
@@ -521,6 +903,15 @@ export type HttpSecurityScheme = (
 "bearerFormat"?: BearerFormat,
 "description"?: HttpSecuritySchemeDescription,
 "type": HttpSecuritySchemeType,
+[
+name: string
+]: HttpSecuritySchemeAdditionalProperties |
+HttpSecuritySchemeX |
+(string) |
+BearerFormat |
+HttpSecuritySchemeDescription |
+HttpSecuritySchemeType |
+undefined
 }
 )
 );
@@ -532,6 +923,14 @@ export type Oauth2SecurityScheme = (
 "type": Oauth2SecuritySchemeType,
 "flows": Flows,
 "description"?: Oauth2SecuritySchemeDescription,
+[
+name: string
+]: Oauth2SecuritySchemeAdditionalProperties |
+Oauth2SecuritySchemeX |
+Oauth2SecuritySchemeType |
+Flows |
+Oauth2SecuritySchemeDescription |
+undefined
 }
 );
 /**
@@ -542,6 +941,14 @@ export type OpenIdConnectSecurityScheme = (
 "type": OpenIdConnectSecuritySchemeType,
 "openIdConnectUrl": OpenIdConnectUrl,
 "description"?: OpenIdConnectSecuritySchemeDescription,
+[
+name: string
+]: OpenIdConnectSecuritySchemeAdditionalProperties |
+OpenIdConnectSecuritySchemeX |
+OpenIdConnectSecuritySchemeType |
+OpenIdConnectUrl |
+OpenIdConnectSecuritySchemeDescription |
+undefined
 }
 );
 /**
@@ -553,6 +960,15 @@ export type OauthFlows = (
 "password"?: Password,
 "clientCredentials"?: ClientCredentials,
 "authorizationCode"?: AuthorizationCode,
+[
+name: string
+]: OauthFlowsAdditionalProperties |
+OauthFlowsX |
+Implicit |
+Password |
+ClientCredentials |
+AuthorizationCode |
+undefined
 }
 );
 /**
@@ -563,6 +979,14 @@ export type ImplicitOauthFlow = (
 "authorizationUrl": ImplicitOauthFlowAuthorizationUrl,
 "refreshUrl"?: ImplicitOauthFlowRefreshUrl,
 "scopes": ImplicitOauthFlowScopes,
+[
+name: string
+]: DefinitionsImplicitOauthFlowAdditionalProperties |
+ImplicitOauthFlowX |
+ImplicitOauthFlowAuthorizationUrl |
+ImplicitOauthFlowRefreshUrl |
+ImplicitOauthFlowScopes |
+undefined
 }
 );
 /**
@@ -573,6 +997,14 @@ export type PasswordOauthFlow = (
 "tokenUrl": PasswordOauthFlowTokenUrl,
 "refreshUrl"?: PasswordOauthFlowRefreshUrl,
 "scopes": PasswordOauthFlowScopes,
+[
+name: string
+]: DefinitionsPasswordOauthFlowAdditionalProperties |
+PasswordOauthFlowX |
+PasswordOauthFlowTokenUrl |
+PasswordOauthFlowRefreshUrl |
+PasswordOauthFlowScopes |
+undefined
 }
 );
 /**
@@ -583,6 +1015,14 @@ export type ClientCredentialsFlow = (
 "tokenUrl": ClientCredentialsFlowTokenUrl,
 "refreshUrl"?: ClientCredentialsFlowRefreshUrl,
 "scopes": ClientCredentialsFlowScopes,
+[
+name: string
+]: DefinitionsClientCredentialsFlowAdditionalProperties |
+ClientCredentialsFlowX |
+ClientCredentialsFlowTokenUrl |
+ClientCredentialsFlowRefreshUrl |
+ClientCredentialsFlowScopes |
+undefined
 }
 );
 /**
@@ -594,6 +1034,15 @@ export type AuthorizationCodeOauthFlow = (
 "tokenUrl": AuthorizationCodeOauthFlowTokenUrl,
 "refreshUrl"?: AuthorizationCodeOauthFlowRefreshUrl,
 "scopes": AuthorizationCodeOauthFlowScopes,
+[
+name: string
+]: DefinitionsAuthorizationCodeOauthFlowAdditionalProperties |
+AuthorizationCodeOauthFlowX |
+AuthorizationCodeOauthFlowAuthorizationUrl |
+AuthorizationCodeOauthFlowTokenUrl |
+AuthorizationCodeOauthFlowRefreshUrl |
+AuthorizationCodeOauthFlowScopes |
+undefined
 }
 );
 /**
@@ -607,6 +1056,17 @@ export type Link = (
 "requestBody"?: LinkRequestBody,
 "description"?: LinkDescription,
 "server"?: LinkServer,
+[
+name: string
+]: DefinitionsLinkAdditionalProperties |
+LinkX |
+LinkOperationId |
+OperationRef |
+LinkParameters |
+LinkRequestBody |
+LinkDescription |
+LinkServer |
+undefined
 }
 );
 /**
@@ -630,6 +1090,15 @@ export type DefinitionsEncoding = (
 "style"?: EncodingStyle,
 "explode"?: EncodingExplode,
 "allowReserved"?: EncodingAllowReserved,
+[
+name: string
+]: DefinitionsEncodingAdditionalProperties |
+ContentType |
+EncodingHeaders |
+EncodingStyle |
+EncodingExplode |
+EncodingAllowReserved |
+undefined
 }
 );
 /**
@@ -1976,6 +2445,16 @@ export type LinkNot = (
 "requestBody"?: LinkRequestBody,
 "description"?: LinkDescription,
 "server"?: LinkServer,
+[
+name: string
+]: DefinitionsLinkAdditionalProperties |
+LinkOperationId |
+OperationRef |
+LinkParameters |
+LinkRequestBody |
+LinkDescription |
+LinkServer |
+undefined
 }
 );
 /**
@@ -2076,6 +2555,23 @@ AZAZ09Parameters0
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+ParameterIn |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+ParameterStyle |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2094,6 +2590,23 @@ AZAZ09Parameters0
 "content": ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+ParameterIn |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+ParameterStyle |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2114,6 +2627,25 @@ AZAZ09Parameters0
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+("path") |
+ParameterDescription |
+(true) |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+("matrix" |
+"label" |
+"simple") |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2135,6 +2667,26 @@ AZAZ09Parameters0
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+("query") |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+("form" |
+"spaceDelimited" |
+"pipeDelimited" |
+"deepObject") |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2153,6 +2705,23 @@ AZAZ09Parameters0
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+("header") |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+("simple") |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2171,6 +2740,23 @@ AZAZ09Parameters0
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+("cookie") |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+("form") |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 );
@@ -2209,6 +2795,21 @@ AZAZ09Headers0
 "content"?: HeaderContent,
 "example"?: HeaderExample,
 "examples"?: HeaderExamples,
+[
+name: string
+]: HeaderAdditionalProperties |
+HeaderDescription |
+HeaderRequired |
+HeaderDeprecated |
+HeaderAllowEmptyValue |
+HeaderStyle |
+HeaderExplode |
+HeaderAllowReserved |
+HeaderSchema |
+HeaderContent |
+HeaderExample |
+HeaderExamples |
+undefined
 }
 )
 |
@@ -2225,6 +2826,21 @@ AZAZ09Headers0
 "content": HeaderContent,
 "example"?: HeaderExample,
 "examples"?: HeaderExamples,
+[
+name: string
+]: HeaderAdditionalProperties |
+HeaderDescription |
+HeaderRequired |
+HeaderDeprecated |
+HeaderAllowEmptyValue |
+HeaderStyle |
+HeaderExplode |
+HeaderAllowReserved |
+HeaderSchema |
+HeaderContent |
+HeaderExample |
+HeaderExamples |
+undefined
 }
 )
 );
@@ -2242,6 +2858,15 @@ SecurityScheme0
 "bearerFormat"?: BearerFormat,
 "description"?: HttpSecuritySchemeDescription,
 "type": HttpSecuritySchemeType,
+[
+name: string
+]: HttpSecuritySchemeAdditionalProperties |
+HttpSecuritySchemeX |
+(string) |
+BearerFormat |
+HttpSecuritySchemeDescription |
+HttpSecuritySchemeType |
+undefined
 }
 )
 |
@@ -2251,6 +2876,15 @@ SecurityScheme0
 "bearerFormat"?: BearerFormat,
 "description"?: HttpSecuritySchemeDescription,
 "type": HttpSecuritySchemeType,
+[
+name: string
+]: HttpSecuritySchemeAdditionalProperties |
+HttpSecuritySchemeX |
+(string) |
+BearerFormat |
+HttpSecuritySchemeDescription |
+HttpSecuritySchemeType |
+undefined
 }
 )
 |
@@ -2363,6 +2997,21 @@ export type HeadersAdditionalProperties = (
 "content"?: HeaderContent,
 "example"?: HeaderExample,
 "examples"?: HeaderExamples,
+[
+name: string
+]: HeaderAdditionalProperties |
+HeaderDescription |
+HeaderRequired |
+HeaderDeprecated |
+HeaderAllowEmptyValue |
+HeaderStyle |
+HeaderExplode |
+HeaderAllowReserved |
+HeaderSchema |
+HeaderContent |
+HeaderExample |
+HeaderExamples |
+undefined
 }
 )
 |
@@ -2379,6 +3028,21 @@ export type HeadersAdditionalProperties = (
 "content": HeaderContent,
 "example"?: HeaderExample,
 "examples"?: HeaderExamples,
+[
+name: string
+]: HeaderAdditionalProperties |
+HeaderDescription |
+HeaderRequired |
+HeaderDeprecated |
+HeaderAllowEmptyValue |
+HeaderStyle |
+HeaderExplode |
+HeaderAllowReserved |
+HeaderSchema |
+HeaderContent |
+HeaderExample |
+HeaderExamples |
+undefined
 }
 )
 |
@@ -2459,6 +3123,23 @@ export type PathItemItems = (
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+ParameterIn |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+ParameterStyle |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2477,6 +3158,23 @@ export type PathItemItems = (
 "content": ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+ParameterIn |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+ParameterStyle |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2497,6 +3195,25 @@ export type PathItemItems = (
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+("path") |
+ParameterDescription |
+(true) |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+("matrix" |
+"label" |
+"simple") |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2518,6 +3235,26 @@ export type PathItemItems = (
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+("query") |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+("form" |
+"spaceDelimited" |
+"pipeDelimited" |
+"deepObject") |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2536,6 +3273,23 @@ export type PathItemItems = (
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+("header") |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+("simple") |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2554,6 +3308,23 @@ export type PathItemItems = (
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+("cookie") |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+("form") |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2582,6 +3353,23 @@ export type ParametersItems = (
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+ParameterIn |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+ParameterStyle |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2600,6 +3388,23 @@ export type ParametersItems = (
 "content": ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+ParameterIn |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+ParameterStyle |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2620,6 +3425,25 @@ export type ParametersItems = (
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+("path") |
+ParameterDescription |
+(true) |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+("matrix" |
+"label" |
+"simple") |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2641,6 +3465,26 @@ export type ParametersItems = (
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+("query") |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+("form" |
+"spaceDelimited" |
+"pipeDelimited" |
+"deepObject") |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2659,6 +3503,23 @@ export type ParametersItems = (
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+("header") |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+("simple") |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2677,6 +3538,23 @@ export type ParametersItems = (
 "content"?: ParameterContent,
 "example"?: ParameterExample,
 "examples"?: ParameterExamples,
+[
+name: string
+]: ParameterAdditionalProperties |
+ParameterName |
+("cookie") |
+ParameterDescription |
+ParameterRequired |
+ParameterDeprecated |
+ParameterAllowEmptyValue |
+("form") |
+ParameterExplode |
+ParameterAllowReserved |
+ParameterSchema |
+ParameterContent |
+ParameterExample |
+ParameterExamples |
+undefined
 }
 )
 |
@@ -2860,6 +3738,21 @@ export type HeadersEncodingAdditionalProperties = (
 "content"?: HeaderContent,
 "example"?: HeaderExample,
 "examples"?: HeaderExamples,
+[
+name: string
+]: HeaderAdditionalProperties |
+HeaderDescription |
+HeaderRequired |
+HeaderDeprecated |
+HeaderAllowEmptyValue |
+HeaderStyle |
+HeaderExplode |
+HeaderAllowReserved |
+HeaderSchema |
+HeaderContent |
+HeaderExample |
+HeaderExamples |
+undefined
 }
 )
 |
@@ -2876,6 +3769,21 @@ export type HeadersEncodingAdditionalProperties = (
 "content": HeaderContent,
 "example"?: HeaderExample,
 "examples"?: HeaderExamples,
+[
+name: string
+]: HeaderAdditionalProperties |
+HeaderDescription |
+HeaderRequired |
+HeaderDeprecated |
+HeaderAllowEmptyValue |
+HeaderStyle |
+HeaderExplode |
+HeaderAllowReserved |
+HeaderSchema |
+HeaderContent |
+HeaderExample |
+HeaderExamples |
+undefined
 }
 )
 |

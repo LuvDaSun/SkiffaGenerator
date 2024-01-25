@@ -65,7 +65,7 @@ export function selectSchemas(pointer: string, document: oas.SchemaDocument) {
     }
 
     for (const method of Object.values(methods)) {
-      const operationObject = pathObject[method as keyof oas.PathItem];
+      const operationObject = pathObject[method];
       if (operationObject == null) {
         continue;
       }
@@ -92,6 +92,8 @@ export function selectSchemas(pointer: string, document: oas.SchemaDocument) {
       if (oas.isReference(responseObject)) {
         throw "TODO";
       }
+
+      assert(oas.isResponse(responseObject));
 
       yield* selectFromResponse(appendToPointer(pointer, "responses", response), responseObject);
     }

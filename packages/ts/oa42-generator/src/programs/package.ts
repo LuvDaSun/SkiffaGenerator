@@ -65,7 +65,6 @@ interface MainOptions {
   defaultName: string;
   nameMaximumIterations: number;
   transformMaximumIterations: number;
-  unionObjectAndMap: boolean;
 }
 
 async function main(options: MainOptions) {
@@ -84,7 +83,6 @@ async function main(options: MainOptions) {
     defaultName,
     nameMaximumIterations,
     transformMaximumIterations,
-    unionObjectAndMap,
   } = options;
 
   // setup document context
@@ -110,6 +108,5 @@ async function main(options: MainOptions) {
     packageDirectoryPath,
     packageName,
     packageVersion,
-    unionObjectAndMap,
   });
 }

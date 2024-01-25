@@ -16,7 +16,6 @@ export interface PackageConfiguration {
   packageName: string;
   packageVersion: string;
   packageDirectoryPath: string;
-  unionObjectAndMap: boolean;
 }
 
 export function generatePackage(apiModel: models.Api, configuration: PackageConfiguration) {
