@@ -90,6 +90,10 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     for (const method of methods) {
       const operationItem = pathItem[method];
 
+      if (operationItem == null) {
+        continue;
+      }
+
       if (oas.isReference(operationItem)) {
         throw "TODO";
       }
