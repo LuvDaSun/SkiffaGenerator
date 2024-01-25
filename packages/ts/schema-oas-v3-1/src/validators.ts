@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.12.8                         -- www.JsonSchema42.org
+// v0.12.9                         -- www.JsonSchema42.org
 //
 import * as types from "./types.js";
 export interface ValidationError {
@@ -856,9 +856,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^(schemas|responses|parameters|examples|requestBodies|headers|securitySchemes|links|callbacks|pathItems)$").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^(schemas|responses|parameters|examples|requestBodies|headers|securitySchemes|links|callbacks|pathItems)$").test(propertyName) &&
 !isSchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItems(propertyValue)
 ) {
 return false;
@@ -866,6 +866,8 @@ return false;
 return true;
 })) {
 return false
+}
+continue;
 }
 break;
 }
@@ -913,9 +915,9 @@ continue;
 }
 switch(propertyName) {
 default:
+if(new RegExp("^/").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^/").test(propertyName) &&
 !isPatternProperties(propertyValue)
 ) {
 return false;
@@ -923,6 +925,8 @@ return false;
 return true;
 })) {
 return false
+}
+continue;
 }
 break;
 }
@@ -1987,9 +1991,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^[1-5](?:[0-9]{2}|XX)$").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^[1-5](?:[0-9]{2}|XX)$").test(propertyName) &&
 !isPatternProperties15092Xx(propertyValue)
 ) {
 return false;
@@ -1997,6 +2001,8 @@ return false;
 return true;
 })) {
 return false
+}
+continue;
 }
 break;
 }
@@ -3132,9 +3138,9 @@ continue;
 }
 switch(propertyName) {
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isX(propertyValue)
 ) {
 return false;
@@ -3142,6 +3148,8 @@ return false;
 return true;
 })) {
 return false
+}
+continue;
 }
 break;
 }

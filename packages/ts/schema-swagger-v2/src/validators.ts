@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.12.8                         -- www.JsonSchema42.org
+// v0.12.9                         -- www.JsonSchema42.org
 //
 import * as types from "./types.js";
 export interface ValidationError {
@@ -272,9 +272,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isV2PatternPropertiesX(propertyValue)
 ) {
 return false;
@@ -283,7 +283,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isV2AdditionalProperties(propertyValue)
@@ -417,9 +418,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isInfoX(propertyValue)
 ) {
 return false;
@@ -428,7 +429,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isInfoAdditionalProperties(propertyValue)
@@ -515,9 +517,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isContactX(propertyValue)
 ) {
 return false;
@@ -526,7 +528,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isContactAdditionalProperties(propertyValue)
@@ -608,9 +611,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isLicenseX(propertyValue)
 ) {
 return false;
@@ -619,7 +622,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isLicenseAdditionalProperties(propertyValue)
@@ -673,9 +677,9 @@ continue;
 }
 switch(propertyName) {
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isPathsX(propertyValue)
 ) {
 return false;
@@ -684,10 +688,11 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
+if(new RegExp("^/").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^/").test(propertyName) &&
 !isPatternProperties(propertyValue)
 ) {
 return false;
@@ -696,7 +701,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isPathsAdditionalProperties(propertyValue)
@@ -938,9 +944,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isExternalDocsX(propertyValue)
 ) {
 return false;
@@ -949,7 +955,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isExternalDocsAdditionalProperties(propertyValue)
@@ -1216,9 +1223,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isOperationX(propertyValue)
 ) {
 return false;
@@ -1227,7 +1234,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isOperationAdditionalProperties(propertyValue)
@@ -1379,9 +1387,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isPathItemX(propertyValue)
 ) {
 return false;
@@ -1390,7 +1398,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isPathItemAdditionalProperties(propertyValue)
@@ -1446,9 +1455,9 @@ continue;
 propertyCount++;
 switch(propertyName) {
 default:
+if(new RegExp("^([0-9]{3})$|^(default)$").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^([0-9]{3})$|^(default)$").test(propertyName) &&
 !isResponses093Default(propertyValue)
 ) {
 return false;
@@ -1457,10 +1466,11 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isResponsesX(propertyValue)
 ) {
 return false;
@@ -1469,7 +1479,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isResponsesAdditionalProperties(propertyValue)
@@ -1612,9 +1623,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isResponseX(propertyValue)
 ) {
 return false;
@@ -1623,7 +1634,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isResponseAdditionalProperties(propertyValue)
@@ -1933,9 +1945,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isHeaderX(propertyValue)
 ) {
 return false;
@@ -1944,7 +1956,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isHeaderAdditionalProperties(propertyValue)
@@ -2139,9 +2152,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isBodyParameterX(propertyValue)
 ) {
 return false;
@@ -2150,7 +2163,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isBodyParameterAdditionalProperties(propertyValue)
@@ -2426,9 +2440,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isHeaderParameterSubSchemaX(propertyValue)
 ) {
 return false;
@@ -2437,7 +2451,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isHeaderParameterSubSchemaAdditionalProperties(propertyValue)
@@ -2724,9 +2739,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isQueryParameterSubSchemaX(propertyValue)
 ) {
 return false;
@@ -2735,7 +2750,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isQueryParameterSubSchemaAdditionalProperties(propertyValue)
@@ -3022,9 +3038,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isFormDataParameterSubSchemaX(propertyValue)
 ) {
 return false;
@@ -3033,7 +3049,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isFormDataParameterSubSchemaAdditionalProperties(propertyValue)
@@ -3316,9 +3333,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isPathParameterSubSchemaX(propertyValue)
 ) {
 return false;
@@ -3327,7 +3344,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isPathParameterSubSchemaAdditionalProperties(propertyValue)
@@ -3824,9 +3842,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isSchemaPatternPropertiesX(propertyValue)
 ) {
 return false;
@@ -3835,7 +3853,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isDefinitionsSchemaAdditionalProperties(propertyValue)
@@ -3995,9 +4014,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isFileSchemaX(propertyValue)
 ) {
 return false;
@@ -4006,7 +4025,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isFileSchemaAdditionalProperties(propertyValue)
@@ -4246,9 +4266,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isPrimitivesItemsX(propertyValue)
 ) {
 return false;
@@ -4257,7 +4277,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isPrimitivesItemsAdditionalProperties(propertyValue)
@@ -4466,9 +4487,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isXmlX(propertyValue)
 ) {
 return false;
@@ -4477,7 +4498,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isXmlAdditionalProperties(propertyValue)
@@ -4570,9 +4592,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isTagX(propertyValue)
 ) {
 return false;
@@ -4581,7 +4603,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isTagAdditionalProperties(propertyValue)
@@ -4715,9 +4738,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isBasicAuthenticationSecurityX(propertyValue)
 ) {
 return false;
@@ -4726,7 +4749,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isBasicAuthenticationSecurityAdditionalProperties(propertyValue)
@@ -4844,9 +4868,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isApiKeySecurityX(propertyValue)
 ) {
 return false;
@@ -4855,7 +4879,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isApiKeySecurityAdditionalProperties(propertyValue)
@@ -4984,9 +5009,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isOauth2ImplicitSecurityX(propertyValue)
 ) {
 return false;
@@ -4995,7 +5020,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isOauth2ImplicitSecurityAdditionalProperties(propertyValue)
@@ -5124,9 +5150,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isOauth2PasswordSecurityX(propertyValue)
 ) {
 return false;
@@ -5135,7 +5161,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isOauth2PasswordSecurityAdditionalProperties(propertyValue)
@@ -5264,9 +5291,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isOauth2ApplicationSecurityX(propertyValue)
 ) {
 return false;
@@ -5275,7 +5302,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isOauth2ApplicationSecurityAdditionalProperties(propertyValue)
@@ -5422,9 +5450,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isOauth2AccessCodeSecurityX(propertyValue)
 ) {
 return false;
@@ -5433,7 +5461,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isOauth2AccessCodeSecurityAdditionalProperties(propertyValue)
@@ -7879,9 +7908,9 @@ continue;
 }
 switch(propertyName) {
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isNotX(propertyValue)
 ) {
 return false;
@@ -7890,7 +7919,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isNotAdditionalProperties(propertyValue)

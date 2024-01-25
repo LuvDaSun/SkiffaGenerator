@@ -3,7 +3,7 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.12.8                         -- www.JsonSchema42.org
+// v0.12.9                         -- www.JsonSchema42.org
 //
 import * as types from "./types.js";
 export interface ValidationError {
@@ -195,9 +195,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isPatternPropertiesX(propertyValue)
 ) {
 return false;
@@ -206,7 +206,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isAdditionalProperties(propertyValue)
@@ -266,9 +267,9 @@ continue;
 }
 switch(propertyName) {
 default:
+if(new RegExp("^\\$ref$").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^\\$ref$").test(propertyName) &&
 !isReferenceRef(propertyValue)
 ) {
 return false;
@@ -276,6 +277,8 @@ return false;
 return true;
 })) {
 return false
+}
+continue;
 }
 break;
 }
@@ -399,9 +402,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isInfoX(propertyValue)
 ) {
 return false;
@@ -410,7 +413,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isInfoAdditionalProperties(propertyValue)
@@ -496,9 +500,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isContactX(propertyValue)
 ) {
 return false;
@@ -507,7 +511,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isContactAdditionalProperties(propertyValue)
@@ -589,9 +594,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isLicenseX(propertyValue)
 ) {
 return false;
@@ -600,7 +605,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isLicenseAdditionalProperties(propertyValue)
@@ -693,9 +699,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isServerX(propertyValue)
 ) {
 return false;
@@ -704,7 +710,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isServerAdditionalProperties(propertyValue)
@@ -797,9 +804,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isServerVariableX(propertyValue)
 ) {
 return false;
@@ -808,7 +815,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isServerVariableAdditionalProperties(propertyValue)
@@ -960,9 +968,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isComponentsX(propertyValue)
 ) {
 return false;
@@ -971,7 +979,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isComponentsAdditionalProperties(propertyValue)
@@ -1409,9 +1418,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isSchemaPatternPropertiesX(propertyValue)
 ) {
 return false;
@@ -1420,7 +1429,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isDefinitionsSchemaAdditionalProperties(propertyValue)
@@ -1599,9 +1609,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isXmlX(propertyValue)
 ) {
 return false;
@@ -1610,7 +1620,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isXmlAdditionalProperties(propertyValue)
@@ -1714,9 +1725,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isResponseX(propertyValue)
 ) {
 return false;
@@ -1725,7 +1736,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isResponseAdditionalProperties(propertyValue)
@@ -1822,9 +1834,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isMediaTypeX(propertyValue)
 ) {
 return false;
@@ -1833,7 +1845,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isDefinitionsMediaTypeAdditionalProperties(propertyValue)
@@ -1940,9 +1953,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isExampleX(propertyValue)
 ) {
 return false;
@@ -1951,7 +1964,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isExampleAdditionalProperties(propertyValue)
@@ -2125,9 +2139,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isHeaderX(propertyValue)
 ) {
 return false;
@@ -2136,7 +2150,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isHeaderAdditionalProperties(propertyValue)
@@ -2202,9 +2217,9 @@ continue;
 }
 switch(propertyName) {
 default:
+if(new RegExp("^\\/").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^\\/").test(propertyName) &&
 !isPatternProperties(propertyValue)
 ) {
 return false;
@@ -2213,10 +2228,11 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isPathsX(propertyValue)
 ) {
 return false;
@@ -2225,7 +2241,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isPathsAdditionalProperties(propertyValue)
@@ -2333,9 +2350,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^(get|put|post|delete|options|head|patch|trace)$").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^(get|put|post|delete|options|head|patch|trace)$").test(propertyName) &&
 !isGetPutPostDeleteOptionsHeadPatchTrace(propertyValue)
 ) {
 return false;
@@ -2344,10 +2361,11 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isPathItemX(propertyValue)
 ) {
 return false;
@@ -2356,7 +2374,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isPathItemAdditionalProperties(propertyValue)
@@ -2548,9 +2567,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isOperationX(propertyValue)
 ) {
 return false;
@@ -2559,7 +2578,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isOperationAdditionalProperties(propertyValue)
@@ -2625,9 +2645,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^[1-5](?:\\d{2}|XX)$").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^[1-5](?:\\d{2}|XX)$").test(propertyName) &&
 !isResponses15D2Xx(propertyValue)
 ) {
 return false;
@@ -2636,10 +2656,11 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isResponsesX(propertyValue)
 ) {
 return false;
@@ -2648,7 +2669,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isResponsesAdditionalProperties(propertyValue)
@@ -2797,9 +2819,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isTagX(propertyValue)
 ) {
 return false;
@@ -2808,7 +2830,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isTagAdditionalProperties(propertyValue)
@@ -2890,9 +2913,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isExternalDocumentationX(propertyValue)
 ) {
 return false;
@@ -2901,7 +2924,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isExternalDocumentationAdditionalProperties(propertyValue)
@@ -3170,9 +3194,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isParameterX(propertyValue)
 ) {
 return false;
@@ -3181,7 +3205,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isParameterAdditionalProperties(propertyValue)
@@ -3328,9 +3353,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isRequestBodyX(propertyValue)
 ) {
 return false;
@@ -3339,7 +3364,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isRequestBodyAdditionalProperties(propertyValue)
@@ -3494,9 +3520,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isApiKeySecuritySchemeX(propertyValue)
 ) {
 return false;
@@ -3505,7 +3531,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isApiKeySecuritySchemeAdditionalProperties(propertyValue)
@@ -3616,9 +3643,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isHttpSecuritySchemeX(propertyValue)
 ) {
 return false;
@@ -3627,7 +3654,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isHttpSecuritySchemeAdditionalProperties(propertyValue)
@@ -3740,9 +3768,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isOauth2SecuritySchemeX(propertyValue)
 ) {
 return false;
@@ -3751,7 +3779,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isOauth2SecuritySchemeAdditionalProperties(propertyValue)
@@ -3851,9 +3880,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isOpenIdConnectSecuritySchemeX(propertyValue)
 ) {
 return false;
@@ -3862,7 +3891,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isOpenIdConnectSecuritySchemeAdditionalProperties(propertyValue)
@@ -3959,9 +3989,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isOauthFlowsX(propertyValue)
 ) {
 return false;
@@ -3970,7 +4000,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isOauthFlowsAdditionalProperties(propertyValue)
@@ -4070,9 +4101,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isImplicitOauthFlowX(propertyValue)
 ) {
 return false;
@@ -4081,7 +4112,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isDefinitionsImplicitOauthFlowAdditionalProperties(propertyValue)
@@ -4181,9 +4213,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isPasswordOauthFlowX(propertyValue)
 ) {
 return false;
@@ -4192,7 +4224,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isDefinitionsPasswordOauthFlowAdditionalProperties(propertyValue)
@@ -4292,9 +4325,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isClientCredentialsFlowX(propertyValue)
 ) {
 return false;
@@ -4303,7 +4336,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isDefinitionsClientCredentialsFlowAdditionalProperties(propertyValue)
@@ -4421,9 +4455,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isAuthorizationCodeOauthFlowX(propertyValue)
 ) {
 return false;
@@ -4432,7 +4466,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isDefinitionsAuthorizationCodeOauthFlowAdditionalProperties(propertyValue)
@@ -4551,9 +4586,9 @@ return false
 }
 break;
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isLinkX(propertyValue)
 ) {
 return false;
@@ -4562,7 +4597,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isDefinitionsLinkAdditionalProperties(propertyValue)
@@ -4619,9 +4655,9 @@ continue;
 }
 switch(propertyName) {
 default:
+if(new RegExp("^x-").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^x-").test(propertyName) &&
 !isCallbackX(propertyValue)
 ) {
 return false;
@@ -4630,7 +4666,8 @@ return true;
 })) {
 return false
 }
-else
+continue;
+}
 if(!withPath(propertyName, () => {
 if(
 !isCallbackAdditionalProperties(propertyValue)
@@ -5732,9 +5769,9 @@ continue;
 }
 switch(propertyName) {
 default:
+if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName) &&
 !isSchemasAZAZ09(propertyValue)
 ) {
 return false;
@@ -5742,6 +5779,8 @@ return false;
 return true;
 })) {
 return false
+}
+continue;
 }
 break;
 }
@@ -5785,9 +5824,9 @@ continue;
 }
 switch(propertyName) {
 default:
+if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName) &&
 !isResponsesAZAZ09(propertyValue)
 ) {
 return false;
@@ -5795,6 +5834,8 @@ return false;
 return true;
 })) {
 return false
+}
+continue;
 }
 break;
 }
@@ -5838,9 +5879,9 @@ continue;
 }
 switch(propertyName) {
 default:
+if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName) &&
 !isParametersAZAZ09(propertyValue)
 ) {
 return false;
@@ -5848,6 +5889,8 @@ return false;
 return true;
 })) {
 return false
+}
+continue;
 }
 break;
 }
@@ -5891,9 +5934,9 @@ continue;
 }
 switch(propertyName) {
 default:
+if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName) &&
 !isExamplesAZAZ09(propertyValue)
 ) {
 return false;
@@ -5901,6 +5944,8 @@ return false;
 return true;
 })) {
 return false
+}
+continue;
 }
 break;
 }
@@ -5944,9 +5989,9 @@ continue;
 }
 switch(propertyName) {
 default:
+if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName) &&
 !isRequestBodiesAZAZ09(propertyValue)
 ) {
 return false;
@@ -5954,6 +5999,8 @@ return false;
 return true;
 })) {
 return false
+}
+continue;
 }
 break;
 }
@@ -5997,9 +6044,9 @@ continue;
 }
 switch(propertyName) {
 default:
+if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName) &&
 !isHeadersAZAZ09(propertyValue)
 ) {
 return false;
@@ -6007,6 +6054,8 @@ return false;
 return true;
 })) {
 return false
+}
+continue;
 }
 break;
 }
@@ -6050,9 +6099,9 @@ continue;
 }
 switch(propertyName) {
 default:
+if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName) &&
 !isSecuritySchemesAZAZ09(propertyValue)
 ) {
 return false;
@@ -6060,6 +6109,8 @@ return false;
 return true;
 })) {
 return false
+}
+continue;
 }
 break;
 }
@@ -6103,9 +6154,9 @@ continue;
 }
 switch(propertyName) {
 default:
+if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName) &&
 !isLinksAZAZ09(propertyValue)
 ) {
 return false;
@@ -6113,6 +6164,8 @@ return false;
 return true;
 })) {
 return false
+}
+continue;
 }
 break;
 }
@@ -6156,9 +6209,9 @@ continue;
 }
 switch(propertyName) {
 default:
+if(new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName)) {
 if(!withPath(propertyName, () => {
 if(
-new RegExp("^[a-zA-Z0-9\\.\\-_]+$").test(propertyName) &&
 !isCallbacksAZAZ09(propertyValue)
 ) {
 return false;
@@ -6166,6 +6219,8 @@ return false;
 return true;
 })) {
 return false
+}
+continue;
 }
 break;
 }

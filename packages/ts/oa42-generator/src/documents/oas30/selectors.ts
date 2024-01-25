@@ -66,6 +66,10 @@ export function selectSchemas(pointer: string, document: oas.SchemaDocument) {
 
     for (const method of Object.values(methods)) {
       const operationObject = pathObject[method as keyof oas.PathItem];
+      if (operationObject == null) {
+        continue;
+      }
+
       assert(oas.isOperation(operationObject));
 
       yield* selectFromOperation(appendToPointer(pointer, method), operationObject);
