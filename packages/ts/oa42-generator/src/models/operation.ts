@@ -22,4 +22,5 @@ export interface Operation {
   cookieParameters: Parameter[];
   bodies: Body[];
   operationResults: OperationResult[];
+  mockable: boolean;
 }

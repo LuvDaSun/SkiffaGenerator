@@ -9,4 +9,5 @@ export interface OperationResult {
   statusCodes: StatusCode[];
   headerParameters: Parameter[];
   bodies: Body[];
+  mockable: boolean;
 }

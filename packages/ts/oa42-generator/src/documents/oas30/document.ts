@@ -169,6 +169,11 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
 
     const operationResults = [...this.getOperationResultModels(operationUri, operationItem)];
 
+    const mockable =
+      [...pathParameters, ...headerParameters, ...queryParameters, ...cookieParameters].every(
+        (parameterModel) => parameterModel.mockable,
+      ) && operationResults.some((operationResultModel) => operationResultModel.mockable);
+
     const operationModel: models.Operation = {
       uri: operationUri,
       method,
@@ -176,13 +181,14 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       deprecated: operationItem.deprecated ?? false,
       summary: operationItem.summary ?? "",
       description: operationItem.description ?? "",
+      pathParameters,
       queryParameters,
       headerParameters,
-      pathParameters,
       cookieParameters,
       authenticationRequirements,
       bodies,
       operationResults,
+      mockable,
     };
 
     return operationModel;
@@ -250,6 +256,10 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       ? [...this.getBodyModels(appendToUriHash(responseUri, "content"), responseItem.content)]
       : [];
 
+    const mockable =
+      headerParameters.every((parameterModel) => parameterModel.mockable) &&
+      bodies.some((bodyModel) => bodyModel.mockable);
+
     return {
       uri: responseUri,
       description: responseItem.description,
@@ -257,6 +267,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       statusCodes,
       headerParameters,
       bodies,
+      mockable,
     };
   }
 
@@ -283,12 +294,14 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     const schemaUri =
       parameterItem.schema == null ? undefined : appendToUriHash(parameterUri, "schema");
     const schemaId = schemaUri == null ? schemaUri : normalizeUrl(schemaUri).toString();
+    const mockable = schemaId != null;
 
     return {
       uri: parameterUri,
       name: parameterName,
       required: parameterItem.required ?? false,
       schemaId,
+      mockable,
     };
   }
 
@@ -351,11 +364,13 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     const schemaUri =
       mediaTypeItem.schema == null ? undefined : appendToUriHash(mediaTypeUri, "schema");
     const schemaId = schemaUri == null ? schemaUri : normalizeUrl(schemaUri).toString();
+    const mockable = schemaId != null;
 
     return {
       uri: mediaTypeUri,
       contentType,
       schemaId,
+      mockable,
     };
   }
 
