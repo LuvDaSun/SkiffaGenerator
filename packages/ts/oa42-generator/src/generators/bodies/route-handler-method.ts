@@ -60,13 +60,16 @@ export function* generateRouteHandlerMethodBody(
    */
 
   yield itt`
-    const authentication = {
-      ${authenticationNames.map(
-        (name) => itt`
-    ${toCamel(name)}: this.${toCamel(name, "authentication", "handler")}?.(""),
-    `,
-      )}
-    }
+    const authentication: A = Object.fromEntries(
+      await Promise.all([
+        ${authenticationNames.map(
+          (name) => itt`
+            (async () => [${JSON.stringify(toCamel(name))}, await this.${toCamel(name, "authentication", "handler")}?.("")])(),
+          `,
+        )}
+      ]),
+    );
+
     if(!${isOperationAuthenticationName}(authentication)) {
       throw new lib.AuthenticationFailed();
     }
