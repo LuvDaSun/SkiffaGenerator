@@ -33,7 +33,7 @@ export class DocumentContext {
     documentUri = new URL("", documentUri);
 
     const documentNode = await loadYAML(documentUri);
-    this.loadFromDocument(documentUri, documentNode);
+    await this.loadFromDocument(documentUri, documentNode);
   }
 
   public async loadFromDocument(documentUri: URL, documentNode: unknown) {
@@ -50,6 +50,10 @@ export class DocumentContext {
         this.document = document;
         break;
       }
+    }
+
+    if (this.document == null) {
+      throw new Error("unable to load document");
     }
   }
 
