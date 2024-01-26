@@ -19,7 +19,7 @@ export type DocumentFactory<N = unknown> = (
 
 export class DocumentContext {
   private factories = new Array<DocumentFactory>();
-  private document?: DocumentBase;
+  private document!: DocumentBase;
 
   constructor(private readonly options: DocumentOptions) {
     //
@@ -36,7 +36,7 @@ export class DocumentContext {
     this.loadFromDocument(documentUri, documentNode);
   }
 
-  public loadFromDocument(documentUri: URL, documentNode: unknown) {
+  public async loadFromDocument(documentUri: URL, documentNode: unknown) {
     documentUri = new URL("", documentUri);
 
     for (const factory of this.factories) {
@@ -46,6 +46,7 @@ export class DocumentContext {
         options: this.options,
       });
       if (document != null) {
+        await document.loadSpecification();
         this.document = document;
         break;
       }
@@ -53,6 +54,6 @@ export class DocumentContext {
   }
 
   public getApiModel() {
-    return this.document!.getApiModel();
+    return this.document.getApiModel();
   }
 }

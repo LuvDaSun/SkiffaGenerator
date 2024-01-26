@@ -9,6 +9,4 @@ export interface Api {
   authentication: Array<Authentication>;
   router: Router<number>;
   names: jns42generator.Specification["names"];
-  typesArena: jns42generator.Specification["typesArena"];
-  validatorsArena: jns42generator.Specification["validatorsArena"];
 }

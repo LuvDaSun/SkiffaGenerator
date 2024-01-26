@@ -100,7 +100,7 @@ async function main(options: MainOptions) {
 
   await documentContext.loadFromUrl(specificationUrl);
 
-  const apiModel = await documentContext.getApiModel();
+  const apiModel = documentContext.getApiModel();
 
   // generate code
 
