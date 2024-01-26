@@ -4,7 +4,7 @@ info:
   title: Nationaal Watersport Diploma API
   description: |-
     Nationaal Watersport Diploma API
-  version: 0.2.0
+  version: 0.1.0
 
 paths:
   /main-category:
@@ -34,9 +34,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/main-category"
+                $ref: "#/components/schemas/main-category"
 
   /sub-category/{main-category-id}:
     parameters:
@@ -71,9 +69,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/sub-category"
+                $ref: "#/components/schemas/sub-category"
 
 components:
   schemas:
