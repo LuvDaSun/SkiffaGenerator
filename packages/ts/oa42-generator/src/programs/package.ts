@@ -37,7 +37,7 @@ export function configurePackageProgram(argv: yargs.Argv) {
           type: "string",
           default: "schema-document",
         })
-        .option("namer-maximum-iterations", {
+        .option("name-maximum-iterations", {
           description: "maximum number of iterations for finding unique names",
           type: "number",
           default: 5,
@@ -46,6 +46,12 @@ export function configurePackageProgram(argv: yargs.Argv) {
           description: "maximum number of iterations for transforming",
           type: "number",
           default: 1000,
+        })
+        .option("union-object-and-map", {
+          description:
+            "If a type is both a map and an object, add index with a union type of all the properties",
+          type: "boolean",
+          default: false,
         }),
     (argv) => main(argv),
   );
@@ -57,7 +63,7 @@ interface MainOptions {
   packageName: string;
   packageVersion: string;
   defaultName: string;
-  namerMaximumIterations: number;
+  nameMaximumIterations: number;
   transformMaximumIterations: number;
 }
 
@@ -75,7 +81,7 @@ async function main(options: MainOptions) {
     packageName,
     packageVersion,
     defaultName,
-    namerMaximumIterations,
+    nameMaximumIterations,
     transformMaximumIterations,
   } = options;
 
@@ -83,7 +89,7 @@ async function main(options: MainOptions) {
 
   const documentContext = new DocumentContext({
     defaultName,
-    namerMaximumIterations,
+    nameMaximumIterations: nameMaximumIterations,
     transformMaximumIterations,
   });
   documentContext.registerFactory(swagger2.factory);
@@ -94,11 +100,12 @@ async function main(options: MainOptions) {
 
   await documentContext.loadFromUrl(specificationUrl);
 
-  const apiModel = await documentContext.getApiModel();
+  const apiModel = documentContext.getApiModel();
+  const specification = documentContext.getSpecification();
 
   // generate code
 
-  generatePackage(apiModel, {
+  generatePackage(apiModel, specification, {
     packageDirectoryPath,
     packageName,
     packageVersion,

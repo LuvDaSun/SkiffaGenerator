@@ -3,5638 +3,11032 @@
 //  _ |  |___ ___ ___|   __|___| |_ ___ _____  __| | |_  |
 // | |_| |_ -| . |   |__   |  _|   | -_|     ||. |_  |  _|
 // |_____|___|___|_|_|_____|___|_|_|___|_|_|_|___| |_|___|
-// v0.9.6                          -- www.JsonSchema42.org
+// v0.12.10                        -- www.JsonSchema42.org
+//
 import * as types from "./types.js";
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07
+export interface ValidationError {
+path: string;
+rule: string;
+typeName?: string;
+}
+const pathPartStack = new Array<string>();
+const typeNameStack = new Array<string>();
+let errors = new Array<ValidationError>();
+let depth = 0;
+export function getValidationErrors() {
+return errors;
+}
+export function getLastValidationError() {
+if(errors.length === 0) {
+throw new TypeError("no validation errors");
+}
+return errors[errors.length - 1];
+}
+function withPath<T>(pathPart: string, job: () => T): T {
+pathPartStack.push(pathPart);
+try {
+return job();
+}
+finally {
+pathPartStack.pop();
+}
+}
+function withType<T>(typeName: string, job: () => T): T {
+if(typeNameStack.length === 0) {
+resetErrors();
+}
+typeNameStack.push(typeName);
+try {
+return job();
+}
+finally {
+typeNameStack.pop();
+}
+}
+function resetErrors() {
+errors = [];
+}
+function recordError(rule: string) {
+errors.push({
+path: pathPartStack.join("/"),
+typeName: typeNameStack[typeNameStack.length - 1],
+rule,
+})
+}
+/**
+* @description The description of OpenAPI v3.1.x documents without schema validation, as defined by https://spec.openapis.org/oas/v3.1.0
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07}
+*/
 export function isSchemaDocument(value: unknown): value is types.SchemaDocument {
-if(!_isMapSchemaDocument(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("SchemaDocument", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceSchemaDocument(value) || !_isAnyOfSchemaDocument(value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("openapi" in value) ||
+value["openapi"] === undefined
+) {
+recordError("required");
 return false;
 }
-return true;
-}
-function _isMapSchemaDocument(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("openapi" in value)) {
-return false;
-}
-if(!("info" in value)) {
+if(
+!("info" in value) ||
+value["info"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "openapi":
+if(!withPath(propertyName, () => {
 if(!isOpenapi(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "info":
+if(!withPath(propertyName, () => {
 if(!isPropertiesInfo(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "jsonSchemaDialect":
+if(!withPath(propertyName, () => {
 if(!isJsonSchemaDialect(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "servers":
+if(!withPath(propertyName, () => {
 if(!isPropertiesServers(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "paths":
+if(!withPath(propertyName, () => {
 if(!isPropertiesPaths(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "webhooks":
+if(!withPath(propertyName, () => {
 if(!isWebhooks(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "components":
+if(!withPath(propertyName, () => {
 if(!isPropertiesComponents(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "security":
+if(!withPath(propertyName, () => {
 if(!isPropertiesSecurity(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "tags":
+if(!withPath(propertyName, () => {
 if(!isPropertiesTags(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "externalDocs":
+if(!withPath(propertyName, () => {
 if(!isPropertiesExternalDocs(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceSchemaDocument(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
-return true;
+{
+let counter = 0;
+if(counter < 1 && isAnyOf0(value)) {
+counter += 1;
 }
-function _isAnyOfSchemaDocument(value: unknown): value is unknown {
-if(isAnyOf0(value)) {
-return true;
+if(counter < 1 && isAnyOf1(value)) {
+counter += 1;
 }
-if(isAnyOf1(value)) {
-return true;
+if(counter < 1 && isAnyOf2(value)) {
+counter += 1;
 }
-if(isAnyOf2(value)) {
-return true;
-}
+if(counter < 1) {
+recordError("anyOf");
 return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info}
+*/
 export function isInfo(value: unknown): value is types.Info {
-if(!_isMapInfo(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Info", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceInfo(value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("title" in value) ||
+value["title"] === undefined
+) {
+recordError("required");
 return false;
 }
-return true;
-}
-function _isMapInfo(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("title" in value)) {
-return false;
-}
-if(!("version" in value)) {
+if(
+!("version" in value) ||
+value["version"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "title":
+if(!withPath(propertyName, () => {
 if(!isTitle(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "summary":
+if(!withPath(propertyName, () => {
 if(!isInfoSummary(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "description":
+if(!withPath(propertyName, () => {
 if(!isInfoDescription(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "termsOfService":
+if(!withPath(propertyName, () => {
 if(!isTermsOfService(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "contact":
+if(!withPath(propertyName, () => {
 if(!isInfoContact(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "license":
+if(!withPath(propertyName, () => {
 if(!isInfoLicense(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "version":
+if(!withPath(propertyName, () => {
 if(!isVersion(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceInfo(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact}
+*/
 export function isContact(value: unknown): value is types.Contact {
-if(!_isMapContact(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Contact", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceContact(value)) {
-return false;
-}
-return true;
-}
-function _isMapContact(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "name":
+if(!withPath(propertyName, () => {
 if(!isContactName(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "url":
+if(!withPath(propertyName, () => {
 if(!isContactUrl(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "email":
+if(!withPath(propertyName, () => {
 if(!isEmail(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceContact(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license}
+*/
 export function isLicense(value: unknown): value is types.License {
-if(!_isMapLicense(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("License", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceLicense(value)) {
-return false;
-}
-return true;
-}
-function _isMapLicense(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("name" in value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("name" in value) ||
+value["name"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "name":
+if(!withPath(propertyName, () => {
 if(!isLicenseName(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "identifier":
+if(!withPath(propertyName, () => {
 if(!isIdentifier(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "url":
+if(!withPath(propertyName, () => {
 if(!isLicenseUrl(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceLicense(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server}
+*/
 export function isServer(value: unknown): value is types.Server {
-if(!_isMapServer(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Server", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceServer(value)) {
-return false;
-}
-return true;
-}
-function _isMapServer(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("url" in value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("url" in value) ||
+value["url"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "url":
+if(!withPath(propertyName, () => {
 if(!isServerUrl(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "description":
+if(!withPath(propertyName, () => {
 if(!isServerDescription(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "variables":
+if(!withPath(propertyName, () => {
 if(!isVariables(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceServer(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable}
+*/
 export function isServerVariable(value: unknown): value is types.ServerVariable {
-if(!_isMapServerVariable(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ServerVariable", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceServerVariable(value)) {
-return false;
-}
-return true;
-}
-function _isMapServerVariable(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("default" in value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("default" in value) ||
+value["default"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "enum":
+if(!withPath(propertyName, () => {
 if(!isEnum(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "default":
+if(!withPath(propertyName, () => {
 if(!isServerVariableDefault(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "description":
+if(!withPath(propertyName, () => {
 if(!isServerVariableDescription(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceServerVariable(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components}
+*/
 export function isComponents(value: unknown): value is types.Components {
-if(!_isMapComponents(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Components", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceComponents(value)) {
-return false;
-}
-return true;
-}
-function _isMapComponents(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "schemas":
+if(!withPath(propertyName, () => {
 if(!isSchemas(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "responses":
+if(!withPath(propertyName, () => {
 if(!isComponentsResponses(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "parameters":
+if(!withPath(propertyName, () => {
 if(!isComponentsParameters(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "examples":
+if(!withPath(propertyName, () => {
 if(!isComponentsExamples(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "requestBodies":
+if(!withPath(propertyName, () => {
 if(!isRequestBodies(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "headers":
+if(!withPath(propertyName, () => {
 if(!isComponentsHeaders(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "securitySchemes":
+if(!withPath(propertyName, () => {
 if(!isSecuritySchemes(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "links":
+if(!withPath(propertyName, () => {
 if(!isComponentsLinks(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "callbacks":
+if(!withPath(propertyName, () => {
 if(!isComponentsCallbacks(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "pathItems":
+if(!withPath(propertyName, () => {
 if(!isPathItems(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
 }
+break;
+default:
 if(new RegExp("^(schemas|responses|parameters|examples|requestBodies|headers|securitySchemes|links|callbacks|pathItems)$").test(propertyName)) {
-if(!isSchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItems(propertyValue)) {
+if(!withPath(propertyName, () => {
+if(
+!isSchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItems(propertyValue)
+) {
 return false;
+}
+return true;
+})) {
+return false
 }
 continue;
 }
+break;
 }
-return true;
 }
-function _isReferenceComponents(value: unknown): value is unknown {
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/paths
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/paths}
+*/
 export function isPaths(value: unknown): value is types.Paths {
-if(!_isMapPaths(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Paths", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferencePaths(value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+for(const propertyName in value) {
+const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+if(new RegExp("^/").test(propertyName)) {
+if(!withPath(propertyName, () => {
+if(
+!isPatternProperties(propertyValue)
+) {
 return false;
 }
 return true;
-}
-function _isMapPaths(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-for(const propertyName in value) {
-const propertyValue = value[propertyName as keyof typeof value];
-if(new RegExp("^/").test(propertyName)) {
-if(!isPatternProperties(propertyValue)) {
-return false;
+})) {
+return false
 }
 continue;
 }
+break;
 }
-return true;
 }
-function _isReferencePaths(value: unknown): value is unknown {
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item}
+*/
 export function isPathItem(value: unknown): value is types.PathItem {
-if(!_isMapPathItem(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("PathItem", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferencePathItem(value)) {
-return false;
-}
-return true;
-}
-function _isMapPathItem(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "summary":
+if(!withPath(propertyName, () => {
 if(!isPathItemSummary(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "description":
+if(!withPath(propertyName, () => {
 if(!isPathItemDescription(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "servers":
+if(!withPath(propertyName, () => {
 if(!isPathItemServers(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "parameters":
+if(!withPath(propertyName, () => {
 if(!isPathItemParameters(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "get":
+if(!withPath(propertyName, () => {
 if(!isGet(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "put":
+if(!withPath(propertyName, () => {
 if(!isPut(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "post":
+if(!withPath(propertyName, () => {
 if(!isPost(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "delete":
+if(!withPath(propertyName, () => {
 if(!isDelete(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "options":
+if(!withPath(propertyName, () => {
 if(!isOptions(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "head":
+if(!withPath(propertyName, () => {
 if(!isHead(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "patch":
+if(!withPath(propertyName, () => {
 if(!isPatch(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "trace":
+if(!withPath(propertyName, () => {
 if(!isTrace(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferencePathItem(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference}
+*/
 export function isPathItemOrReference(value: unknown): value is types.PathItemOrReference {
-if(!_isIfPathItemOrReference(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("PathItemOrReference", () => {
+if(isPathItemOrReferenceIf(value)) {
+if(!isPathItemOrReferenceThen(value)) {
+recordError("then");
 return false;
 }
-return true;
 }
-function _isIfPathItemOrReference(value: unknown): value is unknown {
-return true;
+else {
+if(!isPathItemOrReferenceElse(value)) {
+recordError("else");
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation}
+*/
 export function isOperation(value: unknown): value is types.Operation {
-if(!_isMapOperation(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Operation", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceOperation(value)) {
-return false;
-}
-return true;
-}
-function _isMapOperation(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "tags":
+if(!withPath(propertyName, () => {
 if(!isOperationTags(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "summary":
+if(!withPath(propertyName, () => {
 if(!isOperationSummary(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "description":
+if(!withPath(propertyName, () => {
 if(!isOperationDescription(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "externalDocs":
+if(!withPath(propertyName, () => {
 if(!isOperationExternalDocs(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "operationId":
+if(!withPath(propertyName, () => {
 if(!isOperationOperationId(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "parameters":
+if(!withPath(propertyName, () => {
 if(!isOperationParameters(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "requestBody":
+if(!withPath(propertyName, () => {
 if(!isOperationRequestBody(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "responses":
+if(!withPath(propertyName, () => {
 if(!isOperationResponses(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "callbacks":
+if(!withPath(propertyName, () => {
 if(!isOperationCallbacks(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "deprecated":
+if(!withPath(propertyName, () => {
 if(!isOperationDeprecated(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "security":
+if(!withPath(propertyName, () => {
 if(!isOperationSecurity(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "servers":
+if(!withPath(propertyName, () => {
 if(!isOperationServers(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceOperation(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation}
+*/
 export function isExternalDocumentation(value: unknown): value is types.ExternalDocumentation {
-if(!_isMapExternalDocumentation(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ExternalDocumentation", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceExternalDocumentation(value)) {
-return false;
-}
-return true;
-}
-function _isMapExternalDocumentation(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("url" in value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("url" in value) ||
+value["url"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "description":
+if(!withPath(propertyName, () => {
 if(!isExternalDocumentationDescription(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "url":
+if(!withPath(propertyName, () => {
 if(!isExternalDocumentationUrl(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceExternalDocumentation(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter}
+*/
 export function isParameter(value: unknown): value is types.Parameter {
-if(!_isMapParameter(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Parameter", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceParameter(value) || !_isOneOfParameter(value) || !_isIfParameter(value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("name" in value) ||
+value["name"] === undefined
+) {
+recordError("required");
 return false;
 }
-return true;
-}
-function _isMapParameter(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("name" in value)) {
-return false;
-}
-if(!("in" in value)) {
+if(
+!("in" in value) ||
+value["in"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "name":
+if(!withPath(propertyName, () => {
 if(!isParameterName(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "in":
+if(!withPath(propertyName, () => {
 if(!isPropertiesParameterIn(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "description":
+if(!withPath(propertyName, () => {
 if(!isParameterDescription(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "required":
+if(!withPath(propertyName, () => {
 if(!isParameterRequired(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "deprecated":
+if(!withPath(propertyName, () => {
 if(!isParameterDeprecated(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "schema":
+if(!withPath(propertyName, () => {
 if(!isParameterSchema(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "content":
+if(!withPath(propertyName, () => {
 if(!isParameterContent(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceParameter(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
+{
+let counter = 0;
+if(counter < 2 && isParameterOneOf0(value)) {
+counter += 1;
+}
+if(counter < 2 && isParameterOneOf1(value)) {
+counter += 1;
+}
+if(counter !== 1) {
+recordError("oneOf");
+return false;
+}
+}
+if(isParameterIf(value)) {
+if(!isParameterThen(value)) {
+recordError("then");
+return false;
+}
+}
+else {
+}
 return true;
+;
+});
 }
-function _isOneOfParameter(value: unknown): value is unknown {
-let validCounter = 0;
-if(isParameterOneOf0(value)) {
-validCounter++;
+finally {
+depth -= 1;
 }
-if(validCounter > 1) {
-return false
 }
-if(isParameterOneOf1(value)) {
-validCounter++;
-}
-if(validCounter > 1) {
-return false
-}
-if(validCounter < 1) {
-return false
-}
-return true;
-}
-function _isIfParameter(value: unknown): value is unknown {
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference}
+*/
 export function isParameterOrReference(value: unknown): value is types.ParameterOrReference {
-if(!_isIfParameterOrReference(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ParameterOrReference", () => {
+if(isParameterOrReferenceIf(value)) {
+if(!isParameterOrReferenceThen(value)) {
+recordError("then");
 return false;
 }
-return true;
 }
-function _isIfParameterOrReference(value: unknown): value is unknown {
-return true;
+else {
+if(!isParameterOrReferenceElse(value)) {
+recordError("else");
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body}
+*/
 export function isRequestBody(value: unknown): value is types.RequestBody {
-if(!_isMapRequestBody(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("RequestBody", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceRequestBody(value)) {
-return false;
-}
-return true;
-}
-function _isMapRequestBody(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("content" in value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("content" in value) ||
+value["content"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "description":
+if(!withPath(propertyName, () => {
 if(!isRequestBodyDescription(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "content":
+if(!withPath(propertyName, () => {
 if(!isRequestBodyContent(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "required":
+if(!withPath(propertyName, () => {
 if(!isRequestBodyRequired(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceRequestBody(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference}
+*/
 export function isRequestBodyOrReference(value: unknown): value is types.RequestBodyOrReference {
-if(!_isIfRequestBodyOrReference(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("RequestBodyOrReference", () => {
+if(isRequestBodyOrReferenceIf(value)) {
+if(!isRequestBodyOrReferenceThen(value)) {
+recordError("then");
 return false;
 }
-return true;
 }
-function _isIfRequestBodyOrReference(value: unknown): value is unknown {
-return true;
+else {
+if(!isRequestBodyOrReferenceElse(value)) {
+recordError("else");
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content}
+*/
 export function isContent(value: unknown): value is types.Content {
-if(!_isMapContent(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Content", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapContent(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isContentPropertyNames(propertyName)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
-if(!isContentAdditionalProperties(propertyValue)) {
-return false;
 }
-continue;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isContentAdditionalProperties(propertyValue)
+) {
+return false;
 }
 return true;
+})) {
+return false
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type}
+*/
 export function isMediaType(value: unknown): value is types.MediaType {
-if(!_isMapMediaType(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("MediaType", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isAllOfMediaType(value)) {
-return false;
-}
-return true;
-}
-function _isMapMediaType(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "schema":
+if(!withPath(propertyName, () => {
 if(!isMediaTypeSchema(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "encoding":
+if(!withPath(propertyName, () => {
 if(!isMediaTypeEncoding(propertyValue)) {
-return false;
-}
-continue;
-}
-}
-return true;
-}
-function _isAllOfMediaType(value: unknown): value is unknown {
-if(!isMediaType0(value)) {
-return false;
-}
-if(!isMediaType1(value)) {
+recordError("objectProperties");
 return false;
 }
 return true;
+})) {
+return false
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding
+break;
+default:
+break;
+}
+}
+}
+{
+let counter = 0;
+if(counter === 0 && isMediaType0(value)) {
+counter += 1;
+}
+if(counter === 1 && isMediaType1(value)) {
+counter += 1;
+}
+if(counter < 2) {
+recordError("allOf");
+return false;
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding}
+*/
 export function isEncoding(value: unknown): value is types.Encoding {
-if(!_isMapEncoding(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Encoding", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isAllOfEncoding(value)) {
-return false;
-}
-return true;
-}
-function _isMapEncoding(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "contentType":
+if(!withPath(propertyName, () => {
 if(!isContentType(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "headers":
+if(!withPath(propertyName, () => {
 if(!isEncodingHeaders(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "style":
+if(!withPath(propertyName, () => {
 if(!isEncodingStyle(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "explode":
+if(!withPath(propertyName, () => {
 if(!isEncodingExplode(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "allowReserved":
+if(!withPath(propertyName, () => {
 if(!isAllowReserved(propertyValue)) {
-return false;
-}
-continue;
-}
-}
-return true;
-}
-function _isAllOfEncoding(value: unknown): value is unknown {
-if(!isEncodingAllOf0(value)) {
-return false;
-}
-if(!isEncodingAllOf1(value)) {
+recordError("objectProperties");
 return false;
 }
 return true;
+})) {
+return false
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/responses
+break;
+default:
+break;
+}
+}
+}
+{
+let counter = 0;
+if(counter === 0 && isEncodingAllOf0(value)) {
+counter += 1;
+}
+if(counter === 1 && isEncodingAllOf1(value)) {
+counter += 1;
+}
+if(counter < 2) {
+recordError("allOf");
+return false;
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/responses}
+*/
 export function isResponses(value: unknown): value is types.Responses {
-if(!_isMapResponses(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Responses", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceResponses(value)) {
-return false;
-}
-return true;
-}
-function _isMapResponses(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 let propertyCount = 0;
 for(const propertyName in value) {
-propertyCount++;
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+propertyCount++;
 switch(propertyName) {
 case "default":
+if(!withPath(propertyName, () => {
 if(!isResponsesDefault(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
 }
+break;
+default:
 if(new RegExp("^[1-5](?:[0-9]{2}|XX)$").test(propertyName)) {
-if(!isPatternProperties15092Xx(propertyValue)) {
+if(!withPath(propertyName, () => {
+if(
+!isPatternProperties15092Xx(propertyValue)
+) {
 return false;
 }
+return true;
+})) {
+return false
+}
 continue;
+}
+break;
 }
 }
 if(propertyCount < 1) {
+recordError("minimumProperties");
 return false;
 }
-return true;
 }
-function _isReferenceResponses(value: unknown): value is unknown {
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response}
+*/
 export function isResponse(value: unknown): value is types.Response {
-if(!_isMapResponse(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Response", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceResponse(value)) {
-return false;
-}
-return true;
-}
-function _isMapResponse(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("description" in value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("description" in value) ||
+value["description"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "description":
+if(!withPath(propertyName, () => {
 if(!isResponseDescription(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "headers":
+if(!withPath(propertyName, () => {
 if(!isResponseHeaders(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "content":
+if(!withPath(propertyName, () => {
 if(!isResponseContent(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "links":
+if(!withPath(propertyName, () => {
 if(!isResponseLinks(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceResponse(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference}
+*/
 export function isResponseOrReference(value: unknown): value is types.ResponseOrReference {
-if(!_isIfResponseOrReference(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ResponseOrReference", () => {
+if(isResponseOrReferenceIf(value)) {
+if(!isResponseOrReferenceThen(value)) {
+recordError("then");
 return false;
 }
-return true;
 }
-function _isIfResponseOrReference(value: unknown): value is unknown {
-return true;
+else {
+if(!isResponseOrReferenceElse(value)) {
+recordError("else");
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks}
+*/
 export function isCallbacks(value: unknown): value is types.Callbacks {
-if(!_isMapCallbacks(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Callbacks", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceCallbacks(value)) {
-return false;
-}
-return true;
-}
-function _isMapCallbacks(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isCallbacksAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isCallbacksAdditionalProperties(propertyValue)
+) {
+return false;
 }
-function _isReferenceCallbacks(value: unknown): value is unknown {
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference}
+*/
 export function isCallbacksOrReference(value: unknown): value is types.CallbacksOrReference {
-if(!_isIfCallbacksOrReference(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("CallbacksOrReference", () => {
+if(isCallbacksOrReferenceIf(value)) {
+if(!isCallbacksOrReferenceThen(value)) {
+recordError("then");
 return false;
 }
-return true;
 }
-function _isIfCallbacksOrReference(value: unknown): value is unknown {
-return true;
+else {
+if(!isCallbacksOrReferenceElse(value)) {
+recordError("else");
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example}
+*/
 export function isExample(value: unknown): value is types.Example {
-if(!_isMapExample(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Example", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceExample(value) || !_isNotExample(value)) {
-return false;
-}
-return true;
-}
-function _isMapExample(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "summary":
+if(!withPath(propertyName, () => {
 if(!isExampleSummary(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "description":
+if(!withPath(propertyName, () => {
 if(!isExampleDescription(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "value":
+if(!withPath(propertyName, () => {
 if(!isValue(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "externalValue":
+if(!withPath(propertyName, () => {
 if(!isExternalValue(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceExample(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
-return true;
-}
-function _isNotExample(value: unknown): value is unknown {
 if(isNot(value)) {
+recordError("not");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference}
+*/
 export function isExampleOrReference(value: unknown): value is types.ExampleOrReference {
-if(!_isIfExampleOrReference(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ExampleOrReference", () => {
+if(isExampleOrReferenceIf(value)) {
+if(!isExampleOrReferenceThen(value)) {
+recordError("then");
 return false;
 }
-return true;
 }
-function _isIfExampleOrReference(value: unknown): value is unknown {
-return true;
+else {
+if(!isExampleOrReferenceElse(value)) {
+recordError("else");
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link}
+*/
 export function isLink(value: unknown): value is types.Link {
-if(!_isMapLink(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Link", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceLink(value) || !_isOneOfLink(value)) {
-return false;
-}
-return true;
-}
-function _isMapLink(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "operationRef":
+if(!withPath(propertyName, () => {
 if(!isOperationRef(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "operationId":
+if(!withPath(propertyName, () => {
 if(!isLinkOperationId(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "parameters":
+if(!withPath(propertyName, () => {
 if(!isLinkParameters(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "requestBody":
+if(!withPath(propertyName, () => {
 if(!isLinkRequestBody(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "description":
+if(!withPath(propertyName, () => {
 if(!isLinkDescription(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "body":
+if(!withPath(propertyName, () => {
 if(!isBody(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceLink(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
-return true;
+{
+let counter = 0;
+if(counter < 2 && isLinkOneOf0(value)) {
+counter += 1;
 }
-function _isOneOfLink(value: unknown): value is unknown {
-let validCounter = 0;
-if(isLinkOneOf0(value)) {
-validCounter++;
+if(counter < 2 && isLinkOneOf1(value)) {
+counter += 1;
 }
-if(validCounter > 1) {
-return false
+if(counter !== 1) {
+recordError("oneOf");
+return false;
 }
-if(isLinkOneOf1(value)) {
-validCounter++;
-}
-if(validCounter > 1) {
-return false
-}
-if(validCounter < 1) {
-return false
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference}
+*/
 export function isLinkOrReference(value: unknown): value is types.LinkOrReference {
-if(!_isIfLinkOrReference(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("LinkOrReference", () => {
+if(isLinkOrReferenceIf(value)) {
+if(!isLinkOrReferenceThen(value)) {
+recordError("then");
 return false;
 }
-return true;
 }
-function _isIfLinkOrReference(value: unknown): value is unknown {
-return true;
+else {
+if(!isLinkOrReferenceElse(value)) {
+recordError("else");
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header}
+*/
 export function isHeader(value: unknown): value is types.Header {
-if(!_isMapHeader(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Header", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceHeader(value) || !_isOneOfHeader(value)) {
-return false;
-}
-return true;
-}
-function _isMapHeader(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "description":
+if(!withPath(propertyName, () => {
 if(!isHeaderDescription(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "required":
+if(!withPath(propertyName, () => {
 if(!isHeaderRequired(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "deprecated":
+if(!withPath(propertyName, () => {
 if(!isHeaderDeprecated(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "schema":
+if(!withPath(propertyName, () => {
 if(!isHeaderSchema(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "content":
+if(!withPath(propertyName, () => {
 if(!isHeaderContent(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceHeader(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
-return true;
+{
+let counter = 0;
+if(counter < 2 && isHeaderOneOf0(value)) {
+counter += 1;
 }
-function _isOneOfHeader(value: unknown): value is unknown {
-let validCounter = 0;
-if(isHeaderOneOf0(value)) {
-validCounter++;
+if(counter < 2 && isHeaderOneOf1(value)) {
+counter += 1;
 }
-if(validCounter > 1) {
-return false
+if(counter !== 1) {
+recordError("oneOf");
+return false;
 }
-if(isHeaderOneOf1(value)) {
-validCounter++;
-}
-if(validCounter > 1) {
-return false
-}
-if(validCounter < 1) {
-return false
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference}
+*/
 export function isHeaderOrReference(value: unknown): value is types.HeaderOrReference {
-if(!_isIfHeaderOrReference(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("HeaderOrReference", () => {
+if(isHeaderOrReferenceIf(value)) {
+if(!isHeaderOrReferenceThen(value)) {
+recordError("then");
 return false;
 }
-return true;
 }
-function _isIfHeaderOrReference(value: unknown): value is unknown {
-return true;
+else {
+if(!isHeaderOrReferenceElse(value)) {
+recordError("else");
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag}
+*/
 export function isTag(value: unknown): value is types.Tag {
-if(!_isMapTag(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Tag", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceTag(value)) {
-return false;
-}
-return true;
-}
-function _isMapTag(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("name" in value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("name" in value) ||
+value["name"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "name":
+if(!withPath(propertyName, () => {
 if(!isTagName(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "description":
+if(!withPath(propertyName, () => {
 if(!isTagDescription(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "externalDocs":
+if(!withPath(propertyName, () => {
 if(!isTagExternalDocs(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceTag(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference}
+*/
 export function isReference(value: unknown): value is types.Reference {
-if(!_isMapReference(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Reference", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapReference(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "$ref":
+if(!withPath(propertyName, () => {
 if(!isRef(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "summary":
+if(!withPath(propertyName, () => {
 if(!isReferenceSummary(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "description":
+if(!withPath(propertyName, () => {
 if(!isReferenceDescription(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
+return true;
+})) {
+return false
+}
+break;
+default:
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/schema}
+*/
+export function isSchema(value: unknown): value is types.Schema {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Schema", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) ||
+(typeof value === "boolean"))) {
+recordError("types");
+return false;
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme}
+*/
+export function isSecurityScheme(value: unknown): value is types.SecurityScheme {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("SecurityScheme", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
+return false;
+}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("type" in value) ||
+value["type"] === undefined
+) {
+recordError("required");
+return false;
+}
+for(const propertyName in value) {
+const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
 continue;
 }
-}
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/schema
-export function isSchema(value: unknown): value is types.Schema {
-if(!_isMapSchema(value) && !_isBooleanSchema(value)) {
-return false;
-}
-return true;
-}
-function _isMapSchema(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-for(const propertyName in value) {
-const propertyValue = value[propertyName as keyof typeof value];
-}
-return true;
-}
-function _isBooleanSchema(value: unknown): value is unknown {
-if(typeof value !== "boolean") {
-return false;
-}
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme
-export function isSecurityScheme(value: unknown): value is types.SecurityScheme {
-if(!_isMapSecurityScheme(value)) {
-return false;
-}
-if(!_isAllOfSecurityScheme(value)) {
-return false;
-}
-return true;
-}
-function _isMapSecurityScheme(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("type" in value)) {
-return false;
-}
-for(const propertyName in value) {
-const propertyValue = value[propertyName as keyof typeof value];
 switch(propertyName) {
 case "type":
+if(!withPath(propertyName, () => {
 if(!isSecuritySchemeType(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "description":
+if(!withPath(propertyName, () => {
 if(!isSecuritySchemeDescription(propertyValue)) {
-return false;
-}
-continue;
-}
-}
-return true;
-}
-function _isAllOfSecurityScheme(value: unknown): value is unknown {
-if(!isSecuritySchemeAllOf0(value)) {
-return false;
-}
-if(!isSecuritySchemeAllOf1(value)) {
-return false;
-}
-if(!isAllOf2(value)) {
-return false;
-}
-if(!isAllOf3(value)) {
-return false;
-}
-if(!isAllOf4(value)) {
-return false;
-}
-if(!isAllOf5(value)) {
+recordError("objectProperties");
 return false;
 }
 return true;
+})) {
+return false
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference
+break;
+default:
+break;
+}
+}
+}
+{
+let counter = 0;
+if(counter === 0 && isSecuritySchemeAllOf0(value)) {
+counter += 1;
+}
+if(counter === 1 && isSecuritySchemeAllOf1(value)) {
+counter += 1;
+}
+if(counter === 2 && isAllOf2(value)) {
+counter += 1;
+}
+if(counter === 3 && isAllOf3(value)) {
+counter += 1;
+}
+if(counter === 4 && isAllOf4(value)) {
+counter += 1;
+}
+if(counter === 5 && isAllOf5(value)) {
+counter += 1;
+}
+if(counter < 6) {
+recordError("allOf");
+return false;
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference}
+*/
 export function isSecuritySchemeOrReference(value: unknown): value is types.SecuritySchemeOrReference {
-if(!_isIfSecuritySchemeOrReference(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("SecuritySchemeOrReference", () => {
+if(isSecuritySchemeOrReferenceIf(value)) {
+if(!isSecuritySchemeOrReferenceThen(value)) {
+recordError("then");
 return false;
 }
-return true;
 }
-function _isIfSecuritySchemeOrReference(value: unknown): value is unknown {
-return true;
+else {
+if(!isSecuritySchemeOrReferenceElse(value)) {
+recordError("else");
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows}
+*/
 export function isOauthFlows(value: unknown): value is types.OauthFlows {
-if(!_isMapOauthFlows(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("OauthFlows", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceOauthFlows(value)) {
-return false;
-}
-return true;
-}
-function _isMapOauthFlows(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "implicit":
+if(!withPath(propertyName, () => {
 if(!isPropertiesOauthFlowsImplicit(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "password":
+if(!withPath(propertyName, () => {
 if(!isPropertiesOauthFlowsPassword(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "clientCredentials":
+if(!withPath(propertyName, () => {
 if(!isPropertiesOauthFlowsClientCredentials(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "authorizationCode":
+if(!withPath(propertyName, () => {
 if(!isPropertiesOauthFlowsAuthorizationCode(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceOauthFlows(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement}
+*/
 export function isSecurityRequirement(value: unknown): value is types.SecurityRequirement {
-if(!_isMapSecurityRequirement(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("SecurityRequirement", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapSecurityRequirement(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isSecurityRequirementAdditionalProperties(propertyValue)) {
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isSecurityRequirementAdditionalProperties(propertyValue)
+) {
 return false;
+}
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions}
+*/
+export function isSpecificationExtensions(value: unknown): value is types.SpecificationExtensions {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("SpecificationExtensions", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+for(const propertyName in value) {
+const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+if(new RegExp("^x-").test(propertyName)) {
+if(!withPath(propertyName, () => {
+if(
+!isX(propertyValue)
+) {
+return false;
+}
+return true;
+})) {
+return false
 }
 continue;
 }
-return true;
+break;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions
-export function isSpecificationExtensions(value: unknown): value is types.SpecificationExtensions {
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples}
+*/
 export function isExamples(value: unknown): value is types.Examples {
-if(!_isMapExamples(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapExamples(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+depth += 1;
+try{
+return withType("Examples", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "example":
+if(!withPath(propertyName, () => {
 if(!isExamplesExample(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "examples":
+if(!withPath(propertyName, () => {
 if(!isExamplesExamples(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
+default:
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/map-of-strings
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/map-of-strings}
+*/
 export function isMapOfStrings(value: unknown): value is types.MapOfStrings {
-if(!_isMapMapOfStrings(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("MapOfStrings", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapMapOfStrings(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isMapOfStringsAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isMapOfStringsAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/openapi
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/openapi}
+*/
 export function isOpenapi(value: unknown): value is types.Openapi {
-if(!_isStringOpenapi(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Openapi", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
+}
+if(
+typeof value === "string"
+) {
+if(
+!new RegExp("^3\\.1\\.\\d+(-.+)?$").test(value)
+) {
+recordError("valuePattern");
+return false;
+}
 }
 return true;
+;
+});
 }
-function _isStringOpenapi(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-if(!new RegExp("^3\\.1\\.\\d+(-.+)?$").test(value)) {
-return false;
 }
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/info
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/info}
+*/
 export function isPropertiesInfo(value: unknown): value is types.PropertiesInfo {
-if(!_isReferencePropertiesInfo(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePropertiesInfo(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PropertiesInfo", () => {
 if(!isInfo(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/jsonSchemaDialect
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/jsonSchemaDialect}
+*/
 export function isJsonSchemaDialect(value: unknown): value is types.JsonSchemaDialect {
-if(!_isStringJsonSchemaDialect(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("JsonSchemaDialect", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringJsonSchemaDialect(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/servers
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/servers}
+*/
 export function isPropertiesServers(value: unknown): value is types.PropertiesServers {
-if(!_isArrayPropertiesServers(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("PropertiesServers", () => {
+if(!((Array.isArray(value)))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isArrayPropertiesServers(value: unknown): value is unknown {
-if(!Array.isArray(value)) {
-return false;
-}
+if(
+Array.isArray(value)
+) {
 for(let elementIndex = 0; elementIndex < value.length; elementIndex ++) {
 const elementValue = value[elementIndex];
+switch(elementIndex) {
+default:
+if(!withPath(String(elementIndex), () => {
 if(!isPropertiesServersItems(elementValue)) {
+recordError("elementValue");
 return false;
+}
+return true;
+})) {
+return false;
+}
+break;
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/paths
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/paths}
+*/
 export function isPropertiesPaths(value: unknown): value is types.PropertiesPaths {
-if(!_isReferencePropertiesPaths(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePropertiesPaths(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PropertiesPaths", () => {
 if(!isPaths(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/webhooks
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/webhooks}
+*/
 export function isWebhooks(value: unknown): value is types.Webhooks {
-if(!_isMapWebhooks(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Webhooks", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapWebhooks(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isWebhooksAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isWebhooksAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/components
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/components}
+*/
 export function isPropertiesComponents(value: unknown): value is types.PropertiesComponents {
-if(!_isReferencePropertiesComponents(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePropertiesComponents(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PropertiesComponents", () => {
 if(!isComponents(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/security
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/security}
+*/
 export function isPropertiesSecurity(value: unknown): value is types.PropertiesSecurity {
-if(!_isArrayPropertiesSecurity(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("PropertiesSecurity", () => {
+if(!((Array.isArray(value)))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isArrayPropertiesSecurity(value: unknown): value is unknown {
-if(!Array.isArray(value)) {
-return false;
-}
+if(
+Array.isArray(value)
+) {
 for(let elementIndex = 0; elementIndex < value.length; elementIndex ++) {
 const elementValue = value[elementIndex];
+switch(elementIndex) {
+default:
+if(!withPath(String(elementIndex), () => {
 if(!isPropertiesSecurityItems(elementValue)) {
+recordError("elementValue");
 return false;
+}
+return true;
+})) {
+return false;
+}
+break;
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/tags
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/tags}
+*/
 export function isPropertiesTags(value: unknown): value is types.PropertiesTags {
-if(!_isArrayPropertiesTags(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("PropertiesTags", () => {
+if(!((Array.isArray(value)))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isArrayPropertiesTags(value: unknown): value is unknown {
-if(!Array.isArray(value)) {
-return false;
-}
+if(
+Array.isArray(value)
+) {
 for(let elementIndex = 0; elementIndex < value.length; elementIndex ++) {
 const elementValue = value[elementIndex];
+switch(elementIndex) {
+default:
+if(!withPath(String(elementIndex), () => {
 if(!isPropertiesTagsItems(elementValue)) {
+recordError("elementValue");
 return false;
+}
+return true;
+})) {
+return false;
+}
+break;
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/externalDocs
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/externalDocs}
+*/
 export function isPropertiesExternalDocs(value: unknown): value is types.PropertiesExternalDocs {
-if(!_isReferencePropertiesExternalDocs(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePropertiesExternalDocs(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PropertiesExternalDocs", () => {
 if(!isExternalDocumentation(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/0
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/0}
+*/
 export function isAnyOf0(value: unknown): value is types.AnyOf0 {
-if(!_isMapAnyOf0(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapAnyOf0(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("paths" in value)) {
+depth += 1;
+try{
+return withType("AnyOf0", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("paths" in value) ||
+value["paths"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/1
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/1}
+*/
 export function isAnyOf1(value: unknown): value is types.AnyOf1 {
-if(!_isMapAnyOf1(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapAnyOf1(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("components" in value)) {
+depth += 1;
+try{
+return withType("AnyOf1", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("components" in value) ||
+value["components"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/2
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/anyOf/2}
+*/
 export function isAnyOf2(value: unknown): value is types.AnyOf2 {
-if(!_isMapAnyOf2(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapAnyOf2(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("webhooks" in value)) {
+depth += 1;
+try{
+return withType("AnyOf2", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("webhooks" in value) ||
+value["webhooks"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/title
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/title}
+*/
 export function isTitle(value: unknown): value is types.Title {
-if(!_isStringTitle(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Title", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringTitle(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/summary
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/summary}
+*/
 export function isInfoSummary(value: unknown): value is types.InfoSummary {
-if(!_isStringInfoSummary(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("InfoSummary", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringInfoSummary(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/description
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/description}
+*/
 export function isInfoDescription(value: unknown): value is types.InfoDescription {
-if(!_isStringInfoDescription(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("InfoDescription", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringInfoDescription(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/termsOfService
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/termsOfService}
+*/
 export function isTermsOfService(value: unknown): value is types.TermsOfService {
-if(!_isStringTermsOfService(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TermsOfService", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringTermsOfService(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/contact
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/contact}
+*/
 export function isInfoContact(value: unknown): value is types.InfoContact {
-if(!_isReferenceInfoContact(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceInfoContact(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("InfoContact", () => {
 if(!isContact(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/license
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/license}
+*/
 export function isInfoLicense(value: unknown): value is types.InfoLicense {
-if(!_isReferenceInfoLicense(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceInfoLicense(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("InfoLicense", () => {
 if(!isLicense(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/version
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/info/properties/version}
+*/
 export function isVersion(value: unknown): value is types.Version {
-if(!_isStringVersion(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Version", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringVersion(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/name
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/name}
+*/
 export function isContactName(value: unknown): value is types.ContactName {
-if(!_isStringContactName(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ContactName", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringContactName(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/url
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/url}
+*/
 export function isContactUrl(value: unknown): value is types.ContactUrl {
-if(!_isStringContactUrl(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ContactUrl", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringContactUrl(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/email
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/contact/properties/email}
+*/
 export function isEmail(value: unknown): value is types.Email {
-if(!_isStringEmail(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Email", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringEmail(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/name
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/name}
+*/
 export function isLicenseName(value: unknown): value is types.LicenseName {
-if(!_isStringLicenseName(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("LicenseName", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringLicenseName(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/identifier
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/identifier}
+*/
 export function isIdentifier(value: unknown): value is types.Identifier {
-if(!_isStringIdentifier(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Identifier", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringIdentifier(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/url
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/license/properties/url}
+*/
 export function isLicenseUrl(value: unknown): value is types.LicenseUrl {
-if(!_isStringLicenseUrl(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("LicenseUrl", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringLicenseUrl(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/url
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/url}
+*/
 export function isServerUrl(value: unknown): value is types.ServerUrl {
-if(!_isStringServerUrl(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ServerUrl", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringServerUrl(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/description
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/description}
+*/
 export function isServerDescription(value: unknown): value is types.ServerDescription {
-if(!_isStringServerDescription(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ServerDescription", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringServerDescription(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/variables
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/variables}
+*/
 export function isVariables(value: unknown): value is types.Variables {
-if(!_isMapVariables(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Variables", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapVariables(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isVariablesAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isVariablesAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/enum
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/enum}
+*/
 export function isEnum(value: unknown): value is types.Enum {
-if(!_isArrayEnum(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Enum", () => {
+if(!((Array.isArray(value)))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isArrayEnum(value: unknown): value is unknown {
-if(!Array.isArray(value)) {
-return false;
-}
+if(
+Array.isArray(value)
+) {
 if(value.length < 1) {
+recordError("minimumItems");
 return false;
 }
 for(let elementIndex = 0; elementIndex < value.length; elementIndex ++) {
 const elementValue = value[elementIndex];
+switch(elementIndex) {
+default:
+if(!withPath(String(elementIndex), () => {
 if(!isEnumItems(elementValue)) {
+recordError("elementValue");
 return false;
+}
+return true;
+})) {
+return false;
+}
+break;
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/default
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/default}
+*/
 export function isServerVariableDefault(value: unknown): value is types.ServerVariableDefault {
-if(!_isStringServerVariableDefault(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ServerVariableDefault", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringServerVariableDefault(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/description
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/description}
+*/
 export function isServerVariableDescription(value: unknown): value is types.ServerVariableDescription {
-if(!_isStringServerVariableDescription(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ServerVariableDescription", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringServerVariableDescription(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/schemas
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/schemas}
+*/
 export function isSchemas(value: unknown): value is types.Schemas {
-if(!_isMapSchemas(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Schemas", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapSchemas(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isSchemasAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isSchemasAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/responses
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/responses}
+*/
 export function isComponentsResponses(value: unknown): value is types.ComponentsResponses {
-if(!_isMapComponentsResponses(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ComponentsResponses", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapComponentsResponses(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isResponsesAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isResponsesAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/parameters
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/parameters}
+*/
 export function isComponentsParameters(value: unknown): value is types.ComponentsParameters {
-if(!_isMapComponentsParameters(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ComponentsParameters", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapComponentsParameters(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isParametersAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isParametersAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/examples
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/examples}
+*/
 export function isComponentsExamples(value: unknown): value is types.ComponentsExamples {
-if(!_isMapComponentsExamples(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ComponentsExamples", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapComponentsExamples(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isComponentsExamplesAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isComponentsExamplesAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/requestBodies
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/requestBodies}
+*/
 export function isRequestBodies(value: unknown): value is types.RequestBodies {
-if(!_isMapRequestBodies(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("RequestBodies", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapRequestBodies(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isRequestBodiesAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isRequestBodiesAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/headers
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/headers}
+*/
 export function isComponentsHeaders(value: unknown): value is types.ComponentsHeaders {
-if(!_isMapComponentsHeaders(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ComponentsHeaders", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapComponentsHeaders(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isComponentsHeadersAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isComponentsHeadersAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/securitySchemes
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/securitySchemes}
+*/
 export function isSecuritySchemes(value: unknown): value is types.SecuritySchemes {
-if(!_isMapSecuritySchemes(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("SecuritySchemes", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapSecuritySchemes(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isSecuritySchemesAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isSecuritySchemesAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/links
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/links}
+*/
 export function isComponentsLinks(value: unknown): value is types.ComponentsLinks {
-if(!_isMapComponentsLinks(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ComponentsLinks", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapComponentsLinks(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isComponentsLinksAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isComponentsLinksAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/callbacks
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/callbacks}
+*/
 export function isComponentsCallbacks(value: unknown): value is types.ComponentsCallbacks {
-if(!_isMapComponentsCallbacks(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ComponentsCallbacks", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapComponentsCallbacks(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isComponentsCallbacksAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isComponentsCallbacksAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/pathItems
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/pathItems}
+*/
 export function isPathItems(value: unknown): value is types.PathItems {
-if(!_isMapPathItems(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("PathItems", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapPathItems(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isPathItemsAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isPathItemsAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/patternProperties/^(schemas|responses|parameters|examples|requestBodies|headers|securitySchemes|links|callbacks|pathItems)$
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/patternProperties/^(schemas|responses|parameters|examples|requestBodies|headers|securitySchemes|links|callbacks|pathItems)$}
+*/
 export function isSchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItems(value: unknown): value is types.SchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItems {
-return true;
+if(depth === 0) {
+resetErrors();
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/paths/patternProperties/^/
+depth += 1;
+try{
+return withType("SchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItems", () => {
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/paths/patternProperties/^/}
+*/
 export function isPatternProperties(value: unknown): value is types.PatternProperties {
-if(!_isReferencePatternProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePatternProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PatternProperties", () => {
 if(!isPathItem(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/summary
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/summary}
+*/
 export function isPathItemSummary(value: unknown): value is types.PathItemSummary {
-if(!_isStringPathItemSummary(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("PathItemSummary", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringPathItemSummary(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/description
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/description}
+*/
 export function isPathItemDescription(value: unknown): value is types.PathItemDescription {
-if(!_isStringPathItemDescription(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("PathItemDescription", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringPathItemDescription(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/servers
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/servers}
+*/
 export function isPathItemServers(value: unknown): value is types.PathItemServers {
-if(!_isArrayPathItemServers(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("PathItemServers", () => {
+if(!((Array.isArray(value)))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isArrayPathItemServers(value: unknown): value is unknown {
-if(!Array.isArray(value)) {
-return false;
-}
+if(
+Array.isArray(value)
+) {
 for(let elementIndex = 0; elementIndex < value.length; elementIndex ++) {
 const elementValue = value[elementIndex];
+switch(elementIndex) {
+default:
+if(!withPath(String(elementIndex), () => {
 if(!isPathItemServersItems(elementValue)) {
+recordError("elementValue");
 return false;
+}
+return true;
+})) {
+return false;
+}
+break;
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/parameters
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/parameters}
+*/
 export function isPathItemParameters(value: unknown): value is types.PathItemParameters {
-if(!_isArrayPathItemParameters(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("PathItemParameters", () => {
+if(!((Array.isArray(value)))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isArrayPathItemParameters(value: unknown): value is unknown {
-if(!Array.isArray(value)) {
-return false;
-}
+if(
+Array.isArray(value)
+) {
 for(let elementIndex = 0; elementIndex < value.length; elementIndex ++) {
 const elementValue = value[elementIndex];
+switch(elementIndex) {
+default:
+if(!withPath(String(elementIndex), () => {
 if(!isPathItemParametersItems(elementValue)) {
+recordError("elementValue");
 return false;
+}
+return true;
+})) {
+return false;
+}
+break;
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/get
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/get}
+*/
 export function isGet(value: unknown): value is types.Get {
-if(!_isReferenceGet(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceGet(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("Get", () => {
 if(!isOperation(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/put
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/put}
+*/
 export function isPut(value: unknown): value is types.Put {
-if(!_isReferencePut(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePut(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("Put", () => {
 if(!isOperation(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/post
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/post}
+*/
 export function isPost(value: unknown): value is types.Post {
-if(!_isReferencePost(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePost(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("Post", () => {
 if(!isOperation(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/delete
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/delete}
+*/
 export function isDelete(value: unknown): value is types.Delete {
-if(!_isReferenceDelete(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceDelete(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("Delete", () => {
 if(!isOperation(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/options
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/options}
+*/
 export function isOptions(value: unknown): value is types.Options {
-if(!_isReferenceOptions(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceOptions(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("Options", () => {
 if(!isOperation(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/head
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/head}
+*/
 export function isHead(value: unknown): value is types.Head {
-if(!_isReferenceHead(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceHead(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("Head", () => {
 if(!isOperation(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/patch
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/patch}
+*/
 export function isPatch(value: unknown): value is types.Patch {
-if(!_isReferencePatch(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePatch(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("Patch", () => {
 if(!isOperation(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/trace
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/trace}
+*/
 export function isTrace(value: unknown): value is types.Trace {
-if(!_isReferenceTrace(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceTrace(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("Trace", () => {
 if(!isOperation(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference/if
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference/if}
+*/
 export function isPathItemOrReferenceIf(value: unknown): value is types.PathItemOrReferenceIf {
-if(!_isMapPathItemOrReferenceIf(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("PathItemOrReferenceIf", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapPathItemOrReferenceIf(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("$ref" in value)) {
-return false;
-}
-for(const propertyName in value) {
-const propertyValue = value[propertyName as keyof typeof value];
-}
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference/then
-export function isPathItemOrReferenceThen(value: unknown): value is types.PathItemOrReferenceThen {
-if(!_isReferencePathItemOrReferenceThen(value)) {
-return false;
-}
-return true;
-}
-function _isReferencePathItemOrReferenceThen(value: unknown): value is unknown {
-if(!isReference(value)) {
-return false;
-}
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference/else
-export function isPathItemOrReferenceElse(value: unknown): value is types.PathItemOrReferenceElse {
-if(!_isReferencePathItemOrReferenceElse(value)) {
-return false;
-}
-return true;
-}
-function _isReferencePathItemOrReferenceElse(value: unknown): value is unknown {
-if(!isPathItem(value)) {
-return false;
-}
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/tags
-export function isOperationTags(value: unknown): value is types.OperationTags {
-if(!_isArrayOperationTags(value)) {
-return false;
-}
-return true;
-}
-function _isArrayOperationTags(value: unknown): value is unknown {
-if(!Array.isArray(value)) {
-return false;
-}
-for(let elementIndex = 0; elementIndex < value.length; elementIndex ++) {
-const elementValue = value[elementIndex];
-if(!isOperationTagsItems(elementValue)) {
-return false;
-}
-}
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/summary
-export function isOperationSummary(value: unknown): value is types.OperationSummary {
-if(!_isStringOperationSummary(value)) {
-return false;
-}
-return true;
-}
-function _isStringOperationSummary(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
-}
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/description
-export function isOperationDescription(value: unknown): value is types.OperationDescription {
-if(!_isStringOperationDescription(value)) {
-return false;
-}
-return true;
-}
-function _isStringOperationDescription(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
-}
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/externalDocs
-export function isOperationExternalDocs(value: unknown): value is types.OperationExternalDocs {
-if(!_isReferenceOperationExternalDocs(value)) {
-return false;
-}
-return true;
-}
-function _isReferenceOperationExternalDocs(value: unknown): value is unknown {
-if(!isExternalDocumentation(value)) {
-return false;
-}
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/operationId
-export function isOperationOperationId(value: unknown): value is types.OperationOperationId {
-if(!_isStringOperationOperationId(value)) {
-return false;
-}
-return true;
-}
-function _isStringOperationOperationId(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
-}
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/parameters
-export function isOperationParameters(value: unknown): value is types.OperationParameters {
-if(!_isArrayOperationParameters(value)) {
-return false;
-}
-return true;
-}
-function _isArrayOperationParameters(value: unknown): value is unknown {
-if(!Array.isArray(value)) {
-return false;
-}
-for(let elementIndex = 0; elementIndex < value.length; elementIndex ++) {
-const elementValue = value[elementIndex];
-if(!isOperationParametersItems(elementValue)) {
-return false;
-}
-}
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/requestBody
-export function isOperationRequestBody(value: unknown): value is types.OperationRequestBody {
-if(!_isReferenceOperationRequestBody(value)) {
-return false;
-}
-return true;
-}
-function _isReferenceOperationRequestBody(value: unknown): value is unknown {
-if(!isRequestBodyOrReference(value)) {
-return false;
-}
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/responses
-export function isOperationResponses(value: unknown): value is types.OperationResponses {
-if(!_isReferenceOperationResponses(value)) {
-return false;
-}
-return true;
-}
-function _isReferenceOperationResponses(value: unknown): value is unknown {
-if(!isResponses(value)) {
-return false;
-}
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/callbacks
-export function isOperationCallbacks(value: unknown): value is types.OperationCallbacks {
-if(!_isMapOperationCallbacks(value)) {
-return false;
-}
-return true;
-}
-function _isMapOperationCallbacks(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("$ref" in value) ||
+value["$ref"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isOperationCallbacksAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+break;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/deprecated
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference/then}
+*/
+export function isPathItemOrReferenceThen(value: unknown): value is types.PathItemOrReferenceThen {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("PathItemOrReferenceThen", () => {
+if(!isReference(value)) {
+recordError("reference");
+return false;
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item-or-reference/else}
+*/
+export function isPathItemOrReferenceElse(value: unknown): value is types.PathItemOrReferenceElse {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("PathItemOrReferenceElse", () => {
+if(!isPathItem(value)) {
+recordError("reference");
+return false;
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/tags}
+*/
+export function isOperationTags(value: unknown): value is types.OperationTags {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("OperationTags", () => {
+if(!((Array.isArray(value)))) {
+recordError("types");
+return false;
+}
+if(
+Array.isArray(value)
+) {
+for(let elementIndex = 0; elementIndex < value.length; elementIndex ++) {
+const elementValue = value[elementIndex];
+switch(elementIndex) {
+default:
+if(!withPath(String(elementIndex), () => {
+if(!isOperationTagsItems(elementValue)) {
+recordError("elementValue");
+return false;
+}
+return true;
+})) {
+return false;
+}
+break;
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/summary}
+*/
+export function isOperationSummary(value: unknown): value is types.OperationSummary {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("OperationSummary", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
+return false;
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/description}
+*/
+export function isOperationDescription(value: unknown): value is types.OperationDescription {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("OperationDescription", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
+return false;
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/externalDocs}
+*/
+export function isOperationExternalDocs(value: unknown): value is types.OperationExternalDocs {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("OperationExternalDocs", () => {
+if(!isExternalDocumentation(value)) {
+recordError("reference");
+return false;
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/operationId}
+*/
+export function isOperationOperationId(value: unknown): value is types.OperationOperationId {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("OperationOperationId", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
+return false;
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/parameters}
+*/
+export function isOperationParameters(value: unknown): value is types.OperationParameters {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("OperationParameters", () => {
+if(!((Array.isArray(value)))) {
+recordError("types");
+return false;
+}
+if(
+Array.isArray(value)
+) {
+for(let elementIndex = 0; elementIndex < value.length; elementIndex ++) {
+const elementValue = value[elementIndex];
+switch(elementIndex) {
+default:
+if(!withPath(String(elementIndex), () => {
+if(!isOperationParametersItems(elementValue)) {
+recordError("elementValue");
+return false;
+}
+return true;
+})) {
+return false;
+}
+break;
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/requestBody}
+*/
+export function isOperationRequestBody(value: unknown): value is types.OperationRequestBody {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("OperationRequestBody", () => {
+if(!isRequestBodyOrReference(value)) {
+recordError("reference");
+return false;
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/responses}
+*/
+export function isOperationResponses(value: unknown): value is types.OperationResponses {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("OperationResponses", () => {
+if(!isResponses(value)) {
+recordError("reference");
+return false;
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/callbacks}
+*/
+export function isOperationCallbacks(value: unknown): value is types.OperationCallbacks {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("OperationCallbacks", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
+return false;
+}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+for(const propertyName in value) {
+const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isOperationCallbacksAdditionalProperties(propertyValue)
+) {
+return false;
+}
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/deprecated}
+*/
 export function isOperationDeprecated(value: unknown): value is types.OperationDeprecated {
-if(!_isBooleanOperationDeprecated(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("OperationDeprecated", () => {
+if(!((typeof value === "boolean"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isBooleanOperationDeprecated(value: unknown): value is unknown {
-if(typeof value !== "boolean") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/security
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/security}
+*/
 export function isOperationSecurity(value: unknown): value is types.OperationSecurity {
-if(!_isArrayOperationSecurity(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("OperationSecurity", () => {
+if(!((Array.isArray(value)))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isArrayOperationSecurity(value: unknown): value is unknown {
-if(!Array.isArray(value)) {
-return false;
-}
+if(
+Array.isArray(value)
+) {
 for(let elementIndex = 0; elementIndex < value.length; elementIndex ++) {
 const elementValue = value[elementIndex];
+switch(elementIndex) {
+default:
+if(!withPath(String(elementIndex), () => {
 if(!isOperationSecurityItems(elementValue)) {
+recordError("elementValue");
 return false;
+}
+return true;
+})) {
+return false;
+}
+break;
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/servers
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/servers}
+*/
 export function isOperationServers(value: unknown): value is types.OperationServers {
-if(!_isArrayOperationServers(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("OperationServers", () => {
+if(!((Array.isArray(value)))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isArrayOperationServers(value: unknown): value is unknown {
-if(!Array.isArray(value)) {
-return false;
-}
+if(
+Array.isArray(value)
+) {
 for(let elementIndex = 0; elementIndex < value.length; elementIndex ++) {
 const elementValue = value[elementIndex];
+switch(elementIndex) {
+default:
+if(!withPath(String(elementIndex), () => {
 if(!isOperationServersItems(elementValue)) {
+recordError("elementValue");
 return false;
+}
+return true;
+})) {
+return false;
+}
+break;
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation/properties/description
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation/properties/description}
+*/
 export function isExternalDocumentationDescription(value: unknown): value is types.ExternalDocumentationDescription {
-if(!_isStringExternalDocumentationDescription(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ExternalDocumentationDescription", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringExternalDocumentationDescription(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation/properties/url
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/external-documentation/properties/url}
+*/
 export function isExternalDocumentationUrl(value: unknown): value is types.ExternalDocumentationUrl {
-if(!_isStringExternalDocumentationUrl(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ExternalDocumentationUrl", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringExternalDocumentationUrl(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/name
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/name}
+*/
 export function isParameterName(value: unknown): value is types.ParameterName {
-if(!_isStringParameterName(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ParameterName", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringParameterName(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/in
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/in}
+*/
 export function isPropertiesParameterIn(value: unknown): value is types.PropertiesParameterIn {
-if(!_isStringPropertiesParameterIn(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("PropertiesParameterIn", () => {
+if(
+value !== "query" &&
+value !== "header" &&
+value !== "path" &&
+value !== "cookie"
+) {
+recordError("options");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringPropertiesParameterIn(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-if(value !== "query" && value !== "header" && value !== "path" && value !== "cookie") {
-return false;
 }
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/description
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/description}
+*/
 export function isParameterDescription(value: unknown): value is types.ParameterDescription {
-if(!_isStringParameterDescription(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ParameterDescription", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringParameterDescription(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/required
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/required}
+*/
 export function isParameterRequired(value: unknown): value is types.ParameterRequired {
-if(!_isBooleanParameterRequired(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ParameterRequired", () => {
+if(!((typeof value === "boolean"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isBooleanParameterRequired(value: unknown): value is unknown {
-if(typeof value !== "boolean") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/deprecated
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/deprecated}
+*/
 export function isParameterDeprecated(value: unknown): value is types.ParameterDeprecated {
-if(!_isBooleanParameterDeprecated(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ParameterDeprecated", () => {
+if(!((typeof value === "boolean"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isBooleanParameterDeprecated(value: unknown): value is unknown {
-if(typeof value !== "boolean") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/schema
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/schema}
+*/
 export function isParameterSchema(value: unknown): value is types.ParameterSchema {
-if(!_isReferenceParameterSchema(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceParameterSchema(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ParameterSchema", () => {
 if(!isSchema(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/content
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/properties/content}
+*/
 export function isParameterContent(value: unknown): value is types.ParameterContent {
-if(!_isMapParameterContent(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-if(!_isReferenceParameterContent(value)) {
-return false;
-}
-return true;
-}
-function _isMapParameterContent(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+depth += 1;
+try{
+return withType("ParameterContent", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 let propertyCount = 0;
 for(const propertyName in value) {
-propertyCount++;
 const propertyValue = value[propertyName as keyof typeof value];
-}
-if(propertyCount < 1) {
-return false;
-}
-if(propertyCount > 1) {
-return false;
-}
-return true;
-}
-function _isReferenceParameterContent(value: unknown): value is unknown {
-if(!isContent(value)) {
-return false;
-}
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/oneOf/0
-export function isParameterOneOf0(value: unknown): value is types.ParameterOneOf0 {
-if(!_isMapParameterOneOf0(value)) {
-return false;
-}
-return true;
-}
-function _isMapParameterOneOf0(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("schema" in value)) {
-return false;
-}
-for(const propertyName in value) {
-const propertyValue = value[propertyName as keyof typeof value];
-}
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/oneOf/1
-export function isParameterOneOf1(value: unknown): value is types.ParameterOneOf1 {
-if(!_isMapParameterOneOf1(value)) {
-return false;
-}
-return true;
-}
-function _isMapParameterOneOf1(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("content" in value)) {
-return false;
-}
-for(const propertyName in value) {
-const propertyValue = value[propertyName as keyof typeof value];
-}
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/if
-export function isParameterIf(value: unknown): value is types.ParameterIf {
-if(!_isMapParameterIf(value)) {
-return false;
-}
-return true;
-}
-function _isMapParameterIf(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("in" in value)) {
-return false;
-}
-for(const propertyName in value) {
-const propertyValue = value[propertyName as keyof typeof value];
-switch(propertyName) {
-case "in":
-if(!isIfParameterIn(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
+propertyCount++;
+if(propertyCount > 1) {
+recordError("maximumProperties");
+return false;
 }
-return true;
+switch(propertyName) {
+default:
+break;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/then
-export function isParameterThen(value: unknown): value is types.ParameterThen {
-if(!_isMapParameterThen(value)) {
+}
+if(propertyCount < 1) {
+recordError("minimumProperties");
+return false;
+}
+}
+if(!isContent(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-function _isMapParameterThen(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/oneOf/0}
+*/
+export function isParameterOneOf0(value: unknown): value is types.ParameterOneOf0 {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ParameterOneOf0", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("schema" in value) ||
+value["schema"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/oneOf/1}
+*/
+export function isParameterOneOf1(value: unknown): value is types.ParameterOneOf1 {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ParameterOneOf1", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("content" in value) ||
+value["content"] === undefined
+) {
+recordError("required");
+return false;
+}
+for(const propertyName in value) {
+const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/if}
+*/
+export function isParameterIf(value: unknown): value is types.ParameterIf {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ParameterIf", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("in" in value) ||
+value["in"] === undefined
+) {
+recordError("required");
+return false;
+}
+for(const propertyName in value) {
+const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+case "in":
+if(!withPath(propertyName, () => {
+if(!isIfParameterIn(propertyValue)) {
+recordError("objectProperties");
+return false;
+}
+return true;
+})) {
+return false
+}
+break;
+default:
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/then}
+*/
+export function isParameterThen(value: unknown): value is types.ParameterThen {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ParameterThen", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+for(const propertyName in value) {
+const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "allowEmptyValue":
+if(!withPath(propertyName, () => {
 if(!isAllowEmptyValue(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
+default:
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference/if
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference/if}
+*/
 export function isParameterOrReferenceIf(value: unknown): value is types.ParameterOrReferenceIf {
-if(!_isMapParameterOrReferenceIf(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ParameterOrReferenceIf", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapParameterOrReferenceIf(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("$ref" in value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("$ref" in value) ||
+value["$ref"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference/then
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference/then}
+*/
 export function isParameterOrReferenceThen(value: unknown): value is types.ParameterOrReferenceThen {
-if(!_isReferenceParameterOrReferenceThen(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceParameterOrReferenceThen(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ParameterOrReferenceThen", () => {
 if(!isReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference/else
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter-or-reference/else}
+*/
 export function isParameterOrReferenceElse(value: unknown): value is types.ParameterOrReferenceElse {
-if(!_isReferenceParameterOrReferenceElse(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceParameterOrReferenceElse(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ParameterOrReferenceElse", () => {
 if(!isParameter(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/description
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/description}
+*/
 export function isRequestBodyDescription(value: unknown): value is types.RequestBodyDescription {
-if(!_isStringRequestBodyDescription(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("RequestBodyDescription", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringRequestBodyDescription(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/content
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/content}
+*/
 export function isRequestBodyContent(value: unknown): value is types.RequestBodyContent {
-if(!_isReferenceRequestBodyContent(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceRequestBodyContent(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("RequestBodyContent", () => {
 if(!isContent(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/required
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body/properties/required}
+*/
 export function isRequestBodyRequired(value: unknown): value is types.RequestBodyRequired {
-if(!_isBooleanRequestBodyRequired(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("RequestBodyRequired", () => {
+if(!((typeof value === "boolean"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isBooleanRequestBodyRequired(value: unknown): value is unknown {
-if(typeof value !== "boolean") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference/if
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference/if}
+*/
 export function isRequestBodyOrReferenceIf(value: unknown): value is types.RequestBodyOrReferenceIf {
-if(!_isMapRequestBodyOrReferenceIf(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("RequestBodyOrReferenceIf", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapRequestBodyOrReferenceIf(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("$ref" in value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("$ref" in value) ||
+value["$ref"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference/then
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference/then}
+*/
 export function isRequestBodyOrReferenceThen(value: unknown): value is types.RequestBodyOrReferenceThen {
-if(!_isReferenceRequestBodyOrReferenceThen(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceRequestBodyOrReferenceThen(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("RequestBodyOrReferenceThen", () => {
 if(!isReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference/else
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/request-body-or-reference/else}
+*/
 export function isRequestBodyOrReferenceElse(value: unknown): value is types.RequestBodyOrReferenceElse {
-if(!_isReferenceRequestBodyOrReferenceElse(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceRequestBodyOrReferenceElse(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("RequestBodyOrReferenceElse", () => {
 if(!isRequestBody(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content/additionalProperties}
+*/
 export function isContentAdditionalProperties(value: unknown): value is types.ContentAdditionalProperties {
-if(!_isReferenceContentAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceContentAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ContentAdditionalProperties", () => {
 if(!isMediaType(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content/propertyNames
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/content/propertyNames}
+*/
 export function isContentPropertyNames(value: unknown): value is types.ContentPropertyNames {
-if(!_isStringContentPropertyNames(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ContentPropertyNames", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringContentPropertyNames(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/schema
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/schema}
+*/
 export function isMediaTypeSchema(value: unknown): value is types.MediaTypeSchema {
-if(!_isReferenceMediaTypeSchema(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceMediaTypeSchema(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("MediaTypeSchema", () => {
 if(!isSchema(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/encoding
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/encoding}
+*/
 export function isMediaTypeEncoding(value: unknown): value is types.MediaTypeEncoding {
-if(!_isMapMediaTypeEncoding(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("MediaTypeEncoding", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapMediaTypeEncoding(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isMediaTypeAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isMediaTypeAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/allOf/0
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/allOf/0}
+*/
 export function isMediaType0(value: unknown): value is types.MediaType0 {
-if(!_isReferenceMediaType0(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceMediaType0(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("MediaType0", () => {
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/allOf/1
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/allOf/1}
+*/
 export function isMediaType1(value: unknown): value is types.MediaType1 {
-if(!_isReferenceMediaType1(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceMediaType1(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("MediaType1", () => {
 if(!isExamples(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default}
+*/
 export function isExplodeDefault(value: unknown): value is types.ExplodeDefault {
-if(!_isIfExplodeDefault(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ExplodeDefault", () => {
+if(isExplodeDefaultIf(value)) {
+if(!isExplodeDefaultThen(value)) {
+recordError("then");
 return false;
 }
-return true;
 }
-function _isIfExplodeDefault(value: unknown): value is unknown {
-return true;
+else {
+if(!isExplodeDefaultElse(value)) {
+recordError("else");
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/contentType
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/contentType}
+*/
 export function isContentType(value: unknown): value is types.ContentType {
-if(!_isStringContentType(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ContentType", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringContentType(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/headers
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/headers}
+*/
 export function isEncodingHeaders(value: unknown): value is types.EncodingHeaders {
-if(!_isMapEncodingHeaders(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("EncodingHeaders", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapEncodingHeaders(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isEncodingHeadersAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isEncodingHeadersAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/style
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/style}
+*/
 export function isEncodingStyle(value: unknown): value is types.EncodingStyle {
-if(!_isStringEncodingStyle(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("EncodingStyle", () => {
+if(
+value !== "form" &&
+value !== "spaceDelimited" &&
+value !== "pipeDelimited" &&
+value !== "deepObject"
+) {
+recordError("options");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringEncodingStyle(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-if(value !== "form" && value !== "spaceDelimited" && value !== "pipeDelimited" && value !== "deepObject") {
-return false;
 }
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/explode
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/explode}
+*/
 export function isEncodingExplode(value: unknown): value is types.EncodingExplode {
-if(!_isBooleanEncodingExplode(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("EncodingExplode", () => {
+if(!((typeof value === "boolean"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isBooleanEncodingExplode(value: unknown): value is unknown {
-if(typeof value !== "boolean") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/allowReserved
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/allowReserved}
+*/
 export function isAllowReserved(value: unknown): value is types.AllowReserved {
-if(!_isBooleanAllowReserved(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("AllowReserved", () => {
+if(!((typeof value === "boolean"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isBooleanAllowReserved(value: unknown): value is unknown {
-if(typeof value !== "boolean") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/allOf/0
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/allOf/0}
+*/
 export function isEncodingAllOf0(value: unknown): value is types.EncodingAllOf0 {
-if(!_isReferenceEncodingAllOf0(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceEncodingAllOf0(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("EncodingAllOf0", () => {
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/allOf/1
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/allOf/1}
+*/
 export function isEncodingAllOf1(value: unknown): value is types.EncodingAllOf1 {
-if(!_isReferenceEncodingAllOf1(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceEncodingAllOf1(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("EncodingAllOf1", () => {
 if(!isExplodeDefault(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/responses/properties/default
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/responses/properties/default}
+*/
 export function isResponsesDefault(value: unknown): value is types.ResponsesDefault {
-if(!_isReferenceResponsesDefault(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceResponsesDefault(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ResponsesDefault", () => {
 if(!isResponseOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/responses/patternProperties/^[1-5](?:[0-9]{2}|XX)$
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/responses/patternProperties/^[1-5](?:[0-9]{2}|XX)$}
+*/
 export function isPatternProperties15092Xx(value: unknown): value is types.PatternProperties15092Xx {
-if(!_isReferencePatternProperties15092Xx(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePatternProperties15092Xx(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PatternProperties15092Xx", () => {
 if(!isResponseOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/description
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/description}
+*/
 export function isResponseDescription(value: unknown): value is types.ResponseDescription {
-if(!_isStringResponseDescription(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ResponseDescription", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringResponseDescription(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/headers
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/headers}
+*/
 export function isResponseHeaders(value: unknown): value is types.ResponseHeaders {
-if(!_isMapResponseHeaders(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ResponseHeaders", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapResponseHeaders(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isResponseHeadersAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isResponseHeadersAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/content
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/content}
+*/
 export function isResponseContent(value: unknown): value is types.ResponseContent {
-if(!_isReferenceResponseContent(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceResponseContent(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ResponseContent", () => {
 if(!isContent(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/links
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/links}
+*/
 export function isResponseLinks(value: unknown): value is types.ResponseLinks {
-if(!_isMapResponseLinks(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ResponseLinks", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapResponseLinks(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isResponseLinksAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isResponseLinksAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference/if
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference/if}
+*/
 export function isResponseOrReferenceIf(value: unknown): value is types.ResponseOrReferenceIf {
-if(!_isMapResponseOrReferenceIf(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ResponseOrReferenceIf", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapResponseOrReferenceIf(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("$ref" in value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("$ref" in value) ||
+value["$ref"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference/then
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference/then}
+*/
 export function isResponseOrReferenceThen(value: unknown): value is types.ResponseOrReferenceThen {
-if(!_isReferenceResponseOrReferenceThen(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceResponseOrReferenceThen(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ResponseOrReferenceThen", () => {
 if(!isReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference/else
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response-or-reference/else}
+*/
 export function isResponseOrReferenceElse(value: unknown): value is types.ResponseOrReferenceElse {
-if(!_isReferenceResponseOrReferenceElse(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceResponseOrReferenceElse(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ResponseOrReferenceElse", () => {
 if(!isResponse(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks/additionalProperties}
+*/
 export function isCallbacksAdditionalProperties(value: unknown): value is types.CallbacksAdditionalProperties {
-if(!_isReferenceCallbacksAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceCallbacksAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("CallbacksAdditionalProperties", () => {
 if(!isPathItemOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference/if
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference/if}
+*/
 export function isCallbacksOrReferenceIf(value: unknown): value is types.CallbacksOrReferenceIf {
-if(!_isMapCallbacksOrReferenceIf(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("CallbacksOrReferenceIf", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapCallbacksOrReferenceIf(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("$ref" in value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("$ref" in value) ||
+value["$ref"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference/then
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference/then}
+*/
 export function isCallbacksOrReferenceThen(value: unknown): value is types.CallbacksOrReferenceThen {
-if(!_isReferenceCallbacksOrReferenceThen(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceCallbacksOrReferenceThen(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("CallbacksOrReferenceThen", () => {
 if(!isReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference/else
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/callbacks-or-reference/else}
+*/
 export function isCallbacksOrReferenceElse(value: unknown): value is types.CallbacksOrReferenceElse {
-if(!_isReferenceCallbacksOrReferenceElse(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceCallbacksOrReferenceElse(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("CallbacksOrReferenceElse", () => {
 if(!isCallbacks(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/summary
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/summary}
+*/
 export function isExampleSummary(value: unknown): value is types.ExampleSummary {
-if(!_isStringExampleSummary(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ExampleSummary", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringExampleSummary(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/description
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/description}
+*/
 export function isExampleDescription(value: unknown): value is types.ExampleDescription {
-if(!_isStringExampleDescription(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ExampleDescription", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringExampleDescription(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/value
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/value}
+*/
 export function isValue(value: unknown): value is types.Value {
-if(!_isAnyValue(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Value", () => {
+if(!((true))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isAnyValue(value: unknown): value is unknown {
-return true;
+finally {
+depth -= 1;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/externalValue
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/properties/externalValue}
+*/
 export function isExternalValue(value: unknown): value is types.ExternalValue {
-if(!_isStringExternalValue(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ExternalValue", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringExternalValue(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/not
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example/not}
+*/
 export function isNot(value: unknown): value is types.Not {
-if(!_isMapNot(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Not", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("value" in value) ||
+value["value"] === undefined
+) {
+recordError("required");
 return false;
 }
-return true;
-}
-function _isMapNot(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("value" in value)) {
-return false;
-}
-if(!("externalValue" in value)) {
+if(
+!("externalValue" in value) ||
+value["externalValue"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference/if
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference/if}
+*/
 export function isExampleOrReferenceIf(value: unknown): value is types.ExampleOrReferenceIf {
-if(!_isMapExampleOrReferenceIf(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ExampleOrReferenceIf", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapExampleOrReferenceIf(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("$ref" in value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("$ref" in value) ||
+value["$ref"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference/then
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference/then}
+*/
 export function isExampleOrReferenceThen(value: unknown): value is types.ExampleOrReferenceThen {
-if(!_isReferenceExampleOrReferenceThen(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceExampleOrReferenceThen(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ExampleOrReferenceThen", () => {
 if(!isReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference/else
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/example-or-reference/else}
+*/
 export function isExampleOrReferenceElse(value: unknown): value is types.ExampleOrReferenceElse {
-if(!_isReferenceExampleOrReferenceElse(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceExampleOrReferenceElse(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ExampleOrReferenceElse", () => {
 if(!isExample(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/operationRef
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/operationRef}
+*/
 export function isOperationRef(value: unknown): value is types.OperationRef {
-if(!_isStringOperationRef(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("OperationRef", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringOperationRef(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/operationId
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/operationId}
+*/
 export function isLinkOperationId(value: unknown): value is types.LinkOperationId {
-if(!_isStringLinkOperationId(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("LinkOperationId", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringLinkOperationId(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/parameters
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/parameters}
+*/
 export function isLinkParameters(value: unknown): value is types.LinkParameters {
-if(!_isReferenceLinkParameters(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceLinkParameters(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("LinkParameters", () => {
 if(!isMapOfStrings(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/requestBody
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/requestBody}
+*/
 export function isLinkRequestBody(value: unknown): value is types.LinkRequestBody {
-if(!_isAnyLinkRequestBody(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("LinkRequestBody", () => {
+if(!((true))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isAnyLinkRequestBody(value: unknown): value is unknown {
-return true;
+finally {
+depth -= 1;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/description
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/description}
+*/
 export function isLinkDescription(value: unknown): value is types.LinkDescription {
-if(!_isStringLinkDescription(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("LinkDescription", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringLinkDescription(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/body
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/properties/body}
+*/
 export function isBody(value: unknown): value is types.Body {
-if(!_isReferenceBody(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceBody(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("Body", () => {
 if(!isServer(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/oneOf/0
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/oneOf/0}
+*/
 export function isLinkOneOf0(value: unknown): value is types.LinkOneOf0 {
-if(!_isMapLinkOneOf0(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapLinkOneOf0(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("operationRef" in value)) {
+depth += 1;
+try{
+return withType("LinkOneOf0", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("operationRef" in value) ||
+value["operationRef"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/oneOf/1
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link/oneOf/1}
+*/
 export function isLinkOneOf1(value: unknown): value is types.LinkOneOf1 {
-if(!_isMapLinkOneOf1(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapLinkOneOf1(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("operationId" in value)) {
+depth += 1;
+try{
+return withType("LinkOneOf1", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("operationId" in value) ||
+value["operationId"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference/if
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference/if}
+*/
 export function isLinkOrReferenceIf(value: unknown): value is types.LinkOrReferenceIf {
-if(!_isMapLinkOrReferenceIf(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("LinkOrReferenceIf", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapLinkOrReferenceIf(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("$ref" in value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("$ref" in value) ||
+value["$ref"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference/then
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference/then}
+*/
 export function isLinkOrReferenceThen(value: unknown): value is types.LinkOrReferenceThen {
-if(!_isReferenceLinkOrReferenceThen(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceLinkOrReferenceThen(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("LinkOrReferenceThen", () => {
 if(!isReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference/else
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/link-or-reference/else}
+*/
 export function isLinkOrReferenceElse(value: unknown): value is types.LinkOrReferenceElse {
-if(!_isReferenceLinkOrReferenceElse(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceLinkOrReferenceElse(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("LinkOrReferenceElse", () => {
 if(!isLink(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/description
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/description}
+*/
 export function isHeaderDescription(value: unknown): value is types.HeaderDescription {
-if(!_isStringHeaderDescription(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("HeaderDescription", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringHeaderDescription(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/required
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/required}
+*/
 export function isHeaderRequired(value: unknown): value is types.HeaderRequired {
-if(!_isBooleanHeaderRequired(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("HeaderRequired", () => {
+if(!((typeof value === "boolean"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isBooleanHeaderRequired(value: unknown): value is unknown {
-if(typeof value !== "boolean") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/deprecated
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/deprecated}
+*/
 export function isHeaderDeprecated(value: unknown): value is types.HeaderDeprecated {
-if(!_isBooleanHeaderDeprecated(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("HeaderDeprecated", () => {
+if(!((typeof value === "boolean"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isBooleanHeaderDeprecated(value: unknown): value is unknown {
-if(typeof value !== "boolean") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/schema
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/schema}
+*/
 export function isHeaderSchema(value: unknown): value is types.HeaderSchema {
-if(!_isReferenceHeaderSchema(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceHeaderSchema(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("HeaderSchema", () => {
 if(!isSchema(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/content
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/properties/content}
+*/
 export function isHeaderContent(value: unknown): value is types.HeaderContent {
-if(!_isMapHeaderContent(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-if(!_isReferenceHeaderContent(value)) {
-return false;
-}
-return true;
-}
-function _isMapHeaderContent(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+depth += 1;
+try{
+return withType("HeaderContent", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 let propertyCount = 0;
 for(const propertyName in value) {
-propertyCount++;
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+propertyCount++;
+if(propertyCount > 1) {
+recordError("maximumProperties");
+return false;
+}
+switch(propertyName) {
+default:
+break;
+}
 }
 if(propertyCount < 1) {
+recordError("minimumProperties");
 return false;
 }
-if(propertyCount > 1) {
-return false;
 }
-return true;
-}
-function _isReferenceHeaderContent(value: unknown): value is unknown {
 if(!isContent(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/oneOf/0
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/oneOf/0}
+*/
 export function isHeaderOneOf0(value: unknown): value is types.HeaderOneOf0 {
-if(!_isMapHeaderOneOf0(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapHeaderOneOf0(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("schema" in value)) {
+depth += 1;
+try{
+return withType("HeaderOneOf0", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("schema" in value) ||
+value["schema"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/oneOf/1
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header/oneOf/1}
+*/
 export function isHeaderOneOf1(value: unknown): value is types.HeaderOneOf1 {
-if(!_isMapHeaderOneOf1(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapHeaderOneOf1(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("content" in value)) {
+depth += 1;
+try{
+return withType("HeaderOneOf1", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("content" in value) ||
+value["content"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference/if
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference/if}
+*/
 export function isHeaderOrReferenceIf(value: unknown): value is types.HeaderOrReferenceIf {
-if(!_isMapHeaderOrReferenceIf(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("HeaderOrReferenceIf", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapHeaderOrReferenceIf(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("$ref" in value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("$ref" in value) ||
+value["$ref"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference/then
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference/then}
+*/
 export function isHeaderOrReferenceThen(value: unknown): value is types.HeaderOrReferenceThen {
-if(!_isReferenceHeaderOrReferenceThen(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceHeaderOrReferenceThen(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("HeaderOrReferenceThen", () => {
 if(!isReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference/else
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/header-or-reference/else}
+*/
 export function isHeaderOrReferenceElse(value: unknown): value is types.HeaderOrReferenceElse {
-if(!_isReferenceHeaderOrReferenceElse(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceHeaderOrReferenceElse(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("HeaderOrReferenceElse", () => {
 if(!isHeader(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/name
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/name}
+*/
 export function isTagName(value: unknown): value is types.TagName {
-if(!_isStringTagName(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TagName", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringTagName(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/description
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/description}
+*/
 export function isTagDescription(value: unknown): value is types.TagDescription {
-if(!_isStringTagDescription(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TagDescription", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringTagDescription(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/externalDocs
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/tag/properties/externalDocs}
+*/
 export function isTagExternalDocs(value: unknown): value is types.TagExternalDocs {
-if(!_isReferenceTagExternalDocs(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceTagExternalDocs(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("TagExternalDocs", () => {
 if(!isExternalDocumentation(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/$ref
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/$ref}
+*/
 export function isRef(value: unknown): value is types.Ref {
-if(!_isStringRef(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("Ref", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringRef(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/summary
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/summary}
+*/
 export function isReferenceSummary(value: unknown): value is types.ReferenceSummary {
-if(!_isStringReferenceSummary(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ReferenceSummary", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringReferenceSummary(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/description
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/reference/properties/description}
+*/
 export function isReferenceDescription(value: unknown): value is types.ReferenceDescription {
-if(!_isStringReferenceDescription(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ReferenceDescription", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringReferenceDescription(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey}
+*/
 export function isTypeApikey(value: unknown): value is types.TypeApikey {
-if(!_isIfTypeApikey(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TypeApikey", () => {
+if(isTypeApikeyIf(value)) {
+if(!isTypeApikeyThen(value)) {
+recordError("then");
 return false;
 }
-return true;
 }
-function _isIfTypeApikey(value: unknown): value is unknown {
-return true;
+else {
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http}
+*/
 export function isTypeHttp(value: unknown): value is types.TypeHttp {
-if(!_isIfTypeHttp(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TypeHttp", () => {
+if(isTypeHttpIf(value)) {
+if(!isTypeHttpThen(value)) {
+recordError("then");
 return false;
 }
-return true;
 }
-function _isIfTypeHttp(value: unknown): value is unknown {
-return true;
+else {
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer}
+*/
 export function isTypeHttpBearer(value: unknown): value is types.TypeHttpBearer {
-if(!_isIfTypeHttpBearer(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TypeHttpBearer", () => {
+if(isTypeHttpBearerIf(value)) {
+if(!isTypeHttpBearerThen(value)) {
+recordError("then");
 return false;
 }
-return true;
 }
-function _isIfTypeHttpBearer(value: unknown): value is unknown {
-return true;
+else {
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2}
+*/
 export function isTypeOauth2(value: unknown): value is types.TypeOauth2 {
-if(!_isIfTypeOauth2(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TypeOauth2", () => {
+if(isTypeOauth2If(value)) {
+if(!isTypeOauth2Then(value)) {
+recordError("then");
 return false;
 }
-return true;
 }
-function _isIfTypeOauth2(value: unknown): value is unknown {
-return true;
+else {
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc}
+*/
 export function isTypeOidc(value: unknown): value is types.TypeOidc {
-if(!_isIfTypeOidc(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TypeOidc", () => {
+if(isTypeOidcIf(value)) {
+if(!isTypeOidcThen(value)) {
+recordError("then");
 return false;
 }
-return true;
 }
-function _isIfTypeOidc(value: unknown): value is unknown {
-return true;
+else {
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/properties/type
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/properties/type}
+*/
 export function isSecuritySchemeType(value: unknown): value is types.SecuritySchemeType {
-if(!_isStringSecuritySchemeType(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("SecuritySchemeType", () => {
+if(
+value !== "apiKey" &&
+value !== "http" &&
+value !== "mutualTLS" &&
+value !== "oauth2" &&
+value !== "openIdConnect"
+) {
+recordError("options");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringSecuritySchemeType(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-if(value !== "apiKey" && value !== "http" && value !== "mutualTLS" && value !== "oauth2" && value !== "openIdConnect") {
-return false;
 }
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/properties/description
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/properties/description}
+*/
 export function isSecuritySchemeDescription(value: unknown): value is types.SecuritySchemeDescription {
-if(!_isStringSecuritySchemeDescription(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("SecuritySchemeDescription", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringSecuritySchemeDescription(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/0
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/0}
+*/
 export function isSecuritySchemeAllOf0(value: unknown): value is types.SecuritySchemeAllOf0 {
-if(!_isReferenceSecuritySchemeAllOf0(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceSecuritySchemeAllOf0(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("SecuritySchemeAllOf0", () => {
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/1
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/1}
+*/
 export function isSecuritySchemeAllOf1(value: unknown): value is types.SecuritySchemeAllOf1 {
-if(!_isReferenceSecuritySchemeAllOf1(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceSecuritySchemeAllOf1(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("SecuritySchemeAllOf1", () => {
 if(!isTypeApikey(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/2
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/2}
+*/
 export function isAllOf2(value: unknown): value is types.AllOf2 {
-if(!_isReferenceAllOf2(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceAllOf2(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("AllOf2", () => {
 if(!isTypeHttp(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/3
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/3}
+*/
 export function isAllOf3(value: unknown): value is types.AllOf3 {
-if(!_isReferenceAllOf3(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceAllOf3(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("AllOf3", () => {
 if(!isTypeHttpBearer(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/4
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/4}
+*/
 export function isAllOf4(value: unknown): value is types.AllOf4 {
-if(!_isReferenceAllOf4(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceAllOf4(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("AllOf4", () => {
 if(!isTypeOauth2(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/5
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/allOf/5}
+*/
 export function isAllOf5(value: unknown): value is types.AllOf5 {
-if(!_isReferenceAllOf5(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceAllOf5(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("AllOf5", () => {
 if(!isTypeOidc(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference/if
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference/if}
+*/
 export function isSecuritySchemeOrReferenceIf(value: unknown): value is types.SecuritySchemeOrReferenceIf {
-if(!_isMapSecuritySchemeOrReferenceIf(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("SecuritySchemeOrReferenceIf", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapSecuritySchemeOrReferenceIf(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("$ref" in value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("$ref" in value) ||
+value["$ref"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
+switch(propertyName) {
+default:
+break;
+}
+}
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference/then
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference/then}
+*/
 export function isSecuritySchemeOrReferenceThen(value: unknown): value is types.SecuritySchemeOrReferenceThen {
-if(!_isReferenceSecuritySchemeOrReferenceThen(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceSecuritySchemeOrReferenceThen(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("SecuritySchemeOrReferenceThen", () => {
 if(!isReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference/else
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme-or-reference/else}
+*/
 export function isSecuritySchemeOrReferenceElse(value: unknown): value is types.SecuritySchemeOrReferenceElse {
-if(!_isReferenceSecuritySchemeOrReferenceElse(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceSecuritySchemeOrReferenceElse(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("SecuritySchemeOrReferenceElse", () => {
 if(!isSecurityScheme(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit}
+*/
 export function isDefsOauthFlowsImplicit(value: unknown): value is types.DefsOauthFlowsImplicit {
-if(!_isMapDefsOauthFlowsImplicit(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("DefsOauthFlowsImplicit", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceDefsOauthFlowsImplicit(value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("authorizationUrl" in value) ||
+value["authorizationUrl"] === undefined
+) {
+recordError("required");
 return false;
 }
-return true;
-}
-function _isMapDefsOauthFlowsImplicit(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("authorizationUrl" in value)) {
-return false;
-}
-if(!("scopes" in value)) {
+if(
+!("scopes" in value) ||
+value["scopes"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "authorizationUrl":
+if(!withPath(propertyName, () => {
 if(!isImplicitAuthorizationUrl(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "refreshUrl":
+if(!withPath(propertyName, () => {
 if(!isImplicitRefreshUrl(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "scopes":
+if(!withPath(propertyName, () => {
 if(!isImplicitScopes(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceDefsOauthFlowsImplicit(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password}
+*/
 export function isDefsOauthFlowsPassword(value: unknown): value is types.DefsOauthFlowsPassword {
-if(!_isMapDefsOauthFlowsPassword(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("DefsOauthFlowsPassword", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceDefsOauthFlowsPassword(value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("tokenUrl" in value) ||
+value["tokenUrl"] === undefined
+) {
+recordError("required");
 return false;
 }
-return true;
-}
-function _isMapDefsOauthFlowsPassword(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("tokenUrl" in value)) {
-return false;
-}
-if(!("scopes" in value)) {
+if(
+!("scopes" in value) ||
+value["scopes"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "tokenUrl":
+if(!withPath(propertyName, () => {
 if(!isPasswordTokenUrl(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "refreshUrl":
+if(!withPath(propertyName, () => {
 if(!isPasswordRefreshUrl(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "scopes":
+if(!withPath(propertyName, () => {
 if(!isPasswordScopes(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceDefsOauthFlowsPassword(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials}
+*/
 export function isDefsOauthFlowsClientCredentials(value: unknown): value is types.DefsOauthFlowsClientCredentials {
-if(!_isMapDefsOauthFlowsClientCredentials(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("DefsOauthFlowsClientCredentials", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceDefsOauthFlowsClientCredentials(value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("tokenUrl" in value) ||
+value["tokenUrl"] === undefined
+) {
+recordError("required");
 return false;
 }
-return true;
-}
-function _isMapDefsOauthFlowsClientCredentials(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("tokenUrl" in value)) {
-return false;
-}
-if(!("scopes" in value)) {
+if(
+!("scopes" in value) ||
+value["scopes"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "tokenUrl":
+if(!withPath(propertyName, () => {
 if(!isClientCredentialsTokenUrl(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "refreshUrl":
+if(!withPath(propertyName, () => {
 if(!isClientCredentialsRefreshUrl(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "scopes":
+if(!withPath(propertyName, () => {
 if(!isClientCredentialsScopes(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceDefsOauthFlowsClientCredentials(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code}
+*/
 export function isDefsOauthFlowsAuthorizationCode(value: unknown): value is types.DefsOauthFlowsAuthorizationCode {
-if(!_isMapDefsOauthFlowsAuthorizationCode(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("DefsOauthFlowsAuthorizationCode", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-if(!_isReferenceDefsOauthFlowsAuthorizationCode(value)) {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("authorizationUrl" in value) ||
+value["authorizationUrl"] === undefined
+) {
+recordError("required");
 return false;
 }
-return true;
-}
-function _isMapDefsOauthFlowsAuthorizationCode(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
+if(
+!("tokenUrl" in value) ||
+value["tokenUrl"] === undefined
+) {
+recordError("required");
 return false;
 }
-if(!("authorizationUrl" in value)) {
-return false;
-}
-if(!("tokenUrl" in value)) {
-return false;
-}
-if(!("scopes" in value)) {
+if(
+!("scopes" in value) ||
+value["scopes"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "authorizationUrl":
+if(!withPath(propertyName, () => {
 if(!isAuthorizationCodeAuthorizationUrl(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "tokenUrl":
+if(!withPath(propertyName, () => {
 if(!isAuthorizationCodeTokenUrl(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "refreshUrl":
+if(!withPath(propertyName, () => {
 if(!isAuthorizationCodeRefreshUrl(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "scopes":
+if(!withPath(propertyName, () => {
 if(!isAuthorizationCodeScopes(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
-}
-}
 return true;
+})) {
+return false
 }
-function _isReferenceDefsOauthFlowsAuthorizationCode(value: unknown): value is unknown {
+break;
+default:
+break;
+}
+}
+}
 if(!isSpecificationExtensions(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/implicit
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/implicit}
+*/
 export function isPropertiesOauthFlowsImplicit(value: unknown): value is types.PropertiesOauthFlowsImplicit {
-if(!_isReferencePropertiesOauthFlowsImplicit(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePropertiesOauthFlowsImplicit(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PropertiesOauthFlowsImplicit", () => {
 if(!isDefsOauthFlowsImplicit(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/password
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/password}
+*/
 export function isPropertiesOauthFlowsPassword(value: unknown): value is types.PropertiesOauthFlowsPassword {
-if(!_isReferencePropertiesOauthFlowsPassword(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePropertiesOauthFlowsPassword(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PropertiesOauthFlowsPassword", () => {
 if(!isDefsOauthFlowsPassword(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/clientCredentials
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/clientCredentials}
+*/
 export function isPropertiesOauthFlowsClientCredentials(value: unknown): value is types.PropertiesOauthFlowsClientCredentials {
-if(!_isReferencePropertiesOauthFlowsClientCredentials(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePropertiesOauthFlowsClientCredentials(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PropertiesOauthFlowsClientCredentials", () => {
 if(!isDefsOauthFlowsClientCredentials(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/authorizationCode
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/properties/authorizationCode}
+*/
 export function isPropertiesOauthFlowsAuthorizationCode(value: unknown): value is types.PropertiesOauthFlowsAuthorizationCode {
-if(!_isReferencePropertiesOauthFlowsAuthorizationCode(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePropertiesOauthFlowsAuthorizationCode(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PropertiesOauthFlowsAuthorizationCode", () => {
 if(!isDefsOauthFlowsAuthorizationCode(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement/additionalProperties}
+*/
 export function isSecurityRequirementAdditionalProperties(value: unknown): value is types.SecurityRequirementAdditionalProperties {
-if(!_isArraySecurityRequirementAdditionalProperties(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("SecurityRequirementAdditionalProperties", () => {
+if(!((Array.isArray(value)))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isArraySecurityRequirementAdditionalProperties(value: unknown): value is unknown {
-if(!Array.isArray(value)) {
-return false;
-}
+if(
+Array.isArray(value)
+) {
 for(let elementIndex = 0; elementIndex < value.length; elementIndex ++) {
 const elementValue = value[elementIndex];
+switch(elementIndex) {
+default:
+if(!withPath(String(elementIndex), () => {
 if(!isSecurityRequirementItems(elementValue)) {
+recordError("elementValue");
 return false;
+}
+return true;
+})) {
+return false;
+}
+break;
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions/patternProperties/^x-
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/specification-extensions/patternProperties/^x-}
+*/
 export function isX(value: unknown): value is types.X {
-if(!_isAnyX(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("X", () => {
+if(!((true))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isAnyX(value: unknown): value is unknown {
-return true;
+finally {
+depth -= 1;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples/properties/example
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples/properties/example}
+*/
 export function isExamplesExample(value: unknown): value is types.ExamplesExample {
-if(!_isAnyExamplesExample(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ExamplesExample", () => {
+if(!((true))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isAnyExamplesExample(value: unknown): value is unknown {
-return true;
+finally {
+depth -= 1;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples/properties/examples
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples/properties/examples}
+*/
 export function isExamplesExamples(value: unknown): value is types.ExamplesExamples {
-if(!_isMapExamplesExamples(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ExamplesExamples", () => {
+if(!((
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+))) {
+recordError("types");
 return false;
 }
-return true;
-}
-function _isMapExamplesExamples(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-if(!isExamplesExamplesAdditionalProperties(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
-return true;
+switch(propertyName) {
+default:
+if(!withPath(propertyName, () => {
+if(
+!isExamplesExamplesAdditionalProperties(propertyValue)
+) {
+return false;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/map-of-strings/additionalProperties
+return true;
+})) {
+return false
+}
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/map-of-strings/additionalProperties}
+*/
 export function isMapOfStringsAdditionalProperties(value: unknown): value is types.MapOfStringsAdditionalProperties {
-if(!_isStringMapOfStringsAdditionalProperties(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("MapOfStringsAdditionalProperties", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringMapOfStringsAdditionalProperties(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/servers/items
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/servers/items}
+*/
 export function isPropertiesServersItems(value: unknown): value is types.PropertiesServersItems {
-if(!_isReferencePropertiesServersItems(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePropertiesServersItems(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PropertiesServersItems", () => {
 if(!isServer(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/webhooks/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/webhooks/additionalProperties}
+*/
 export function isWebhooksAdditionalProperties(value: unknown): value is types.WebhooksAdditionalProperties {
-if(!_isReferenceWebhooksAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceWebhooksAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("WebhooksAdditionalProperties", () => {
 if(!isPathItemOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/security/items
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/security/items}
+*/
 export function isPropertiesSecurityItems(value: unknown): value is types.PropertiesSecurityItems {
-if(!_isReferencePropertiesSecurityItems(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePropertiesSecurityItems(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PropertiesSecurityItems", () => {
 if(!isSecurityRequirement(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/tags/items
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/properties/tags/items}
+*/
 export function isPropertiesTagsItems(value: unknown): value is types.PropertiesTagsItems {
-if(!_isReferencePropertiesTagsItems(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePropertiesTagsItems(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PropertiesTagsItems", () => {
 if(!isTag(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/variables/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server/properties/variables/additionalProperties}
+*/
 export function isVariablesAdditionalProperties(value: unknown): value is types.VariablesAdditionalProperties {
-if(!_isReferenceVariablesAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceVariablesAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("VariablesAdditionalProperties", () => {
 if(!isServerVariable(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/enum/items
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/server-variable/properties/enum/items}
+*/
 export function isEnumItems(value: unknown): value is types.EnumItems {
-if(!_isStringEnumItems(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("EnumItems", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringEnumItems(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/schemas/additionalProperties
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/schemas/additionalProperties}
+*/
 export function isSchemasAdditionalProperties(value: unknown): value is types.SchemasAdditionalProperties {
-if(!_isReferenceSchemasAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceSchemasAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("SchemasAdditionalProperties", () => {
 if(!isSchema(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/responses/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/responses/additionalProperties}
+*/
 export function isResponsesAdditionalProperties(value: unknown): value is types.ResponsesAdditionalProperties {
-if(!_isReferenceResponsesAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceResponsesAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ResponsesAdditionalProperties", () => {
 if(!isResponseOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/parameters/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/parameters/additionalProperties}
+*/
 export function isParametersAdditionalProperties(value: unknown): value is types.ParametersAdditionalProperties {
-if(!_isReferenceParametersAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceParametersAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ParametersAdditionalProperties", () => {
 if(!isParameterOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/examples/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/examples/additionalProperties}
+*/
 export function isComponentsExamplesAdditionalProperties(value: unknown): value is types.ComponentsExamplesAdditionalProperties {
-if(!_isReferenceComponentsExamplesAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceComponentsExamplesAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ComponentsExamplesAdditionalProperties", () => {
 if(!isExampleOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/requestBodies/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/requestBodies/additionalProperties}
+*/
 export function isRequestBodiesAdditionalProperties(value: unknown): value is types.RequestBodiesAdditionalProperties {
-if(!_isReferenceRequestBodiesAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceRequestBodiesAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("RequestBodiesAdditionalProperties", () => {
 if(!isRequestBodyOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/headers/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/headers/additionalProperties}
+*/
 export function isComponentsHeadersAdditionalProperties(value: unknown): value is types.ComponentsHeadersAdditionalProperties {
-if(!_isReferenceComponentsHeadersAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceComponentsHeadersAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ComponentsHeadersAdditionalProperties", () => {
 if(!isHeaderOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/securitySchemes/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/securitySchemes/additionalProperties}
+*/
 export function isSecuritySchemesAdditionalProperties(value: unknown): value is types.SecuritySchemesAdditionalProperties {
-if(!_isReferenceSecuritySchemesAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceSecuritySchemesAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("SecuritySchemesAdditionalProperties", () => {
 if(!isSecuritySchemeOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/links/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/links/additionalProperties}
+*/
 export function isComponentsLinksAdditionalProperties(value: unknown): value is types.ComponentsLinksAdditionalProperties {
-if(!_isReferenceComponentsLinksAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceComponentsLinksAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ComponentsLinksAdditionalProperties", () => {
 if(!isLinkOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/callbacks/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/callbacks/additionalProperties}
+*/
 export function isComponentsCallbacksAdditionalProperties(value: unknown): value is types.ComponentsCallbacksAdditionalProperties {
-if(!_isReferenceComponentsCallbacksAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceComponentsCallbacksAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ComponentsCallbacksAdditionalProperties", () => {
 if(!isCallbacksOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/pathItems/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/properties/pathItems/additionalProperties}
+*/
 export function isPathItemsAdditionalProperties(value: unknown): value is types.PathItemsAdditionalProperties {
-if(!_isReferencePathItemsAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePathItemsAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PathItemsAdditionalProperties", () => {
 if(!isPathItemOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/patternProperties/^(schemas|responses|parameters|examples|requestBodies|headers|securitySchemes|links|callbacks|pathItems)$/propertyNames
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/components/patternProperties/^(schemas|responses|parameters|examples|requestBodies|headers|securitySchemes|links|callbacks|pathItems)$/propertyNames}
+*/
 export function isSchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItemsPropertyNames(value: unknown): value is types.SchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItemsPropertyNames {
-if(!_isStringSchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItemsPropertyNames(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("SchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItemsPropertyNames", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
+}
+if(
+typeof value === "string"
+) {
+if(
+!new RegExp("^[a-zA-Z0-9._-]+$").test(value)
+) {
+recordError("valuePattern");
+return false;
+}
 }
 return true;
+;
+});
 }
-function _isStringSchemasResponsesParametersExamplesRequestBodiesHeadersSecuritySchemesLinksCallbacksPathItemsPropertyNames(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-if(!new RegExp("^[a-zA-Z0-9._-]+$").test(value)) {
-return false;
 }
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/servers/items
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/servers/items}
+*/
 export function isPathItemServersItems(value: unknown): value is types.PathItemServersItems {
-if(!_isReferencePathItemServersItems(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePathItemServersItems(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PathItemServersItems", () => {
 if(!isServer(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/parameters/items
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/path-item/properties/parameters/items}
+*/
 export function isPathItemParametersItems(value: unknown): value is types.PathItemParametersItems {
-if(!_isReferencePathItemParametersItems(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePathItemParametersItems(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PathItemParametersItems", () => {
 if(!isParameterOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/tags/items
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/tags/items}
+*/
 export function isOperationTagsItems(value: unknown): value is types.OperationTagsItems {
-if(!_isStringOperationTagsItems(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("OperationTagsItems", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringOperationTagsItems(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/parameters/items
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/parameters/items}
+*/
 export function isOperationParametersItems(value: unknown): value is types.OperationParametersItems {
-if(!_isReferenceOperationParametersItems(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceOperationParametersItems(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("OperationParametersItems", () => {
 if(!isParameterOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/callbacks/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/callbacks/additionalProperties}
+*/
 export function isOperationCallbacksAdditionalProperties(value: unknown): value is types.OperationCallbacksAdditionalProperties {
-if(!_isReferenceOperationCallbacksAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceOperationCallbacksAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("OperationCallbacksAdditionalProperties", () => {
 if(!isCallbacksOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/security/items
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/security/items}
+*/
 export function isOperationSecurityItems(value: unknown): value is types.OperationSecurityItems {
-if(!_isReferenceOperationSecurityItems(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceOperationSecurityItems(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("OperationSecurityItems", () => {
 if(!isSecurityRequirement(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/servers/items
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/operation/properties/servers/items}
+*/
 export function isOperationServersItems(value: unknown): value is types.OperationServersItems {
-if(!_isReferenceOperationServersItems(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceOperationServersItems(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("OperationServersItems", () => {
 if(!isServer(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/if/properties/in
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/if/properties/in}
+*/
 export function isIfParameterIn(value: unknown): value is types.IfParameterIn {
-if(!_isStringIfParameterIn(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("IfParameterIn", () => {
+if(
+value !== "query"
+) {
+recordError("options");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringIfParameterIn(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-if(value !== "query") {
-return false;
 }
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/then/properties/allowEmptyValue
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/parameter/then/properties/allowEmptyValue}
+*/
 export function isAllowEmptyValue(value: unknown): value is types.AllowEmptyValue {
-if(!_isBooleanAllowEmptyValue(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("AllowEmptyValue", () => {
+if(!((typeof value === "boolean"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isBooleanAllowEmptyValue(value: unknown): value is unknown {
-if(typeof value !== "boolean") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/encoding/additionalProperties
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/media-type/properties/encoding/additionalProperties}
+*/
 export function isMediaTypeAdditionalProperties(value: unknown): value is types.MediaTypeAdditionalProperties {
-if(!_isReferenceMediaTypeAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceMediaTypeAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("MediaTypeAdditionalProperties", () => {
 if(!isEncoding(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/if
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/if}
+*/
 export function isExplodeDefaultIf(value: unknown): value is types.ExplodeDefaultIf {
-if(!_isMapExplodeDefaultIf(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapExplodeDefaultIf(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("style" in value)) {
+depth += 1;
+try{
+return withType("ExplodeDefaultIf", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("style" in value) ||
+value["style"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "style":
+if(!withPath(propertyName, () => {
 if(!isExplodeDefaultStyle(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
+default:
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/then
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/then}
+*/
 export function isExplodeDefaultThen(value: unknown): value is types.ExplodeDefaultThen {
-if(!_isMapExplodeDefaultThen(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapExplodeDefaultThen(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+depth += 1;
+try{
+return withType("ExplodeDefaultThen", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "explode":
+if(!withPath(propertyName, () => {
 if(!isEncodingExplodeDefaultExplode(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
+default:
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/else
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/else}
+*/
 export function isExplodeDefaultElse(value: unknown): value is types.ExplodeDefaultElse {
-if(!_isMapExplodeDefaultElse(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapExplodeDefaultElse(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+depth += 1;
+try{
+return withType("ExplodeDefaultElse", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "explode":
+if(!withPath(propertyName, () => {
 if(!isElseExplodeDefaultExplode(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
+default:
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/headers/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/properties/headers/additionalProperties}
+*/
 export function isEncodingHeadersAdditionalProperties(value: unknown): value is types.EncodingHeadersAdditionalProperties {
-if(!_isReferenceEncodingHeadersAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceEncodingHeadersAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("EncodingHeadersAdditionalProperties", () => {
 if(!isHeaderOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/headers/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/headers/additionalProperties}
+*/
 export function isResponseHeadersAdditionalProperties(value: unknown): value is types.ResponseHeadersAdditionalProperties {
-if(!_isReferenceResponseHeadersAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceResponseHeadersAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ResponseHeadersAdditionalProperties", () => {
 if(!isHeaderOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/links/additionalProperties
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/response/properties/links/additionalProperties}
+*/
 export function isResponseLinksAdditionalProperties(value: unknown): value is types.ResponseLinksAdditionalProperties {
-if(!_isReferenceResponseLinksAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceResponseLinksAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ResponseLinksAdditionalProperties", () => {
 if(!isLinkOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/if
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/if}
+*/
 export function isTypeApikeyIf(value: unknown): value is types.TypeApikeyIf {
-if(!_isMapTypeApikeyIf(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapTypeApikeyIf(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("type" in value)) {
+depth += 1;
+try{
+return withType("TypeApikeyIf", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("type" in value) ||
+value["type"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "type":
+if(!withPath(propertyName, () => {
 if(!isTypeApikeyType(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
+default:
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/then
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/then}
+*/
 export function isTypeApikeyThen(value: unknown): value is types.TypeApikeyThen {
-if(!_isMapTypeApikeyThen(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TypeApikeyThen", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("name" in value) ||
+value["name"] === undefined
+) {
+recordError("required");
 return false;
 }
-return true;
-}
-function _isMapTypeApikeyThen(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("name" in value)) {
-return false;
-}
-if(!("in" in value)) {
+if(
+!("in" in value) ||
+value["in"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "name":
+if(!withPath(propertyName, () => {
 if(!isTypeApikeyName(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "in":
+if(!withPath(propertyName, () => {
 if(!isTypeApikeyIn(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
+default:
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http/if
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http/if}
+*/
 export function isTypeHttpIf(value: unknown): value is types.TypeHttpIf {
-if(!_isMapTypeHttpIf(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapTypeHttpIf(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("type" in value)) {
+depth += 1;
+try{
+return withType("TypeHttpIf", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("type" in value) ||
+value["type"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "type":
+if(!withPath(propertyName, () => {
 if(!isTypeHttpType(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
+default:
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http/then
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http/then}
+*/
 export function isTypeHttpThen(value: unknown): value is types.TypeHttpThen {
-if(!_isMapTypeHttpThen(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapTypeHttpThen(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("scheme" in value)) {
+depth += 1;
+try{
+return withType("TypeHttpThen", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("scheme" in value) ||
+value["scheme"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "scheme":
+if(!withPath(propertyName, () => {
 if(!isTypeHttpScheme(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
+default:
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/if
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/if}
+*/
 export function isTypeHttpBearerIf(value: unknown): value is types.TypeHttpBearerIf {
-if(!_isMapTypeHttpBearerIf(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TypeHttpBearerIf", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("type" in value) ||
+value["type"] === undefined
+) {
+recordError("required");
 return false;
 }
-return true;
-}
-function _isMapTypeHttpBearerIf(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("type" in value)) {
-return false;
-}
-if(!("scheme" in value)) {
+if(
+!("scheme" in value) ||
+value["scheme"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "type":
+if(!withPath(propertyName, () => {
 if(!isTypeHttpBearerType(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
 case "scheme":
+if(!withPath(propertyName, () => {
 if(!isTypeHttpBearerScheme(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
+default:
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/then
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/then}
+*/
 export function isTypeHttpBearerThen(value: unknown): value is types.TypeHttpBearerThen {
-if(!_isMapTypeHttpBearerThen(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapTypeHttpBearerThen(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
+depth += 1;
+try{
+return withType("TypeHttpBearerThen", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "bearerFormat":
+if(!withPath(propertyName, () => {
 if(!isBearerFormat(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
+default:
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2/if
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2/if}
+*/
 export function isTypeOauth2If(value: unknown): value is types.TypeOauth2If {
-if(!_isMapTypeOauth2If(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapTypeOauth2If(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("type" in value)) {
+depth += 1;
+try{
+return withType("TypeOauth2If", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("type" in value) ||
+value["type"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "type":
+if(!withPath(propertyName, () => {
 if(!isTypeOauth2Type(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
+default:
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2/then
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2/then}
+*/
 export function isTypeOauth2Then(value: unknown): value is types.TypeOauth2Then {
-if(!_isMapTypeOauth2Then(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapTypeOauth2Then(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("flows" in value)) {
+depth += 1;
+try{
+return withType("TypeOauth2Then", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("flows" in value) ||
+value["flows"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "flows":
+if(!withPath(propertyName, () => {
 if(!isFlows(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
+default:
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc/if
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc/if}
+*/
 export function isTypeOidcIf(value: unknown): value is types.TypeOidcIf {
-if(!_isMapTypeOidcIf(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapTypeOidcIf(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("type" in value)) {
+depth += 1;
+try{
+return withType("TypeOidcIf", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("type" in value) ||
+value["type"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
+if(propertyValue === undefined) {
+continue;
+}
 switch(propertyName) {
 case "type":
+if(!withPath(propertyName, () => {
 if(!isTypeOidcType(propertyValue)) {
+recordError("objectProperties");
 return false;
 }
-continue;
+return true;
+})) {
+return false
+}
+break;
+default:
+break;
+}
 }
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc/then
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc/then}
+*/
 export function isTypeOidcThen(value: unknown): value is types.TypeOidcThen {
-if(!_isMapTypeOidcThen(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isMapTypeOidcThen(value: unknown): value is unknown {
-if(typeof value !== "object" || value === null || Array.isArray(value)) {
-return false;
-}
-if(!("openIdConnectUrl" in value)) {
+depth += 1;
+try{
+return withType("TypeOidcThen", () => {
+if(
+value !== null &&
+typeof value === "object" &&
+!Array.isArray(value)
+) {
+if(
+!("openIdConnectUrl" in value) ||
+value["openIdConnectUrl"] === undefined
+) {
+recordError("required");
 return false;
 }
 for(const propertyName in value) {
 const propertyValue = value[propertyName as keyof typeof value];
-switch(propertyName) {
-case "openIdConnectUrl":
-if(!isOpenIdConnectUrl(propertyValue)) {
-return false;
-}
+if(propertyValue === undefined) {
 continue;
 }
+switch(propertyName) {
+case "openIdConnectUrl":
+if(!withPath(propertyName, () => {
+if(!isOpenIdConnectUrl(propertyValue)) {
+recordError("objectProperties");
+return false;
 }
 return true;
+})) {
+return false
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/authorizationUrl
+break;
+default:
+break;
+}
+}
+}
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/authorizationUrl}
+*/
 export function isImplicitAuthorizationUrl(value: unknown): value is types.ImplicitAuthorizationUrl {
-if(!_isStringImplicitAuthorizationUrl(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ImplicitAuthorizationUrl", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringImplicitAuthorizationUrl(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/refreshUrl
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/refreshUrl}
+*/
 export function isImplicitRefreshUrl(value: unknown): value is types.ImplicitRefreshUrl {
-if(!_isStringImplicitRefreshUrl(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ImplicitRefreshUrl", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringImplicitRefreshUrl(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/scopes
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/implicit/properties/scopes}
+*/
 export function isImplicitScopes(value: unknown): value is types.ImplicitScopes {
-if(!_isReferenceImplicitScopes(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceImplicitScopes(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ImplicitScopes", () => {
 if(!isMapOfStrings(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/tokenUrl
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/tokenUrl}
+*/
 export function isPasswordTokenUrl(value: unknown): value is types.PasswordTokenUrl {
-if(!_isStringPasswordTokenUrl(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("PasswordTokenUrl", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringPasswordTokenUrl(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/refreshUrl
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/refreshUrl}
+*/
 export function isPasswordRefreshUrl(value: unknown): value is types.PasswordRefreshUrl {
-if(!_isStringPasswordRefreshUrl(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("PasswordRefreshUrl", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringPasswordRefreshUrl(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/scopes
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/password/properties/scopes}
+*/
 export function isPasswordScopes(value: unknown): value is types.PasswordScopes {
-if(!_isReferencePasswordScopes(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferencePasswordScopes(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("PasswordScopes", () => {
 if(!isMapOfStrings(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/tokenUrl
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/tokenUrl}
+*/
 export function isClientCredentialsTokenUrl(value: unknown): value is types.ClientCredentialsTokenUrl {
-if(!_isStringClientCredentialsTokenUrl(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ClientCredentialsTokenUrl", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringClientCredentialsTokenUrl(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/refreshUrl
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/refreshUrl}
+*/
 export function isClientCredentialsRefreshUrl(value: unknown): value is types.ClientCredentialsRefreshUrl {
-if(!_isStringClientCredentialsRefreshUrl(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ClientCredentialsRefreshUrl", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringClientCredentialsRefreshUrl(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/scopes
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/client-credentials/properties/scopes}
+*/
 export function isClientCredentialsScopes(value: unknown): value is types.ClientCredentialsScopes {
-if(!_isReferenceClientCredentialsScopes(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceClientCredentialsScopes(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ClientCredentialsScopes", () => {
 if(!isMapOfStrings(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/authorizationUrl
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/authorizationUrl}
+*/
 export function isAuthorizationCodeAuthorizationUrl(value: unknown): value is types.AuthorizationCodeAuthorizationUrl {
-if(!_isStringAuthorizationCodeAuthorizationUrl(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("AuthorizationCodeAuthorizationUrl", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringAuthorizationCodeAuthorizationUrl(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/tokenUrl
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/tokenUrl}
+*/
 export function isAuthorizationCodeTokenUrl(value: unknown): value is types.AuthorizationCodeTokenUrl {
-if(!_isStringAuthorizationCodeTokenUrl(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("AuthorizationCodeTokenUrl", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringAuthorizationCodeTokenUrl(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/refreshUrl
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/refreshUrl}
+*/
 export function isAuthorizationCodeRefreshUrl(value: unknown): value is types.AuthorizationCodeRefreshUrl {
-if(!_isStringAuthorizationCodeRefreshUrl(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("AuthorizationCodeRefreshUrl", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringAuthorizationCodeRefreshUrl(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/scopes
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/oauth-flows/$defs/authorization-code/properties/scopes}
+*/
 export function isAuthorizationCodeScopes(value: unknown): value is types.AuthorizationCodeScopes {
-if(!_isReferenceAuthorizationCodeScopes(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceAuthorizationCodeScopes(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("AuthorizationCodeScopes", () => {
 if(!isMapOfStrings(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement/additionalProperties/items
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-requirement/additionalProperties/items}
+*/
 export function isSecurityRequirementItems(value: unknown): value is types.SecurityRequirementItems {
-if(!_isStringSecurityRequirementItems(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("SecurityRequirementItems", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringSecurityRequirementItems(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples/properties/examples/additionalProperties
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/examples/properties/examples/additionalProperties}
+*/
 export function isExamplesExamplesAdditionalProperties(value: unknown): value is types.ExamplesExamplesAdditionalProperties {
-if(!_isReferenceExamplesExamplesAdditionalProperties(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceExamplesExamplesAdditionalProperties(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("ExamplesExamplesAdditionalProperties", () => {
 if(!isExampleOrReference(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/if/properties/style
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/if/properties/style}
+*/
 export function isExplodeDefaultStyle(value: unknown): value is types.ExplodeDefaultStyle {
-if(!_isStringExplodeDefaultStyle(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("ExplodeDefaultStyle", () => {
+if(
+value !== "form"
+) {
+recordError("options");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringExplodeDefaultStyle(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-if(value !== "form") {
-return false;
 }
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/then/properties/explode
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/then/properties/explode}
+*/
 export function isEncodingExplodeDefaultExplode(value: unknown): value is types.EncodingExplodeDefaultExplode {
-return true;
+if(depth === 0) {
+resetErrors();
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/else/properties/explode
+depth += 1;
+try{
+return withType("EncodingExplodeDefaultExplode", () => {
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/encoding/$defs/explode-default/else/properties/explode}
+*/
 export function isElseExplodeDefaultExplode(value: unknown): value is types.ElseExplodeDefaultExplode {
-return true;
+if(depth === 0) {
+resetErrors();
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/if/properties/type
+depth += 1;
+try{
+return withType("ElseExplodeDefaultExplode", () => {
+return true;
+;
+});
+}
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/if/properties/type}
+*/
 export function isTypeApikeyType(value: unknown): value is types.TypeApikeyType {
-if(!_isStringTypeApikeyType(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TypeApikeyType", () => {
+if(
+value !== "apiKey"
+) {
+recordError("options");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringTypeApikeyType(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-if(value !== "apiKey") {
-return false;
 }
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/then/properties/name
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/then/properties/name}
+*/
 export function isTypeApikeyName(value: unknown): value is types.TypeApikeyName {
-if(!_isStringTypeApikeyName(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TypeApikeyName", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringTypeApikeyName(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/then/properties/in
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-apikey/then/properties/in}
+*/
 export function isTypeApikeyIn(value: unknown): value is types.TypeApikeyIn {
-if(!_isStringTypeApikeyIn(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TypeApikeyIn", () => {
+if(
+value !== "query" &&
+value !== "header" &&
+value !== "cookie"
+) {
+recordError("options");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringTypeApikeyIn(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-if(value !== "query" && value !== "header" && value !== "cookie") {
-return false;
 }
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http/if/properties/type
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http/if/properties/type}
+*/
 export function isTypeHttpType(value: unknown): value is types.TypeHttpType {
-if(!_isStringTypeHttpType(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TypeHttpType", () => {
+if(
+value !== "http"
+) {
+recordError("options");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringTypeHttpType(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-if(value !== "http") {
-return false;
 }
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http/then/properties/scheme
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http/then/properties/scheme}
+*/
 export function isTypeHttpScheme(value: unknown): value is types.TypeHttpScheme {
-if(!_isStringTypeHttpScheme(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TypeHttpScheme", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringTypeHttpScheme(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/if/properties/type
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/if/properties/type}
+*/
 export function isTypeHttpBearerType(value: unknown): value is types.TypeHttpBearerType {
-if(!_isStringTypeHttpBearerType(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TypeHttpBearerType", () => {
+if(
+value !== "http"
+) {
+recordError("options");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringTypeHttpBearerType(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-if(value !== "http") {
-return false;
 }
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/if/properties/scheme
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/if/properties/scheme}
+*/
 export function isTypeHttpBearerScheme(value: unknown): value is types.TypeHttpBearerScheme {
-if(!_isStringTypeHttpBearerScheme(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TypeHttpBearerScheme", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
+}
+if(
+typeof value === "string"
+) {
+if(
+!new RegExp("^[Bb][Ee][Aa][Rr][Ee][Rr]$").test(value)
+) {
+recordError("valuePattern");
+return false;
+}
 }
 return true;
+;
+});
 }
-function _isStringTypeHttpBearerScheme(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-if(!new RegExp("^[Bb][Ee][Aa][Rr][Ee][Rr]$").test(value)) {
-return false;
 }
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/then/properties/bearerFormat
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-http-bearer/then/properties/bearerFormat}
+*/
 export function isBearerFormat(value: unknown): value is types.BearerFormat {
-if(!_isStringBearerFormat(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("BearerFormat", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringBearerFormat(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2/if/properties/type
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2/if/properties/type}
+*/
 export function isTypeOauth2Type(value: unknown): value is types.TypeOauth2Type {
-if(!_isStringTypeOauth2Type(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TypeOauth2Type", () => {
+if(
+value !== "oauth2"
+) {
+recordError("options");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringTypeOauth2Type(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-if(value !== "oauth2") {
-return false;
 }
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2/then/properties/flows
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oauth2/then/properties/flows}
+*/
 export function isFlows(value: unknown): value is types.Flows {
-if(!_isReferenceFlows(value)) {
-return false;
+if(depth === 0) {
+resetErrors();
 }
-return true;
-}
-function _isReferenceFlows(value: unknown): value is unknown {
+depth += 1;
+try{
+return withType("Flows", () => {
 if(!isOauthFlows(value)) {
+recordError("reference");
 return false;
 }
 return true;
+;
+});
 }
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc/if/properties/type
+finally {
+depth -= 1;
+}
+}
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc/if/properties/type}
+*/
 export function isTypeOidcType(value: unknown): value is types.TypeOidcType {
-if(!_isStringTypeOidcType(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("TypeOidcType", () => {
+if(
+value !== "openIdConnect"
+) {
+recordError("options");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringTypeOidcType(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-if(value !== "openIdConnect") {
-return false;
 }
-return true;
-}
-// https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc/then/properties/openIdConnectUrl
+/**
+* @see {@link https://spec.openapis.org/oas/3.1/schema/2022-10-07#/$defs/security-scheme/$defs/type-oidc/then/properties/openIdConnectUrl}
+*/
 export function isOpenIdConnectUrl(value: unknown): value is types.OpenIdConnectUrl {
-if(!_isStringOpenIdConnectUrl(value)) {
+if(depth === 0) {
+resetErrors();
+}
+depth += 1;
+try{
+return withType("OpenIdConnectUrl", () => {
+if(!((typeof value === "string"))) {
+recordError("types");
 return false;
 }
 return true;
+;
+});
 }
-function _isStringOpenIdConnectUrl(value: unknown): value is unknown {
-if(typeof value !== "string") {
-return false;
+finally {
+depth -= 1;
 }
-return true;
 }

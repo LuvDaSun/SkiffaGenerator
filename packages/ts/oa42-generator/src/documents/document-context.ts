@@ -3,7 +3,7 @@ import { DocumentBase } from "./document-base.js";
 
 export interface DocumentOptions {
   defaultName: string;
-  namerMaximumIterations: number;
+  nameMaximumIterations: number;
   transformMaximumIterations: number;
 }
 
@@ -19,7 +19,7 @@ export type DocumentFactory<N = unknown> = (
 
 export class DocumentContext {
   private factories = new Array<DocumentFactory>();
-  private document?: DocumentBase;
+  private document!: DocumentBase;
 
   constructor(private readonly options: DocumentOptions) {
     //
@@ -33,10 +33,10 @@ export class DocumentContext {
     documentUri = new URL("", documentUri);
 
     const documentNode = await loadYAML(documentUri);
-    this.loadFromDocument(documentUri, documentNode);
+    await this.loadFromDocument(documentUri, documentNode);
   }
 
-  public loadFromDocument(documentUri: URL, documentNode: unknown) {
+  public async loadFromDocument(documentUri: URL, documentNode: unknown) {
     documentUri = new URL("", documentUri);
 
     for (const factory of this.factories) {
@@ -46,13 +46,22 @@ export class DocumentContext {
         options: this.options,
       });
       if (document != null) {
+        await document.load();
         this.document = document;
         break;
       }
     }
+
+    if (this.document == null) {
+      throw new Error("unable to load document");
+    }
   }
 
   public getApiModel() {
-    return this.document!.getApiModel();
+    return this.document.getApiModel();
+  }
+
+  public getSpecification() {
+    return this.document.getSpecification();
   }
 }

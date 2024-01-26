@@ -1,3 +1,4 @@
+import assert from "assert";
 import * as models from "../../models/index.js";
 import { banner, toCamel } from "../../utils/index.js";
 import { NestedText, itt } from "../../utils/iterable-text-template.js";
@@ -14,12 +15,24 @@ export function* generateClientServerTestTsCode(apiModel: models.Api) {
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
+      if (!operationModel.mockable) {
+        continue;
+      }
+
       if (operationModel.bodies.length === 0) {
         for (const operationResultModel of operationModel.operationResults) {
+          if (!operationResultModel.mockable) {
+            continue;
+          }
+
           if (operationResultModel.bodies.length === 0) {
             yield generateOperationTest(apiModel, operationModel, null, operationResultModel, null);
           }
           for (const responseBodyModel of operationResultModel.bodies) {
+            if (!responseBodyModel.mockable) {
+              continue;
+            }
+
             yield generateOperationTest(
               apiModel,
               operationModel,
@@ -31,7 +44,15 @@ export function* generateClientServerTestTsCode(apiModel: models.Api) {
         }
       }
       for (const requestBodyModel of operationModel.bodies) {
+        if (!requestBodyModel.mockable) {
+          continue;
+        }
+
         for (const operationResultModel of operationModel.operationResults) {
+          if (!operationResultModel.mockable) {
+            continue;
+          }
+
           if (operationResultModel.bodies.length === 0) {
             yield generateOperationTest(
               apiModel,
@@ -42,6 +63,10 @@ export function* generateClientServerTestTsCode(apiModel: models.Api) {
             );
           }
           for (const responseBodyModel of operationResultModel.bodies) {
+            if (!responseBodyModel.mockable) {
+              continue;
+            }
+
             yield generateOperationTest(
               apiModel,
               operationModel,
@@ -149,9 +174,11 @@ function* generateOperationTest(
       ...operationModel.pathParameters,
       ...operationModel.queryParameters,
     ]) {
-      if (parameterModel.schemaId == null) {
+      if (!parameterModel.mockable) {
         continue;
       }
+
+      assert(parameterModel.schemaId != null);
 
       const validateFunctionName = toCamel("is", names[parameterModel.schemaId]);
 
@@ -171,17 +198,17 @@ function* generateOperationTest(
 
       switch (requestBodyModel.contentType) {
         case "application/json": {
-          if (requestBodyModel.schemaId != null) {
-            const validateFunctionName = toCamel("is", names[requestBodyModel.schemaId]);
+          assert(requestBodyModel.schemaId != null);
 
-            yield itt`
+          const validateFunctionName = toCamel("is", names[requestBodyModel.schemaId]);
+
+          yield itt`
               {
                 const entity = await incomingRequest.entity();
                 const valid = main.${validateFunctionName}(entity);
                 assert.equal(valid, true);
               }
             `;
-          }
           break;
         }
       }
@@ -200,13 +227,11 @@ function* generateOperationTest(
     } else {
       switch (responseBodyModel.contentType) {
         case "application/json": {
+          assert(responseBodyModel.schemaId != null);
+
           let entityExpression: NestedText;
-          if (responseBodyModel.schemaId == null) {
-            entityExpression = itt`{}`;
-          } else {
-            const mockFunctionName = toCamel("mock", names[responseBodyModel.schemaId]);
-            entityExpression = itt`main.${mockFunctionName}()`;
-          }
+          const mockFunctionName = toCamel("mock", names[responseBodyModel.schemaId]);
+          entityExpression = itt`main.${mockFunctionName}()`;
 
           yield itt`
             return {
@@ -246,13 +271,12 @@ function* generateOperationTest(
     } else {
       switch (requestBodyModel.contentType) {
         case "application/json": {
+          assert(requestBodyModel.schemaId != null);
+
           let entityExpression: NestedText;
-          if (requestBodyModel.schemaId == null) {
-            entityExpression = itt`{}`;
-          } else {
-            const mockFunctionName = toCamel("mock", names[requestBodyModel.schemaId]);
-            entityExpression = itt`main.${mockFunctionName}()`;
-          }
+
+          const mockFunctionName = toCamel("mock", names[requestBodyModel.schemaId]);
+          entityExpression = itt`main.${mockFunctionName}()`;
 
           yield itt`
             const operationResult = await main.${callMethodFunctionName}(
@@ -286,9 +310,11 @@ function* generateOperationTest(
     `;
 
     for (const parameterModel of operationResultModel.headerParameters) {
-      if (parameterModel.schemaId == null) {
+      if (!parameterModel.mockable) {
         continue;
       }
+
+      assert(parameterModel.schemaId != null);
 
       const validateFunctionName = toCamel("is", names[parameterModel.schemaId]);
 
@@ -331,9 +357,11 @@ function* generateOperationTest(
       ...operationModel.pathParameters,
       ...operationModel.queryParameters,
     ]) {
-      if (parameterModel.schemaId == null) {
+      if (!parameterModel.mockable) {
         continue;
       }
+
+      assert(parameterModel.schemaId != null);
 
       const mockFunctionName = toCamel("mock", names[parameterModel.schemaId]);
       yield itt`
@@ -344,9 +372,11 @@ function* generateOperationTest(
 
   function* generateResponseParametersMockBody() {
     for (const parameterModel of operationResultModel.headerParameters) {
-      if (parameterModel.schemaId == null) {
+      if (!parameterModel.mockable) {
         continue;
       }
+
+      assert(parameterModel.schemaId != null);
 
       const mockFunctionName = toCamel("mock", names[parameterModel.schemaId]);
       yield itt`

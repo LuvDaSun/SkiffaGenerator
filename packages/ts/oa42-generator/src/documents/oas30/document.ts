@@ -1,58 +1,36 @@
+import assert from "assert";
 import { Router } from "goodrouter";
-import * as jns42generator from "jns42-generator";
-import { Namer } from "jns42-generator";
 import { Method, StatusCode, methods, statusCodes } from "oa42-lib";
 import * as oas from "schema-oas-v3-0";
 import * as models from "../../models/index.js";
 import {
+  appendToPointer,
   appendToUriHash,
   normalizeUrl,
   statusKindComparer,
   takeStatusCodes,
 } from "../../utils/index.js";
 import { DocumentBase } from "../document-base.js";
-import { selectSchemas } from "./selectors.js";
 
 export class Document extends DocumentBase<oas.SchemaDocument> {
-  public async getApiModel(): Promise<models.Api> {
+  public getApiModel(): models.Api {
     const uri = this.documentUri;
-
-    const { defaultName, namerMaximumIterations, transformMaximumIterations } = this.options;
 
     const paths = [...this.getPathModels()];
     const authentication = [...this.getAuthenticationModels()];
-    const schemas = Object.fromEntries(await this.getSchemas());
     const router = new Router<number>();
     for (const pathModel of paths) {
       router.insertRoute(pathModel.id, pathModel.pattern);
     }
 
-    const namer = new Namer(defaultName, namerMaximumIterations);
-    for (const nodeId in schemas) {
-      const nodeUrl = new URL(nodeId);
-      const path = nodeUrl.pathname + nodeUrl.hash.replace(/^#/g, "");
-      namer.registerPath(nodeId, path);
-    }
-
-    const names = namer.getNames();
-
-    const types = jns42generator.transformSchema(
-      {
-        $schema: "https://schema.JsonSchema42.org/jns42-intermediate/schema.json",
-        schemas,
-      },
-      transformMaximumIterations,
-    );
-
     const apiModel: models.Api = {
       uri,
       paths,
       authentication,
-      schemas,
-      names,
       router,
-      types,
+      names: this.specification.names,
     };
+
     return apiModel;
   }
 
@@ -97,15 +75,23 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     for (const method of methods) {
       const operationItem = pathItem[method];
 
-      if (oas.isOperation(operationItem)) {
-        yield this.getOperationModel(
-          pathUri,
-          pathItem,
-          appendToUriHash(pathUri, method),
-          method,
-          operationItem,
-        );
+      if (operationItem == null) {
+        continue;
       }
+
+      if (oas.isReference(operationItem)) {
+        throw "TODO";
+      }
+
+      assert(oas.isOperation(operationItem));
+
+      yield this.getOperationModel(
+        pathUri,
+        pathItem,
+        appendToUriHash(pathUri, method),
+        method,
+        operationItem,
+      );
     }
   }
 
@@ -117,26 +103,31 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     operationItem: oas.Operation,
   ) {
     const allParameters = [
-      ...(pathItem.parameters ?? []).map(
-        (item, index) => [appendToUriHash(pathUri, "parameters", index), item.name, item] as const,
-      ),
-      ...(operationItem.parameters ?? []).map(
-        (item, index) =>
-          [appendToUriHash(operationUri, "parameters", index), item.name, item] as const,
-      ),
+      ...(pathItem.parameters ?? [])
+        .map((item) => this.dereference(item))
+        .map(
+          (item, index) =>
+            [appendToUriHash(pathUri, "parameters", index), item.name, item] as const,
+        ),
+      ...(operationItem.parameters ?? [])
+        .map((item) => this.dereference(item))
+        .map(
+          (item, index) =>
+            [appendToUriHash(operationUri, "parameters", index), item.name, item] as const,
+        ),
     ];
 
     const queryParameters = allParameters
       .filter(([, , parameterItem]) => parameterItem.in === "query")
       .map((args) => this.getParameterModel(...args));
     const headerParameters = allParameters
-      .filter(([, , parameterItem]) => (parameterItem.in as string) === "header")
+      .filter(([, , parameterItem]) => parameterItem.in === "header")
       .map((args) => this.getParameterModel(...args));
     const pathParameters = allParameters
-      .filter(([, , parameterItem]) => (parameterItem.in as string) === "path")
+      .filter(([, , parameterItem]) => parameterItem.in === "path")
       .map((args) => this.getParameterModel(...args));
     const cookieParameters = allParameters
-      .filter(([, , parameterItem]) => (parameterItem.in as string) === "cookie")
+      .filter(([, , parameterItem]) => parameterItem.in === "cookie")
       .map((args) => this.getParameterModel(...args));
 
     const authenticationRequirements = (
@@ -150,18 +141,23 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       })),
     );
 
+    const requestBody = this.dereference(operationItem.requestBody);
     const bodies =
-      operationItem.requestBody?.content != null &&
-      oas.isRequestBodyContent(operationItem.requestBody?.content)
+      requestBody?.content != null
         ? [
             ...this.getBodyModels(
               appendToUriHash(operationUri, "requestBody", "content"),
-              operationItem.requestBody.content,
+              requestBody.content,
             ),
           ]
         : [];
 
     const operationResults = [...this.getOperationResultModels(operationUri, operationItem)];
+
+    const mockable =
+      [...pathParameters, ...headerParameters, ...queryParameters, ...cookieParameters].every(
+        (parameterModel) => parameterModel.mockable || !parameterModel.required,
+      ) && operationResults.some((operationResultModel) => operationResultModel.mockable);
 
     const operationModel: models.Operation = {
       uri: operationUri,
@@ -170,13 +166,14 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       deprecated: operationItem.deprecated ?? false,
       summary: operationItem.summary ?? "",
       description: operationItem.description ?? "",
+      pathParameters,
       queryParameters,
       headerParameters,
-      pathParameters,
       cookieParameters,
       authenticationRequirements,
       bodies,
       operationResults,
+      mockable,
     };
 
     return operationModel;
@@ -213,7 +210,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     const statusKinds = Object.keys(operationItem.responses ?? {}).sort(statusKindComparer);
 
     for (const statusKind of statusKinds) {
-      const responseItem = operationItem.responses![statusKind];
+      const responseItem = operationItem.responses[statusKind];
 
       if (!oas.isResponse(responseItem)) {
         continue;
@@ -244,6 +241,11 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       ? [...this.getBodyModels(appendToUriHash(responseUri, "content"), responseItem.content)]
       : [];
 
+    const mockable =
+      headerParameters.every(
+        (parameterModel) => parameterModel.mockable || !parameterModel.required,
+      ) && bodies.some((bodyModel) => bodyModel.mockable);
+
     return {
       uri: responseUri,
       description: responseItem.description,
@@ -251,6 +253,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       statusCodes,
       headerParameters,
       bodies,
+      mockable,
     };
   }
 
@@ -277,46 +280,18 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     const schemaUri =
       parameterItem.schema == null ? undefined : appendToUriHash(parameterUri, "schema");
     const schemaId = schemaUri == null ? schemaUri : normalizeUrl(schemaUri).toString();
+    const mockable =
+      (schemaId != null &&
+        this.specification.typesArena.getItem(this.schemaIdMap[schemaId]).mockable) ??
+      false;
 
     return {
       uri: parameterUri,
       name: parameterName,
       required: parameterItem.required ?? false,
       schemaId,
+      mockable,
     };
-  }
-
-  // TODO
-  private async getSchemas(): Promise<Iterable<readonly [string, any]>> {
-    const documentContext = new jns42generator.DocumentContext();
-
-    documentContext.registerFactory(
-      jns42generator.schemaDraft04.metaSchemaId,
-      ({ givenUrl, antecedentUrl, documentNode: rootNode }) =>
-        new jns42generator.schemaDraft04.Document(
-          givenUrl,
-          antecedentUrl,
-          rootNode,
-          documentContext,
-        ),
-    );
-
-    for (const [pointer, schema] of selectSchemas("", this.documentNode)) {
-      const uri = new URL(
-        (this.documentUri.hash === "" ? "#" : this.documentUri.hash) + pointer,
-        this.documentUri,
-      );
-
-      await documentContext.loadFromDocument(
-        uri,
-        uri,
-        this.documentUri,
-        this.documentNode,
-        jns42generator.schemaDraft04.metaSchemaId,
-      );
-    }
-
-    return documentContext.getIntermediateSchemaEntries();
   }
 
   private *getBodyModels(
@@ -324,7 +299,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     requestBodyItem: oas.RequestBodyContent | oas.ResponseContent,
   ) {
     for (const contentType in requestBodyItem) {
-      const mediaTypeItem = requestBodyItem[contentType as keyof typeof requestBodyItem];
+      const mediaTypeItem = requestBodyItem[contentType];
 
       if (!oas.isMediaType(mediaTypeItem)) {
         continue;
@@ -345,11 +320,264 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     const schemaUri =
       mediaTypeItem.schema == null ? undefined : appendToUriHash(mediaTypeUri, "schema");
     const schemaId = schemaUri == null ? schemaUri : normalizeUrl(schemaUri).toString();
+    const mockable =
+      (schemaId != null &&
+        this.specification.typesArena.getItem(this.schemaIdMap[schemaId]).mockable) ??
+      false;
 
     return {
       uri: mediaTypeUri,
       contentType,
       schemaId,
+      mockable,
     };
   }
+
+  private dereference<T>(target: T | oas.Reference): T {
+    if (oas.isReference(target)) {
+      throw new Error();
+    }
+    return target;
+  }
+
+  //#region selectors
+
+  protected *selectSchemas(
+    pointer: string,
+    document: oas.SchemaDocument,
+  ): Iterable<readonly [string, unknown]> {
+    yield* selectFromDocument(pointer);
+
+    function* selectFromDocument(pointer: string) {
+      for (const [path, pathObject] of Object.entries(document.paths)) {
+        assert(oas.isPathItem(pathObject));
+        yield* selectFromPath(appendToPointer(pointer, "paths", path), pathObject);
+      }
+
+      for (const [schema, schemaObject] of Object.entries(document.components?.schemas ?? {})) {
+        yield* selectFromSchema(
+          appendToPointer(pointer, "components", "schemas", schema),
+          schemaObject,
+        );
+      }
+
+      for (const [requestBody, requestBodyObject] of Object.entries(
+        document.components?.requestBodies ?? {},
+      )) {
+        yield* selectFromRequestBody(
+          appendToPointer(pointer, "components", "requestBodies", requestBody),
+          requestBodyObject,
+        );
+      }
+
+      for (const [response, responseObject] of Object.entries(
+        document.components?.responses ?? {},
+      )) {
+        if (oas.isReference(responseObject)) {
+          throw "TODO";
+        }
+
+        yield* selectFromResponse(
+          appendToPointer(pointer, "components", "responses", response),
+          responseObject,
+        );
+      }
+
+      for (const [parameter, parameterObject] of Object.entries(
+        document.components?.parameters ?? {},
+      )) {
+        yield* selectFromParameter(
+          appendToPointer(pointer, "components", "parameters", parameter),
+          parameterObject,
+        );
+      }
+
+      for (const [header, headerObject] of Object.entries(document.components?.headers ?? {})) {
+        yield* selectFromHeader(
+          appendToPointer(pointer, "components", "headers", header),
+          headerObject,
+        );
+      }
+    }
+
+    function* selectFromPath(pointer: string, pathObject: oas.PathItem) {
+      for (const [parameter, parameterObject] of Object.entries(pathObject.parameters ?? {})) {
+        yield* selectFromParameter(
+          appendToPointer(pointer, "parameters", parameter),
+          parameterObject,
+        );
+      }
+
+      for (const method of Object.values(methods)) {
+        const operationObject = pathObject[method];
+        if (operationObject == null) {
+          continue;
+        }
+
+        assert(oas.isOperation(operationObject));
+
+        yield* selectFromOperation(appendToPointer(pointer, method), operationObject);
+      }
+    }
+
+    function* selectFromOperation(pointer: string, operationObject: oas.Operation) {
+      if (!oas.isOperation(operationObject)) {
+        return;
+      }
+
+      for (const [parameter, parameterObject] of Object.entries(operationObject.parameters ?? [])) {
+        yield* selectFromParameter(
+          appendToPointer(pointer, "parameters", parameter),
+          parameterObject,
+        );
+      }
+
+      for (const [response, responseObject] of Object.entries(operationObject.responses ?? {})) {
+        if (oas.isReference(responseObject)) {
+          throw "TODO";
+        }
+
+        assert(oas.isResponse(responseObject));
+
+        yield* selectFromResponse(appendToPointer(pointer, "responses", response), responseObject);
+      }
+
+      if (operationObject.requestBody) {
+        yield* selectFromRequestBody(
+          appendToPointer(pointer, "requestBody"),
+          operationObject.requestBody,
+        );
+      }
+    }
+
+    function* selectFromRequestBody(pointer: string, requestBodyObject: oas.RequestBodiesAZAZ09) {
+      if (oas.isReference(requestBodyObject)) {
+        return;
+      }
+
+      for (const [contentType, contentObject] of Object.entries(requestBodyObject.content)) {
+        yield* selectFromMediaTypeObject(
+          appendToPointer(pointer, "content", contentType),
+          contentObject,
+        );
+      }
+    }
+
+    function* selectFromMediaTypeObject(
+      pointer: string,
+      mediaTypeObject: oas.RequestBodyContentAdditionalProperties,
+    ) {
+      if (oas.isReference(mediaTypeObject)) {
+        return;
+      }
+
+      yield* selectFromSchema(appendToPointer(pointer, "schema"), mediaTypeObject.schema);
+    }
+
+    function* selectFromResponse(responsePointer: string, responseObject: oas.Response) {
+      for (const [contentType, contentObject] of Object.entries(responseObject.content ?? {})) {
+        yield* selectFromSchema(
+          appendToPointer(responsePointer, "content", contentType, "schema"),
+          contentObject.schema,
+        );
+      }
+
+      for (const [header, headerObject] of Object.entries(responseObject.headers ?? {})) {
+        yield* selectFromHeader(appendToPointer(responsePointer, "headers", header), headerObject);
+      }
+    }
+
+    function* selectFromParameter(pointer: string, parameterObject: oas.Reference | oas.Parameter) {
+      if (oas.isReference(parameterObject)) return;
+
+      yield* selectFromSchema(appendToPointer(pointer, "schema"), parameterObject.schema);
+    }
+
+    function* selectFromHeader(headerPointer: string, headerObject: oas.Reference | oas.Header) {
+      if (oas.isReference(headerObject)) {
+        return;
+      }
+
+      yield* selectFromSchema(appendToPointer(headerPointer, "schema"), headerObject.schema);
+    }
+
+    function* selectFromSchema(
+      schemaPointer: string,
+      schemaObject: oas.Reference | oas.DefinitionsSchema | undefined,
+    ) {
+      if (schemaObject == null) {
+        return;
+      }
+
+      yield [schemaPointer, schemaObject] as const;
+    }
+
+    // function* selectFromSchema(
+    //   schemaObject:
+    //     | oas.Reference
+    //     | oas.SchemaObject
+    //     | undefined,
+    //   pointer: string,
+    // ): Iterable<{
+    //   schemaObject: oas.SchemaObject;
+    //   pointerParts: string[];
+    // }> {
+    //   if (!schemaObject) return;
+    //   if (oas.isReference(schemaObject)) return;
+
+    //   yield {
+    //     schemaObject,
+    //     pointerParts,
+    //   };
+
+    //   for (const [property, propertyObject] of Object.entries(
+    //     schemaObject.properties ?? {},
+    //   )) {
+    //     yield* selectFromSchema(propertyObject, [
+    //       ...pointerParts,
+    //       "properties",
+    //       property,
+    //     ]);
+    //   }
+
+    //   for (const [allOf, allOfObject] of Object.entries(
+    //     schemaObject.allOf ?? {},
+    //   )) {
+    //     yield* selectFromSchema(allOfObject, [...pointerParts, "allOf", allOf]);
+    //   }
+
+    //   for (const [anyOf, anyOfObject] of Object.entries(
+    //     schemaObject.anyOf ?? {},
+    //   )) {
+    //     yield* selectFromSchema(anyOfObject, [...pointerParts, "anyOf", anyOf]);
+    //   }
+
+    //   for (const [oneOf, oneOfObject] of Object.entries(
+    //     schemaObject.oneOf ?? {},
+    //   )) {
+    //     yield* selectFromSchema(oneOfObject, [...pointerParts, "oneOf", oneOf]);
+    //   }
+
+    //   if ("items" in schemaObject) {
+    //     if (Array.isArray(schemaObject.items)) {
+    //       for (const [item, itemObject] of Object.entries(schemaObject.items)) {
+    //         yield* selectFromSchema(itemObject, [...pointerParts, "items", item]);
+    //       }
+    //     } else {
+    //       yield* selectFromSchema(schemaObject.items, [...pointerParts, "items"]);
+    //     }
+    //   }
+
+    //   if (typeof schemaObject.additionalProperties === "object") {
+    //     yield* selectFromSchema(schemaObject.additionalProperties, [
+    //       ...pointerParts,
+    //       "additionalProperties",
+    //     ]);
+    //   }
+
+    //   yield* selectFromSchema(schemaObject.not, [...pointerParts, "not"]);
+    // }
+  }
+
+  //#endregion
 }

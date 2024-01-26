@@ -3,4 +3,5 @@ export interface Parameter {
   name: string;
   required: boolean;
   schemaId?: string;
+  mockable: boolean;
 }
