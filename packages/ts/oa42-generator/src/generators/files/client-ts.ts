@@ -73,7 +73,7 @@ export function* generateClientTsCode(apiModel: models.Api) {
           ${generateClientOperationFunctionBody(apiModel, pathModel, operationModel)}
         }
       `;
-      yield* generateOperationCredentialsType(operationModel);
+      yield* generateOperationCredentialsType(apiModel, operationModel);
       yield* generateOperationOutgoingRequestType(apiModel, operationModel);
       yield* generateOperationIncomingResponseType(apiModel, operationModel);
     }

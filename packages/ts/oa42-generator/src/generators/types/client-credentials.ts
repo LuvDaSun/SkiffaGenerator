@@ -1,34 +1,28 @@
 import * as models from "../../models/index.js";
-import { joinIterable } from "../../utils/index.js";
+import { toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { toCamel, toPascal } from "../../utils/name.js";
 
-export function* generateOperationCredentialsType(operationModel: models.Operation) {
+export function* generateOperationCredentialsType(
+  apiModel: models.Api,
+  operationModel: models.Operation,
+) {
   const operationCredentialsName = toPascal(operationModel.name, "credentials");
+  const authenticationNames = new Set(
+    operationModel.authenticationRequirements.flatMap((requirements) =>
+      requirements.map((requirement) => requirement.authenticationName),
+    ),
+  );
+  const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
+    authenticationNames.has(authenticationModel.name),
+  );
 
   yield itt`
-    export type ${operationCredentialsName} =
-      ${joinIterable(generateUnionTypes(operationModel.authenticationRequirements), " |\n")}
-    ;
+    export type ${operationCredentialsName} = {
+      ${authenticationModels.map(
+        (authenticationModel) => itt`
+          ${toCamel(authenticationModel.name)}: string,
+        `,
+      )}
+    };
   `;
-}
-
-function* generateUnionTypes(requirements: models.AuthenticationRequirement[][]) {
-  if (requirements.length === 0) {
-    yield itt`{}`;
-  }
-
-  for (const subRequirements of requirements) {
-    yield itt`
-      {
-        ${generateTypeBody(subRequirements)}
-      }
-    `;
-  }
-}
-
-function* generateTypeBody(subRequirements: models.AuthenticationRequirement[]) {
-  for (const requirement of subRequirements) {
-    yield itt`${toCamel(requirement.authenticationName)}: string,`;
-  }
 }
