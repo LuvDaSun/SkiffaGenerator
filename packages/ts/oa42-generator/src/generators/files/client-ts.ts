@@ -4,6 +4,7 @@ import { banner, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateClientOperationFunctionBody } from "../bodies/index.js";
 import {
+  generateOperationCredentialsType,
   generateOperationIncomingResponseType,
   generateOperationOutgoingRequestType,
 } from "../types/index.js";
@@ -47,10 +48,9 @@ export function* generateClientTsCode(apiModel: models.Api) {
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
       const operationFunctionName = toCamel(operationModel.name);
-
       const operationOutgoingRequestName = toPascal(operationModel.name, "outgoing", "request");
-
       const operationIncomingResponseName = toPascal(operationModel.name, "incoming", "response");
+      const credentialsName = toPascal(operationModel.name, "credentials");
 
       const jsDoc = [
         operationModel.deprecated ? "@deprecated" : "",
@@ -67,12 +67,13 @@ export function* generateClientTsCode(apiModel: models.Api) {
          */
         export async function ${operationFunctionName}(
           outgoingRequest: ${operationOutgoingRequestName},
-          credentials: unknown,
+          credentials: ${credentialsName},
           options: ClientOptions = defaultClientOptions,
         ): Promise<${operationIncomingResponseName}> {
           ${generateClientOperationFunctionBody(apiModel, pathModel, operationModel)}
         }
       `;
+      yield* generateOperationCredentialsType(operationModel);
       yield* generateOperationOutgoingRequestType(apiModel, operationModel);
       yield* generateOperationIncomingResponseType(apiModel, operationModel);
     }
