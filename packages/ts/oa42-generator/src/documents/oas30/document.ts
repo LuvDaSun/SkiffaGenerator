@@ -384,7 +384,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
         document.components?.responses ?? {},
       )) {
         if (oas.isReference(responseObject)) {
-          throw "TODO";
+          continue;
         }
 
         yield* selectFromResponse(
@@ -444,7 +444,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
 
       for (const [response, responseObject] of Object.entries(operationObject.responses ?? {})) {
         if (oas.isReference(responseObject)) {
-          throw "TODO";
+          continue;
         }
 
         assert(oas.isResponse(responseObject));
