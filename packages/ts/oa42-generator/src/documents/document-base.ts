@@ -81,7 +81,10 @@ export abstract class DocumentBase<N = unknown> {
 
   //#region selectors
 
-  protected abstract selectSchemas(pointer: string, document: N): Iterable<[string, unknown]>;
+  protected abstract selectSchemas(
+    pointer: string,
+    document: N,
+  ): Iterable<readonly [string, unknown]>;
 
   //#endregion
 }

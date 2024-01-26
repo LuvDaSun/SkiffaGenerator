@@ -345,8 +345,8 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
   protected *selectSchemas(
     pointer: string,
     document: oas.SchemaDocument,
-  ): Iterable<[string, unknown]> {
-    return selectFromDocument(pointer);
+  ): Iterable<readonly [string, unknown]> {
+    yield* selectFromDocument(pointer);
 
     function* selectFromDocument(pointer: string) {
       for (const [path, pathObject] of Object.entries(document.paths)) {

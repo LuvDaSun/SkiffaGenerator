@@ -174,6 +174,10 @@ function* generateOperationTest(
       ...operationModel.pathParameters,
       ...operationModel.queryParameters,
     ]) {
+      if (!parameterModel.mockable) {
+        continue;
+      }
+
       assert(parameterModel.schemaId != null);
 
       const validateFunctionName = toCamel("is", names[parameterModel.schemaId]);
@@ -194,17 +198,17 @@ function* generateOperationTest(
 
       switch (requestBodyModel.contentType) {
         case "application/json": {
-          if (requestBodyModel.schemaId != null) {
-            const validateFunctionName = toCamel("is", names[requestBodyModel.schemaId]);
+          assert(requestBodyModel.schemaId != null);
 
-            yield itt`
+          const validateFunctionName = toCamel("is", names[requestBodyModel.schemaId]);
+
+          yield itt`
               {
                 const entity = await incomingRequest.entity();
                 const valid = main.${validateFunctionName}(entity);
                 assert.equal(valid, true);
               }
             `;
-          }
           break;
         }
       }
@@ -306,6 +310,10 @@ function* generateOperationTest(
     `;
 
     for (const parameterModel of operationResultModel.headerParameters) {
+      if (!parameterModel.mockable) {
+        continue;
+      }
+
       assert(parameterModel.schemaId != null);
 
       const validateFunctionName = toCamel("is", names[parameterModel.schemaId]);
@@ -349,6 +357,10 @@ function* generateOperationTest(
       ...operationModel.pathParameters,
       ...operationModel.queryParameters,
     ]) {
+      if (!parameterModel.mockable) {
+        continue;
+      }
+
       assert(parameterModel.schemaId != null);
 
       const mockFunctionName = toCamel("mock", names[parameterModel.schemaId]);
@@ -360,6 +372,10 @@ function* generateOperationTest(
 
   function* generateResponseParametersMockBody() {
     for (const parameterModel of operationResultModel.headerParameters) {
+      if (!parameterModel.mockable) {
+        continue;
+      }
+
       assert(parameterModel.schemaId != null);
 
       const mockFunctionName = toCamel("mock", names[parameterModel.schemaId]);
