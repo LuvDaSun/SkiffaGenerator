@@ -229,7 +229,7 @@ function* generateResponseStatusCodeCaseClauses(
 
   yield itt`
     default:
-      throw new lib.UnexpectedClientResponseStatusCode();
+      throw new lib.ClientResponseUnexpectedStatusCode();
   `;
 }
 
@@ -294,7 +294,7 @@ function* generateOperationResultBody(
   } else {
     yield itt`
       if (responseContentType == null) {
-        throw new lib.MissingClientResponseContentType();
+        throw new lib.ClientResponseMissingContentType();
       }
 
       switch(responseContentType) {
@@ -320,7 +320,7 @@ function* generateOperationResultContentTypeCaseClauses(
 
   yield itt`
     default:
-      throw new lib.UnexpectedClientResponseContentType();       
+      throw new lib.ClientResponseUnexpectedContentType();       
   `;
 }
 

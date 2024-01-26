@@ -192,7 +192,7 @@ export function* generateRouteHandlerMethodBody(
   } else {
     yield itt`
       if(requestContentType == null) {
-        throw new lib.MissingServerRequestContentType();
+        throw new lib.ServerRequestMissingContentType();
       }
 
       switch(requestContentType) {
@@ -242,7 +242,7 @@ function* generateRequestContentTypeCodeCaseClauses(
   }
   yield itt`
     default:
-      throw new lib.UnexpectedServerRequestContentType();
+      throw new lib.ServerRequestUnexpectedContentType();
   `;
 }
 
