@@ -101,10 +101,11 @@ async function main(options: MainOptions) {
   await documentContext.loadFromUrl(specificationUrl);
 
   const apiModel = documentContext.getApiModel();
+  const specification = documentContext.getSpecification();
 
   // generate code
 
-  generatePackage(apiModel, {
+  generatePackage(apiModel, specification, {
     packageDirectoryPath,
     packageName,
     packageVersion,

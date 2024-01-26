@@ -56,4 +56,8 @@ export class DocumentContext {
   public getApiModel() {
     return this.document.getApiModel();
   }
+
+  public getSpecification() {
+    return this.document.getSpecification();
+  }
 }

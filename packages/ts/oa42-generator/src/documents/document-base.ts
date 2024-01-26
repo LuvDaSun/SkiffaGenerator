@@ -12,6 +12,11 @@ export abstract class DocumentBase<N = unknown> {
     //
   }
 
+  public getSpecification(): Specification {
+    return this.specification;
+  }
+  public abstract getApiModel(): models.Api;
+
   protected specification!: Specification;
   protected schemaIdMap!: Record<string, number>;
   public async load() {
@@ -73,8 +78,6 @@ export abstract class DocumentBase<N = unknown> {
 
     return documentContext.getIntermediateSchemaEntries();
   }
-
-  public abstract getApiModel(): models.Api;
 
   //#region selectors
 
