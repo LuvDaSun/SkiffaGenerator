@@ -280,7 +280,10 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     const schemaUri =
       parameterItem.schema == null ? undefined : appendToUriHash(parameterUri, "schema");
     const schemaId = schemaUri == null ? schemaUri : normalizeUrl(schemaUri).toString();
-    const mockable = schemaId != null;
+    const mockable =
+      (schemaId != null &&
+        this.specification.typesArena.getItem(this.schemaIdMap[schemaId]).mockable) ??
+      false;
 
     return {
       uri: parameterUri,
@@ -317,7 +320,10 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     const schemaUri =
       mediaTypeItem.schema == null ? undefined : appendToUriHash(mediaTypeUri, "schema");
     const schemaId = schemaUri == null ? schemaUri : normalizeUrl(schemaUri).toString();
-    const mockable = schemaId != null;
+    const mockable =
+      (schemaId != null &&
+        this.specification.typesArena.getItem(this.schemaIdMap[schemaId]).mockable) ??
+      false;
 
     return {
       uri: mediaTypeUri,

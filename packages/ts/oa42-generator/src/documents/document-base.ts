@@ -13,7 +13,8 @@ export abstract class DocumentBase<N = unknown> {
   }
 
   protected specification!: Specification;
-  public async loadSpecification() {
+  protected schemaIdMap!: Record<string, number>;
+  public async load() {
     const { defaultName, nameMaximumIterations, transformMaximumIterations } = this.options;
 
     const schemas = Object.fromEntries(await this.getSchemas());
@@ -27,7 +28,18 @@ export abstract class DocumentBase<N = unknown> {
       nameMaximumIterations,
       transformMaximumIterations,
     });
+
+    const schemaIdMap: Record<string, number> = {};
+    for (const [key, model] of specification.typesArena) {
+      if (model.id == null) {
+        continue;
+      }
+
+      schemaIdMap[model.id] = key;
+    }
+
     this.specification = specification;
+    this.schemaIdMap = schemaIdMap;
   }
 
   private async getSchemas(): Promise<Iterable<readonly [string, any]>> {

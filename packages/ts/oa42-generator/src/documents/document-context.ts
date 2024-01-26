@@ -46,7 +46,7 @@ export class DocumentContext {
         options: this.options,
       });
       if (document != null) {
-        await document.loadSpecification();
+        await document.load();
         this.document = document;
         break;
       }
