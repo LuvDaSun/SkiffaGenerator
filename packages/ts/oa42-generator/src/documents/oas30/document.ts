@@ -73,24 +73,20 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
 
   private *getOperationModels(pathUri: URL, pathPattern: string, pathItem: oas.PathItem) {
     for (const method of methods) {
-      const operationItem = pathItem[method];
+      const operationModel = this.dereference(pathItem[method]);
 
-      if (operationItem == null) {
+      if (operationModel == null) {
         continue;
       }
 
-      if (oas.isReference(operationItem)) {
-        throw "TODO";
-      }
-
-      assert(oas.isOperation(operationItem));
+      assert(oas.isOperation(operationModel));
 
       yield this.getOperationModel(
         pathUri,
         pathItem,
         appendToUriHash(pathUri, method),
         method,
-        operationItem,
+        operationModel,
       );
     }
   }
@@ -104,13 +100,23 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
   ) {
     const allParameters = [
       ...(pathItem.parameters ?? [])
-        .map((item) => this.dereference(item))
+        .map((item) => {
+          const parameterObject = this.dereference(item);
+          assert(oas.isParameter(parameterObject));
+
+          return parameterObject;
+        })
         .map(
           (item, index) =>
             [appendToUriHash(pathUri, "parameters", index), item.name, item] as const,
         ),
       ...(operationItem.parameters ?? [])
-        .map((item) => this.dereference(item))
+        .map((item) => {
+          const parameterObject = this.dereference(item);
+          assert(oas.isParameter(parameterObject));
+
+          return parameterObject;
+        })
         .map(
           (item, index) =>
             [appendToUriHash(operationUri, "parameters", index), item.name, item] as const,
@@ -141,16 +147,19 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       })),
     );
 
+    let bodies: models.Body[];
     const requestBody = this.dereference(operationItem.requestBody);
-    const bodies =
-      requestBody?.content != null
-        ? [
-            ...this.getBodyModels(
-              appendToUriHash(operationUri, "requestBody", "content"),
-              requestBody.content,
-            ),
-          ]
-        : [];
+    if (requestBody == null) {
+      bodies = [];
+    } else {
+      assert(oas.isDefinitionsRequestBody(requestBody));
+      bodies = [
+        ...this.getBodyModels(
+          appendToUriHash(operationUri, "requestBody", "content"),
+          requestBody.content,
+        ),
+      ];
+    }
 
     const operationResults = [...this.getOperationResultModels(operationUri, operationItem)];
 
@@ -333,9 +342,10 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     };
   }
 
-  private dereference<T>(target: T | oas.Reference): T {
-    if (oas.isReference(target)) {
-      throw new Error();
+  private dereference(target: unknown | oas.Reference): unknown {
+    while (oas.isReference(target)) {
+      const pointer = (target.$ref as string).replace(/^#+/, "");
+      target = this.nodes[pointer];
     }
     return target;
   }

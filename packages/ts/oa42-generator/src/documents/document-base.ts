@@ -1,15 +1,17 @@
 import * as jns42generator from "jns42-generator";
 import { Specification } from "jns42-generator";
 import * as models from "../models/index.js";
+import { readNode } from "../utils/index.js";
 import { DocumentOptions } from "./document-context.js";
 
 export abstract class DocumentBase<N = unknown> {
+  protected readonly nodes: Record<string, unknown>;
   constructor(
     protected readonly documentUri: URL,
     protected readonly documentNode: N,
     protected readonly options: DocumentOptions,
   ) {
-    //
+    this.nodes = Object.fromEntries(readNode("", documentNode));
   }
 
   public getSpecification(): Specification {
