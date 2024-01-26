@@ -24,6 +24,14 @@ export class UnexpectedClientResponseContentType extends ClientError {
   }
 }
 
+export class UnexpectedClientResponseStatusCode extends ClientError {
+  public readonly name = "UnexpectedClientResponseStatusCode";
+
+  constructor() {
+    super(`Unexpected status code in client response`);
+  }
+}
+
 export class ClientRequestParameterValidationFailed extends ClientError {
   public readonly name = "ClientRequestParameterValidationFailed";
 

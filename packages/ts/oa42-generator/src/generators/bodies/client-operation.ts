@@ -229,7 +229,7 @@ function* generateResponseStatusCodeCaseClauses(
 
   yield itt`
     default:
-      throw new lib.Unreachable();
+      throw new lib.UnexpectedClientResponseStatusCode();
   `;
 }
 
@@ -320,7 +320,7 @@ function* generateOperationResultContentTypeCaseClauses(
 
   yield itt`
     default:
-      throw new lib.Unreachable();       
+      throw new lib.UnexpectedClientResponseContentType();       
   `;
 }
 
