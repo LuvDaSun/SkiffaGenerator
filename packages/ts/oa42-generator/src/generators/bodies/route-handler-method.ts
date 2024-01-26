@@ -13,12 +13,13 @@ export function* generateRouteHandlerMethodBody(
   const requestParametersName = toPascal(operationModel.name, "request", "parameters");
   const isRequestParametersFunction = toCamel("is", operationModel.name, "request", "parameters");
   const isOperationAuthenticationName = toCamel("is", operationModel.name, "authentication");
-  const authenticationNames = Array.from(
-    new Set(
-      operationModel.authenticationRequirements.flatMap((requirements) =>
-        requirements.map((requirement) => requirement.authenticationName),
-      ),
+  const authenticationNames = new Set(
+    operationModel.authenticationRequirements.flatMap((requirements) =>
+      requirements.map((requirement) => requirement.authenticationName),
     ),
+  );
+  const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
+    authenticationNames.has(authenticationModel.name),
   );
 
   yield itt`
@@ -60,11 +61,29 @@ export function* generateRouteHandlerMethodBody(
    */
 
   yield itt`
+    const credentials = {
+      ${authenticationModels.map((authenticationModel) => {
+        return itt`
+          ${toCamel(authenticationModel.name)}:
+            lib.first(lib.getParameterValues(serverIncomingRequest.headers, ${JSON.stringify(authenticationModel.name)})),
+        `;
+      })}
+    }
+  `;
+
+  yield itt`
     const authentication: A = Object.fromEntries(
       await Promise.all([
-        ${authenticationNames.map(
-          (name) => itt`
-            (async () => [${JSON.stringify(toCamel(name))}, await this.${toCamel(name, "authentication", "handler")}?.("")])(),
+        ${authenticationModels.map(
+          (authenticationModel) => itt`
+            (
+              async () => [
+                ${JSON.stringify(toCamel(authenticationModel.name))},
+                credentials.apiToken == null ?
+                  undefined :
+                  await this.${toCamel(authenticationModel.name, "authentication", "handler")}?.(credentials.${toCamel(authenticationModel.name)})
+              ]
+            )(),
           `,
         )}
       ]),
