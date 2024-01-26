@@ -50,7 +50,7 @@ export function* generateClientOperationFunctionBody(
       lib.addParameter(
         pathParameters,
         ${JSON.stringify(parameterModel.name)},
-        outgoingRequest.parameters.${parameterName} as unknown as string,
+        outgoingRequest.parameters.${parameterName} == null ? "" : String(outgoingRequest.parameters.${parameterName}),
       );
     `;
 
@@ -71,7 +71,7 @@ export function* generateClientOperationFunctionBody(
       lib.addParameter(
         queryParameters,
         ${JSON.stringify(parameterModel.name)},
-        outgoingRequest.parameters.${parameterName} as unknown as string,
+        outgoingRequest.parameters.${parameterName} == null ? "" : String(outgoingRequest.parameters.${parameterName}),
       );
     `;
 
@@ -91,7 +91,7 @@ export function* generateClientOperationFunctionBody(
     const addParameterCode = itt`
       requestHeaders.append(
         ${JSON.stringify(parameterModel.name)}, 
-        outgoingRequest.parameters.${parameterName} as unknown as string,
+        outgoingRequest.parameters.${parameterName} == null ? "" : String(outgoingRequest.parameters.${parameterName}),
       );
     `;
 
@@ -112,7 +112,7 @@ export function* generateClientOperationFunctionBody(
       lib.addParameter(
         cookieParameters,
         ${JSON.stringify(parameterModel.name)},
-        outgoingRequest.parameters.${parameterName} as unknown as string,
+        outgoingRequest.parameters.${parameterName} == null ? "" : String(outgoingRequest.parameters.${parameterName}),
       );
     `;
 
@@ -125,6 +125,21 @@ export function* generateClientOperationFunctionBody(
         }
       `;
     }
+  }
+
+  const authenticationNames = new Set(
+    operationModel.authenticationRequirements.flatMap((requirements) =>
+      requirements.map((requirement) => requirement.authenticationName),
+    ),
+  );
+  for (const authenticationModel of apiModel.authentication) {
+    if (!authenticationNames.has(authenticationModel.name)) {
+      continue;
+    }
+
+    yield itt`
+      requestHeaders.append(${JSON.stringify(authenticationModel.name)}, credentials.${toCamel(authenticationModel.name)});
+    `;
   }
 
   yield itt`
@@ -153,36 +168,36 @@ export function* generateClientOperationFunctionBody(
     yield* generateRequestContentTypeCodeBody(apiModel, operationModel);
   } else {
     yield itt`  
-      switch(outgoingRequest.contentType){
-        ${generateRequestContentTypeCaseClauses(apiModel, operationModel)}
-      }
-    `;
+        switch(outgoingRequest.contentType){
+          ${generateRequestContentTypeCaseClauses(apiModel, operationModel)}
+        }
+      `;
   }
 
   yield itt`
-    const requestInit: RequestInit = {
-      headers: requestHeaders,
-      method: ${JSON.stringify(operationModel.method.toUpperCase())},
-      redirect: "manual",
-      body,
-    };
-    const fetchResponse = await fetch(url, requestInit);
-
-    const responseContentType = 
-      fetchResponse.headers.get("content-type");
-
-    let incomingResponse: ${operationIncomingResponseName};
-  `;
-
-  yield itt`
-    switch(fetchResponse.status) {
-      ${generateResponseStatusCodeCaseClauses(apiModel, operationModel)}
-    }
-  `;
+      const requestInit: RequestInit = {
+        headers: requestHeaders,
+        method: ${JSON.stringify(operationModel.method.toUpperCase())},
+        redirect: "manual",
+        body,
+      };
+      const fetchResponse = await fetch(url, requestInit);
+  
+      const responseContentType = 
+        fetchResponse.headers.get("content-type");
+  
+      let incomingResponse: ${operationIncomingResponseName};
+    `;
 
   yield itt`
-    return incomingResponse;
-  `;
+      switch(fetchResponse.status) {
+        ${generateResponseStatusCodeCaseClauses(apiModel, operationModel)}
+      }
+    `;
+
+  yield itt`
+      return incomingResponse;
+    `;
 }
 
 function* generateRequestContentTypeCaseClauses(
