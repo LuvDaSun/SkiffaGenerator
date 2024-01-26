@@ -13,12 +13,13 @@ export function* generateRouteHandlerMethodBody(
   const requestParametersName = toPascal(operationModel.name, "request", "parameters");
   const isRequestParametersFunction = toCamel("is", operationModel.name, "request", "parameters");
   const isOperationAuthenticationName = toCamel("is", operationModel.name, "authentication");
-  const authenticationNames = Array.from(
-    new Set(
-      operationModel.authenticationRequirements.flatMap((requirements) =>
-        requirements.map((requirement) => requirement.authenticationName),
-      ),
+  const authenticationNames = new Set(
+    operationModel.authenticationRequirements.flatMap((requirements) =>
+      requirements.map((requirement) => requirement.authenticationName),
     ),
+  );
+  const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
+    authenticationNames.has(authenticationModel.name),
   );
 
   yield itt`
@@ -60,13 +61,34 @@ export function* generateRouteHandlerMethodBody(
    */
 
   yield itt`
-    const authentication = {
-      ${authenticationNames.map(
-        (name) => itt`
-    ${toCamel(name)}: this.${toCamel(name, "authentication", "handler")}?.(""),
-    `,
-      )}
+    const credentials = {
+      ${authenticationModels.map((authenticationModel) => {
+        return itt`
+          ${toCamel(authenticationModel.name)}:
+            lib.first(lib.getParameterValues(serverIncomingRequest.headers, ${JSON.stringify(authenticationModel.name)})),
+        `;
+      })}
     }
+  `;
+
+  yield itt`
+    const authentication: A = Object.fromEntries(
+      await Promise.all([
+        ${authenticationModels.map(
+          (authenticationModel) => itt`
+            (
+              async () => [
+                ${JSON.stringify(toCamel(authenticationModel.name))},
+                credentials.apiToken == null ?
+                  undefined :
+                  await this.${toCamel(authenticationModel.name, "authentication", "handler")}?.(credentials.${toCamel(authenticationModel.name)})
+              ]
+            )(),
+          `,
+        )}
+      ]),
+    );
+
     if(!${isOperationAuthenticationName}(authentication)) {
       throw new lib.AuthenticationFailed();
     }
@@ -192,7 +214,7 @@ export function* generateRouteHandlerMethodBody(
   } else {
     yield itt`
       if(requestContentType == null) {
-        throw new lib.MissingServerRequestContentType();
+        throw new lib.ServerRequestMissingContentType();
       }
 
       switch(requestContentType) {
@@ -242,7 +264,7 @@ function* generateRequestContentTypeCodeCaseClauses(
   }
   yield itt`
     default:
-      throw new lib.UnexpectedServerRequestContentType();
+      throw new lib.ServerRequestUnexpectedContentType();
   `;
 }
 

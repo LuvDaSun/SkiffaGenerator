@@ -1,6 +1,6 @@
 import assert from "assert";
 import * as models from "../../models/index.js";
-import { banner, toCamel } from "../../utils/index.js";
+import { banner, mapIterable, toCamel } from "../../utils/index.js";
 import { NestedText, itt } from "../../utils/iterable-text-template.js";
 
 export function* generateClientServerTestTsCode(apiModel: models.Api) {
@@ -11,6 +11,12 @@ export function* generateClientServerTestTsCode(apiModel: models.Api) {
     import test from "node:test";
     import * as main from "./main.js";
     import * as http from "http";
+  `;
+
+  yield itt`
+    type ServerAuthentication = {
+      ${apiModel.authentication.map((authenticationModel) => itt`${toCamel(authenticationModel.name)}: boolean,`)}
+    };
   `;
 
   for (const pathModel of apiModel.paths) {
@@ -95,8 +101,17 @@ function* generateOperationTest(
     return;
   }
 
+  const authenticationNames = new Set(
+    operationModel.authenticationRequirements.flatMap((requirements) =>
+      requirements.map((requirement) => requirement.authenticationName),
+    ),
+  );
+  const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
+    authenticationNames.has(authenticationModel.name),
+  );
+
   const { names } = apiModel;
-  const registerHandlerMethodName = toCamel("register", operationModel.name, "operation");
+  const registerOperationHandlerMethodName = toCamel("register", operationModel.name, "operation");
 
   let testNameParts = new Array<string>();
   testNameParts.push(operationModel.name);
@@ -130,16 +145,26 @@ function* generateOperationTest(
 
   function* generateTestBody() {
     yield itt`
-      const server = new main.Server({
+      const server = new main.Server<ServerAuthentication>({
         validateIncomingParameters: false,
         validateIncomingEntity: false,
         validateOutgoingParameters: false,
         validateOutgoingEntity: false,
       });
-      server.${registerHandlerMethodName}(async (incomingRequest, authentication) => {
+      server.${registerOperationHandlerMethodName}(async (incomingRequest, authentication) => {
         ${generateServerOperationHandler()}
       });
     `;
+    for (const authenticationModel of authenticationModels) {
+      const registerAuthenticationHandlerMethodName = toCamel(
+        "register",
+        authenticationModel.name,
+        "authentication",
+      );
+      yield itt`
+        server.${registerAuthenticationHandlerMethodName}((credential) => credential === "super-secret-api-key")
+      `;
+    }
     yield itt`
       let lastError: unknown;
       const httpServer = http.createServer();
@@ -258,7 +283,14 @@ function* generateOperationTest(
             contentType: null,
             parameters: {${generateRequestParametersMockBody()}},
           },
-          {},
+          {
+            ${mapIterable(
+              authenticationModels,
+              (authenticationModel) => itt`
+                ${toCamel(authenticationModel.name)}: "super-secret-api-key",
+              `,
+            )}
+          },
           {
             baseUrl,
             validateIncomingParameters: false,
@@ -285,7 +317,14 @@ function* generateOperationTest(
                 parameters: {${generateRequestParametersMockBody()}},
                 entity: () => ${entityExpression},
               },
-              {},
+              {
+                ${mapIterable(
+                  authenticationModels,
+                  (authenticationModel) => itt`
+                    ${toCamel(authenticationModel.name)}: "super-secret-api-key",
+                  `,
+                )}
+              },
               {
                 baseUrl,
                 validateIncomingParameters: false,

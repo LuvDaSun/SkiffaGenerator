@@ -41,8 +41,8 @@ export function createErrorMiddleware(onError?: (error: unknown) => void): Serve
       }
 
       if (
-        error instanceof errors.MissingServerRequestContentType ||
-        error instanceof errors.UnexpectedServerRequestContentType
+        error instanceof errors.ServerRequestMissingContentType ||
+        error instanceof errors.ServerRequestUnexpectedContentType
       ) {
         return {
           headers: {},

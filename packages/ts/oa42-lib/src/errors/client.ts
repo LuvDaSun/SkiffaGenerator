@@ -8,19 +8,27 @@ export abstract class ClientError extends ErrorBase {
   //
 }
 
-export class MissingClientResponseContentType extends ClientError {
-  public readonly name = "MissingClientResponseContentType";
+export class ClientResponseMissingContentType extends ClientError {
+  public readonly name = "ClientResponseMissingContentType";
 
   constructor() {
     super(`Missing content-type in client response`);
   }
 }
 
-export class UnexpectedClientResponseContentType extends ClientError {
-  public readonly name = "UnexpectedClientResponseContentType";
+export class ClientResponseUnexpectedContentType extends ClientError {
+  public readonly name = "ClientResponseUnexpectedContentType";
 
   constructor() {
     super(`Unexpected content-type in client response`);
+  }
+}
+
+export class ClientResponseUnexpectedStatusCode extends ClientError {
+  public readonly name = "ClientResponseUnexpectedStatusCode";
+
+  constructor() {
+    super(`Unexpected status code in client response`);
   }
 }
 

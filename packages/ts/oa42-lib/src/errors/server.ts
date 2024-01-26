@@ -40,16 +40,16 @@ export class OperationNotImplemented extends ServerError {
   }
 }
 
-export class MissingServerRequestContentType extends ServerError {
-  public readonly name = "MissingServerRequestContentType";
+export class ServerRequestMissingContentType extends ServerError {
+  public readonly name = "ServerRequestMissingContentType";
 
   constructor() {
     super(`Missing content-type in server request`);
   }
 }
 
-export class UnexpectedServerRequestContentType extends ServerError {
-  public readonly name = "UnexpectedServerRequestContentType";
+export class ServerRequestUnexpectedContentType extends ServerError {
+  public readonly name = "ServerRequestUnexpectedContentType";
 
   constructor() {
     super(`Unexpected content-type in server request`);

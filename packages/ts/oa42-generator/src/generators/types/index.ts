@@ -1,3 +1,4 @@
+export * from "./client-credentials.js";
 export * from "./operation-authentication.js";
 export * from "./operation-handler.js";
 export * from "./operation-incoming-request.js";
