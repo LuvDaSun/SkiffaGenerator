@@ -194,11 +194,11 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     }
 
     for (const authenticationName in this.documentNode.components.securitySchemes) {
-      const authenticationItem = this.documentNode.components.securitySchemes[authenticationName];
+      const authenticationItem = this.dereference(
+        this.documentNode.components.securitySchemes[authenticationName],
+      );
 
-      if (!oas.isSecurityScheme(authenticationItem)) {
-        continue;
-      }
+      assert(oas.isSecurityScheme(authenticationItem));
 
       yield this.getAuthenticationModel(authenticationName, authenticationItem);
     }
@@ -219,11 +219,9 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     const statusKinds = Object.keys(operationItem.responses ?? {}).sort(statusKindComparer);
 
     for (const statusKind of statusKinds) {
-      const responseItem = operationItem.responses[statusKind];
+      const responseItem = this.dereference(operationItem.responses[statusKind]);
 
-      if (!oas.isResponse(responseItem)) {
-        continue;
-      }
+      assert(oas.isResponse(responseItem));
 
       const statusCodes = [...takeStatusCodes(statusCodesAvailable, statusKind)];
 
@@ -268,10 +266,9 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
 
   private *getOperationResultHeaderParameters(operationUri: URL, responseItem: oas.Response) {
     for (const parameterName in responseItem.headers ?? {}) {
-      const headerItem = responseItem.headers![parameterName];
-      if (!oas.isHeader(headerItem)) {
-        continue;
-      }
+      const headerItem = this.dereference(responseItem.headers![parameterName]);
+
+      assert(oas.isHeader(headerItem));
 
       yield this.getParameterModel(
         appendToUriHash(operationUri, "headers", parameterName),
@@ -309,10 +306,6 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
   ) {
     for (const contentType in requestBodyItem) {
       const mediaTypeItem = requestBodyItem[contentType];
-
-      if (!oas.isMediaType(mediaTypeItem)) {
-        continue;
-      }
 
       yield this.getBodyModel(
         appendToUriHash(requestBodyUri, contentType),
