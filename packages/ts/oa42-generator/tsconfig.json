@@ -9,10 +9,5 @@
     "lib": ["es2023", "DOM"],
   },
   "include": ["src/**/*"],
-  "references": [
-    { "path": "../oa42-lib" },
-    { "path": "../schema-oas-v3-0" },
-    { "path": "../schema-oas-v3-1" },
-    { "path": "../schema-swagger-v2" },
-  ],
+  "references": [{ "path": "../oa42-lib" }],
 }

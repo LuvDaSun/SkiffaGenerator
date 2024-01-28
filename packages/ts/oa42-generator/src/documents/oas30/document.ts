@@ -1,7 +1,7 @@
+import * as oas from "@jns42/schema-oas-v3-0";
 import assert from "assert";
 import { Router } from "goodrouter";
 import { Method, StatusCode, methods, statusCodes } from "oa42-lib";
-import * as oas from "schema-oas-v3-0";
 import * as models from "../../models/index.js";
 import {
   appendToPointer,
