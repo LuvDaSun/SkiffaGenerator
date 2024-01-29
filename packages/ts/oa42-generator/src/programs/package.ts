@@ -35,7 +35,7 @@ export function configurePackageProgram(argv: yargs.Argv) {
         .option("default-name", {
           description: "default name for types",
           type: "string",
-          default: "@jns42/schema-document",
+          default: "@jns42/document",
         })
         .option("name-maximum-iterations", {
           description: "maximum number of iterations for finding unique names",
