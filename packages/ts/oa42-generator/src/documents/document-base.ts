@@ -19,10 +19,12 @@ export abstract class DocumentBase<N = unknown> {
   }
   public abstract getApiModel(): models.Api;
 
+  protected abstract getDefaultSchemaId(): string;
+
   protected specification!: Specification;
   protected schemaIdMap!: Record<string, number>;
   public async load() {
-    const { defaultName, nameMaximumIterations, transformMaximumIterations } = this.options;
+    const { defaultTypeName, nameMaximumIterations, transformMaximumIterations } = this.options;
 
     const schemas = Object.fromEntries(await this.getSchemas());
 
@@ -31,7 +33,7 @@ export abstract class DocumentBase<N = unknown> {
       schemas,
     };
     const specification = jns42generator.loadSpecification(document, {
-      defaultTypeName: defaultName,
+      defaultTypeName,
       nameMaximumIterations,
       transformMaximumIterations,
     });
@@ -53,7 +55,47 @@ export abstract class DocumentBase<N = unknown> {
     const documentContext = new jns42generator.DocumentContext();
 
     documentContext.registerFactory(
+      jns42generator.schemaDraft202012.metaSchemaId,
+      ({ givenUrl, antecedentUrl, documentNode: rootNode }) =>
+        new jns42generator.schemaDraft04.Document(
+          givenUrl,
+          antecedentUrl,
+          rootNode,
+          documentContext,
+        ),
+    );
+    documentContext.registerFactory(
       jns42generator.schemaDraft04.metaSchemaId,
+      ({ givenUrl, antecedentUrl, documentNode: rootNode }) =>
+        new jns42generator.schemaDraft04.Document(
+          givenUrl,
+          antecedentUrl,
+          rootNode,
+          documentContext,
+        ),
+    );
+    documentContext.registerFactory(
+      jns42generator.schemaOasV31.metaSchemaId,
+      ({ givenUrl, antecedentUrl, documentNode: rootNode }) =>
+        new jns42generator.schemaDraft04.Document(
+          givenUrl,
+          antecedentUrl,
+          rootNode,
+          documentContext,
+        ),
+    );
+    documentContext.registerFactory(
+      jns42generator.oasV30.metaSchemaId,
+      ({ givenUrl, antecedentUrl, documentNode: rootNode }) =>
+        new jns42generator.schemaDraft04.Document(
+          givenUrl,
+          antecedentUrl,
+          rootNode,
+          documentContext,
+        ),
+    );
+    documentContext.registerFactory(
+      jns42generator.swaggerV2.metaSchemaId,
       ({ givenUrl, antecedentUrl, documentNode: rootNode }) =>
         new jns42generator.schemaDraft04.Document(
           givenUrl,
@@ -74,7 +116,7 @@ export abstract class DocumentBase<N = unknown> {
         uri,
         this.documentUri,
         this.documentNode,
-        jns42generator.schemaDraft04.metaSchemaId,
+        this.getDefaultSchemaId(),
       );
     }
 

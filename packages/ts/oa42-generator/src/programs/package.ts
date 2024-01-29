@@ -32,10 +32,10 @@ export function configurePackageProgram(argv: yargs.Argv) {
           type: "string",
           demandOption: true,
         })
-        .option("default-name", {
+        .option("default-type-name", {
           description: "default name for types",
           type: "string",
-          default: "@jns42/schema-document",
+          default: "@jns42/document",
         })
         .option("name-maximum-iterations", {
           description: "maximum number of iterations for finding unique names",
@@ -62,7 +62,7 @@ interface MainOptions {
   packageDirectory: string;
   packageName: string;
   packageVersion: string;
-  defaultName: string;
+  defaultTypeName: string;
   nameMaximumIterations: number;
   transformMaximumIterations: number;
 }
@@ -80,7 +80,7 @@ async function main(options: MainOptions) {
   const {
     packageName,
     packageVersion,
-    defaultName,
+    defaultTypeName,
     nameMaximumIterations,
     transformMaximumIterations,
   } = options;
@@ -88,7 +88,7 @@ async function main(options: MainOptions) {
   // setup document context
 
   const documentContext = new DocumentContext({
-    defaultName,
+    defaultTypeName,
     nameMaximumIterations: nameMaximumIterations,
     transformMaximumIterations,
   });

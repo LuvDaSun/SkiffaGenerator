@@ -2,7 +2,7 @@ import { loadYAML } from "../utils/index.js";
 import { DocumentBase } from "./document-base.js";
 
 export interface DocumentOptions {
-  defaultName: string;
+  defaultTypeName: string;
   nameMaximumIterations: number;
   transformMaximumIterations: number;
 }

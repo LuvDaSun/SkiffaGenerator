@@ -1,4 +1,4 @@
-import * as oas from "@jns42/schema-oas-v3-0";
+import * as oas from "@jns42/oas-v3-0";
 import assert from "assert";
 import { Router } from "goodrouter";
 import { Method, StatusCode, methods, statusCodes } from "oa42-lib";
@@ -32,6 +32,10 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     };
 
     return apiModel;
+  }
+
+  protected getDefaultSchemaId(): string {
+    return "https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema";
   }
 
   private *getPathModels() {
