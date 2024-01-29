@@ -34,6 +34,10 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     return apiModel;
   }
 
+  protected getDefaultSchemaId(): string {
+    return "https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema";
+  }
+
   private *getPathModels() {
     if (this.documentNode.paths == null) {
       return;
