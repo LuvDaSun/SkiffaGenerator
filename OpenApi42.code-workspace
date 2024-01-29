@@ -12,18 +12,6 @@
       "name": "ts/oa42-generator",
       "path": "./packages/ts/oa42-generator",
     },
-    {
-      "name": "ts/schema-oas-v3-1 (generated)",
-      "path": "packages/ts/schema-oas-v3-1",
-    },
-    {
-      "name": "ts/schema-oas-v3-0 (generated)",
-      "path": "packages/ts/schema-oas-v3-0",
-    },
-    {
-      "name": "ts/schema-swagger-v2 (generated)",
-      "path": "packages/ts/schema-swagger-v2",
-    },
   ],
   "settings": {
     "window.title": "OpenApi42",

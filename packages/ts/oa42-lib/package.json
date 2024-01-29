@@ -16,12 +16,10 @@
     "./src/**"
   ],
   "scripts": {
-    "prepare": "tsc --build",
+    "prepack": "tsc --build",
     "build": "tsc --build ",
     "clean": "rm -rf out",
-    "test": "node --test ./out/*.test.js ./out/*/*.test.js ./out/*/*/*.test.js",
-    "lint": "prettier --check *",
-    "spelling": "cspell ."
+    "test": "node --test ./out/*.test.js ./out/*/*.test.js ./out/*/*/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -37,7 +35,7 @@
     "library"
   ],
   "dependencies": {
-    "@types/node": "^20.11.7",
+    "@types/node": "^20.11.10",
     "tslib": "^2.6.2",
     "type-fest": "^4.10.1"
   },
