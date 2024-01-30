@@ -4,6 +4,7 @@ import { banner, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateIsAuthenticationFunctionBody } from "../bodies/index.js";
 import {
+  generateOperationAcceptType,
   generateOperationAuthenticationType,
   generateOperationHandlerType,
   generateOperationIncomingRequestType,
@@ -111,6 +112,7 @@ export function* generateServerTsCode(apiModel: models.Api) {
       `;
 
       yield* generateOperationAuthenticationType(operationModel);
+      yield* generateOperationAcceptType(operationModel);
       yield* generateOperationHandlerType(operationModel);
 
       yield* generateOperationIncomingRequestType(apiModel, operationModel);

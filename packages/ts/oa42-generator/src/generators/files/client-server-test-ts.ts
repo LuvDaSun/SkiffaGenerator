@@ -151,7 +151,7 @@ function* generateOperationTest(
         validateOutgoingParameters: false,
         validateOutgoingEntity: false,
       });
-      server.${registerOperationHandlerMethodName}(async (incomingRequest, authentication) => {
+      server.${registerOperationHandlerMethodName}(async (incomingRequest, authentication, accepts) => {
         ${generateServerOperationHandler()}
       });
     `;

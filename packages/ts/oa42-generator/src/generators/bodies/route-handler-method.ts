@@ -145,15 +145,15 @@ export function* generateRouteHandlerMethodBody(
           const parameterName = toCamel(parameterModel.name);
           if (parameterTypeName == null) {
             return `
-            ${parameterName}: 
-            lib.first(lib.getParameterValues(queryParameters, ${JSON.stringify(parameterModel.name)})),
+              ${parameterName}: 
+                lib.first(lib.getParameterValues(queryParameters, ${JSON.stringify(parameterModel.name)})),
             `;
           }
 
           const parseParameterFunction = toCamel("parse", parameterTypeName);
 
           return `
-          ${parameterName}: 
+            ${parameterName}: 
               parsers.${parseParameterFunction}(lib.getParameterValues(queryParameters, ${JSON.stringify(
                 parameterModel.name,
               )})),
@@ -167,7 +167,7 @@ export function* generateRouteHandlerMethodBody(
           if (parameterTypeName == null) {
             return `
               ${parameterName}: 
-              lib.first(lib.getParameterValues(cookieParameters, ${JSON.stringify(parameterModel.name)})),
+                lib.first(lib.getParameterValues(cookieParameters, ${JSON.stringify(parameterModel.name)})),
             `;
           }
 
@@ -218,6 +218,10 @@ export function* generateRouteHandlerMethodBody(
     `;
   }
 
+  yield itt`
+    const accepts: never[] = [];
+  `;
+
   /**
    * execute the operation handler and collect the response
    */
@@ -226,6 +230,7 @@ export function* generateRouteHandlerMethodBody(
     const outgoingResponse = await this.${operationHandlerName}?.(
       incomingRequest,
       authentication,
+      accepts
     );
     if (outgoingResponse == null) {
       throw new lib.OperationNotImplemented();
@@ -233,7 +238,7 @@ export function* generateRouteHandlerMethodBody(
   `;
 
   yield itt`
-    let serverOutgoingResponse: lib.ServerOutgoingResponse ;
+    let serverOutgoingResponse: lib.ServerOutgoingResponse;
     switch(outgoingResponse.status) {
       ${generateStatusCodeCaseClauses(apiModel, operationModel)}
     }
