@@ -13,13 +13,7 @@
     "welkom"
   ],
   "useGitignore": true,
-  "files": [
-    "**"
-  ],
-  "ignorePaths": [
-    "specifications/"
-  ],
-  "enableFiletypes": [
-    "*"
-  ]
+  "files": ["**"],
+  "ignorePaths": ["specifications/"],
+  "enableFiletypes": ["*"]
 }
