@@ -7,12 +7,19 @@
     "endregion",
     "esbenp",
     "goodrouter",
+    "openapi",
     "Promisable",
     "urlencoding",
     "welkom"
   ],
   "useGitignore": true,
-  "files": ["**"],
-  "ignorePaths": ["specifications/"],
-  "enableFiletypes": ["*"]
+  "files": [
+    "**"
+  ],
+  "ignorePaths": [
+    "specifications/"
+  ],
+  "enableFiletypes": [
+    "*"
+  ]
 }
