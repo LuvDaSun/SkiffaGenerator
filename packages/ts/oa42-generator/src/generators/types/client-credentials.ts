@@ -18,11 +18,40 @@ export function* generateOperationCredentialsType(
 
   yield itt`
     export type ${operationCredentialsName} = {
-      ${authenticationModels.map(
-        (authenticationModel) => itt`
-          ${toCamel(authenticationModel.name)}: string,
-        `,
-      )}
+      ${generateTypeContent(authenticationModels)}
     };
   `;
+}
+
+function* generateTypeContent(authenticationModels: Iterable<models.Authentication>) {
+  for (const authenticationModel of authenticationModels) {
+    switch (authenticationModel.type) {
+      case "apiKey":
+        yield itt`${toCamel(authenticationModel.name)}: string,`;
+        break;
+
+      case "http":
+        switch (authenticationModel.scheme) {
+          case "basic":
+            yield itt`${toCamel(authenticationModel.name)}: {
+              id: string,
+              password: string,
+            },`;
+            break;
+
+          case "bearer":
+            yield itt`${toCamel(authenticationModel.name)}: string,`;
+            break;
+
+          default: {
+            throw "impossible";
+          }
+        }
+        break;
+
+      default: {
+        throw "impossible";
+      }
+    }
+  }
 }
