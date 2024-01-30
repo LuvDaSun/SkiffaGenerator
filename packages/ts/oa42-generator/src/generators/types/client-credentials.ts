@@ -27,20 +27,26 @@ function* generateTypeContent(authenticationModels: Iterable<models.Authenticati
   for (const authenticationModel of authenticationModels) {
     switch (authenticationModel.type) {
       case "apiKey":
-        yield itt`${toCamel(authenticationModel.name)}: string,`;
+        yield itt`
+          ${toCamel(authenticationModel.name)}: string,
+        `;
         break;
 
       case "http":
         switch (authenticationModel.scheme) {
           case "basic":
-            yield itt`${toCamel(authenticationModel.name)}: {
-              id: string,
-              password: string,
-            },`;
+            yield itt`
+              ${toCamel(authenticationModel.name)}: {
+                id: string,
+                password: string,
+              },
+            `;
             break;
 
           case "bearer":
-            yield itt`${toCamel(authenticationModel.name)}: string,`;
+            yield itt`
+              ${toCamel(authenticationModel.name)}: string,
+            `;
             break;
 
           default: {
