@@ -47,14 +47,15 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     for (const pathPattern in this.documentNode.paths) {
       const pathItem = this.documentNode.paths[pathPattern];
 
-      if (oas.isPathItem(pathItem)) {
-        yield this.getPathModel(
-          pathIndex,
-          appendToUriHash(this.documentUri, "paths", pathPattern),
-          pathPattern,
-          pathItem,
-        );
-      }
+      assert(oas.isPathItem(pathItem));
+
+      yield this.getPathModel(
+        pathIndex,
+        appendToUriHash(this.documentUri, "paths", pathPattern),
+        pathPattern,
+        pathItem,
+      );
+
       pathIndex++;
     }
   }
