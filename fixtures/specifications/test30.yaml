@@ -1,0 +1,75 @@
+openapi: 3.0.0
+
+info:
+  title: Test api
+  description: |-
+    For testing purpose!
+  version: 0.1.0
+
+paths:
+  /api-key-header:
+    get:
+      security:
+        - api-key-header: []
+      operationId: api-key-header
+      summary: Test endpoint
+      responses:
+        "204":
+          description: No content
+  /api-key-cookie:
+    get:
+      security:
+        - api-key-header: []
+      operationId: api-key-cookie
+      summary: Test endpoint
+      responses:
+        "204":
+          description: No content
+  /api-key-query:
+    get:
+      security:
+        - api-key-header: []
+      operationId: api-key-query
+      summary: Test endpoint
+      responses:
+        "204":
+          description: No content
+  /http-basic:
+    get:
+      security:
+        - http-basic: []
+      operationId: http-basic
+      summary: Test endpoint
+      responses:
+        "204":
+          description: No content
+  /http-bearer:
+    get:
+      security:
+        - http-bearer: []
+      operationId: http-bearer
+      summary: Test endpoint
+      responses:
+        "204":
+          description: No content
+
+components:
+  securitySchemes:
+    api-key-header:
+      type: apiKey
+      name: api-key-header
+      in: header
+    api-key-cookie:
+      type: apiKey
+      name: api-key-cookie
+      in: cookie
+    api-key-query:
+      type: apiKey
+      name: api-key-query
+      in: query
+    http-basic:
+      type: http
+      scheme: basic
+    http-bearer:
+      type: http
+      scheme: bearer
