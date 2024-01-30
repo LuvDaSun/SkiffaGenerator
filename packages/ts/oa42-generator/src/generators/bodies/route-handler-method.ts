@@ -78,7 +78,7 @@ export function* generateRouteHandlerMethodBody(
   `;
 
   yield itt`
-    const authentication: A = Object.fromEntries(
+    const authentication = Object.fromEntries(
       await Promise.all([
         ${authenticationModels.map(
           (authenticationModel) => itt`
@@ -93,7 +93,7 @@ export function* generateRouteHandlerMethodBody(
           `,
         )}
       ]),
-    );
+    ) as A;
 
     if(!${isOperationAuthenticationName}(authentication)) {
       throw new lib.AuthenticationFailed();

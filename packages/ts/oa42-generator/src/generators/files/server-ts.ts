@@ -70,7 +70,7 @@ export function* generateServerTsCode(apiModel: models.Api) {
               export type ${handlerTypeName}<A extends ServerAuthentication> =
                 (credential: {
                   id: string,
-                  password: string,
+                  secret: string,
                 }) =>
                   A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined |
                   Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;

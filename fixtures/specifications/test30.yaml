@@ -53,7 +53,33 @@ paths:
         "204":
           description: No content
 
+  /json-xml:
+    get:
+      operationId: json-xml
+      summary: Test endpoint
+      responses:
+        "200":
+          description: Ok
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/message-container"
+            "application/xml":
+              schema:
+                $ref: "#/components/schemas/message-container"
+
 components:
+  schemas:
+    message-container:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          minLength: 3
+      additionalProperties: false
+
   securitySchemes:
     api-key-header:
       type: apiKey

@@ -175,7 +175,7 @@ function* generateOperationTest(
               yield itt`
                 server.${registerAuthenticationHandlerMethodName}(
                   (credential) =>
-                    credential.id === "elmerbulthuis" && credential.password === "welkom123"
+                    credential.id === "elmerbulthuis" && credential.secret === "welkom123"
                 )
               `;
               break;
