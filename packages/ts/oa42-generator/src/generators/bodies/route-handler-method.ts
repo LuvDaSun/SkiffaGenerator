@@ -74,7 +74,7 @@ export function* generateRouteHandlerMethodBody(
             (
               async () => [
                 ${JSON.stringify(toCamel(authenticationModel.name))},
-                credentials.apiToken == null ?
+                credentials.${toCamel(authenticationModel.name)} == null ?
                   undefined :
                   await this.${toCamel(authenticationModel.name, "authentication", "handler")}?.(credentials.${toCamel(authenticationModel.name)})
               ]
@@ -281,14 +281,14 @@ export function* generateRouteHandlerMethodBody(
             case "basic":
               yield itt`
                 ${toCamel(authenticationModel.name)}:
-                  lib.parseBasicAuthorizationHeader(lib.getParameterValues(serverIncomingRequest.headers, ${JSON.stringify(authenticationModel.name)})),
+                  lib.parseBasicAuthorizationHeader(lib.getParameterValues(serverIncomingRequest.headers, "authorization")),
               `;
               break;
 
             case "bearer":
               yield itt`
                 ${toCamel(authenticationModel.name)}:
-                  lib.parseAuthorizationHeader("bearer", serverIncomingRequest.headers, ${JSON.stringify(authenticationModel.name)})),
+                  lib.parseAuthorizationHeader("bearer", lib.getParameterValues(serverIncomingRequest.headers, "authorization")),
               `;
               break;
 

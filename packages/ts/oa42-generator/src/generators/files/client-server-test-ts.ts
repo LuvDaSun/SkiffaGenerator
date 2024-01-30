@@ -161,9 +161,43 @@ function* generateOperationTest(
         authenticationModel.name,
         "authentication",
       );
-      yield itt`
-        server.${registerAuthenticationHandlerMethodName}((credential) => credential === "super-secret-api-key")
-      `;
+      switch (authenticationModel.type) {
+        case "apiKey":
+          yield itt`
+            server.${registerAuthenticationHandlerMethodName}(
+              (credential) => credential === "super-secret-api-key"
+            )
+          `;
+          break;
+        case "http":
+          switch (authenticationModel.scheme) {
+            case "basic":
+              yield itt`
+                server.${registerAuthenticationHandlerMethodName}(
+                  (credential) =>
+                    credential.id === "elmerbulthuis" && credential.password === "welkom123"
+                )
+              `;
+              break;
+
+            case "bearer":
+              yield itt`
+                server.${registerAuthenticationHandlerMethodName}(
+                  (credential) => credential === "super-secret-api-key"
+                )
+              `;
+              break;
+
+            default: {
+              throw "impossible";
+            }
+          }
+          break;
+
+        default: {
+          throw "impossible";
+        }
+      }
     }
     yield itt`
       let lastError: unknown;
