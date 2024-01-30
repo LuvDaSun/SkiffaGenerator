@@ -94,13 +94,6 @@ function* generateOperationTest(
   operationResultModel: models.OperationResult,
   responseBodyModel: models.Body | null,
 ) {
-  if (requestBodyModel != null && requestBodyModel.contentType !== "application/json") {
-    return;
-  }
-  if (responseBodyModel != null && responseBodyModel.contentType !== "application/json") {
-    return;
-  }
-
   const authenticationNames = new Set(
     operationModel.authenticationRequirements.flatMap((requirements) =>
       requirements.map((requirement) => requirement.authenticationName),
@@ -151,7 +144,7 @@ function* generateOperationTest(
         validateOutgoingParameters: false,
         validateOutgoingEntity: false,
       });
-      server.${registerOperationHandlerMethodName}(async (incomingRequest, authentication) => {
+      server.${registerOperationHandlerMethodName}(async (incomingRequest, authentication, accepts) => {
         ${generateServerOperationHandler()}
       });
     `;
@@ -175,7 +168,7 @@ function* generateOperationTest(
               yield itt`
                 server.${registerAuthenticationHandlerMethodName}(
                   (credential) =>
-                    credential.id === "elmerbulthuis" && credential.password === "welkom123"
+                    credential.id === "elmerbulthuis" && credential.secret === "welkom123"
                 )
               `;
               break;
@@ -428,7 +421,7 @@ function* generateOperationTest(
               yield itt`
                 ${toCamel(authenticationModel.name)}: {
                   id: "elmerbulthuis",
-                  password: "welkom123",
+                  secret: "welkom123",
                 },
               `;
               break;

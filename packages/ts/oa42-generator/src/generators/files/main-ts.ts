@@ -15,6 +15,7 @@ export function* generateMainTsCode(apiModel: models.Api) {
     export * from "./validators.js";
     export * from "./parsers.js";
     export * from "./parameters.js";
+    export * from "./shared.js";
     export * from "./client.js";
     export * from "./server.js";
     export * from "./mocks.js";

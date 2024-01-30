@@ -10,6 +10,7 @@ import { generateMainTsCode } from "./files/main-ts.js";
 import { generatePackageJsonData } from "./files/package-json.js";
 import { generateParametersTsCode } from "./files/parameters-ts.js";
 import { generateServerTsCode } from "./files/server-ts.js";
+import { generateSharedTsCode } from "./files/shared-ts.js";
 import { generateTsconfigJsonData } from "./files/tsconfig-json.js";
 
 export interface PackageConfiguration {
@@ -21,9 +22,9 @@ export interface PackageConfiguration {
 export function generatePackage(
   apiModel: models.Api,
   specification: jns42generator.Specification,
-  configuration: PackageConfiguration,
+  packageConfiguration: PackageConfiguration,
 ) {
-  const { packageDirectoryPath, packageName, packageVersion } = configuration;
+  const { packageDirectoryPath, packageName, packageVersion } = packageConfiguration;
 
   fs.mkdirSync(packageDirectoryPath, { recursive: true });
   fs.mkdirSync(path.join(packageDirectoryPath, "src"), { recursive: true });
@@ -53,44 +54,14 @@ export function generatePackage(
   }
 
   {
+    const code = generateSharedTsCode(apiModel);
+    const filePath = path.join(packageDirectoryPath, "src", "shared.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
     const code = generateParametersTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "parameters.ts");
-    writeCodeToFile(filePath, code);
-  }
-
-  {
-    const code = jns42generator.generateTypesTsCode(specification, configuration);
-    const filePath = path.join(packageDirectoryPath, "src", "types.ts");
-    writeCodeToFile(filePath, code);
-  }
-
-  {
-    const code = jns42generator.generateValidatorsTsCode(specification, configuration);
-    const filePath = path.join(packageDirectoryPath, "src", "validators.ts");
-    writeCodeToFile(filePath, code);
-  }
-
-  {
-    const code = jns42generator.generateParsersTsCode(specification, configuration);
-    const filePath = path.join(packageDirectoryPath, "src", "parsers.ts");
-    writeCodeToFile(filePath, code);
-  }
-
-  {
-    const code = jns42generator.generateMocksTsCode(specification, configuration);
-    const filePath = path.join(packageDirectoryPath, "src", "mocks.ts");
-    writeCodeToFile(filePath, code);
-  }
-
-  {
-    const code = jns42generator.generateExamplesTestTsCode(specification, configuration);
-    const filePath = path.join(packageDirectoryPath, "src", "examples.test.ts");
-    writeCodeToFile(filePath, code);
-  }
-
-  {
-    const code = jns42generator.generateMocksTestTsCode(specification, configuration);
-    const filePath = path.join(packageDirectoryPath, "src", "mocks.test.ts");
     writeCodeToFile(filePath, code);
   }
 
@@ -109,6 +80,42 @@ export function generatePackage(
   {
     const code = generateClientServerTestTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "client-server.test.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
+    const code = jns42generator.generateTypesTsCode(specification);
+    const filePath = path.join(packageDirectoryPath, "src", "types.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
+    const code = jns42generator.generateValidatorsTsCode(specification);
+    const filePath = path.join(packageDirectoryPath, "src", "validators.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
+    const code = jns42generator.generateParsersTsCode(specification);
+    const filePath = path.join(packageDirectoryPath, "src", "parsers.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
+    const code = jns42generator.generateMocksTsCode(specification);
+    const filePath = path.join(packageDirectoryPath, "src", "mocks.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
+    const code = jns42generator.generateExamplesTestTsCode(specification);
+    const filePath = path.join(packageDirectoryPath, "src", "examples.test.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
+    const code = jns42generator.generateMocksTestTsCode(specification);
+    const filePath = path.join(packageDirectoryPath, "src", "mocks.test.ts");
     writeCodeToFile(filePath, code);
   }
 }

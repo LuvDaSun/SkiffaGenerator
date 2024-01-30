@@ -22,15 +22,15 @@ export function parseBasicAuthorizationHeader(values: Iterable<string>) {
   if (encoded == null) return;
 
   const decoded = Base64.decode(encoded);
-  const [id, password] = decoded.split(":", 2);
+  const [id, secret] = decoded.split(":", 2);
 
-  return { id, password };
+  return { id, secret };
 }
 
-export function stringifyBasicAuthorizationHeader(credential: { id: string; password: string }) {
-  const { id, password } = credential;
+export function stringifyBasicAuthorizationHeader(credential: { id: string; secret: string }) {
+  const { id, secret } = credential;
 
-  const decoded = id + ":" + password;
+  const decoded = id + ":" + secret;
   const encoded = Base64.encode(decoded);
 
   return stringifyAuthorizationHeader("Basic", encoded);
@@ -43,7 +43,7 @@ export function* parseContentTypeHeader(values: Iterable<string>) {
   }
 }
 
-export function parseAcceptHeader<T extends string>(values: string[], types: Set<T>) {
+export function parseAcceptHeader<T extends string>(values: string[]) {
   const parsed = parse();
   const list = Array.from(parsed);
   list.sort(([, a], [, b]) => b - a);
@@ -57,8 +57,9 @@ export function parseAcceptHeader<T extends string>(values: string[], types: Set
         const parts = entry.split(/\s*;\s*/);
         const type = parts.shift() as T | undefined;
 
-        if (!type) continue;
-        if (!types.has(type)) continue;
+        if (type == null) {
+          continue;
+        }
 
         const values: Record<string, string> = {};
         for (const part of parts) {

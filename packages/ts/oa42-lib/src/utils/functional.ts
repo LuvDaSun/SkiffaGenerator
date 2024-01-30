@@ -23,3 +23,13 @@ export function first<T>(iterable: Iterable<T>): T | undefined {
   }
   return undefined;
 }
+
+export function* intersect<T>(iterable: Iterable<T>, otherIterable: Iterable<T>) {
+  const otherSet = new Set(otherIterable);
+  for (const element of iterable) {
+    if (!otherSet.has(element)) {
+      continue;
+    }
+    yield element;
+  }
+}

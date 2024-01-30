@@ -7,6 +7,7 @@ export function* generateClientOperationFunctionBody(
   operationModel: models.Operation,
 ) {
   const operationIncomingResponseName = toPascal(operationModel.name, "incoming", "response");
+  const operationAcceptConstName = toCamel(operationModel.name, "operation", "accept");
 
   const isRequestParametersFunction = toCamel("is", operationModel.name, "request", "parameters");
 
@@ -208,6 +209,8 @@ export function* generateClientOperationFunctionBody(
     if(cookie !== ""){
       requestHeaders.append("set-cookie", cookie);
     }
+
+    requestHeaders.append("accept", lib.stringifyAcceptHeader(shared.${operationAcceptConstName}));
 
     const url = new URL(path, baseUrl);
     let body: BodyInit | null;  

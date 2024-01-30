@@ -2,14 +2,14 @@ import * as jns42generator from "jns42-generator";
 import { Specification } from "jns42-generator";
 import * as models from "../models/index.js";
 import { readNode } from "../utils/index.js";
-import { DocumentOptions } from "./document-context.js";
+import { DocumentConfiguration } from "./document-context.js";
 
 export abstract class DocumentBase<N = unknown> {
   protected readonly nodes: Record<string, unknown>;
   constructor(
     protected readonly documentUri: URL,
     protected readonly documentNode: N,
-    protected readonly options: DocumentOptions,
+    protected readonly configuration: DocumentConfiguration,
   ) {
     this.nodes = Object.fromEntries(readNode("", documentNode));
   }
@@ -24,7 +24,8 @@ export abstract class DocumentBase<N = unknown> {
   protected specification!: Specification;
   protected schemaIdMap!: Record<string, number>;
   public async load() {
-    const { defaultTypeName, nameMaximumIterations, transformMaximumIterations } = this.options;
+    const { defaultTypeName, nameMaximumIterations, transformMaximumIterations } =
+      this.configuration;
 
     const schemas = Object.fromEntries(await this.getSchemas());
 

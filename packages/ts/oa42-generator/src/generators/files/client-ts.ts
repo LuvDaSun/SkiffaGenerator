@@ -18,6 +18,7 @@ export function* generateClientTsCode(apiModel: models.Api) {
     import * as types from "./types.js";
     import * as validators from "./validators.js";
     import * as parsers from "./parsers.js";
+    import * as shared from "./shared.js";
     import * as lib from "oa42-lib";
   `;
 

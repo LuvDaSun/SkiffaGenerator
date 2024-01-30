@@ -47,11 +47,17 @@ export function configurePackageProgram(argv: yargs.Argv) {
           type: "number",
           default: 1000,
         })
-        .option("union-object-and-map", {
-          description:
-            "If a type is both a map and an object, add index with a union type of all the properties",
-          type: "boolean",
-          default: false,
+        .option("request-types", {
+          description: "Preferred request content-types",
+          type: "string",
+          array: true,
+          default: ["application/json", "multipart/form-data", "text/plain"],
+        })
+        .option("response-types", {
+          description: "Preferred response content-types",
+          type: "string",
+          array: true,
+          default: ["application/json", "multipart/form-data", "text/plain"],
         }),
     (argv) => main(argv),
   );
@@ -65,6 +71,8 @@ interface MainOptions {
   defaultTypeName: string;
   nameMaximumIterations: number;
   transformMaximumIterations: number;
+  requestTypes: string[];
+  responseTypes: string[];
 }
 
 async function main(options: MainOptions) {
@@ -83,6 +91,8 @@ async function main(options: MainOptions) {
     defaultTypeName,
     nameMaximumIterations,
     transformMaximumIterations,
+    requestTypes,
+    responseTypes,
   } = options;
 
   // setup document context
@@ -91,6 +101,8 @@ async function main(options: MainOptions) {
     defaultTypeName,
     nameMaximumIterations: nameMaximumIterations,
     transformMaximumIterations,
+    requestTypes,
+    responseTypes,
   });
   documentContext.registerFactory(swagger2.factory);
   documentContext.registerFactory(oas30.factory);

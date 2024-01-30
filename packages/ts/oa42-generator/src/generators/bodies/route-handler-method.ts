@@ -21,6 +21,8 @@ export function* generateRouteHandlerMethodBody(
   const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
     authenticationNames.has(authenticationModel.name),
   );
+  const operationAcceptTypeName = toPascal(operationModel.name, "operation", "accept");
+  const operationAcceptConstName = toCamel(operationModel.name, "operation", "accept");
 
   yield itt`
     const { 
@@ -38,10 +40,10 @@ export function* generateRouteHandlerMethodBody(
   yield itt`
     const cookie =
       lib.getParameterValues(serverIncomingRequest.headers, "cookie");
-    const accept =
-      lib.getParameterValues(serverIncomingRequest.headers, "accept");
     const requestContentType =
       lib.first(lib.getParameterValues(serverIncomingRequest.headers, "content-type"));
+    const responseAccepts =
+      lib.parseAcceptHeader(lib.getParameterValues(serverIncomingRequest.headers, "accept"));
   `;
 
   /**
@@ -56,6 +58,15 @@ export function* generateRouteHandlerMethodBody(
       lib.parseParameters(cookie, "", "; ", "=");
   `;
 
+  /*
+  set accept for use in 
+  */
+  yield itt`
+    const accepts = [
+      ...lib.intersect(responseAccepts, shared.${operationAcceptConstName}),
+    ] as shared.${operationAcceptTypeName}[];
+  `;
+
   /**
    * let's handle authentication
    */
@@ -67,7 +78,7 @@ export function* generateRouteHandlerMethodBody(
   `;
 
   yield itt`
-    const authentication: A = Object.fromEntries(
+    const authentication = Object.fromEntries(
       await Promise.all([
         ${authenticationModels.map(
           (authenticationModel) => itt`
@@ -82,7 +93,7 @@ export function* generateRouteHandlerMethodBody(
           `,
         )}
       ]),
-    );
+    ) as A;
 
     if(!${isOperationAuthenticationName}(authentication)) {
       throw new lib.AuthenticationFailed();
@@ -145,15 +156,15 @@ export function* generateRouteHandlerMethodBody(
           const parameterName = toCamel(parameterModel.name);
           if (parameterTypeName == null) {
             return `
-            ${parameterName}: 
-            lib.first(lib.getParameterValues(queryParameters, ${JSON.stringify(parameterModel.name)})),
+              ${parameterName}: 
+                lib.first(lib.getParameterValues(queryParameters, ${JSON.stringify(parameterModel.name)})),
             `;
           }
 
           const parseParameterFunction = toCamel("parse", parameterTypeName);
 
           return `
-          ${parameterName}: 
+            ${parameterName}: 
               parsers.${parseParameterFunction}(lib.getParameterValues(queryParameters, ${JSON.stringify(
                 parameterModel.name,
               )})),
@@ -167,7 +178,7 @@ export function* generateRouteHandlerMethodBody(
           if (parameterTypeName == null) {
             return `
               ${parameterName}: 
-              lib.first(lib.getParameterValues(cookieParameters, ${JSON.stringify(parameterModel.name)})),
+                lib.first(lib.getParameterValues(cookieParameters, ${JSON.stringify(parameterModel.name)})),
             `;
           }
 
@@ -226,6 +237,7 @@ export function* generateRouteHandlerMethodBody(
     const outgoingResponse = await this.${operationHandlerName}?.(
       incomingRequest,
       authentication,
+      accepts
     );
     if (outgoingResponse == null) {
       throw new lib.OperationNotImplemented();
@@ -233,7 +245,7 @@ export function* generateRouteHandlerMethodBody(
   `;
 
   yield itt`
-    let serverOutgoingResponse: lib.ServerOutgoingResponse ;
+    let serverOutgoingResponse: lib.ServerOutgoingResponse;
     switch(outgoingResponse.status) {
       ${generateStatusCodeCaseClauses(apiModel, operationModel)}
     }

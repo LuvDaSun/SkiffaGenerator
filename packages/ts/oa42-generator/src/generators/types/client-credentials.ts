@@ -38,7 +38,7 @@ function* generateTypeContent(authenticationModels: Iterable<models.Authenticati
             yield itt`
               ${toCamel(authenticationModel.name)}: {
                 id: string,
-                password: string,
+                secret: string,
               },
             `;
             break;

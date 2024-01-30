@@ -21,6 +21,7 @@ export function* generateServerTsCode(apiModel: models.Api) {
     import * as types from "./types.js";
     import * as validators from "./validators.js";
     import * as parsers from "./parsers.js";
+    import * as shared from "./shared.js";
     import * as lib from "oa42-lib";
   `;
 
@@ -69,7 +70,7 @@ export function* generateServerTsCode(apiModel: models.Api) {
               export type ${handlerTypeName}<A extends ServerAuthentication> =
                 (credential: {
                   id: string,
-                  password: string,
+                  secret: string,
                 }) =>
                   A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined |
                   Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;
