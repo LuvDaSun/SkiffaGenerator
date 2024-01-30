@@ -43,7 +43,7 @@ export function* parseContentTypeHeader(values: Iterable<string>) {
   }
 }
 
-export function parseAcceptHeader<T extends string>(values: string[], types: Set<T>) {
+export function parseAcceptHeader<T extends string>(values: string[]) {
   const parsed = parse();
   const list = Array.from(parsed);
   list.sort(([, a], [, b]) => b - a);
@@ -57,8 +57,9 @@ export function parseAcceptHeader<T extends string>(values: string[], types: Set
         const parts = entry.split(/\s*;\s*/);
         const type = parts.shift() as T | undefined;
 
-        if (!type) continue;
-        if (!types.has(type)) continue;
+        if (type == null) {
+          continue;
+        }
 
         const values: Record<string, string> = {};
         for (const part of parts) {

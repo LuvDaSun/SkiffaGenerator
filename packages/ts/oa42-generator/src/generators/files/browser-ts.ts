@@ -12,6 +12,8 @@ export function* generateBrowserTsCode(apiModel: models.Api) {
     export * from "./validators.js";
     export * from "./parsers.js";
     export * from "./parameters.js";
+    export * from "./shared.js";
     export * from "./client.js";
-  `;
+
+    `;
 }

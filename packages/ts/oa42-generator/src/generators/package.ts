@@ -10,6 +10,7 @@ import { generateMainTsCode } from "./files/main-ts.js";
 import { generatePackageJsonData } from "./files/package-json.js";
 import { generateParametersTsCode } from "./files/parameters-ts.js";
 import { generateServerTsCode } from "./files/server-ts.js";
+import { generateSharedTsCode } from "./files/shared-ts.js";
 import { generateTsconfigJsonData } from "./files/tsconfig-json.js";
 
 export interface PackageConfiguration {
@@ -56,8 +57,32 @@ export function generatePackage(
   }
 
   {
+    const code = generateSharedTsCode(apiModel, { requestTypes, responseTypes });
+    const filePath = path.join(packageDirectoryPath, "src", "shared.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
     const code = generateParametersTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "parameters.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
+    const code = generateClientTsCode(apiModel, { requestTypes, responseTypes });
+    const filePath = path.join(packageDirectoryPath, "src", "client.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
+    const code = generateServerTsCode(apiModel, { requestTypes, responseTypes });
+    const filePath = path.join(packageDirectoryPath, "src", "server.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
+    const code = generateClientServerTestTsCode(apiModel);
+    const filePath = path.join(packageDirectoryPath, "src", "client-server.test.ts");
     writeCodeToFile(filePath, code);
   }
 
@@ -94,24 +119,6 @@ export function generatePackage(
   {
     const code = jns42generator.generateMocksTestTsCode(specification, configuration);
     const filePath = path.join(packageDirectoryPath, "src", "mocks.test.ts");
-    writeCodeToFile(filePath, code);
-  }
-
-  {
-    const code = generateClientTsCode(apiModel, { requestTypes, responseTypes });
-    const filePath = path.join(packageDirectoryPath, "src", "client.ts");
-    writeCodeToFile(filePath, code);
-  }
-
-  {
-    const code = generateServerTsCode(apiModel, { requestTypes, responseTypes });
-    const filePath = path.join(packageDirectoryPath, "src", "server.ts");
-    writeCodeToFile(filePath, code);
-  }
-
-  {
-    const code = generateClientServerTestTsCode(apiModel);
-    const filePath = path.join(packageDirectoryPath, "src", "client-server.test.ts");
     writeCodeToFile(filePath, code);
   }
 }

@@ -4,7 +4,6 @@ import { banner, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateIsAuthenticationFunctionBody } from "../bodies/index.js";
 import {
-  generateOperationAcceptType,
   generateOperationAuthenticationType,
   generateOperationHandlerType,
   generateOperationIncomingRequestType,
@@ -28,6 +27,7 @@ export function* generateServerTsCode(
     import * as types from "./types.js";
     import * as validators from "./validators.js";
     import * as parsers from "./parsers.js";
+    import * as shared from "./shared.js";
     import * as lib from "oa42-lib";
   `;
 
@@ -118,7 +118,6 @@ export function* generateServerTsCode(
       `;
 
       yield* generateOperationAuthenticationType(operationModel);
-      yield* generateOperationAcceptType(operationModel);
       yield* generateOperationHandlerType(operationModel);
 
       yield* generateOperationIncomingRequestType(apiModel, operationModel);

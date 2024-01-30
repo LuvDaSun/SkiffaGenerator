@@ -25,6 +25,7 @@ export function* generateRouteHandlerMethodBody(
   const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
     authenticationNames.has(authenticationModel.name),
   );
+  const operationAcceptTypeName = toPascal(operationModel.name, "operation", "accept");
 
   yield itt`
     const { 
@@ -42,10 +43,10 @@ export function* generateRouteHandlerMethodBody(
   yield itt`
     const cookie =
       lib.getParameterValues(serverIncomingRequest.headers, "cookie");
-    const accept =
-      lib.getParameterValues(serverIncomingRequest.headers, "accept");
     const requestContentType =
       lib.first(lib.getParameterValues(serverIncomingRequest.headers, "content-type"));
+    const responseAcceptTypes =
+      lib.parseAcceptHeader(lib.getParameterValues(serverIncomingRequest.headers, "accept"));
   `;
 
   /**
@@ -58,6 +59,13 @@ export function* generateRouteHandlerMethodBody(
       lib.parseParameters([serverIncomingRequest.query], "?", "&", "=");
     const cookieParameters = 
       lib.parseParameters(cookie, "", "; ", "=");
+  `;
+
+  /*
+  set accept for use in 
+  */
+  yield itt`
+    const accepts: shared.${operationAcceptTypeName}[] = [];
   `;
 
   /**
@@ -221,10 +229,6 @@ export function* generateRouteHandlerMethodBody(
       }
     `;
   }
-
-  yield itt`
-    const accepts: never[] = [];
-  `;
 
   /**
    * execute the operation handler and collect the response

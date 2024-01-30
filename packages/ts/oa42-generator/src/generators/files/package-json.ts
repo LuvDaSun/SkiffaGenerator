@@ -26,6 +26,9 @@ export function generatePackageJsonData(name: string, version: string) {
       "./parameters": {
         default: "./out/parameters.js",
       },
+      "./shared": {
+        default: "./out/shared.js",
+      },
       "./client": {
         default: "./out/client.js",
       },
@@ -34,8 +37,8 @@ export function generatePackageJsonData(name: string, version: string) {
       },
     },
     scripts: {
+      prepack: "tsc --build",
       pretest: "tsc --build",
-      prepare: "tsc --build",
       build: "tsc --build",
       clean: "rm -rf ./out && tsc --build --clean",
       test: "node --test ./out/*.test.js",

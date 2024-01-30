@@ -5,4 +5,5 @@ export * from "./main-ts.js";
 export * from "./package-json.js";
 export * from "./parameters-ts.js";
 export * from "./server-ts.js";
+export * from "./shared-ts.js";
 export * from "./tsconfig-json.js";
