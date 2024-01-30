@@ -212,10 +212,52 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     authenticationName: string,
     authenticationItem: oas.SecurityScheme,
   ) {
-    const authenticationModel: models.Authentication = {
-      name: authenticationName,
-    };
-    return authenticationModel;
+    switch (authenticationItem.type) {
+      case "apiKey": {
+        const authenticationModel: models.ApiKeyAuthentication = {
+          name: authenticationName,
+          type: "apiKey",
+          in: authenticationItem.in,
+        };
+        return authenticationModel;
+      }
+      case "http":
+        switch (authenticationItem.scheme) {
+          case "basic": {
+            const authenticationModel: models.HttpBasicAuthentication = {
+              name: authenticationName,
+              type: "http",
+              scheme: "basic",
+            };
+            return authenticationModel;
+          }
+
+          case "bearer": {
+            const authenticationModel: models.HttpBearerAuthentication = {
+              name: authenticationName,
+              type: "http",
+              scheme: "bearer",
+            };
+            return authenticationModel;
+          }
+
+          default: {
+            throw new Error("http authentication scheme not yet supported");
+          }
+        }
+
+      case "oauth2": {
+        throw new Error("security scheme oauth2 not yet supported");
+      }
+
+      case "openIdConnect": {
+        throw new Error("security scheme openIdConnect not yet supported");
+      }
+
+      default: {
+        throw new Error("security scheme not supported");
+      }
+    }
   }
 
   private *getOperationResultModels(operationUri: URL, operationItem: oas.Operation) {
