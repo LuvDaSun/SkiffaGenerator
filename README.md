@@ -12,4 +12,10 @@ You might want to build The project via `npm --workspaces run build`. This is au
 
 ## Publishing
 
-Bump the version of what you want to publish and then `npm publish` it!
+Bump version via `npm --workspaces version patch`. You could also bump a minor or major version.
+
+Then update dependencies via `npm --workspaces update --save`, or do this manually.
+
+The publish everything via `npm --workspaces publish`.
+
+Then commit and push everything to git.
