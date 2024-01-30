@@ -9,7 +9,13 @@ import {
   generateOperationOutgoingRequestType,
 } from "../types/index.js";
 
-export function* generateClientTsCode(apiModel: models.Api) {
+export function* generateClientTsCode(
+  apiModel: models.Api,
+  configuration: {
+    requestTypes: string[];
+    responseTypes: string[];
+  },
+) {
   yield banner;
 
   yield itt`

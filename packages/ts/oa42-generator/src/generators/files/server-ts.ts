@@ -13,7 +13,13 @@ import {
   generateServerClass,
 } from "../types/index.js";
 
-export function* generateServerTsCode(apiModel: models.Api) {
+export function* generateServerTsCode(
+  apiModel: models.Api,
+  configuration: {
+    requestTypes: string[];
+    responseTypes: string[];
+  },
+) {
   yield banner;
 
   yield itt`

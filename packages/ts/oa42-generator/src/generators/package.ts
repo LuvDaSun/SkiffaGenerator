@@ -25,7 +25,8 @@ export function generatePackage(
   specification: jns42generator.Specification,
   configuration: PackageConfiguration,
 ) {
-  const { packageDirectoryPath, packageName, packageVersion } = configuration;
+  const { packageDirectoryPath, packageName, packageVersion, requestTypes, responseTypes } =
+    configuration;
 
   fs.mkdirSync(packageDirectoryPath, { recursive: true });
   fs.mkdirSync(path.join(packageDirectoryPath, "src"), { recursive: true });
@@ -97,13 +98,13 @@ export function generatePackage(
   }
 
   {
-    const code = generateClientTsCode(apiModel);
+    const code = generateClientTsCode(apiModel, { requestTypes, responseTypes });
     const filePath = path.join(packageDirectoryPath, "src", "client.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = generateServerTsCode(apiModel);
+    const code = generateServerTsCode(apiModel, { requestTypes, responseTypes });
     const filePath = path.join(packageDirectoryPath, "src", "server.ts");
     writeCodeToFile(filePath, code);
   }
