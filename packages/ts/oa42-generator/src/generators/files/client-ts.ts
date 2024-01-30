@@ -76,7 +76,7 @@ export function* generateClientTsCode(
           credentials: ${credentialsName},
           options: ClientOptions = defaultClientOptions,
         ): Promise<${operationIncomingResponseName}> {
-          ${generateClientOperationFunctionBody(apiModel, pathModel, operationModel)}
+          ${generateClientOperationFunctionBody(apiModel, pathModel, operationModel, configuration)}
         }
       `;
       yield* generateOperationCredentialsType(apiModel, operationModel);

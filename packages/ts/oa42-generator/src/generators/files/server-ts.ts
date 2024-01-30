@@ -54,7 +54,7 @@ export function* generateServerTsCode(
   `;
 
   yield* generateServerAuthenticationType(apiModel);
-  yield* generateServerClass(apiModel);
+  yield* generateServerClass(apiModel, configuration);
 
   for (const authenticationModel of apiModel.authentication) {
     const handlerTypeName = toPascal(authenticationModel.name, "authentication", "handler");
