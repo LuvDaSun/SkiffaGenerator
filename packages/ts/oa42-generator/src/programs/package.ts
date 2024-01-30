@@ -115,11 +115,17 @@ async function main(options: MainOptions) {
 
   // generate code
 
-  generatePackage(apiModel, specification, {
-    packageDirectoryPath,
-    packageName,
-    packageVersion,
-    requestTypes,
-    responseTypes,
-  });
+  generatePackage(
+    apiModel,
+    specification,
+    {
+      packageDirectoryPath,
+      packageName,
+      packageVersion,
+    },
+    {
+      requestTypes,
+      responseTypes,
+    },
+  );
 }
