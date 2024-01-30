@@ -46,6 +46,18 @@ export function configurePackageProgram(argv: yargs.Argv) {
           description: "maximum number of iterations for transforming",
           type: "number",
           default: 1000,
+        })
+        .option("request-types", {
+          description: "Preferred request content-types",
+          type: "string",
+          array: true,
+          default: ["application/json", "multipart/form-data", "text/plain"],
+        })
+        .option("response-types", {
+          description: "Preferred response content-types",
+          type: "string",
+          array: true,
+          default: ["application/json", "multipart/form-data", "text/plain"],
         }),
     (argv) => main(argv),
   );
@@ -59,6 +71,8 @@ interface MainOptions {
   defaultTypeName: string;
   nameMaximumIterations: number;
   transformMaximumIterations: number;
+  requestTypes: string[];
+  responseTypes: string[];
 }
 
 async function main(options: MainOptions) {
@@ -77,6 +91,8 @@ async function main(options: MainOptions) {
     defaultTypeName,
     nameMaximumIterations,
     transformMaximumIterations,
+    requestTypes,
+    responseTypes,
   } = options;
 
   // setup document context
@@ -103,5 +119,7 @@ async function main(options: MainOptions) {
     packageDirectoryPath,
     packageName,
     packageVersion,
+    requestTypes,
+    responseTypes,
   });
 }

@@ -16,6 +16,8 @@ export interface PackageConfiguration {
   packageName: string;
   packageVersion: string;
   packageDirectoryPath: string;
+  requestTypes: string[];
+  responseTypes: string[];
 }
 
 export function generatePackage(
