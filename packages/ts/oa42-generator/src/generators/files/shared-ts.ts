@@ -2,14 +2,9 @@ import { intersect } from "oa42-lib";
 import * as models from "../../models/index.js";
 import { banner, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
+import { GeneratorConfiguration } from "../configuration.js";
 
-export function* generateSharedTsCode(
-  apiModel: models.Api,
-  configuration: {
-    requestTypes: string[];
-    responseTypes: string[];
-  },
-) {
+export function* generateSharedTsCode(apiModel: models.Api, configuration: GeneratorConfiguration) {
   yield banner;
 
   for (const pathModel of apiModel.paths) {

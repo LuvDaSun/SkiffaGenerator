@@ -3,6 +3,7 @@ import * as models from "../../models/index.js";
 import { banner, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateIsAuthenticationFunctionBody } from "../bodies/index.js";
+import { GeneratorConfiguration } from "../configuration.js";
 import {
   generateOperationAuthenticationType,
   generateOperationHandlerType,
@@ -12,13 +13,7 @@ import {
   generateServerClass,
 } from "../types/index.js";
 
-export function* generateServerTsCode(
-  apiModel: models.Api,
-  configuration: {
-    requestTypes: string[];
-    responseTypes: string[];
-  },
-) {
+export function* generateServerTsCode(apiModel: models.Api, configuration: GeneratorConfiguration) {
   yield banner;
 
   yield itt`

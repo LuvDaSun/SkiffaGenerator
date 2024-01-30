@@ -1,10 +1,14 @@
 import * as models from "../../models/index.js";
 import { banner, itt } from "../../utils/index.js";
+import { GeneratorConfiguration } from "../configuration.js";
 
 /**
  * Code generator that generates code only for browsers
  */
-export function* generateBrowserTsCode(apiModel: models.Api) {
+export function* generateBrowserTsCode(
+  apiModel: models.Api,
+  configuration: GeneratorConfiguration,
+) {
   yield banner;
 
   yield itt`

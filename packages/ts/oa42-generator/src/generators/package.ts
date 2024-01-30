@@ -3,6 +3,7 @@ import * as jns42generator from "jns42-generator";
 import path from "path";
 import * as models from "../models/index.js";
 import { NestedText, flattenNestedText, splitIterableText } from "../utils/index.js";
+import { GeneratorConfiguration } from "./configuration.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
 import { generateClientServerTestTsCode } from "./files/client-server-test-ts.js";
 import { generateClientTsCode } from "./files/client-ts.js";
@@ -17,17 +18,15 @@ export interface PackageConfiguration {
   packageName: string;
   packageVersion: string;
   packageDirectoryPath: string;
-  requestTypes: string[];
-  responseTypes: string[];
 }
 
 export function generatePackage(
   apiModel: models.Api,
   specification: jns42generator.Specification,
-  configuration: PackageConfiguration,
+  packageConfiguration: PackageConfiguration,
+  generatorConfiguration: GeneratorConfiguration,
 ) {
-  const { packageDirectoryPath, packageName, packageVersion, requestTypes, responseTypes } =
-    configuration;
+  const { packageDirectoryPath, packageName, packageVersion } = packageConfiguration;
 
   fs.mkdirSync(packageDirectoryPath, { recursive: true });
   fs.mkdirSync(path.join(packageDirectoryPath, "src"), { recursive: true });
@@ -45,79 +44,79 @@ export function generatePackage(
   }
 
   {
-    const code = generateMainTsCode(apiModel);
+    const code = generateMainTsCode(apiModel, generatorConfiguration);
     const filePath = path.join(packageDirectoryPath, "src", "main.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = generateBrowserTsCode(apiModel);
+    const code = generateBrowserTsCode(apiModel, generatorConfiguration);
     const filePath = path.join(packageDirectoryPath, "src", "browser.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = generateSharedTsCode(apiModel, { requestTypes, responseTypes });
+    const code = generateSharedTsCode(apiModel, generatorConfiguration);
     const filePath = path.join(packageDirectoryPath, "src", "shared.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = generateParametersTsCode(apiModel);
+    const code = generateParametersTsCode(apiModel, generatorConfiguration);
     const filePath = path.join(packageDirectoryPath, "src", "parameters.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = generateClientTsCode(apiModel, { requestTypes, responseTypes });
+    const code = generateClientTsCode(apiModel, generatorConfiguration);
     const filePath = path.join(packageDirectoryPath, "src", "client.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = generateServerTsCode(apiModel, { requestTypes, responseTypes });
+    const code = generateServerTsCode(apiModel, generatorConfiguration);
     const filePath = path.join(packageDirectoryPath, "src", "server.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = generateClientServerTestTsCode(apiModel);
+    const code = generateClientServerTestTsCode(apiModel, generatorConfiguration);
     const filePath = path.join(packageDirectoryPath, "src", "client-server.test.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = jns42generator.generateTypesTsCode(specification, configuration);
+    const code = jns42generator.generateTypesTsCode(specification, packageConfiguration);
     const filePath = path.join(packageDirectoryPath, "src", "types.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = jns42generator.generateValidatorsTsCode(specification, configuration);
+    const code = jns42generator.generateValidatorsTsCode(specification, packageConfiguration);
     const filePath = path.join(packageDirectoryPath, "src", "validators.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = jns42generator.generateParsersTsCode(specification, configuration);
+    const code = jns42generator.generateParsersTsCode(specification, packageConfiguration);
     const filePath = path.join(packageDirectoryPath, "src", "parsers.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = jns42generator.generateMocksTsCode(specification, configuration);
+    const code = jns42generator.generateMocksTsCode(specification, packageConfiguration);
     const filePath = path.join(packageDirectoryPath, "src", "mocks.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = jns42generator.generateExamplesTestTsCode(specification, configuration);
+    const code = jns42generator.generateExamplesTestTsCode(specification, packageConfiguration);
     const filePath = path.join(packageDirectoryPath, "src", "examples.test.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = jns42generator.generateMocksTestTsCode(specification, configuration);
+    const code = jns42generator.generateMocksTestTsCode(specification, packageConfiguration);
     const filePath = path.join(packageDirectoryPath, "src", "mocks.test.ts");
     writeCodeToFile(filePath, code);
   }

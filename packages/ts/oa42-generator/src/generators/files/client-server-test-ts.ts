@@ -2,8 +2,12 @@ import assert from "assert";
 import * as models from "../../models/index.js";
 import { banner, toCamel } from "../../utils/index.js";
 import { NestedText, itt } from "../../utils/iterable-text-template.js";
+import { GeneratorConfiguration } from "../configuration.js";
 
-export function* generateClientServerTestTsCode(apiModel: models.Api) {
+export function* generateClientServerTestTsCode(
+  apiModel: models.Api,
+  configuration: GeneratorConfiguration,
+) {
   yield banner;
 
   yield itt`

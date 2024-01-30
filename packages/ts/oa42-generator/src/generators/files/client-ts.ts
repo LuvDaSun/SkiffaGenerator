@@ -3,19 +3,14 @@ import * as models from "../../models/index.js";
 import { banner, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateClientOperationFunctionBody } from "../bodies/index.js";
+import { GeneratorConfiguration } from "../configuration.js";
 import {
   generateOperationCredentialsType,
   generateOperationIncomingResponseType,
   generateOperationOutgoingRequestType,
 } from "../types/index.js";
 
-export function* generateClientTsCode(
-  apiModel: models.Api,
-  configuration: {
-    requestTypes: string[];
-    responseTypes: string[];
-  },
-) {
+export function* generateClientTsCode(apiModel: models.Api, configuration: GeneratorConfiguration) {
   yield banner;
 
   yield itt`
