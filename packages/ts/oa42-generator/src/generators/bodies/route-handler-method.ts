@@ -26,6 +26,7 @@ export function* generateRouteHandlerMethodBody(
     authenticationNames.has(authenticationModel.name),
   );
   const operationAcceptTypeName = toPascal(operationModel.name, "operation", "accept");
+  const operationAcceptConstName = toCamel(operationModel.name, "operation", "accept");
 
   yield itt`
     const { 
@@ -45,7 +46,7 @@ export function* generateRouteHandlerMethodBody(
       lib.getParameterValues(serverIncomingRequest.headers, "cookie");
     const requestContentType =
       lib.first(lib.getParameterValues(serverIncomingRequest.headers, "content-type"));
-    const responseAcceptTypes =
+    const responseAccepts =
       lib.parseAcceptHeader(lib.getParameterValues(serverIncomingRequest.headers, "accept"));
   `;
 
@@ -65,7 +66,9 @@ export function* generateRouteHandlerMethodBody(
   set accept for use in 
   */
   yield itt`
-    const accepts: shared.${operationAcceptTypeName}[] = [];
+    const accepts: shared.${operationAcceptTypeName}[] = [
+      ...lib.intersect(responseAccepts, shared.${operationAcceptConstName}),
+    ];
   `;
 
   /**

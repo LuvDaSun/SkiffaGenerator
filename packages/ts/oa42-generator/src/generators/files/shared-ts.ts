@@ -22,8 +22,11 @@ export function* generateSharedTsCode(
       );
 
       yield itt`
-        export type ${operationAcceptTypeName} =
-          ${operationAccepts.map((operationAccept) => JSON.stringify(operationAccept)).join(" | ")};
+        export type ${operationAcceptTypeName} = ${
+          operationAccepts.length > 0
+            ? operationAccepts.map((operationAccept) => JSON.stringify(operationAccept)).join(" | ")
+            : "never"
+        };
       `;
 
       const accepts = [...intersect(configuration.requestTypes, operationAccepts)];
