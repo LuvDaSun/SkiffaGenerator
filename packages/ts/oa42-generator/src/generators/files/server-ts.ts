@@ -52,12 +52,49 @@ export function* generateServerTsCode(apiModel: models.Api) {
   for (const authenticationModel of apiModel.authentication) {
     const handlerTypeName = toPascal(authenticationModel.name, "authentication", "handler");
 
-    yield itt`
-      export type ${handlerTypeName}<A extends ServerAuthentication> =
-        (credential: string) =>
-          A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined |
-          Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;
-    `;
+    switch (authenticationModel.type) {
+      case "apiKey":
+        yield itt`
+          export type ${handlerTypeName}<A extends ServerAuthentication> =
+            (credential: string) =>
+              A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined |
+              Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;
+          `;
+        break;
+
+      case "http":
+        switch (authenticationModel.scheme) {
+          case "basic":
+            yield itt`
+              export type ${handlerTypeName}<A extends ServerAuthentication> =
+                (credential: {
+                  id: string,
+                  password: string,
+                }) =>
+                  A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined |
+                  Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;
+              `;
+            break;
+
+          case "bearer":
+            yield itt`
+              export type ${handlerTypeName}<A extends ServerAuthentication> =
+                (credential: string) =>
+                  A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined |
+                  Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;
+              `;
+            break;
+
+          default: {
+            throw "impossible";
+          }
+        }
+        break;
+
+      default: {
+        throw "impossible";
+      }
+    }
   }
 
   for (const pathModel of apiModel.paths) {

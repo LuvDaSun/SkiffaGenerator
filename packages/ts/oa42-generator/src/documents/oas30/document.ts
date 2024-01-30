@@ -170,7 +170,9 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     const mockable =
       [...pathParameters, ...headerParameters, ...queryParameters, ...cookieParameters].every(
         (parameterModel) => parameterModel.mockable || !parameterModel.required,
-      ) && operationResults.some((operationResultModel) => operationResultModel.mockable);
+      ) &&
+      (operationResults.length == 0 ||
+        operationResults.some((operationResultModel) => operationResultModel.mockable));
 
     const operationModel: models.Operation = {
       uri: operationUri,
@@ -212,10 +214,52 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     authenticationName: string,
     authenticationItem: oas.SecurityScheme,
   ) {
-    const authenticationModel: models.Authentication = {
-      name: authenticationName,
-    };
-    return authenticationModel;
+    switch (authenticationItem.type) {
+      case "apiKey": {
+        const authenticationModel: models.ApiKeyAuthentication = {
+          name: authenticationName,
+          type: "apiKey",
+          in: authenticationItem.in,
+        };
+        return authenticationModel;
+      }
+      case "http":
+        switch (authenticationItem.scheme) {
+          case "basic": {
+            const authenticationModel: models.HttpBasicAuthentication = {
+              name: authenticationName,
+              type: "http",
+              scheme: "basic",
+            };
+            return authenticationModel;
+          }
+
+          case "bearer": {
+            const authenticationModel: models.HttpBearerAuthentication = {
+              name: authenticationName,
+              type: "http",
+              scheme: "bearer",
+            };
+            return authenticationModel;
+          }
+
+          default: {
+            throw new Error("http authentication scheme not yet supported");
+          }
+        }
+
+      case "oauth2": {
+        throw new Error("security scheme oauth2 not yet supported");
+      }
+
+      case "openIdConnect": {
+        throw new Error("security scheme openIdConnect not yet supported");
+      }
+
+      default: {
+        throw new Error("security scheme not supported");
+      }
+    }
   }
 
   private *getOperationResultModels(operationUri: URL, operationItem: oas.Operation) {
@@ -255,7 +299,8 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     const mockable =
       headerParameters.every(
         (parameterModel) => parameterModel.mockable || !parameterModel.required,
-      ) && bodies.some((bodyModel) => bodyModel.mockable);
+      ) &&
+      (bodies.length == 0 || bodies.some((bodyModel) => bodyModel.mockable));
 
     return {
       uri: responseUri,

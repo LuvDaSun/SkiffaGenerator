@@ -132,14 +132,63 @@ export function* generateClientOperationFunctionBody(
       requirements.map((requirement) => requirement.authenticationName),
     ),
   );
-  for (const authenticationModel of apiModel.authentication) {
-    if (!authenticationNames.has(authenticationModel.name)) {
-      continue;
-    }
+  const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
+    authenticationNames.has(authenticationModel.name),
+  );
 
-    yield itt`
-      requestHeaders.append(${JSON.stringify(authenticationModel.name)}, credentials.${toCamel(authenticationModel.name)});
-    `;
+  for (const authenticationModel of authenticationModels) {
+    switch (authenticationModel.type) {
+      case "apiKey":
+        switch (authenticationModel.in) {
+          case "query": {
+            yield itt`
+              queryParameters.append(${JSON.stringify(authenticationModel.name)}, credentials.${toCamel(authenticationModel.name)});
+            `;
+            break;
+          }
+
+          case "header": {
+            yield itt`
+              requestHeaders.append(${JSON.stringify(authenticationModel.name)}, credentials.${toCamel(authenticationModel.name)});
+            `;
+            break;
+          }
+
+          case "cookie": {
+            yield itt`
+              cookieParameters.append(${JSON.stringify(authenticationModel.name)}, credentials.${toCamel(authenticationModel.name)});
+            `;
+            break;
+          }
+          default:
+            throw "impossible";
+        }
+        break;
+
+      case "http":
+        switch (authenticationModel.scheme) {
+          case "basic":
+            yield itt`
+              requestHeaders.append("authorization", lib.stringifyBasicAuthorizationHeader(credentials.${toCamel(authenticationModel.name)}));
+            `;
+            break;
+
+          case "bearer":
+            yield itt`
+              requestHeaders.append("authorization", lib.stringifyAuthorizationHeader("Bearer", credentials.${toCamel(authenticationModel.name)}));
+            `;
+            break;
+
+          default: {
+            throw "impossible";
+          }
+        }
+        break;
+
+      default: {
+        throw "impossible";
+      }
+    }
   }
 
   yield itt`

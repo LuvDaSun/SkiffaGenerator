@@ -62,12 +62,7 @@ export function* generateRouteHandlerMethodBody(
 
   yield itt`
     const credentials = {
-      ${authenticationModels.map((authenticationModel) => {
-        return itt`
-          ${toCamel(authenticationModel.name)}:
-            lib.first(lib.getParameterValues(serverIncomingRequest.headers, ${JSON.stringify(authenticationModel.name)})),
-        `;
-      })}
+      ${generateCredentialsContent()}
     }
   `;
 
@@ -79,7 +74,7 @@ export function* generateRouteHandlerMethodBody(
             (
               async () => [
                 ${JSON.stringify(toCamel(authenticationModel.name))},
-                credentials.apiToken == null ?
+                credentials.${toCamel(authenticationModel.name)} == null ?
                   undefined :
                   await this.${toCamel(authenticationModel.name, "authentication", "handler")}?.(credentials.${toCamel(authenticationModel.name)})
               ]
@@ -247,6 +242,68 @@ export function* generateRouteHandlerMethodBody(
   yield itt`
     return serverOutgoingResponse
   `;
+
+  function* generateCredentialsContent() {
+    for (const authenticationModel of authenticationModels) {
+      switch (authenticationModel.type) {
+        case "apiKey":
+          switch (authenticationModel.in) {
+            case "query": {
+              yield itt`
+                ${toCamel(authenticationModel.name)}:
+                  lib.first(lib.getParameterValues(queryParameters, ${JSON.stringify(authenticationModel.name)})),
+              `;
+              break;
+            }
+
+            case "header": {
+              yield itt`
+                ${toCamel(authenticationModel.name)}:
+                  lib.first(lib.getParameterValues(serverIncomingRequest.headers, ${JSON.stringify(authenticationModel.name)})),
+              `;
+              break;
+            }
+
+            case "cookie": {
+              yield itt`
+                ${toCamel(authenticationModel.name)}:
+                  lib.first(lib.getParameterValues(cookieParameters, ${JSON.stringify(authenticationModel.name)})),
+              `;
+              break;
+            }
+            default:
+              throw "impossible";
+          }
+          break;
+
+        case "http":
+          switch (authenticationModel.scheme) {
+            case "basic":
+              yield itt`
+                ${toCamel(authenticationModel.name)}:
+                  lib.parseBasicAuthorizationHeader(lib.getParameterValues(serverIncomingRequest.headers, "authorization")),
+              `;
+              break;
+
+            case "bearer":
+              yield itt`
+                ${toCamel(authenticationModel.name)}:
+                  lib.parseAuthorizationHeader("bearer", lib.getParameterValues(serverIncomingRequest.headers, "authorization")),
+              `;
+              break;
+
+            default: {
+              throw "impossible";
+            }
+          }
+          break;
+
+        default: {
+          throw "impossible";
+        }
+      }
+    }
+  }
 }
 
 function* generateRequestContentTypeCodeCaseClauses(
