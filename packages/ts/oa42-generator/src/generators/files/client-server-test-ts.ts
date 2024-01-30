@@ -94,13 +94,6 @@ function* generateOperationTest(
   operationResultModel: models.OperationResult,
   responseBodyModel: models.Body | null,
 ) {
-  if (requestBodyModel != null && requestBodyModel.contentType !== "application/json") {
-    return;
-  }
-  if (responseBodyModel != null && responseBodyModel.contentType !== "application/json") {
-    return;
-  }
-
   const authenticationNames = new Set(
     operationModel.authenticationRequirements.flatMap((requirements) =>
       requirements.map((requirement) => requirement.authenticationName),
