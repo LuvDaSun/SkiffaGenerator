@@ -22,15 +22,15 @@ export function parseBasicAuthorizationHeader(values: Iterable<string>) {
   if (encoded == null) return;
 
   const decoded = Base64.decode(encoded);
-  const [id, password] = decoded.split(":", 2);
+  const [id, secret] = decoded.split(":", 2);
 
-  return { id, password };
+  return { id, secret };
 }
 
-export function stringifyBasicAuthorizationHeader(credential: { id: string; password: string }) {
-  const { id, password } = credential;
+export function stringifyBasicAuthorizationHeader(credential: { id: string; secret: string }) {
+  const { id, secret } = credential;
 
-  const decoded = id + ":" + password;
+  const decoded = id + ":" + secret;
   const encoded = Base64.encode(decoded);
 
   return stringifyAuthorizationHeader("Basic", encoded);

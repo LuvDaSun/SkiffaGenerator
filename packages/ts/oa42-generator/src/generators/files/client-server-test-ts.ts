@@ -432,7 +432,7 @@ function* generateOperationTest(
               yield itt`
                 ${toCamel(authenticationModel.name)}: {
                   id: "elmerbulthuis",
-                  password: "welkom123",
+                  secret: "welkom123",
                 },
               `;
               break;

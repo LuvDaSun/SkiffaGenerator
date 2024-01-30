@@ -66,9 +66,9 @@ export function* generateRouteHandlerMethodBody(
   set accept for use in 
   */
   yield itt`
-    const accepts: shared.${operationAcceptTypeName}[] = [
+    const accepts = [
       ...lib.intersect(responseAccepts, shared.${operationAcceptConstName}),
-    ];
+    ] as shared.${operationAcceptTypeName}[];
   `;
 
   /**
