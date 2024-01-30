@@ -170,7 +170,9 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     const mockable =
       [...pathParameters, ...headerParameters, ...queryParameters, ...cookieParameters].every(
         (parameterModel) => parameterModel.mockable || !parameterModel.required,
-      ) && operationResults.some((operationResultModel) => operationResultModel.mockable);
+      ) &&
+      (operationResults.length == 0 ||
+        operationResults.some((operationResultModel) => operationResultModel.mockable));
 
     const operationModel: models.Operation = {
       uri: operationUri,
@@ -297,7 +299,8 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     const mockable =
       headerParameters.every(
         (parameterModel) => parameterModel.mockable || !parameterModel.required,
-      ) && bodies.some((bodyModel) => bodyModel.mockable);
+      ) &&
+      (bodies.length == 0 || bodies.some((bodyModel) => bodyModel.mockable));
 
     return {
       uri: responseUri,
