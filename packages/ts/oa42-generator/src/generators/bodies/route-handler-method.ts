@@ -7,10 +7,6 @@ import { itt, toCamel, toPascal } from "../../utils/index.js";
 export function* generateRouteHandlerMethodBody(
   apiModel: models.Api,
   operationModel: models.Operation,
-  configuration: {
-    requestTypes: string[];
-    responseTypes: string[];
-  },
 ) {
   const operationHandlerName = toCamel(operationModel.name, "operation", "handler");
   const operationIncomingRequestName = toPascal(operationModel.name, "incoming", "request");

@@ -5,10 +5,6 @@ export function* generateClientOperationFunctionBody(
   apiModel: models.Api,
   pathModel: models.Path,
   operationModel: models.Operation,
-  configuration: {
-    requestTypes: string[];
-    responseTypes: string[];
-  },
 ) {
   const operationIncomingResponseName = toPascal(operationModel.name, "incoming", "response");
   const operationAcceptConstName = toCamel(operationModel.name, "operation", "accept");

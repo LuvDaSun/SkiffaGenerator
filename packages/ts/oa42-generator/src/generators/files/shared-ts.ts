@@ -1,10 +1,8 @@
-import { intersect } from "oa42-lib";
 import * as models from "../../models/index.js";
 import { banner, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { GeneratorConfiguration } from "../configuration.js";
 
-export function* generateSharedTsCode(apiModel: models.Api, configuration: GeneratorConfiguration) {
+export function* generateSharedTsCode(apiModel: models.Api) {
   yield banner;
 
   for (const pathModel of apiModel.paths) {
@@ -12,9 +10,13 @@ export function* generateSharedTsCode(apiModel: models.Api, configuration: Gener
       const operationAcceptTypeName = toPascal(operationModel.name, "operation", "accept");
       const operationAcceptConstName = toCamel(operationModel.name, "operation", "accept");
 
-      const operationAccepts = operationModel.operationResults.flatMap((operationResultModel) =>
-        operationResultModel.bodies.map((bodyModel) => bodyModel.contentType),
-      );
+      const operationAccepts = [
+        ...new Set(
+          operationModel.operationResults.flatMap((operationResultModel) =>
+            operationResultModel.bodies.map((bodyModel) => bodyModel.contentType),
+          ),
+        ),
+      ];
 
       yield itt`
         export type ${operationAcceptTypeName} = ${
@@ -24,9 +26,8 @@ export function* generateSharedTsCode(apiModel: models.Api, configuration: Gener
         };
       `;
 
-      const accepts = [...intersect(configuration.requestTypes, operationAccepts)];
       yield itt`
-        export const ${operationAcceptConstName}: ${operationAcceptTypeName}[] = ${JSON.stringify(accepts)};
+        export const ${operationAcceptConstName}: ${operationAcceptTypeName}[] = ${JSON.stringify(operationAccepts)};
       `;
     }
   }

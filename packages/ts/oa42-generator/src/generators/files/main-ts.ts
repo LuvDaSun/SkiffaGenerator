@@ -1,13 +1,12 @@
 import * as models from "../../models/index.js";
 import { banner } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { GeneratorConfiguration } from "../configuration.js";
 
 /**
  * Main entrypoint for the package, exports client and server and
  * dependencies
  */
-export function* generateMainTsCode(apiModel: models.Api, configuration: GeneratorConfiguration) {
+export function* generateMainTsCode(apiModel: models.Api) {
   yield banner;
 
   yield itt`

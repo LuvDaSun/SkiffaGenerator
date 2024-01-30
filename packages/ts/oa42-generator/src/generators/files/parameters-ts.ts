@@ -5,16 +5,12 @@ import {
   generateIsRequestParametersFunctionBody,
   generateIsResponseParametersFunctionBody,
 } from "../bodies/index.js";
-import { GeneratorConfiguration } from "../configuration.js";
 import {
   generateOperationParametersTypes,
   generateOperationResultParameterTypes,
 } from "../types/index.js";
 
-export function* generateParametersTsCode(
-  apiModel: models.Api,
-  configuration: GeneratorConfiguration,
-) {
+export function* generateParametersTsCode(apiModel: models.Api) {
   yield banner;
 
   yield itt`

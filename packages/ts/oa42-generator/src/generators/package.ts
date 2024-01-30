@@ -3,7 +3,6 @@ import * as jns42generator from "jns42-generator";
 import path from "path";
 import * as models from "../models/index.js";
 import { NestedText, flattenNestedText, splitIterableText } from "../utils/index.js";
-import { GeneratorConfiguration } from "./configuration.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
 import { generateClientServerTestTsCode } from "./files/client-server-test-ts.js";
 import { generateClientTsCode } from "./files/client-ts.js";
@@ -24,7 +23,6 @@ export function generatePackage(
   apiModel: models.Api,
   specification: jns42generator.Specification,
   packageConfiguration: PackageConfiguration,
-  generatorConfiguration: GeneratorConfiguration,
 ) {
   const { packageDirectoryPath, packageName, packageVersion } = packageConfiguration;
 
@@ -44,43 +42,43 @@ export function generatePackage(
   }
 
   {
-    const code = generateMainTsCode(apiModel, generatorConfiguration);
+    const code = generateMainTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "main.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = generateBrowserTsCode(apiModel, generatorConfiguration);
+    const code = generateBrowserTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "browser.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = generateSharedTsCode(apiModel, generatorConfiguration);
+    const code = generateSharedTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "shared.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = generateParametersTsCode(apiModel, generatorConfiguration);
+    const code = generateParametersTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "parameters.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = generateClientTsCode(apiModel, generatorConfiguration);
+    const code = generateClientTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "client.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = generateServerTsCode(apiModel, generatorConfiguration);
+    const code = generateServerTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "server.ts");
     writeCodeToFile(filePath, code);
   }
 
   {
-    const code = generateClientServerTestTsCode(apiModel, generatorConfiguration);
+    const code = generateClientServerTestTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "client-server.test.ts");
     writeCodeToFile(filePath, code);
   }

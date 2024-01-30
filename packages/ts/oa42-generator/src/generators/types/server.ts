@@ -23,29 +23,17 @@ import {
  * that is transformed into a `ServerOutgoingResponse` that is the return type
  * of the handle method.
  */
-export function* generateServerClass(
-  apiModel: models.Api,
-  configuration: {
-    requestTypes: string[];
-    responseTypes: string[];
-  },
-) {
+export function* generateServerClass(apiModel: models.Api) {
   yield itt`
 export class Server<A extends ServerAuthentication = ServerAuthentication>
   extends lib.ServerBase
 {
-  ${generateServerBody(apiModel, configuration)}
+  ${generateServerBody(apiModel)}
 }
 `;
 }
 
-function* generateServerBody(
-  apiModel: models.Api,
-  configuration: {
-    requestTypes: string[];
-    responseTypes: string[];
-  },
-) {
+function* generateServerBody(apiModel: models.Api) {
   yield itt`
     protected readonly options: ServerOptions & typeof defaultServerOptions;
     constructor(options: ServerOptions = {}) {
@@ -122,7 +110,7 @@ function* generateServerBody(
           pathParameters: Record<string, string>,
           serverIncomingRequest: lib.ServerIncomingRequest,
         ): Promise<lib.ServerOutgoingResponse> {
-          ${generateRouteHandlerMethodBody(apiModel, operationModel, configuration)}
+          ${generateRouteHandlerMethodBody(apiModel, operationModel)}
         }
       `;
     }

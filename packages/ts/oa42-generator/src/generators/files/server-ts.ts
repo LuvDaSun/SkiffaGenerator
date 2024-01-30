@@ -3,7 +3,6 @@ import * as models from "../../models/index.js";
 import { banner, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateIsAuthenticationFunctionBody } from "../bodies/index.js";
-import { GeneratorConfiguration } from "../configuration.js";
 import {
   generateOperationAuthenticationType,
   generateOperationHandlerType,
@@ -13,7 +12,7 @@ import {
   generateServerClass,
 } from "../types/index.js";
 
-export function* generateServerTsCode(apiModel: models.Api, configuration: GeneratorConfiguration) {
+export function* generateServerTsCode(apiModel: models.Api) {
   yield banner;
 
   yield itt`
@@ -49,7 +48,7 @@ export function* generateServerTsCode(apiModel: models.Api, configuration: Gener
   `;
 
   yield* generateServerAuthenticationType(apiModel);
-  yield* generateServerClass(apiModel, configuration);
+  yield* generateServerClass(apiModel);
 
   for (const authenticationModel of apiModel.authentication) {
     const handlerTypeName = toPascal(authenticationModel.name, "authentication", "handler");

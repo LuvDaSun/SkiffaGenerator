@@ -1,16 +1,18 @@
 import { loadYAML } from "../utils/index.js";
 import { DocumentBase } from "./document-base.js";
 
-export interface DocumentOptions {
+export interface DocumentConfiguration {
   defaultTypeName: string;
   nameMaximumIterations: number;
   transformMaximumIterations: number;
+  requestTypes: string[];
+  responseTypes: string[];
 }
 
 export interface DocumentInitializer<N = unknown> {
   documentUri: URL;
   documentNode: N;
-  options: DocumentOptions;
+  configuration: DocumentConfiguration;
 }
 
 export type DocumentFactory<N = unknown> = (
@@ -21,7 +23,7 @@ export class DocumentContext {
   private factories = new Array<DocumentFactory>();
   private document!: DocumentBase;
 
-  constructor(private readonly options: DocumentOptions) {
+  constructor(private readonly configurations: DocumentConfiguration) {
     //
   }
 
@@ -43,7 +45,7 @@ export class DocumentContext {
       const document = factory({
         documentUri,
         documentNode,
-        options: this.options,
+        configuration: this.configurations,
       });
       if (document != null) {
         await document.load();

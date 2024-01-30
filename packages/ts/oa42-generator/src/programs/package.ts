@@ -101,6 +101,8 @@ async function main(options: MainOptions) {
     defaultTypeName,
     nameMaximumIterations: nameMaximumIterations,
     transformMaximumIterations,
+    requestTypes,
+    responseTypes,
   });
   documentContext.registerFactory(swagger2.factory);
   documentContext.registerFactory(oas30.factory);
@@ -115,17 +117,9 @@ async function main(options: MainOptions) {
 
   // generate code
 
-  generatePackage(
-    apiModel,
-    specification,
-    {
-      packageDirectoryPath,
-      packageName,
-      packageVersion,
-    },
-    {
-      requestTypes,
-      responseTypes,
-    },
-  );
+  generatePackage(apiModel, specification, {
+    packageDirectoryPath,
+    packageName,
+    packageVersion,
+  });
 }
