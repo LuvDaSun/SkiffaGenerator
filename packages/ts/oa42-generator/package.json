@@ -1,6 +1,6 @@
 {
   "name": "oa42-generator",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "sideEffects": false,
   "description": "",
   "type": "module",
@@ -34,14 +34,14 @@
     "generator"
   ],
   "dependencies": {
-    "@jns42/oas-v3-0": "^0.13.4",
-    "@jns42/oas-v3-1": "^0.13.4",
-    "@jns42/swagger-v2": "^0.13.4",
-    "@types/node": "^20.11.10",
+    "@jns42/oas-v3-0": "^0.13.6",
+    "@jns42/oas-v3-1": "^0.13.6",
+    "@jns42/swagger-v2": "^0.13.6",
+    "@types/node": "^20.11.13",
     "@types/yargs": "^17.0.32",
     "camelcase": "^8.0.0",
     "goodrouter": "^2.1.2",
-    "jns42-generator": "^0.13.5",
+    "jns42-generator": "^0.13.6",
     "oa42-lib": "^0.8.0",
     "tslib": "^2.6.2",
     "type-fest": "^4.10.2",
