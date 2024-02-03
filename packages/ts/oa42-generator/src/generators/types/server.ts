@@ -47,7 +47,7 @@ function* generateServerBody(apiModel: models.Api) {
   `;
 
   yield itt`
-    public async routeHandler(
+    protected async routeHandler(
       serverIncomingRequest: lib.ServerIncomingRequest,
     ): Promise<lib.ServerOutgoingResponse> {
       ${generateCommonRouteHandlerMethodBody(apiModel)}
