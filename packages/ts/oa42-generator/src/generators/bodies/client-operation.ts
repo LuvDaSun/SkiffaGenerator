@@ -18,7 +18,7 @@ export function* generateClientOperationFunctionBody(
       validateIncomingParameters,
       validateOutgoingEntity,
       validateOutgoingParameters,
-    } = options;
+    } = configuration;
 
     if(baseUrl == null) {
       throw new Error("please set baseUrl");

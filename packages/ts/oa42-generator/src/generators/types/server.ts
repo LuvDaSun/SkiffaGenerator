@@ -35,13 +35,13 @@ export class Server<A extends ServerAuthentication = ServerAuthentication>
 
 function* generateServerBody(apiModel: models.Api) {
   yield itt`
-    protected readonly options: ServerOptions & typeof defaultServerOptions;
-    constructor(options: ServerOptions = {}) {
+    protected readonly configuration: ServerConfiguration & typeof defaultServerConfiguration;
+    constructor(configuration: ServerConfiguration = {}) {
       super();
 
-      this.options = {
-        ...defaultServerOptions,
-        ...options,
+      this.configuration = {
+        ...defaultServerConfiguration,
+        ...configuration,
       };
     }
   `;

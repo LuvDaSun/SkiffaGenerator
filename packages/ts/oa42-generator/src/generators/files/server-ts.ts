@@ -26,13 +26,13 @@ export function* generateServerTsCode(apiModel: models.Api) {
   `;
 
   yield itt`
-    export interface ServerOptions {
+    export interface ServerConfiguration {
       validateIncomingEntity?: boolean;
       validateIncomingParameters?: boolean;
       validateOutgoingEntity?: boolean;
       validateOutgoingParameters?: boolean;
     }
-    export const defaultServerOptions = {
+    export const defaultServerConfiguration = {
       validateIncomingEntity: true,
       validateIncomingParameters: true,
       validateOutgoingEntity: false,

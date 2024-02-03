@@ -30,7 +30,7 @@ export function* generateRouteHandlerMethodBody(
       validateIncomingParameters,
       validateOutgoingEntity,
       validateOutgoingParameters,
-    } = this.options;
+    } = this.configuration;
   `;
 
   /**
