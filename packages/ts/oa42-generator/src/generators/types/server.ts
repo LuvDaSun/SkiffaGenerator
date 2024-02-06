@@ -47,6 +47,18 @@ function* generateServerBody(apiModel: models.Api) {
   `;
 
   yield itt`
+    public registerMiddleware(middleware: ServerMiddleware) {
+      const nextMiddleware = this.handler;
+  
+      this.handler = (request, next) => {
+        return middleware.call(this, request, (request) => {
+          return nextMiddleware.call(this, request, next);
+        });
+      };
+    }
+  `;
+
+  yield itt`
     protected async routeHandler(
       serverIncomingRequest: lib.ServerIncomingRequest,
     ): Promise<lib.ServerOutgoingResponse> {

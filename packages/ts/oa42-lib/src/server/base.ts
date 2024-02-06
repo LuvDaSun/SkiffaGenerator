@@ -18,10 +18,6 @@ export interface ServerOutgoingResponse {
   stream?(signal?: AbortSignal): AsyncIterable<Uint8Array>;
 }
 
-export interface RequestListenerOptions {
-  onError?: (error: unknown) => void;
-}
-
 export interface ServerMiddleware {
   (
     this: ServerBase,
@@ -31,43 +27,20 @@ export interface ServerMiddleware {
 }
 
 export abstract class ServerBase {
-  private middleware: ServerMiddleware = (request, next) => next(request);
+  private handler: ServerMiddleware = (request, next) => next(request);
 
   protected abstract routeHandler(
     incomingRequest: ServerIncomingRequest,
   ): Promise<ServerOutgoingResponse>;
 
-  public registerMiddleware(middleware: ServerMiddleware) {
-    const nextMiddleware = this.middleware;
-
-    this.middleware = (request, next) => {
-      return middleware.call(this, request, (request) => {
-        return nextMiddleware.call(this, request, next);
-      });
-    };
-  }
-
-  public asRequestListener(
-    options: RequestListenerOptions = {},
-  ): (
+  public asHttpRequestListener(): (
     request: (http.IncomingMessage | http2.Http2ServerRequest) & Readable,
     response: (http.ServerResponse | http2.Http2ServerResponse) & Writable,
   ) => void {
     return (request, response) => {
       const abortController = new AbortController();
 
-      /*
-       * Not sure if the aborted event is fired when there is a connection
-       * error! if we use finish we can be sure that as soon the response
-       * finished the abort is signalled
-       *
-       * One version that uses the aborted event seemed leaky. This might
-       * be the cause of the leak!
-       */
-      // request.addListener("aborted", () => abortController.abort());
       finished(response, (error) => abortController.abort());
-      /*
-       */
 
       const task = async () => {
         assert(request.url != null);
@@ -101,7 +74,7 @@ export abstract class ServerBase {
           },
         };
 
-        const outgoingResponse = await this.middleware(incomingRequest, (incomingRequest) => {
+        const outgoingResponse = await this.handler(incomingRequest, (incomingRequest) => {
           return this.routeHandler(incomingRequest);
         });
 
@@ -124,7 +97,6 @@ export abstract class ServerBase {
       };
 
       task().catch(async (error) => {
-        options.onError?.(error);
         response.destroy(error);
       });
     };
