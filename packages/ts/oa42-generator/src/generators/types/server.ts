@@ -36,7 +36,7 @@ export class Server<A extends ServerAuthentication = ServerAuthentication>
 function* generateServerBody(apiModel: models.Api) {
   yield itt`
     protected readonly configuration: ServerConfiguration & typeof defaultServerConfiguration;
-    constructor(configuration: ServerConfiguration = {}) {
+    constructor(configuration: Partial<ServerConfiguration> = {}) {
       super();
 
       this.configuration = {
@@ -47,10 +47,10 @@ function* generateServerBody(apiModel: models.Api) {
   `;
 
   yield itt`
-    public registerMiddleware(middleware: ServerMiddleware) {
-      const nextMiddleware = this.handler;
+    public registerMiddleware(middleware: lib.ServerMiddleware) {
+      const nextMiddleware = this.middleware;
   
-      this.handler = (request, next) => {
+      this.middleware = (request, next) => {
         return middleware.call(this, request, (request) => {
           return nextMiddleware.call(this, request, next);
         });
@@ -59,7 +59,7 @@ function* generateServerBody(apiModel: models.Api) {
   `;
 
   yield itt`
-    protected async routeHandler(
+    protected async requestHandler(
       serverIncomingRequest: lib.ServerIncomingRequest,
     ): Promise<lib.ServerOutgoingResponse> {
       ${generateCommonRouteHandlerMethodBody(apiModel)}

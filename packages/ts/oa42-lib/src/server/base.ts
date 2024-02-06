@@ -27,9 +27,9 @@ export interface ServerMiddleware {
 }
 
 export abstract class ServerBase {
-  private handler: ServerMiddleware = (request, next) => next(request);
+  protected middleware: ServerMiddleware = (request, next) => next(request);
 
-  protected abstract routeHandler(
+  protected abstract requestHandler(
     incomingRequest: ServerIncomingRequest,
   ): Promise<ServerOutgoingResponse>;
 
@@ -74,8 +74,8 @@ export abstract class ServerBase {
           },
         };
 
-        const outgoingResponse = await this.handler(incomingRequest, (incomingRequest) => {
-          return this.routeHandler(incomingRequest);
+        const outgoingResponse = await this.middleware(incomingRequest, (incomingRequest) => {
+          return this.requestHandler(incomingRequest);
         });
 
         response.statusCode = outgoingResponse.status;

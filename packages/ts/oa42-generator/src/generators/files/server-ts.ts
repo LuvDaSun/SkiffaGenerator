@@ -27,18 +27,18 @@ export function* generateServerTsCode(apiModel: models.Api) {
 
   yield itt`
     export interface ServerConfiguration {
-      validateIncomingEntity?: boolean;
-      validateIncomingParameters?: boolean;
-      validateOutgoingEntity?: boolean;
-      validateOutgoingParameters?: boolean;
-      onError?: (error: unknown) => void;
+      validateIncomingEntity: boolean;
+      validateIncomingParameters: boolean;
+      validateOutgoingEntity: boolean;
+      validateOutgoingParameters: boolean;
+      onError: (error: unknown) => void;
       requestWrapper: <T>(inner: () => Promise<T>) => Promise<T>;
       endpointWrapper: <T>(inner: () => Promise<T>) => Promise<T>;
       authenticationWrapper: <T>(inner: () => Promise<T>) => Promise<T>;
       operationWrapper: <T>(inner: () => Promise<T>) => Promise<T>;
       middlewareWrapper: <T>(inner: () => Promise<T>) => Promise<T>;
     }
-    export const defaultServerConfiguration = {
+    export const defaultServerConfiguration: ServerConfiguration = {
       validateIncomingEntity: true,
       validateIncomingParameters: true,
       validateOutgoingEntity: false,
