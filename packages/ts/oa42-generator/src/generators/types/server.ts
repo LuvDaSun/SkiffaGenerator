@@ -56,6 +56,7 @@ function* generateServerBody(apiModel: models.Api) {
               await nextMiddleware.call(this, request, next)
             ),
             this.configuration.middlewareWrapper,
+            middleware.name,
           );
     }
   `;
@@ -89,6 +90,7 @@ function* generateServerBody(apiModel: models.Api) {
           lib.wrapAsync(
             authenticationHandler,
             this.configuration.authenticationWrapper,
+            ${JSON.stringify(authenticationModel.name)},
           );
       }
     `;
@@ -122,7 +124,11 @@ function* generateServerBody(apiModel: models.Api) {
          */
         public ${registerHandlerMethodName}(operationHandler: ${handlerTypeName}<A>) {
           this.${handlerPropertyName} =
-            lib.wrapAsync(operationHandler, this.configuration.operationWrapper);
+            lib.wrapAsync(
+              operationHandler,
+              this.configuration.operationWrapper,
+              ${JSON.stringify(operationModel.name)},
+            );
         }
       `;
 
