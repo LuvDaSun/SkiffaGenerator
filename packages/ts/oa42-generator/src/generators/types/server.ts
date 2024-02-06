@@ -2,8 +2,8 @@ import * as models from "../../models/index.js";
 import { toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
-  generateCommonRouteHandlerMethodBody,
-  generateRouteHandlerMethodBody,
+  generateEndpointHandlerMethodBody,
+  generateRequestHandlerMethodBody,
 } from "../bodies/index.js";
 
 /**
@@ -62,7 +62,7 @@ function* generateServerBody(apiModel: models.Api) {
     protected async requestHandler(
       serverIncomingRequest: lib.ServerIncomingRequest,
     ): Promise<lib.ServerOutgoingResponse> {
-      ${generateCommonRouteHandlerMethodBody(apiModel)}
+      ${generateRequestHandlerMethodBody(apiModel)}
     }
   `;
 
@@ -93,7 +93,7 @@ function* generateServerBody(apiModel: models.Api) {
 
       const registerHandlerMethodName = toCamel("register", operationModel.name, "operation");
 
-      const routeHandlerName = toCamel(operationModel.name, "route", "handler");
+      const endpointHandlerName = toCamel(operationModel.name, "endpoint", "handler");
 
       yield itt`
         private ${handlerPropertyName}?: ${handlerTypeName}<A>;
@@ -118,11 +118,11 @@ function* generateServerBody(apiModel: models.Api) {
       `;
 
       yield itt`
-        private async ${routeHandlerName}(
+        private async ${endpointHandlerName}(
           pathParameters: Record<string, string>,
           serverIncomingRequest: lib.ServerIncomingRequest,
         ): Promise<lib.ServerOutgoingResponse> {
-          ${generateRouteHandlerMethodBody(apiModel, operationModel)}
+          ${generateEndpointHandlerMethodBody(apiModel, operationModel)}
         }
       `;
     }

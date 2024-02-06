@@ -4,7 +4,7 @@ import { itt, toCamel, toPascal } from "../../utils/index.js";
 /**
  * function statements for route handler
  */
-export function* generateRouteHandlerMethodBody(
+export function* generateEndpointHandlerMethodBody(
   apiModel: models.Api,
   operationModel: models.Operation,
 ) {

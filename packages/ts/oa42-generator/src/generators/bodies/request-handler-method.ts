@@ -1,7 +1,7 @@
 import * as models from "../../models/index.js";
 import { itt, toCamel } from "../../utils/index.js";
 
-export function* generateCommonRouteHandlerMethodBody(apiModel: models.Api) {
+export function* generateRequestHandlerMethodBody(apiModel: models.Api) {
   yield itt`
     const [pathId, pathParameters] =
       router.parseRoute(serverIncomingRequest.path);
@@ -30,11 +30,11 @@ function* generatePathCaseClauses(apiModel: models.Api) {
 }
 function* generateOperationCaseClauses(pathModel: models.Path) {
   for (const operationModel of pathModel.operations) {
-    const routeHandlerName = toCamel(operationModel.name, "route", "handler");
+    const endpointHandlerName = toCamel(operationModel.name, "endpoint", "handler");
 
     yield itt`
       case ${JSON.stringify(operationModel.method.toUpperCase())}:
-        return this.${routeHandlerName}(
+        return this.${endpointHandlerName}(
           pathParameters,
           serverIncomingRequest,
         );
