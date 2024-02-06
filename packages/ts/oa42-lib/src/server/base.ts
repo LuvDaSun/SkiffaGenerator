@@ -96,9 +96,14 @@ export abstract class ServerBase {
         await new Promise<void>((resolve) => response.end(() => resolve()));
       };
 
-      task().catch(async (error) => {
-        response.destroy(error);
-      });
+      task().then(
+        () => {
+          response.destroy();
+        },
+        async (error) => {
+          response.destroy(error);
+        },
+      );
     };
   }
 }
