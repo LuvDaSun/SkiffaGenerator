@@ -31,7 +31,6 @@ export function* generateServerTsCode(apiModel: models.Api) {
       validateIncomingParameters: boolean;
       validateOutgoingEntity: boolean;
       validateOutgoingParameters: boolean;
-      onError: (error: unknown) => void;
       requestWrapper: <T>(inner: () => Promise<T>) => Promise<T>;
       endpointWrapper: <T>(inner: () => Promise<T>) => Promise<T>;
       authenticationWrapper: <T>(inner: () => Promise<T>, name: string) => Promise<T>;
@@ -43,7 +42,6 @@ export function* generateServerTsCode(apiModel: models.Api) {
       validateIncomingParameters: true,
       validateOutgoingEntity: false,
       validateOutgoingParameters: false,
-      onError: (error) => { throw error; },
       requestWrapper: (inner) => inner(),
       endpointWrapper: (inner) => inner(),
       authenticationWrapper: (inner, name) => inner(),

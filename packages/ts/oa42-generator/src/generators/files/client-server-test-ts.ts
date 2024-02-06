@@ -197,9 +197,7 @@ function* generateOperationTest(
       const httpServer = http.createServer();
       httpServer.addListener(
         "request",
-        server.asRequestListener({
-          onError: (error) => lastError = error,
-        }),
+        server.asHttpRequestListener(),
       );
       await new Promise<void>((resolve) => httpServer.listen(resolve));
       const address = httpServer.address();
