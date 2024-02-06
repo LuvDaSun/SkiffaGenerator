@@ -59,10 +59,12 @@ function* generateServerBody(apiModel: models.Api) {
   `;
 
   yield itt`
-    protected async requestHandler(
+    protected requestHandler(
       serverIncomingRequest: lib.ServerIncomingRequest,
     ): Promise<lib.ServerOutgoingResponse> {
-      ${generateRequestHandlerMethodBody(apiModel)}
+      return this.configuration.requestWrapper(async () => {
+        ${generateRequestHandlerMethodBody(apiModel)}
+      });
     }
   `;
 
@@ -122,7 +124,9 @@ function* generateServerBody(apiModel: models.Api) {
           pathParameters: Record<string, string>,
           serverIncomingRequest: lib.ServerIncomingRequest,
         ): Promise<lib.ServerOutgoingResponse> {
-          ${generateEndpointHandlerMethodBody(apiModel, operationModel)}
+          return this.configuration.endpointWrapper(async () => {
+            ${generateEndpointHandlerMethodBody(apiModel, operationModel)}
+          });
         }
       `;
     }

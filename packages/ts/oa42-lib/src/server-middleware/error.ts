@@ -1,14 +1,12 @@
 import * as errors from "../errors/index.js";
 import { ServerMiddleware } from "../server/index.js";
 
-export function createErrorMiddleware(onError?: (error: unknown) => void): ServerMiddleware {
+export function createErrorMiddleware(): ServerMiddleware {
   return async function (request, next) {
     try {
       const response = await next(request);
       return response;
     } catch (error) {
-      onError?.(error);
-
       if (
         error instanceof errors.ServerRequestEntityValidationFailed ||
         error instanceof errors.ServerRequestParameterValidationFailed
