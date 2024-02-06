@@ -9,6 +9,10 @@
       "path": "./packages/ts/oa42-lib",
     },
     {
+      "name": "ts/oa42-opentelemetry",
+      "path": "./packages/ts/oa42-opentelemetry",
+    },
+    {
       "name": "ts/oa42-generator",
       "path": "./packages/ts/oa42-generator",
     },

@@ -1,0 +1,47 @@
+{
+  "name": "oa42-opentelemetry",
+  "version": "0.8.2",
+  "description": "",
+  "type": "module",
+  "main": "./out/main.js",
+  "types": "./out/main.d.ts",
+  "exports": {
+    ".": {
+      "default": "./out/main.js"
+    }
+  },
+  "files": [
+    "./out/**",
+    "./src/**"
+  ],
+  "scripts": {
+    "prepack": "tsc --build",
+    "pretest": "tsc --build",
+    "build": "tsc --build ",
+    "clean": "rm -rf out",
+    "test": "node --test ./out/*.test.js ./out/*/*.test.js ./out/*/*/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:LuvDaSun/OpenApi42"
+  },
+  "author": "LuvDaSun Software B.V.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LuvDaSun/OpenApi42/issues"
+  },
+  "keywords": [
+    "openapi",
+    "opentelemetry"
+  ],
+  "dependencies": {
+    "@opentelemetry/api": "^1.7.0",
+    "@types/node": "^20.11.14",
+    "tslib": "^2.6.2",
+    "type-fest": "^4.10.2"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.2",
+    "typescript": "^5.3.3"
+  }
+}
