@@ -2,7 +2,7 @@ import * as errors from "../errors/index.js";
 import { ServerMiddleware } from "../server/index.js";
 
 export function createErrorMiddleware(): ServerMiddleware {
-  return async function (request, next) {
+  return async function errorMiddleware(request, next) {
     try {
       const response = await next(request);
       return response;
