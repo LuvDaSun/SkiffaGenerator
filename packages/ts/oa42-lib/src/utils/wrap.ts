@@ -1,14 +1,14 @@
-export function wrapAsync<A extends unknown[], R, S extends unknown[]>(
-  inner: (...args: A) => Promise<R>,
-  wrapper: (inner: () => Promise<R>, ...state: S) => Promise<R>,
-  ...state: S
-): (...args: A) => Promise<R> {
-  return (...args: A) => {
+export function wrapAsync<IA extends unknown[], IR, WA extends unknown[]>(
+  inner: (...innerArguments: IA) => Promise<IR>,
+  wrapper: (inner: () => Promise<IR>, ...wrapperArguments: WA) => Promise<IR>,
+  ...wrapperArguments: WA
+): (...args: IA) => Promise<IR> {
+  return (...innerArguments: IA) => {
     return wrapper(
       async () => {
-        return await inner(...args);
+        return await inner(...innerArguments);
       },
-      ...state,
+      ...wrapperArguments,
     );
   };
 }
