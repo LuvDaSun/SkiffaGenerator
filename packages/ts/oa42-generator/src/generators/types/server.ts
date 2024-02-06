@@ -50,11 +50,13 @@ function* generateServerBody(apiModel: models.Api) {
     public registerMiddleware(middleware: lib.ServerMiddleware) {
       const nextMiddleware = this.middleware;
   
-      this.middleware = (request, next) => {
-        return middleware.call(this, request, (request) => {
-          return nextMiddleware.call(this, request, next);
-        });
-      };
+      this.middleware =
+        lib.wrapAsync(
+          async (request, next) => await middleware.call(this, request, async (request) =>
+              await nextMiddleware.call(this, request, next)
+            ),
+            this.configuration.middlewareWrapper,
+          );
     }
   `;
 
@@ -83,7 +85,11 @@ function* generateServerBody(apiModel: models.Api) {
 
     yield itt`
       public ${registerHandlerMethodName}(authenticationHandler: ${handlerTypeName}<A>) {
-        this.${handlerPropertyName} = authenticationHandler;
+        this.${handlerPropertyName} =
+          lib.wrapAsync(
+            authenticationHandler,
+            this.configuration.authenticationWrapper,
+          );
       }
     `;
   }
@@ -115,12 +121,13 @@ function* generateServerBody(apiModel: models.Api) {
          ${jsDoc}
          */
         public ${registerHandlerMethodName}(operationHandler: ${handlerTypeName}<A>) {
-          this.${handlerPropertyName} = operationHandler;
+          this.${handlerPropertyName} =
+            lib.wrapAsync(operationHandler, this.configuration.operationWrapper);
         }
       `;
 
       yield itt`
-        private async ${endpointHandlerName}(
+        private ${endpointHandlerName}(
           pathParameters: Record<string, string>,
           serverIncomingRequest: lib.ServerIncomingRequest,
         ): Promise<lib.ServerOutgoingResponse> {

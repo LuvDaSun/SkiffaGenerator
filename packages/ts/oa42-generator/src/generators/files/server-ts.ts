@@ -70,7 +70,6 @@ export function* generateServerTsCode(apiModel: models.Api) {
         yield itt`
           export type ${handlerTypeName}<A extends ServerAuthentication> =
             (credential: string) =>
-              A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined |
               Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;
           `;
         break;
@@ -84,7 +83,6 @@ export function* generateServerTsCode(apiModel: models.Api) {
                   id: string,
                   secret: string,
                 }) =>
-                  A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined |
                   Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;
               `;
             break;
@@ -93,7 +91,6 @@ export function* generateServerTsCode(apiModel: models.Api) {
             yield itt`
               export type ${handlerTypeName}<A extends ServerAuthentication> =
                 (credential: string) =>
-                  A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined |
                   Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;
               `;
             break;

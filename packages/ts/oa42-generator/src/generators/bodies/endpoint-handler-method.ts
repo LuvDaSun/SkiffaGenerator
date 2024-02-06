@@ -87,7 +87,8 @@ export function* generateEndpointHandlerMethodBody(
                 ${JSON.stringify(toCamel(authenticationModel.name))},
                 credentials.${toCamel(authenticationModel.name)} == null ?
                   undefined :
-                  await this.${toCamel(authenticationModel.name, "authentication", "handler")}?.(credentials.${toCamel(authenticationModel.name)})
+                  await this.${toCamel(authenticationModel.name, "authentication", "handler")}?.
+                    (credentials.${toCamel(authenticationModel.name)})
               ]
             )(),
           `,
