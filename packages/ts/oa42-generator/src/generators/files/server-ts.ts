@@ -34,9 +34,9 @@ export function* generateServerTsCode(apiModel: models.Api) {
       onError: (error: unknown) => void;
       requestWrapper: <T>(inner: () => Promise<T>) => Promise<T>;
       endpointWrapper: <T>(inner: () => Promise<T>) => Promise<T>;
-      authenticationWrapper: <T>(inner: (name: string) => Promise<T>) => Promise<T>;
-      operationWrapper: <T>(inner: (name: string) => Promise<T>) => Promise<T>;
-      middlewareWrapper: <T>(inner: (name: string) => Promise<T>) => Promise<T>;
+      authenticationWrapper: <T>(inner: () => Promise<T>, name: string) => Promise<T>;
+      operationWrapper: <T>(inner: () => Promise<T>, name: string) => Promise<T>;
+      middlewareWrapper: <T>(inner: () => Promise<T>, name: string) => Promise<T>;
     }
     export const defaultServerConfiguration: ServerConfiguration = {
       validateIncomingEntity: true,
@@ -46,9 +46,9 @@ export function* generateServerTsCode(apiModel: models.Api) {
       onError: (error) => { throw error; },
       requestWrapper: (inner) => inner(),
       endpointWrapper: (inner) => inner(),
-      authenticationWrapper: (inner) => inner(),
-      operationWrapper: (inner) => inner(),
-      middlewareWrapper: (inner) => inner(),
+      authenticationWrapper: (inner, name) => inner(),
+      operationWrapper: (inner, name) => inner(),
+      middlewareWrapper: (inner, name) => inner(),
     };
   `;
 
