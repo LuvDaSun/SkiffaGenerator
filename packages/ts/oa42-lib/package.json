@@ -3,12 +3,12 @@
   "version": "0.8.3",
   "description": "",
   "type": "module",
-  "main": "./out-commonjs/main.js",
+  "main": "./out/main.cjs",
   "module": "./out/main.js",
   "types": "./out/main.d.ts",
   "exports": {
     ".": {
-      "require": "./out-commonjs/main.js",
+      "require": "./out/main.cjs",
       "import": "./out/main.js",
       "types": "./out/main.d.ts.js",
       "browser": "./out/browser.js"
