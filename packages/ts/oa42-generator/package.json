@@ -7,26 +7,25 @@
     "oa42-generator": "bin/oa42-generator"
   },
   "type": "module",
-  "main": "./out-commonjs/main.js",
+  "main": "./out/main.cjs",
   "module": "./out/main.js",
   "types": "./out/main.d.ts",
   "exports": {
     ".": {
-      "require": "./out-commonjs/main.js",
+      "require": "./out/main.cjs",
       "import": "./out/main.js",
-      "types": "./out/main.d.ts.js",
+      "types": "./out/main.d.ts",
       "browser": "./out/browser.js"
     }
   },
   "files": [
-    "./out/**",
-    "./out-commonjs/**"
+    "./out/**"
   ],
   "scripts": {
-    "prepack": "tsc --composite false; tsc --composite false --outDir out-commonjs --declaration false --module commonjs --moduleResolution Node10 ; echo '{\"type\":\"commonjs\"}' > out-commonjs/package.json",
+    "prepack": "make",
     "pretest": "tsc --build",
     "build": "tsc --build",
-    "clean": "rm -rf out out-* ; tsc --build --clean",
+    "clean": "tsc --build --clean",
     "test": "node --test ./out/**/*.test.js"
   },
   "repository": {
