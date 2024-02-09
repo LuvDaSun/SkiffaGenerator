@@ -15,14 +15,13 @@
     }
   },
   "files": [
-    "./out/**",
-    "./out-commonjs/**"
+    "./out/**"
   ],
   "scripts": {
-    "prepack": "tsc --composite false; tsc --composite false --outDir out-commonjs --declaration false --module commonjs --moduleResolution Node10 ; echo '{\"type\":\"commonjs\"}' > out-commonjs/package.json",
+    "prepack": "make",
     "pretest": "tsc --build",
     "build": "tsc --build",
-    "clean": "rm -rf out out-* ; tsc --build --clean",
+    "clean": "rm -rf out ; tsc --build --clean",
     "test": "node --test ./out/**/*.test.js"
   },
   "repository": {
