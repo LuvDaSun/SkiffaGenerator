@@ -59,5 +59,10 @@ out/%.cjs.map: \
 
 .NOTPARALLEL: \
 	clean build \
-	$(OUT_JS) \
 	$(OUT_DTS) \
+	$(OUT_JS) \
+	$(OUT_JS_MAP) \
+	$(OUT_CJS) \
+	$(OUT_CJS_MAP) \
+
+
