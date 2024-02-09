@@ -1,6 +1,6 @@
 {
   "name": "oa42-generator",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "sideEffects": false,
   "description": "",
   "bin": {
@@ -14,13 +14,13 @@
     ".": {
       "require": "./out-commonjs/main.js",
       "import": "./out/main.js",
-      "types": "./out/main.d.ts.js",
-      "browser": "./out/browser.js"
+      "types": "./out/main.d.ts"
     }
   },
   "files": [
     "./out/**",
-    "./out-commonjs/**"
+    "./out-commonjs/**",
+    "./bin/**"
   ],
   "scripts": {
     "prepack": "tsc --composite false; tsc --composite false --outDir out-commonjs --declaration false --module commonjs --moduleResolution Node10 ; echo '{\"type\":\"commonjs\"}' > out-commonjs/package.json",

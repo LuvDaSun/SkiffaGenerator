@@ -1,6 +1,6 @@
 {
   "name": "oa42-lib",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "",
   "type": "module",
   "main": "./out-commonjs/main.js",
@@ -10,7 +10,7 @@
     ".": {
       "require": "./out-commonjs/main.js",
       "import": "./out/main.js",
-      "types": "./out/main.d.ts.js",
+      "types": "./out/main.d.ts",
       "browser": "./out/browser.js"
     }
   },
