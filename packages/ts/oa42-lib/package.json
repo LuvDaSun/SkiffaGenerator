@@ -10,7 +10,7 @@
     ".": {
       "require": "./out/main.cjs",
       "import": "./out/main.js",
-      "types": "./out/main.d.ts.js",
+      "types": "./out/main.d.ts",
       "browser": "./out/browser.js"
     }
   },
