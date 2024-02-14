@@ -6,6 +6,7 @@
   "main": "./out-commonjs/main.js",
   "module": "./out/main.js",
   "types": "./out/main.d.ts",
+  "browser": "./out/browser.js",
   "exports": {
     ".": {
       "require": "./out-commonjs/main.js",
