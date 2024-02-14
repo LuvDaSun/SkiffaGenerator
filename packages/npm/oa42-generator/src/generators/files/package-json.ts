@@ -18,11 +18,8 @@ export function generatePackageJsonData(name: string, version: string) {
     },
     files: ["./out/**", "./out-commonjs/**"],
     scripts: {
-      prepack:
-        'tsc --composite false; tsc --composite false --outDir out-commonjs --declaration false --module commonjs --moduleResolution Node10 ; echo \'{"type":"commonjs"}\' > out-commonjs/package.json',
-      pretest: "tsc --build",
-      build: "tsc --build",
-      clean: "rm -rf out out-* ; tsc --build --clean",
+      prepare: `tsc ; tsc --outDir out-commonjs --declaration false --module commonjs --moduleResolution Node10 ; echo '{"type":"commonjs"}' > out-commonjs/package.json`,
+      clean: "rm -rf out out-*",
       test: "node --test ./out/**/*.test.js",
     },
     author: "",
