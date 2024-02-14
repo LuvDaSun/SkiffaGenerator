@@ -5,12 +5,12 @@
       "path": "./fixtures",
     },
     {
-      "name": "ts/oa42-lib",
-      "path": "./packages/ts/oa42-lib",
+      "name": "npm/oa42-lib",
+      "path": "./packages/npm/oa42-lib",
     },
     {
-      "name": "ts/oa42-generator",
-      "path": "./packages/ts/oa42-generator",
+      "name": "npm/oa42-generator",
+      "path": "./packages/npm/oa42-generator",
     },
   ],
   "settings": {
