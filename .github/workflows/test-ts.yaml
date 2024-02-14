@@ -7,7 +7,7 @@ on:
       - "*"
       - .github/**
       - fixtures/**
-      - packages/ts/**
+      - packages/npm/**
 
 jobs:
   unit:

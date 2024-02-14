@@ -1,7 +1,7 @@
 {
   "private": true,
   "workspaces": [
-    "packages/ts/*"
+    "packages/npm/*"
   ],
   "scripts": {
     "spelling": "cspell",
