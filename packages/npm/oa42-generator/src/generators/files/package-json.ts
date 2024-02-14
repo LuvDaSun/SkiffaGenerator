@@ -12,7 +12,7 @@ export function generatePackageJsonData(name: string, version: string) {
       ".": {
         require: "./out-commonjs/main.js",
         import: "./out/main.js",
-        types: "./out/main.d.ts.js",
+        types: "./out/main.d.ts",
       },
     },
     files: ["./out/**", "./out-commonjs/**"],
