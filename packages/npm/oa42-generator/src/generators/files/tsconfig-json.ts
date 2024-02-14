@@ -6,6 +6,7 @@ export function generateTsconfigJsonData() {
       rootDir: "./src",
       sourceMap: true,
       declaration: true,
+      lib: ["es2023", "DOM"],
     },
     include: ["./src"],
   };
