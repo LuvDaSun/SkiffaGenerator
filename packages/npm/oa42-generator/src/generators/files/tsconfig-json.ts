@@ -7,7 +7,7 @@ export function generateTsconfigJsonData() {
       sourceMap: true,
       declaration: true,
     },
-    include: ["src"],
+    include: ["./src"],
   };
 
   return content;
