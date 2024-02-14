@@ -8,9 +8,13 @@ words:
   - goodrouter
   - openapi
   - Promisable
+  - ryanluker
   - urlencoding
   - welkom
 useGitignore: true
-files: ["**"]
-ignorePaths: ["specifications/"]
-enableFiletypes: ["*"]
+files:
+  - "**"
+ignorePaths:
+  - specifications/
+enableFiletypes:
+  - "*"
