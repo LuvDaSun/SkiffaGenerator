@@ -1,7 +1,7 @@
 {
   "private": true,
   "workspaces": [
-    "packages/ts/*"
+    "packages/npm/*"
   ],
   "scripts": {
     "spelling": "cspell",
@@ -10,6 +10,6 @@
   "devDependencies": {
     "cspell": "^8.3.2",
     "jns42-generator": "^0.13.6",
-    "prettier": "^3.2.4"
+    "prettier": "^3.2.5"
   }
 }

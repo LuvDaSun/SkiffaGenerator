@@ -6,42 +6,24 @@ export function generatePackageJsonData(name: string, version: string) {
     name: name,
     version: version,
     type: "module",
-    main: "./out/main.js",
+    main: "./out-commonjs/main.js",
+    module: "./out/main.js",
     types: "./out/main.d.ts",
-    files: ["./src/*", "./out/*"],
     exports: {
       ".": {
-        default: "./out/main.js",
-        browser: "./out/browser.js",
-      },
-      "./types": {
-        default: "./out/types.js",
-      },
-      "./validators": {
-        default: "./out/validators.js",
-      },
-      "./parsers": {
-        default: "./out/parsers.js",
-      },
-      "./parameters": {
-        default: "./out/parameters.js",
-      },
-      "./shared": {
-        default: "./out/shared.js",
-      },
-      "./client": {
-        default: "./out/client.js",
-      },
-      "./server": {
-        default: "./out/server.js",
+        require: "./out-commonjs/main.js",
+        import: "./out/main.js",
+        types: "./out/main.d.ts",
       },
     },
+    files: ["./out/**", "./out-commonjs/**"],
     scripts: {
-      prepack: "tsc --build",
+      prepack:
+        'tsc --composite false; tsc --composite false --outDir out-commonjs --declaration false --module commonjs --moduleResolution Node10 ; echo \'{"type":"commonjs"}\' > out-commonjs/package.json',
       pretest: "tsc --build",
       build: "tsc --build",
-      clean: "rm -rf ./out && tsc --build --clean",
-      test: "node --test ./out/*.test.js",
+      clean: "rm -rf out out-* ; tsc --build --clean",
+      test: "node --test ./out/**/*.test.js",
     },
     author: "",
     license: "ISC",
