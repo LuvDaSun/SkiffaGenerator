@@ -5,6 +5,7 @@ export function generatePackageJsonData(name: string, version: string) {
   const content: PackageJson = {
     name: name,
     version: version,
+    type: "module",
     main: "./out-commonjs/main.js",
     module: "./out/main.js",
     types: "./out/main.d.ts",
