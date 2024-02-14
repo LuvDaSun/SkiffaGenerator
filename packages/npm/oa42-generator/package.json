@@ -1,6 +1,6 @@
 {
   "name": "oa42-generator",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "sideEffects": false,
   "description": "",
   "type": "module",
@@ -16,11 +16,10 @@
   },
   "files": [
     "./out/**",
-    "./out-commonjs/**",
-    "./bin/**"
+    "./out-commonjs/**"
   ],
   "bin": {
-    "oa42-generator": "bin/oa42-generator"
+    "oa42-generator": "out/program.js"
   },
   "scripts": {
     "watch": "tsc --watch",
