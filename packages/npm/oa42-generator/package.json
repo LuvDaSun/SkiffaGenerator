@@ -25,7 +25,7 @@
   "scripts": {
     "watch": "tsc --watch",
     "prepare": "tsc ; tsc --outDir out-commonjs --declaration false --module commonjs --moduleResolution Node10 ; echo '{\"type\":\"commonjs\"}' > out-commonjs/package.json",
-    "clean": "rm -rf out out-* ; tsc --build --clean",
+    "clean": "rm -rf out out-*",
     "test": "node --test ./out/**/*.test.js"
   },
   "repository": {

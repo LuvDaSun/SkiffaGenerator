@@ -6,6 +6,7 @@
       "label": "build",
       "script": "watch",
       "problemMatcher": ["$tsc-watch"],
+      "isBackground": true,
       "group": {
         "kind": "build",
         "isDefault": true
