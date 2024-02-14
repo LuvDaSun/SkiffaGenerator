@@ -6,8 +6,8 @@
     "sourceMap": true,
     "declaration": true,
     "composite": true,
-    "lib": ["es2023", "DOM"],
+    "lib": ["es2023", "DOM"]
   },
   "include": ["src/**/*"],
-  "references": [{ "path": "../oa42-lib" }],
+  "references": [{ "path": "../oa42-lib" }]
 }
