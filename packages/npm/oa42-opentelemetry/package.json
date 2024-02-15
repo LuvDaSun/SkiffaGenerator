@@ -1,6 +1,6 @@
 {
   "name": "oa42-opentelemetry",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "",
   "type": "module",
   "main": "./out-commonjs/main.js",
@@ -41,10 +41,10 @@
   "dependencies": {
     "@opentelemetry/api": "^1.7.0",
     "@opentelemetry/instrumentation": "^0.48.0",
-    "@types/node": "^20.11.14",
+    "@types/node": "^20.11.19",
+    "oa42-lib": "^0.8.10",
     "tslib": "^2.6.2",
-    "type-fest": "^4.10.2",
-    "oa42-lib": "^0.8.8"
+    "type-fest": "^4.10.2"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",

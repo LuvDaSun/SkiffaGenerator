@@ -6,6 +6,10 @@ import {
 import * as lib from "oa42-lib";
 
 export class Instrumentation extends InstrumentationBase<typeof lib> {
+  constructor() {
+    super("oa42-opentelemetry", "*");
+  }
+
   private originalServerWrappers?: lib.ServerWrappers;
   protected init() {
     return new InstrumentationNodeModuleDefinition<typeof lib>(
