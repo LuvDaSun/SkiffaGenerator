@@ -1,20 +1,35 @@
 import * as opentelemetry from "@opentelemetry/api";
 import {
   InstrumentationBase,
-  InstrumentationModuleDefinition,
+  InstrumentationNodeModuleDefinition,
 } from "@opentelemetry/instrumentation";
-import { ServerWrappers } from "oa42-lib";
+import * as lib from "oa42-lib";
 
-export class Oa42Instrumentation extends InstrumentationBase {
-  protected init():
-    | void
-    | InstrumentationModuleDefinition<any>
-    | InstrumentationModuleDefinition<any>[] {
-    throw new Error("Method not implemented.");
+export class Oa42Instrumentation extends InstrumentationBase<typeof lib> {
+  private originalServerWrappers?: lib.ServerWrappers;
+  protected init() {
+    return new InstrumentationNodeModuleDefinition<typeof lib>(
+      "oa42-lib",
+      ["*"],
+      (moduleExports, moduleVersion) => {
+        this.originalServerWrappers = moduleExports.defaultServerWrappers;
+        instrument(moduleExports.defaultServerWrappers);
+        return moduleExports;
+      },
+      (moduleExports, moduleVersion) => {
+        if (this.originalServerWrappers == null) {
+          return;
+        }
+        Object.assign(moduleExports, {
+          defaultServerWrappers: this.originalServerWrappers,
+        });
+        this.originalServerWrappers = undefined;
+      },
+    );
   }
 }
 
-export function instrument(serverWrappers: ServerWrappers) {
+export function instrument(serverWrappers: lib.ServerWrappers) {
   const tracer = opentelemetry.trace.getTracer("oa42");
 
   serverWrappers.requestWrapper = (inner) =>
@@ -38,17 +53,21 @@ export function instrument(serverWrappers: ServerWrappers) {
     });
 
   serverWrappers.authenticationWrapper = (inner, name) =>
-    tracer.startActiveSpan(`authentication: ${name}`, async (span) => {
-      try {
-        const result = await inner();
-        return result;
-      } finally {
-        span.end();
-      }
-    });
+    tracer.startActiveSpan(
+      "authentication",
+      { attributes: { authentication: name } },
+      async (span) => {
+        try {
+          const result = await inner();
+          return result;
+        } finally {
+          span.end();
+        }
+      },
+    );
 
   serverWrappers.middlewareWrapper = (inner, name) =>
-    tracer.startActiveSpan(`middleware: ${name}`, async (span) => {
+    tracer.startActiveSpan("middleware", { attributes: { middleware: name } }, async (span) => {
       try {
         const result = await inner();
         return result;
@@ -58,7 +77,7 @@ export function instrument(serverWrappers: ServerWrappers) {
     });
 
   serverWrappers.operationWrapper = (inner, name) =>
-    tracer.startActiveSpan(`operation: ${name}`, async (span) => {
+    tracer.startActiveSpan("operation", { attributes: { operation: name } }, async (span) => {
       try {
         const result = await inner();
         return result;
