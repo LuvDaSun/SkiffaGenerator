@@ -35,7 +35,7 @@ export class Server<A extends ServerAuthentication = ServerAuthentication>
 
 function* generateServerBody(apiModel: models.Api) {
   yield itt`
-    protected readonly configuration: ServerConfiguration & typeof defaultServerConfiguration;
+    protected readonly configuration: ServerConfiguration;
     constructor(configuration: Partial<ServerConfiguration> = {}) {
       super();
 
@@ -55,7 +55,7 @@ function* generateServerBody(apiModel: models.Api) {
           async (request, next) => await middleware.call(this, request, async (request) =>
               await nextMiddleware.call(this, request, next)
             ),
-            this.configuration.middlewareWrapper,
+            this.middlewareWrapper,
             middleware.name,
           );
     }
@@ -65,7 +65,7 @@ function* generateServerBody(apiModel: models.Api) {
     protected requestHandler(
       serverIncomingRequest: lib.ServerIncomingRequest,
     ): Promise<lib.ServerOutgoingResponse> {
-      return this.configuration.requestWrapper(async () => {
+      return this.requestWrapper(async () => {
         ${generateRequestHandlerMethodBody(apiModel)}
       });
     }
@@ -89,7 +89,7 @@ function* generateServerBody(apiModel: models.Api) {
         this.${handlerPropertyName} =
           lib.wrapAsync(
             authenticationHandler,
-            this.configuration.authenticationWrapper,
+            this.authenticationWrapper,
             ${JSON.stringify(authenticationModel.name)},
           );
       }
@@ -126,7 +126,7 @@ function* generateServerBody(apiModel: models.Api) {
           this.${handlerPropertyName} =
             lib.wrapAsync(
               operationHandler,
-              this.configuration.operationWrapper,
+              this.operationWrapper,
               ${JSON.stringify(operationModel.name)},
             );
         }
@@ -137,7 +137,7 @@ function* generateServerBody(apiModel: models.Api) {
           pathParameters: Record<string, string>,
           serverIncomingRequest: lib.ServerIncomingRequest,
         ): Promise<lib.ServerOutgoingResponse> {
-          return this.configuration.endpointWrapper(async () => {
+          return this.endpointWrapper(async () => {
             ${generateEndpointHandlerMethodBody(apiModel, operationModel)}
           });
         }

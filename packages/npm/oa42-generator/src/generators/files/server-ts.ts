@@ -31,22 +31,12 @@ export function* generateServerTsCode(apiModel: models.Api) {
       validateIncomingParameters: boolean;
       validateOutgoingEntity: boolean;
       validateOutgoingParameters: boolean;
-      requestWrapper: <T>(inner: () => Promise<T>) => Promise<T>;
-      endpointWrapper: <T>(inner: () => Promise<T>) => Promise<T>;
-      authenticationWrapper: <T>(inner: () => Promise<T>, name: string) => Promise<T>;
-      operationWrapper: <T>(inner: () => Promise<T>, name: string) => Promise<T>;
-      middlewareWrapper: <T>(inner: () => Promise<T>, name: string) => Promise<T>;
     }
     export const defaultServerConfiguration: ServerConfiguration = {
       validateIncomingEntity: true,
       validateIncomingParameters: true,
       validateOutgoingEntity: false,
       validateOutgoingParameters: false,
-      requestWrapper: (inner) => inner(),
-      endpointWrapper: (inner) => inner(),
-      authenticationWrapper: (inner, name) => inner(),
-      operationWrapper: (inner, name) => inner(),
-      middlewareWrapper: (inner, name) => inner(),
     };
   `;
 
