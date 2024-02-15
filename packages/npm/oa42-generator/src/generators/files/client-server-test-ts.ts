@@ -158,7 +158,7 @@ function* generateOperationTest(
         case "apiKey":
           yield itt`
             server.${registerAuthenticationHandlerMethodName}(
-              (credential) => credential === "super-secret-api-key"
+              async (credential) => credential === "super-secret-api-key"
             )
           `;
           break;
@@ -167,7 +167,7 @@ function* generateOperationTest(
             case "basic":
               yield itt`
                 server.${registerAuthenticationHandlerMethodName}(
-                  (credential) =>
+                  async (credential) =>
                     credential.id === "elmerbulthuis" && credential.secret === "welkom123"
                 )
               `;
@@ -176,7 +176,7 @@ function* generateOperationTest(
             case "bearer":
               yield itt`
                 server.${registerAuthenticationHandlerMethodName}(
-                  (credential) => credential === "super-secret-api-key"
+                  async (credential) => credential === "super-secret-api-key"
                 )
               `;
               break;
@@ -197,9 +197,7 @@ function* generateOperationTest(
       const httpServer = http.createServer();
       httpServer.addListener(
         "request",
-        server.asRequestListener({
-          onError: (error) => lastError = error,
-        }),
+        server.asHttpRequestListener(),
       );
       await new Promise<void>((resolve) => httpServer.listen(resolve));
       const address = httpServer.address();

@@ -15,6 +15,6 @@ export function* generateOperationHandlerType(operationModel: models.Operation) 
         incomingRequest: ${operationIncomingRequestName},
         authentication: ${operationAuthenticationName}<A>,
         accepts: shared.${operationAcceptTypeName}[]
-      ) => ${operationOutgoingResponseName} | Promise<${operationOutgoingResponseName}>
+      ) => Promise<${operationOutgoingResponseName}>
   `;
 }

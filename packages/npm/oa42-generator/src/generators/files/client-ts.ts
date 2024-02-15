@@ -23,7 +23,7 @@ export function* generateClientTsCode(apiModel: models.Api) {
   `;
 
   yield itt`
-    export interface ClientOptions {
+    export interface ClientConfiguration {
       baseUrl?: URL;
       validateIncomingEntity?: boolean;
       validateIncomingParameters?: boolean;
@@ -31,7 +31,7 @@ export function* generateClientTsCode(apiModel: models.Api) {
       validateOutgoingParameters?: boolean;
     }
 
-    export const defaultClientOptions = {
+    export const defaultClientConfiguration = {
       validateIncomingEntity: true,
       validateIncomingParameters: true,
       validateOutgoingEntity: false,
@@ -69,7 +69,7 @@ export function* generateClientTsCode(apiModel: models.Api) {
         export async function ${operationFunctionName}(
           outgoingRequest: ${operationOutgoingRequestName},
           credentials: ${credentialsName},
-          options: ClientOptions = defaultClientOptions,
+          configuration: ClientConfiguration = defaultClientConfiguration,
         ): Promise<${operationIncomingResponseName}> {
           ${generateClientOperationFunctionBody(apiModel, pathModel, operationModel)}
         }

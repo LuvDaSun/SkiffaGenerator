@@ -3,6 +3,7 @@ import * as http from "http";
 import * as http2 from "http2";
 import { Readable, Writable, finished } from "stream";
 import { Parameters, StatusCode } from "../utils/index.js";
+import { ServerWrappers, defaultServerWrappers } from "./wrapper.js";
 
 export interface ServerIncomingRequest {
   path: string;
@@ -18,10 +19,6 @@ export interface ServerOutgoingResponse {
   stream?(signal?: AbortSignal): AsyncIterable<Uint8Array>;
 }
 
-export interface RequestListenerOptions {
-  onError?: (error: unknown) => void;
-}
-
 export interface ServerMiddleware {
   (
     this: ServerBase,
@@ -30,44 +27,27 @@ export interface ServerMiddleware {
   ): Promise<ServerOutgoingResponse>;
 }
 
-export abstract class ServerBase {
-  private middleware: ServerMiddleware = (request, next) => next(request);
+export abstract class ServerBase implements ServerWrappers {
+  public requestWrapper = defaultServerWrappers.requestWrapper;
+  public endpointWrapper = defaultServerWrappers.endpointWrapper;
+  public authenticationWrapper = defaultServerWrappers.authenticationWrapper;
+  public operationWrapper = defaultServerWrappers.operationWrapper;
+  public middlewareWrapper = defaultServerWrappers.middlewareWrapper;
 
-  protected abstract routeHandler(
+  protected middleware: ServerMiddleware = (request, next) => next(request);
+
+  protected abstract requestHandler(
     incomingRequest: ServerIncomingRequest,
   ): Promise<ServerOutgoingResponse>;
 
-  public registerMiddleware(middleware: ServerMiddleware) {
-    const nextMiddleware = this.middleware;
-
-    this.middleware = (request, next) => {
-      return middleware.call(this, request, (request) => {
-        return nextMiddleware.call(this, request, next);
-      });
-    };
-  }
-
-  public asRequestListener(
-    options: RequestListenerOptions = {},
-  ): (
+  public asHttpRequestListener(): (
     request: (http.IncomingMessage | http2.Http2ServerRequest) & Readable,
     response: (http.ServerResponse | http2.Http2ServerResponse) & Writable,
   ) => void {
     return (request, response) => {
       const abortController = new AbortController();
 
-      /*
-       * Not sure if the aborted event is fired when there is a connection
-       * error! if we use finish we can be sure that as soon the response
-       * finished the abort is signalled
-       *
-       * One version that uses the aborted event seemed leaky. This might
-       * be the cause of the leak!
-       */
-      // request.addListener("aborted", () => abortController.abort());
       finished(response, (error) => abortController.abort());
-      /*
-       */
 
       const task = async () => {
         assert(request.url != null);
@@ -102,7 +82,7 @@ export abstract class ServerBase {
         };
 
         const outgoingResponse = await this.middleware(incomingRequest, (incomingRequest) => {
-          return this.routeHandler(incomingRequest);
+          return this.requestHandler(incomingRequest);
         });
 
         response.statusCode = outgoingResponse.status;
@@ -123,10 +103,14 @@ export abstract class ServerBase {
         await new Promise<void>((resolve) => response.end(() => resolve()));
       };
 
-      task().catch(async (error) => {
-        options.onError?.(error);
-        response.destroy(error);
-      });
+      task().then(
+        () => {
+          response.destroy();
+        },
+        async (error) => {
+          response.destroy(error);
+        },
+      );
     };
   }
 }

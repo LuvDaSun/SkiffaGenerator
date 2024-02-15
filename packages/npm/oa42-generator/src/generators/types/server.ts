@@ -2,8 +2,8 @@ import * as models from "../../models/index.js";
 import { toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
-  generateCommonRouteHandlerMethodBody,
-  generateRouteHandlerMethodBody,
+  generateEndpointHandlerMethodBody,
+  generateRequestHandlerMethodBody,
 } from "../bodies/index.js";
 
 /**
@@ -35,22 +35,39 @@ export class Server<A extends ServerAuthentication = ServerAuthentication>
 
 function* generateServerBody(apiModel: models.Api) {
   yield itt`
-    protected readonly options: ServerOptions & typeof defaultServerOptions;
-    constructor(options: ServerOptions = {}) {
+    protected readonly configuration: ServerConfiguration;
+    constructor(configuration: Partial<ServerConfiguration> = {}) {
       super();
 
-      this.options = {
-        ...defaultServerOptions,
-        ...options,
+      this.configuration = {
+        ...defaultServerConfiguration,
+        ...configuration,
       };
     }
   `;
 
   yield itt`
-    public async routeHandler(
+    public registerMiddleware(middleware: lib.ServerMiddleware) {
+      const nextMiddleware = this.middleware;
+  
+      this.middleware =
+        lib.wrapAsync(
+          async (request, next) => await middleware.call(this, request, async (request) =>
+              await nextMiddleware.call(this, request, next)
+            ),
+            this.middlewareWrapper,
+            middleware.name,
+          );
+    }
+  `;
+
+  yield itt`
+    protected requestHandler(
       serverIncomingRequest: lib.ServerIncomingRequest,
     ): Promise<lib.ServerOutgoingResponse> {
-      ${generateCommonRouteHandlerMethodBody(apiModel)}
+      return this.requestWrapper(async () => {
+        ${generateRequestHandlerMethodBody(apiModel)}
+      });
     }
   `;
 
@@ -69,7 +86,12 @@ function* generateServerBody(apiModel: models.Api) {
 
     yield itt`
       public ${registerHandlerMethodName}(authenticationHandler: ${handlerTypeName}<A>) {
-        this.${handlerPropertyName} = authenticationHandler;
+        this.${handlerPropertyName} =
+          lib.wrapAsync(
+            authenticationHandler,
+            this.authenticationWrapper,
+            ${JSON.stringify(authenticationModel.name)},
+          );
       }
     `;
   }
@@ -81,7 +103,7 @@ function* generateServerBody(apiModel: models.Api) {
 
       const registerHandlerMethodName = toCamel("register", operationModel.name, "operation");
 
-      const routeHandlerName = toCamel(operationModel.name, "route", "handler");
+      const endpointHandlerName = toCamel(operationModel.name, "endpoint", "handler");
 
       yield itt`
         private ${handlerPropertyName}?: ${handlerTypeName}<A>;
@@ -101,16 +123,23 @@ function* generateServerBody(apiModel: models.Api) {
          ${jsDoc}
          */
         public ${registerHandlerMethodName}(operationHandler: ${handlerTypeName}<A>) {
-          this.${handlerPropertyName} = operationHandler;
+          this.${handlerPropertyName} =
+            lib.wrapAsync(
+              operationHandler,
+              this.operationWrapper,
+              ${JSON.stringify(operationModel.name)},
+            );
         }
       `;
 
       yield itt`
-        private async ${routeHandlerName}(
+        private ${endpointHandlerName}(
           pathParameters: Record<string, string>,
           serverIncomingRequest: lib.ServerIncomingRequest,
         ): Promise<lib.ServerOutgoingResponse> {
-          ${generateRouteHandlerMethodBody(apiModel, operationModel)}
+          return this.endpointWrapper(async () => {
+            ${generateEndpointHandlerMethodBody(apiModel, operationModel)}
+          });
         }
       `;
     }

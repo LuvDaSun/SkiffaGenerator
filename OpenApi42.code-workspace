@@ -2,15 +2,19 @@
   "folders": [
     {
       "name": "fixtures",
-      "path": "./fixtures",
-    },
-    {
-      "name": "npm/oa42-lib",
-      "path": "./packages/npm/oa42-lib",
+      "path": "fixtures",
     },
     {
       "name": "npm/oa42-generator",
-      "path": "./packages/npm/oa42-generator",
+      "path": "packages/npm/oa42-generator",
+    },
+    {
+      "name": "npm/oa42-lib",
+      "path": "packages/npm/oa42-lib",
+    },
+    {
+      "name": "npm/oa42-opentelemetry",
+      "path": "packages/npm/oa42-opentelemetry",
     },
   ],
   "settings": {
