@@ -1,25 +1,29 @@
 {
   "name": "oa42-opentelemetry",
-  "version": "0.8.2",
+  "version": "0.1.0",
   "description": "",
   "type": "module",
-  "main": "./out/main.js",
+  "main": "./out-commonjs/main.js",
+  "module": "./out/main.js",
   "types": "./out/main.d.ts",
+  "browser": "./out/browser.js",
   "exports": {
     ".": {
-      "default": "./out/main.js"
+      "require": "./out-commonjs/main.js",
+      "import": "./out/main.js",
+      "types": "./out/main.d.ts",
+      "browser": "./out/browser.js"
     }
   },
   "files": [
     "./out/**",
-    "./src/**"
+    "./out-commonjs/**"
   ],
   "scripts": {
-    "prepack": "tsc --build",
-    "pretest": "tsc --build",
-    "build": "tsc --build ",
-    "clean": "rm -rf out",
-    "test": "node --test ./out/*.test.js ./out/*/*.test.js ./out/*/*/*.test.js"
+    "watch": "tsc --watch",
+    "prepare": "tsc ; tsc --outDir out-commonjs --declaration false --module commonjs --moduleResolution Node10 ; echo '{\"type\":\"commonjs\"}' > out-commonjs/package.json",
+    "clean": "rm -rf out out-*",
+    "test": "node --test ./out/**/*.test.js"
   },
   "repository": {
     "type": "git",
