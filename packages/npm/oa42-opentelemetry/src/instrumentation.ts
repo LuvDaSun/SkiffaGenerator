@@ -5,7 +5,7 @@ import {
 } from "@opentelemetry/instrumentation";
 import * as lib from "oa42-lib";
 
-export class Oa42Instrumentation extends InstrumentationBase<typeof lib> {
+export class Instrumentation extends InstrumentationBase<typeof lib> {
   private originalServerWrappers?: lib.ServerWrappers;
   protected init() {
     return new InstrumentationNodeModuleDefinition<typeof lib>(
