@@ -1,6 +1,6 @@
 {
   "name": "oa42-generator",
-  "version": "0.8.15",
+  "version": "0.8.17",
   "sideEffects": false,
   "description": "",
   "type": "module",
@@ -52,8 +52,12 @@
     "oa42-lib": "^0.8.11",
     "tslib": "^2.6.2",
     "type-fest": "^4.10.2",
-    "typescript": "^5.3.3",
     "yaml": "^2.3.4",
     "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.2",
+    "rollup": "^4.12.0",
+    "typescript": "^5.3.3"
   }
 }

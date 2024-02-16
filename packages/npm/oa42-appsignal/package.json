@@ -1,6 +1,6 @@
 {
   "name": "oa42-appsignal",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "",
   "type": "module",
   "main": "./bundled/main.cjs",
@@ -43,5 +43,10 @@
     "oa42-lib": "^0.8.11",
     "tslib": "^2.6.2",
     "type-fest": "^4.10.2"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.2",
+    "rollup": "^4.12.0",
+    "typescript": "^5.3.3"
   }
 }
