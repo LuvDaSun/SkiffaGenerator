@@ -1,14 +1,13 @@
-import * as path from "path";
-import { fileURLToPath } from "url";
+import path from "path";
 
-export const projectRoot = makeProjectRoot();
+export const projectRoot = getProjectRoot();
 
-function makeProjectRoot() {
+function getProjectRoot() {
   let dirname: string;
-  if (typeof __dirname === "undefined") {
-    dirname = path.dirname(fileURLToPath(new URL(import.meta.url)));
+  if (typeof require === "undefined") {
+    dirname = eval("import.meta.dirname");
   } else {
-    dirname = __dirname;
+    dirname = eval("__dirname");
   }
   return path.resolve(dirname, "..", "..");
 }
