@@ -22,9 +22,9 @@
     "oa42-generator": "bundled/program.js"
   },
   "scripts": {
-    "make": "make",
-    "prepare": "make",
+    "prepack": "make",
     "pretest": "make",
+    "make": "make",
     "test": "node --test ./transpiled/**/*.test.js"
   },
   "repository": {

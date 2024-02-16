@@ -18,9 +18,9 @@
     "./bundled/**"
   ],
   "scripts": {
-    "make": "make",
-    "prepare": "make",
+    "prepack": "make",
     "pretest": "make",
+    "make": "make",
     "test": "node --test ./transpiled/**/*.test.js"
   },
   "repository": {
