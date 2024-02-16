@@ -43,6 +43,13 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
       try {
         const result = await inner();
         return result;
+      } catch (error) {
+        if (error instanceof Error) {
+          appsignal.setError(error);
+        } else {
+          appsignal.setError(new Error(String(error)));
+        }
+        throw error;
       } finally {
         span.end();
       }
@@ -54,46 +61,70 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
       try {
         const result = await inner();
         return result;
+      } catch (error) {
+        if (error instanceof Error) {
+          appsignal.setError(error);
+        } else {
+          appsignal.setError(new Error(String(error)));
+        }
+        throw error;
       } finally {
         span.end();
       }
     });
 
   serverWrappers.authenticationWrapper = (inner, name) =>
-    tracer.startActiveSpan(
-      "authentication",
-      { attributes: { authentication: name } },
-      async (span) => {
-        appsignal.setCategory("authentication");
-        appsignal.setName(name);
-        try {
-          const result = await inner();
-          return result;
-        } finally {
-          span.end();
+    tracer.startActiveSpan("authentication", async (span) => {
+      appsignal.setCategory("authentication");
+      appsignal.setName(name);
+      try {
+        const result = await inner();
+        return result;
+      } catch (error) {
+        if (error instanceof Error) {
+          appsignal.setError(error);
+        } else {
+          appsignal.setError(new Error(String(error)));
         }
-      },
-    );
+        throw error;
+      } finally {
+        span.end();
+      }
+    });
 
   serverWrappers.middlewareWrapper = (inner, name) =>
-    tracer.startActiveSpan("middleware", { attributes: { middleware: name } }, async (span) => {
+    tracer.startActiveSpan("middleware", async (span) => {
       appsignal.setCategory("middleware");
       appsignal.setName(name);
       try {
         const result = await inner();
         return result;
+      } catch (error) {
+        if (error instanceof Error) {
+          appsignal.setError(error);
+        } else {
+          appsignal.setError(new Error(String(error)));
+        }
+        throw error;
       } finally {
         span.end();
       }
     });
 
   serverWrappers.operationWrapper = (inner, name) =>
-    tracer.startActiveSpan("operation", { attributes: { operation: name } }, async (span) => {
-      appsignal.setCategory("middleware");
+    tracer.startActiveSpan("operation", async (span) => {
+      appsignal.setCategory("operation");
       appsignal.setName(name);
       try {
         const result = await inner();
         return result;
+      } catch (error) {
+        if (error instanceof Error) {
+          appsignal.setError(error);
+        } else {
+          appsignal.setError(new Error(String(error)));
+        }
+        throw error;
       } finally {
         span.end();
       }
