@@ -20,6 +20,8 @@ transpiled/%.js transpiled/%.js.map types/%.d.ts: \
 	tsconfig.json \
 	src/%.ts \
 
+	(cd ../oa42-lib ; make)
+
 	npx tsc \
 		--project $< \
 
