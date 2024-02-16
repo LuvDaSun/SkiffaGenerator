@@ -43,9 +43,5 @@
     "js-base64": "^3.7.6",
     "tslib": "^2.6.2",
     "type-fest": "^4.10.2"
-  },
-  "devDependencies": {
-    "@tsconfig/node20": "^20.1.2",
-    "typescript": "^5.3.3"
   }
 }
