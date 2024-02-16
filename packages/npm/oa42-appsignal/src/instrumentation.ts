@@ -1,3 +1,4 @@
+import * as appsignal from "@appsignal/nodejs";
 import * as opentelemetry from "@opentelemetry/api";
 import {
   InstrumentationBase,
@@ -7,7 +8,7 @@ import * as lib from "oa42-lib";
 
 export class Instrumentation extends InstrumentationBase<typeof lib> {
   constructor() {
-    super("oa42-opentelemetry", "*");
+    super("oa42-appsignal", "*");
   }
 
   private originalServerWrappers?: lib.ServerWrappers;
@@ -38,9 +39,17 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
 
   serverWrappers.requestWrapper = (inner) =>
     tracer.startActiveSpan("request", async (span) => {
+      appsignal.setName("request");
       try {
         const result = await inner();
         return result;
+      } catch (error) {
+        if (error instanceof Error) {
+          appsignal.setError(error);
+        } else {
+          appsignal.setError(new Error(String(error)));
+        }
+        throw error;
       } finally {
         span.end();
       }
@@ -48,43 +57,74 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
 
   serverWrappers.endpointWrapper = (inner) =>
     tracer.startActiveSpan("endpoint", async (span) => {
+      appsignal.setName("endpoint");
       try {
         const result = await inner();
         return result;
+      } catch (error) {
+        if (error instanceof Error) {
+          appsignal.setError(error);
+        } else {
+          appsignal.setError(new Error(String(error)));
+        }
+        throw error;
       } finally {
         span.end();
       }
     });
 
   serverWrappers.authenticationWrapper = (inner, name) =>
-    tracer.startActiveSpan(
-      "authentication",
-      { attributes: { authentication: name } },
-      async (span) => {
-        try {
-          const result = await inner();
-          return result;
-        } finally {
-          span.end();
-        }
-      },
-    );
-
-  serverWrappers.middlewareWrapper = (inner, name) =>
-    tracer.startActiveSpan("middleware", { attributes: { middleware: name } }, async (span) => {
+    tracer.startActiveSpan("authentication", async (span) => {
+      appsignal.setName("authentication");
+      appsignal.setTag("authentication", name);
       try {
         const result = await inner();
         return result;
+      } catch (error) {
+        if (error instanceof Error) {
+          appsignal.setError(error);
+        } else {
+          appsignal.setError(new Error(String(error)));
+        }
+        throw error;
+      } finally {
+        span.end();
+      }
+    });
+
+  serverWrappers.middlewareWrapper = (inner, name) =>
+    tracer.startActiveSpan("middleware", async (span) => {
+      appsignal.setName("middleware");
+      appsignal.setTag("middleware", name);
+      try {
+        const result = await inner();
+        return result;
+      } catch (error) {
+        if (error instanceof Error) {
+          appsignal.setError(error);
+        } else {
+          appsignal.setError(new Error(String(error)));
+        }
+        throw error;
       } finally {
         span.end();
       }
     });
 
   serverWrappers.operationWrapper = (inner, name) =>
-    tracer.startActiveSpan("operation", { attributes: { operation: name } }, async (span) => {
+    tracer.startActiveSpan("operation", async (span) => {
+      appsignal.setName("operation");
+      appsignal.setTag("operation", name);
       try {
         const result = await inner();
         return result;
+      } catch (error) {
+        if (error instanceof Error) {
+          appsignal.setError(error);
+        } else {
+          appsignal.setError(new Error(String(error)));
+        }
+        throw error;
       } finally {
         span.end();
       }
