@@ -20,6 +20,7 @@
     "./bundled/**"
   ],
   "scripts": {
+    "make": "make",
     "prepare": "make",
     "pretest": "make",
     "test": "node --test ./transpiled/**/*.test.js"
