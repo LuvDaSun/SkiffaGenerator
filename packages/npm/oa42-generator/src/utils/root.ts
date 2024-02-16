@@ -3,6 +3,12 @@ import path from "path";
 export const projectRoot = getProjectRoot();
 
 function getProjectRoot() {
-  const dirname = typeof __dirname === "undefined" ? eval("import.meta.dirname") : __dirname;
+  let dirname: string;
+  if (typeof __dirname === "undefined") {
+    dirname = eval("import.meta.dirname");
+  } else {
+    dirname = __dirname;
+  }
+
   return path.resolve(dirname, "..", "..");
 }
