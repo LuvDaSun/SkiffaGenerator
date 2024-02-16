@@ -34,7 +34,7 @@ export class Instrumentation extends InstrumentationBase<typeof lib> {
 }
 
 export function instrument(serverWrappers: lib.ServerWrappers) {
-  const tracer = opentelemetry.trace.getTracer("oa42");
+  const tracer = opentelemetry.trace.getTracer("oa42-opentelemetry");
 
   serverWrappers.requestWrapper = (inner) =>
     tracer.startActiveSpan("request", async (span) => {
