@@ -9,6 +9,7 @@ words:
   - goodrouter
   - openapi
   - opentelemetry
+  - patsubst
   - Promisable
   - rollup
   - ryanluker
