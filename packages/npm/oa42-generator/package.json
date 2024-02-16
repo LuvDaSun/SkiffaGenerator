@@ -1,6 +1,6 @@
 {
   "name": "oa42-generator",
-  "version": "0.8.17",
+  "version": "0.8.19",
   "sideEffects": false,
   "description": "",
   "type": "module",
