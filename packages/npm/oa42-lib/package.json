@@ -1,0 +1,49 @@
+{
+  "name": "oa42-lib",
+  "version": "0.8.10",
+  "description": "",
+  "type": "module",
+  "main": "./out/main.cjs",
+  "module": "./out/main.js",
+  "types": "./out/main.d.ts",
+  "browser": "./out/browser.js",
+  "exports": {
+    ".": {
+      "require": "./out/main.cjs",
+      "import": "./out/main.js",
+      "types": "./out/main.d.ts",
+      "browser": "./out/browser.js"
+    }
+  },
+  "files": [
+    "./out/**"
+  ],
+  "scripts": {
+    "prepare": "make",
+    "pretest": "make",
+    "test": "node --test ./out/**/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:LuvDaSun/OpenApi42"
+  },
+  "author": "LuvDaSun Software B.V.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LuvDaSun/OpenApi42/issues"
+  },
+  "keywords": [
+    "openapi",
+    "library"
+  ],
+  "dependencies": {
+    "@types/node": "^20.11.19",
+    "js-base64": "^3.7.6",
+    "tslib": "^2.6.2",
+    "type-fest": "^4.10.2"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.2",
+    "typescript": "^5.3.3"
+  }
+}

@@ -1,0 +1,22 @@
+version: "0.2"
+words:
+  - appsignal
+  - AZAZ
+  - camelcase
+  - elmerbulthuis
+  - endregion
+  - esbenp
+  - goodrouter
+  - openapi
+  - opentelemetry
+  - Promisable
+  - ryanluker
+  - urlencoding
+  - welkom
+useGitignore: true
+files:
+  - "**"
+ignorePaths:
+  - specifications/
+enableFiletypes:
+  - "*"

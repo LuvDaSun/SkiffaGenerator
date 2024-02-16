@@ -2,15 +2,23 @@
   "folders": [
     {
       "name": "fixtures",
-      "path": "./fixtures",
+      "path": "fixtures",
     },
     {
-      "name": "ts/oa42-lib",
-      "path": "./packages/ts/oa42-lib",
+      "name": "npm/oa42-generator",
+      "path": "packages/npm/oa42-generator",
     },
     {
-      "name": "ts/oa42-generator",
-      "path": "./packages/ts/oa42-generator",
+      "name": "npm/oa42-lib",
+      "path": "packages/npm/oa42-lib",
+    },
+    {
+      "name": "npm/oa42-opentelemetry",
+      "path": "packages/npm/oa42-opentelemetry",
+    },
+    {
+      "name": "npm/oa42-appsignal",
+      "path": "packages/npm/oa42-appsignal",
     },
   ],
   "settings": {
@@ -23,5 +31,13 @@
     "editor.rulers": [100],
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "typescript.tsdk": "node_modules/typescript/lib",
+  },
+  "extensions": {
+    "recommendations": [
+      "ryanluker.vscode-coverage-gutters",
+      "esbenp.prettier-vscode",
+      "streetsidesoftware.code-spell-checker",
+    ],
+    "unwantedRecommendations": [],
   },
 }
