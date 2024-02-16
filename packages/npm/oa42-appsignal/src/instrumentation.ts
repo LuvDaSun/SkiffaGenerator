@@ -40,7 +40,7 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
 
   serverWrappers.requestWrapper = (inner) =>
     tracer.startActiveSpan("request", async (span) => {
-      appsignal.setName("request");
+      appsignal.setCategory("request");
       try {
         const result = await inner();
         return result;
@@ -58,7 +58,7 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
 
   serverWrappers.endpointWrapper = (inner) =>
     tracer.startActiveSpan("endpoint", async (span) => {
-      appsignal.setName("endpoint");
+      appsignal.setCategory("endpoint");
       try {
         const result = await inner();
         return result;
@@ -76,8 +76,8 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
 
   serverWrappers.authenticationWrapper = (inner, name) =>
     tracer.startActiveSpan("authentication", async (span) => {
-      appsignal.setName("authentication");
-      appsignal.setTag("authentication", name);
+      appsignal.setCategory("authentication");
+      appsignal.setName(name);
       try {
         const result = await inner();
         return result;
@@ -95,8 +95,8 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
 
   serverWrappers.middlewareWrapper = (inner, name) =>
     tracer.startActiveSpan("middleware", async (span) => {
-      appsignal.setName("middleware");
-      appsignal.setTag("middleware", name);
+      appsignal.setCategory("middleware");
+      appsignal.setName(name);
       try {
         const result = await inner();
         return result;
@@ -114,8 +114,8 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
 
   serverWrappers.operationWrapper = (inner, name) =>
     tracer.startActiveSpan("operation", async (span) => {
-      appsignal.setName("operation");
-      appsignal.setTag("operation", name);
+      appsignal.setCategory("operation");
+      appsignal.setName(name);
       try {
         const result = await inner();
         return result;
