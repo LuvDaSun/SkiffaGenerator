@@ -1,6 +1,6 @@
 {
   "name": "oa42-lib",
-  "version": "0.8.15",
+  "version": "0.8.16",
   "description": "",
   "type": "module",
   "main": "./bundled/main.cjs",
@@ -20,9 +20,9 @@
     "./bundled/**"
   ],
   "scripts": {
-    "make": "make",
-    "prepare": "make",
+    "prepack": "make",
     "pretest": "make",
+    "build": "make",
     "test": "node --test ./transpiled/**/*.test.js"
   },
   "repository": {
