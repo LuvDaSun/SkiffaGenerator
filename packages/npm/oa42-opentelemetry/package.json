@@ -1,29 +1,26 @@
 {
   "name": "oa42-opentelemetry",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "",
   "type": "module",
-  "main": "./out-commonjs/main.js",
-  "module": "./out/main.js",
-  "types": "./out/main.d.ts",
-  "browser": "./out/browser.js",
+  "main": "./bundled/main.cjs",
+  "module": "./bundles/main.js",
+  "types": "./types/main.d.ts",
   "exports": {
     ".": {
-      "require": "./out-commonjs/main.js",
-      "import": "./out/main.js",
-      "types": "./out/main.d.ts",
-      "browser": "./out/browser.js"
+      "require": "./bundled/main.cjs",
+      "import": "./bundled/main.js",
+      "types": "./types/main.d.ts"
     }
   },
   "files": [
-    "./out/**",
-    "./out-commonjs/**"
+    "./types/**",
+    "./bundled/**"
   ],
   "scripts": {
-    "watch": "tsc --watch",
-    "prepare": "tsc ; tsc --outDir out-commonjs --declaration false --module commonjs --moduleResolution Node10 ; echo '{\"type\":\"commonjs\"}' > out-commonjs/package.json",
-    "clean": "rm -rf out out-*",
-    "test": "node --test ./out/**/*.test.js"
+    "prepare": "make",
+    "pretest": "make",
+    "test": "node --test ./transpiled/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -42,12 +39,8 @@
     "@opentelemetry/api": "^1.7.0",
     "@opentelemetry/instrumentation": "^0.48.0",
     "@types/node": "^20.11.19",
-    "oa42-lib": "^0.8.10",
+    "oa42-lib": "^0.8.11",
     "tslib": "^2.6.2",
     "type-fest": "^4.10.2"
-  },
-  "devDependencies": {
-    "@tsconfig/node20": "^20.1.2",
-    "typescript": "^5.3.3"
   }
 }

@@ -1,29 +1,29 @@
 {
   "name": "oa42-lib",
-  "version": "0.8.10",
+  "version": "0.8.11",
   "description": "",
   "type": "module",
-  "main": "./out-commonjs/main.js",
-  "module": "./out/main.js",
-  "types": "./out/main.d.ts",
-  "browser": "./out/browser.js",
+  "main": "./bundled/main.cjs",
+  "module": "./bundles/main.js",
+  "types": "./types/main.d.ts",
+  "browser": "./bundles/browser.js",
   "exports": {
     ".": {
-      "require": "./out-commonjs/main.js",
-      "import": "./out/main.js",
-      "types": "./out/main.d.ts",
-      "browser": "./out/browser.js"
+      "require": "./bundled/main.cjs",
+      "import": "./bundled/main.js",
+      "types": "./types/main.d.ts",
+      "browser": "./bundled/browser.js"
     }
   },
   "files": [
-    "./out/**",
-    "./out-commonjs/**"
+    "./types/**",
+    "./bundled/**"
   ],
   "scripts": {
-    "watch": "tsc --watch",
-    "prepare": "tsc ; tsc --outDir out-commonjs --declaration false --module commonjs --moduleResolution Node10 ; echo '{\"type\":\"commonjs\"}' > out-commonjs/package.json",
-    "clean": "rm -rf out out-*",
-    "test": "node --test ./out/**/*.test.js"
+    "make": "make",
+    "prepare": "make",
+    "pretest": "make",
+    "test": "node --test ./transpiled/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -43,9 +43,5 @@
     "js-base64": "^3.7.6",
     "tslib": "^2.6.2",
     "type-fest": "^4.10.2"
-  },
-  "devDependencies": {
-    "@tsconfig/node20": "^20.1.2",
-    "typescript": "^5.3.3"
   }
 }
