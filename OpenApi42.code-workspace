@@ -16,6 +16,10 @@
       "name": "npm/oa42-opentelemetry",
       "path": "packages/npm/oa42-opentelemetry",
     },
+    {
+      "name": "npm/oa42-appsignal",
+      "path": "packages/npm/oa42-appsignal",
+    },
   ],
   "settings": {
     "window.title": "OpenApi42",
