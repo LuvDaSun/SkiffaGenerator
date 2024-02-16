@@ -1,3 +1,4 @@
+import * as appsignal from "@appsignal/nodejs";
 import * as opentelemetry from "@opentelemetry/api";
 import {
   InstrumentationBase,
@@ -7,7 +8,7 @@ import * as lib from "oa42-lib";
 
 export class Instrumentation extends InstrumentationBase<typeof lib> {
   constructor() {
-    super("oa42-opentelemetry", "*");
+    super("oa42-appsignal", "*");
   }
 
   private originalServerWrappers?: lib.ServerWrappers;
@@ -34,10 +35,11 @@ export class Instrumentation extends InstrumentationBase<typeof lib> {
 }
 
 export function instrument(serverWrappers: lib.ServerWrappers) {
-  const tracer = opentelemetry.trace.getTracer("oa42-opentelemetry");
+  const tracer = opentelemetry.trace.getTracer("oa42-server");
 
   serverWrappers.requestWrapper = (inner) =>
     tracer.startActiveSpan("request", async (span) => {
+      appsignal.setCategory("request");
       try {
         const result = await inner();
         return result;
@@ -48,6 +50,7 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
 
   serverWrappers.endpointWrapper = (inner) =>
     tracer.startActiveSpan("endpoint", async (span) => {
+      appsignal.setCategory("endpoint");
       try {
         const result = await inner();
         return result;
@@ -61,6 +64,8 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
       "authentication",
       { attributes: { authentication: name } },
       async (span) => {
+        appsignal.setCategory("authentication");
+        appsignal.setName(name);
         try {
           const result = await inner();
           return result;
@@ -72,6 +77,8 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
 
   serverWrappers.middlewareWrapper = (inner, name) =>
     tracer.startActiveSpan("middleware", { attributes: { middleware: name } }, async (span) => {
+      appsignal.setCategory("middleware");
+      appsignal.setName(name);
       try {
         const result = await inner();
         return result;
@@ -82,6 +89,8 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
 
   serverWrappers.operationWrapper = (inner, name) =>
     tracer.startActiveSpan("operation", { attributes: { operation: name } }, async (span) => {
+      appsignal.setCategory("middleware");
+      appsignal.setName(name);
       try {
         const result = await inner();
         return result;
