@@ -3,6 +3,6 @@ import path from "path";
 export const projectRoot = getProjectRoot();
 
 function getProjectRoot() {
-  let dirname = import.meta.dirname;
+  const dirname = import.meta.dirname ?? __dirname;
   return path.resolve(dirname, "..", "..");
 }
