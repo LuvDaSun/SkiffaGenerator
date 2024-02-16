@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     container: node:21.5.0-alpine3.19
     steps:
+      - run: apk add make
       - uses: actions/checkout@v3
       - run: npm ci
       - run: npm run formatting
@@ -21,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     container: node:21.5.0-alpine3.19
     steps:
+      - run: apk add make
       - uses: actions/checkout@v3
       - run: npm ci
       - run: npm run spelling
@@ -29,6 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     container: node:21.5.0-alpine3.19
     steps:
+      - run: apk add make
       - uses: actions/checkout@v3
       - run: npm ci
       - run: npm --workspaces audit --audit-level high
