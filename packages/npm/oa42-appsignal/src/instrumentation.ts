@@ -5,17 +5,18 @@ import {
   InstrumentationNodeModuleDefinition,
 } from "@opentelemetry/instrumentation";
 import * as lib from "oa42-lib";
+import { packageInfo } from "./utils/index.js";
 
 export class Instrumentation extends InstrumentationBase<typeof lib> {
   constructor() {
-    super("oa42-appsignal", "*");
+    super(packageInfo.name ?? "", packageInfo.version ?? "");
   }
 
   private originalServerWrappers?: lib.ServerWrappers;
   protected init() {
     return new InstrumentationNodeModuleDefinition<typeof lib>(
       "oa42-lib",
-      ["*"],
+      [packageInfo.dependencies?.["oa42-lib"] ?? "*"],
       (moduleExports, moduleVersion) => {
         this.originalServerWrappers = moduleExports.defaultServerWrappers;
         instrument(moduleExports.defaultServerWrappers);
@@ -35,7 +36,7 @@ export class Instrumentation extends InstrumentationBase<typeof lib> {
 }
 
 export function instrument(serverWrappers: lib.ServerWrappers) {
-  const tracer = opentelemetry.trace.getTracer("oa42-server");
+  const tracer = opentelemetry.trace.getTracer("server");
 
   serverWrappers.requestWrapper = (inner) =>
     tracer.startActiveSpan("request", async (span) => {
