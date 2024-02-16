@@ -1,6 +1,6 @@
 {
   "name": "oa42-opentelemetry",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "",
   "type": "module",
   "main": "./out-commonjs/main.js",
