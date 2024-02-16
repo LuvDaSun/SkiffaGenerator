@@ -1,56 +1,50 @@
 SHELL:=$(PREFIX)/bin/sh
 SRC_TS:=$(wildcard src/*.ts src/*/*.ts src/*/*/*.ts)
-OUT_DTS:=$(patsubst src/%.ts,out/%.d.ts,$(SRC_TS))
-OUT_JS:=$(patsubst src/%.ts,out/%.js,$(SRC_TS))
-OUT_JS_MAP:=$(patsubst src/%.ts,out/%.js.map,$(SRC_TS))
-OUT_CJS:=$(patsubst src/%.ts,out/%.cjs,$(SRC_TS))
-OUT_CJS_MAP:=$(patsubst src/%.ts,out/%.cjs.map,$(SRC_TS))
+TYPES_DTS:=$(patsubst src/%.ts,types/%.d.ts,$(SRC_TS))
+TRANSPILED_JS:=$(patsubst src/%.ts,transpiled/%.js,$(SRC_TS))
+TRANSPILED_JS_MAP:=$(patsubst src/%.ts,transpiled/%.js.map,$(SRC_TS))
 
 build: \
-	$(OUT_DTS) \
-	$(OUT_JS) \
-	$(OUT_JS_MAP) \
-	$(OUT_CJS) \
-	$(OUT_CJS_MAP) \
+	$(TYPES_DTS) \
+	bundled/browser.js \
+	bundled/main.js \
+	bundled/main.cjs \
 
 rebuild: \
 	clean build
 
 clean: \
 
-	rm --recursive --force out
+	rm --recursive --force bundled transpiled types
 
-out/%.js out/%.js.map out/%.d.ts: \
+transpiled/%.js transpiled/%.js.map types/%.d.ts: \
 	tsconfig.json \
 	src/%.ts \
 
 	npx tsc \
 		--project $< \
-		--composite false \
 
-out/%.cjs: \
-	.cjs/%.js \
+bundled/%.js bundled/%.js.map: \
+	transpiled/%.js \
+	$(TRANSPILED_JS) \
+	$(TRANSPILED_JS_MAP) \
 
-	@mkdir --parents $(@D)
-	@mv $< $@
+	npx rollup \
+		--input $< \
+		--file bundled/$*.js \
+		--sourcemap \
+		--format es \
 
-out/%.cjs.map: \
-	.cjs/%.js.map \
+bundled/%.cjs bundled/%.cjs.map: \
+	transpiled/%.js \
+	$(TRANSPILED_JS) \
+	$(TRANSPILED_JS_MAP) \
 
-	@mkdir --parents $(@D)
-	@mv $< $@	
-
-.cjs/%.js .cjs/%.js.map: \
-	tsconfig.json \
-	src/%.ts \
-
-	npx tsc \
-		--project $< \
-		--composite false \
-		--outDir .cjs \
-		--declaration false \
-		--module commonjs \
-		--moduleResolution Node10 \
+	npx rollup \
+		--input $< \
+		--file bundled/$*.cjs \
+		--sourcemap \
+		--format cjs \
 
 .PHONY: \
 	build \
@@ -58,11 +52,6 @@ out/%.cjs.map: \
 	clean \
 
 .NOTPARALLEL: \
-	clean build \
-	$(OUT_DTS) \
-	$(OUT_JS) \
-	$(OUT_JS_MAP) \
-	$(OUT_CJS) \
-	$(OUT_CJS_MAP) \
-
-
+	clean build rebuild \
+	transpiled/%.js transpiled/%.js.map types/%.d.ts \
+	bundled/%.cjs bundled/%.cjs.map \

@@ -4,27 +4,27 @@
   "sideEffects": false,
   "description": "",
   "type": "module",
-  "main": "./out/main.cjs",
-  "module": "./out/main.js",
-  "types": "./out/main.d.ts",
+  "main": "./bundled/main.cjs",
+  "module": "./bundled/main.js",
+  "types": "./types/main.d.ts",
   "exports": {
     ".": {
-      "require": "./out/main.cjs",
-      "import": "./out/main.js",
-      "types": "./out/main.d.ts"
+      "require": "./bundled/main.cjs",
+      "import": "./bundled/main.js",
+      "types": "./types/main.d.ts"
     }
   },
   "files": [
-    "./bin/**",
-    "./out/**"
+    "./types/**",
+    "./bundled/**"
   ],
   "bin": {
-    "oa42-generator": "out/program.js"
+    "oa42-generator": "bundled/program.js"
   },
   "scripts": {
     "prepare": "make",
     "pretest": "make",
-    "test": "node --test ./out/**/*.test.js"
+    "test": "node --test ./transpiled/**/*.test.js"
   },
   "repository": {
     "type": "git",

@@ -3,25 +3,26 @@
   "version": "0.8.10",
   "description": "",
   "type": "module",
-  "main": "./out/main.cjs",
-  "module": "./out/main.js",
-  "types": "./out/main.d.ts",
-  "browser": "./out/browser.js",
+  "main": "./bundled/main.cjs",
+  "module": "./bundles/main.js",
+  "types": "./types/main.d.ts",
+  "browser": "./bundles/browser.js",
   "exports": {
     ".": {
-      "require": "./out/main.cjs",
-      "import": "./out/main.js",
-      "types": "./out/main.d.ts",
-      "browser": "./out/browser.js"
+      "require": "./bundled/main.cjs",
+      "import": "./bundled/main.js",
+      "types": "./types/main.d.ts",
+      "browser": "./bundled/browser.js"
     }
   },
   "files": [
-    "./out/**"
+    "./types/**",
+    "./bundled/**"
   ],
   "scripts": {
     "prepare": "make",
     "pretest": "make",
-    "test": "node --test ./out/**/*.test.js"
+    "test": "node --test ./transpiled/**/*.test.js"
   },
   "repository": {
     "type": "git",

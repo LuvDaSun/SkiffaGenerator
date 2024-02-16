@@ -8,8 +8,9 @@
 !.npmrc
 
 node_modules/
-out/
-out-*/
+transpiled/
+types/
+bundled/
 coverage/
 
 !.vscode/

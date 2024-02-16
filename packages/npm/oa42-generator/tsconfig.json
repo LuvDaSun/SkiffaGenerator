@@ -2,7 +2,8 @@
   "extends": "@tsconfig/node20",
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./out",
+    "outDir": "./transpiled",
+    "declarationDir": "./types",
     "sourceMap": true,
     "declaration": true,
     "lib": ["es2023", "DOM"]

@@ -6,7 +6,6 @@ TRANSPILED_JS_MAP:=$(patsubst src/%.ts,transpiled/%.js.map,$(SRC_TS))
 
 build: \
 	$(TYPES_DTS) \
-	bundled/program.js \
 	bundled/main.js \
 	bundled/main.cjs \
 
