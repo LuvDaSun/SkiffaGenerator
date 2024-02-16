@@ -1,6 +1,6 @@
 {
   "name": "oa42-appsignal",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "",
   "type": "module",
   "main": "./bundled/main.cjs",
