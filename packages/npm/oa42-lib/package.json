@@ -22,7 +22,7 @@
   "scripts": {
     "prepack": "make",
     "pretest": "make",
-    "make": "make",
+    "build": "make",
     "test": "node --test ./transpiled/**/*.test.js"
   },
   "repository": {
