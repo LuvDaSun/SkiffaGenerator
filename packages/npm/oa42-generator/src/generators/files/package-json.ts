@@ -5,15 +5,18 @@ export function generatePackageJsonData(name: string, version: string) {
   const content: PackageJson = {
     name: name,
     version: version,
+    sideEffects: false,
     type: "module",
     main: "./out-commonjs/main.js",
     module: "./out/main.js",
     types: "./out/main.d.ts",
+    browser: "./out/browser.js",
     exports: {
       ".": {
         require: "./out-commonjs/main.js",
         import: "./out/main.js",
         types: "./out/main.d.ts",
+        browser: "./out/browser.js",
       },
     },
     files: ["./out/**", "./out-commonjs/**"],
