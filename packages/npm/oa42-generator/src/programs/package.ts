@@ -5,6 +5,7 @@ import * as oas30 from "../documents/oas30/index.js";
 import * as oas31 from "../documents/oas31/index.js";
 import * as swagger2 from "../documents/swagger2/index.js";
 import { generatePackage } from "../generators/index.js";
+import { toUrl } from "../utils/index.js";
 
 export function configurePackageProgram(argv: yargs.Argv) {
   return argv.command(
@@ -78,12 +79,7 @@ interface MainOptions {
 async function main(options: MainOptions) {
   // read from options
 
-  let specificationUrl: URL;
-  if (/^\w+\:\/\//.test(options.specificationUrl)) {
-    specificationUrl = new URL(options.specificationUrl);
-  } else {
-    specificationUrl = new URL("file://" + path.resolve(process.cwd(), options.specificationUrl));
-  }
+  let specificationUrl = toUrl(options.specificationUrl);
   const packageDirectoryPath = path.resolve(options.packageDirectory);
   const {
     packageName,
