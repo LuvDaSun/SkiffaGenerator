@@ -18,3 +18,9 @@ export function normalizeUrl(url: URL) {
 
   return url;
 }
+
+export function toUrl(pathOrUrl: string) {
+  const baseUrl = new URL(`file://${process.cwd()}`);
+  const url = new URL(pathOrUrl, baseUrl);
+  return url;
+}
