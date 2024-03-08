@@ -14,9 +14,9 @@ export function* generateBuildJsCode() {
   `;
 
   yield itt`
-    cp.spawnSync("tsc", [], { stdio: "inherit" });
+    cp.execFileSync("tsc", [], { shell: true });
     
-    cp.spawnSync(
+    cp.execFileSync(
       "rollup",
       [
         "--input",
@@ -27,10 +27,10 @@ export function* generateBuildJsCode() {
         "--format",
         "es",
       ],
-      { stdio: "inherit" },
+      { shell: true },
     );
     
-    cp.spawnSync(
+    cp.execFileSync(
       "rollup",
       [
         "--input",
@@ -41,7 +41,7 @@ export function* generateBuildJsCode() {
         "--format",
         "cjs",
       ],
-      { stdio: "inherit" },
+      { shell: true },
     );
     
   `;

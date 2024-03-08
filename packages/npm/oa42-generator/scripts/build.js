@@ -3,9 +3,9 @@
 import cp from "child_process";
 import path from "path";
 
-cp.spawnSync("tsc", [], { stdio: "inherit" });
+cp.execFileSync("tsc", [], { shell: true });
 
-cp.spawnSync(
+cp.execFileSync(
   "rollup",
   [
     "--input",
@@ -16,10 +16,10 @@ cp.spawnSync(
     "--format",
     "es",
   ],
-  { stdio: "inherit" },
+  { shell: true },
 );
 
-cp.spawnSync(
+cp.execFileSync(
   "rollup",
   [
     "--input",
@@ -30,10 +30,10 @@ cp.spawnSync(
     "--format",
     "cjs",
   ],
-  { stdio: "inherit" },
+  { shell: true },
 );
 
-cp.spawnSync(
+cp.execFileSync(
   "rollup",
   [
     "--input",
@@ -44,5 +44,5 @@ cp.spawnSync(
     "--format",
     "es",
   ],
-  { stdio: "inherit" },
+  { shell: true },
 );
