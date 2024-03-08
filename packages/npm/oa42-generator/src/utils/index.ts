@@ -3,6 +3,7 @@ export * from "./iterable-text-template.js";
 export * from "./iterable.js";
 export * from "./load.js";
 export * from "./name.js";
+export * from "./node-location.js";
 export * from "./package.js";
 export * from "./pointer.js";
 export * from "./read-node.js";
