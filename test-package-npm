@@ -2,6 +2,9 @@
 
 cd $(dirname $0)
 
+npm run build --workspaces
+npm install --no-package-lock
+
 export NODE_ENV=development
 ERROR=0
 
