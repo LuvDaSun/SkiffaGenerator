@@ -4,6 +4,5 @@ export * from "./iterable.js";
 export * from "./load.js";
 export * from "./name.js";
 export * from "./package.js";
-export * from "./pointer.js";
 export * from "./read-node.js";
 export * from "./status-code.js";

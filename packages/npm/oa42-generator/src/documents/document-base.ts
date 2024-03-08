@@ -1,4 +1,5 @@
 import * as jns42generator from "jns42-generator";
+import { NodeLocation } from "jns42-generator";
 import * as models from "../models/index.js";
 import { readNode } from "../utils/index.js";
 import { DocumentConfiguration } from "./document-context.js";
@@ -6,7 +7,7 @@ import { DocumentConfiguration } from "./document-context.js";
 export abstract class DocumentBase<N = unknown> {
   protected readonly nodes: Record<string, unknown>;
   constructor(
-    protected readonly documentUri: URL,
+    protected readonly documentLocation: NodeLocation,
     protected readonly documentNode: N,
     protected readonly configuration: DocumentConfiguration,
   ) {
@@ -110,19 +111,12 @@ export abstract class DocumentBase<N = unknown> {
         ),
     );
 
-    for (const [pointer, schema] of this.selectSchemas("", this.documentNode)) {
-      const location = jns42generator.NodeLocation.parse(
-        new URL(
-          (this.documentUri.hash === "" ? "#" : this.documentUri.hash) + pointer,
-          this.documentUri,
-        ).toString(),
-      );
-      const documentLocation = jns42generator.NodeLocation.parse(this.documentUri.toString());
-
+    for (const [pointer, schema] of this.selectSchemas([], this.documentNode)) {
+      const nodeLocation = this.documentLocation.pushPointer(...pointer);
       await documentContext.loadFromDocument(
-        location,
-        location,
-        documentLocation,
+        nodeLocation,
+        nodeLocation,
+        this.documentLocation,
         this.documentNode,
         this.getDefaultSchemaId(),
       );
@@ -134,9 +128,9 @@ export abstract class DocumentBase<N = unknown> {
   //#region selectors
 
   protected abstract selectSchemas(
-    pointer: string,
+    pointer: string[],
     document: N,
-  ): Iterable<readonly [string, unknown]>;
+  ): Iterable<readonly [string[], unknown]>;
 
   //#endregion
 }

@@ -1,3 +1,4 @@
+import { NodeLocation } from "jns42-generator";
 import { Method } from "oa42-lib";
 import { AuthenticationRequirement } from "./authentication-requirement.js";
 import { Body } from "./body.js";
@@ -5,7 +6,7 @@ import { OperationResult } from "./operation-result.js";
 import { Parameter } from "./parameter.js";
 
 export interface Operation {
-  uri: URL;
+  location: NodeLocation;
   method: Method;
   name: string;
   deprecated: boolean;
