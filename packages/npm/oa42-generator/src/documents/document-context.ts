@@ -1,3 +1,4 @@
+import { NodeLocation } from "jns42-generator";
 import { loadYAML } from "../utils/index.js";
 import { DocumentBase } from "./document-base.js";
 
@@ -10,7 +11,7 @@ export interface DocumentConfiguration {
 }
 
 export interface DocumentInitializer<N = unknown> {
-  documentUri: URL;
+  documentLocation: NodeLocation;
   documentNode: N;
   configuration: DocumentConfiguration;
 }
@@ -31,19 +32,19 @@ export class DocumentContext {
     this.factories.push(factory);
   }
 
-  public async loadFromUrl(documentUri: URL) {
-    documentUri = new URL("", documentUri);
+  public async loadFromLocation(documentLocation: NodeLocation) {
+    documentLocation = documentLocation.toRoot();
 
-    const documentNode = await loadYAML(documentUri);
-    await this.loadFromDocument(documentUri, documentNode);
+    const documentNode = await loadYAML(documentLocation.toString(false));
+    await this.loadFromDocument(documentLocation, documentNode);
   }
 
-  public async loadFromDocument(documentUri: URL, documentNode: unknown) {
-    documentUri = new URL("", documentUri);
+  public async loadFromDocument(documentLocation: NodeLocation, documentNode: unknown) {
+    documentLocation = documentLocation.toRoot();
 
     for (const factory of this.factories) {
       const document = factory({
-        documentUri,
+        documentLocation,
         documentNode,
         configuration: this.configurations,
       });
