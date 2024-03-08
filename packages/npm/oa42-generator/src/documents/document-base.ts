@@ -115,7 +115,7 @@ export abstract class DocumentBase<N = unknown> {
         ),
     );
 
-    for (const [pointer, schema] of this.selectSchemas([], this.documentNode)) {
+    for (const [pointer, schemaNode] of this.selectSchemas([], this.documentNode)) {
       const nodeLocation = this.documentLocation.pushPointer(...pointer);
       await documentContext.loadFromDocument(
         nodeLocation,
