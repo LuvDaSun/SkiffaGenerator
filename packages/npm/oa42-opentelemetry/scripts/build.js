@@ -3,7 +3,9 @@
 import cp from "child_process";
 import path from "path";
 
-cp.execFileSync("tsc", [], { shell: true });
+const options = { shell: true, stdio: "inherit" };
+
+cp.execFileSync("tsc", [], options);
 
 cp.execFileSync(
   "rollup",
@@ -16,7 +18,7 @@ cp.execFileSync(
     "--format",
     "es",
   ],
-  { shell: true },
+  options,
 );
 
 cp.execFileSync(
@@ -30,5 +32,5 @@ cp.execFileSync(
     "--format",
     "cjs",
   ],
-  { shell: true },
+  options,
 );
