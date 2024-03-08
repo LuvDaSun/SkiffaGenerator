@@ -5,9 +5,6 @@ cd $(dirname $0)
 export NODE_ENV=development
 ERROR=0
 
-npm run build --workspaces
-npm install
-
 for F in $(ls fixtures/specifications/test30.yaml); do
   echo $(basename $F .yaml)
 
