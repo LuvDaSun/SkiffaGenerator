@@ -18,7 +18,5 @@ words:
 useGitignore: true
 files:
   - "**"
-ignorePaths:
-  - specifications/
 enableFiletypes:
   - "*"
