@@ -1,0 +1,40 @@
+#!/bin/sh
+
+cd $(dirname $0)
+
+npm run build --workspaces
+npm install --no-package-lock
+
+export NODE_ENV=development
+ERROR=0
+
+for F in $(ls fixtures/specifications/test30.yaml); do
+  echo $(basename $F .yaml)
+
+  npx oa42-generator package \
+    $F \
+    --package-directory .package-npm/specifications/$(basename $F .yaml) \
+    --package-name $(basename $F .yaml) \
+    --package-version "0.0.0" \
+
+  if [ $? -ne 0 ]; then
+    ERROR=1
+  fi;
+
+  ( cd .package-npm/specifications/$(basename $F .yaml) ; npm install)
+
+  if [ $? -ne 0 ]; then
+    ERROR=1
+  fi;
+
+  ( cd .package-npm/specifications/$(basename $F .yaml) ; npm test)
+
+  if [ $? -ne 0 ]; then
+    ERROR=1
+  fi;
+
+done;
+
+exit $ERROR
+
+

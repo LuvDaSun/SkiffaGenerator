@@ -1,3 +1,4 @@
+import { NodeLocation } from "jns42-generator";
 import * as path from "path";
 import * as yargs from "yargs";
 import { DocumentContext } from "../documents/document-context.js";
@@ -78,12 +79,7 @@ interface MainOptions {
 async function main(options: MainOptions) {
   // read from options
 
-  let specificationUrl: URL;
-  if (/^\w+\:\/\//.test(options.specificationUrl)) {
-    specificationUrl = new URL(options.specificationUrl);
-  } else {
-    specificationUrl = new URL("file://" + path.resolve(process.cwd(), options.specificationUrl));
-  }
+  let specificationLocation = NodeLocation.parse(options.specificationUrl);
   const packageDirectoryPath = path.resolve(options.packageDirectory);
   const {
     packageName,
@@ -110,7 +106,7 @@ async function main(options: MainOptions) {
 
   // load api model
 
-  await documentContext.loadFromUrl(specificationUrl);
+  await documentContext.loadFromLocation(specificationLocation);
 
   const apiModel = documentContext.getApiModel();
   const specification = documentContext.getSpecification();

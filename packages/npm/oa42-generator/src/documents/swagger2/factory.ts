@@ -3,11 +3,11 @@ import { DocumentInitializer } from "../document-context.js";
 import { Document } from "./document.js";
 
 export function factory({
-  documentUri,
+  documentLocation,
   documentNode,
   configuration: options,
 }: DocumentInitializer) {
   if (swagger2.isSchemaJson(documentNode)) {
-    return new Document(documentUri, documentNode, options);
+    return new Document(documentLocation, documentNode, options);
   }
 }

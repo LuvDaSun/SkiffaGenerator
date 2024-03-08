@@ -37,16 +37,16 @@
     "opentelemetry"
   ],
   "dependencies": {
-    "@opentelemetry/api": "^1.7.0",
-    "@opentelemetry/instrumentation": "^0.48.0",
-    "@types/node": "^20.11.19",
+    "@opentelemetry/api": "^1.8.0",
+    "@opentelemetry/instrumentation": "^0.49.1",
+    "@types/node": "^20.11.25",
     "oa42-lib": "^0.8.16",
     "tslib": "^2.6.2",
     "type-fest": "^4.10.2"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",
-    "rollup": "^4.12.0",
-    "typescript": "^5.3.3"
+    "rollup": "^4.12.1",
+    "typescript": "^5.4.2"
   }
 }

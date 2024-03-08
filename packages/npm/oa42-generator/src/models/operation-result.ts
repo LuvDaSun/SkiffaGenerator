@@ -1,9 +1,10 @@
+import { NodeLocation } from "jns42-generator";
 import { StatusCode } from "oa42-lib";
 import { Body } from "./body.js";
 import { Parameter } from "./parameter.js";
 
 export interface OperationResult {
-  uri: URL;
+  location: NodeLocation;
   description: string;
   statusKind: string;
   statusCodes: StatusCode[];

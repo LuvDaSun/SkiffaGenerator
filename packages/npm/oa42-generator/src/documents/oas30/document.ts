@@ -1,20 +1,15 @@
 import * as oas from "@jns42/oas-v3-0";
 import assert from "assert";
 import { Router } from "goodrouter";
+import { NodeLocation } from "jns42-generator";
 import { Method, StatusCode, methods, statusCodes } from "oa42-lib";
 import * as models from "../../models/index.js";
-import {
-  appendToPointer,
-  appendToUriHash,
-  normalizeUrl,
-  statusKindComparer,
-  takeStatusCodes,
-} from "../../utils/index.js";
+import { statusKindComparer, takeStatusCodes } from "../../utils/index.js";
 import { DocumentBase } from "../document-base.js";
 
 export class Document extends DocumentBase<oas.SchemaDocument> {
   public getApiModel(): models.Api {
-    const uri = this.documentUri;
+    const documentLocation = this.documentLocation;
 
     const paths = [...this.getPathModels()];
     const authentication = [...this.getAuthenticationModels()];
@@ -24,7 +19,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     }
 
     const apiModel: models.Api = {
-      uri,
+      location: documentLocation,
       paths,
       authentication,
       router,
@@ -51,7 +46,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
 
       yield this.getPathModel(
         pathIndex,
-        appendToUriHash(this.documentUri, "paths", pathPattern),
+        this.documentLocation.pushPointer("paths", pathPattern),
         pathPattern,
         pathItem,
       );
@@ -62,21 +57,25 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
 
   private getPathModel(
     pathIndex: number,
-    pathUri: URL,
+    pathLocation: NodeLocation,
     pathPattern: string,
     pathItem: oas.PathItem,
   ) {
     const pathModel: models.Path = {
       id: pathIndex + 1,
-      uri: pathUri,
+      location: pathLocation,
       pattern: pathPattern,
-      operations: Array.from(this.getOperationModels(pathUri, pathPattern, pathItem)),
+      operations: Array.from(this.getOperationModels(pathLocation, pathPattern, pathItem)),
     };
 
     return pathModel;
   }
 
-  private *getOperationModels(pathUri: URL, pathPattern: string, pathItem: oas.PathItem) {
+  private *getOperationModels(
+    pathLocation: NodeLocation,
+    pathPattern: string,
+    pathItem: oas.PathItem,
+  ) {
     for (const method of methods) {
       const operationModel = this.dereference(pathItem[method]);
 
@@ -87,9 +86,9 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       assert(oas.isOperation(operationModel));
 
       yield this.getOperationModel(
-        pathUri,
+        pathLocation,
         pathItem,
-        appendToUriHash(pathUri, method),
+        pathLocation.pushPointer(method),
         method,
         operationModel,
       );
@@ -97,9 +96,9 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
   }
 
   private getOperationModel(
-    pathUri: URL,
+    pathLocation: NodeLocation,
     pathItem: oas.PathItem,
-    operationUri: URL,
+    operationLocation: NodeLocation,
     method: Method,
     operationItem: oas.Operation,
   ) {
@@ -115,7 +114,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
         })
         .map(
           (item, index) =>
-            [appendToUriHash(pathUri, "parameters", index), item.name, item] as const,
+            [pathLocation.pushPointer("parameters", String(index)), item.name, item] as const,
         ),
       ...(operationItem.parameters ?? [])
         .map((item) => {
@@ -126,7 +125,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
         })
         .map(
           (item, index) =>
-            [appendToUriHash(operationUri, "parameters", index), item.name, item] as const,
+            [operationLocation.pushPointer("parameters", String(index)), item.name, item] as const,
         ),
     ];
 
@@ -162,14 +161,14 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       assert(oas.isDefinitionsRequestBody(requestBody));
       bodies = [
         ...this.getBodyModels(
-          appendToUriHash(operationUri, "requestBody", "content"),
+          operationLocation.pushPointer("requestBody", "content"),
           requestBody.content,
           requestTypes,
         ),
       ];
     }
 
-    const operationResults = [...this.getOperationResultModels(operationUri, operationItem)];
+    const operationResults = [...this.getOperationResultModels(operationLocation, operationItem)];
 
     const mockable =
       [...pathParameters, ...headerParameters, ...queryParameters, ...cookieParameters].every(
@@ -179,7 +178,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
         operationResults.some((operationResultModel) => operationResultModel.mockable));
 
     const operationModel: models.Operation = {
-      uri: operationUri,
+      location: operationLocation,
       method,
       name: operationItem.operationId ?? "",
       deprecated: operationItem.deprecated ?? false,
@@ -266,7 +265,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     }
   }
 
-  private *getOperationResultModels(operationUri: URL, operationItem: oas.Operation) {
+  private *getOperationResultModels(operationLocation: NodeLocation, operationItem: oas.Operation) {
     const statusCodesAvailable = new Set(statusCodes);
     const statusKinds = Object.keys(operationItem.responses ?? {}).sort(statusKindComparer);
 
@@ -278,7 +277,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       const statusCodes = [...takeStatusCodes(statusCodesAvailable, statusKind)];
 
       yield this.getOperationResultModel(
-        appendToUriHash(operationUri, "responses", statusKind),
+        operationLocation.pushPointer("responses", statusKind),
         statusKind,
         statusCodes,
         responseItem,
@@ -287,7 +286,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
   }
 
   private getOperationResultModel(
-    responseUri: URL,
+    responseLocation: NodeLocation,
     statusKind: string,
     statusCodes: StatusCode[],
     responseItem: oas.Response,
@@ -295,7 +294,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     const { requestTypes, responseTypes } = this.configuration;
 
     const headerParameters = [
-      ...this.getOperationResultHeaderParameters(responseUri, responseItem),
+      ...this.getOperationResultHeaderParameters(responseLocation, responseItem),
     ];
 
     const bodies =
@@ -303,7 +302,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
         ? []
         : [
             ...this.getBodyModels(
-              appendToUriHash(responseUri, "content"),
+              responseLocation.pushPointer("content"),
               responseItem.content,
               responseTypes,
             ),
@@ -316,7 +315,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       (bodies.length == 0 || bodies.some((bodyModel) => bodyModel.mockable));
 
     return {
-      uri: responseUri,
+      location: responseLocation,
       description: responseItem.description,
       statusKind,
       statusCodes,
@@ -326,14 +325,17 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
     };
   }
 
-  private *getOperationResultHeaderParameters(operationUri: URL, responseItem: oas.Response) {
+  private *getOperationResultHeaderParameters(
+    operationLocation: NodeLocation,
+    responseItem: oas.Response,
+  ) {
     for (const parameterName in responseItem.headers ?? {}) {
       const headerItem = this.dereference(responseItem.headers![parameterName]);
 
       assert(oas.isHeader(headerItem));
 
       yield this.getParameterModel(
-        appendToUriHash(operationUri, "headers", parameterName),
+        operationLocation.pushPointer("headers", parameterName),
         parameterName,
         headerItem,
       );
@@ -341,20 +343,20 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
   }
 
   private getParameterModel(
-    parameterUri: URL,
+    parameterLocation: NodeLocation,
     parameterName: string,
     parameterItem: oas.Parameter | oas.Header,
   ): models.Parameter {
-    const schemaUri =
-      parameterItem.schema == null ? undefined : appendToUriHash(parameterUri, "schema");
-    const schemaId = schemaUri == null ? schemaUri : normalizeUrl(schemaUri).toString();
+    const schemaLocation =
+      parameterItem.schema == null ? undefined : parameterLocation.pushPointer("schema");
+    const schemaId = schemaLocation?.toString();
     const mockable =
       (schemaId != null &&
         this.specification.typesArena.getItem(this.schemaIdMap[schemaId]).mockable) ??
       false;
 
     return {
-      uri: parameterUri,
+      location: parameterLocation,
       name: parameterName,
       required: parameterItem.required ?? false,
       schemaId,
@@ -363,7 +365,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
   }
 
   private *getBodyModels(
-    requestBodyUri: URL,
+    requestBodyLocation: NodeLocation,
     requestBodyItem: oas.RequestBodyContent | oas.ResponseContent,
     contentTypes: string[],
   ) {
@@ -374,27 +376,27 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       }
 
       yield this.getBodyModel(
-        appendToUriHash(requestBodyUri, contentType),
+        requestBodyLocation.pushPointer(contentType),
         contentType,
         mediaTypeItem,
       );
     }
   }
   private getBodyModel(
-    mediaTypeUri: URL,
+    mediaTypeLocation: NodeLocation,
     contentType: string,
     mediaTypeItem: oas.MediaType,
   ): models.Body {
-    const schemaUri =
-      mediaTypeItem.schema == null ? undefined : appendToUriHash(mediaTypeUri, "schema");
-    const schemaId = schemaUri == null ? schemaUri : normalizeUrl(schemaUri).toString();
+    const schemaLocation =
+      mediaTypeItem.schema == null ? undefined : mediaTypeLocation.pushPointer("schema");
+    const schemaId = schemaLocation?.toString();
     const mockable =
       (schemaId != null &&
         this.specification.typesArena.getItem(this.schemaIdMap[schemaId]).mockable) ??
       false;
 
     return {
-      uri: mediaTypeUri,
+      location: mediaTypeLocation,
       contentType,
       schemaId,
       mockable,
@@ -403,8 +405,9 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
 
   private dereference(target: unknown | oas.Reference): unknown {
     while (oas.isReference(target)) {
-      const pointer = (target.$ref as string).replace(/^#+/, "");
-      target = this.nodes[pointer];
+      const refLocation = this.documentLocation.join(NodeLocation.parse(target.$ref as string));
+      const refId = refLocation.toString();
+      target = this.nodes[refId];
     }
     return target;
   }
@@ -412,31 +415,28 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
   //#region selectors
 
   protected *selectSchemas(
-    pointer: string,
+    pointer: string[],
     document: oas.SchemaDocument,
-  ): Iterable<readonly [string, unknown]> {
+  ): Iterable<readonly [string[], unknown]> {
     const { requestTypes, responseTypes } = this.configuration;
 
     yield* selectFromDocument(pointer);
 
-    function* selectFromDocument(pointer: string) {
+    function* selectFromDocument(pointer: string[]) {
       for (const [path, pathObject] of Object.entries(document.paths)) {
         assert(oas.isPathItem(pathObject));
-        yield* selectFromPath(appendToPointer(pointer, "paths", path), pathObject);
+        yield* selectFromPath([...pointer, "paths", path], pathObject);
       }
 
       for (const [schema, schemaObject] of Object.entries(document.components?.schemas ?? {})) {
-        yield* selectFromSchema(
-          appendToPointer(pointer, "components", "schemas", schema),
-          schemaObject,
-        );
+        yield* selectFromSchema([...pointer, "components", "schemas", schema], schemaObject);
       }
 
       for (const [requestBody, requestBodyObject] of Object.entries(
         document.components?.requestBodies ?? {},
       )) {
         yield* selectFromRequestBody(
-          appendToPointer(pointer, "components", "requestBodies", requestBody),
+          [...pointer, "components", "requestBodies", requestBody],
           requestBodyObject,
         );
       }
@@ -449,7 +449,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
         }
 
         yield* selectFromResponse(
-          appendToPointer(pointer, "components", "responses", response),
+          [...pointer, "components", "responses", response],
           responseObject,
         );
       }
@@ -458,25 +458,19 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
         document.components?.parameters ?? {},
       )) {
         yield* selectFromParameter(
-          appendToPointer(pointer, "components", "parameters", parameter),
+          [...pointer, "components", "parameters", parameter],
           parameterObject,
         );
       }
 
       for (const [header, headerObject] of Object.entries(document.components?.headers ?? {})) {
-        yield* selectFromHeader(
-          appendToPointer(pointer, "components", "headers", header),
-          headerObject,
-        );
+        yield* selectFromHeader([...pointer, "components", "headers", header], headerObject);
       }
     }
 
-    function* selectFromPath(pointer: string, pathObject: oas.PathItem) {
+    function* selectFromPath(pointer: string[], pathObject: oas.PathItem) {
       for (const [parameter, parameterObject] of Object.entries(pathObject.parameters ?? {})) {
-        yield* selectFromParameter(
-          appendToPointer(pointer, "parameters", parameter),
-          parameterObject,
-        );
+        yield* selectFromParameter([...pointer, "parameters", parameter], parameterObject);
       }
 
       for (const method of Object.values(methods)) {
@@ -487,20 +481,17 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
 
         assert(oas.isOperation(operationObject));
 
-        yield* selectFromOperation(appendToPointer(pointer, method), operationObject);
+        yield* selectFromOperation([...pointer, method], operationObject);
       }
     }
 
-    function* selectFromOperation(pointer: string, operationObject: oas.Operation) {
+    function* selectFromOperation(pointer: string[], operationObject: oas.Operation) {
       if (!oas.isOperation(operationObject)) {
         return;
       }
 
       for (const [parameter, parameterObject] of Object.entries(operationObject.parameters ?? [])) {
-        yield* selectFromParameter(
-          appendToPointer(pointer, "parameters", parameter),
-          parameterObject,
-        );
+        yield* selectFromParameter([...pointer, "parameters", parameter], parameterObject);
       }
 
       for (const [response, responseObject] of Object.entries(operationObject.responses ?? {})) {
@@ -510,18 +501,15 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
 
         assert(oas.isResponse(responseObject));
 
-        yield* selectFromResponse(appendToPointer(pointer, "responses", response), responseObject);
+        yield* selectFromResponse([...pointer, "responses", response], responseObject);
       }
 
       if (operationObject.requestBody) {
-        yield* selectFromRequestBody(
-          appendToPointer(pointer, "requestBody"),
-          operationObject.requestBody,
-        );
+        yield* selectFromRequestBody([...pointer, "requestBody"], operationObject.requestBody);
       }
     }
 
-    function* selectFromRequestBody(pointer: string, requestBodyObject: oas.RequestBodiesAZAZ09) {
+    function* selectFromRequestBody(pointer: string[], requestBodyObject: oas.RequestBodiesAZAZ09) {
       if (oas.isReference(requestBodyObject)) {
         return;
       }
@@ -533,25 +521,22 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
           continue;
         }
 
-        yield* selectFromMediaTypeObject(
-          appendToPointer(pointer, "content", contentType),
-          contentObject,
-        );
+        yield* selectFromMediaTypeObject([...pointer, "content", contentType], contentObject);
       }
     }
 
     function* selectFromMediaTypeObject(
-      pointer: string,
+      pointer: string[],
       mediaTypeObject: oas.RequestBodyContentAdditionalProperties,
     ) {
       if (oas.isReference(mediaTypeObject)) {
         return;
       }
 
-      yield* selectFromSchema(appendToPointer(pointer, "schema"), mediaTypeObject.schema);
+      yield* selectFromSchema([...pointer, "schema"], mediaTypeObject.schema);
     }
 
-    function* selectFromResponse(responsePointer: string, responseObject: oas.Response) {
+    function* selectFromResponse(responsePointer: string[], responseObject: oas.Response) {
       if (responseObject.content != null) {
         for (const contentType of responseTypes) {
           const contentObject = responseObject.content[contentType];
@@ -561,33 +546,36 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
           }
 
           yield* selectFromSchema(
-            appendToPointer(responsePointer, "content", contentType, "schema"),
+            [...responsePointer, "content", contentType, "schema"],
             contentObject.schema,
           );
         }
       }
 
       for (const [header, headerObject] of Object.entries(responseObject.headers ?? {})) {
-        yield* selectFromHeader(appendToPointer(responsePointer, "headers", header), headerObject);
+        yield* selectFromHeader([...responsePointer, "headers", header], headerObject);
       }
     }
 
-    function* selectFromParameter(pointer: string, parameterObject: oas.Reference | oas.Parameter) {
+    function* selectFromParameter(
+      pointer: string[],
+      parameterObject: oas.Reference | oas.Parameter,
+    ) {
       if (oas.isReference(parameterObject)) return;
 
-      yield* selectFromSchema(appendToPointer(pointer, "schema"), parameterObject.schema);
+      yield* selectFromSchema([...pointer, "schema"], parameterObject.schema);
     }
 
-    function* selectFromHeader(headerPointer: string, headerObject: oas.Reference | oas.Header) {
+    function* selectFromHeader(headerPointer: string[], headerObject: oas.Reference | oas.Header) {
       if (oas.isReference(headerObject)) {
         return;
       }
 
-      yield* selectFromSchema(appendToPointer(headerPointer, "schema"), headerObject.schema);
+      yield* selectFromSchema([...headerPointer, "schema"], headerObject.schema);
     }
 
     function* selectFromSchema(
-      schemaPointer: string,
+      schemaPointer: string[],
       schemaObject: oas.Reference | oas.DefinitionsSchema | undefined,
     ) {
       if (schemaObject == null) {

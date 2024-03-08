@@ -1,27 +1,31 @@
 import * as jns42generator from "jns42-generator";
-import { Specification } from "jns42-generator";
+import { NodeLocation } from "jns42-generator";
 import * as models from "../models/index.js";
 import { readNode } from "../utils/index.js";
 import { DocumentConfiguration } from "./document-context.js";
 
 export abstract class DocumentBase<N = unknown> {
-  protected readonly nodes: Record<string, unknown>;
+  protected readonly nodes: Record<string, unknown> = {};
   constructor(
-    protected readonly documentUri: URL,
+    protected readonly documentLocation: NodeLocation,
     protected readonly documentNode: N,
     protected readonly configuration: DocumentConfiguration,
   ) {
-    this.nodes = Object.fromEntries(readNode("", documentNode));
+    for (const [pointer, node] of readNode([], documentNode)) {
+      const nodeLocation = documentLocation.pushPointer(...pointer);
+      const nodeId = nodeLocation.toString();
+      this.nodes[nodeId] = node;
+    }
   }
 
-  public getSpecification(): Specification {
+  public getSpecification(): jns42generator.Specification {
     return this.specification;
   }
   public abstract getApiModel(): models.Api;
 
   protected abstract getDefaultSchemaId(): string;
 
-  protected specification!: Specification;
+  protected specification!: jns42generator.Specification;
   protected schemaIdMap!: Record<string, number>;
   public async load() {
     const { defaultTypeName, nameMaximumIterations, transformMaximumIterations } =
@@ -57,65 +61,66 @@ export abstract class DocumentBase<N = unknown> {
 
     documentContext.registerFactory(
       jns42generator.schemaDraft202012.metaSchemaId,
-      ({ givenUrl, antecedentUrl, documentNode: rootNode }) =>
+      ({ retrievalLocation, givenLocation, antecedentLocation, documentNode: rootNode }) =>
         new jns42generator.schemaDraft04.Document(
-          givenUrl,
-          antecedentUrl,
+          retrievalLocation,
+          givenLocation,
+          antecedentLocation,
           rootNode,
           documentContext,
         ),
     );
     documentContext.registerFactory(
       jns42generator.schemaDraft04.metaSchemaId,
-      ({ givenUrl, antecedentUrl, documentNode: rootNode }) =>
+      ({ retrievalLocation, givenLocation, antecedentLocation, documentNode: rootNode }) =>
         new jns42generator.schemaDraft04.Document(
-          givenUrl,
-          antecedentUrl,
+          retrievalLocation,
+          givenLocation,
+          antecedentLocation,
           rootNode,
           documentContext,
         ),
     );
     documentContext.registerFactory(
       jns42generator.schemaOasV31.metaSchemaId,
-      ({ givenUrl, antecedentUrl, documentNode: rootNode }) =>
+      ({ retrievalLocation, givenLocation, antecedentLocation, documentNode: rootNode }) =>
         new jns42generator.schemaDraft04.Document(
-          givenUrl,
-          antecedentUrl,
+          retrievalLocation,
+          givenLocation,
+          antecedentLocation,
           rootNode,
           documentContext,
         ),
     );
     documentContext.registerFactory(
       jns42generator.oasV30.metaSchemaId,
-      ({ givenUrl, antecedentUrl, documentNode: rootNode }) =>
+      ({ retrievalLocation, givenLocation, antecedentLocation, documentNode: rootNode }) =>
         new jns42generator.schemaDraft04.Document(
-          givenUrl,
-          antecedentUrl,
+          retrievalLocation,
+          givenLocation,
+          antecedentLocation,
           rootNode,
           documentContext,
         ),
     );
     documentContext.registerFactory(
       jns42generator.swaggerV2.metaSchemaId,
-      ({ givenUrl, antecedentUrl, documentNode: rootNode }) =>
+      ({ retrievalLocation, givenLocation, antecedentLocation, documentNode: rootNode }) =>
         new jns42generator.schemaDraft04.Document(
-          givenUrl,
-          antecedentUrl,
+          retrievalLocation,
+          givenLocation,
+          antecedentLocation,
           rootNode,
           documentContext,
         ),
     );
 
-    for (const [pointer, schema] of this.selectSchemas("", this.documentNode)) {
-      const uri = new URL(
-        (this.documentUri.hash === "" ? "#" : this.documentUri.hash) + pointer,
-        this.documentUri,
-      );
-
+    for (const [pointer, schema] of this.selectSchemas([], this.documentNode)) {
+      const nodeLocation = this.documentLocation.pushPointer(...pointer);
       await documentContext.loadFromDocument(
-        uri,
-        uri,
-        this.documentUri,
+        nodeLocation,
+        nodeLocation,
+        this.documentLocation,
         this.documentNode,
         this.getDefaultSchemaId(),
       );
@@ -127,9 +132,9 @@ export abstract class DocumentBase<N = unknown> {
   //#region selectors
 
   protected abstract selectSchemas(
-    pointer: string,
+    pointer: string[],
     document: N,
-  ): Iterable<readonly [string, unknown]>;
+  ): Iterable<readonly [string[], unknown]>;
 
   //#endregion
 }
