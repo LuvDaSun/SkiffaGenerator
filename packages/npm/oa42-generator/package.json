@@ -41,9 +41,9 @@
     "generator"
   ],
   "dependencies": {
-    "@jns42/oas-v3-0": "^0.13.7",
-    "@jns42/oas-v3-1": "^0.13.7",
-    "@jns42/swagger-v2": "^0.13.7",
+    "@jns42/oas-v3-0": "^0.14.1",
+    "@jns42/oas-v3-1": "^0.14.1",
+    "@jns42/swagger-v2": "^0.14.1",
     "@types/node": "^20.11.25",
     "@types/yargs": "^17.0.32",
     "camelcase": "^8.0.0",
