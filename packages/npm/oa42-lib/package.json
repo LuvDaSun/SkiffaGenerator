@@ -20,9 +20,10 @@
     "./bundled/**"
   ],
   "scripts": {
-    "prepack": "make",
-    "pretest": "make",
-    "build": "make",
+    "prepack": "./scripts/build.js",
+    "pretest": "./scripts/build.js",
+    "build": "./scripts/build.js",
+    "clean": "./scripts/clean.js",
     "test": "node --test ./transpiled/**/*.test.js"
   },
   "repository": {
