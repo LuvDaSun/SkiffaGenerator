@@ -9,7 +9,6 @@ npm run build --workspaces
 
 for F in $(ls fixtures/specifications/test30.yaml); do
   echo $(basename $F .yaml)
-  echo $F
 
   npx oa42-generator package \
     $F \
