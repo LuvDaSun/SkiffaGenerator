@@ -4,6 +4,8 @@ import path from "path";
 import * as models from "../models/index.js";
 import { NestedText, flattenNestedText, splitIterableText } from "../utils/index.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
+import { generateBuildJsCode } from "./files/build-js.js";
+import { generateCleanJsCode } from "./files/clean-js.js";
 import { generateClientServerTestTsCode } from "./files/client-server-test-ts.js";
 import { generateClientTsCode } from "./files/client-ts.js";
 import { generateMainTsCode } from "./files/main-ts.js";
@@ -28,6 +30,7 @@ export function generatePackage(
 
   fs.mkdirSync(packageDirectoryPath, { recursive: true });
   fs.mkdirSync(path.join(packageDirectoryPath, "src"), { recursive: true });
+  fs.mkdirSync(path.join(packageDirectoryPath, "scripts"), { recursive: true });
 
   {
     const data = generatePackageJsonData(packageName, packageVersion);
@@ -116,6 +119,18 @@ export function generatePackage(
   {
     const code = jns42generator.generateMocksTestTsCode(specification);
     const filePath = path.join(packageDirectoryPath, "src", "mocks.test.ts");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
+    const code = generateBuildJsCode();
+    const filePath = path.join(packageDirectoryPath, "scripts", "build.js");
+    writeCodeToFile(filePath, code);
+  }
+
+  {
+    const code = generateCleanJsCode();
+    const filePath = path.join(packageDirectoryPath, "scripts", "clean.js");
     writeCodeToFile(filePath, code);
   }
 }

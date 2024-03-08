@@ -1,4 +1,6 @@
 export * from "./browser-ts.js";
+export * from "./build-js.js";
+export * from "./clean-js.js";
 export * from "./client-server-test-ts.js";
 export * from "./client-ts.js";
 export * from "./main-ts.js";
