@@ -18,10 +18,10 @@
     "./bundled/**"
   ],
   "scripts": {
-    "prepack": "./scripts/build.js",
-    "pretest": "./scripts/build.js",
-    "build": "./scripts/build.js",
-    "clean": "./scripts/clean.js",
+    "prepack": "node ./scripts/build.js",
+    "pretest": "node ./scripts/build.js",
+    "build": "node ./scripts/build.js",
+    "clean": "node ./scripts/clean.js",
     "test": "node --test ./transpiled/**/*.test.js"
   },
   "repository": {
