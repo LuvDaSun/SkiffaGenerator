@@ -4,7 +4,7 @@ import { readNode } from "./read-node.js";
 
 test("read node", (t) => {
   const actual = [
-    ...readNode("#", {
+    ...readNode([], {
       a: "b",
       c: ["d", "e"],
     }),
@@ -12,16 +12,16 @@ test("read node", (t) => {
 
   const expected = [
     [
-      "#",
+      [],
       {
         a: "b",
         c: ["d", "e"],
       },
     ],
-    ["#/a", "b"],
-    ["#/c", ["d", "e"]],
-    ["#/c/0", "d"],
-    ["#/c/1", "e"],
+    [["a"], "b"],
+    [["c"], ["d", "e"]],
+    [["c", "0"], "d"],
+    [["c", "1"], "e"],
   ];
 
   assert.deepStrictEqual(actual, expected);

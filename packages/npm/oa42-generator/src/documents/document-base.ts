@@ -5,13 +5,17 @@ import { readNode } from "../utils/index.js";
 import { DocumentConfiguration } from "./document-context.js";
 
 export abstract class DocumentBase<N = unknown> {
-  protected readonly nodes: Record<string, unknown>;
+  protected readonly nodes: Record<string, unknown> = {};
   constructor(
     protected readonly documentLocation: NodeLocation,
     protected readonly documentNode: N,
     protected readonly configuration: DocumentConfiguration,
   ) {
-    this.nodes = Object.fromEntries(readNode("", documentNode));
+    for (const [pointer, node] of readNode([], documentNode)) {
+      const nodeLocation = documentLocation.pushPointer(...pointer);
+      const nodeId = nodeLocation.toString();
+      this.nodes[nodeId] = node;
+    }
   }
 
   public getSpecification(): jns42generator.Specification {

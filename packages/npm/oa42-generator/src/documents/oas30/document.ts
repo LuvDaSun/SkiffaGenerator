@@ -405,8 +405,9 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
 
   private dereference(target: unknown | oas.Reference): unknown {
     while (oas.isReference(target)) {
-      const pointer = (target.$ref as string).replace(/^#+/, "");
-      target = this.nodes[pointer];
+      const refLocation = this.documentLocation.join(NodeLocation.parse(target.$ref as string));
+      const refId = refLocation.toString();
+      target = this.nodes[refId];
     }
     return target;
   }
