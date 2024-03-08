@@ -21,9 +21,9 @@ export function generatePackageJsonData(name: string, version: string) {
     },
     files: ["./out/**", "./out-commonjs/**"],
     scripts: {
-      prepack: `tsc ; tsc --outDir out-commonjs --declaration false --module commonjs --moduleResolution Node10 ; echo '{"type":"commonjs"}' > out-commonjs/package.json`,
-      pretest: `tsc ; tsc --outDir out-commonjs --declaration false --module commonjs --moduleResolution Node10 ; echo '{"type":"commonjs"}' > out-commonjs/package.json`,
-      build: `tsc ; tsc --outDir out-commonjs --declaration false --module commonjs --moduleResolution Node10 ; echo '{"type":"commonjs"}' > out-commonjs/package.json`,
+      prepack: `tsc && tsc --outDir out-commonjs --declaration false --module commonjs --moduleResolution Node10 && echo '{"type":"commonjs"}' > out-commonjs/package.json`,
+      pretest: `tsc && tsc --outDir out-commonjs --declaration false --module commonjs --moduleResolution Node10 && echo '{"type":"commonjs"}' > out-commonjs/package.json`,
+      build: `tsc && tsc --outDir out-commonjs --declaration false --module commonjs --moduleResolution Node10 && echo '{"type":"commonjs"}' > out-commonjs/package.json`,
       clean: "rm -rf out out-*",
       test: "node --test ./out/**/*.test.js",
     },
