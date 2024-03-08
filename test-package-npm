@@ -21,6 +21,11 @@ for F in $(ls fixtures/specifications/test30.yaml); do
   fi;
 
   ( cd .package-npm/specifications/$(basename $F .yaml) ; npm install)
+
+  if [ $? -ne 0 ]; then
+    ERROR=1
+  fi;
+
   ( cd .package-npm/specifications/$(basename $F .yaml) ; npm test)
 
   if [ $? -ne 0 ]; then
