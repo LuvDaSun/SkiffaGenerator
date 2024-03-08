@@ -18,6 +18,7 @@ jobs:
       - run: corepack enable
       - uses: actions/checkout@v4
       - run: npm ci
+      - run: npm --workspaces run build
       - run: npm --workspaces test
 
   test-matrix:
@@ -33,6 +34,7 @@ jobs:
       - run: corepack enable
       - uses: actions/checkout@v4
       - run: npm ci
+      - run: npm --workspaces run build
       - run: npm --workspaces test
       - run: ./test-package-npm
 
