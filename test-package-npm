@@ -33,8 +33,6 @@ for F in $(ls fixtures/specifications/*.yaml); do
     ERROR=1
   fi;
 
-  cat .package-npm/specifications/$(basename $F .yaml)/out-commonjs/package.json
-
 done;
 
 exit $ERROR
