@@ -8,7 +8,7 @@ npm install --no-package-lock
 export NODE_ENV=development
 ERROR=0
 
-for F in $(ls fixtures/specifications/test30.yaml); do
+for F in $(ls fixtures/specifications/*.yaml); do
   echo $(basename $F .yaml)
 
   npx oa42-generator package \
