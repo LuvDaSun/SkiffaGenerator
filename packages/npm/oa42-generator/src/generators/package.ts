@@ -126,12 +126,14 @@ export function generatePackage(
     const code = generateBuildJsCode();
     const filePath = path.join(packageDirectoryPath, "scripts", "build.js");
     writeCodeToFile(filePath, code);
+    fs.chmodSync(filePath, 0o755);
   }
 
   {
     const code = generateCleanJsCode();
     const filePath = path.join(packageDirectoryPath, "scripts", "clean.js");
     writeCodeToFile(filePath, code);
+    fs.chmodSync(filePath, 0o755);
   }
 }
 

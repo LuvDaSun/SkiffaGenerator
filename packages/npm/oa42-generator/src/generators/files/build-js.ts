@@ -2,7 +2,9 @@ import { banner } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 
 export function* generateBuildJsCode() {
-  yield itt`#!/usr/bin/env node`;
+  yield itt`
+    #!/usr/bin/env node
+  `;
 
   yield banner;
 
@@ -42,18 +44,5 @@ export function* generateBuildJsCode() {
       { stdio: "inherit" },
     );
     
-    cp.spawnSync(
-      "rollup",
-      [
-        "--input",
-        path.resolve("transpiled", "program.js"),
-        "--file",
-        path.resolve("bundled", "program.js"),
-        "--sourcemap",
-        "--format",
-        "es",
-      ],
-      { stdio: "inherit" },
-    );
   `;
 }

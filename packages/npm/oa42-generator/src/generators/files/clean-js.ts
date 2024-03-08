@@ -2,7 +2,9 @@ import { banner } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 
 export function* generateCleanJsCode() {
-  yield itt`#!/usr/bin/env node`;
+  yield itt`
+    #!/usr/bin/env node
+  `;
 
   yield banner;
 
