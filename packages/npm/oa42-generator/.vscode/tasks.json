@@ -5,6 +5,7 @@
       "type": "npm",
       "label": "build",
       "script": "build",
+      "problemMatcher": ["$tsc"],
       "group": {
         "kind": "build",
         "isDefault": true
