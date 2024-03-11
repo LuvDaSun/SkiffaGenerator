@@ -351,8 +351,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       parameterItem.schema == null ? undefined : parameterLocation.pushPointer("schema");
     const schemaId = schemaLocation?.toString();
     const mockable =
-      (schemaId != null &&
-        this.specification.typesArena.getItem(this.schemaIdMap[schemaId]).mockable) ??
+      (schemaId != null && this.specification.typesArena.isMockable(this.schemaIdMap[schemaId])) ??
       false;
 
     return {
@@ -391,8 +390,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       mediaTypeItem.schema == null ? undefined : mediaTypeLocation.pushPointer("schema");
     const schemaId = schemaLocation?.toString();
     const mockable =
-      (schemaId != null &&
-        this.specification.typesArena.getItem(this.schemaIdMap[schemaId]).mockable) ??
+      (schemaId != null && this.specification.typesArena.isMockable(this.schemaIdMap[schemaId])) ??
       false;
 
     return {

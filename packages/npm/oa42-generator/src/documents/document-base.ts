@@ -44,7 +44,9 @@ export abstract class DocumentBase<N = unknown> {
     });
 
     const schemaIdMap: Record<string, number> = {};
-    for (const [key, model] of specification.typesArena) {
+    for (const [key, model] of [...specification.typesArena].map(
+      (item, key) => [key, item] as const,
+    )) {
       if (model.id == null) {
         continue;
       }
