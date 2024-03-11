@@ -123,7 +123,7 @@ export abstract class DocumentBase<N = unknown> {
         nodeLocation,
         nodeLocation,
         this.documentLocation,
-        schemaNode,
+        this.documentNode,
         this.getDefaultSchemaId(),
       );
     }
