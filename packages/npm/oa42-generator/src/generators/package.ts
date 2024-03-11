@@ -6,6 +6,7 @@ import { NestedText, flattenNestedText, itt, splitIterableText } from "../utils/
 import { generateBrowserTsCode } from "./files/browser-ts.js";
 import { generateBuildJsCode } from "./files/build-js.js";
 import { generateCleanJsCode } from "./files/clean-js.js";
+import { generateClientServerTestTsCode } from "./files/client-server-test-ts.js";
 import { generateClientTsCode } from "./files/client-ts.js";
 import { generateMainTsCode } from "./files/main-ts.js";
 import { generatePackageJsonData } from "./files/package-json.js";
