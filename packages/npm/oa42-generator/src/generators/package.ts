@@ -79,11 +79,11 @@ export function generatePackage(
     writeContentToFile(filePath, content);
   }
 
-  // {
-  //   const content = generateClientServerTestTsCode(apiModel);
-  //   const filePath = path.join(packageDirectoryPath, "src", "client-server.test.ts");
-  //   writeContentToFile(filePath, content);
-  // }
+  {
+    const content = generateClientServerTestTsCode(apiModel);
+    const filePath = path.join(packageDirectoryPath, "src", "client-server.test.ts");
+    writeContentToFile(filePath, content);
+  }
 
   {
     const content = jns42generator.generateTypesTsCode(specification);
@@ -115,11 +115,11 @@ export function generatePackage(
     writeContentToFile(filePath, content);
   }
 
-  // {
-  //   const content = jns42generator.generateMocksTestTsCode(specification);
-  //   const filePath = path.join(packageDirectoryPath, "src", "mocks.test.ts");
-  //   writeContentToFile(filePath, content);
-  // }
+  {
+    const content = jns42generator.generateMocksTestTsCode(specification);
+    const filePath = path.join(packageDirectoryPath, "src", "mocks.test.ts");
+    writeContentToFile(filePath, content);
+  }
 
   {
     const content = generateBuildJsCode();
