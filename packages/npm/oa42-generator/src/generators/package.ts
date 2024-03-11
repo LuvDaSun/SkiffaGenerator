@@ -6,6 +6,7 @@ import { NestedText, flattenNestedText, itt, splitIterableText } from "../utils/
 import { generateBrowserTsCode } from "./files/browser-ts.js";
 import { generateBuildJsCode } from "./files/build-js.js";
 import { generateCleanJsCode } from "./files/clean-js.js";
+import { generateClientServerTestTsCode } from "./files/client-server-test-ts.js";
 import { generateClientTsCode } from "./files/client-ts.js";
 import { generateMainTsCode } from "./files/main-ts.js";
 import { generatePackageJsonData } from "./files/package-json.js";
@@ -79,11 +80,11 @@ export function generatePackage(
     writeContentToFile(filePath, content);
   }
 
-  // {
-  //   const content = generateClientServerTestTsCode(apiModel);
-  //   const filePath = path.join(packageDirectoryPath, "src", "client-server.test.ts");
-  //   writeContentToFile(filePath, content);
-  // }
+  {
+    const content = generateClientServerTestTsCode(apiModel);
+    const filePath = path.join(packageDirectoryPath, "src", "client-server.test.ts");
+    writeContentToFile(filePath, content);
+  }
 
   {
     const content = jns42generator.generateTypesTsCode(specification);
@@ -115,11 +116,11 @@ export function generatePackage(
     writeContentToFile(filePath, content);
   }
 
-  // {
-  //   const content = jns42generator.generateMocksTestTsCode(specification);
-  //   const filePath = path.join(packageDirectoryPath, "src", "mocks.test.ts");
-  //   writeContentToFile(filePath, content);
-  // }
+  {
+    const content = jns42generator.generateMocksTestTsCode(specification);
+    const filePath = path.join(packageDirectoryPath, "src", "mocks.test.ts");
+    writeContentToFile(filePath, content);
+  }
 
   {
     const content = generateBuildJsCode();
