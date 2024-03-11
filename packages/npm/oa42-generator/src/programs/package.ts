@@ -95,7 +95,7 @@ async function main(options: MainOptions) {
 
   const documentContext = new DocumentContext({
     defaultTypeName,
-    nameMaximumIterations: nameMaximumIterations,
+    nameMaximumIterations,
     transformMaximumIterations,
     requestTypes,
     responseTypes,
