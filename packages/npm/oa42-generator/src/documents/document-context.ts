@@ -24,7 +24,7 @@ export class DocumentContext {
   private factories = new Array<DocumentFactory>();
   private document!: DocumentBase;
 
-  constructor(private readonly configurations: DocumentConfiguration) {
+  constructor(private readonly configuration: DocumentConfiguration) {
     //
   }
 
@@ -46,7 +46,7 @@ export class DocumentContext {
       const document = factory({
         documentLocation,
         documentNode,
-        configuration: this.configurations,
+        configuration: this.configuration,
       });
       if (document != null) {
         await document.load();
