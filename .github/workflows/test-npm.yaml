@@ -1,13 +1,5 @@
 on:
   pull_request: {}
-  push:
-    branches:
-      - "*"
-    paths:
-      - package-lock.json
-      - .github/**
-      - fixtures/**
-      - packages/npm/**
 
 jobs:
   test:
