@@ -1,0 +1,92 @@
+openapi: "3.0.2"
+
+info:
+  title: Chat Demo API
+  description: |-
+    Chat Demo API
+  version: 0.0.0
+
+paths:
+  /messages:
+    get:
+      operationId: get-messages
+      summary: Get messages
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/messages" }
+    post:
+      operationId: new-message
+      summary: Create a new message
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/message" }
+      responses:
+        "201":
+          description: Created
+
+  /message-events:
+    get:
+      operationId: message-events
+      summary: Message events
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - { $ref: "#/components/schemas/messages-snapshot-event" }
+                  - { $ref: "#/components/schemas/new-message-event" }
+
+components:
+  schemas:
+    #events
+    messages-snapshot-event:
+      type: object
+      required:
+        - type
+        - messages
+      properties:
+        type:
+          enum: [messages-snapshot]
+        messages:
+          type: array
+          items: { $ref: "#/components/schemas/text" }
+
+    new-message-event:
+      type: object
+      required:
+        - type
+        - message
+      properties:
+        type:
+          enum: [new-message]
+        message: { $ref: "#/components/schemas/text" }
+
+    #entities
+
+    message:
+      type: object
+      required:
+        - value
+      properties:
+        value: { $ref: "#/components/schemas/text" }
+
+    messages:
+      type: object
+      required:
+        - values
+      properties:
+        values:
+          type: array
+          items: { $ref: "#/components/schemas/text" }
+
+    # fields
+
+    text:
+      type: string
+      minLength: 1
