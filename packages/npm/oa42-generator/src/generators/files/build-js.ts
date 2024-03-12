@@ -27,7 +27,7 @@ export function* generateBuildJsCode() {
         path.resolve("bundled", "main.js"),
         "--sourcemap",
         "--format",
-        "es",
+        "module",
       ],
       options,
     );
@@ -41,7 +41,11 @@ export function* generateBuildJsCode() {
         path.resolve("bundled", "main.cjs"),
         "--sourcemap",
         "--format",
-        "cjs",
+        "commonjs",
+        "--external",
+        "goodrouter",
+        "--external",
+        "oa42-lib"
       ],
       options,
     );
