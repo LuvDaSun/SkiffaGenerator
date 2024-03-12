@@ -15,8 +15,5 @@
     "cspell": "^8.6.0",
     "oa42-generator": "^0.9.6",
     "prettier": "^3.2.5"
-  },
-  "dependencies": {
-    "@rollup/plugin-replace": "^5.0.5"
   }
 }
