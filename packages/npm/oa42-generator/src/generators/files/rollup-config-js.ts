@@ -5,10 +5,9 @@ export function* generateRollupConfigJsCode() {
   yield banner;
 
   yield itt`
-  import replace from "@rollup/plugin-replace";
-  import path from "path";
-  import { defineConfig } from "rollup";
-`;
+    import path from "path";
+    import { defineConfig } from "rollup";
+  `;
 
   yield itt`
     const external = (id, parent, resolved) => !(id.startsWith(".") || path.isAbsolute(id));
