@@ -4,7 +4,7 @@ Because OpenApi is the answer to everything!
 
 ## Installing
 
-First, install dependencies via `npm install`.
+First, install dependencies via `npm install`. Tests should work on node v21 and later!
 
 ## Building
 

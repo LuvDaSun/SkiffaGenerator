@@ -11,6 +11,7 @@ import { generateClientTsCode } from "./files/client-ts.js";
 import { generateMainTsCode } from "./files/main-ts.js";
 import { generatePackageJsonData } from "./files/package-json.js";
 import { generateParametersTsCode } from "./files/parameters-ts.js";
+import { generateRollupConfigJsCode } from "./files/rollup-config-js.js";
 import { generateServerTsCode } from "./files/server-ts.js";
 import { generateSharedTsCode } from "./files/shared-ts.js";
 import { generateTsconfigJsonData } from "./files/tsconfig-json.js";
@@ -42,6 +43,12 @@ export function generatePackage(
     const data = generateTsconfigJsonData();
     const filePath = path.join(packageDirectoryPath, "tsconfig.json");
     fs.writeFileSync(filePath, JSON.stringify(data, undefined, 2));
+  }
+
+  {
+    const content = generateRollupConfigJsCode();
+    const filePath = path.join(packageDirectoryPath, "rollup.config.js");
+    writeContentToFile(filePath, content);
   }
 
   {
