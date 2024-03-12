@@ -23,12 +23,15 @@ export function generatePackageJsonData(name: string, version: string) {
       pretest: "node ./scripts/build.js",
       build: "node ./scripts/build.js",
       clean: "node ./scripts/clean.js",
-      test: "node --test ./transpiled/**/*.test.js",
+      test: "node --test ./transpiled/examples.test.js ./transpiled/mocks.test.js ./transpiled/client-server.test.js",
     },
     author: "",
     license: "ISC",
     dependencies: withDependencies(["@types/node", "goodrouter", "oa42-lib"]),
     devDependencies: withDependencies(["typescript", "rollup", "@tsconfig/node20"]),
+    engines: {
+      node: ">=18",
+    },
   };
 
   return content;

@@ -49,5 +49,8 @@
     "@tsconfig/node20": "^20.1.2",
     "rollup": "^4.12.1",
     "typescript": "^5.4.2"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
