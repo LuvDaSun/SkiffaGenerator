@@ -45,7 +45,7 @@
     "@jns42/oas-v3-0": "^0.15.5",
     "@jns42/oas-v3-1": "^0.15.5",
     "@jns42/swagger-v2": "^0.15.5",
-    "@types/node": "^20.11.25",
+    "@types/node": "^20.11.26",
     "@types/yargs": "^17.0.32",
     "camelcase": "^8.0.0",
     "goodrouter": "^2.1.6",
@@ -57,10 +57,10 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
+    "@rollup/plugin-replace": "^5.0.5",
     "@tsconfig/node20": "^20.1.2",
-    "rollup": "^4.12.1",
-    "typescript": "^5.4.2",
-    "@rollup/plugin-replace": "^5.0.5"
+    "rollup": "^4.13.0",
+    "typescript": "^5.4.2"
   },
   "engines": {
     "node": ">=18"
