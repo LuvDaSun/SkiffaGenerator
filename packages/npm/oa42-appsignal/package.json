@@ -1,6 +1,6 @@
 {
   "name": "oa42-appsignal",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "",
   "type": "module",
   "main": "./bundled/main.cjs",
@@ -41,7 +41,7 @@
     "@appsignal/nodejs": "^3.3.0",
     "@opentelemetry/api": "^1.8.0",
     "@types/node": "^20.11.26",
-    "oa42-lib": "^0.8.18",
+    "oa42-lib": "^0.8.19",
     "tslib": "^2.6.2",
     "type-fest": "^4.10.2"
   },
