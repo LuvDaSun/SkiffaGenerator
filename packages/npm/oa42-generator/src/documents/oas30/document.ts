@@ -18,12 +18,23 @@ export class Document extends DocumentBase<oas.OasSchema> {
       router.insertRoute(pathModel.id, pathModel.pattern);
     }
 
+    const names = {} as Record<string, string>;
+    for (const [key, item] of [...this.specification.typesArena].map(
+      (item, index) => [index, item] as const,
+    )) {
+      const { id } = item;
+      if (id == null) {
+        continue;
+      }
+      names[id] = this.specification.names.toPascalCase(key);
+    }
+
     const apiModel: models.Api = {
       location: documentLocation,
       paths,
       authentication,
       router,
-      names: this.specification.names,
+      names,
     };
 
     return apiModel;

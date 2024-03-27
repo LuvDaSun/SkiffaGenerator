@@ -18,6 +18,10 @@ export abstract class DocumentBase<N = unknown> {
     }
   }
 
+  [Symbol.dispose]() {
+    this.specification?.[Symbol.dispose]();
+  }
+
   public getSpecification(): jns42generator.Specification {
     return this.specification;
   }
