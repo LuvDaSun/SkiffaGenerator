@@ -18,6 +18,10 @@ export abstract class DocumentBase<N = unknown> {
     }
   }
 
+  [Symbol.dispose]() {
+    this.specification?.[Symbol.dispose]();
+  }
+
   public getSpecification(): jns42generator.Specification {
     return this.specification;
   }
@@ -28,8 +32,7 @@ export abstract class DocumentBase<N = unknown> {
   protected specification!: jns42generator.Specification;
   protected schemaIdMap!: Record<string, number>;
   public async load() {
-    const { defaultTypeName, nameMaximumIterations, transformMaximumIterations } =
-      this.configuration;
+    const { defaultTypeName, transformMaximumIterations } = this.configuration;
 
     const schemas = Object.fromEntries(await this.getSchemas());
 
@@ -39,7 +42,6 @@ export abstract class DocumentBase<N = unknown> {
     };
     const specification = jns42generator.loadSpecification(document, {
       defaultTypeName,
-      nameMaximumIterations,
       transformMaximumIterations,
     });
 

@@ -93,7 +93,7 @@ async function main(options: MainOptions) {
 
   // setup document context
 
-  const documentContext = new DocumentContext({
+  using documentContext = new DocumentContext({
     defaultTypeName,
     nameMaximumIterations,
     transformMaximumIterations,

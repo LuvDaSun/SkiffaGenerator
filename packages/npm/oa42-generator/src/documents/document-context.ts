@@ -28,6 +28,10 @@ export class DocumentContext {
     //
   }
 
+  [Symbol.dispose]() {
+    this.document?.[Symbol.dispose]();
+  }
+
   public registerFactory(factory: DocumentFactory) {
     this.factories.push(factory);
   }
