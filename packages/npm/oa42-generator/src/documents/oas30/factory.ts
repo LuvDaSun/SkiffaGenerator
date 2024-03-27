@@ -7,7 +7,7 @@ export function factory({
   documentNode,
   configuration: options,
 }: DocumentInitializer) {
-  if (oas30.isSchemaDocument(documentNode)) {
+  if (oas30.isOasSchema(documentNode)) {
     return new Document(documentLocation, documentNode, options);
   }
 }

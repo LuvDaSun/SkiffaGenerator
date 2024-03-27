@@ -7,7 +7,7 @@ import * as models from "../../models/index.js";
 import { statusKindComparer, takeStatusCodes } from "../../utils/index.js";
 import { DocumentBase } from "../document-base.js";
 
-export class Document extends DocumentBase<oas.SchemaDocument> {
+export class Document extends DocumentBase<oas.OasSchema> {
   public getApiModel(): models.Api {
     const documentLocation = this.documentLocation;
 
@@ -414,7 +414,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
 
   protected *selectSchemas(
     pointer: string[],
-    document: oas.SchemaDocument,
+    document: oas.OasSchema,
   ): Iterable<readonly [string[], unknown]> {
     const { requestTypes, responseTypes } = this.configuration;
 
@@ -507,7 +507,10 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
       }
     }
 
-    function* selectFromRequestBody(pointer: string[], requestBodyObject: oas.RequestBodiesAZAZ09) {
+    function* selectFromRequestBody(
+      pointer: string[],
+      requestBodyObject: oas.OperationRequestBody,
+    ) {
       if (oas.isReference(requestBodyObject)) {
         return;
       }
@@ -574,7 +577,7 @@ export class Document extends DocumentBase<oas.SchemaDocument> {
 
     function* selectFromSchema(
       schemaPointer: string[],
-      schemaObject: oas.Reference | oas.DefinitionsSchema | undefined,
+      schemaObject: oas.Reference | oas.SchemaSchema | undefined,
     ) {
       if (schemaObject == null) {
         return;
