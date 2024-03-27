@@ -12,7 +12,7 @@
     "formatting": "prettier --check *"
   },
   "devDependencies": {
-    "cspell": "^8.6.0",
+    "cspell": "^8.6.1",
     "oa42-generator": "^0.9.11",
     "prettier": "^3.2.5"
   }
