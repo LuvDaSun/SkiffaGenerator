@@ -9,6 +9,7 @@ export default defineConfig([
     external,
     input: path.resolve("transpiled", "main.js"),
     output: { file: path.resolve("bundled", "main.js"), format: "module", sourcemap: true },
+    context: "global",
     plugins: [
       replace({
         values: {
@@ -22,6 +23,7 @@ export default defineConfig([
     external,
     input: path.resolve("transpiled", "main.js"),
     output: { file: path.resolve("bundled", "main.cjs"), format: "commonjs", sourcemap: true },
+    context: "global",
     plugins: [
       replace({
         values: {
@@ -35,6 +37,7 @@ export default defineConfig([
     external,
     input: path.resolve("transpiled", "program.js"),
     output: { file: path.resolve("bundled", "program.js"), format: "module", sourcemap: true },
+    context: "global",
     plugins: [
       replace({
         values: {
