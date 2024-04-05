@@ -119,7 +119,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
       ...(pathItem.parameters ?? [])
         .map((item) => {
           const parameterObject = this.dereference(item);
-          assert(oas.isParameter(parameterObject));
+          assert(oas.isPathItemItems(parameterObject));
 
           return parameterObject;
         })
@@ -130,7 +130,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
       ...(operationItem.parameters ?? [])
         .map((item) => {
           const parameterObject = this.dereference(item);
-          assert(oas.isParameter(parameterObject));
+          assert(oas.isPathItemItems(parameterObject));
 
           return parameterObject;
         })
@@ -343,7 +343,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
     for (const parameterName in responseItem.headers ?? {}) {
       const headerItem = this.dereference(responseItem.headers![parameterName]);
 
-      assert(oas.isHeader(headerItem));
+      assert(oas.isHeadersAdditionalProperties(headerItem));
 
       yield this.getParameterModel(
         operationLocation.pushPointer("headers", parameterName),
@@ -356,7 +356,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
   private getParameterModel(
     parameterLocation: NodeLocation,
     parameterName: string,
-    parameterItem: oas.Parameter | oas.Header,
+    parameterItem: oas.PathItemItems | oas.HeadersAdditionalProperties,
   ): models.Parameter {
     const schemaLocation =
       parameterItem.schema == null ? undefined : parameterLocation.pushPointer("schema");
@@ -368,7 +368,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
     return {
       location: parameterLocation,
       name: parameterName,
-      required: parameterItem.required ?? false,
+      required: (parameterItem.required as boolean) ?? false,
       schemaId,
       mockable,
     };
@@ -395,7 +395,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
   private getBodyModel(
     mediaTypeLocation: NodeLocation,
     contentType: string,
-    mediaTypeItem: oas.MediaType,
+    mediaTypeItem: oas.DefinitionsMediaType,
   ): models.Body {
     const schemaLocation =
       mediaTypeItem.schema == null ? undefined : mediaTypeLocation.pushPointer("schema");
@@ -571,14 +571,17 @@ export class Document extends DocumentBase<oas.OasSchema> {
 
     function* selectFromParameter(
       pointer: string[],
-      parameterObject: oas.Reference | oas.Parameter,
+      parameterObject: oas.Reference | oas.ParametersPatternProperties,
     ) {
       if (oas.isReference(parameterObject)) return;
 
       yield* selectFromSchema([...pointer, "schema"], parameterObject.schema);
     }
 
-    function* selectFromHeader(headerPointer: string[], headerObject: oas.Reference | oas.Header) {
+    function* selectFromHeader(
+      headerPointer: string[],
+      headerObject: oas.Reference | oas.HeadersAdditionalProperties,
+    ) {
       if (oas.isReference(headerObject)) {
         return;
       }
@@ -588,7 +591,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
 
     function* selectFromSchema(
       schemaPointer: string[],
-      schemaObject: oas.Reference | oas.SchemaSchema | undefined,
+      schemaObject: oas.Reference | oas.SchemasPatternProperties | undefined,
     ) {
       if (schemaObject == null) {
         return;
