@@ -1,7 +1,5 @@
-import { NodeLocation } from "jns42-generator";
-
 export interface Parameter {
-  location: NodeLocation;
+  location: string;
   name: string;
   required: boolean;
   schemaId?: string;

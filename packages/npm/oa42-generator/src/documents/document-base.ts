@@ -1,5 +1,5 @@
+import * as jns42core from "@jns42/core";
 import * as jns42generator from "jns42-generator";
-import { NodeLocation } from "jns42-generator";
 import * as models from "../models/index.js";
 import { readNode } from "../utils/index.js";
 import { DocumentConfiguration } from "./document-context.js";
@@ -7,7 +7,7 @@ import { DocumentConfiguration } from "./document-context.js";
 export abstract class DocumentBase<N = unknown> {
   protected readonly nodes: Record<string, unknown> = {};
   constructor(
-    protected readonly documentLocation: NodeLocation,
+    protected readonly documentLocation: string,
     protected readonly documentNode: N,
     protected readonly configuration: DocumentConfiguration,
   ) {
@@ -61,71 +61,16 @@ export abstract class DocumentBase<N = unknown> {
   }
 
   private async getSchemas(): Promise<Iterable<readonly [string, any]>> {
-    const documentContext = new jns42generator.DocumentContext();
-
-    documentContext.registerFactory(
-      jns42generator.schemaDraft202012.metaSchemaId,
-      ({ retrievalLocation, givenLocation, antecedentLocation, documentNode: rootNode }) =>
-        new jns42generator.schemaDraft04.Document(
-          retrievalLocation,
-          givenLocation,
-          antecedentLocation,
-          rootNode,
-          documentContext,
-        ),
-    );
-    documentContext.registerFactory(
-      jns42generator.schemaDraft04.metaSchemaId,
-      ({ retrievalLocation, givenLocation, antecedentLocation, documentNode: rootNode }) =>
-        new jns42generator.schemaDraft04.Document(
-          retrievalLocation,
-          givenLocation,
-          antecedentLocation,
-          rootNode,
-          documentContext,
-        ),
-    );
-    documentContext.registerFactory(
-      jns42generator.schemaOasV31.metaSchemaId,
-      ({ retrievalLocation, givenLocation, antecedentLocation, documentNode: rootNode }) =>
-        new jns42generator.schemaDraft04.Document(
-          retrievalLocation,
-          givenLocation,
-          antecedentLocation,
-          rootNode,
-          documentContext,
-        ),
-    );
-    documentContext.registerFactory(
-      jns42generator.oasV30.metaSchemaId,
-      ({ retrievalLocation, givenLocation, antecedentLocation, documentNode: rootNode }) =>
-        new jns42generator.schemaDraft04.Document(
-          retrievalLocation,
-          givenLocation,
-          antecedentLocation,
-          rootNode,
-          documentContext,
-        ),
-    );
-    documentContext.registerFactory(
-      jns42generator.swaggerV2.metaSchemaId,
-      ({ retrievalLocation, givenLocation, antecedentLocation, documentNode: rootNode }) =>
-        new jns42generator.schemaDraft04.Document(
-          retrievalLocation,
-          givenLocation,
-          antecedentLocation,
-          rootNode,
-          documentContext,
-        ),
-    );
+    const documentContext = jns42core.DocumentContext.new();
+    documentContext.registerWellKnownFactories();
 
     for (const [pointer, schemaNode] of this.selectSchemas([], this.documentNode)) {
       const nodeLocation = this.documentLocation.pushPointer(...pointer);
-      await documentContext.loadFromDocument(
+      await documentContext.loadFromNode(
         nodeLocation,
         nodeLocation,
         this.documentLocation,
-        this.documentNode,
+        schemaNode,
         this.getDefaultSchemaId(),
       );
     }

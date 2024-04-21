@@ -1,9 +1,8 @@
-import { NodeLocation } from "jns42-generator";
 import { Operation } from "./operation.js";
 
 export interface Path {
   id: number;
-  location: NodeLocation;
+  location: string;
   pattern: string;
   operations: Operation[];
 }

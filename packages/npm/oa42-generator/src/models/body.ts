@@ -1,7 +1,5 @@
-import { NodeLocation } from "jns42-generator";
-
 export interface Body {
-  location: NodeLocation;
+  location: string;
   contentType: string;
   schemaId?: string;
   mockable: boolean;
