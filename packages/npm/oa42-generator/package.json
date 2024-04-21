@@ -42,14 +42,14 @@
     "generator"
   ],
   "dependencies": {
-    "@jns42/oas-v3-0": "^0.16.3",
-    "@jns42/oas-v3-1": "^0.16.3",
-    "@jns42/swagger-v2": "^0.16.3",
-    "@types/node": "^20.12.4",
+    "@jns42/oas-v3-0": "^0.17.0",
+    "@jns42/oas-v3-1": "^0.17.0",
+    "@jns42/swagger-v2": "^0.17.0",
+    "@types/node": "^20.12.7",
     "@types/yargs": "^17.0.32",
     "camelcase": "^8.0.0",
     "goodrouter": "^2.1.6",
-    "jns42-generator": "^0.16.3",
+    "jns42-generator": "^0.17.0",
     "oa42-lib": "^0.8.20",
     "tslib": "^2.6.2",
     "type-fest": "^4.10.2",
@@ -59,8 +59,8 @@
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.5",
     "@tsconfig/node20": "^20.1.4",
-    "rollup": "^4.14.0",
-    "typescript": "^5.4.4"
+    "rollup": "^4.16.0",
+    "typescript": "^5.4.5"
   },
   "engines": {
     "node": ">=18"

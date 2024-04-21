@@ -40,7 +40,7 @@
     "library"
   ],
   "dependencies": {
-    "@types/node": "^20.12.4",
+    "@types/node": "^20.12.7",
     "js-base64": "^3.7.7",
     "msecs": "^1.0.3",
     "tslib": "^2.6.2",
@@ -49,8 +49,8 @@
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.5",
     "@tsconfig/node20": "^20.1.4",
-    "rollup": "^4.14.0",
-    "typescript": "^5.4.4"
+    "rollup": "^4.16.0",
+    "typescript": "^5.4.5"
   },
   "engines": {
     "node": ">=18"
