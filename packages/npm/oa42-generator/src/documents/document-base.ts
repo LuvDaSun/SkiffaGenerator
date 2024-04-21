@@ -34,33 +34,6 @@ export abstract class DocumentBase<N = unknown> {
   public async load() {
     const { defaultTypeName, transformMaximumIterations } = this.configuration;
 
-    const schemas = Object.fromEntries(await this.getSchemas());
-
-    const document = {
-      $schema: "https://schema.JsonSchema42.org/jns42-intermediate/schema.json" as const,
-      schemas,
-    };
-    const specification = jns42generator.loadSpecification(document, {
-      defaultTypeName,
-      transformMaximumIterations,
-    });
-
-    const schemaIdMap: Record<string, number> = {};
-    for (const [key, model] of [...specification.typesArena].map(
-      (item, key) => [key, item] as const,
-    )) {
-      if (model.id == null) {
-        continue;
-      }
-
-      schemaIdMap[model.id] = key;
-    }
-
-    this.specification = specification;
-    this.schemaIdMap = schemaIdMap;
-  }
-
-  private async getSchemas(): Promise<Iterable<readonly [string, any]>> {
     const documentContext = jns42core.DocumentContext.new();
     documentContext.registerWellKnownFactories();
 
@@ -75,7 +48,24 @@ export abstract class DocumentBase<N = unknown> {
       );
     }
 
-    return documentContext.getIntermediateSchemaEntries();
+    const specification = jns42generator.loadSpecification(documentContext, {
+      defaultTypeName,
+      transformMaximumIterations,
+    });
+
+    const schemaIdMap: Record<string, number> = {};
+    for (const [key, model] of [...specification.typesArena].map(
+      (item, key) => [key, item] as const,
+    )) {
+      if (model.location == null) {
+        continue;
+      }
+
+      schemaIdMap[model.location] = key;
+    }
+
+    this.specification = specification;
+    this.schemaIdMap = schemaIdMap;
   }
 
   //#region selectors
