@@ -3,6 +3,9 @@
 import fs from "fs";
 import path from "path";
 
-fs.rmSync(path.resolve("transpiled"), { recursive: true, force: true });
-fs.rmSync(path.resolve("types"), { recursive: true, force: true });
-fs.rmSync(path.resolve("bundled"), { recursive: true, force: true });
+const projectRoot = path.resolve(import.meta.dirname, "..");
+
+fs.rmSync(path.resolve(projectRoot, "transpiled"), { recursive: true, force: true });
+fs.rmSync(path.resolve(projectRoot, "types"), { recursive: true, force: true });
+fs.rmSync(path.resolve(projectRoot, "bundled"), { recursive: true, force: true });
+fs.rmSync(path.resolve(projectRoot, "bin"), { recursive: true, force: true });
