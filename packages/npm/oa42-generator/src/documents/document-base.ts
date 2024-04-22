@@ -46,6 +46,7 @@ export abstract class DocumentBase<N = unknown> {
         schemaNode,
         this.getDefaultSchemaId(),
       );
+      const s = documentContext.getSchemaNodes();
     }
 
     const specification = jns42generator.loadSpecification(documentContext, {

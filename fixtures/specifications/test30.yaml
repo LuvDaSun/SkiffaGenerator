@@ -7,6 +7,29 @@ info:
   version: 0.1.0
 
 paths:
+  /abc:
+    get:
+      operationId: abc
+      summary: abc
+      responses:
+        "200":
+          description: Ok
+          content:
+            "application/json":
+              schema:
+                type: object
+                required:
+                  - a
+                  - b
+                  - c
+                properties:
+                  a:
+                    type: string
+                  b:
+                    type: string
+                  c:
+                    type: string
+
   /api-key-header:
     get:
       security:
