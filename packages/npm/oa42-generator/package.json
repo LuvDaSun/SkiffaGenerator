@@ -42,7 +42,7 @@
     "generator"
   ],
   "dependencies": {
-    "@jns42/core": "^0.3.3",
+    "@oa42/core": "^0.1.0",
     "@jns42/oas-v3-0": "^0.17.1",
     "@jns42/oas-v3-1": "^0.17.1",
     "@jns42/swagger-v2": "^0.17.1",
