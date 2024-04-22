@@ -1,3 +1,4 @@
+import { NodeLocation } from "@jns42/core";
 import * as oas from "@jns42/oas-v3-0";
 import assert from "assert";
 import { Router } from "goodrouter";
@@ -57,7 +58,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
 
       yield this.getPathModel(
         pathIndex,
-        this.documentLocation.pushPointer("paths", pathPattern),
+        this.documentLocation.pushPointer(["paths", pathPattern]),
         pathPattern,
         pathItem,
       );
@@ -68,7 +69,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
 
   private getPathModel(
     pathIndex: number,
-    pathLocation: string,
+    pathLocation: NodeLocation,
     pathPattern: string,
     pathItem: oas.PathItem,
   ) {
@@ -82,7 +83,11 @@ export class Document extends DocumentBase<oas.OasSchema> {
     return pathModel;
   }
 
-  private *getOperationModels(pathLocation: string, pathPattern: string, pathItem: oas.PathItem) {
+  private *getOperationModels(
+    pathLocation: NodeLocation,
+    pathPattern: string,
+    pathItem: oas.PathItem,
+  ) {
     for (const method of methods) {
       const operationModel = this.dereference(pathItem[method]);
 
@@ -95,7 +100,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
       yield this.getOperationModel(
         pathLocation,
         pathItem,
-        pathLocation.pushPointer(method),
+        pathLocation.pushPointer([method]),
         method,
         operationModel,
       );
@@ -103,9 +108,9 @@ export class Document extends DocumentBase<oas.OasSchema> {
   }
 
   private getOperationModel(
-    pathLocation: string,
+    pathLocation: NodeLocation,
     pathItem: oas.PathItem,
-    operationLocation: string,
+    operationLocation: NodeLocation,
     method: Method,
     operationItem: oas.Operation,
   ) {
@@ -121,7 +126,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
         })
         .map(
           (item, index) =>
-            [pathLocation.pushPointer("parameters", String(index)), item.name, item] as const,
+            [pathLocation.pushPointer(["parameters", String(index)]), item.name, item] as const,
         ),
       ...(operationItem.parameters ?? [])
         .map((item) => {
@@ -132,7 +137,11 @@ export class Document extends DocumentBase<oas.OasSchema> {
         })
         .map(
           (item, index) =>
-            [operationLocation.pushPointer("parameters", String(index)), item.name, item] as const,
+            [
+              operationLocation.pushPointer(["parameters", String(index)]),
+              item.name,
+              item,
+            ] as const,
         ),
     ];
 
@@ -168,7 +177,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
       assert(oas.isDefinitionsRequestBody(requestBody));
       bodies = [
         ...this.getBodyModels(
-          operationLocation.pushPointer("requestBody", "content"),
+          operationLocation.pushPointer(["requestBody", "content"]),
           requestBody.content,
           requestTypes,
         ),
@@ -272,7 +281,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
     }
   }
 
-  private *getOperationResultModels(operationLocation: string, operationItem: oas.Operation) {
+  private *getOperationResultModels(operationLocation: NodeLocation, operationItem: oas.Operation) {
     const statusCodesAvailable = new Set(statusCodes);
     const statusKinds = Object.keys(operationItem.responses ?? {}).sort(statusKindComparer);
 
@@ -284,7 +293,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
       const statusCodes = [...takeStatusCodes(statusCodesAvailable, statusKind)];
 
       yield this.getOperationResultModel(
-        operationLocation.pushPointer("responses", statusKind),
+        operationLocation.pushPointer(["responses", statusKind]),
         statusKind,
         statusCodes,
         responseItem,
@@ -293,7 +302,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
   }
 
   private getOperationResultModel(
-    responseLocation: string,
+    responseLocation: NodeLocation,
     statusKind: string,
     statusCodes: StatusCode[],
     responseItem: oas.Response,
@@ -309,7 +318,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
         ? []
         : [
             ...this.getBodyModels(
-              responseLocation.pushPointer("content"),
+              responseLocation.pushPointer(["content"]),
               responseItem.content,
               responseTypes,
             ),
@@ -333,7 +342,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
   }
 
   private *getOperationResultHeaderParameters(
-    operationLocation: string,
+    operationLocation: NodeLocation,
     responseItem: oas.Response,
   ) {
     for (const parameterName in responseItem.headers ?? {}) {
@@ -342,7 +351,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
       assert(oas.isHeadersAdditionalProperties(headerItem));
 
       yield this.getParameterModel(
-        operationLocation.pushPointer("headers", parameterName),
+        operationLocation.pushPointer(["headers", parameterName]),
         parameterName,
         headerItem,
       );
@@ -350,12 +359,12 @@ export class Document extends DocumentBase<oas.OasSchema> {
   }
 
   private getParameterModel(
-    parameterLocation: string,
+    parameterLocation: NodeLocation,
     parameterName: string,
     parameterItem: oas.PathItemItems | oas.HeadersAdditionalProperties,
   ): models.Parameter {
     const schemaLocation =
-      parameterItem.schema == null ? undefined : parameterLocation.pushPointer("schema");
+      parameterItem.schema == null ? undefined : parameterLocation.pushPointer(["schema"]);
     const schemaId = schemaLocation?.toString();
     const mockable =
       (schemaId != null &&
@@ -372,7 +381,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
   }
 
   private *getBodyModels(
-    requestBodyLocation: string,
+    requestBodyLocation: NodeLocation,
     requestBodyItem: oas.RequestBodyContent | oas.ResponseContent,
     contentTypes: string[],
   ) {
@@ -383,19 +392,19 @@ export class Document extends DocumentBase<oas.OasSchema> {
       }
 
       yield this.getBodyModel(
-        requestBodyLocation.pushPointer(contentType),
+        requestBodyLocation.pushPointer([contentType]),
         contentType,
         mediaTypeItem,
       );
     }
   }
   private getBodyModel(
-    mediaTypeLocation: string,
+    mediaTypeLocation: NodeLocation,
     contentType: string,
     mediaTypeItem: oas.DefinitionsMediaType,
   ): models.Body {
     const schemaLocation =
-      mediaTypeItem.schema == null ? undefined : mediaTypeLocation.pushPointer("schema");
+      mediaTypeItem.schema == null ? undefined : mediaTypeLocation.pushPointer(["schema"]);
     const schemaId = schemaLocation?.toString();
     const mockable =
       (schemaId != null &&
@@ -412,7 +421,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
 
   private dereference(target: unknown | oas.Reference): unknown {
     while (oas.isReference(target)) {
-      const refLocation = this.documentLocation.join(target.$ref as string);
+      const refLocation = this.documentLocation.join(NodeLocation.parse(target.$ref as string));
       const refId = refLocation.toString();
       target = this.nodes[refId];
     }

@@ -1,5 +1,7 @@
+import { NodeLocation } from "@jns42/core";
+
 export interface Parameter {
-  location: string;
+  location: NodeLocation;
   name: string;
   required: boolean;
   schemaId?: string;

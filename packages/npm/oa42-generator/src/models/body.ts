@@ -1,5 +1,7 @@
+import { NodeLocation } from "@jns42/core";
+
 export interface Body {
-  location: string;
+  location: NodeLocation;
   contentType: string;
   schemaId?: string;
   mockable: boolean;

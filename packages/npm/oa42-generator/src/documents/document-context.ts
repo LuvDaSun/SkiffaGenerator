@@ -1,3 +1,4 @@
+import { NodeLocation } from "@jns42/core";
 import { loadYAML } from "../utils/index.js";
 import { DocumentBase } from "./document-base.js";
 
@@ -10,7 +11,7 @@ export interface DocumentConfiguration {
 }
 
 export interface DocumentInitializer<N = unknown> {
-  documentLocation: string;
+  documentLocation: NodeLocation;
   documentNode: N;
   configuration: DocumentConfiguration;
 }
@@ -43,7 +44,7 @@ export class DocumentContext {
   public async loadFromDocument(documentLocation: string, documentNode: unknown) {
     for (const factory of this.factories) {
       const document = factory({
-        documentLocation,
+        documentLocation: NodeLocation.parse(documentLocation),
         documentNode,
         configuration: this.configuration,
       });
