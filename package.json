@@ -1,6 +1,7 @@
 {
   "private": true,
   "workspaces": [
+    "packages/npm/oa42-core",
     "packages/npm/oa42-lib",
     "packages/npm/oa42-generator",
     "packages/npm/oa42-opentelemetry",

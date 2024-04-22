@@ -1,0 +1,6 @@
+[workspace]
+resolver = "2"
+members = ["packages/cargo/oa42-core"]
+
+[profile.release]
+lto = true

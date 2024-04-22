@@ -20,6 +20,14 @@
       "name": "npm/oa42-appsignal",
       "path": "packages/npm/oa42-appsignal",
     },
+    {
+      "name": "npm/oa42-core",
+      "path": "packages/npm/oa42-core",
+    },
+    {
+      "name": "cargo/oa42-core",
+      "path": "packages/cargo/oa42-core",
+    },
   ],
   "settings": {
     "window.title": "OpenApi42",
