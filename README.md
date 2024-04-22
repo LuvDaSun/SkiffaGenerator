@@ -4,13 +4,17 @@ Because OpenApi is the answer to everything!
 
 ## Installing
 
-First, install dependencies via `npm install`. Tests should work on node v21 and later!
+First, install dependencies via `npm install`.
 
 ## Building
 
 You probably want to build The project via `npm --workspaces run build`. This is automatically done before testing and packaging.
 
 > instead of using `--workspaces` you can also use `-ws` we will be using the full names as they make more clear what they are doing.
+
+## Testing
+
+Tests should work on node v21 and later! Run all tests via `npm --workspaces test`.
 
 ## Publishing
 
