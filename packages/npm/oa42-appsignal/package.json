@@ -41,7 +41,7 @@
     "@appsignal/nodejs": "^3.4.0",
     "@opentelemetry/api": "^1.8.0",
     "@types/node": "^20.12.7",
-    "oa42-lib": "^0.8.20",
+    "oa42-lib": "^0.8.22",
     "tslib": "^2.6.2",
     "type-fest": "^4.10.2"
   },

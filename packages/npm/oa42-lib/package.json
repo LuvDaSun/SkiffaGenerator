@@ -1,6 +1,6 @@
 {
   "name": "oa42-lib",
-  "version": "0.8.20",
+  "version": "0.8.22",
   "description": "",
   "type": "module",
   "main": "./bundled/main.cjs",
