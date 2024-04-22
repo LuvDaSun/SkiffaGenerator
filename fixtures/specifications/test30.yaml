@@ -25,9 +25,9 @@ paths:
                 properties:
                   a:
                     type: string
-                  c:
+                  b:
                     type: string
-                  d:
+                  c:
                     type: string
 
   /api-key-header:
