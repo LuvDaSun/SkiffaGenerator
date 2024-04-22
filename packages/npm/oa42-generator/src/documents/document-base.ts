@@ -1,4 +1,5 @@
 import * as jns42core from "@jns42/core";
+import { NodeLocation } from "@oa42/core";
 import * as jns42generator from "jns42-generator";
 import * as models from "../models/index.js";
 import { readNode } from "../utils/index.js";
@@ -7,7 +8,7 @@ import { DocumentConfiguration } from "./document-context.js";
 export abstract class DocumentBase<N = unknown> {
   protected readonly nodes: Record<string, unknown> = {};
   constructor(
-    protected readonly documentLocation: jns42core.NodeLocation,
+    protected readonly documentLocation: NodeLocation,
     protected readonly documentNode: N,
     protected readonly configuration: DocumentConfiguration,
   ) {

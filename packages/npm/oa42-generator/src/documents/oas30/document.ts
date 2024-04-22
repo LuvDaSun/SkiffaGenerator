@@ -1,5 +1,5 @@
-import { NodeLocation } from "@jns42/core";
 import * as oas from "@jns42/oas-v3-0";
+import { NodeLocation } from "@oa42/core";
 import assert from "assert";
 import { Router } from "goodrouter";
 import * as jns42generator from "jns42-generator";

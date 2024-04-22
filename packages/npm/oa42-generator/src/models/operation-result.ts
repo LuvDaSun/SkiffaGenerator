@@ -1,4 +1,4 @@
-import { NodeLocation } from "@jns42/core";
+import { NodeLocation } from "@oa42/core";
 import { StatusCode } from "oa42-lib";
 import { Body } from "./body.js";
 import { Parameter } from "./parameter.js";
