@@ -7,12 +7,12 @@ import { DocumentConfiguration } from "./document-context.js";
 export abstract class DocumentBase<N = unknown> {
   protected readonly nodes: Record<string, unknown> = {};
   constructor(
-    protected readonly documentLocation: string,
+    protected readonly documentLocation: jns42core.NodeLocation,
     protected readonly documentNode: N,
     protected readonly configuration: DocumentConfiguration,
   ) {
     for (const [pointer, node] of readNode([], documentNode)) {
-      const nodeLocation = documentLocation.pushPointer(...pointer);
+      const nodeLocation = documentLocation.pushPointer(pointer);
       const nodeId = nodeLocation.toString();
       this.nodes[nodeId] = node;
     }
@@ -38,11 +38,11 @@ export abstract class DocumentBase<N = unknown> {
     documentContext.registerWellKnownFactories();
 
     for (const [pointer, schemaNode] of this.selectSchemas([], this.documentNode)) {
-      const nodeLocation = this.documentLocation.pushPointer(...pointer);
+      const nodeLocation = this.documentLocation.pushPointer(pointer);
       await documentContext.loadFromNode(
-        nodeLocation,
-        nodeLocation,
-        this.documentLocation,
+        nodeLocation.toString(),
+        nodeLocation.toString(),
+        this.documentLocation.toString(),
         schemaNode,
         this.getDefaultSchemaId(),
       );
