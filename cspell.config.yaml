@@ -9,10 +9,12 @@ words:
   - endregion
   - esbenp
   - goodrouter
+  - oneshot
   - openapi
   - opentelemetry
   - patsubst
   - Promisable
+  - repr
   - rlib
   - rollup
   - ryanluker

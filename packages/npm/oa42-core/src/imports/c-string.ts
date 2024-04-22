@@ -41,7 +41,7 @@ export class CString extends ForeignObject {
     const { pointer } = this;
     const index = mainFfi.memoryUint8.indexOf(0, pointer); // Find the null terminator to determine the string size.
     if (index < 0) {
-      throw new TypeError("cstring size not found"); // Throw an error if the null terminator is not found.
+      throw new TypeError("c-string size not found"); // Throw an error if the null terminator is not found.
     }
     const data = mainFfi.memoryUint8.subarray(pointer, index); // Extract the string data up to the null terminator.
     const value = textDecoder.decode(data); // Decode the data back into a JavaScript string.

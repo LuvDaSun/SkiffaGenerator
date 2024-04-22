@@ -15,7 +15,7 @@ export type ForeignPrimitive =
   | "i64"
   | "f32"
   | "f64"
-  | "cstring";
+  | "c-string";
 
 export class ForeignStructureBuilder<P extends object> {
   private properties = new Array<[string, ForeignPrimitive]>();
@@ -34,7 +34,7 @@ export class ForeignStructureBuilder<P extends object> {
   ): ForeignStructureBuilder<P & Record<N, number>>;
   public addProperty<N extends string>(
     name: N,
-    type: "cstring",
+    type: "c-string",
   ): ForeignStructureBuilder<P & Record<N, string>>;
   public addProperty<N extends string>(name: N, type: ForeignPrimitive) {
     const clone = new ForeignStructureBuilder<P>();
@@ -204,7 +204,7 @@ export class ForeignStructureBuilder<P extends object> {
           });
           offset += 8;
           break;
-        case "cstring":
+        case "c-string":
           Object.defineProperty(Type.prototype, name, {
             enumerable: true,
             get() {
