@@ -1,4 +1,3 @@
-import { NodeLocation } from "jns42-generator";
 import * as path from "path";
 import * as yargs from "yargs";
 import { DocumentContext } from "../documents/document-context.js";
@@ -79,7 +78,7 @@ interface MainOptions {
 async function main(options: MainOptions) {
   // read from options
 
-  let specificationLocation = NodeLocation.parse(options.specificationUrl);
+  let specificationLocation = options.specificationUrl;
   const packageDirectoryPath = path.resolve(options.packageDirectory);
   const {
     packageName,

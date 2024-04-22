@@ -1,5 +1,5 @@
+import { NodeLocation } from "@jns42/core";
 import { Router } from "goodrouter";
-import { NodeLocation } from "jns42-generator";
 import { Authentication } from "./authentication.js";
 import { Path } from "./path.js";
 

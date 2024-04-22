@@ -38,9 +38,9 @@
     "appsignal"
   ],
   "dependencies": {
-    "@appsignal/nodejs": "^3.3.2",
+    "@appsignal/nodejs": "^3.3.4",
     "@opentelemetry/api": "^1.8.0",
-    "@types/node": "^20.12.4",
+    "@types/node": "^20.12.7",
     "oa42-lib": "^0.8.20",
     "tslib": "^2.6.2",
     "type-fest": "^4.10.2"
@@ -48,8 +48,8 @@
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.5",
     "@tsconfig/node20": "^20.1.4",
-    "rollup": "^4.14.0",
-    "typescript": "^5.4.4"
+    "rollup": "^4.16.1",
+    "typescript": "^5.4.5"
   },
   "engines": {
     "node": ">=18"

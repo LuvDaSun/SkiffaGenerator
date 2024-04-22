@@ -1,4 +1,4 @@
-import { NodeLocation } from "jns42-generator";
+import { NodeLocation } from "@jns42/core";
 import { Method } from "oa42-lib";
 import { AuthenticationRequirement } from "./authentication-requirement.js";
 import { Body } from "./body.js";
