@@ -1,9 +1,10 @@
+import { banner } from "@oa42/core";
 import * as models from "../../models/index.js";
-import { banner, toCamel, toPascal } from "../../utils/index.js";
+import { packageInfo, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 
 export function* generateSharedTsCode(apiModel: models.Api) {
-  yield banner;
+  yield banner("//", `v${packageInfo.version}`);
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {

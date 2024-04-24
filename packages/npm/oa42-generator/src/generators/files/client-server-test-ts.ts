@@ -1,10 +1,11 @@
+import { banner } from "@oa42/core";
 import assert from "assert";
 import * as models from "../../models/index.js";
-import { banner, toCamel } from "../../utils/index.js";
+import { packageInfo, toCamel } from "../../utils/index.js";
 import { NestedText, itt } from "../../utils/iterable-text-template.js";
 
 export function* generateClientServerTestTsCode(apiModel: models.Api) {
-  yield banner;
+  yield banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import assert from "assert/strict";

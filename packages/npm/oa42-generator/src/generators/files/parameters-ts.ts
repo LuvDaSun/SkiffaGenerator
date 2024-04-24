@@ -1,5 +1,6 @@
+import { banner } from "@oa42/core";
 import * as models from "../../models/index.js";
-import { banner, toCamel, toPascal } from "../../utils/index.js";
+import { packageInfo, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
   generateIsRequestParametersFunctionBody,
@@ -11,7 +12,7 @@ import {
 } from "../types/index.js";
 
 export function* generateParametersTsCode(apiModel: models.Api) {
-  yield banner;
+  yield banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import * as types from "./types.js";

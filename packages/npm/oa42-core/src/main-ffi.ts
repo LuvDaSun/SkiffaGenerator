@@ -31,6 +31,8 @@ export interface MainExports extends ExportsBase {
   vec_string_get(vec_usize: number, index: number, error_reference: number): number;
   vec_string_push(vec_usize: number, value: number, error_reference: number): void;
 
+  banner(prefix: number, version: number, error_reference: number): number;
+
   node_location_drop(node_location: number): void;
   node_location_clone(node_location: number): number;
   node_location_parse(input: number, error_reference: number): number;

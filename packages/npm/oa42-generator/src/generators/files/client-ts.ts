@@ -1,6 +1,7 @@
+import { banner } from "@oa42/core";
 import { RouterMode } from "goodrouter";
 import * as models from "../../models/index.js";
-import { banner, toCamel, toPascal } from "../../utils/index.js";
+import { packageInfo, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateClientOperationFunctionBody } from "../bodies/index.js";
 import {
@@ -10,7 +11,7 @@ import {
 } from "../types/index.js";
 
 export function* generateClientTsCode(apiModel: models.Api) {
-  yield banner;
+  yield banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import { Router } from "goodrouter";
