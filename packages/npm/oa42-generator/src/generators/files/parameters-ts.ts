@@ -5,7 +5,7 @@ import { itt } from "../../utils/iterable-text-template.js";
 import {
   generateIsRequestParametersFunctionBody,
   generateIsResponseParametersFunctionBody,
-} from "../bodies/index.js";
+} from "../functions/index.js";
 import {
   generateOperationParametersTypes,
   generateOperationResultParameterTypes,

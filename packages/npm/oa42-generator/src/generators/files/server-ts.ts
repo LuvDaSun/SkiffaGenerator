@@ -3,7 +3,7 @@ import { RouterMode } from "goodrouter";
 import * as models from "../../models/index.js";
 import { packageInfo, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { generateIsAuthenticationFunctionBody } from "../bodies/index.js";
+import { generateIsAuthenticationFunctionBody } from "../functions/index.js";
 import {
   generateOperationAuthenticationType,
   generateOperationHandlerType,

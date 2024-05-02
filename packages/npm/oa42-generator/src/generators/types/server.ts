@@ -4,7 +4,7 @@ import { itt } from "../../utils/iterable-text-template.js";
 import {
   generateEndpointHandlerMethodBody,
   generateRequestHandlerMethodBody,
-} from "../bodies/index.js";
+} from "../functions/index.js";
 
 /**
  * Generated the server class. This is the server that is generated from the
