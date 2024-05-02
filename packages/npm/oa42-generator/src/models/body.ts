@@ -1,4 +1,4 @@
-import { NodeLocation } from "@jns42/core";
+import { NodeLocation } from "@oa42/core";
 
 export interface Body {
   location: NodeLocation;

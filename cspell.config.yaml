@@ -2,17 +2,23 @@ version: "0.2"
 words:
   - appsignal
   - AZAZ
+  - Bulthuis
   - camelcase
+  - cdylib
   - elmerbulthuis
   - endregion
   - esbenp
   - goodrouter
+  - oneshot
   - openapi
   - opentelemetry
   - patsubst
   - Promisable
+  - repr
+  - rlib
   - rollup
   - ryanluker
+  - serde
   - urlencoding
   - welkom
 useGitignore: true

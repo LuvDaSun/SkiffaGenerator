@@ -1,0 +1,26 @@
+on:
+  pull_request: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: rust:1.77.0
+    steps:
+      - uses: actions/checkout@v4
+      - run: cargo test --workspace --all-targets
+
+  clippy:
+    runs-on: ubuntu-latest
+    container: rust:1.77.0
+    steps:
+      - uses: actions/checkout@v4
+      - run: rustup component add clippy
+      - run: cargo clippy --all-targets
+
+  rustfmt:
+    runs-on: ubuntu-latest
+    container: rust:1.77.0
+    steps:
+      - uses: actions/checkout@v4
+      - run: rustup component add rustfmt
+      - run: cargo fmt --check
