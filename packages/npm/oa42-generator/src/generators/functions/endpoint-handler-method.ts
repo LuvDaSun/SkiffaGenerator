@@ -1,13 +1,28 @@
 import * as models from "../../models/index.js";
 import { itt, toCamel, toPascal } from "../../utils/index.js";
 
-/**
- * function statements for route handler
- */
-export function* generateEndpointHandlerMethodBody(
+export function* generateEndpointHandlerMethod(
   apiModel: models.Api,
   operationModel: models.Operation,
 ) {
+  const endpointHandlerName = toCamel(operationModel.name, "endpoint", "handler");
+
+  yield itt`
+    private ${endpointHandlerName}(
+      pathParameters: Record<string, string>,
+      serverIncomingRequest: lib.ServerIncomingRequest,
+    ): Promise<lib.ServerOutgoingResponse> {
+      return this.endpointWrapper(async () => {
+        ${generateBody(apiModel, operationModel)}
+      });
+    }
+  `;
+}
+
+/**
+ * function statements for route handler
+ */
+function* generateBody(apiModel: models.Api, operationModel: models.Operation) {
   const operationHandlerName = toCamel(operationModel.name, "operation", "handler");
   const operationIncomingRequestName = toPascal(operationModel.name, "incoming", "request");
   const requestParametersName = toPascal(operationModel.name, "request", "parameters");

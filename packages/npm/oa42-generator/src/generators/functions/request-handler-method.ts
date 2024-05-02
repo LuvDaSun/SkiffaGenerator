@@ -1,7 +1,19 @@
 import * as models from "../../models/index.js";
 import { itt, toCamel } from "../../utils/index.js";
 
-export function* generateRequestHandlerMethodBody(apiModel: models.Api) {
+export function* generateRequestHandlerMethod(apiModel: models.Api) {
+  yield itt`
+    protected requestHandler(
+      serverIncomingRequest: lib.ServerIncomingRequest,
+    ): Promise<lib.ServerOutgoingResponse> {
+      return this.requestWrapper(async () => {
+        ${generateBody(apiModel)}
+      });
+    }
+  `;
+}
+
+function* generateBody(apiModel: models.Api) {
   yield itt`
     const [pathId, pathParameters] =
       router.parseRoute(serverIncomingRequest.path);

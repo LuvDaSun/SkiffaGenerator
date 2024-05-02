@@ -1,10 +1,7 @@
 import * as models from "../../models/index.js";
 import { toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import {
-  generateEndpointHandlerMethodBody,
-  generateRequestHandlerMethodBody,
-} from "../functions/index.js";
+import { generateEndpointHandlerMethod, generateRequestHandlerMethod } from "../functions/index.js";
 
 /**
  * Generated the server class. This is the server that is generated from the
@@ -61,15 +58,7 @@ function* generateServerBody(apiModel: models.Api) {
     }
   `;
 
-  yield itt`
-    protected requestHandler(
-      serverIncomingRequest: lib.ServerIncomingRequest,
-    ): Promise<lib.ServerOutgoingResponse> {
-      return this.requestWrapper(async () => {
-        ${generateRequestHandlerMethodBody(apiModel)}
-      });
-    }
-  `;
+  yield generateRequestHandlerMethod(apiModel);
 
   for (const authenticationModel of apiModel.authentication) {
     const registerHandlerMethodName = toCamel(
@@ -103,8 +92,6 @@ function* generateServerBody(apiModel: models.Api) {
 
       const registerHandlerMethodName = toCamel("register", operationModel.name, "operation");
 
-      const endpointHandlerName = toCamel(operationModel.name, "endpoint", "handler");
-
       yield itt`
         private ${handlerPropertyName}?: ${handlerTypeName}<A>;
       `;
@@ -132,16 +119,7 @@ function* generateServerBody(apiModel: models.Api) {
         }
       `;
 
-      yield itt`
-        private ${endpointHandlerName}(
-          pathParameters: Record<string, string>,
-          serverIncomingRequest: lib.ServerIncomingRequest,
-        ): Promise<lib.ServerOutgoingResponse> {
-          return this.endpointWrapper(async () => {
-            ${generateEndpointHandlerMethodBody(apiModel, operationModel)}
-          });
-        }
-      `;
+      yield generateEndpointHandlerMethod(apiModel, operationModel);
     }
   }
 }
