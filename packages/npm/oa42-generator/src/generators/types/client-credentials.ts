@@ -2,6 +2,7 @@ import * as models from "../../models/index.js";
 import { toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 
+// TODO redo
 export function* generateOperationCredentialsType(
   apiModel: models.Api,
   operationModel: models.Operation,
@@ -28,7 +29,7 @@ function* generateTypeContent(authenticationModels: Iterable<models.Authenticati
     switch (authenticationModel.type) {
       case "apiKey":
         yield itt`
-          ${toCamel(authenticationModel.name)}: string,
+          ${toCamel(authenticationModel.name)}?: string,
         `;
         break;
 
@@ -36,7 +37,7 @@ function* generateTypeContent(authenticationModels: Iterable<models.Authenticati
         switch (authenticationModel.scheme) {
           case "basic":
             yield itt`
-              ${toCamel(authenticationModel.name)}: {
+              ${toCamel(authenticationModel.name)}?: {
                 id: string,
                 secret: string,
               },
@@ -45,7 +46,7 @@ function* generateTypeContent(authenticationModels: Iterable<models.Authenticati
 
           case "bearer":
             yield itt`
-              ${toCamel(authenticationModel.name)}: string,
+              ${toCamel(authenticationModel.name)}?: string,
             `;
             break;
 
