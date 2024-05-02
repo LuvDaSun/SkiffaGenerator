@@ -25,6 +25,6 @@ function* generateAndRules(subRequirements: models.AuthenticationRequirement[]) 
   }
 
   for (const requirement of subRequirements) {
-    yield itt`authentication.${toCamel(requirement.authenticationName)} !== undefined`;
+    yield itt`(${JSON.stringify(toCamel(requirement.authenticationName))} in authentication && authentication.${toCamel(requirement.authenticationName)} !== undefined)`;
   }
 }
