@@ -45,11 +45,11 @@
     "@rollup/plugin-replace": "^5.0.5",
     "@tsconfig/node20": "^20.1.4",
     "c8": "^9.1.0",
-    "rollup": "^4.16.2",
+    "rollup": "^4.17.2",
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@types/node": "^20.12.7",
+    "@types/node": "^20.12.8",
     "p-defer": "^4.0.1",
     "tslib": "^2.6.2",
     "type-fest": "^4.9.0"

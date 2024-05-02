@@ -40,7 +40,7 @@
   "dependencies": {
     "@opentelemetry/api": "^1.8.0",
     "@opentelemetry/instrumentation": "^0.50.0",
-    "@types/node": "^20.12.7",
+    "@types/node": "^20.12.8",
     "oa42-lib": "^0.8.22",
     "tslib": "^2.6.2",
     "type-fest": "^4.10.2"
@@ -48,7 +48,7 @@
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.5",
     "@tsconfig/node20": "^20.1.4",
-    "rollup": "^4.16.2",
+    "rollup": "^4.17.2",
     "typescript": "^5.4.5"
   },
   "engines": {
