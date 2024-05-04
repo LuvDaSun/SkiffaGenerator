@@ -35,12 +35,12 @@ export function* generateServerClass(apiModel: models.Api) {
 export class Server<A extends ${authenticationTypeName} = ${authenticationTypeName}>
   extends lib.ServerBase
 {
-  ${generateServerBody(apiModel)}
+  ${generateBody(apiModel)}
 }
 `;
 }
 
-function* generateServerBody(apiModel: models.Api) {
+function* generateBody(apiModel: models.Api) {
   yield itt`
     protected readonly configuration: ServerConfiguration;
     constructor(configuration: Partial<ServerConfiguration> = {}) {
@@ -53,6 +53,7 @@ function* generateServerBody(apiModel: models.Api) {
     }
   `;
 
+  // TODO move to functions
   yield itt`
     public registerMiddleware(middleware: lib.ServerMiddleware) {
       const nextMiddleware = this.middleware;
@@ -79,6 +80,7 @@ function* generateServerBody(apiModel: models.Api) {
       private ${handlerPropertyName}?: ${handlerTypeName}<A>;
     `;
 
+    // TODO move to functions
     yield itt`
       public ${registerHandlerMethodName}(authenticationHandler: ${handlerTypeName}<A>) {
         this.${handlerPropertyName} =
@@ -101,6 +103,7 @@ function* generateServerBody(apiModel: models.Api) {
         private ${handlerPropertyName}?: ${handlerTypeName}<A>;
       `;
 
+      // TODO move to functions
       const jsDoc = [
         operationModel.deprecated ? "@deprecated" : "",
         operationModel.summary,

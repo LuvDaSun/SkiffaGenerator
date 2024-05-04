@@ -61,6 +61,7 @@ export function* generateServerTsCode(apiModel: models.Api) {
   for (const authenticationModel of apiModel.authentication) {
     const handlerTypeName = getAuthenticationHandlerTypeName(authenticationModel);
 
+    // TODO move to types
     switch (authenticationModel.type) {
       case "apiKey":
         yield itt`

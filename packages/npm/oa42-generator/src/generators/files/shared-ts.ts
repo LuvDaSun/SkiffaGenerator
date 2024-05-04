@@ -20,6 +20,7 @@ export function* generateSharedTsCode(apiModel: models.Api) {
         ),
       ];
 
+      // TODO move to types
       yield itt`
         export type ${operationAcceptTypeName} = ${
           operationAccepts.length > 0
