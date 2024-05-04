@@ -1,7 +1,12 @@
 import * as models from "../../models/index.js";
-import { toCamel, toPascal } from "../../utils/index.js";
+import { toCamel } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateEndpointHandlerMethod, generateRequestHandlerMethod } from "../functions/index.js";
+import {
+  getAuthenticationHandlerTypeName,
+  getOperationHandlerTypeName,
+  getServerAuthenticationTypeName,
+} from "../names/index.js";
 
 /**
  * Generated the server class. This is the server that is generated from the
@@ -21,8 +26,10 @@ import { generateEndpointHandlerMethod, generateRequestHandlerMethod } from "../
  * of the handle method.
  */
 export function* generateServerClass(apiModel: models.Api) {
+  const authenticationTypeName = getServerAuthenticationTypeName();
+
   yield itt`
-export class Server<A extends ServerAuthentication = ServerAuthentication>
+export class Server<A extends ${authenticationTypeName} = ${authenticationTypeName}>
   extends lib.ServerBase
 {
   ${generateServerBody(apiModel)}
@@ -66,7 +73,7 @@ function* generateServerBody(apiModel: models.Api) {
       authenticationModel.name,
       "authentication",
     );
-    const handlerTypeName = toPascal(authenticationModel.name, "authentication", "handler");
+    const handlerTypeName = getAuthenticationHandlerTypeName(authenticationModel);
     const handlerPropertyName = toCamel(authenticationModel.name, "authentication", "handler");
 
     yield itt`
@@ -88,7 +95,7 @@ function* generateServerBody(apiModel: models.Api) {
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
       const handlerPropertyName = toCamel(operationModel.name, "operation", "handler");
-      const handlerTypeName = toPascal(operationModel.name, "operation", "handler");
+      const handlerTypeName = getOperationHandlerTypeName(operationModel);
 
       const registerHandlerMethodName = toCamel("register", operationModel.name, "operation");
 

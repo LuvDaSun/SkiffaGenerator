@@ -1,5 +1,6 @@
 import * as models from "../../models/index.js";
-import { itt, toCamel, toPascal } from "../../utils/index.js";
+import { itt, toCamel } from "../../utils/index.js";
+import { getRequestParametersTypeName } from "../names/index.js";
 
 export function* generateIsRequestParametersFunction(
   apiModel: models.Api,
@@ -12,7 +13,7 @@ export function* generateIsRequestParametersFunction(
     "parameters",
   );
 
-  const requestParametersTypeName = toPascal(operationModel.name, "request", "parameters");
+  const requestParametersTypeName = getRequestParametersTypeName(operationModel);
 
   yield itt`
     export function ${isRequestParametersFunctionName}(

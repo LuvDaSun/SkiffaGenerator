@@ -1,5 +1,11 @@
 import * as models from "../../models/index.js";
-import { itt, toCamel, toPascal } from "../../utils/index.js";
+import { itt, toCamel } from "../../utils/index.js";
+import {
+  getAuthenticationHandlerTypeName,
+  getIncomingRequestTypeName,
+  getOperationAcceptTypeName,
+  getRequestParametersTypeName,
+} from "../names/index.js";
 
 export function* generateEndpointHandlerMethod(
   apiModel: models.Api,
@@ -24,8 +30,8 @@ export function* generateEndpointHandlerMethod(
  */
 function* generateBody(apiModel: models.Api, operationModel: models.Operation) {
   const operationHandlerName = toCamel(operationModel.name, "operation", "handler");
-  const operationIncomingRequestName = toPascal(operationModel.name, "incoming", "request");
-  const requestParametersName = toPascal(operationModel.name, "request", "parameters");
+  const operationIncomingRequestName = getIncomingRequestTypeName(operationModel);
+  const requestParametersName = getRequestParametersTypeName(operationModel);
   const isRequestParametersFunction = toCamel("is", operationModel.name, "request", "parameters");
   const isOperationAuthenticationName = toCamel("is", operationModel.name, "authentication");
   const authenticationNames = new Set(
@@ -36,7 +42,7 @@ function* generateBody(apiModel: models.Api, operationModel: models.Operation) {
   const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
     authenticationNames.has(authenticationModel.name),
   );
-  const operationAcceptTypeName = toPascal(operationModel.name, "operation", "accept");
+  const operationAcceptTypeName = getOperationAcceptTypeName(operationModel);
   const operationAcceptConstName = toCamel(operationModel.name, "operation", "accept");
 
   yield itt`
@@ -102,7 +108,7 @@ function* generateBody(apiModel: models.Api, operationModel: models.Operation) {
                 ${JSON.stringify(toCamel(authenticationModel.name))},
                 credentials.${toCamel(authenticationModel.name)} == null ?
                   undefined :
-                  await this.${toCamel(authenticationModel.name, "authentication", "handler")}?.
+                  await this.${getAuthenticationHandlerTypeName(authenticationModel)}?.
                     (credentials.${toCamel(authenticationModel.name)})
               ]
             )(),
@@ -482,13 +488,6 @@ function* generateOperationResultBody(
   operationModel: models.Operation,
   operationResultModel: models.OperationResult,
 ) {
-  const responseParametersName = toPascal(
-    operationModel.name,
-    operationResultModel.statusKind,
-    "response",
-    "parameters",
-  );
-
   const isResponseParametersFunction = toCamel(
     "is",
     operationModel.name,

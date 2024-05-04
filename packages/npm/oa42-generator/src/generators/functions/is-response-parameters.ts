@@ -1,5 +1,6 @@
 import * as models from "../../models/index.js";
-import { itt, toCamel, toPascal } from "../../utils/index.js";
+import { itt, toCamel } from "../../utils/index.js";
+import { getResponseParametersTypeName } from "../names/index.js";
 
 export function* generateIsResponseParametersFunction(
   apiModel: models.Api,
@@ -14,19 +15,9 @@ export function* generateIsResponseParametersFunction(
     "parameters",
   );
 
-  const parseResponseParametersFunctionName = toCamel(
-    "parse",
-    operationModel.name,
-    operationResultModel.statusKind,
-    "response",
-    "parameters",
-  );
-
-  const responseParametersTypeName = toPascal(
-    operationModel.name,
-    operationResultModel.statusKind,
-    "response",
-    "parameters",
+  const responseParametersTypeName = getResponseParametersTypeName(
+    operationModel,
+    operationResultModel,
   );
 
   yield itt`

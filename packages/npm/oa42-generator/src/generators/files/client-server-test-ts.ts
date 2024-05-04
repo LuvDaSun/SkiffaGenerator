@@ -3,6 +3,7 @@ import assert from "assert";
 import * as models from "../../models/index.js";
 import { packageInfo, toCamel } from "../../utils/index.js";
 import { NestedText, itt } from "../../utils/iterable-text-template.js";
+import { getServerAuthenticationTypeName } from "../names/index.js";
 
 export function* generateClientServerTestTsCode(apiModel: models.Api) {
   yield banner("//", `v${packageInfo.version}`);
@@ -14,11 +15,16 @@ export function* generateClientServerTestTsCode(apiModel: models.Api) {
     import * as http from "http";
   `;
 
-  yield itt`
-    type ServerAuthentication = {
+  {
+    // TODO move to function
+    const typeName = getServerAuthenticationTypeName();
+
+    yield itt`
+    type ${typeName} = {
       ${apiModel.authentication.map((authenticationModel) => itt`${toCamel(authenticationModel.name)}: boolean,`)}
     };
   `;
+  }
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
@@ -138,8 +144,10 @@ function* generateOperationTest(
   `;
 
   function* generateTestBody() {
+    const serverAuthenticationName = getServerAuthenticationTypeName();
+
     yield itt`
-      const server = new main.Server<ServerAuthentication>({
+      const server = new main.Server<${serverAuthenticationName}>({
         validateIncomingParameters: false,
         validateIncomingEntity: false,
         validateOutgoingParameters: false,

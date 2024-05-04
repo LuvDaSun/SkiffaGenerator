@@ -1,10 +1,14 @@
 import { banner } from "@oa42/core";
 import { RouterMode } from "goodrouter";
 import * as models from "../../models/index.js";
-import { packageInfo, toCamel, toPascal } from "../../utils/index.js";
+import { packageInfo, toCamel } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateServerClass } from "../classes/index.js";
 import { generateIsAuthenticationFunction } from "../functions/is-authentication.js";
+import {
+  getAuthenticationHandlerTypeName,
+  getServerAuthenticationTypeName,
+} from "../names/index.js";
 import {
   generateOperationAuthenticationType,
   generateOperationHandlerType,
@@ -14,6 +18,8 @@ import {
 } from "../types/index.js";
 
 export function* generateServerTsCode(apiModel: models.Api) {
+  const serverAuthenticationName = getServerAuthenticationTypeName();
+
   yield banner("//", `v${packageInfo.version}`);
 
   yield itt`
@@ -52,12 +58,12 @@ export function* generateServerTsCode(apiModel: models.Api) {
   yield* generateServerClass(apiModel);
 
   for (const authenticationModel of apiModel.authentication) {
-    const handlerTypeName = toPascal(authenticationModel.name, "authentication", "handler");
+    const handlerTypeName = getAuthenticationHandlerTypeName(authenticationModel);
 
     switch (authenticationModel.type) {
       case "apiKey":
         yield itt`
-          export type ${handlerTypeName}<A extends ServerAuthentication> =
+          export type ${handlerTypeName}<A extends ${serverAuthenticationName}> =
             (credential: string) =>
               Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;
           `;
@@ -67,7 +73,7 @@ export function* generateServerTsCode(apiModel: models.Api) {
         switch (authenticationModel.scheme) {
           case "basic":
             yield itt`
-              export type ${handlerTypeName}<A extends ServerAuthentication> =
+              export type ${handlerTypeName}<A extends ${serverAuthenticationName}> =
                 (credential: {
                   id: string,
                   secret: string,
@@ -78,7 +84,7 @@ export function* generateServerTsCode(apiModel: models.Api) {
 
           case "bearer":
             yield itt`
-              export type ${handlerTypeName}<A extends ServerAuthentication> =
+              export type ${handlerTypeName}<A extends ${serverAuthenticationName}> =
                 (credential: string) =>
                   Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;
               `;

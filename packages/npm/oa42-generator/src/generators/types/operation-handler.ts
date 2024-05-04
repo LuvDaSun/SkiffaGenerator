@@ -1,16 +1,24 @@
 import * as models from "../../models/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { toPascal } from "../../utils/name.js";
+import {
+  getIncomingRequestTypeName,
+  getOperationAcceptTypeName,
+  getOperationAuthenticationTypeName,
+  getOperationHandlerTypeName,
+  getOutgoingResponseTypeName,
+  getServerAuthenticationTypeName,
+} from "../names/index.js";
 
 export function* generateOperationHandlerType(operationModel: models.Operation) {
-  const operationHandlerTypeName = toPascal(operationModel.name, "operation", "handler");
-  const operationAuthenticationName = toPascal(operationModel.name, "authentication");
-  const operationAcceptTypeName = toPascal(operationModel.name, "operation", "accept");
-  const operationIncomingRequestName = toPascal(operationModel.name, "incoming", "request");
-  const operationOutgoingResponseName = toPascal(operationModel.name, "outgoing", "response");
+  const operationHandlerTypeName = getOperationHandlerTypeName(operationModel);
+  const operationAuthenticationName = getOperationAuthenticationTypeName(operationModel);
+  const operationAcceptTypeName = getOperationAcceptTypeName(operationModel);
+  const operationIncomingRequestName = getIncomingRequestTypeName(operationModel);
+  const operationOutgoingResponseName = getOutgoingResponseTypeName(operationModel);
+  const serverAuthenticationName = getServerAuthenticationTypeName();
 
   yield itt`
-    export type ${operationHandlerTypeName}<A extends ServerAuthentication> = 
+    export type ${operationHandlerTypeName}<A extends ${serverAuthenticationName}> = 
       (
         incomingRequest: ${operationIncomingRequestName},
         authentication: ${operationAuthenticationName}<A>,

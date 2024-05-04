@@ -1,13 +1,14 @@
 import * as models from "../../models/index.js";
-import { toCamel, toPascal } from "../../utils/index.js";
+import { toCamel } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
+import { getOperationCredentialsTypeName } from "../names/index.js";
 
 // TODO redo
 export function* generateOperationCredentialsType(
   apiModel: models.Api,
   operationModel: models.Operation,
 ) {
-  const operationCredentialsName = toPascal(operationModel.name, "credentials");
+  const operationCredentialsName = getOperationCredentialsTypeName(operationModel);
   const authenticationNames = new Set(
     operationModel.authenticationRequirements.flatMap((requirements) =>
       requirements.map((requirement) => requirement.authenticationName),

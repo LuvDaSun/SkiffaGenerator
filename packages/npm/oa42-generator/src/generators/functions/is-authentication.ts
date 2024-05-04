@@ -1,15 +1,20 @@
 import * as models from "../../models/index.js";
-import { itt, joinIterable, toCamel, toPascal } from "../../utils/index.js";
+import { itt, joinIterable, toCamel } from "../../utils/index.js";
+import {
+  getOperationAuthenticationTypeName,
+  getServerAuthenticationTypeName,
+} from "../names/index.js";
 
 export function* generateIsAuthenticationFunction(
   pathModel: models.Path,
   operationModel: models.Operation,
 ) {
+  const serverAuthenticationName = getServerAuthenticationTypeName();
   const isAuthenticationFunctionName = toCamel("is", operationModel.name, "authentication");
-  const authenticationTypeName = toPascal(operationModel.name, "authentication");
+  const authenticationTypeName = getOperationAuthenticationTypeName(operationModel);
 
   yield itt`
-    export function ${isAuthenticationFunctionName}<A extends ServerAuthentication>(
+    export function ${isAuthenticationFunctionName}<A extends ${serverAuthenticationName}>(
       authentication: Partial<${authenticationTypeName}<A>>,
     ): authentication is ${authenticationTypeName}<A> {
       ${generateBody(pathModel, operationModel)}

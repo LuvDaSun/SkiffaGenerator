@@ -1,5 +1,12 @@
 import * as models from "../../models/index.js";
-import { itt, toCamel, toPascal } from "../../utils/index.js";
+import { itt, toCamel } from "../../utils/index.js";
+import {
+  getIncomingResponseTypeName,
+  getOperationAcceptTypeName,
+  getOperationCredentialsTypeName,
+  getOutgoingRequestTypeName,
+  getResponseParametersTypeName,
+} from "../names/index.js";
 
 export function* generateClientOperationFunction(
   apiModel: models.Api,
@@ -7,9 +14,9 @@ export function* generateClientOperationFunction(
   operationModel: models.Operation,
 ) {
   const operationFunctionName = toCamel(operationModel.name);
-  const operationOutgoingRequestName = toPascal(operationModel.name, "outgoing", "request");
-  const operationIncomingResponseName = toPascal(operationModel.name, "incoming", "response");
-  const credentialsName = toPascal(operationModel.name, "credentials");
+  const operationOutgoingRequestName = getOutgoingRequestTypeName(operationModel);
+  const operationIncomingResponseName = getIncomingResponseTypeName(operationModel);
+  const credentialsName = getOperationCredentialsTypeName(operationModel);
 
   const jsDoc = [
     operationModel.deprecated ? "@deprecated" : "",
@@ -39,8 +46,8 @@ function* generateBody(
   pathModel: models.Path,
   operationModel: models.Operation,
 ) {
-  const operationIncomingResponseName = toPascal(operationModel.name, "incoming", "response");
-  const operationAcceptConstName = toCamel(operationModel.name, "operation", "accept");
+  const operationIncomingResponseName = getIncomingResponseTypeName(operationModel);
+  const operationAcceptConstName = getOperationAcceptTypeName(operationModel);
 
   const isRequestParametersFunction = toCamel("is", operationModel.name, "request", "parameters");
 
@@ -348,11 +355,9 @@ function* generateOperationResultBody(
   operationModel: models.Operation,
   operationResultModel: models.OperationResult,
 ) {
-  const responseParametersName = toPascal(
-    operationModel.name,
-    operationResultModel.statusKind,
-    "response",
-    "parameters",
+  const responseParametersName = getResponseParametersTypeName(
+    operationModel,
+    operationResultModel,
   );
 
   const isResponseParametersFunction = toCamel(
