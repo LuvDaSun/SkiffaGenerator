@@ -1,10 +1,44 @@
 import * as models from "../../models/index.js";
-import { itt, toCamel } from "../../utils/index.js";
+import { itt, toCamel, toPascal } from "../../utils/index.js";
 
-export function* generateIsResponseParametersFunctionBody(
+export function* generateIsResponseParametersFunction(
   apiModel: models.Api,
+  operationModel: models.Operation,
   operationResultModel: models.OperationResult,
 ) {
+  const isResponseParametersFunctionName = toCamel(
+    "is",
+    operationModel.name,
+    operationResultModel.statusKind,
+    "response",
+    "parameters",
+  );
+
+  const parseResponseParametersFunctionName = toCamel(
+    "parse",
+    operationModel.name,
+    operationResultModel.statusKind,
+    "response",
+    "parameters",
+  );
+
+  const responseParametersTypeName = toPascal(
+    operationModel.name,
+    operationResultModel.statusKind,
+    "response",
+    "parameters",
+  );
+
+  yield itt`
+    export function ${isResponseParametersFunctionName}(
+      parameters: Partial<Record<keyof ${responseParametersTypeName}, unknown>>,
+    ): parameters is ${responseParametersTypeName} {
+      ${generateBody(apiModel, operationResultModel)}
+    }
+  `;
+}
+
+function* generateBody(apiModel: models.Api, operationResultModel: models.OperationResult) {
   const parameterModels = operationResultModel.headerParameters;
 
   for (const parameterModel of parameterModels) {

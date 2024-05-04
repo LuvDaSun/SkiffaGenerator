@@ -1,7 +1,40 @@
 import * as models from "../../models/index.js";
 import { itt, toCamel, toPascal } from "../../utils/index.js";
 
-export function* generateClientOperationFunctionBody(
+export function* generateClientOperationFunction(
+  apiModel: models.Api,
+  pathModel: models.Path,
+  operationModel: models.Operation,
+) {
+  const operationFunctionName = toCamel(operationModel.name);
+  const operationOutgoingRequestName = toPascal(operationModel.name, "outgoing", "request");
+  const operationIncomingResponseName = toPascal(operationModel.name, "incoming", "response");
+  const credentialsName = toPascal(operationModel.name, "credentials");
+
+  const jsDoc = [
+    operationModel.deprecated ? "@deprecated" : "",
+    operationModel.summary,
+    operationModel.description,
+  ]
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
+    .join("\n");
+
+  yield itt`
+  /**
+    ${jsDoc}
+   */
+  export async function ${operationFunctionName}(
+    outgoingRequest: ${operationOutgoingRequestName},
+    credentials: ${credentialsName},
+    configuration: ClientConfiguration = defaultClientConfiguration,
+  ): Promise<${operationIncomingResponseName}> {
+    ${generateBody(apiModel, pathModel, operationModel)}
+  }
+`;
+}
+
+function* generateBody(
   apiModel: models.Api,
   pathModel: models.Path,
   operationModel: models.Operation,

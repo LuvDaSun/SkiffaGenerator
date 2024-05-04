@@ -3,7 +3,7 @@ import { RouterMode } from "goodrouter";
 import * as models from "../../models/index.js";
 import { packageInfo, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { generateIsAuthenticationFunctionBody } from "../functions/index.js";
+import { generateIsAuthenticationFunction } from "../functions/is-authentication.js";
 import {
   generateOperationAuthenticationType,
   generateOperationHandlerType,
@@ -98,16 +98,7 @@ export function* generateServerTsCode(apiModel: models.Api) {
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      const isAuthenticationFunctionName = toCamel("is", operationModel.name, "authentication");
-      const authenticationTypeName = toPascal(operationModel.name, "authentication");
-
-      yield itt`
-        export function ${isAuthenticationFunctionName}<A extends ServerAuthentication>(
-          authentication: Partial<${authenticationTypeName}<A>>,
-        ): authentication is ${authenticationTypeName}<A> {
-          ${generateIsAuthenticationFunctionBody(pathModel, operationModel)}
-        }
-      `;
+      yield* generateIsAuthenticationFunction(pathModel, operationModel);
 
       yield* generateOperationAuthenticationType(operationModel);
       yield* generateOperationHandlerType(operationModel);
