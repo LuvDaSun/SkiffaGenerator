@@ -1,7 +1,7 @@
 import * as models from "../../models/index.js";
-import { joinIterable, toCamel } from "../../utils/index.js";
+import { joinIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { getServerAuthenticationTypeName } from "../names/index.js";
+import { getAuthenticationMemberName, getServerAuthenticationTypeName } from "../names/index.js";
 
 export function* generateServerAuthenticationType(apiModel: models.Api) {
   const typeName = getServerAuthenticationTypeName();
@@ -11,7 +11,7 @@ export function* generateServerAuthenticationType(apiModel: models.Api) {
     authenticationModels.length > 0
       ? joinIterable(
           authenticationModels.map((authenticationModel) =>
-            JSON.stringify(toCamel(authenticationModel.name)),
+            JSON.stringify(getAuthenticationMemberName(authenticationModel)),
           ),
           "|",
         )

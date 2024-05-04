@@ -1,10 +1,13 @@
 import * as models from "../../models/index.js";
-import { toCamel } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateEndpointHandlerMethod, generateRequestHandlerMethod } from "../functions/index.js";
 import {
+  getAuthenticationHandlerName,
   getAuthenticationHandlerTypeName,
+  getOperationHandlerName,
   getOperationHandlerTypeName,
+  getRegisterAuthenticationHandlerName,
+  getRegisterOperationHandlerName,
   getServerAuthenticationTypeName,
 } from "../names/index.js";
 
@@ -68,13 +71,9 @@ function* generateServerBody(apiModel: models.Api) {
   yield generateRequestHandlerMethod(apiModel);
 
   for (const authenticationModel of apiModel.authentication) {
-    const registerHandlerMethodName = toCamel(
-      "register",
-      authenticationModel.name,
-      "authentication",
-    );
+    const registerHandlerMethodName = getRegisterAuthenticationHandlerName(authenticationModel);
     const handlerTypeName = getAuthenticationHandlerTypeName(authenticationModel);
-    const handlerPropertyName = toCamel(authenticationModel.name, "authentication", "handler");
+    const handlerPropertyName = getAuthenticationHandlerName(authenticationModel);
 
     yield itt`
       private ${handlerPropertyName}?: ${handlerTypeName}<A>;
@@ -94,10 +93,9 @@ function* generateServerBody(apiModel: models.Api) {
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      const handlerPropertyName = toCamel(operationModel.name, "operation", "handler");
+      const handlerPropertyName = getOperationHandlerName(operationModel);
       const handlerTypeName = getOperationHandlerTypeName(operationModel);
-
-      const registerHandlerMethodName = toCamel("register", operationModel.name, "operation");
+      const registerHandlerMethodName = getRegisterOperationHandlerName(operationModel);
 
       yield itt`
         private ${handlerPropertyName}?: ${handlerTypeName}<A>;

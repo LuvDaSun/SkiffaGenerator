@@ -1,6 +1,7 @@
 import * as models from "../../models/index.js";
 import { itt, joinIterable, toCamel } from "../../utils/index.js";
 import {
+  getIsAuthenticationFunctionName,
   getOperationAuthenticationTypeName,
   getServerAuthenticationTypeName,
 } from "../names/index.js";
@@ -10,7 +11,7 @@ export function* generateIsAuthenticationFunction(
   operationModel: models.Operation,
 ) {
   const serverAuthenticationName = getServerAuthenticationTypeName();
-  const isAuthenticationFunctionName = toCamel("is", operationModel.name, "authentication");
+  const isAuthenticationFunctionName = getIsAuthenticationFunctionName(operationModel);
   const authenticationTypeName = getOperationAuthenticationTypeName(operationModel);
 
   yield itt`

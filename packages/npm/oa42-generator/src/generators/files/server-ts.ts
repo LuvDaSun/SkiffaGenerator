@@ -1,12 +1,13 @@
 import { banner } from "@oa42/core";
 import { RouterMode } from "goodrouter";
 import * as models from "../../models/index.js";
-import { packageInfo, toCamel } from "../../utils/index.js";
+import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateServerClass } from "../classes/index.js";
 import { generateIsAuthenticationFunction } from "../functions/is-authentication.js";
 import {
   getAuthenticationHandlerTypeName,
+  getAuthenticationMemberName,
   getServerAuthenticationTypeName,
 } from "../names/index.js";
 import {
@@ -65,7 +66,7 @@ export function* generateServerTsCode(apiModel: models.Api) {
         yield itt`
           export type ${handlerTypeName}<A extends ${serverAuthenticationName}> =
             (credential: string) =>
-              Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;
+              Promise<A[${JSON.stringify(getAuthenticationMemberName(authenticationModel))}] | undefined>;
           `;
         break;
 
@@ -78,7 +79,7 @@ export function* generateServerTsCode(apiModel: models.Api) {
                   id: string,
                   secret: string,
                 }) =>
-                  Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;
+                  Promise<A[${JSON.stringify(getAuthenticationMemberName(authenticationModel))}] | undefined>;
               `;
             break;
 
@@ -86,7 +87,7 @@ export function* generateServerTsCode(apiModel: models.Api) {
             yield itt`
               export type ${handlerTypeName}<A extends ${serverAuthenticationName}> =
                 (credential: string) =>
-                  Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;
+                  Promise<A[${JSON.stringify(getAuthenticationMemberName(authenticationModel))}] | undefined>;
               `;
             break;
 

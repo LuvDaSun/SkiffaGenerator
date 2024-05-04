@@ -1,7 +1,6 @@
 import * as models from "../../models/index.js";
-import { joinIterable } from "../../utils/index.js";
+import { joinIterable, toCamel } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { toCamel } from "../../utils/name.js";
 import {
   getOperationAuthenticationTypeName,
   getServerAuthenticationTypeName,

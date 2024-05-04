@@ -1,20 +1,20 @@
 import * as models from "../../models/index.js";
-import { itt, toCamel } from "../../utils/index.js";
-import { getResponseParametersTypeName } from "../names/index.js";
+import { itt } from "../../utils/index.js";
+import {
+  getIsResponseParametersFunction,
+  getParameterMemberName,
+  getResponseParametersTypeName,
+} from "../names/index.js";
 
 export function* generateIsResponseParametersFunction(
   apiModel: models.Api,
   operationModel: models.Operation,
   operationResultModel: models.OperationResult,
 ) {
-  const isResponseParametersFunctionName = toCamel(
-    "is",
-    operationModel.name,
-    operationResultModel.statusKind,
-    "response",
-    "parameters",
+  const isResponseParametersFunctionName = getIsResponseParametersFunction(
+    operationModel,
+    operationResultModel,
   );
-
   const responseParametersTypeName = getResponseParametersTypeName(
     operationModel,
     operationResultModel,
@@ -42,7 +42,7 @@ function* generateBody(apiModel: models.Api, operationResultModel: models.Operat
 
     const isParameterFunction = `is${parameterTypeName}`;
 
-    const parameterPropertyName = toCamel(parameterModel.name);
+    const parameterPropertyName = getParameterMemberName(parameterModel);
 
     if (parameterModel.required) {
       yield itt`

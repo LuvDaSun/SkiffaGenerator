@@ -1,5 +1,6 @@
 import * as models from "../../models/index.js";
-import { itt, toCamel } from "../../utils/index.js";
+import { itt } from "../../utils/index.js";
+import { getEndpointHandlerName } from "../names/index.js";
 
 export function* generateRequestHandlerMethod(apiModel: models.Api) {
   yield itt`
@@ -42,7 +43,7 @@ function* generatePathCaseClauses(apiModel: models.Api) {
 }
 function* generateOperationCaseClauses(pathModel: models.Path) {
   for (const operationModel of pathModel.operations) {
-    const endpointHandlerName = toCamel(operationModel.name, "endpoint", "handler");
+    const endpointHandlerName = getEndpointHandlerName(operationModel);
 
     yield itt`
       case ${JSON.stringify(operationModel.method.toUpperCase())}:

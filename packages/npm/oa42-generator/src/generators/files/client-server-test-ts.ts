@@ -1,9 +1,20 @@
 import { banner } from "@oa42/core";
 import assert from "assert";
 import * as models from "../../models/index.js";
-import { packageInfo, toCamel } from "../../utils/index.js";
-import { NestedText, itt } from "../../utils/iterable-text-template.js";
-import { getServerAuthenticationTypeName } from "../names/index.js";
+import { packageInfo } from "../../utils/index.js";
+import { itt } from "../../utils/iterable-text-template.js";
+import {
+  getAuthenticationMemberName,
+  getIsBodyFunction,
+  getIsParameterFunction,
+  getMockBodyFunction,
+  getMockParameterFunction,
+  getOperationFunctionName,
+  getParameterMemberName,
+  getRegisterAuthenticationHandlerName,
+  getRegisterOperationHandlerName,
+  getServerAuthenticationTypeName,
+} from "../names/index.js";
 
 export function* generateClientServerTestTsCode(apiModel: models.Api) {
   yield banner("//", `v${packageInfo.version}`);
@@ -21,7 +32,7 @@ export function* generateClientServerTestTsCode(apiModel: models.Api) {
 
     yield itt`
     type ${typeName} = {
-      ${apiModel.authentication.map((authenticationModel) => itt`${toCamel(authenticationModel.name)}: boolean,`)}
+      ${apiModel.authentication.map((authenticationModel) => itt`${getAuthenticationMemberName(authenticationModel)}: boolean,`)}
     };
   `;
   }
@@ -111,7 +122,7 @@ function* generateOperationTest(
   );
 
   const { names } = apiModel;
-  const registerOperationHandlerMethodName = toCamel("register", operationModel.name, "operation");
+  const registerOperationHandlerMethodName = getRegisterOperationHandlerName(operationModel);
 
   let testNameParts = new Array<string>();
   testNameParts.push(operationModel.name);
@@ -158,11 +169,9 @@ function* generateOperationTest(
       });
     `;
     for (const authenticationModel of authenticationModels) {
-      const registerAuthenticationHandlerMethodName = toCamel(
-        "register",
-        authenticationModel.name,
-        "authentication",
-      );
+      const registerAuthenticationHandlerMethodName =
+        getRegisterAuthenticationHandlerName(authenticationModel);
+
       switch (authenticationModel.type) {
         case "apiKey":
           yield itt`
@@ -237,13 +246,12 @@ function* generateOperationTest(
         continue;
       }
 
-      assert(parameterModel.schemaId != null);
-
-      const validateFunctionName = toCamel("is", names[parameterModel.schemaId]);
+      const validateFunctionName = getIsParameterFunction(apiModel, parameterModel);
+      assert(validateFunctionName != null);
 
       yield itt`
         {
-          const parameterValue = incomingRequest.parameters.${toCamel(parameterModel.name)};
+          const parameterValue = incomingRequest.parameters.${getParameterMemberName(parameterModel)};
           const valid = main.${validateFunctionName}(parameterValue);
           assert.equal(valid, true);
         }
@@ -257,9 +265,8 @@ function* generateOperationTest(
 
       switch (requestBodyModel.contentType) {
         case "application/json": {
-          assert(requestBodyModel.schemaId != null);
-
-          const validateFunctionName = toCamel("is", names[requestBodyModel.schemaId]);
+          const validateFunctionName = getIsBodyFunction(apiModel, requestBodyModel);
+          assert(validateFunctionName != null);
 
           yield itt`
               {
@@ -286,11 +293,10 @@ function* generateOperationTest(
     } else {
       switch (responseBodyModel.contentType) {
         case "application/json": {
-          assert(responseBodyModel.schemaId != null);
+          const mockFunctionName = getMockBodyFunction(apiModel, responseBodyModel);
+          assert(mockFunctionName != null);
 
-          let entityExpression: NestedText;
-          const mockFunctionName = toCamel("mock", names[responseBodyModel.schemaId]);
-          entityExpression = itt`main.${mockFunctionName}()`;
+          const entityExpression = itt`main.${mockFunctionName}()`;
 
           yield itt`
             return {
@@ -309,7 +315,7 @@ function* generateOperationTest(
   }
 
   function* generateClientTest() {
-    const callMethodFunctionName = toCamel(operationModel.name);
+    const callMethodFunctionName = getOperationFunctionName(operationModel);
     if (requestBodyModel == null) {
       yield itt`
         const operationResult = await main.${callMethodFunctionName}(
@@ -332,12 +338,10 @@ function* generateOperationTest(
     } else {
       switch (requestBodyModel.contentType) {
         case "application/json": {
-          assert(requestBodyModel.schemaId != null);
+          const mockFunctionName = getMockBodyFunction(apiModel, requestBodyModel);
+          assert(mockFunctionName != null);
 
-          let entityExpression: NestedText;
-
-          const mockFunctionName = toCamel("mock", names[requestBodyModel.schemaId]);
-          entityExpression = itt`main.${mockFunctionName}()`;
+          const entityExpression = itt`main.${mockFunctionName}()`;
 
           yield itt`
             const operationResult = await main.${callMethodFunctionName}(
@@ -377,13 +381,12 @@ function* generateOperationTest(
         continue;
       }
 
-      assert(parameterModel.schemaId != null);
-
-      const validateFunctionName = toCamel("is", names[parameterModel.schemaId]);
+      const validateFunctionName = getIsParameterFunction(apiModel, parameterModel);
+      assert(validateFunctionName != null);
 
       yield itt`
         {
-          const parameterValue = operationResult.parameters.${toCamel(parameterModel.name)};
+          const parameterValue = operationResult.parameters.${getParameterMemberName(parameterModel)};
           const valid = main.${validateFunctionName}(parameterValue);
           assert.equal(valid, true);
         }
@@ -397,8 +400,8 @@ function* generateOperationTest(
 
       switch (responseBodyModel.contentType) {
         case "application/json": {
-          if (responseBodyModel.schemaId != null) {
-            const validateFunctionName = toCamel("is", names[responseBodyModel.schemaId]);
+          const validateFunctionName = getIsBodyFunction(apiModel, responseBodyModel);
+          if (validateFunctionName != null) {
             yield itt`
               { 
                 const entity = await operationResult.entity();
@@ -418,7 +421,7 @@ function* generateOperationTest(
       switch (authenticationModel.type) {
         case "apiKey":
           yield itt`
-            ${toCamel(authenticationModel.name)}: "super-secret",
+            ${getAuthenticationMemberName(authenticationModel)}: "super-secret",
           `;
           break;
 
@@ -426,7 +429,7 @@ function* generateOperationTest(
           switch (authenticationModel.scheme) {
             case "basic":
               yield itt`
-                ${toCamel(authenticationModel.name)}: {
+                ${getAuthenticationMemberName(authenticationModel)}: {
                   id: "elmerbulthuis",
                   secret: "welkom123",
                 },
@@ -435,7 +438,7 @@ function* generateOperationTest(
 
             case "bearer":
               yield itt`
-                ${toCamel(authenticationModel.name)}: "super-secret",
+                ${getAuthenticationMemberName(authenticationModel)}: "super-secret",
               `;
               break;
 
@@ -463,11 +466,11 @@ function* generateOperationTest(
         continue;
       }
 
-      assert(parameterModel.schemaId != null);
+      const mockFunctionName = getMockParameterFunction(apiModel, parameterModel);
+      assert(mockFunctionName != null);
 
-      const mockFunctionName = toCamel("mock", names[parameterModel.schemaId]);
       yield itt`
-        ${toCamel(parameterModel.name)}: main.${mockFunctionName}(),
+        ${getParameterMemberName(parameterModel)}: main.${mockFunctionName}(),
       `;
     }
   }
@@ -478,11 +481,11 @@ function* generateOperationTest(
         continue;
       }
 
-      assert(parameterModel.schemaId != null);
+      const mockFunctionName = getMockParameterFunction(apiModel, parameterModel);
+      assert(mockFunctionName != null);
 
-      const mockFunctionName = toCamel("mock", names[parameterModel.schemaId]);
       yield itt`
-        ${toCamel(parameterModel.name)}: main.${mockFunctionName}(),
+        ${getParameterMemberName(parameterModel)}: main.${mockFunctionName}(),
       `;
     }
   }

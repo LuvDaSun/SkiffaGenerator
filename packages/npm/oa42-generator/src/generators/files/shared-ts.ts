@@ -1,8 +1,8 @@
 import { banner } from "@oa42/core";
 import * as models from "../../models/index.js";
-import { packageInfo, toCamel } from "../../utils/index.js";
+import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { getOperationAcceptTypeName } from "../names/index.js";
+import { getOperationAcceptConstName, getOperationAcceptTypeName } from "../names/index.js";
 
 export function* generateSharedTsCode(apiModel: models.Api) {
   yield banner("//", `v${packageInfo.version}`);
@@ -10,7 +10,7 @@ export function* generateSharedTsCode(apiModel: models.Api) {
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
       const operationAcceptTypeName = getOperationAcceptTypeName(operationModel);
-      const operationAcceptConstName = toCamel(operationModel.name, "operation", "accept");
+      const operationAcceptConstName = getOperationAcceptConstName(operationModel);
 
       const operationAccepts = [
         ...new Set(

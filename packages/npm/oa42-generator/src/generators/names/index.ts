@@ -1,2 +1,2 @@
-export * from ".//functions.js";
+export * from "./identifiers.js";
 export * from "./types.js";
