@@ -1,7 +1,7 @@
 import * as models from "../../models/index.js";
 import { itt } from "../../utils/index.js";
 import {
-  getAuthenticationHandlerTypeName,
+  getAuthenticationHandlerName,
   getAuthenticationMemberName,
   getEndpointHandlerName,
   getIncomingRequestTypeName,
@@ -117,7 +117,7 @@ function* generateBody(apiModel: models.Api, operationModel: models.Operation) {
                 ${JSON.stringify(getAuthenticationMemberName(authenticationModel))},
                 credentials.${getAuthenticationMemberName(authenticationModel)} == null ?
                   undefined :
-                  await this.${getAuthenticationHandlerTypeName(authenticationModel)}?.
+                  await this.${getAuthenticationHandlerName(authenticationModel)}?.
                     (credentials.${getAuthenticationMemberName(authenticationModel)})
               ]
             )(),

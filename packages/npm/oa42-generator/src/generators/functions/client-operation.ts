@@ -5,7 +5,7 @@ import {
   getIncomingResponseTypeName,
   getIsRequestParametersFunction,
   getIsResponseParametersFunction,
-  getOperationAcceptTypeName,
+  getOperationAcceptConstName,
   getOperationCredentialsTypeName,
   getOperationFunctionName,
   getOutgoingRequestTypeName,
@@ -53,7 +53,7 @@ function* generateBody(
   operationModel: models.Operation,
 ) {
   const operationIncomingResponseName = getIncomingResponseTypeName(operationModel);
-  const operationAcceptConstName = getOperationAcceptTypeName(operationModel);
+  const operationAcceptConstName = getOperationAcceptConstName(operationModel);
   const isRequestParametersFunction = getIsRequestParametersFunction(operationModel);
 
   yield itt`

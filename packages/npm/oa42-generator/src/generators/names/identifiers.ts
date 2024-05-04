@@ -34,7 +34,7 @@ export function getAuthenticationMemberName(authenticationModel: models.Authenti
 }
 
 export function getParameterMemberName(parameterModel: models.Parameter) {
-  return getParameterMemberName(parameterModel);
+  return toCamel(parameterModel.name);
 }
 
 export function getIsRequestParametersFunction(operationModel: models.Operation) {
