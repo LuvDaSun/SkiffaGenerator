@@ -10,6 +10,7 @@ export function* generateOperationAuthenticationType(operationModel: models.Oper
   const operationAuthenticationName = getOperationAuthenticationTypeName(operationModel);
   const serverAuthenticationName = getServerAuthenticationTypeName();
 
+  // TODO redo this (via the authenticationModel)
   yield itt`
     export type ${operationAuthenticationName}<A extends ${serverAuthenticationName}> = 
       ${

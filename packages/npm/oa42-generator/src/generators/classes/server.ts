@@ -80,6 +80,7 @@ function* generateBody(apiModel: models.Api) {
       private ${handlerPropertyName}?: ${handlerTypeName}<A>;
     `;
 
+    // TODO add function to register all authentication handlers
     // TODO move to functions
     yield itt`
       public ${registerHandlerMethodName}(authenticationHandler: ${handlerTypeName}<A>) {
@@ -103,6 +104,7 @@ function* generateBody(apiModel: models.Api) {
         private ${handlerPropertyName}?: ${handlerTypeName}<A>;
       `;
 
+      // TODO add function to register all operation handlers
       // TODO move to functions
       const jsDoc = [
         operationModel.deprecated ? "@deprecated" : "",

@@ -24,6 +24,7 @@ export function* generateOperationCredentialsType(
   `;
 }
 
+// TODO redo with actual requirements
 function* generateTypeContent(authenticationModels: Iterable<models.Authentication>) {
   for (const authenticationModel of authenticationModels) {
     switch (authenticationModel.type) {

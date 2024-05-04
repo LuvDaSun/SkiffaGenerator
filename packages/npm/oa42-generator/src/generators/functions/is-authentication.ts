@@ -23,6 +23,7 @@ export function* generateIsAuthenticationFunction(
   `;
 }
 
+// TODO redo this (use authenticationModel)
 function* generateBody(pathModel: models.Path, operationModel: models.Operation) {
   yield itt`return ${joinIterable(generateOrRules(operationModel.authenticationRequirements), " ||\n")}`;
   return;
