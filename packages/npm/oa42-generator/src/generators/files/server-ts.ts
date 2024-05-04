@@ -3,6 +3,7 @@ import { RouterMode } from "goodrouter";
 import * as models from "../../models/index.js";
 import { packageInfo, toCamel, toPascal } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
+import { generateServerClass } from "../classes/index.js";
 import { generateIsAuthenticationFunction } from "../functions/is-authentication.js";
 import {
   generateOperationAuthenticationType,
@@ -10,7 +11,6 @@ import {
   generateOperationIncomingRequestType,
   generateOperationOutgoingResponseType,
   generateServerAuthenticationType,
-  generateServerClass,
 } from "../types/index.js";
 
 export function* generateServerTsCode(apiModel: models.Api) {
