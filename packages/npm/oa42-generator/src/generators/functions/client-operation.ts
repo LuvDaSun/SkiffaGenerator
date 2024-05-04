@@ -143,21 +143,27 @@ export function* generateClientOperationFunctionBody(
         switch (authenticationModel.in) {
           case "query": {
             yield itt`
-              queryParameters.append(${JSON.stringify(authenticationModel.name)}, credentials.${toCamel(authenticationModel.name)});
+              if(credentials.${toCamel(authenticationModel.name)} != null) {
+                queryParameters.append(${JSON.stringify(authenticationModel.name)}, credentials.${toCamel(authenticationModel.name)});
+              }
             `;
             break;
           }
 
           case "header": {
             yield itt`
-              requestHeaders.append(${JSON.stringify(authenticationModel.name)}, credentials.${toCamel(authenticationModel.name)});
+              if(credentials.${toCamel(authenticationModel.name)} != null) {
+                requestHeaders.append(${JSON.stringify(authenticationModel.name)}, credentials.${toCamel(authenticationModel.name)});
+              }
             `;
             break;
           }
 
           case "cookie": {
             yield itt`
-              cookieParameters.append(${JSON.stringify(authenticationModel.name)}, credentials.${toCamel(authenticationModel.name)});
+              if(credentials.${toCamel(authenticationModel.name)} != null) {
+                cookieParameters.append(${JSON.stringify(authenticationModel.name)}, credentials.${toCamel(authenticationModel.name)});
+              }
             `;
             break;
           }
@@ -170,13 +176,17 @@ export function* generateClientOperationFunctionBody(
         switch (authenticationModel.scheme) {
           case "basic":
             yield itt`
-              requestHeaders.append("authorization", lib.stringifyBasicAuthorizationHeader(credentials.${toCamel(authenticationModel.name)}));
+              if(credentials.${toCamel(authenticationModel.name)} != null) {
+                requestHeaders.append("authorization", lib.stringifyBasicAuthorizationHeader(credentials.${toCamel(authenticationModel.name)}));
+              }
             `;
             break;
 
           case "bearer":
             yield itt`
-              requestHeaders.append("authorization", lib.stringifyAuthorizationHeader("Bearer", credentials.${toCamel(authenticationModel.name)}));
+              if(credentials.${toCamel(authenticationModel.name)} != null) {
+                requestHeaders.append("authorization", lib.stringifyAuthorizationHeader("Bearer", credentials.${toCamel(authenticationModel.name)}));
+              }
             `;
             break;
 
