@@ -34,6 +34,7 @@ pub fn wake() {
 ///
 /// This function may panic if the task fails to spawn or if the `host_invoke_callback` function fails.
 ///
+#[allow(dead_code)]
 pub fn spawn_and_callback(callback: Key, task: impl Future<Output = ()> + 'static) {
   EXECUTOR.with_borrow_mut(|pool| {
     let spawner = pool.spawner();
