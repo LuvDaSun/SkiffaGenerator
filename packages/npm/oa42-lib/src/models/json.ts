@@ -1,39 +1,39 @@
 import { Promisable } from "type-fest";
 import { StatusCode } from "../utils/index.js";
+import { ParametersContainer } from "./parameters.js";
 import { deserializeTextLines, deserializeTextValue } from "./text.js";
 
 //#region interfaces
 
-export type OutgoingJsonRequestDefault<P extends object, T> = {
-  readonly parameters: P;
-} & OutgoingJsonContainer<T>;
+export type OutgoingJsonRequestDefault<P extends object, T> = ParametersContainer<P> &
+  OutgoingJsonContainer<T>;
 
 export type OutgoingJsonRequest<P extends object, C extends string, T> = {
-  readonly parameters: P;
   readonly contentType: C;
-} & OutgoingJsonContainer<T>;
+} & ParametersContainer<P> &
+  OutgoingJsonContainer<T>;
 
 export type OutgoingJsonResponseDefault<S extends StatusCode, P extends object, T> = {
   readonly status: S;
-  readonly parameters: P;
-} & OutgoingJsonContainer<T>;
+} & ParametersContainer<P> &
+  OutgoingJsonContainer<T>;
 
 export type OutgoingJsonResponse<S extends StatusCode, P extends object, C extends string, T> = {
   readonly status: S;
-  readonly parameters: P;
   readonly contentType: C;
-} & OutgoingJsonContainer<T>;
+} & ParametersContainer<P> &
+  OutgoingJsonContainer<T>;
 
 export type IncomingJsonRequest<P extends object, C extends string, T> = {
-  readonly parameters: P;
   readonly contentType: C;
-} & IncomingJsonContainer<T>;
+} & ParametersContainer<P> &
+  IncomingJsonContainer<T>;
 
 export type IncomingJsonResponse<S extends StatusCode, P extends object, C extends string, T> = {
   readonly status: S;
-  readonly parameters: P;
   readonly contentType: C;
-} & IncomingJsonContainer<T>;
+} & ParametersContainer<P> &
+  IncomingJsonContainer<T>;
 
 //#endregion
 

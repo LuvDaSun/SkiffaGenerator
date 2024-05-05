@@ -1,43 +1,48 @@
 import { StatusCode } from "../utils/index.js";
+import { ParametersContainer } from "./parameters.js";
 
 //#region interfaces
 
-export interface OutgoingStreamRequestDefault<P extends object> {
-  readonly parameters: P;
-  stream(signal?: AbortSignal): AsyncIterable<Uint8Array>;
-}
+export type OutgoingStreamRequestDefault<P extends object> = ParametersContainer<P> &
+  OutgoingStreamContainer;
 
-export interface OutgoingStreamRequest<P extends object, C extends string> {
-  readonly parameters: P;
-  readonly contentType: C;
-  stream(signal?: AbortSignal): AsyncIterable<Uint8Array>;
-}
+export type OutgoingStreamRequest<P extends object, C extends string> = ParametersContainer<P> &
+  OutgoingStreamContainer & {
+    readonly contentType: C;
+  };
 
-export interface OutgoingStreamResponseDefault<S extends StatusCode, P extends object> {
-  readonly status: S;
-  readonly parameters: P;
-  stream(signal?: AbortSignal): AsyncIterable<Uint8Array>;
-}
+export type OutgoingStreamResponseDefault<
+  S extends StatusCode,
+  P extends object,
+> = ParametersContainer<P> &
+  OutgoingStreamContainer & {
+    readonly status: S;
+  };
 
-export interface OutgoingStreamResponse<S extends StatusCode, P extends object, C extends string> {
-  readonly status: S;
-  readonly parameters: P;
-  readonly contentType: C;
-  stream(signal?: AbortSignal): AsyncIterable<Uint8Array>;
-}
+export type OutgoingStreamResponse<
+  S extends StatusCode,
+  P extends object,
+  C extends string,
+> = ParametersContainer<P> &
+  OutgoingStreamContainer & {
+    readonly status: S;
+    readonly contentType: C;
+  };
 
-export interface IncomingStreamRequest<P extends object, C extends string> {
-  readonly parameters: P;
-  readonly contentType: C;
-  stream(signal?: AbortSignal): AsyncIterable<Uint8Array>;
-}
+export type IncomingStreamRequest<P extends object, C extends string> = ParametersContainer<P> &
+  IncomingStreamContainer & {
+    readonly contentType: C;
+  };
 
-export interface IncomingStreamResponse<S extends StatusCode, P extends object, C extends string> {
-  readonly status: S;
-  readonly parameters: P;
-  readonly contentType: C;
-  stream(signal?: AbortSignal): AsyncIterable<Uint8Array>;
-}
+export type IncomingStreamResponse<
+  S extends StatusCode,
+  P extends object,
+  C extends string,
+> = ParametersContainer<P> &
+  IncomingStreamContainer & {
+    readonly status: S;
+    readonly contentType: C;
+  };
 
 //#endregion
 
