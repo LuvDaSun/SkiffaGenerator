@@ -45,7 +45,7 @@ export function* generateOperationAuthenticationType(
     for (const requirement of subRequirements) {
       const authenticationModel = authenticationMap[requirement.authenticationName];
       const memberName = getAuthenticationMemberName(authenticationModel);
-      yield memberName;
+      yield JSON.stringify(memberName);
     }
   }
 }
