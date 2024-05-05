@@ -1,9 +1,9 @@
 import { itt } from "../../utils/index.js";
-import { getCredentialsConstantName, getCredentialsTypeName } from "../names/index.js";
+import { getCredentialsTypeName, getDefaultCredentialsConstantName } from "../names/index.js";
 
 export function* generateCredentialsConstant() {
   const typeName = getCredentialsTypeName();
-  const constantName = getCredentialsConstantName();
+  const constantName = getDefaultCredentialsConstantName();
 
   yield itt`
     export const ${constantName}: ${typeName} = {};

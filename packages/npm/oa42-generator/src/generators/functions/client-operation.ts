@@ -2,6 +2,7 @@ import * as models from "../../models/index.js";
 import { itt } from "../../utils/index.js";
 import {
   getAuthenticationMemberName,
+  getDefaultCredentialsConstantName,
   getIncomingResponseTypeName,
   getIsRequestParametersFunction,
   getIsResponseParametersFunction,
@@ -39,8 +40,8 @@ export function* generateClientOperationFunction(
    */
   export async function ${operationFunctionName}(
     outgoingRequest: ${operationOutgoingRequestName},
-    credentials: ${credentialsName},
-    configuration: ClientConfiguration = defaultClientConfiguration,
+    operationCredentials: ${credentialsName} = {},
+    operationConfiguration: ClientConfiguration = {},
   ): Promise<${operationIncomingResponseName}> {
     ${generateBody(apiModel, pathModel, operationModel)}
   }
@@ -55,6 +56,15 @@ function* generateBody(
   const operationIncomingResponseName = getIncomingResponseTypeName(operationModel);
   const operationAcceptConstName = getOperationAcceptConstName(operationModel);
   const isRequestParametersFunction = getIsRequestParametersFunction(operationModel);
+  const defaultCredentialsName = getDefaultCredentialsConstantName();
+
+  yield itt`
+    const credentials = {...operationCredentials, ...${defaultCredentialsName}}
+  `;
+
+  yield itt`
+    const configuration = {...operationConfiguration, ...defaultClientConfiguration}
+  `;
 
   yield itt`
     const {

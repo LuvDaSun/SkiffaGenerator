@@ -1,8 +1,8 @@
 import * as models from "../../models/index.js";
 import { toCamel } from "../../utils/index.js";
 
-export function getCredentialsConstantName() {
-  return toCamel("credentials");
+export function getDefaultCredentialsConstantName() {
+  return toCamel("default", "credentials");
 }
 
 export function getOperationFunctionName(operationModel: models.Operation) {
