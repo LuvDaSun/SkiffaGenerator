@@ -7,8 +7,10 @@ import { generateServerClass } from "../classes/index.js";
 import { generateIsAuthenticationFunction } from "../functions/is-authentication.js";
 import {
   generateAuthenticationHandlerType,
+  generateAuthenticationHandlersType,
   generateOperationAuthenticationType,
   generateOperationHandlerType,
+  generateOperationHandlersType,
   generateOperationIncomingRequestType,
   generateOperationOutgoingResponseType,
   generateServerAuthenticationType,
@@ -50,6 +52,8 @@ export function* generateServerTsCode(apiModel: models.Api) {
   `;
 
   yield* generateServerAuthenticationType(apiModel);
+  yield* generateAuthenticationHandlersType(apiModel);
+  yield* generateOperationHandlersType(apiModel);
   yield* generateServerClass(apiModel);
 
   for (const authenticationModel of apiModel.authentication) {

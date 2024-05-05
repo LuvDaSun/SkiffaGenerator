@@ -2,7 +2,7 @@ import * as models from "../../models/index.js";
 import { toPascal } from "../../utils/index.js";
 
 export function getServerAuthenticationTypeName() {
-  return "ServerAuthentication";
+  return toPascal("server", "authentication");
 }
 
 export function getAuthenticationHandlerTypeName(authenticationModel: models.Authentication) {
@@ -13,8 +13,16 @@ export function getOperationHandlerTypeName(operationModel: models.Operation) {
   return toPascal(operationModel.name, "operation", "handler");
 }
 
+export function getOperationHandlersTypeName() {
+  return toPascal("operation", "handlers");
+}
+
 export function getOperationAuthenticationTypeName(operationModel: models.Operation) {
   return toPascal(operationModel.name, "authentication");
+}
+
+export function getAuthenticationHandlersTypeName() {
+  return toPascal("authentication", "handlers");
 }
 
 export function getOperationAcceptTypeName(operationModel: models.Operation) {

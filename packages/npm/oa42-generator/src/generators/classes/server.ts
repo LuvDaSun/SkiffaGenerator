@@ -5,9 +5,15 @@ import {
   generateRegisterMiddlewareMethod,
   generateRequestHandlerMethod,
   registerAuthenticationHandlerMethod,
+  registerAuthenticationHandlersMethod,
   registerOperationHandlerMethod,
+  registerOperationHandlersMethod,
 } from "../functions/index.js";
-import { getServerAuthenticationTypeName } from "../names/index.js";
+import {
+  getAuthenticationHandlersTypeName,
+  getOperationHandlersTypeName,
+  getServerAuthenticationTypeName,
+} from "../names/index.js";
 
 /**
  * Generated the server class. This is the server that is generated from the
@@ -39,6 +45,14 @@ export class Server<A extends ${authenticationTypeName} = ${authenticationTypeNa
 }
 
 function* generateBody(apiModel: models.Api) {
+  const authenticationHandlersTypeName = getAuthenticationHandlersTypeName();
+  const operationHandlersTypeName = getOperationHandlersTypeName();
+
+  yield itt`
+  protected readonly authenticationHandlers: Partial<${authenticationHandlersTypeName}<A>> = {};
+  protected readonly operationHandlers: Partial<${operationHandlersTypeName}<A>> = {};
+`;
+
   yield itt`
     protected readonly configuration: ServerConfiguration;
     constructor(configuration: Partial<ServerConfiguration> = {}) {
@@ -52,8 +66,10 @@ function* generateBody(apiModel: models.Api) {
   `;
 
   yield generateRegisterMiddlewareMethod();
-
   yield generateRequestHandlerMethod(apiModel);
+
+  yield registerAuthenticationHandlersMethod(apiModel);
+  yield registerOperationHandlersMethod(apiModel);
 
   for (const authenticationModel of apiModel.authentication) {
     yield registerAuthenticationHandlerMethod(authenticationModel);

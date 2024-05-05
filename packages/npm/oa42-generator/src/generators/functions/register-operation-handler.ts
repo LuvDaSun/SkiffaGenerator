@@ -3,7 +3,9 @@ import { itt } from "../../utils/index.js";
 import {
   getOperationHandlerName,
   getOperationHandlerTypeName,
+  getOperationHandlersTypeName,
   getRegisterOperationHandlerName,
+  getRegisterOperationsHandlerName,
 } from "../names/index.js";
 
 export function* registerOperationHandlerMethod(operationModel: models.Operation) {
@@ -11,11 +13,6 @@ export function* registerOperationHandlerMethod(operationModel: models.Operation
   const handlerTypeName = getOperationHandlerTypeName(operationModel);
   const registerHandlerMethodName = getRegisterOperationHandlerName(operationModel);
 
-  yield itt`
-    private ${handlerPropertyName}?: ${handlerTypeName}<A>;
-  `;
-
-  // TODO add function to register all operation handlers
   const jsDoc = [
     operationModel.deprecated ? "@deprecated" : "",
     operationModel.summary,
@@ -30,7 +27,7 @@ export function* registerOperationHandlerMethod(operationModel: models.Operation
      ${jsDoc}
      */
     public ${registerHandlerMethodName}(operationHandler: ${handlerTypeName}<A>) {
-      this.${handlerPropertyName} =
+      this.operationHandlers.${handlerPropertyName} =
         lib.wrapAsync(
           operationHandler,
           this.operationWrapper,
@@ -38,4 +35,38 @@ export function* registerOperationHandlerMethod(operationModel: models.Operation
         );
     }
   `;
+}
+
+export function* registerOperationHandlersMethod(apiModel: models.Api) {
+  const methodName = getRegisterOperationsHandlerName();
+  const handlersTypeName = getOperationHandlersTypeName();
+
+  yield itt`
+    public ${methodName}(handlers: Partial<${handlersTypeName}<A>>) {
+      for(const name in handlers) {
+        switch(name) {
+          ${switchBody()}
+        }
+      }
+    }
+  `;
+
+  function* switchBody() {
+    for (const pathModel of apiModel.paths) {
+      for (const operationModel of pathModel.operations) {
+        const registerHandlerMethodName = getRegisterOperationHandlerName(operationModel);
+        const propertyName = getOperationHandlerName(operationModel);
+        yield itt`
+          case ${JSON.stringify(propertyName)}:
+            this.${registerHandlerMethodName}(handlers.${propertyName}!);
+            break;
+        `;
+      }
+    }
+
+    yield itt`
+      default:
+        throw new TypeError("unexpected");
+    `;
+  }
 }

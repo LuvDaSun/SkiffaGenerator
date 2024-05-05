@@ -117,7 +117,7 @@ function* generateBody(apiModel: models.Api, operationModel: models.Operation) {
                 ${JSON.stringify(getAuthenticationMemberName(authenticationModel))},
                 credentials.${getAuthenticationMemberName(authenticationModel)} == null ?
                   undefined :
-                  await this.${getAuthenticationHandlerName(authenticationModel)}?.
+                  await this.authenticationHandlers.${getAuthenticationHandlerName(authenticationModel)}?.
                     (credentials.${getAuthenticationMemberName(authenticationModel)})
               ]
             )(),
@@ -253,7 +253,7 @@ function* generateBody(apiModel: models.Api, operationModel: models.Operation) {
    */
 
   yield itt`
-    const outgoingResponse = await this.${operationHandlerName}?.(
+    const outgoingResponse = await this.operationHandlers.${operationHandlerName}?.(
       incomingRequest,
       authentication,
       accepts

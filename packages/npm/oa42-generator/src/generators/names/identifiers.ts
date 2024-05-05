@@ -13,12 +13,20 @@ export function getRegisterOperationHandlerName(operationModel: models.Operation
   return toCamel("register", operationModel.name, "operation");
 }
 
+export function getRegisterOperationsHandlerName() {
+  return toCamel("register", "operations");
+}
+
 export function getAuthenticationHandlerName(authenticationModel: models.Authentication) {
   return toCamel(authenticationModel.name, "authentication", "handler");
 }
 
 export function getRegisterAuthenticationHandlerName(authenticationModel: models.Authentication) {
   return toCamel("register", authenticationModel.name, "authentication");
+}
+
+export function getRegisterAuthenticationsHandlerName() {
+  return toCamel("register", "authentications");
 }
 
 export function getEndpointHandlerName(operationModel: models.Operation) {

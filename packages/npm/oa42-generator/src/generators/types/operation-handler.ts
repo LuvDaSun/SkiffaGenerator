@@ -4,7 +4,9 @@ import {
   getIncomingRequestTypeName,
   getOperationAcceptTypeName,
   getOperationAuthenticationTypeName,
+  getOperationHandlerName,
   getOperationHandlerTypeName,
+  getOperationHandlersTypeName,
   getOutgoingResponseTypeName,
   getServerAuthenticationTypeName,
 } from "../names/index.js";
@@ -25,4 +27,27 @@ export function* generateOperationHandlerType(operationModel: models.Operation) 
         accepts: shared.${operationAcceptTypeName}[]
       ) => Promise<${operationOutgoingResponseName}>
   `;
+}
+
+export function* generateOperationHandlersType(apiModel: models.Api) {
+  const serverAuthenticationName = getServerAuthenticationTypeName();
+  const typeName = getOperationHandlersTypeName();
+
+  yield itt`
+    export type ${typeName}<A extends ${serverAuthenticationName}> = {
+      ${body()}
+    }
+  `;
+
+  function* body() {
+    for (const pathModel of apiModel.paths) {
+      for (const operationModel of pathModel.operations) {
+        const propertyName = getOperationHandlerName(operationModel);
+        const typeName = getOperationHandlerTypeName(operationModel);
+        yield `
+          ${propertyName}: ${typeName}<A>,
+        `;
+      }
+    }
+  }
 }
