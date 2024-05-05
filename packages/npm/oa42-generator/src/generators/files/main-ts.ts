@@ -11,7 +11,7 @@ export function* generateMainTsCode(apiModel: models.Api) {
   yield banner("//", `v${packageInfo.version}`);
 
   yield itt`
-    export * from "oa42-lib";
+    export * as lib from "oa42-lib";
 
     export * as types from "./types.js";
     export * as validators from "./validators.js";
