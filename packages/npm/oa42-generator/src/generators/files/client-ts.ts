@@ -5,10 +5,13 @@ import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateClientOperationFunction } from "../functions/client-operation.js";
 import {
+  generateAuthenticationCredentialType,
+  generateCredentialsType,
   generateOperationCredentialsType,
   generateOperationIncomingResponseType,
   generateOperationOutgoingRequestType,
 } from "../types/index.js";
+import { generateCredentialsConstant } from "../variables/default-credentials.js";
 
 export function* generateClientTsCode(apiModel: models.Api) {
   yield banner("//", `v${packageInfo.version}`);
@@ -46,6 +49,13 @@ export function* generateClientTsCode(apiModel: models.Api) {
       parameterValueEncoder: value => value,
     }).loadFromJson(${JSON.stringify(apiModel.router.saveToJson(RouterMode.Client))});
   `;
+
+  yield* generateCredentialsConstant();
+  yield* generateCredentialsType(apiModel);
+
+  for (const authenticationModel of apiModel.authentication) {
+    yield* generateAuthenticationCredentialType(authenticationModel);
+  }
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {

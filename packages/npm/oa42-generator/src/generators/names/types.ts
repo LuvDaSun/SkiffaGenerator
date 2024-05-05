@@ -29,8 +29,16 @@ export function getOperationAcceptTypeName(operationModel: models.Operation) {
   return toPascal(operationModel.name, "operation", "accept");
 }
 
+export function getCredentialsTypeName() {
+  return toPascal("credentials");
+}
+
 export function getOperationCredentialsTypeName(operationModel: models.Operation) {
   return toPascal(operationModel.name, "credentials");
+}
+
+export function getAuthenticationCredentialTypeName(authenticationModel: models.Authentication) {
+  return toPascal(authenticationModel.name, "credential");
 }
 
 export function getIncomingRequestTypeName(operationModel: models.Operation) {

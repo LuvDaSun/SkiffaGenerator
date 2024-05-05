@@ -7,6 +7,9 @@ import { generateOperationAcceptConstant } from "../variables/operation-accept.j
 export function* generateSharedTsCode(apiModel: models.Api) {
   yield banner("//", `v${packageInfo.version}`);
 
+  // for (const authenticationModel of apiModel.authentication) {
+  // }
+
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
       yield generateOperationAcceptType(operationModel);
