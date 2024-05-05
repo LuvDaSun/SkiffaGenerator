@@ -13,8 +13,8 @@
     "formatting": "prettier --check *"
   },
   "devDependencies": {
-    "cspell": "^8.7.0",
-    "oa42-generator": "^0.9.17",
+    "cspell": "^8.8.0",
+    "oa42-generator": "^0.9.20",
     "prettier": "^3.2.5"
   }
 }

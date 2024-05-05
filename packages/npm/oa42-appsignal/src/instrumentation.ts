@@ -7,14 +7,14 @@ import {
 import * as lib from "oa42-lib";
 import { packageInfo } from "./utils/index.js";
 
-export class Instrumentation extends InstrumentationBase<typeof lib> {
+export class Instrumentation extends InstrumentationBase {
   constructor() {
     super(packageInfo.name ?? "", packageInfo.version ?? "");
   }
 
   private originalServerWrappers?: lib.ServerWrappers;
   protected init() {
-    return new InstrumentationNodeModuleDefinition<typeof lib>(
+    return new InstrumentationNodeModuleDefinition(
       "oa42-lib",
       [packageInfo.dependencies?.["oa42-lib"] ?? "*"],
       (moduleExports, moduleVersion) => {
