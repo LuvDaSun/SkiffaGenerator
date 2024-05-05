@@ -5,18 +5,18 @@
   "type": "module",
   "main": "./bundled/main.cjs",
   "module": "./bundles/main.js",
-  "types": "./types/main.d.ts",
+  "types": "./typed/main.d.ts",
   "browser": "./bundles/browser.js",
   "exports": {
     ".": {
       "require": "./bundled/main.cjs",
       "import": "./bundled/main.js",
-      "types": "./types/main.d.ts",
+      "types": "./typed/main.d.ts",
       "browser": "./bundled/browser.js"
     }
   },
   "files": [
-    "./types/**",
+    "./typed/**",
     "./bundled/**"
   ],
   "scripts": {
