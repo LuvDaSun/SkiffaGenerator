@@ -10,7 +10,7 @@ export function getOperationFunctionName(operationModel: models.Operation) {
 }
 
 export function getOperationHandlerName(operationModel: models.Operation) {
-  return toCamel(operationModel.name, "operation", "handler");
+  return toCamel(operationModel.name);
 }
 
 export function getRegisterOperationHandlerName(operationModel: models.Operation) {
@@ -22,7 +22,7 @@ export function getRegisterOperationsHandlerName() {
 }
 
 export function getAuthenticationHandlerName(authenticationModel: models.Authentication) {
-  return toCamel(authenticationModel.name, "authentication", "handler");
+  return toCamel(authenticationModel.name);
 }
 
 export function getRegisterAuthenticationHandlerName(authenticationModel: models.Authentication) {
