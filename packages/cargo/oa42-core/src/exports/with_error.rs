@@ -15,6 +15,7 @@ where
   }
 }
 
+#[allow(dead_code)]
 pub async fn with_error_reference_future<R, T, F>(error_reference: *mut usize, task: T) -> Option<R>
 where
   T: FnOnce() -> F,

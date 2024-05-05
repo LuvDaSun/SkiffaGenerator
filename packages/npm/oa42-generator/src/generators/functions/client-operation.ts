@@ -1,15 +1,70 @@
 import * as models from "../../models/index.js";
-import { itt, toCamel, toPascal } from "../../utils/index.js";
+import { itt } from "../../utils/index.js";
+import {
+  getAuthenticationMemberName,
+  getDefaultCredentialsConstantName,
+  getIncomingResponseTypeName,
+  getIsRequestParametersFunction,
+  getIsResponseParametersFunction,
+  getOperationAcceptConstName,
+  getOperationCredentialsTypeName,
+  getOperationFunctionName,
+  getOutgoingRequestTypeName,
+  getParameterMemberName,
+  getParseParameterFunction,
+  getResponseParametersTypeName,
+} from "../names/index.js";
 
-export function* generateClientOperationFunctionBody(
+export function* generateClientOperationFunction(
   apiModel: models.Api,
   pathModel: models.Path,
   operationModel: models.Operation,
 ) {
-  const operationIncomingResponseName = toPascal(operationModel.name, "incoming", "response");
-  const operationAcceptConstName = toCamel(operationModel.name, "operation", "accept");
+  const operationFunctionName = getOperationFunctionName(operationModel);
+  const operationOutgoingRequestName = getOutgoingRequestTypeName(operationModel);
+  const operationIncomingResponseName = getIncomingResponseTypeName(operationModel);
+  const credentialsName = getOperationCredentialsTypeName(operationModel);
 
-  const isRequestParametersFunction = toCamel("is", operationModel.name, "request", "parameters");
+  const jsDoc = [
+    operationModel.deprecated ? "@deprecated" : "",
+    operationModel.summary,
+    operationModel.description,
+  ]
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
+    .join("\n");
+
+  yield itt`
+  /**
+    ${jsDoc}
+   */
+  export async function ${operationFunctionName}(
+    outgoingRequest: ${operationOutgoingRequestName},
+    operationCredentials: ${credentialsName} = {},
+    operationConfiguration: ClientConfiguration = {},
+  ): Promise<${operationIncomingResponseName}> {
+    ${generateBody(apiModel, pathModel, operationModel)}
+  }
+`;
+}
+
+function* generateBody(
+  apiModel: models.Api,
+  pathModel: models.Path,
+  operationModel: models.Operation,
+) {
+  const operationIncomingResponseName = getIncomingResponseTypeName(operationModel);
+  const operationAcceptConstName = getOperationAcceptConstName(operationModel);
+  const isRequestParametersFunction = getIsRequestParametersFunction(operationModel);
+  const defaultCredentialsName = getDefaultCredentialsConstantName();
+
+  yield itt`
+    const credentials = {...operationCredentials, ...${defaultCredentialsName}}
+  `;
+
+  yield itt`
+    const configuration = {...operationConfiguration, ...defaultClientConfiguration}
+  `;
 
   yield itt`
     const {
@@ -46,7 +101,7 @@ export function* generateClientOperationFunctionBody(
   `;
 
   for (const parameterModel of operationModel.pathParameters) {
-    const parameterName = toCamel(parameterModel.name);
+    const parameterName = getParameterMemberName(parameterModel);
     const addParameterCode = itt`
       lib.addParameter(
         pathParameters,
@@ -67,7 +122,7 @@ export function* generateClientOperationFunctionBody(
   }
 
   for (const parameterModel of operationModel.queryParameters) {
-    const parameterName = toCamel(parameterModel.name);
+    const parameterName = getParameterMemberName(parameterModel);
     const addParameterCode = itt`
       lib.addParameter(
         queryParameters,
@@ -88,7 +143,7 @@ export function* generateClientOperationFunctionBody(
   }
 
   for (const parameterModel of operationModel.headerParameters) {
-    const parameterName = toCamel(parameterModel.name);
+    const parameterName = getParameterMemberName(parameterModel);
     const addParameterCode = itt`
       requestHeaders.append(
         ${JSON.stringify(parameterModel.name)}, 
@@ -108,7 +163,7 @@ export function* generateClientOperationFunctionBody(
   }
 
   for (const parameterModel of operationModel.cookieParameters) {
-    const parameterName = toCamel(parameterModel.name);
+    const parameterName = getParameterMemberName(parameterModel);
     const addParameterCode = itt`
       lib.addParameter(
         cookieParameters,
@@ -143,8 +198,8 @@ export function* generateClientOperationFunctionBody(
         switch (authenticationModel.in) {
           case "query": {
             yield itt`
-              if(credentials.${toCamel(authenticationModel.name)} != null) {
-                queryParameters.append(${JSON.stringify(authenticationModel.name)}, credentials.${toCamel(authenticationModel.name)});
+              if(credentials.${getAuthenticationMemberName(authenticationModel)} != null) {
+                queryParameters.append(${JSON.stringify(authenticationModel.name)}, credentials.${getAuthenticationMemberName(authenticationModel)});
               }
             `;
             break;
@@ -152,8 +207,8 @@ export function* generateClientOperationFunctionBody(
 
           case "header": {
             yield itt`
-              if(credentials.${toCamel(authenticationModel.name)} != null) {
-                requestHeaders.append(${JSON.stringify(authenticationModel.name)}, credentials.${toCamel(authenticationModel.name)});
+              if(credentials.${getAuthenticationMemberName(authenticationModel)} != null) {
+                requestHeaders.append(${JSON.stringify(authenticationModel.name)}, credentials.${getAuthenticationMemberName(authenticationModel)});
               }
             `;
             break;
@@ -161,8 +216,8 @@ export function* generateClientOperationFunctionBody(
 
           case "cookie": {
             yield itt`
-              if(credentials.${toCamel(authenticationModel.name)} != null) {
-                cookieParameters.append(${JSON.stringify(authenticationModel.name)}, credentials.${toCamel(authenticationModel.name)});
+              if(credentials.${getAuthenticationMemberName(authenticationModel)} != null) {
+                cookieParameters.append(${JSON.stringify(authenticationModel.name)}, credentials.${getAuthenticationMemberName(authenticationModel)});
               }
             `;
             break;
@@ -176,16 +231,16 @@ export function* generateClientOperationFunctionBody(
         switch (authenticationModel.scheme) {
           case "basic":
             yield itt`
-              if(credentials.${toCamel(authenticationModel.name)} != null) {
-                requestHeaders.append("authorization", lib.stringifyBasicAuthorizationHeader(credentials.${toCamel(authenticationModel.name)}));
+              if(credentials.${getAuthenticationMemberName(authenticationModel)} != null) {
+                requestHeaders.append("authorization", lib.stringifyBasicAuthorizationHeader(credentials.${getAuthenticationMemberName(authenticationModel)}));
               }
             `;
             break;
 
           case "bearer":
             yield itt`
-              if(credentials.${toCamel(authenticationModel.name)} != null) {
-                requestHeaders.append("authorization", lib.stringifyAuthorizationHeader("Bearer", credentials.${toCamel(authenticationModel.name)}));
+              if(credentials.${getAuthenticationMemberName(authenticationModel)} != null) {
+                requestHeaders.append("authorization", lib.stringifyAuthorizationHeader("Bearer", credentials.${getAuthenticationMemberName(authenticationModel)}));
               }
             `;
             break;
@@ -315,35 +370,26 @@ function* generateOperationResultBody(
   operationModel: models.Operation,
   operationResultModel: models.OperationResult,
 ) {
-  const responseParametersName = toPascal(
-    operationModel.name,
-    operationResultModel.statusKind,
-    "response",
-    "parameters",
+  const responseParametersName = getResponseParametersTypeName(
+    operationModel,
+    operationResultModel,
   );
-
-  const isResponseParametersFunction = toCamel(
-    "is",
-    operationModel.name,
-    operationResultModel.statusKind,
-    "response",
-    "parameters",
+  const isResponseParametersFunction = getIsResponseParametersFunction(
+    operationModel,
+    operationResultModel,
   );
 
   yield itt`
     const responseParameters = {
       ${operationResultModel.headerParameters.map((parameterModel) => {
-        const parameterSchemaId = parameterModel.schemaId;
-        const parameterTypeName =
-          parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
-        const parameterName = toCamel(parameterModel.name);
-        if (parameterTypeName == null) {
+        const parameterName = getParameterMemberName(parameterModel);
+        const parseParameterFunction = getParseParameterFunction(apiModel, parameterModel);
+
+        if (parseParameterFunction == null) {
           return `
             ${parameterName}: fetchResponse.headers.get(${JSON.stringify(parameterModel.name)}),
           `;
         }
-
-        const parseParameterFunction = toCamel("parse", parameterTypeName);
 
         return `
           ${parameterName}: parsers.${parseParameterFunction}(fetchResponse.headers.get(${JSON.stringify(

@@ -1,13 +1,13 @@
 import * as models from "../../models/index.js";
 import { joinIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { toPascal } from "../../utils/name.js";
+import { getOutgoingResponseTypeName, getResponseParametersTypeName } from "../names/index.js";
 
 export function* generateOperationOutgoingResponseType(
   apiModel: models.Api,
   operationModel: models.Operation,
 ) {
-  const operationOutgoingResponseName = toPascal(operationModel.name, "outgoing", "response");
+  const operationOutgoingResponseName = getOutgoingResponseTypeName(operationModel);
 
   yield itt`
     export type ${operationOutgoingResponseName} = ${joinIterable(
@@ -39,11 +39,9 @@ function* generateResponseBodies(
   operationResultModel: models.OperationResult,
   bodyModel?: models.Body,
 ) {
-  const operationOutgoingParametersName = toPascal(
-    operationModel.name,
-    operationResultModel.statusKind,
-    "response",
-    "parameters",
+  const operationOutgoingParametersName = getResponseParametersTypeName(
+    operationModel,
+    operationResultModel,
   );
 
   if (bodyModel == null) {

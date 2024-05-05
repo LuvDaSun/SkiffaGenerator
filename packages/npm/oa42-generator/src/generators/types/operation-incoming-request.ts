@@ -1,13 +1,13 @@
 import * as models from "../../models/index.js";
 import { joinIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { toPascal } from "../../utils/name.js";
+import { getIncomingRequestTypeName, getRequestParametersTypeName } from "../names/index.js";
 
 export function* generateOperationIncomingRequestType(
   apiModel: models.Api,
   operationModel: models.Operation,
 ) {
-  const operationIncomingRequestName = toPascal(operationModel.name, "incoming", "request");
+  const operationIncomingRequestName = getIncomingRequestTypeName(operationModel);
 
   yield itt`
     export type ${operationIncomingRequestName} = ${joinIterable(
@@ -32,7 +32,7 @@ function* generateRequestBodies(
   operationModel: models.Operation,
   bodyModel?: models.Body,
 ) {
-  const operationIncomingParametersName = toPascal(operationModel.name, "request", "parameters");
+  const operationIncomingParametersName = getRequestParametersTypeName(operationModel);
 
   if (bodyModel == null) {
     yield itt`

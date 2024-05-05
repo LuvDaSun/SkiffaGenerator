@@ -1,16 +1,19 @@
 import { banner } from "@oa42/core";
 import { RouterMode } from "goodrouter";
 import * as models from "../../models/index.js";
-import { packageInfo, toCamel, toPascal } from "../../utils/index.js";
+import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { generateIsAuthenticationFunctionBody } from "../bodies/index.js";
+import { generateServerClass } from "../classes/index.js";
+import { generateIsAuthenticationFunction } from "../functions/is-authentication.js";
 import {
+  generateAuthenticationHandlerType,
+  generateAuthenticationHandlersType,
   generateOperationAuthenticationType,
   generateOperationHandlerType,
+  generateOperationHandlersType,
   generateOperationIncomingRequestType,
   generateOperationOutgoingResponseType,
   generateServerAuthenticationType,
-  generateServerClass,
 } from "../types/index.js";
 
 export function* generateServerTsCode(apiModel: models.Api) {
@@ -49,67 +52,19 @@ export function* generateServerTsCode(apiModel: models.Api) {
   `;
 
   yield* generateServerAuthenticationType(apiModel);
+  yield* generateAuthenticationHandlersType(apiModel);
+  yield* generateOperationHandlersType(apiModel);
   yield* generateServerClass(apiModel);
 
   for (const authenticationModel of apiModel.authentication) {
-    const handlerTypeName = toPascal(authenticationModel.name, "authentication", "handler");
-
-    switch (authenticationModel.type) {
-      case "apiKey":
-        yield itt`
-          export type ${handlerTypeName}<A extends ServerAuthentication> =
-            (credential: string) =>
-              Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;
-          `;
-        break;
-
-      case "http":
-        switch (authenticationModel.scheme) {
-          case "basic":
-            yield itt`
-              export type ${handlerTypeName}<A extends ServerAuthentication> =
-                (credential: {
-                  id: string,
-                  secret: string,
-                }) =>
-                  Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;
-              `;
-            break;
-
-          case "bearer":
-            yield itt`
-              export type ${handlerTypeName}<A extends ServerAuthentication> =
-                (credential: string) =>
-                  Promise<A[${JSON.stringify(toCamel(authenticationModel.name))}] | undefined>;
-              `;
-            break;
-
-          default: {
-            throw "impossible";
-          }
-        }
-        break;
-
-      default: {
-        throw "impossible";
-      }
-    }
+    yield* generateAuthenticationHandlerType(authenticationModel);
   }
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      const isAuthenticationFunctionName = toCamel("is", operationModel.name, "authentication");
-      const authenticationTypeName = toPascal(operationModel.name, "authentication");
+      yield* generateIsAuthenticationFunction(apiModel, operationModel);
 
-      yield itt`
-        export function ${isAuthenticationFunctionName}<A extends ServerAuthentication>(
-          authentication: Partial<${authenticationTypeName}<A>>,
-        ): authentication is ${authenticationTypeName}<A> {
-          ${generateIsAuthenticationFunctionBody(pathModel, operationModel)}
-        }
-      `;
-
-      yield* generateOperationAuthenticationType(operationModel);
+      yield* generateOperationAuthenticationType(apiModel, operationModel);
       yield* generateOperationHandlerType(operationModel);
 
       yield* generateOperationIncomingRequestType(apiModel, operationModel);

@@ -1,11 +1,34 @@
 import * as models from "../../models/index.js";
-import { itt, toCamel } from "../../utils/index.js";
+import { itt } from "../../utils/index.js";
+import {
+  getIsRequestParametersFunction,
+  getParameterMemberName,
+  getRequestParametersTypeName,
+} from "../names/index.js";
 
-export function* generateIsResponseParametersFunctionBody(
+export function* generateIsRequestParametersFunction(
   apiModel: models.Api,
-  operationResultModel: models.OperationResult,
+  operationModel: models.Operation,
 ) {
-  const parameterModels = operationResultModel.headerParameters;
+  const isRequestParametersFunctionName = getIsRequestParametersFunction(operationModel);
+  const requestParametersTypeName = getRequestParametersTypeName(operationModel);
+
+  yield itt`
+    export function ${isRequestParametersFunctionName}(
+      parameters: Partial<Record<keyof ${requestParametersTypeName}, unknown>>,
+    ): parameters is ${requestParametersTypeName} {
+      ${generateBody(apiModel, operationModel)}
+    }
+  `;
+}
+
+function* generateBody(apiModel: models.Api, operationModel: models.Operation) {
+  const parameterModels = [
+    ...operationModel.queryParameters,
+    ...operationModel.headerParameters,
+    ...operationModel.pathParameters,
+    ...operationModel.cookieParameters,
+  ];
 
   for (const parameterModel of parameterModels) {
     const parameterSchemaId = parameterModel.schemaId;
@@ -17,7 +40,7 @@ export function* generateIsResponseParametersFunctionBody(
 
     const isParameterFunction = `is${parameterTypeName}`;
 
-    const parameterPropertyName = toCamel(parameterModel.name);
+    const parameterPropertyName = getParameterMemberName(parameterModel);
 
     if (parameterModel.required) {
       yield itt`

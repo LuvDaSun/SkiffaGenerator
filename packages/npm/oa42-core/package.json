@@ -6,16 +6,16 @@
   "type": "module",
   "main": "./bundled/main.cjs",
   "module": "./bundled/main.js",
-  "types": "./types/main.d.ts",
+  "types": "./typed/main.d.ts",
   "exports": {
     ".": {
       "require": "./bundled/main.cjs",
       "import": "./bundled/main.js",
-      "types": "./types/main.d.ts"
+      "types": "./typed/main.d.ts"
     }
   },
   "files": [
-    "./types/**",
+    "./typed/**",
     "./bundled/**",
     "./bin/**"
   ],
@@ -52,7 +52,7 @@
     "@types/node": "^20.12.8",
     "p-defer": "^4.0.1",
     "tslib": "^2.6.2",
-    "type-fest": "^4.9.0"
+    "type-fest": "^4.18.1"
   },
   "engines": {
     "node": ">=18"

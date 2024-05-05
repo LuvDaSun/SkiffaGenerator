@@ -1,7 +1,20 @@
 import * as models from "../../models/index.js";
-import { itt, toCamel } from "../../utils/index.js";
+import { itt } from "../../utils/index.js";
+import { getEndpointHandlerName } from "../names/index.js";
 
-export function* generateRequestHandlerMethodBody(apiModel: models.Api) {
+export function* generateRequestHandlerMethod(apiModel: models.Api) {
+  yield itt`
+    protected requestHandler(
+      serverIncomingRequest: lib.ServerIncomingRequest,
+    ): Promise<lib.ServerOutgoingResponse> {
+      return this.wrappers.request(async () => {
+        ${generateBody(apiModel)}
+      });
+    }
+  `;
+}
+
+function* generateBody(apiModel: models.Api) {
   yield itt`
     const [pathId, pathParameters] =
       router.parseRoute(serverIncomingRequest.path);
@@ -30,7 +43,7 @@ function* generatePathCaseClauses(apiModel: models.Api) {
 }
 function* generateOperationCaseClauses(pathModel: models.Path) {
   for (const operationModel of pathModel.operations) {
-    const endpointHandlerName = toCamel(operationModel.name, "endpoint", "handler");
+    const endpointHandlerName = getEndpointHandlerName(operationModel);
 
     yield itt`
       case ${JSON.stringify(operationModel.method.toUpperCase())}:

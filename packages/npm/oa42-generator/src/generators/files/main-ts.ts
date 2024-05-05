@@ -12,13 +12,15 @@ export function* generateMainTsCode(apiModel: models.Api) {
 
   yield itt`
     export * from "oa42-lib";
-    export * from "./types.js";
-    export * from "./validators.js";
-    export * from "./parsers.js";
-    export * from "./parameters.js";
+
+    export * as types from "./types.js";
+    export * as validators from "./validators.js";
+    export * as parsers from "./parsers.js";
+    export * as parameters from "./parameters.js";
+    export * as mocks from "./mocks.js";
+
     export * from "./shared.js";
     export * from "./client.js";
     export * from "./server.js";
-    export * from "./mocks.js";
-  `;
+    `;
 }

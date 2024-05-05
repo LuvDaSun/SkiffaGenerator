@@ -4,7 +4,7 @@ export function generateTsconfigJsonData() {
     compilerOptions: {
       rootDir: "./src",
       outDir: "./transpiled",
-      declarationDir: "./types",
+      declarationDir: "./typed",
       sourceMap: true,
       declaration: true,
       composite: true,

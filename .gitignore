@@ -14,7 +14,7 @@ node_modules/
 target/
 coverage/
 transpiled/
-types/
+typed/
 bundled/
 out/
 bin/
