@@ -18,7 +18,7 @@ export function* registerAuthenticationHandlerMethod(authenticationModel: models
       this.authenticationHandlers.${handlerPropertyName} =
         lib.wrapAsync(
           authenticationHandler,
-          this.authenticationWrapper,
+          this.wrappers.authentication,
           ${JSON.stringify(authenticationModel.name)},
         );
     }

@@ -27,7 +27,7 @@ export function* generateEndpointHandlerMethod(
       pathParameters: Record<string, string>,
       serverIncomingRequest: lib.ServerIncomingRequest,
     ): Promise<lib.ServerOutgoingResponse> {
-      return this.endpointWrapper(async () => {
+      return this.wrappers.endpoint(async () => {
         ${generateBody(apiModel, operationModel)}
       });
     }

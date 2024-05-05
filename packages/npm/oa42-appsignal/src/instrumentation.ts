@@ -38,7 +38,7 @@ export class Instrumentation extends InstrumentationBase<typeof lib> {
 export function instrument(serverWrappers: lib.ServerWrappers) {
   const tracer = opentelemetry.trace.getTracer("server");
 
-  serverWrappers.requestWrapper = (inner) =>
+  serverWrappers.request = (inner) =>
     tracer.startActiveSpan("request", async (span) => {
       appsignal.setCategory("request");
       try {
@@ -56,7 +56,7 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
       }
     });
 
-  serverWrappers.endpointWrapper = (inner) =>
+  serverWrappers.endpoint = (inner) =>
     tracer.startActiveSpan("endpoint", async (span) => {
       appsignal.setCategory("endpoint");
       try {
@@ -74,7 +74,7 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
       }
     });
 
-  serverWrappers.authenticationWrapper = (inner, name) =>
+  serverWrappers.authentication = (inner, name) =>
     tracer.startActiveSpan("authentication", async (span) => {
       appsignal.setCategory("authentication");
       appsignal.setName(name);
@@ -93,7 +93,7 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
       }
     });
 
-  serverWrappers.middlewareWrapper = (inner, name) =>
+  serverWrappers.middleware = (inner, name) =>
     tracer.startActiveSpan("middleware", async (span) => {
       appsignal.setCategory("middleware");
       appsignal.setName(name);
@@ -112,7 +112,7 @@ export function instrument(serverWrappers: lib.ServerWrappers) {
       }
     });
 
-  serverWrappers.operationWrapper = (inner, name) =>
+  serverWrappers.operation = (inner, name) =>
     tracer.startActiveSpan("operation", async (span) => {
       appsignal.setCategory("operation");
       appsignal.setName(name);

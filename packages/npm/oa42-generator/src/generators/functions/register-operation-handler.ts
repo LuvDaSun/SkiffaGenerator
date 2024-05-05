@@ -30,7 +30,7 @@ export function* registerOperationHandlerMethod(operationModel: models.Operation
       this.operationHandlers.${handlerPropertyName} =
         lib.wrapAsync(
           operationHandler,
-          this.operationWrapper,
+          this.wrappers.operation,
           ${JSON.stringify(operationModel.name)},
         );
     }

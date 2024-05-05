@@ -7,7 +7,7 @@ export function* generateRequestHandlerMethod(apiModel: models.Api) {
     protected requestHandler(
       serverIncomingRequest: lib.ServerIncomingRequest,
     ): Promise<lib.ServerOutgoingResponse> {
-      return this.requestWrapper(async () => {
+      return this.wrappers.request(async () => {
         ${generateBody(apiModel)}
       });
     }
