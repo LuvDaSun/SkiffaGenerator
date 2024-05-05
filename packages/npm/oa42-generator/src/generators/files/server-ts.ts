@@ -6,11 +6,7 @@ import { itt } from "../../utils/iterable-text-template.js";
 import { generateServerClass } from "../classes/index.js";
 import { generateIsAuthenticationFunction } from "../functions/is-authentication.js";
 import {
-  getAuthenticationHandlerTypeName,
-  getAuthenticationMemberName,
-  getServerAuthenticationTypeName,
-} from "../names/index.js";
-import {
+  generateAuthenticationHandlerType,
   generateOperationAuthenticationType,
   generateOperationHandlerType,
   generateOperationIncomingRequestType,
@@ -19,8 +15,6 @@ import {
 } from "../types/index.js";
 
 export function* generateServerTsCode(apiModel: models.Api) {
-  const serverAuthenticationName = getServerAuthenticationTypeName();
-
   yield banner("//", `v${packageInfo.version}`);
 
   yield itt`
@@ -59,49 +53,7 @@ export function* generateServerTsCode(apiModel: models.Api) {
   yield* generateServerClass(apiModel);
 
   for (const authenticationModel of apiModel.authentication) {
-    const handlerTypeName = getAuthenticationHandlerTypeName(authenticationModel);
-
-    // TODO move to types
-    switch (authenticationModel.type) {
-      case "apiKey":
-        yield itt`
-          export type ${handlerTypeName}<A extends ${serverAuthenticationName}> =
-            (credential: string) =>
-              Promise<A[${JSON.stringify(getAuthenticationMemberName(authenticationModel))}] | undefined>;
-          `;
-        break;
-
-      case "http":
-        switch (authenticationModel.scheme) {
-          case "basic":
-            yield itt`
-              export type ${handlerTypeName}<A extends ${serverAuthenticationName}> =
-                (credential: {
-                  id: string,
-                  secret: string,
-                }) =>
-                  Promise<A[${JSON.stringify(getAuthenticationMemberName(authenticationModel))}] | undefined>;
-              `;
-            break;
-
-          case "bearer":
-            yield itt`
-              export type ${handlerTypeName}<A extends ${serverAuthenticationName}> =
-                (credential: string) =>
-                  Promise<A[${JSON.stringify(getAuthenticationMemberName(authenticationModel))}] | undefined>;
-              `;
-            break;
-
-          default: {
-            throw "impossible";
-          }
-        }
-        break;
-
-      default: {
-        throw "impossible";
-      }
-    }
+    yield* generateAuthenticationHandlerType(authenticationModel);
   }
 
   for (const pathModel of apiModel.paths) {

@@ -13,7 +13,6 @@ import {
   getParameterMemberName,
   getRegisterAuthenticationHandlerName,
   getRegisterOperationHandlerName,
-  getServerAuthenticationTypeName,
 } from "../names/index.js";
 
 export function* generateClientServerTestTsCode(apiModel: models.Api) {
@@ -30,16 +29,11 @@ export function* generateClientServerTestTsCode(apiModel: models.Api) {
     import * as mocks from "./mocks.js";
   `;
 
-  {
-    // TODO move to type
-    const typeName = getServerAuthenticationTypeName();
-
-    yield itt`
-    type ${typeName} = {
+  yield itt`
+    type ApiServerAuthentication = {
       ${apiModel.authentication.map((authenticationModel) => itt`${getAuthenticationMemberName(authenticationModel)}: boolean,`)}
     };
   `;
-  }
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
@@ -159,10 +153,8 @@ function* generateOperationTest(
   `;
 
   function* generateTestBody() {
-    const serverAuthenticationName = getServerAuthenticationTypeName();
-
     yield itt`
-      const apiServer = new server.Server<${serverAuthenticationName}>({
+      const apiServer = new server.Server<ApiServerAuthentication>({
         validateIncomingParameters: false,
         validateIncomingEntity: false,
         validateOutgoingParameters: false,
