@@ -89,7 +89,7 @@ function* generateBody(
 
   yield itt`
     if(validateOutgoingParameters) {
-      if(!parameters.${isRequestParametersFunction}(outgoingRequest.parameters)) {
+      if(!parameters.${isRequestParametersFunction}(outgoingRequest.parameters ?? {})) {
         const lastError = parameters.getLastParameterValidationError();
         throw new lib.ClientRequestParameterValidationFailed(
           lastError.parameterName,

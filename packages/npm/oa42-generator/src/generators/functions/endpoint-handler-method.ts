@@ -492,7 +492,7 @@ function* generateOperationResultBody(
 
   yield itt`
     if(validateOutgoingParameters) {
-      if(!parameters.${isResponseParametersFunction}(outgoingResponse.parameters)) {
+      if(!parameters.${isResponseParametersFunction}(outgoingResponse.parameters ?? {})) {
         const lastError = parameters.getLastParameterValidationError();
         throw new lib.ServerResponseParameterValidationFailed(
           lastError.parameterName,

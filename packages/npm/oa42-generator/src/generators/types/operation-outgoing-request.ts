@@ -1,5 +1,5 @@
 import * as models from "../../models/index.js";
-import { joinIterable } from "../../utils/index.js";
+import { joinIterable, mapIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { getOutgoingRequestTypeName, getRequestParametersTypeName } from "../names/index.js";
 
@@ -7,36 +7,59 @@ export function* generateOperationOutgoingRequestType(
   apiModel: models.Api,
   operationModel: models.Operation,
 ) {
-  const operationOutgoingRequestName = getOutgoingRequestTypeName(operationModel);
+  const typeName = getOutgoingRequestTypeName(operationModel);
 
   yield itt`
-    export type ${operationOutgoingRequestName} = ${joinIterable(
-      generateRequestTypes(apiModel, operationModel),
+    export type ${typeName} = ${joinIterable(
+      mapIterable(generateElements(apiModel, operationModel), (element) => itt`(${element})`),
       " |\n",
     )};
   `;
 }
 
-function* generateRequestTypes(apiModel: models.Api, operationModel: models.Operation) {
-  if (operationModel.bodies.length === 0) {
-    yield* generateRequestBodies(apiModel, operationModel);
-  }
+function* generateElements(apiModel: models.Api, operationModel: models.Operation) {
+  yield itt`
+    ${generateParametersContainerType(operationModel)} &
+    (
+      ${joinIterable(generateBodyContainerTypes(apiModel, operationModel), " |\n")}
+    )
+  `;
+}
 
-  for (const bodyModel of operationModel.bodies) {
-    yield* generateRequestBodies(apiModel, operationModel, bodyModel);
+function* generateParametersContainerType(operationModel: models.Operation) {
+  const parametersTypeName = getRequestParametersTypeName(operationModel);
+
+  const required =
+    operationModel.pathParameters.some((parameter) => parameter.required) ||
+    operationModel.queryParameters.some((parameter) => parameter.required) ||
+    operationModel.headerParameters.some((parameter) => parameter.required) ||
+    operationModel.cookieParameters.some((parameter) => parameter.required);
+
+  if (required) {
+    yield `lib.ParametersContainer<parameters.${parametersTypeName}>`;
+  } else {
+    yield `lib.OptionalParametersContainer<parameters.${parametersTypeName}>`;
   }
 }
 
-function* generateRequestBodies(
+function* generateBodyContainerTypes(apiModel: models.Api, operationModel: models.Operation) {
+  if (operationModel.bodies.length === 0) {
+    yield* generateBodyContainerType(apiModel, operationModel);
+  }
+
+  for (const bodyModel of operationModel.bodies) {
+    yield* generateBodyContainerType(apiModel, operationModel, bodyModel);
+  }
+}
+
+function* generateBodyContainerType(
   apiModel: models.Api,
   operationModel: models.Operation,
   bodyModel?: models.Body,
 ) {
-  const operationOutgoingParametersName = getRequestParametersTypeName(operationModel);
-
   if (bodyModel == null) {
     yield itt`
-      lib.OutgoingEmptyRequest<parameters.${operationOutgoingParametersName}>
+      lib.OutgoingEmptyRequest
     `;
     return;
   }
@@ -45,7 +68,6 @@ function* generateRequestBodies(
     case "plain/text": {
       yield itt`
         lib.OutgoingTextRequest<
-          parameters.${operationOutgoingParametersName},
           ${JSON.stringify(bodyModel.contentType)}
         >
       `;
@@ -57,7 +79,6 @@ function* generateRequestBodies(
 
       yield itt`
         lib.OutgoingJsonRequest<
-          parameters.${operationOutgoingParametersName},
           ${JSON.stringify(bodyModel.contentType)},
           ${bodyTypeName == null ? "unknown" : itt`types.${bodyTypeName}`}
         >
@@ -67,7 +88,6 @@ function* generateRequestBodies(
     default: {
       yield itt`
         lib.OutgoingStreamRequest<
-          parameters.${operationOutgoingParametersName},
           ${JSON.stringify(bodyModel.contentType)}
         >
       `;

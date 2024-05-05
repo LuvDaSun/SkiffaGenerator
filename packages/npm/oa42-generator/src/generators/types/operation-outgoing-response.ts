@@ -1,5 +1,5 @@
 import * as models from "../../models/index.js";
-import { joinIterable } from "../../utils/index.js";
+import { joinIterable, mapIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { getOutgoingResponseTypeName, getResponseParametersTypeName } from "../names/index.js";
 
@@ -7,51 +7,73 @@ export function* generateOperationOutgoingResponseType(
   apiModel: models.Api,
   operationModel: models.Operation,
 ) {
-  const operationOutgoingResponseName = getOutgoingResponseTypeName(operationModel);
+  const typeName = getOutgoingResponseTypeName(operationModel);
 
   yield itt`
-    export type ${operationOutgoingResponseName} = ${joinIterable(
-      generateResponseTypes(apiModel, operationModel),
+    export type ${typeName} = ${joinIterable(
+      mapIterable(generateElements(apiModel, operationModel), (element) => itt`(${element})`),
       " |\n",
     )};
   `;
 }
 
-function* generateResponseTypes(apiModel: models.Api, operationModel: models.Operation) {
+function* generateElements(apiModel: models.Api, operationModel: models.Operation) {
   if (operationModel.operationResults.length === 0) {
     yield itt`never`;
   }
 
   for (const operationResultModel of operationModel.operationResults) {
-    if (operationResultModel.bodies.length === 0) {
-      yield* generateResponseBodies(apiModel, operationModel, operationResultModel);
-    }
-
-    for (const bodyModel of operationResultModel.bodies) {
-      yield* generateResponseBodies(apiModel, operationModel, operationResultModel, bodyModel);
-    }
+    yield itt`
+      ${generateParametersContainerType(operationModel, operationResultModel)} &
+      (
+        ${joinIterable(generateBodyContainerTypes(apiModel, operationModel, operationResultModel), " |\n")}
+      )
+    `;
   }
 }
 
-function* generateResponseBodies(
+function* generateParametersContainerType(
+  operationModel: models.Operation,
+  operationResultModel: models.OperationResult,
+) {
+  const parametersTypeName = getResponseParametersTypeName(operationModel, operationResultModel);
+
+  const required = operationResultModel.headerParameters.some((parameter) => parameter.required);
+
+  if (required) {
+    yield `lib.ParametersContainer<parameters.${parametersTypeName}>`;
+  } else {
+    yield `lib.OptionalParametersContainer<parameters.${parametersTypeName}>`;
+  }
+}
+
+function* generateBodyContainerTypes(
+  apiModel: models.Api,
+  operationModel: models.Operation,
+  operationResultModel: models.OperationResult,
+) {
+  if (operationResultModel.bodies.length === 0) {
+    yield* generateBodyContainerType(apiModel, operationModel, operationResultModel);
+  }
+
+  for (const bodyModel of operationResultModel.bodies) {
+    yield* generateBodyContainerType(apiModel, operationModel, operationResultModel, bodyModel);
+  }
+}
+
+function* generateBodyContainerType(
   apiModel: models.Api,
   operationModel: models.Operation,
   operationResultModel: models.OperationResult,
   bodyModel?: models.Body,
 ) {
-  const operationOutgoingParametersName = getResponseParametersTypeName(
-    operationModel,
-    operationResultModel,
-  );
-
   if (bodyModel == null) {
     yield itt`
       lib.OutgoingEmptyResponse<
         ${joinIterable(
           operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
           " |\n",
-        )},
-        parameters.${operationOutgoingParametersName}
+        )}
       >
     `;
     return;
@@ -65,7 +87,6 @@ function* generateResponseBodies(
             operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
             " |\n",
           )},
-          parameters.${operationOutgoingParametersName},
           ${JSON.stringify(bodyModel.contentType)}
         >
       `;
@@ -81,7 +102,6 @@ function* generateResponseBodies(
             operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
             " |\n",
           )},
-          parameters.${operationOutgoingParametersName},
           ${JSON.stringify(bodyModel.contentType)},
           ${bodyTypeName == null ? "unknown" : itt`types.${bodyTypeName}`}
         >
@@ -95,7 +115,6 @@ function* generateResponseBodies(
             operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
             " |\n",
           )},
-          parameters.${operationOutgoingParametersName},
           ${JSON.stringify(bodyModel.contentType)}
         >
       `;

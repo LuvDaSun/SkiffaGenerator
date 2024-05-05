@@ -1,38 +1,25 @@
 import { Promisable } from "type-fest";
 import { StatusCode } from "../utils/status-code.js";
-import { ParametersContainer } from "./parameters.js";
 
 //#region interfaces
 
-export type OutgoingTextRequestDefault<P extends object> = ParametersContainer<P> &
-  OutgoingTextContainer;
-
-export type OutgoingTextRequest<P extends object, C extends string> = {
+export type OutgoingTextRequest<C extends string> = {
   readonly contentType: C;
-} & ParametersContainer<P> &
-  OutgoingTextContainer;
+} & OutgoingTextContainer;
 
-export type OutgoingTextResponseDefault<S extends StatusCode, P extends object> = {
-  readonly status: S;
-} & ParametersContainer<P> &
-  OutgoingTextContainer;
-
-export type OutgoingTextResponse<S extends StatusCode, P extends object, C extends string> = {
+export type OutgoingTextResponse<S extends StatusCode, C extends string> = {
   readonly status: S;
   readonly contentType: C;
-} & ParametersContainer<P> &
-  OutgoingTextContainer;
+} & OutgoingTextContainer;
 
-export type IncomingTextRequest<P extends object, C extends string> = {
+export type IncomingTextRequest<C extends string> = {
   readonly contentType: C;
-} & ParametersContainer<P> &
-  IncomingTextContainer;
+} & IncomingTextContainer;
 
-export type IncomingTextResponse<S extends StatusCode, P extends object, C extends string> = {
+export type IncomingTextResponse<S extends StatusCode, C extends string> = {
   readonly status: S;
   readonly contentType: C;
-} & ParametersContainer<P> &
-  IncomingTextContainer;
+} & IncomingTextContainer;
 
 //#endregion
 

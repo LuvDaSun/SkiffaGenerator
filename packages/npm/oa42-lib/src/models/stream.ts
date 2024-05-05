@@ -3,20 +3,9 @@ import { ParametersContainer } from "./parameters.js";
 
 //#region interfaces
 
-export type OutgoingStreamRequestDefault<P extends object> = ParametersContainer<P> &
-  OutgoingStreamContainer;
-
 export type OutgoingStreamRequest<P extends object, C extends string> = ParametersContainer<P> &
   OutgoingStreamContainer & {
     readonly contentType: C;
-  };
-
-export type OutgoingStreamResponseDefault<
-  S extends StatusCode,
-  P extends object,
-> = ParametersContainer<P> &
-  OutgoingStreamContainer & {
-    readonly status: S;
   };
 
 export type OutgoingStreamResponse<
