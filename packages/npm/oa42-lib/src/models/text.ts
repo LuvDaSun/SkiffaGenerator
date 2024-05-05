@@ -3,34 +3,21 @@ import { StatusCode } from "../utils/status-code.js";
 
 //#region interfaces
 
-export type OutgoingTextRequestDefault<P extends object> = {
-  readonly parameters: P;
-} & OutgoingTextContainer;
-
-export type OutgoingTextRequest<P extends object, C extends string> = {
-  readonly parameters: P;
+export type OutgoingTextRequest<C extends string> = {
   readonly contentType: C;
 } & OutgoingTextContainer;
 
-export type OutgoingTextResponseDefault<S extends StatusCode, P extends object> = {
+export type OutgoingTextResponse<S extends StatusCode, C extends string> = {
   readonly status: S;
-  readonly parameters: P;
-} & OutgoingTextContainer;
-
-export type OutgoingTextResponse<S extends StatusCode, P extends object, C extends string> = {
-  readonly status: S;
-  readonly parameters: P;
   readonly contentType: C;
 } & OutgoingTextContainer;
 
-export type IncomingTextRequest<P extends object, C extends string> = {
-  readonly parameters: P;
+export type IncomingTextRequest<C extends string> = {
   readonly contentType: C;
 } & IncomingTextContainer;
 
-export type IncomingTextResponse<S extends StatusCode, P extends object, C extends string> = {
+export type IncomingTextResponse<S extends StatusCode, C extends string> = {
   readonly status: S;
-  readonly parameters: P;
   readonly contentType: C;
 } & IncomingTextContainer;
 
