@@ -31,7 +31,7 @@ export function* generateClientServerTestTsCode(apiModel: models.Api) {
   `;
 
   {
-    // TODO move to function
+    // TODO move to type
     const typeName = getServerAuthenticationTypeName();
 
     yield itt`
