@@ -1,38 +1,51 @@
 import * as models from "../../models/index.js";
-import { joinIterable, toCamel } from "../../utils/index.js";
+import { joinIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
+  getAuthenticationMemberName,
   getOperationAuthenticationTypeName,
   getServerAuthenticationTypeName,
 } from "../names/index.js";
 
-export function* generateOperationAuthenticationType(operationModel: models.Operation) {
+export function* generateOperationAuthenticationType(
+  apiModel: models.Api,
+  operationModel: models.Operation,
+) {
   const operationAuthenticationName = getOperationAuthenticationTypeName(operationModel);
   const serverAuthenticationName = getServerAuthenticationTypeName();
+  const authenticationMap = Object.fromEntries(
+    apiModel.authentication.map((model) => [model.name, model]),
+  );
 
-  // TODO redo this (via the authenticationModel)
   yield itt`
     export type ${operationAuthenticationName}<A extends ${serverAuthenticationName}> = 
-      ${
-        operationModel.authenticationRequirements.length > 0
-          ? joinIterable(
-              operationModel.authenticationRequirements.map(
-                (requirements) =>
-                  itt`Pick<A, ${
-                    requirements.length > 0
-                      ? joinIterable(
-                          requirements.map((requirement) =>
-                            JSON.stringify(toCamel(requirement.authenticationName)),
-                          ),
-                          "|",
-                        )
-                      : "{}"
-                  }>`,
-              ),
-              "|",
-            )
-          : "{}"
-      }
+      ${body()}
     ;
   `;
+
+  function* body() {
+    yield joinIterable(generateUnionTypes(operationModel.authenticationRequirements), "|\n");
+  }
+
+  function* generateUnionTypes(requirements: models.AuthenticationRequirement[][]) {
+    if (requirements.length === 0) {
+      yield JSON.stringify({});
+    }
+
+    for (const subRequirements of requirements) {
+      yield itt`Pick<A, ${joinIterable(generatePickUnionTypes(subRequirements), " | ")}>`;
+    }
+  }
+
+  function* generatePickUnionTypes(subRequirements: models.AuthenticationRequirement[]) {
+    if (subRequirements.length === 0) {
+      yield JSON.stringify({});
+    }
+
+    for (const requirement of subRequirements) {
+      const authenticationModel = authenticationMap[requirement.authenticationName];
+      const memberName = getAuthenticationMemberName(authenticationModel);
+      yield memberName;
+    }
+  }
 }

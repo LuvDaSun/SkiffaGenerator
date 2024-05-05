@@ -62,9 +62,9 @@ export function* generateServerTsCode(apiModel: models.Api) {
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      yield* generateIsAuthenticationFunction(pathModel, operationModel);
+      yield* generateIsAuthenticationFunction(apiModel, operationModel);
 
-      yield* generateOperationAuthenticationType(operationModel);
+      yield* generateOperationAuthenticationType(apiModel, operationModel);
       yield* generateOperationHandlerType(operationModel);
 
       yield* generateOperationIncomingRequestType(apiModel, operationModel);
