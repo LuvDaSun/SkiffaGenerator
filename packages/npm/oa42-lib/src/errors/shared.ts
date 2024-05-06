@@ -1,4 +1,3 @@
-import { StatusCode } from "../utils/index.js";
 import { ErrorBase } from "./base.js";
 
 export class Unreachable extends ErrorBase {
@@ -12,7 +11,7 @@ export class Unreachable extends ErrorBase {
 export class UnexpectedStatusCode extends ErrorBase {
   public readonly name = "UnexpectedStatusCode";
 
-  constructor(public readonly status: StatusCode) {
+  constructor(public readonly status: number) {
     super(`UnexpectedStatusCode ${status}`);
   }
 }
