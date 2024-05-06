@@ -42,7 +42,7 @@ export function* generateClientOperationFunction(
     outgoingRequest: ${operationOutgoingRequestName},
     operationCredentials: ${credentialsName} = {},
     operationConfiguration: ClientConfiguration = {},
-  ): Promise<${operationIncomingResponseName}> {
+  ): Promise<${operationIncomingResponseName} | { status: number }> {
     ${generateBody(apiModel, pathModel, operationModel)}
   }
 `;
@@ -361,7 +361,9 @@ function* generateResponseStatusCodeCaseClauses(
 
   yield itt`
     default:
-      throw new lib.ClientResponseUnexpectedStatusCode();
+      return {
+        status: fetchResponse.status,
+      };
   `;
 }
 
