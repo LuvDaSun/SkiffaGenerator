@@ -2,39 +2,43 @@ import * as api from "reverse-api";
 import { reverse } from "./reverse.js";
 import { waitForSignal } from "./signal.js";
 
-// create and configure server
+main();
 
-const server = new api.Server();
-server.registerReverseOperation(async (incomingRequest) => {
-  const originalText: string = await incomingRequest.value();
-  const reversedText = reverse(originalText);
+async function main() {
+  // create and configure server
 
-  return {
-    status: 200,
-    contentType: "text/plain",
-    value: () => reversedText,
-  };
-});
+  const server = new api.Server();
+  server.registerReverseOperation(async (incomingRequest) => {
+    const originalText = await incomingRequest.value();
+    const reversedText = reverse(originalText);
 
-// read the port to listen to from the environment or use the default
+    return {
+      status: 200,
+      contentType: "text/plain",
+      value: () => reversedText,
+    };
+  });
 
-const port = Number(process.env.PORT ?? 8080);
+  // read the port to listen to from the environment or use the default
 
-console.info(`Starting server...`);
-{
-  // listen to the specified port and send requests to the server. We are
-  // using the `using` syntax here, the server will be disposed (terminated)
-  // at the end of the current block.
-  await using listener = await api.lib.listen(server, { port });
+  const port = Number(process.env.PORT ?? 8080);
 
-  console.info(`Server started (${listener.port})`);
+  console.info(`Starting server...`);
+  {
+    // listen to the specified port and send requests to the server. We are
+    // using the `using` syntax here, the server will be disposed (terminated)
+    // at the end of the current block.
+    await using listener = await api.lib.listen(server, { port });
 
-  // wait for a user to send a signal and eventually stop listening.
-  await waitForSignal("SIGINT", "SIGTERM");
+    console.info(`Server started (${listener.port})`);
 
-  console.info("Stopping server...");
+    // wait for a user to send a signal and eventually stop listening.
+    await waitForSignal("SIGINT", "SIGTERM");
 
-  // Thanks to the `using` keyword (and a proper implementation of the dispose)
-  // the server is terminated here, at the end of this block.
+    console.info("Stopping server...");
+
+    // Thanks to the `using` keyword (and a proper implementation of the dispose)
+    // the server is terminated here, at the end of this block.
+  }
+  console.info(`Server stopped`);
 }
-console.info(`Server stopped`);
