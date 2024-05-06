@@ -1,11 +1,11 @@
-import { UnexpectedStatusCode } from "../main.js";
+import { StatusCode, UnexpectedStatusCode } from "../main.js";
 
-export type StatusContainer<T extends number = number> = {
-  status: T;
+export type StatusContainer<S extends StatusCode> = {
+  status: S;
 };
 
-export function expectStatus<T extends number>(
-  actualContainer: StatusContainer,
+export function expectStatus<T extends StatusCode>(
+  actualContainer: StatusContainer<StatusCode>,
   ...expected: T[]
 ): asserts actualContainer is StatusContainer<T> {
   for (const status of expected) {

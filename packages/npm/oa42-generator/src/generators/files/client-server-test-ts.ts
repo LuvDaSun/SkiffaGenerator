@@ -353,7 +353,7 @@ function* generateOperationTest(
     `;
 
     yield itt`
-      assert(operationResult.status === ${JSON.stringify(statusCode)})
+      lib.expectStatus(operationResult, ${JSON.stringify(statusCode)});
     `;
 
     for (const parameterModel of operationResultModel.headerParameters) {

@@ -361,9 +361,7 @@ function* generateResponseStatusCodeCaseClauses(
 
   yield itt`
     default:
-      return {
-        status: fetchResponse.status,
-      };
+      throw new lib.UnexpectedStatusCode(fetchResponse.status)  
   `;
 }
 
