@@ -42,7 +42,7 @@ export function* generateClientOperationFunction(
     outgoingRequest: ${operationOutgoingRequestName},
     operationCredentials: ${credentialsName} = {},
     operationConfiguration: ClientConfiguration = {},
-  ): Promise<${operationIncomingResponseName} & { status: number }> {
+  ): Promise<${operationIncomingResponseName}> {
     ${generateBody(apiModel, pathModel, operationModel)}
   }
 `;
