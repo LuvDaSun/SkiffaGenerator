@@ -3,8 +3,10 @@
 import cp from "child_process";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
-const projectRoot = path.resolve(import.meta.dirname, "..");
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = path.resolve(dirname, "..");
 const workspaceRoot = path.resolve(projectRoot, "..", "..", "..");
 
 const options = { shell: true, stdio: "inherit", env: process.env };
