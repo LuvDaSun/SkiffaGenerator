@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(dirname, "..");
+const workspaceRoot = path.resolve(dirname, "..", "..", "..", "..");
 
 const options = { shell: true, stdio: "inherit", env: process.env, cwd: projectRoot };
 
