@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
-const projectRoot = path.resolve(import.meta.dirname, "..");
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = path.resolve(dirname, "..");
 
 fs.rmSync(path.resolve(projectRoot, "transpiled"), { recursive: true, force: true });
 fs.rmSync(path.resolve(projectRoot, "typed"), { recursive: true, force: true });
