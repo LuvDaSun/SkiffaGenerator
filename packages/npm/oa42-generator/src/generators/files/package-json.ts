@@ -28,7 +28,7 @@ export function generatePackageJsonData(name: string, version: string) {
     author: "",
     license: "ISC",
     dependencies: withDependencies(["@types/node", "goodrouter", "oa42-lib"]),
-    devDependencies: withDependencies(["typescript", "rollup", "@tsconfig/node20"]),
+    devDependencies: withDependencies(["typescript", "rollup", "@tsconfig/node18"]),
     engines: {
       node: ">=18",
     },

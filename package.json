@@ -5,7 +5,8 @@
     "packages/npm/oa42-lib",
     "packages/npm/oa42-generator",
     "packages/npm/oa42-opentelemetry",
-    "packages/npm/oa42-appsignal"
+    "packages/npm/oa42-appsignal",
+    "examples/npm/*"
   ],
   "packageManager": "npm@10.5.0",
   "scripts": {
@@ -14,7 +15,7 @@
   },
   "devDependencies": {
     "cspell": "^8.8.0",
-    "oa42-generator": "^0.9.24",
+    "oa42-generator": "^0.9.25",
     "prettier": "^3.2.5"
   }
 }

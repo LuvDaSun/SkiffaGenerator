@@ -1,6 +1,6 @@
 export function generateTsconfigJsonData() {
   const content = {
-    extends: "@tsconfig/node20",
+    extends: "@tsconfig/node18",
     compilerOptions: {
       rootDir: "./src",
       outDir: "./transpiled",
