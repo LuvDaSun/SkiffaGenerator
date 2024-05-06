@@ -13,7 +13,9 @@ words:
   - openapi
   - opentelemetry
   - patsubst
+  - prestart
   - Promisable
+  - remle
   - repr
   - rlib
   - rollup

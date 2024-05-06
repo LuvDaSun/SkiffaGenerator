@@ -43,13 +43,13 @@
   "homepage": "https://www.OpenApi42.org",
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.5",
-    "@tsconfig/node20": "^20.1.4",
+    "@tsconfig/node18": "^18.2.4",
     "c8": "^9.1.0",
     "rollup": "^4.17.2",
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@types/node": "^20.12.8",
+    "@types/node": "^18.19.31",
     "p-defer": "^4.0.1",
     "tslib": "^2.6.2",
     "type-fest": "^4.18.1"

@@ -587,7 +587,7 @@ function* generateOperationResultContentTypeBody(apiModel: models.Api, bodyModel
               return lib.serializeTextLines(outgoingResponse.lines(signal));
             }
             else if("value" in outgoingResponse) {
-              return lib.serializeTextValue(outgoingResponse.value);
+              return lib.serializeTextValue(outgoingResponse.value());
             }
             else {
               throw new lib.Unreachable();
