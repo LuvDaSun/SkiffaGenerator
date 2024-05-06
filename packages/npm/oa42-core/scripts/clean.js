@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(dirname, "..");
