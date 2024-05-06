@@ -65,7 +65,7 @@ function* generateBodyContainerType(
   }
 
   switch (bodyModel.contentType) {
-    case "plain/text": {
+    case "text/plain": {
       yield itt`
         lib.OutgoingTextRequest<
           ${JSON.stringify(bodyModel.contentType)}

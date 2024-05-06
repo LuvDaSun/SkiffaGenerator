@@ -74,7 +74,7 @@ function* generateBodyContainerType(
   }
 
   switch (bodyModel.contentType) {
-    case "plain/text": {
+    case "text/plain": {
       yield itt`
         lib.IncomingTextResponse<
           ${joinIterable(

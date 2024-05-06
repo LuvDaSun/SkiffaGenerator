@@ -1,0 +1,22 @@
+openapi: 3.0.2
+
+info:
+  title: Reverse api
+  description: |-
+    This API is able to take a string and reverse it. It has only one endpoint! Use this API
+    to get started with OpenApi42.
+  version: 0.1.0
+
+paths:
+  /reverse:
+    post:
+      operationId: reverse
+      requestBody:
+        content:
+          "text/plain": {}
+      responses:
+        "200":
+          description: Ok
+          content:
+            "text/plain": {}
+              

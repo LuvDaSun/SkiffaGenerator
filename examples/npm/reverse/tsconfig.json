@@ -1,0 +1,12 @@
+{
+  "extends": "@tsconfig/node18",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./transpiled",
+    "declarationDir": "./typed",
+    "sourceMap": true,
+    "declaration": true,
+    "composite": true
+  },
+  "include": ["src/**/*"]
+}

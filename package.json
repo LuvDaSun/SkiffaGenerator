@@ -1,6 +1,7 @@
 {
   "private": true,
   "workspaces": [
+    "generated/npm/*",
     "packages/npm/oa42-core",
     "packages/npm/oa42-lib",
     "packages/npm/oa42-generator",
@@ -15,7 +16,6 @@
   },
   "devDependencies": {
     "cspell": "^8.8.0",
-    "oa42-generator": "^0.9.25",
     "prettier": "^3.2.5"
   }
 }

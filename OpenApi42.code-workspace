@@ -5,6 +5,10 @@
       "path": "fixtures",
     },
     {
+      "name": "examples",
+      "path": "examples",
+    },
+    {
       "name": "npm/oa42-generator",
       "path": "packages/npm/oa42-generator",
     },
