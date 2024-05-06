@@ -6,7 +6,7 @@ import { ServerMiddleware } from "../server/index.js";
 /**
  * Configure static files to serve, of, when false. Server an empty (204) response.
  */
-export interface ServeConfiguration {
+export interface ServeMiddlewareConfiguration {
   [path: string]:
     | {
         /**
@@ -27,8 +27,10 @@ export interface ServeConfiguration {
  * @param configuration configuration of the static files to serve
  * @returns middleware
  */
-export function serve(configuration: ServeConfiguration): ServerMiddleware {
-  return async (request, next) => {
+export function createServeMiddleware(
+  configuration: ServeMiddlewareConfiguration,
+): ServerMiddleware {
+  return async function serveMiddleware(request, next) {
     if (request.method === "GET") {
       const pathConfiguration = configuration[request.path];
       if (pathConfiguration === false) {

@@ -2,7 +2,7 @@ import { second } from "msecs";
 import { ServerMiddleware, ServerOutgoingResponse } from "../server/index.js";
 import { methods } from "../utils/index.js";
 
-export interface CorsMiddlewareOptions {
+export interface CorsMiddlewareConfiguration {
   /**
    * maximum age in milliseconds
    */
@@ -13,9 +13,8 @@ export interface CorsMiddlewareOptions {
   allowOrigin: string;
 }
 
-export function createCorsMiddleware(options: CorsMiddlewareOptions): ServerMiddleware {
-  const { allowOrigin } = options;
-  const { maxAge } = options;
+export function createCorsMiddleware(configuration: CorsMiddlewareConfiguration): ServerMiddleware {
+  const { allowOrigin, maxAge } = configuration;
 
   return async function corsMiddleware(request, next) {
     if (request.method === "OPTIONS") {
