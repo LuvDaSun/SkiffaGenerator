@@ -1,0 +1,27 @@
+on:
+  pull_request: {}
+
+jobs:
+  test-lts:
+    strategy:
+      matrix:
+        node-version: [21]
+        rust-version: [1.77]
+        runs-on: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: corepack enable
+      - run: rustup default ${{ matrix.rust-version }}
+      - run: rustup target add wasm32-unknown-unknown
+
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm run build --workspaces
+      - run: npm install --no-package-lock
+
+      # node test runner seems to support globs since v21
+      - if: ${{ matrix.node-version >= 21 }}
+        run: npm --workspaces test

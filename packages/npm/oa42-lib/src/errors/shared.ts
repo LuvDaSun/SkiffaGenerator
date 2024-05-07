@@ -7,3 +7,11 @@ export class Unreachable extends ErrorBase {
     super(`Unreachable`);
   }
 }
+
+export class UnexpectedStatusCode extends ErrorBase {
+  public readonly name = "UnexpectedStatusCode";
+
+  constructor(public readonly status: number) {
+    super(`UnexpectedStatusCode ${status}`);
+  }
+}

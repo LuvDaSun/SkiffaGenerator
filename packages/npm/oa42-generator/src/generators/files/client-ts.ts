@@ -1,16 +1,20 @@
+import { banner } from "@oa42/core";
 import { RouterMode } from "goodrouter";
 import * as models from "../../models/index.js";
-import { banner, toCamel, toPascal } from "../../utils/index.js";
+import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { generateClientOperationFunctionBody } from "../bodies/index.js";
+import { generateClientOperationFunction } from "../functions/client-operation.js";
 import {
+  generateAuthenticationCredentialType,
+  generateCredentialsType,
   generateOperationCredentialsType,
   generateOperationIncomingResponseType,
   generateOperationOutgoingRequestType,
 } from "../types/index.js";
+import { generateCredentialsConstant } from "../variables/default-credentials.js";
 
 export function* generateClientTsCode(apiModel: models.Api) {
-  yield banner;
+  yield banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import { Router } from "goodrouter";
@@ -46,34 +50,16 @@ export function* generateClientTsCode(apiModel: models.Api) {
     }).loadFromJson(${JSON.stringify(apiModel.router.saveToJson(RouterMode.Client))});
   `;
 
+  yield* generateCredentialsConstant();
+  yield* generateCredentialsType(apiModel);
+
+  for (const authenticationModel of apiModel.authentication) {
+    yield* generateAuthenticationCredentialType(authenticationModel);
+  }
+
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      const operationFunctionName = toCamel(operationModel.name);
-      const operationOutgoingRequestName = toPascal(operationModel.name, "outgoing", "request");
-      const operationIncomingResponseName = toPascal(operationModel.name, "incoming", "response");
-      const credentialsName = toPascal(operationModel.name, "credentials");
-
-      const jsDoc = [
-        operationModel.deprecated ? "@deprecated" : "",
-        operationModel.summary,
-        operationModel.description,
-      ]
-        .map((line) => line.trim())
-        .filter((line) => line.length > 0)
-        .join("\n");
-
-      yield itt`
-        /**
-          ${jsDoc}
-         */
-        export async function ${operationFunctionName}(
-          outgoingRequest: ${operationOutgoingRequestName},
-          credentials: ${credentialsName},
-          configuration: ClientConfiguration = defaultClientConfiguration,
-        ): Promise<${operationIncomingResponseName}> {
-          ${generateClientOperationFunctionBody(apiModel, pathModel, operationModel)}
-        }
-      `;
+      yield* generateClientOperationFunction(apiModel, pathModel, operationModel);
       yield* generateOperationCredentialsType(apiModel, operationModel);
       yield* generateOperationOutgoingRequestType(apiModel, operationModel);
       yield* generateOperationIncomingResponseType(apiModel, operationModel);

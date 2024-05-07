@@ -1,0 +1,61 @@
+{
+  "name": "@oa42/core",
+  "version": "0.1.4",
+  "sideEffects": false,
+  "description": "core library",
+  "type": "module",
+  "main": "./bundled/main.cjs",
+  "module": "./bundled/main.js",
+  "types": "./typed/main.d.ts",
+  "exports": {
+    ".": {
+      "require": "./bundled/main.cjs",
+      "import": "./bundled/main.js",
+      "types": "./typed/main.d.ts"
+    }
+  },
+  "files": [
+    "./typed/**",
+    "./bundled/**",
+    "./bin/**"
+  ],
+  "scripts": {
+    "prepack": "node ./scripts/build.js",
+    "pretest": "tsc",
+    "build": "node ./scripts/build.js",
+    "clean": "node ./scripts/clean.js",
+    "test": "node --test ./transpiled/**/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/LuvDaSun/OpenApi42.git"
+  },
+  "author": "LuvDaSun Software B.V.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LuvDaSun/OpenApi42/issues"
+  },
+  "keywords": [
+    "openapi",
+    "api",
+    "core"
+  ],
+  "homepage": "https://www.OpenApi42.org",
+  "devDependencies": {
+    "@rollup/plugin-replace": "^5.0.5",
+    "@tsconfig/node18": "^18.2.4",
+    "c8": "^9.1.0",
+    "rollup": "^4.17.2",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@types/node": "^18.19.32",
+    "p-defer": "^4.0.1",
+    "tslib": "^2.6.2",
+    "type-fest": "^4.18.1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

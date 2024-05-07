@@ -1,6 +1,7 @@
 {
   "private": true,
   "workspaces": [
+    "packages/npm/oa42-core",
     "packages/npm/oa42-lib",
     "packages/npm/oa42-generator",
     "packages/npm/oa42-opentelemetry",
@@ -12,8 +13,7 @@
     "formatting": "prettier --check *"
   },
   "devDependencies": {
-    "cspell": "^8.7.0",
-    "oa42-generator": "^0.9.16",
+    "cspell": "^8.8.0",
     "prettier": "^3.2.5"
   }
 }

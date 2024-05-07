@@ -1,15 +1,15 @@
 export interface ServerWrappers {
-  requestWrapper: <T>(inner: () => Promise<T>) => Promise<T>;
-  endpointWrapper: <T>(inner: () => Promise<T>) => Promise<T>;
-  authenticationWrapper: <T>(inner: () => Promise<T>, name: string) => Promise<T>;
-  operationWrapper: <T>(inner: () => Promise<T>, name: string) => Promise<T>;
-  middlewareWrapper: <T>(inner: () => Promise<T>, name: string) => Promise<T>;
+  request: <T>(inner: () => Promise<T>) => Promise<T>;
+  endpoint: <T>(inner: () => Promise<T>) => Promise<T>;
+  authentication: <T>(inner: () => Promise<T>, name: string) => Promise<T>;
+  operation: <T>(inner: () => Promise<T>, name: string) => Promise<T>;
+  middleware: <T>(inner: () => Promise<T>, name: string) => Promise<T>;
 }
 
 export const defaultServerWrappers: ServerWrappers = {
-  requestWrapper: <T>(inner: () => Promise<T>) => inner(),
-  endpointWrapper: <T>(inner: () => Promise<T>) => inner(),
-  authenticationWrapper: <T>(inner: () => Promise<T>, name: string) => inner(),
-  operationWrapper: <T>(inner: () => Promise<T>, name: string) => inner(),
-  middlewareWrapper: <T>(inner: () => Promise<T>, name: string) => inner(),
+  request: <T>(inner: () => Promise<T>) => inner(),
+  endpoint: <T>(inner: () => Promise<T>) => inner(),
+  authentication: <T>(inner: () => Promise<T>, name: string) => inner(),
+  operation: <T>(inner: () => Promise<T>, name: string) => inner(),
+  middleware: <T>(inner: () => Promise<T>, name: string) => inner(),
 };

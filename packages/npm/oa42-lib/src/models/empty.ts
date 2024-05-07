@@ -1,32 +1,19 @@
 import { StatusCode } from "../utils/index.js";
 
-export interface OutgoingEmptyRequestDefault<P extends object> {
-  readonly parameters: P;
-}
-
-export interface OutgoingEmptyRequest<P extends object> {
-  readonly parameters: P;
+export type OutgoingEmptyRequest = {
   readonly contentType: null;
-}
+};
 
-export interface OutgoingEmptyResponseDefault<S extends StatusCode, P extends object> {
+export type OutgoingEmptyResponse<S extends StatusCode> = {
   readonly status: S;
-  readonly parameters: P;
-}
+  readonly contentType: null;
+};
 
-export interface OutgoingEmptyResponse<S extends StatusCode, P extends object> {
+export type IncomingEmptyRequest = {
+  readonly contentType: null;
+};
+
+export type IncomingEmptyResponse<S extends StatusCode> = {
   readonly status: S;
-  readonly parameters: P;
   readonly contentType: null;
-}
-
-export interface IncomingEmptyRequest<P extends object> {
-  readonly parameters: P;
-  readonly contentType: null;
-}
-
-export interface IncomingEmptyResponse<S extends StatusCode, P extends object> {
-  readonly status: S;
-  readonly parameters: P;
-  readonly contentType: null;
-}
+};

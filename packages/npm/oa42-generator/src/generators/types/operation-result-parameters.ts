@@ -1,18 +1,16 @@
 import camelcase from "camelcase";
 import * as models from "../../models/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { toPascal } from "../../utils/name.js";
+import { getResponseParametersTypeName } from "../names/index.js";
 
 export function* generateOperationResultParameterTypes(
   apiModel: models.Api,
   operationModel: models.Operation,
   operationResultModel: models.OperationResult,
 ) {
-  const operationResponseParametersName = toPascal(
-    operationModel.name,
-    operationResultModel.statusKind,
-    "response",
-    "parameters",
+  const operationResponseParametersName = getResponseParametersTypeName(
+    operationModel,
+    operationResultModel,
   );
 
   const parameterModels = operationResultModel.headerParameters;

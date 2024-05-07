@@ -1,18 +1,26 @@
 .*
 
 *.tsbuildinfo
+*.tgz
+*.node
 
 !.gitignore
 !.prettierignore
+!.gitattributes
 !.editorconfig
 !.npmrc
 
 node_modules/
-transpiled/
-types/
-bundled/
+target/
 coverage/
+transpiled/
+typed/
+bundled/
+out/
+bin/
+
+generated/
+logs/
 
 !.vscode/
 !.github/
-

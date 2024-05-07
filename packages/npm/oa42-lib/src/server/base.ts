@@ -3,7 +3,7 @@ import * as http from "http";
 import * as http2 from "http2";
 import { Readable, Writable, finished } from "stream";
 import { Parameters, StatusCode } from "../utils/index.js";
-import { ServerWrappers, defaultServerWrappers } from "./wrapper.js";
+import { defaultServerWrappers } from "./wrapper.js";
 
 export interface ServerIncomingRequest {
   path: string;
@@ -27,12 +27,8 @@ export interface ServerMiddleware {
   ): Promise<ServerOutgoingResponse>;
 }
 
-export abstract class ServerBase implements ServerWrappers {
-  public requestWrapper = defaultServerWrappers.requestWrapper;
-  public endpointWrapper = defaultServerWrappers.endpointWrapper;
-  public authenticationWrapper = defaultServerWrappers.authenticationWrapper;
-  public operationWrapper = defaultServerWrappers.operationWrapper;
-  public middlewareWrapper = defaultServerWrappers.middlewareWrapper;
+export abstract class ServerBase {
+  public wrappers = { ...defaultServerWrappers };
 
   protected middleware: ServerMiddleware = (request, next) => next(request);
 

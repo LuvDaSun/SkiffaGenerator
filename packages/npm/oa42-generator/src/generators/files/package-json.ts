@@ -9,15 +9,15 @@ export function generatePackageJsonData(name: string, version: string) {
     type: "module",
     main: "./bundled/main.cjs",
     module: "./bundled/main.js",
-    types: "./types/main.d.ts",
+    types: "./typed/main.d.ts",
     exports: {
       ".": {
         require: "./bundled/main.cjs",
         import: "./bundled/main.js",
-        types: "./types/main.d.ts",
+        types: "./typed/main.d.ts",
       },
     },
-    files: ["./types/**", "./bundled/**"],
+    files: ["./typed/**", "./bundled/**"],
     scripts: {
       prepack: "node ./scripts/build.js",
       pretest: "tsc",
@@ -28,7 +28,7 @@ export function generatePackageJsonData(name: string, version: string) {
     author: "",
     license: "ISC",
     dependencies: withDependencies(["@types/node", "goodrouter", "oa42-lib"]),
-    devDependencies: withDependencies(["typescript", "rollup", "@tsconfig/node20"]),
+    devDependencies: withDependencies(["typescript", "rollup", "@tsconfig/node18"]),
     engines: {
       node: ">=18",
     },

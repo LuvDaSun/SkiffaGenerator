@@ -1,5 +1,6 @@
+import { banner } from "@oa42/core";
 import * as models from "../../models/index.js";
-import { banner } from "../../utils/index.js";
+import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 
 /**
@@ -7,17 +8,19 @@ import { itt } from "../../utils/iterable-text-template.js";
  * dependencies
  */
 export function* generateMainTsCode(apiModel: models.Api) {
-  yield banner;
+  yield banner("//", `v${packageInfo.version}`);
 
   yield itt`
-    export * from "oa42-lib";
-    export * from "./types.js";
-    export * from "./validators.js";
-    export * from "./parsers.js";
-    export * from "./parameters.js";
+    export * as lib from "oa42-lib";
+
+    export * as types from "./types.js";
+    export * as validators from "./validators.js";
+    export * as parsers from "./parsers.js";
+    export * as parameters from "./parameters.js";
+    export * as mocks from "./mocks.js";
+
     export * from "./shared.js";
     export * from "./client.js";
     export * from "./server.js";
-    export * from "./mocks.js";
-  `;
+    `;
 }

@@ -1,51 +1,63 @@
 import * as models from "../../models/index.js";
-import { joinIterable } from "../../utils/index.js";
+import { joinIterable, mapIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { toPascal } from "../../utils/name.js";
+import { getIncomingRequestTypeName, getRequestParametersTypeName } from "../names/index.js";
 
 export function* generateOperationIncomingRequestType(
   apiModel: models.Api,
   operationModel: models.Operation,
 ) {
-  const operationIncomingRequestName = toPascal(operationModel.name, "incoming", "request");
+  const typeName = getIncomingRequestTypeName(operationModel);
 
   yield itt`
-    export type ${operationIncomingRequestName} = ${joinIterable(
-      generateRequestTypes(apiModel, operationModel),
+    export type ${typeName} = ${joinIterable(
+      mapIterable(generateElements(apiModel, operationModel), (element) => itt`(${element})`),
       " |\n",
     )};
   `;
 }
 
-function* generateRequestTypes(apiModel: models.Api, operationModel: models.Operation) {
+function* generateElements(apiModel: models.Api, operationModel: models.Operation) {
+  yield itt`
+    ${generateParametersContainerType(operationModel)} &
+    (
+      ${joinIterable(generateBodyContainerTypes(apiModel, operationModel), " |\n")}
+    )
+  `;
+}
+
+function* generateParametersContainerType(operationModel: models.Operation) {
+  const parametersTypeName = getRequestParametersTypeName(operationModel);
+
+  yield `lib.ParametersContainer<parameters.${parametersTypeName}>`;
+}
+
+function* generateBodyContainerTypes(apiModel: models.Api, operationModel: models.Operation) {
   if (operationModel.bodies.length === 0) {
-    yield* generateRequestBodies(apiModel, operationModel);
+    yield* generateBodyContainerType(apiModel, operationModel);
   }
 
   for (const bodyModel of operationModel.bodies) {
-    yield* generateRequestBodies(apiModel, operationModel, bodyModel);
+    yield* generateBodyContainerType(apiModel, operationModel, bodyModel);
   }
 }
 
-function* generateRequestBodies(
+function* generateBodyContainerType(
   apiModel: models.Api,
   operationModel: models.Operation,
   bodyModel?: models.Body,
 ) {
-  const operationIncomingParametersName = toPascal(operationModel.name, "request", "parameters");
-
   if (bodyModel == null) {
     yield itt`
-      lib.IncomingEmptyRequest<parameters.${operationIncomingParametersName}>
+      lib.IncomingEmptyRequest
     `;
     return;
   }
 
   switch (bodyModel.contentType) {
-    case "plain/text": {
+    case "text/plain": {
       yield itt`
         lib.IncomingTextRequest<
-          parameters.${operationIncomingParametersName},
           ${JSON.stringify(bodyModel.contentType)}
         >
       `;
@@ -57,7 +69,6 @@ function* generateRequestBodies(
 
       yield itt`
         lib.IncomingJsonRequest<
-          parameters.${operationIncomingParametersName},
           ${JSON.stringify(bodyModel.contentType)},
           ${bodyTypeName == null ? "unknown" : itt`types.${bodyTypeName}`}
         >
@@ -67,7 +78,6 @@ function* generateRequestBodies(
     default: {
       yield itt`
         lib.IncomingStreamRequest<
-          parameters.${operationIncomingParametersName},
           ${JSON.stringify(bodyModel.contentType)}
         >
       `;

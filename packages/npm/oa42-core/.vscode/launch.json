@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "run file",
+      "program": "${file}",
+      "args": [],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "cwd": "${workspaceFolder}",
+      "sourceMaps": true,
+      "outFiles": ["${workspaceFolder}/transpiled/**/*.js"],
+      "preLaunchTask": "build",
+      "outputCapture": "std"
+    }
+  ]
+}

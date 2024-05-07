@@ -4,34 +4,21 @@ import { deserializeTextLines, deserializeTextValue } from "./text.js";
 
 //#region interfaces
 
-export type OutgoingJsonRequestDefault<P extends object, T> = {
-  readonly parameters: P;
-} & OutgoingJsonContainer<T>;
-
-export type OutgoingJsonRequest<P extends object, C extends string, T> = {
-  readonly parameters: P;
+export type OutgoingJsonRequest<C extends string, T> = {
   readonly contentType: C;
 } & OutgoingJsonContainer<T>;
 
-export type OutgoingJsonResponseDefault<S extends StatusCode, P extends object, T> = {
+export type OutgoingJsonResponse<S extends StatusCode, C extends string, T> = {
   readonly status: S;
-  readonly parameters: P;
-} & OutgoingJsonContainer<T>;
-
-export type OutgoingJsonResponse<S extends StatusCode, P extends object, C extends string, T> = {
-  readonly status: S;
-  readonly parameters: P;
   readonly contentType: C;
 } & OutgoingJsonContainer<T>;
 
-export type IncomingJsonRequest<P extends object, C extends string, T> = {
-  readonly parameters: P;
+export type IncomingJsonRequest<C extends string, T> = {
   readonly contentType: C;
 } & IncomingJsonContainer<T>;
 
-export type IncomingJsonResponse<S extends StatusCode, P extends object, C extends string, T> = {
+export type IncomingJsonResponse<S extends StatusCode, C extends string, T> = {
   readonly status: S;
-  readonly parameters: P;
   readonly contentType: C;
 } & IncomingJsonContainer<T>;
 
