@@ -1,15 +1,15 @@
-use serde_json::Value;
+use super::{Node, NodeRc};
 use std::iter::once;
 
-pub fn read_json_node(prefix: &[String], node: Value) -> Vec<(Vec<String>, Value)> {
-  match &node {
-    Value::Array(array_value) => once((prefix.to_owned(), node.clone()))
+pub fn read_node(prefix: &[String], node: NodeRc) -> Vec<(Vec<String>, NodeRc)> {
+  match &*node {
+    Node::Array(array_value) => once((prefix.to_owned(), node.clone()))
       .chain(
         array_value
           .iter()
           .enumerate()
           .flat_map(|(index, element_value)| {
-            read_json_node(
+            read_node(
               &prefix
                 .iter()
                 .cloned()
@@ -20,9 +20,9 @@ pub fn read_json_node(prefix: &[String], node: Value) -> Vec<(Vec<String>, Value
           }),
       )
       .collect(),
-    Value::Object(object_value) => once((prefix.to_owned(), node.clone()))
+    Node::Object(object_value) => once((prefix.to_owned(), node.clone()))
       .chain(object_value.iter().flat_map(|(name, element_value)| {
-        read_json_node(
+        read_node(
           &prefix
             .iter()
             .cloned()
