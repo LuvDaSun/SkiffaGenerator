@@ -21,7 +21,10 @@ pub struct ReferencedDocument {
   pub given_location: NodeLocation,
 }
 
-pub trait Document<E> {
+pub trait Document
+where
+  Self: Sized,
+{
   fn get_referenced_documents(&self) -> &Vec<ReferencedDocument>;
   fn get_embedded_documents(&self) -> &Vec<EmbeddedDocument>;
 
@@ -29,7 +32,7 @@ pub trait Document<E> {
   fn get_antecedent_location(&self) -> Option<&NodeLocation>;
   fn get_node_locations(&self) -> Vec<NodeLocation>;
 
-  fn get_document_elements(&self) -> BTreeMap<NodeLocation, E>;
+  fn get_documents(&self) -> BTreeMap<NodeLocation, Self>;
 
   fn resolve_anchor(&self, anchor: &str) -> Option<Vec<String>>;
   fn resolve_antecedent_anchor(&self, anchor: &str) -> Option<Vec<String>>;
@@ -42,14 +45,17 @@ pub struct DocumentConfiguration {
   pub document_node: NodeRc,
 }
 
-pub type DocumentFactory<K, E> =
-  dyn Fn(Weak<DocumentContext<K, E>>, DocumentConfiguration) -> Rc<dyn Document<E>>;
+pub type DocumentFactory<K, D> =
+  dyn Fn(Weak<DocumentContext<K, D>>, DocumentConfiguration) -> Rc<D>;
 pub type DiscoverDocumentType<K> = Box<dyn Fn(&NodeRc) -> &K>;
 pub type FetchFile = Box<dyn Fn(&str) -> Pin<Box<dyn Future<Output = Result<String, Error>>>>>;
 
 type Queue = Vec<(NodeLocation, NodeLocation, Option<NodeLocation>, String)>;
 
-pub struct DocumentContext<K, E> {
+pub struct DocumentContext<K, D>
+where
+  D: Document,
+{
   /**
   Maps node retrieval locations to their documents. Every node has a location that is an identifier. Thi
   map maps that identifier to the identifier of a document.
@@ -65,7 +71,7 @@ pub struct DocumentContext<K, E> {
   /**
    * all documents, indexed by the document node id of the document
    */
-  documents: RefCell<HashMap<NodeLocation, Rc<dyn Document<E>>>>,
+  documents: RefCell<HashMap<NodeLocation, Rc<D>>>,
 
   /**
   This map maps document retrieval locations to document root locations
@@ -75,16 +81,17 @@ pub struct DocumentContext<K, E> {
   /**
    * document factories by document type key
    */
-  factories: HashMap<K, Box<DocumentFactory<K, E>>>,
+  factories: HashMap<K, Box<DocumentFactory<K, D>>>,
 
   fetch_file: FetchFile,
 
   discover_document_type: DiscoverDocumentType<K>,
 }
 
-impl<K, E> DocumentContext<K, E>
+impl<K, D> DocumentContext<K, D>
 where
   K: PartialEq + Eq + Hash,
+  D: Document,
 {
   pub fn new(fetch_file: FetchFile, discover_document_type: DiscoverDocumentType<K>) -> Rc<Self> {
     Rc::new(Self {
@@ -101,7 +108,7 @@ where
   pub fn register_factory(
     self: &mut Rc<Self>,
     schema: K,
-    factory: Box<DocumentFactory<K, E>>,
+    factory: Box<DocumentFactory<K, D>>,
   ) -> Result<(), Error> {
     /*
     don't check if the factory is already registered here so we can
@@ -126,12 +133,12 @@ where
       .cloned()
   }
 
-  pub fn get_documents(&self) -> BTreeMap<NodeLocation, E> {
+  pub fn get_documents(&self) -> BTreeMap<NodeLocation, D> {
     self
       .documents
       .borrow()
       .values()
-      .flat_map(|document| document.get_document_elements())
+      .flat_map(|document| document.get_documents())
       .collect()
   }
 
@@ -144,7 +151,7 @@ where
       .clone()
   }
 
-  pub fn get_item(&self, document_location: &NodeLocation) -> Result<Rc<dyn Document<E>>, Error> {
+  pub fn get_document(&self, document_location: &NodeLocation) -> Result<Rc<D>, Error> {
     let document_location = document_location.clone();
 
     let documents = self.documents.borrow();
@@ -154,15 +161,15 @@ where
     Ok(result)
   }
 
-  pub fn get_item_and_antecedents(
+  pub fn get_document_and_antecedents(
     &self,
     document_location: &NodeLocation,
-  ) -> Result<Vec<Rc<dyn Document<E>>>, Error> {
+  ) -> Result<Vec<Rc<D>>, Error> {
     let mut results = Vec::new();
     let mut document_location = document_location.clone();
 
     loop {
-      let result = self.get_item(&document_location)?;
+      let result = self.get_document(&document_location)?;
       results.push(result.clone());
 
       let Some(antecedent_location) = result.get_antecedent_location() else {
