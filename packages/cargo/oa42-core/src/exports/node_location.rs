@@ -1,5 +1,5 @@
 use super::with_error::with_error_reference;
-use crate::utils::node_location::NodeLocation;
+use crate::utils::NodeLocation;
 use std::{
   ffi::{c_char, CStr, CString},
   ptr::null_mut,

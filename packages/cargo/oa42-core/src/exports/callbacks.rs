@@ -1,5 +1,5 @@
 use crate::executor::wake;
-use crate::utils::key::Key;
+use crate::utils::Key;
 
 #[no_mangle]
 extern "C" fn invoke_callback(key: Key) {

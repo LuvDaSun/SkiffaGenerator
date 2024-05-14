@@ -1,4 +1,4 @@
-use crate::utils::key::Key;
+use crate::utils::Key;
 use once_cell::sync::Lazy;
 use std::{collections::BTreeMap, sync::Mutex};
 

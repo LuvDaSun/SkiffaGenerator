@@ -1,4 +1,4 @@
-use crate::utils::key::Key;
+use crate::utils::Key;
 use std::ffi::c_char;
 
 extern "C" {

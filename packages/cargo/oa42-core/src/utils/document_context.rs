@@ -45,14 +45,14 @@ pub struct DocumentConfiguration {
   pub document_node: NodeRc,
 }
 
-pub type DocumentFactory<K, D> =
-  dyn Fn(Weak<DocumentContext<K, D>>, DocumentConfiguration) -> Rc<D>;
-pub type DiscoverDocumentType<K> = Box<dyn Fn(&NodeRc) -> &K>;
+pub type DocumentFactory<T, D> =
+  dyn Fn(Weak<DocumentContext<T, D>>, DocumentConfiguration) -> Rc<D>;
+pub type DiscoverDocumentType<T> = Box<dyn Fn(&NodeRc) -> &T>;
 pub type FetchFile = Box<dyn Fn(&str) -> Pin<Box<dyn Future<Output = Result<String, Error>>>>>;
 
-type Queue = Vec<(NodeLocation, NodeLocation, Option<NodeLocation>, String)>;
+type Queue<T> = Vec<(NodeLocation, NodeLocation, Option<NodeLocation>, T)>;
 
-pub struct DocumentContext<K, D>
+pub struct DocumentContext<T, D>
 where
   D: Document,
 {
@@ -81,19 +81,19 @@ where
   /**
    * document factories by document type key
    */
-  factories: HashMap<K, Box<DocumentFactory<K, D>>>,
+  factories: HashMap<T, Box<DocumentFactory<T, D>>>,
 
   fetch_file: FetchFile,
 
-  discover_document_type: DiscoverDocumentType<K>,
+  discover_document_type: DiscoverDocumentType<T>,
 }
 
-impl<K, D> DocumentContext<K, D>
+impl<T, D> DocumentContext<T, D>
 where
-  K: PartialEq + Eq + Hash,
+  T: PartialEq + Eq + Hash + Clone,
   D: Document,
 {
-  pub fn new(fetch_file: FetchFile, discover_document_type: DiscoverDocumentType<K>) -> Rc<Self> {
+  pub fn new(fetch_file: FetchFile, discover_document_type: DiscoverDocumentType<T>) -> Rc<Self> {
     Rc::new(Self {
       node_documents: Default::default(),
       node_cache: Default::default(),
@@ -107,8 +107,8 @@ where
 
   pub fn register_factory(
     self: &mut Rc<Self>,
-    schema: K,
-    factory: Box<DocumentFactory<K, D>>,
+    r#type: T,
+    factory: Box<DocumentFactory<T, D>>,
   ) -> Result<(), Error> {
     /*
     don't check if the factory is already registered here so we can
@@ -117,7 +117,7 @@ where
     Rc::get_mut(self)
       .ok_or(Error::Unknown)?
       .factories
-      .insert(schema, factory);
+      .insert(r#type, factory);
 
     Ok(())
   }
@@ -191,7 +191,7 @@ where
     retrieval_location: &NodeLocation,
     given_location: &NodeLocation,
     antecedent_location: Option<&NodeLocation>,
-    default_meta_schema_id: &str,
+    default_type: T,
   ) -> Result<(), Error> {
     if !retrieval_location.is_root() {
       Err(Error::NotARoot)?
@@ -203,7 +203,7 @@ where
         retrieval_location,
         given_location,
         antecedent_location,
-        default_meta_schema_id,
+        default_type,
         &mut queue,
       )
       .await?;
@@ -218,8 +218,8 @@ where
     retrieval_location: &NodeLocation,
     given_location: &NodeLocation,
     antecedent_location: Option<&NodeLocation>,
-    default_meta_schema_id: &str,
-    queue: &mut Queue,
+    default_type: T,
+    queue: &mut Queue<T>,
   ) -> Result<(), Error> {
     /*
     If the document is not in the cache
@@ -244,7 +244,7 @@ where
       retrieval_location.clone(),
       given_location.clone(),
       antecedent_location.cloned(),
-      default_meta_schema_id.to_owned(),
+      default_type,
     ));
 
     Ok(())
@@ -261,7 +261,7 @@ where
     given_location: &NodeLocation,
     antecedent_location: Option<&NodeLocation>,
     node: NodeRc,
-    default_meta_schema_id: &str,
+    default_type: T,
   ) -> Result<(), Error> {
     let mut queue = Default::default();
 
@@ -271,7 +271,7 @@ where
         given_location,
         antecedent_location,
         node,
-        default_meta_schema_id,
+        default_type,
         &mut queue,
       )
       .await?;
@@ -287,8 +287,8 @@ where
     given_location: &NodeLocation,
     antecedent_location: Option<&NodeLocation>,
     node: NodeRc,
-    default_meta_schema_id: &str,
-    queue: &mut Queue,
+    default_type: T,
+    queue: &mut Queue<T>,
   ) -> Result<(), Error> {
     /*
     If the document is not in the cache
@@ -301,7 +301,7 @@ where
       retrieval_location.clone(),
       given_location.clone(),
       antecedent_location.cloned(),
-      default_meta_schema_id.to_owned(),
+      default_type,
     ));
 
     Ok(())
@@ -350,23 +350,19 @@ where
   /**
   Load documents from queue, drain the queue
   */
-  async fn load_from_queue(self: &Rc<Self>, queue: &mut Queue) -> Result<(), Error> {
+  async fn load_from_queue(self: &Rc<Self>, queue: &mut Queue<T>) -> Result<(), Error> {
     /*
     This here will drain the queue.
     */
-    while let Some((
-      retrieval_location,
-      given_location,
-      antecedent_location,
-      default_meta_schema_id,
-    )) = queue.pop()
+    while let Some((retrieval_location, given_location, antecedent_location, default_type)) =
+      queue.pop()
     {
       self
         .load_from_cache_with_queue(
           &retrieval_location,
           &given_location,
           antecedent_location.as_ref(),
-          &default_meta_schema_id,
+          default_type,
           queue,
         )
         .await?;
@@ -385,8 +381,8 @@ where
     retrieval_location: &NodeLocation,
     given_location: &NodeLocation,
     antecedent_location: Option<&NodeLocation>,
-    default_meta_schema_id: &str,
-    queue: &mut Queue,
+    default_type: T,
+    queue: &mut Queue<T>,
   ) -> Result<(), Error> {
     if self
       .node_documents
@@ -471,7 +467,7 @@ where
           &embedded_document.given_location,
           Some(document_location),
           node,
-          default_meta_schema_id,
+          default_type.clone(),
           queue,
         )
         .await?;
@@ -484,7 +480,7 @@ where
           &referenced_document.retrieval_location,
           &referenced_document.given_location,
           Some(document_location),
-          default_meta_schema_id,
+          default_type.clone(),
           queue,
         )
         .await?;
@@ -495,6 +491,4 @@ where
 }
 
 #[cfg(test)]
-mod tests {
-  //
-}
+mod tests {}

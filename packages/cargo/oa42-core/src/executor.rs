@@ -1,5 +1,5 @@
 use crate::imports::host_invoke_callback;
-use crate::utils::key::Key;
+use crate::utils::Key;
 use futures::task::LocalSpawnExt;
 use futures::{executor::LocalPool, Future};
 use std::cell::RefCell;
