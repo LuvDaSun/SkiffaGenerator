@@ -45,7 +45,7 @@ pub struct DocumentConfiguration {
 pub type DocumentFactory<K, E> =
   dyn Fn(Weak<DocumentContext<K, E>>, DocumentConfiguration) -> Rc<dyn Document<E>>;
 pub type DiscoverDocumentType<K> = Box<dyn Fn(&NodeRc) -> &K>;
-pub type FetchFile = Box<dyn Fn(String) -> Pin<Box<dyn Future<Output = Result<String, Error>>>>>;
+pub type FetchFile = Box<dyn Fn(&str) -> Pin<Box<dyn Future<Output = Result<String, Error>>>>>;
 
 type Queue = Vec<(NodeLocation, NodeLocation, Option<NodeLocation>, String)>;
 
@@ -223,7 +223,7 @@ where
       */
       let document_location = retrieval_location.set_root();
       let fetch_location = document_location.to_fetch_string();
-      let data = (self.fetch_file)(fetch_location).await?;
+      let data = (self.fetch_file)(&fetch_location).await?;
       let document_node = serde_yaml::from_str(&data)?;
       let document_node = Rc::new(document_node);
 
