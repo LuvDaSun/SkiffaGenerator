@@ -1,19 +1,34 @@
 openapi: 3.0.2
 
 info:
-  title: Nationaal Watersport Diploma API
+  title: Nationaal Watersportdiploma API
   description: |-
-    Nationaal Watersport Diploma API
+    Nationaal Watersportdiploma API
   version: 0.1.0
 
 security:
-  - api-token: []
+  - open-id: []
+  - api-key: []
 
 paths:
-  /main-category:
+  /me:
     get:
-      operationId: get-main-categories
-      summary: Get main get-main-categories
+      operationId: me
+      summary: Retrieves information about the current user (if any)
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserModel"
+
+  /discipline:
+    get:
+      operationId: listDisciplines
+      tags:
+        - discipline
+      summary: Lists all disciplines
       responses:
         "200":
           description: Ok
@@ -22,35 +37,48 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/main-category"
-    post:
-      operationId: create-main-category
-      summary: Create an new main category
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/main-category-fields"
-      responses:
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/main-category"
+                  $ref: "#/components/schemas/DisciplineModel"
+        "404":
+          description: Not found
         "403":
-          $ref: "#/components/responses/forbidden"
+          description: Forbidden
 
-  /sub-category/{main-category-id}:
+  /discipline/{discipline-key}:
     parameters:
-      - name: main-category-id
-        in: path
+      - in: path
+        name: discipline-key
         required: true
         schema:
-          $ref: "#/components/schemas/entity-id"
+          $ref: "#/components/schemas/HandleOrId"
     get:
-      operationId: get-sub-categories
-      summary: Get sub categories in a main category
+      operationId: retrieveDiscipline
+      tags:
+        - discipline
+      summary: Retrieves a single discipline
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DisciplineModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /discipline/{discipline-key}/curricula:
+    parameters:
+      - in: path
+        name: discipline-key
+        required: true
+        schema:
+          $ref: "#/components/schemas/HandleOrId"
+    get:
+      operationId: listCurriculaByDiscipline
+      tags:
+        - curriculum
+      summary: List a curricula by discipline
       responses:
         "200":
           description: Ok
@@ -59,102 +87,1032 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/main-category"
+                  $ref: "#/components/schemas/CurriculumModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /programs:
+    get:
+      operationId: listPrograms
+      summary: Retrieve a list of programs
+      description: >-
+        Retrieve a list of programs. The list will be paginated and the provided
+        query parameters allow filtering the returned programs.
+      tags:
+        - program
+
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProgramModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /program/{program-key}/curricula:
+    parameters:
+      - in: path
+        name: program-key
+        required: true
+        schema:
+          $ref: "#/components/schemas/HandleOrId"
+    get:
+      operationId: listCurriculaByProgram
+      tags:
+        - curriculum
+      summary: List curricula by program
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CurriculumModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /find-certificate:
+    get:
+      parameters:
+        - in: query
+          name: certificate-handle
+          required: true
+          schema:
+            $ref: "#/components/schemas/CertificateHandle"
+        - in: query
+          name: issuedAt
+          required: true
+          schema:
+            type: string
+
+      operationId: find-certificate
+      summary: Find certificate by handle and issue date
+
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CertificateModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /list-certificates-by-number:
+    get:
+      parameters:
+        - in: query
+          name: numbers
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/CertificateHandle"
+
+      operationId: listCertificatesByNumber
+      tags:
+        - certificate
+      summary: List certificates by number
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CertificateModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /certificate/{certificate-key}:
+    parameters:
+      - in: query
+        name: certificate-key
+        required: true
+        schema:
+          $ref: "#/components/schemas/CertificateHandleOrId"
+
+    get:
+      operationId: get-certificate
+      summary: Get certificate by handle or id
+
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CertificateModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /locations:
+    get:
+      operationId: get-locations
+      summary: Get all locations
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LocationModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
     post:
-      operationId: create-sub-category
-      summary: Create an new sub category in a main category
+      operationId: create-location
+      summary: Creates a new location
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/sub-category-fields"
+              $ref: "#/components/schemas/CreateLocationModel"
+
       responses:
         "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/sub-category"
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    $ref: "#/components/schemas/Id"
         "403":
-          $ref: "#/components/responses/forbidden"
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /location/{location-key}:
+    parameters:
+      - in: path
+        required: true
+        name: location-key
+        schema:
+          $ref: "#/components/schemas/HandleOrId"
+
+    get:
+      operationId: get-location
+      summary: Get location
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LocationModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /location/{location-key}/persons:
+    parameters:
+      - in: path
+        required: true
+        name: location-key
+        schema:
+          $ref: "#/components/schemas/HandleOrId"
+
+    get:
+      operationId: listPersonsForLocation
+      summary: List persons for a location
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PersonModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+    post:
+      operationId: createPersonForLocation
+      summary: create a person for a location
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePersonModel"
+
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IdContainer"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /location/{location-key}/certificate:
+    parameters:
+      - in: path
+        required: true
+        name: location-key
+        schema:
+          $ref: "#/components/schemas/HandleOrId"
+
+    get:
+      operationId: get-location-certificates
+      summary: Get all certificates for location
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LocationCertificateModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+    post:
+      operationId: create-location-certificate
+      summary: Creates a new certificate for a location
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLocationCertificateModel"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    $ref: "#/components/schemas/Id"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+
+  /location/{location-key}/cohort:
+    parameters:
+      - in: path
+        required: true
+        name: location-key
+        schema:
+          $ref: "#/components/schemas/HandleOrId"
+
+    get:
+      operationId: get-location-cohorts
+      summary: Get all cohorts for location
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LocationCohortModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+    post:
+      operationId: create-location-cohort
+      summary: Creates a new cohort for a location
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLocationCohortModel"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    $ref: "#/components/schemas/Id"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /country:
+    get:
+      operationId: listCountries
+      tags:
+        - country
+      summary: Lists all countries
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CountryModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /curriculum/{curriculum-key}/gear-types:
+    parameters:
+      - in: path
+        name: curriculum-key
+        required: true
+        schema:
+          $ref: "#/components/schemas/HandleOrId"
+    get:
+      operationId: listGearTypesByCurriculum
+      tags:
+        - gear-type
+      summary: List gear typers by curriculum
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GearTypeModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
 
 components:
   schemas:
-    #entity schemas
+    # Entities
 
-    main-category:
-      description: |-
-        Full main category entity
-      $ref: "#/components/schemas/main-category-fields"
+    UserModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/IdContainer"
+      required:
+        - handle
+      properties:
+        handle:
+          $ref: "#/components/schemas/Handle"
+
+    DisciplineModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/IdContainer"
+        - $ref: "#/components/schemas/CudFields"
+      required:
+        - handle
+        - title
+        - weight
+      properties:
+        handle:
+          $ref: "#/components/schemas/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+        weight:
+          $ref: "#/components/schemas/PositiveInteger"
+
+    CurriculumModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/IdContainer"
+        - $ref: "#/components/schemas/CudFields"
+      required:
+        - startedAt
+        - programId
+        - revision
+        - modules
+      properties:
+        startedAt:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Date"
+        programId:
+          $ref: "#/components/schemas/Id"
+        revision:
+          $ref: "#/components/schemas/Revision"
+        modules:
+          type: array
+          items:
+            $ref: "#/components/schemas/ModuleModel"
+
+    ModuleModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/IdContainer"
+        - $ref: "#/components/schemas/CudFields"
+      required:
+        - handle
+        - title
+        - type
+        - isRequired
+        - weight
+        - competencies
+      properties:
+        handle:
+          $ref: "#/components/schemas/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+        type:
+          oneOf:
+            - nullable: true
+            - enum:
+                - "knowledge"
+                - "skill"
+        isRequired:
+          type: boolean
+        weight:
+          $ref: "#/components/schemas/PositiveInteger"
+        competencies:
+          type: array
+          items:
+            $ref: "#/components/schemas/CompetencyModel"
+
+    CompetencyModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/IdContainer"
+        - $ref: "#/components/schemas/CudFields"
+      required:
+        - handle
+        - title
+        - type
+        - isRequired
+        - requirement
+        - weight
+      properties:
+        handle:
+          $ref: "#/components/schemas/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+        type:
+          oneOf:
+            - nullable: true
+            - enum:
+                - "knowledge"
+                - "skill"
+        isRequired:
+          type: boolean
+        requirement:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+        weight:
+          $ref: "#/components/schemas/PositiveInteger"
+
+    ProgramModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/IdContainer"
+        - $ref: "#/components/schemas/CudFields"
+      required:
+        - handle
+        - title
+        - degree
+        - discipline
+        - categories
+      properties:
+        handle:
+          $ref: "#/components/schemas/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+        degree:
+          $ref: "#/components/schemas/DegreeModel"
+        discipline:
+          $ref: "#/components/schemas/DisciplineModel"
+        categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChildCategoryModel"
+
+    LocationModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/IdContainer"
+        - $ref: "#/components/schemas/CudFields"
+      required:
+        - handle
+        - name
+        - websiteUrl
+        - shortDescription
+        - logo
+        - logoSquare
+        - logoCertificate
+      properties:
+        handle:
+          $ref: "#/components/schemas/Handle"
+        name:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+        websiteUrl:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Url"
+        shortDescription:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+        logo:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/ImageModel"
+        logoSquare:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/ImageModel"
+        logoCertificate:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/ImageModel"
+
+    CreateLocationModel:
+      type: object
+      required:
+        - handle
+        - title
+      properties:
+        handle:
+          $ref: "#/components/schemas/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+
+    LocationCohortModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/IdContainer"
+      required:
+        - handle
+        - title
+      properties:
+        handle:
+          $ref: "#/components/schemas/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+
+    CreateLocationCohortModel:
+      type: object
+      required:
+        - handle
+        - title
+      properties:
+        handle:
+          $ref: "#/components/schemas/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+
+    CertificateModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/IdContainer"
+        - $ref: "#/components/schemas/CudFields"
+      required:
+        - handle
+        - studentCurriculumId
+        - issuedAt
+        - visibleFrom
+      properties:
+        handle:
+          $ref: "#/components/schemas/Handle"
+        studentCurriculumId:
+          $ref: "#/components/schemas/Id"
+        issuedAt:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Date"
+        visibleFrom:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Date"
+
+    DegreeModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/IdContainer"
+        - $ref: "#/components/schemas/CudFields"
+      required:
+        - handle
+        - title
+        - rang
+      properties:
+        handle:
+          $ref: "#/components/schemas/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+        rang:
+          $ref: "#/components/schemas/PositiveInteger"
+
+    CategoryModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/IdContainer"
+        - $ref: "#/components/schemas/CudFields"
+      required:
+        - handle
+        - title
+        - description
+        - weight
+      properties:
+        handle:
+          $ref: "#/components/schemas/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+        description:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+        weight:
+          $ref: "#/components/schemas/PositiveInteger"
+
+    ChildCategoryModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/CategoryModel"
+      required:
+        - parent
+      properties:
+        parent:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/CategoryModel"
+
+    LocationCertificateModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/IdContainer"
+      required:
+        - handle
+        - title
+      properties:
+        handle:
+          $ref: "#/components/schemas/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+
+    CreateLocationCertificateModel:
+      type: object
+      required:
+        - handle
+        - title
+      properties:
+        handle:
+          $ref: "#/components/schemas/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+
+    CountryModel:
+      type: object
+      required:
+        - code
+        - name
+      properties:
+        code:
+          $ref: "#/components/schemas/Code"
+        name:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+
+    GearTypeModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/IdContainer"
+        - $ref: "#/components/schemas/CudFields"
+      required:
+        - handle
+        - title
+      properties:
+        handle:
+          $ref: "#/components/schemas/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+
+    ImageModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/IdContainer"
+        - $ref: "#/components/schemas/CuFields"
+      required:
+        - name
+        - url
+        - type
+        - alt
+        - mimeType
+        - size
+        - transformUrl
+        - width
+        - height
+      properties:
+        name:
+          $ref: "#/components/schemas/Text"
+        url:
+          $ref: "#/components/schemas/Url"
+        type:
+          enum:
+            - image
+        alt:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+        mimeType:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/MimeType"
+        size:
+          $ref: "#/components/schemas/PositiveInteger"
+        transformUrl:
+          $ref: "#/components/schemas/Url"
+        width:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/PositiveInteger"
+        height:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/PositiveInteger"
+
+    PersonModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/IdContainer"
+        - $ref: "#/components/schemas/CudFields"
+      required:
+        - userId
+        - firstName
+        - lastNamePrefix
+        - lastName
+        - dateOfBirth
+        - birthCity
+        - birthCountry
+        - actors
+      properties:
+        userId:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Id"
+        firstName:
+          $ref: "#/components/schemas/Text"
+        lastNamePrefix:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+        lastName:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+        dateOfBirth:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Date"
+        birthCity:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+        birthCountry:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/CountryModel"
+        actors:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActorModel"
+
+    CreatePersonModel:
+      type: object
+      required:
+        - email
+        - firstName
+        - lastNamePrefix
+        - lastName
+        - dateOfBirth
+        - birthCity
+        - birthCountry
+      properties:
+        email:
+          $ref: "#/components/schemas/Email"
+        firstName:
+          $ref: "#/components/schemas/Text"
+        lastNamePrefix:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Text"
+        lastName:
+          $ref: "#/components/schemas/Text"
+        dateOfBirth:
+          $ref: "#/components/schemas/Date"
+        birthCity:
+          $ref: "#/components/schemas/Text"
+        birthCountry:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Code"
+
+    ActorModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/IdContainer"
+        - $ref: "#/components/schemas/CudFields"
+      required:
+        - type
+        - locationId
+        - personId
+      properties:
+        type:
+          enum:
+            - student
+            - instructor
+            - location_admin
+            - application
+            - system
+        locationId:
+          $ref: "#/components/schemas/Id"
+        personId:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Id"
+    # Bases
+
+    IdContainer:
+      type: object
       required:
         - id
       properties:
         id:
-          $ref: "#/components/schemas/entity-id"
+          $ref: "#/components/schemas/Id"
 
-    main-category-fields:
-      description: |-
-        Main category editable fields
+    CudFields:
       type: object
       required:
-        - name
+        - createdAt
+        - updatedAt
+        - deletedAt
       properties:
-        name:
-          $ref: "#/components/schemas/entity-name"
-        description:
-          $ref: "#/components/schemas/entity-description"
+        createdAt:
+          $ref: "#/components/schemas/Date"
+        updatedAt:
+          $ref: "#/components/schemas/Date"
+        deletedAt:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/Date"
 
-    sub-category:
-      description: |-
-        Full sub category entity
-      $ref: "#/components/schemas/sub-category-fields"
-      required:
-        - id
-      properties:
-        id:
-          $ref: "#/components/schemas/entity-id"
-
-    sub-category-fields:
-      description: |-
-        Sub category entity editable fields
+    CuFields:
       type: object
       required:
-        - name
+        - createdAt
+        - updatedAt
       properties:
-        name:
-          $ref: "#/components/schemas/entity-name"
-        description:
-          $ref: "#/components/schemas/entity-description"
+        createdAt:
+          $ref: "#/components/schemas/Date"
+        updatedAt:
+          $ref: "#/components/schemas/Date"
 
-    # field schemas
+    # Fields
 
-    entity-id:
-      description: |-
-        Key of an entity
+    Id:
+      type: string
+      format: uuid
+      description: A unique identifier
+
+    Code:
+      type: string
+      description: A code
+
+    Text:
+      type: string
+      minLength: 1
+      description: non empty text
+
+    MimeType:
+      type: string
+      minLength: 1
+      description: a valid mime type
+
+    Url:
+      type: string
+      format: uri
+      description: a valid url
+
+    Email:
+      type: string
+      format: email
+      description: email
+
+    Handle:
+      type: string
+      pattern: ^[a-z0-9\-]+$
+      minLength: 3
+      description: The unique handle of an item
+      not:
+        $ref: "#/components/schemas/Id"
+
+    HandleOrId:
+      oneOf:
+        - $ref: "#/components/schemas/Id"
+        - $ref: "#/components/schemas/Handle"
+
+    CertificateHandle:
+      type: string
+      pattern: ^[a-zA-Z0-9]+$
+      minLength: 10
+      maxLength: 10
+      description: The unique handle of a certificate
+      not:
+        $ref: "#/components/schemas/Id"
+
+    CertificateHandleOrId:
+      oneOf:
+        - $ref: "#/components/schemas/Id"
+        - $ref: "#/components/schemas/CertificateHandle"
+
+    Date:
+      type: string
+      format: date
+
+    PositiveInteger:
       type: integer
       minimum: 0
       exclusiveMinimum: true
 
-    entity-name:
-      description: |-
-        The name of an entity
+    Revision:
       type: string
       minLength: 1
-      maxLength: 100
-
-    entity-description:
-      description: |-
-        Description of an entity
-      type: string
-      minLength: 1
-      maxLength: 100
-
-  responses:
-    forbidden:
-      description: Forbidden
 
   securitySchemes:
-    api-token:
+    # this should be transformed into oauth authentication once the generator supports it
+    open-id:
+      type: http
+      description: Default authentication mechanism
+      scheme: bearer
+
+    api-key:
       type: apiKey
-      name: api-token
+      name: x-api-key
       in: header

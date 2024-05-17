@@ -1,6 +1,7 @@
 use once_cell::sync::Lazy;
 use regex::{Regex, RegexBuilder};
 use std::{error::Error, fmt::Display, hash::Hash, iter::once, str::FromStr};
+use wasm_bindgen::prelude::*;
 
 pub static URL_REGEX: Lazy<Regex> = Lazy::new(|| {
   RegexBuilder::new(r"^([a-z]+\:(?:\/\/)?[^\/]*)?([^\?\#]*?)?(\?.*?)?(\#.*?)?$")
@@ -15,6 +16,7 @@ pub static URL_REGEX: Lazy<Regex> = Lazy::new(|| {
 )]
 #[serde(try_from = "&str")]
 #[serde(into = "String")]
+#[wasm_bindgen]
 pub struct NodeLocation {
   origin: String,
   path: Vec<String>,

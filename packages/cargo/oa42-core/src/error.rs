@@ -1,4 +1,4 @@
-use crate::utils::node_location::ParseError;
+use crate::utils::ParseError;
 use std::fmt::Display;
 
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq, Ord, PartialOrd)]
