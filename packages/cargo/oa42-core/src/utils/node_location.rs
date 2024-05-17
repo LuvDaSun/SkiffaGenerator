@@ -36,8 +36,8 @@ impl NodeLocation {
   }
 
   #[wasm_bindgen(js_name = "parse")]
-  pub fn parse(input: String) -> Result<NodeLocation, ParseError> {
-    Self::from_str(input.as_str())
+  pub fn parse(input: &str) -> Result<NodeLocation, ParseError> {
+    Self::from_str(input)
   }
 
   #[wasm_bindgen(js_name = "getAnchor")]
@@ -79,7 +79,7 @@ impl NodeLocation {
   #[wasm_bindgen(js_name = "setAnchor")]
   pub fn set_anchor(&self, value: String) -> Self {
     let mut cloned = self.clone();
-    cloned.hash = once(value).map(|part| part.into()).collect();
+    cloned.hash = once(value).collect();
     cloned
   }
 
@@ -89,8 +89,7 @@ impl NodeLocation {
   #[wasm_bindgen(js_name = "setPointer")]
   pub fn set_pointer(&self, value: Vec<String>) -> Self {
     let mut cloned = self.clone();
-    cloned.hash =
-      normalize_hash(once(String::new()).chain(value.into_iter().map(|part| part.into())));
+    cloned.hash = normalize_hash(once(String::new()).chain(value));
     cloned
   }
 
@@ -113,8 +112,7 @@ impl NodeLocation {
       .get_pointer()
       .unwrap_or_default()
       .into_iter()
-      .map(|part| (*part).into())
-      .chain(value.into_iter().map(|part| part.into()))
+      .chain(value)
       .collect();
 
     self.set_pointer(pointer)
