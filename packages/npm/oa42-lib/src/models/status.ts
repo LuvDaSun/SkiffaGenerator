@@ -1,4 +1,5 @@
-import { StatusCode, UnexpectedStatusCode } from "../main.js";
+import { UnexpectedStatusCode } from "../errors/index.js";
+import { StatusCode } from "../utils/index.js";
 
 export type StatusContainer<S extends StatusCode> = {
   status: S;
