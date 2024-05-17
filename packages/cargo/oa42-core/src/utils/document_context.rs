@@ -1,10 +1,7 @@
+use super::{fetch_file, read_node, NodeLocation, NodeRc};
 use crate::error::Error;
-use crate::utils::NodeRc;
-use crate::utils::{node_location::NodeLocation, read_node};
 use std::collections::BTreeMap;
-use std::future::Future;
 use std::hash::Hash;
-use std::pin::Pin;
 use std::{
   cell::RefCell,
   collections::HashMap,
@@ -21,10 +18,7 @@ pub struct ReferencedDocument {
   pub given_location: NodeLocation,
 }
 
-pub trait Document
-where
-  Self: Sized,
-{
+pub trait Document<I> {
   fn get_referenced_documents(&self) -> &Vec<ReferencedDocument>;
   fn get_embedded_documents(&self) -> &Vec<EmbeddedDocument>;
 
@@ -32,7 +26,7 @@ where
   fn get_antecedent_location(&self) -> Option<&NodeLocation>;
   fn get_node_locations(&self) -> Vec<NodeLocation>;
 
-  fn get_documents(&self) -> BTreeMap<NodeLocation, Self>;
+  fn get_intermediate_documents(&self) -> BTreeMap<NodeLocation, I>;
 
   fn resolve_anchor(&self, anchor: &str) -> Option<Vec<String>>;
   fn resolve_antecedent_anchor(&self, anchor: &str) -> Option<Vec<String>>;
@@ -45,17 +39,12 @@ pub struct DocumentConfiguration {
   pub document_node: NodeRc,
 }
 
-pub type DocumentFactory<T, D> =
-  dyn Fn(Weak<DocumentContext<T, D>>, DocumentConfiguration) -> Rc<D>;
-pub type DiscoverDocumentType<T> = Box<dyn Fn(&NodeRc) -> &T>;
-pub type FetchFile = Box<dyn Fn(&str) -> Pin<Box<dyn Future<Output = Result<String, Error>>>>>;
+pub type DocumentFactory<T, I> =
+  dyn Fn(Weak<DocumentContext<T, I>>, DocumentConfiguration) -> Rc<dyn Document<I>>;
 
 type Queue<T> = Vec<(NodeLocation, NodeLocation, Option<NodeLocation>, T)>;
 
-pub struct DocumentContext<T, D>
-where
-  D: Document,
-{
+pub struct DocumentContext<T, I> {
   /**
   Maps node retrieval locations to their documents. Every node has a location that is an identifier. Thi
   map maps that identifier to the identifier of a document.
@@ -71,7 +60,7 @@ where
   /**
    * all documents, indexed by the document node id of the document
    */
-  documents: RefCell<HashMap<NodeLocation, Rc<D>>>,
+  documents: RefCell<HashMap<NodeLocation, Rc<dyn Document<I>>>>,
 
   /**
   This map maps document retrieval locations to document root locations
@@ -81,34 +70,27 @@ where
   /**
    * document factories by document type key
    */
-  factories: HashMap<T, Box<DocumentFactory<T, D>>>,
-
-  fetch_file: FetchFile,
-
-  discover_document_type: DiscoverDocumentType<T>,
+  factories: HashMap<T, Box<DocumentFactory<T, I>>>,
 }
 
-impl<T, D> DocumentContext<T, D>
+impl<T, I> DocumentContext<T, I>
 where
-  T: PartialEq + Eq + Hash + Clone,
-  D: Document,
+  T: PartialEq + Eq + Hash + Clone + for<'a> TryFrom<&'a NodeRc>,
 {
-  pub fn new(fetch_file: FetchFile, discover_document_type: DiscoverDocumentType<T>) -> Rc<Self> {
+  pub fn new() -> Rc<Self> {
     Rc::new(Self {
       node_documents: Default::default(),
       node_cache: Default::default(),
       documents: Default::default(),
       document_resolved: Default::default(),
       factories: Default::default(),
-      fetch_file,
-      discover_document_type,
     })
   }
 
   pub fn register_factory(
     self: &mut Rc<Self>,
     r#type: T,
-    factory: Box<DocumentFactory<T, D>>,
+    factory: Box<DocumentFactory<T, I>>,
   ) -> Result<(), Error> {
     /*
     don't check if the factory is already registered here so we can
@@ -133,12 +115,12 @@ where
       .cloned()
   }
 
-  pub fn get_documents(&self) -> BTreeMap<NodeLocation, D> {
+  pub fn get_intermediate_documents(&self) -> BTreeMap<NodeLocation, I> {
     self
       .documents
       .borrow()
       .values()
-      .flat_map(|document| document.get_documents())
+      .flat_map(|document| document.get_intermediate_documents())
       .collect()
   }
 
@@ -151,7 +133,10 @@ where
       .clone()
   }
 
-  pub fn get_document(&self, document_location: &NodeLocation) -> Result<Rc<D>, Error> {
+  pub fn get_document(
+    &self,
+    document_location: &NodeLocation,
+  ) -> Result<Rc<dyn Document<I>>, Error> {
     let document_location = document_location.clone();
 
     let documents = self.documents.borrow();
@@ -164,7 +149,7 @@ where
   pub fn get_document_and_antecedents(
     &self,
     document_location: &NodeLocation,
-  ) -> Result<Vec<Rc<D>>, Error> {
+  ) -> Result<Vec<Rc<dyn Document<I>>>, Error> {
     let mut results = Vec::new();
     let mut document_location = document_location.clone();
 
@@ -230,7 +215,7 @@ where
       */
       let document_location = retrieval_location.set_root();
       let fetch_location = document_location.to_fetch_string();
-      let data = (self.fetch_file)(&fetch_location).await?;
+      let data = fetch_file(&fetch_location).await?;
       let document_node = serde_yaml::from_str(&data)?;
       let document_node = Rc::new(document_node);
 
@@ -397,13 +382,10 @@ where
     */
     let document = {
       let node_cache = self.node_cache.borrow();
-      let node = node_cache
-        .get(retrieval_location)
-        .ok_or(Error::NotFound)?
-        .clone();
-      let document_type = (self.discover_document_type)(&node);
+      let node = node_cache.get(retrieval_location).ok_or(Error::NotFound)?;
+      let document_type = node.try_into().unwrap_or(default_type.clone());
 
-      let factory = self.factories.get(document_type).ok_or(Error::NotFound)?;
+      let factory = self.factories.get(&document_type).ok_or(Error::NotFound)?;
 
       factory(
         Rc::downgrade(self),
@@ -411,7 +393,7 @@ where
           retrieval_location: retrieval_location.clone(),
           given_location: given_location.clone(),
           antecedent_location: antecedent_location.cloned(),
-          document_node: node,
+          document_node: node.clone(),
         },
       )
     };

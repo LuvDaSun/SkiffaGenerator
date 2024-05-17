@@ -1,2 +1,4 @@
+pub mod documents;
 pub mod error;
-pub mod utils;
+
+mod utils;
