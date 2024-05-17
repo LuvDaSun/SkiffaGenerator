@@ -18,6 +18,7 @@ typed/
 bundled/
 out/
 bin/
+dist/
 
 generated/
 logs/
