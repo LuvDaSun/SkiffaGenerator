@@ -1,4 +1,4 @@
-use crate::{models::IntermediateDocument, utils::Document};
+use crate::{models::Api, utils::Document};
 use std::rc::Rc;
 
 pub struct Oas30Document {
@@ -11,7 +11,7 @@ impl Oas30Document {
   }
 }
 
-impl Document<IntermediateDocument> for Oas30Document {
+impl Document<Api> for Oas30Document {
   fn get_referenced_documents(&self) -> &Vec<crate::utils::ReferencedDocument> {
     todo!()
   }
@@ -34,7 +34,7 @@ impl Document<IntermediateDocument> for Oas30Document {
 
   fn get_intermediate_documents(
     &self,
-  ) -> std::collections::BTreeMap<crate::utils::NodeLocation, IntermediateDocument> {
+  ) -> std::collections::BTreeMap<crate::utils::NodeLocation, Api> {
     todo!()
   }
 

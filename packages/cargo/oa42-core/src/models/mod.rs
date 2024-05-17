@@ -1,7 +1,6 @@
 mod api;
 mod authentication_requirement;
 mod body;
-mod intermediate_document;
 mod method;
 mod operation;
 mod operation_result;
@@ -11,7 +10,6 @@ mod path;
 pub use api::*;
 pub use authentication_requirement::*;
 pub use body::*;
-pub use intermediate_document::*;
 pub use method::*;
 pub use operation::*;
 pub use operation_result::*;

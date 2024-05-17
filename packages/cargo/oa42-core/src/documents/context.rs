@@ -1,14 +1,12 @@
 use super::SpecificationDocumentType;
 use crate::documents::{Oas30Document, Oas31Document, Swagger2Document};
 use crate::error::Error;
-use crate::{models::IntermediateDocument, utils::DocumentContext};
+use crate::{models::Api, utils::DocumentContext};
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-pub struct SpecificationDocumentContext(
-  Rc<DocumentContext<SpecificationDocumentType, IntermediateDocument>>,
-);
+pub struct SpecificationDocumentContext(Rc<DocumentContext<SpecificationDocumentType, Api>>);
 
 #[wasm_bindgen]
 impl SpecificationDocumentContext {
