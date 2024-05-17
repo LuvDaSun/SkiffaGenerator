@@ -4,13 +4,12 @@
   "sideEffects": false,
   "description": "core library",
   "type": "module",
-  "main": "./dist/oa42_core.js",
   "module": "./dist/oa42_core.js",
   "types": "./dist/oa42_core.d.ts",
   "exports": {
     ".": {
-      "default": "./bundled/oa42_core.js",
-      "types": "./typed/oa42_core.d.ts"
+      "import": "./dist/oa42_core.js",
+      "types": "./dist/oa42_core.d.ts"
     }
   },
   "files": [
