@@ -1,26 +1,26 @@
 use crate::error::Error;
 
 #[cfg(target_os = "unknown")]
-pub async fn fetch_file(url: String) -> Result<String, Error> {
-  use wasm_bindgen::prelude::*;
-  use wasm_bindgen_futures::JsFuture;
-  use web_sys::{Request, RequestInit, RequestMode, Response};
+pub async fn fetch_file(location: &str) -> Result<String, Error> {
+  // use wasm_bindgen::prelude::*;
+  // use wasm_bindgen_futures::JsFuture;
+  // use web_sys::{Request, RequestInit, RequestMode, Response};
 
-  let mut opts = RequestInit::new();
-  opts.method("GET");
-  opts.mode(RequestMode::Cors);
+  // let mut opts = RequestInit::new();
+  // opts.method("GET");
+  // opts.mode(RequestMode::Cors);
 
-  let request = Request::new_with_str_and_init(&url, &opts)?;
+  // let request = Request::new_with_str_and_init(&url, &opts)?;
 
-  let window = web_sys::window().unwrap();
-  let fetch = window.fetch_with_request(&request);
+  // let window = web_sys::window().unwrap();
+  // let fetch = window.fetch_with_request(&request);
 
-  let resp_value = JsFuture::from(fetch).await?;
+  // let resp_value = JsFuture::from(fetch).await?;
 
-  let resp: Response = resp_value.dyn_into().unwrap();
+  // let resp: Response = resp_value.dyn_into().unwrap();
 
-  let json = JsFuture::from(resp.text()?).await?;
-  Ok(json)
+  // let json = JsFuture::from(resp.text()?).await?;
+  Ok(String::new())
 }
 
 #[cfg(not(target_os = "unknown"))]
