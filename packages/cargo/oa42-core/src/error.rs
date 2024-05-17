@@ -1,10 +1,11 @@
 use crate::utils::ParseError;
 use std::fmt::Display;
+use wasm_bindgen::prelude::*;
 
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq, Ord, PartialOrd)]
-#[repr(usize)]
+#[wasm_bindgen]
 pub enum Error {
-  Ok = 0,
+  Ok,
   Unknown,
   Conflict,
   NotFound,
