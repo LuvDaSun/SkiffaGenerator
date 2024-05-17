@@ -4,11 +4,11 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 pub struct OperationResult {
-  pub location: NodeLocation,
-  pub description: String,
-  pub status_kind: String,
-  pub status_codes: Vec<usize>,
-  pub header_parameters: Vec<Parameter>,
-  pub bodies: Vec<Body>,
-  pub mockable: bool,
+  location: NodeLocation,
+  description: String,
+  status_kind: String,
+  status_codes: Vec<usize>,
+  header_parameters: Vec<Parameter>,
+  bodies: Vec<Body>,
+  mockable: bool,
 }
