@@ -1,8 +1,7 @@
 use super::{Body, Parameter};
 use crate::utils::NodeLocation;
-use wasm_bindgen::prelude::*;
 
-#[wasm_bindgen]
+#[oa42_macros::model]
 pub struct OperationResult {
   location: NodeLocation,
   description: String,

@@ -1,7 +1,6 @@
 use crate::utils::NodeLocation;
-use wasm_bindgen::prelude::*;
 
-#[wasm_bindgen]
+#[oa42_macros::model]
 pub struct Body {
   location: NodeLocation,
   content_type: String,

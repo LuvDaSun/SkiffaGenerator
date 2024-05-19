@@ -15,7 +15,6 @@ maintenance = { status = "actively-developed" }
 [dependencies]
 serde = { version = "^1.0.158", features = ["derive"] }
 serde_json = "^1.0.94"
-proc-macro2 = "^1.0.78"
 quote = "^1.0.35"
 futures = { version = "0.3.30" }
 serde_yaml = "^0.9.31"
@@ -26,10 +25,12 @@ wasm-bindgen = "0.2.92"
 semver = "1.0.23"
 wasm-bindgen-futures = "0.4.42"
 web-sys = { version = "0.3.69", features = ["Window", "Request", "Response", "Headers","RequestInit", "RequestMode"] }
+oa42-macros = { path = "../oa42-macros" }
 
 [target.'cfg(not(target_os = "unknown"))'.dependencies]
 async-std = { version = "1.12.0", features = ["attributes"] }
 surf = "2.3.2"
+
 
 [lib]
 crate-type = ["rlib", "cdylib"]

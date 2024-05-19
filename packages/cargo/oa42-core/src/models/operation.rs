@@ -1,8 +1,7 @@
 use super::{AuthenticationRequirement, Body, Method, OperationResult, Parameter};
 use crate::utils::NodeLocation;
-use wasm_bindgen::prelude::*;
 
-#[wasm_bindgen]
+#[oa42_macros::model]
 pub struct Operation {
   location: NodeLocation,
   method: Method,
@@ -14,7 +13,7 @@ pub struct Operation {
    * all authentications from the second level should pass, any authentications
    * of the first level should pass
    */
-  authentication_requirements: Vec<Vec<AuthenticationRequirement>>,
+  // authentication_requirements: Vec<Vec<AuthenticationRequirement>>,
   query_parameters: Vec<Parameter>,
   header_parameters: Vec<Parameter>,
   path_parameters: Vec<Parameter>,

@@ -1,8 +1,7 @@
 use super::Operation;
 use crate::utils::NodeLocation;
-use wasm_bindgen::prelude::*;
 
-#[wasm_bindgen]
+#[oa42_macros::model]
 pub struct Path {
   id: usize,
   location: NodeLocation,
