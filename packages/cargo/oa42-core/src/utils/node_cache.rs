@@ -1,17 +1,15 @@
 use super::{fetch_file, Node, NodeLocation, NodeRc};
 use crate::error::Error;
+use std::collections::BTreeMap;
 use std::iter::once;
-use std::{collections::HashMap, rc::Rc};
+use std::rc::Rc;
 
 /// Caches nodes (json / yaml) and indexes the nodes by their location.
-/// Also this system tracks the document that the node belongs to and is
-/// smart enough to some nodes that are already in a different document. This is
-/// important for loading embedded documents in random order.
 /// Nodes have a retrieval location that is the physical (possibly globally
 /// unique) location of the node.
 ///
 pub struct NodeCache {
-  nodes: HashMap<NodeLocation, NodeRc>,
+  nodes: BTreeMap<NodeLocation, NodeRc>,
 }
 
 impl NodeCache {
@@ -64,9 +62,6 @@ impl NodeCache {
     retrieval_location: &NodeLocation,
     node: NodeRc,
   ) -> Result<(), Error> {
-    /*
-    If the document is not in the cache
-    */
     self.fill_node_cache(retrieval_location, node)?;
 
     Ok(())
