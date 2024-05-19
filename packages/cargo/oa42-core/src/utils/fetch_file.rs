@@ -20,7 +20,7 @@ pub async fn fetch_file(location: &str) -> Result<String, Error> {
   // let resp: Response = resp_value.dyn_into().unwrap();
 
   // let json = JsFuture::from(resp.text()?).await?;
-  Ok(String::new())
+  Ok("{}".to_owned())
 }
 
 #[cfg(not(target_os = "unknown"))]

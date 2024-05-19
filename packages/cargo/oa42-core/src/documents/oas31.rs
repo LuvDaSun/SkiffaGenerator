@@ -1,4 +1,7 @@
-use crate::{models::Api, utils::Document};
+use crate::{
+  models::Api,
+  utils::{Document, EmbeddedDocument, NodeLocation, ReferencedDocument},
+};
 use std::rc::Rc;
 
 pub struct Oas31Document {
@@ -12,29 +15,27 @@ impl Oas31Document {
 }
 
 impl Document<Api> for Oas31Document {
-  fn get_referenced_documents(&self) -> &Vec<crate::utils::ReferencedDocument> {
+  fn get_referenced_documents(&self) -> &Vec<ReferencedDocument> {
     todo!()
   }
 
-  fn get_embedded_documents(&self) -> &Vec<crate::utils::EmbeddedDocument> {
+  fn get_embedded_documents(&self) -> &Vec<EmbeddedDocument> {
     todo!()
   }
 
-  fn get_document_location(&self) -> &crate::utils::NodeLocation {
+  fn get_document_location(&self) -> &NodeLocation {
     todo!()
   }
 
-  fn get_antecedent_location(&self) -> Option<&crate::utils::NodeLocation> {
+  fn get_antecedent_location(&self) -> Option<&NodeLocation> {
     todo!()
   }
 
-  fn get_node_locations(&self) -> Vec<crate::utils::NodeLocation> {
+  fn get_node_locations(&self) -> Vec<NodeLocation> {
     todo!()
   }
 
-  fn get_intermediate_documents(
-    &self,
-  ) -> std::collections::BTreeMap<crate::utils::NodeLocation, Api> {
+  fn get_intermediate_documents(&self) -> std::collections::BTreeMap<NodeLocation, Api> {
     todo!()
   }
 

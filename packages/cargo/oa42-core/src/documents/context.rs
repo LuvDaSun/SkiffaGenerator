@@ -1,6 +1,7 @@
 use super::SpecificationDocumentType;
 use crate::documents::{Oas30Document, Oas31Document, Swagger2Document};
 use crate::error::Error;
+use crate::utils::NodeLocation;
 use crate::{models::Api, utils::DocumentContext};
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
@@ -32,5 +33,24 @@ impl SpecificationDocumentContext {
     )?;
 
     Ok(())
+  }
+
+  #[wasm_bindgen(js_name = "loadFromLocation")]
+  pub async fn load_from_location(
+    &self,
+    retrieval_location: NodeLocation,
+    given_location: NodeLocation,
+    antecedent_location: Option<NodeLocation>,
+    default_type: SpecificationDocumentType,
+  ) -> Result<(), Error> {
+    self
+      .0
+      .load_from_location(
+        &retrieval_location,
+        &given_location,
+        antecedent_location.as_ref(),
+        default_type,
+      )
+      .await
   }
 }

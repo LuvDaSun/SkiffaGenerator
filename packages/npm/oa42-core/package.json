@@ -3,7 +3,7 @@
   "version": "0.1.4",
   "sideEffects": false,
   "description": "core library",
-  "type": "module",
+  "type": "commonjs",
   "module": "./dist/oa42_core.js",
   "types": "./dist/oa42_core.d.ts",
   "exports": {
@@ -16,9 +16,9 @@
     "./dist/**"
   ],
   "scripts": {
-    "prepack": "node ./scripts/build.js",
-    "build": "node ./scripts/build.js",
-    "clean": "node ./scripts/clean.js"
+    "prepack": "node ./scripts/build.mjs",
+    "build": "node ./scripts/build.mjs",
+    "clean": "node ./scripts/clean.mjs"
   },
   "repository": {
     "type": "git",

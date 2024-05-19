@@ -23,6 +23,8 @@ cp.execFileSync(
 cp.execFileSync(
   "wasm-bindgen",
   [
+    "--target",
+    "nodejs",
     "--out-dir",
     path.resolve(projectRoot, "dist"),
     path.resolve(workspaceRoot, "target", "wasm32-unknown-unknown", "release", "oa42_core.wasm"),

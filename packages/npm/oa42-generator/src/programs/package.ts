@@ -1,3 +1,4 @@
+import * as core from "@oa42/core";
 import * as path from "path";
 import * as yargs from "yargs";
 import { DocumentContext } from "../documents/document-context.js";
@@ -35,7 +36,7 @@ export function configurePackageProgram(argv: yargs.Argv) {
         .option("default-type-name", {
           description: "default name for types",
           type: "string",
-          default: "@jns42/document",
+          default: "schema",
         })
         .option("name-maximum-iterations", {
           description: "maximum number of iterations for finding unique names",
@@ -103,9 +104,20 @@ async function main(options: MainOptions) {
   documentContext.registerFactory(oas30.factory);
   documentContext.registerFactory(oas31.factory);
 
+  const specificationDocumentContext = new core.SpecificationDocumentContext();
+  specificationDocumentContext.registerWellKnownFactories();
+
   // load api model
 
   await documentContext.loadFromLocation(specificationLocation);
+
+  const specificationNodeLocation = core.NodeLocation.parse(specificationLocation);
+  await specificationDocumentContext.loadFromLocation(
+    specificationNodeLocation.clone(),
+    specificationNodeLocation.clone(),
+    undefined,
+    core.SpecificationDocumentType.OpenApiV31,
+  );
 
   const apiModel = documentContext.getApiModel();
   const specification = documentContext.getSpecification();

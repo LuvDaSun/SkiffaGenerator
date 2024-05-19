@@ -183,6 +183,7 @@ where
     }
 
     let mut queue = Default::default();
+
     self
       .load_from_location_with_queue(
         retrieval_location,

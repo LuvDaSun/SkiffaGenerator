@@ -35,6 +35,11 @@ impl NodeLocation {
     }
   }
 
+  #[wasm_bindgen(js_name = "clone")]
+  pub fn clone(&self) -> Self {
+    Clone::clone(self)
+  }
+
   #[wasm_bindgen(js_name = "parse")]
   pub fn parse(input: &str) -> Result<NodeLocation, ParseError> {
     Self::from_str(input)
