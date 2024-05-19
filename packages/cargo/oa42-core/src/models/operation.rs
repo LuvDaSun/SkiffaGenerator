@@ -16,7 +16,7 @@ pub struct Operation {
    * all authentications from the second level should pass, any authentications
    * of the first level should pass
    */
-  // authentication_requirements: Vec<Vec<AuthenticationRequirement>>,
+  // authentication_requirements: Vec<Vec<AuthenticationRequirementContainer>>,
   query_parameters: Vec<ParameterContainer>,
   header_parameters: Vec<ParameterContainer>,
   path_parameters: Vec<ParameterContainer>,
