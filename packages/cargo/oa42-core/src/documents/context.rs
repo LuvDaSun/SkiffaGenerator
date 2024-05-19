@@ -1,5 +1,5 @@
 use super::SpecificationDocumentType;
-use crate::documents::{Oas30Document, Oas31Document, Swagger2Document};
+use crate::documents::{oas30, oas31, swagger2};
 use crate::error::Error;
 use crate::utils::NodeLocation;
 use crate::{models::Api, utils::DocumentContext};
@@ -21,15 +21,39 @@ impl SpecificationDocumentContext {
   pub fn register_well_known_factories(&mut self) -> Result<(), Error> {
     self.0.register_factory(
       SpecificationDocumentType::Swagger2,
-      Box::new(|_context, _configuration| Swagger2Document::new()),
+      Box::new(|context, configuration| {
+        swagger2::SpecificationDocument::new(
+          context,
+          configuration.retrieval_location,
+          configuration.given_location,
+          configuration.antecedent_location,
+          configuration.document_node,
+        )
+      }),
     )?;
     self.0.register_factory(
       SpecificationDocumentType::OpenApiV30,
-      Box::new(|_context, _configuration| Oas30Document::new()),
+      Box::new(|context, configuration| {
+        oas30::SpecificationDocument::new(
+          context,
+          configuration.retrieval_location,
+          configuration.given_location,
+          configuration.antecedent_location,
+          configuration.document_node,
+        )
+      }),
     )?;
     self.0.register_factory(
       SpecificationDocumentType::OpenApiV31,
-      Box::new(|_context, _configuration| Oas31Document::new()),
+      Box::new(|context, configuration| {
+        oas31::SpecificationDocument::new(
+          context,
+          configuration.retrieval_location,
+          configuration.given_location,
+          configuration.antecedent_location,
+          configuration.document_node,
+        )
+      }),
     )?;
 
     Ok(())
