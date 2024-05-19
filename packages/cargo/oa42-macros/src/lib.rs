@@ -3,23 +3,14 @@ use quote::{format_ident, quote};
 use syn::{parse_macro_input, ItemStruct};
 
 #[proc_macro_attribute]
-pub fn model(
+pub fn model_container(
   _attr: proc_macro::TokenStream,
   item: proc_macro::TokenStream,
 ) -> proc_macro::TokenStream {
   let item = parse_macro_input!(item as ItemStruct);
-  let visibility = item.vis;
-  let name = item.ident;
-  let interior_name = format_ident!("{}Interior", name);
-  let fields = item.fields.iter().flat_map(|field| {
-    let name = field.ident.as_ref()?;
-    let ty = &field.ty;
-    let visibility = &field.vis;
-
-    Some(quote! {
-      #visibility #name: #ty,
-    })
-  });
+  let visibility = &item.vis;
+  let name = &item.ident;
+  let container_name = format_ident!("{}Container", name);
 
   let getters = item.fields.iter().flat_map(|field| {
     let field_name = field.ident.as_ref()?;
@@ -36,23 +27,21 @@ pub fn model(
   });
 
   let tokens = quote! {
-    #visibility struct #interior_name {
-      #(#fields)*
-    }
+    #item
 
     #[wasm_bindgen::prelude::wasm_bindgen]
     #[derive(Clone)]
-    #visibility struct #name(std::rc::Rc<#interior_name>);
+    #visibility struct #container_name(std::rc::Rc<#name>);
 
-    impl #name {
-      pub fn new(interior: #interior_name) -> Self {
+    impl #container_name {
+      pub fn new(interior: #name) -> Self {
         let interior = std::rc::Rc::new(interior);
         Self(interior)
       }
     }
 
     #[wasm_bindgen::prelude::wasm_bindgen]
-    impl #name {
+    impl #container_name {
       #(#getters)*
     }
 

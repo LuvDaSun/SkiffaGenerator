@@ -1,7 +1,10 @@
-use super::{AuthenticationRequirement, Body, Method, OperationResult, Parameter};
+use super::{
+  AuthenticationRequirementContainer, BodyContainer, Method, OperationResultContainer,
+  ParameterContainer,
+};
 use crate::utils::NodeLocation;
 
-#[oa42_macros::model]
+#[oa42_macros::model_container]
 pub struct Operation {
   location: NodeLocation,
   method: Method,
@@ -14,11 +17,11 @@ pub struct Operation {
    * of the first level should pass
    */
   // authentication_requirements: Vec<Vec<AuthenticationRequirement>>,
-  query_parameters: Vec<Parameter>,
-  header_parameters: Vec<Parameter>,
-  path_parameters: Vec<Parameter>,
-  cookie_parameters: Vec<Parameter>,
-  bodies: Vec<Body>,
-  operation_results: Vec<OperationResult>,
+  query_parameters: Vec<ParameterContainer>,
+  header_parameters: Vec<ParameterContainer>,
+  path_parameters: Vec<ParameterContainer>,
+  cookie_parameters: Vec<ParameterContainer>,
+  bodies: Vec<BodyContainer>,
+  operation_results: Vec<OperationResultContainer>,
   mockable: bool,
 }
