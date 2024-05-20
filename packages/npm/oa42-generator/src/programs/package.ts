@@ -93,40 +93,39 @@ async function main(options: MainOptions) {
 
   // setup document context
 
-  using documentContext = new DocumentContext({
-    defaultTypeName,
-    nameMaximumIterations,
-    transformMaximumIterations,
-    requestTypes,
-    responseTypes,
-  });
-  documentContext.registerFactory(swagger2.factory);
-  documentContext.registerFactory(oas30.factory);
-  documentContext.registerFactory(oas31.factory);
+  {
+    const nodeCache = new core.NodeCache();
+    const documentContext = new core.DocumentContext(nodeCache);
+    documentContext.registerWellKnownFactories();
 
-  const specificationDocumentContext = new core.SpecificationDocumentContext();
-  specificationDocumentContext.registerWellKnownFactories();
+    await documentContext.loadFromLocation(core.NodeLocation.parse(specificationLocation));
+  }
 
-  // load api model
+  {
+    using documentContext = new DocumentContext({
+      defaultTypeName,
+      nameMaximumIterations,
+      transformMaximumIterations,
+      requestTypes,
+      responseTypes,
+    });
+    documentContext.registerFactory(swagger2.factory);
+    documentContext.registerFactory(oas30.factory);
+    documentContext.registerFactory(oas31.factory);
 
-  await documentContext.loadFromLocation(specificationLocation);
+    // load api model
 
-  const specificationNodeLocation = core.NodeLocation.parse(specificationLocation);
-  await specificationDocumentContext.loadFromLocation(
-    specificationNodeLocation.clone(),
-    specificationNodeLocation.clone(),
-    undefined,
-    core.SpecificationDocumentType.OpenApiV31,
-  );
+    await documentContext.loadFromLocation(specificationLocation);
 
-  const apiModel = documentContext.getApiModel();
-  const specification = documentContext.getSpecification();
+    const apiModel = documentContext.getApiModel();
+    const specification = documentContext.getSpecification();
 
-  // generate code
+    // generate code
 
-  generatePackage(apiModel, specification, {
-    packageDirectoryPath,
-    packageName,
-    packageVersion,
-  });
+    generatePackage(apiModel, specification, {
+      packageDirectoryPath,
+      packageName,
+      packageVersion,
+    });
+  }
 }

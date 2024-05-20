@@ -1,4 +1,4 @@
-use crate::utils::ParseError;
+use crate::utils::{FetchFileError, NodeCacheError, ParseError};
 use std::fmt::Display;
 use wasm_bindgen::prelude::*;
 
@@ -86,6 +86,26 @@ impl From<std::io::Error> for Error {
 impl From<surf::Error> for Error {
   fn from(_value: surf::Error) -> Self {
     Self::HttpError
+  }
+}
+
+impl From<NodeCacheError> for Error {
+  fn from(value: NodeCacheError) -> Self {
+    match value {
+      NodeCacheError::NotTheSame => Self::NotTheSame,
+      NodeCacheError::InvalidYaml => Self::InvalidYaml,
+      NodeCacheError::IoError => Self::IoError,
+      NodeCacheError::HttpError => Self::HttpError,
+    }
+  }
+}
+
+impl From<FetchFileError> for Error {
+  fn from(value: FetchFileError) -> Self {
+    match value {
+      FetchFileError::IoError => Self::IoError,
+      FetchFileError::HttpError => Self::HttpError,
+    }
   }
 }
 

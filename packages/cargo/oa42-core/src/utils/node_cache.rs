@@ -1,5 +1,4 @@
-use super::{fetch_file, Node, NodeLocation, NodeRc};
-use crate::error::Error;
+use super::{fetch_file, FetchFileError, Node, NodeLocation, NodeRc};
 use std::collections::BTreeMap;
 use std::iter::once;
 use std::rc::Rc;
@@ -21,6 +20,12 @@ impl NodeCache {
     }
   }
 
+  /// Retrieves all locations in the cache
+  ///
+  pub fn get_locations(&self) -> impl Iterator<Item = &NodeLocation> {
+    self.nodes.keys()
+  }
+
   /// Retrieves the node
   ///
   pub fn get_node(&self, retrieval_location: &NodeLocation) -> Option<NodeRc> {
@@ -33,7 +38,7 @@ impl NodeCache {
   pub async fn load_from_location(
     &mut self,
     retrieval_location: &NodeLocation,
-  ) -> Result<(), Error> {
+  ) -> Result<(), NodeCacheError> {
     /*
     If the document is not in the cache
     */
@@ -60,7 +65,7 @@ impl NodeCache {
     &mut self,
     retrieval_location: &NodeLocation,
     node: NodeRc,
-  ) -> Result<(), Error> {
+  ) -> Result<(), NodeCacheError> {
     self.fill_node_cache(retrieval_location, node)?;
 
     Ok(())
@@ -74,14 +79,14 @@ impl NodeCache {
     &mut self,
     retrieval_location: &NodeLocation,
     node: NodeRc,
-  ) -> Result<(), Error> {
+  ) -> Result<(), NodeCacheError> {
     let mut queue = Vec::new();
     queue.push((retrieval_location.clone(), node));
 
     while let Some((retrieval_location, node)) = queue.pop() {
       if let Some(node_previous) = self.nodes.get(&retrieval_location) {
         if node != *node_previous {
-          Err(Error::NotTheSame)?
+          Err(NodeCacheError::NotTheSame)?
         }
       } else {
         match &*node {
@@ -114,11 +119,57 @@ impl NodeCache {
   }
 }
 
+#[derive(Debug)]
+pub enum NodeCacheError {
+  NotTheSame,
+  InvalidYaml,
+  IoError,
+  HttpError,
+}
+
+impl From<FetchFileError> for NodeCacheError {
+  fn from(value: FetchFileError) -> Self {
+    match value {
+      FetchFileError::IoError => NodeCacheError::IoError,
+      FetchFileError::HttpError => NodeCacheError::HttpError,
+    }
+  }
+}
+
+impl From<serde_yaml::Error> for NodeCacheError {
+  fn from(_value: serde_yaml::Error) -> Self {
+    Self::InvalidYaml
+  }
+}
+
 #[cfg(test)]
 mod tests {
+  use super::NodeCache;
+  use crate::utils::{Node, NodeLocation};
 
-  #[test]
-  fn test_1() {
-    //
+  #[async_std::test]
+  async fn test_load_from_location() {
+    let mut cache = NodeCache::new();
+
+    let location = NodeLocation::parse("../../../fixtures/specifications/nwd.yaml").unwrap();
+
+    cache.load_from_location(&location).await.unwrap();
+
+    cache.get_node(&location).unwrap();
+
+    cache
+      .get_node(&location.set_pointer(vec!["paths".into(), "/me".into()]))
+      .unwrap();
+
+    let node = cache
+      .get_node(&location.set_pointer(vec![
+        "paths".into(),
+        "/location/{location-key}".into(),
+        "parameters".into(),
+        "0".into(),
+        "in".into(),
+      ]))
+      .unwrap();
+    assert_eq!(*node, Node::String("path".into()));
   }
 }

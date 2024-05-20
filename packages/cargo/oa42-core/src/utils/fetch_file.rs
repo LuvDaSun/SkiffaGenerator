@@ -1,7 +1,23 @@
-use crate::error::Error;
+pub enum FetchFileError {
+  IoError,
+  HttpError,
+}
+
+impl From<std::io::Error> for FetchFileError {
+  fn from(_value: std::io::Error) -> Self {
+    Self::IoError
+  }
+}
+
+#[cfg(not(target_os = "unknown"))]
+impl From<surf::Error> for FetchFileError {
+  fn from(_value: surf::Error) -> Self {
+    Self::HttpError
+  }
+}
 
 #[cfg(target_os = "unknown")]
-pub async fn fetch_file(location: &str) -> Result<String, Error> {
+pub async fn fetch_file(location: &str) -> Result<String, FetchFileError> {
   // use wasm_bindgen::prelude::*;
   // use wasm_bindgen_futures::JsFuture;
   // use web_sys::{Request, RequestInit, RequestMode, Response};
@@ -24,7 +40,7 @@ pub async fn fetch_file(location: &str) -> Result<String, Error> {
 }
 
 #[cfg(not(target_os = "unknown"))]
-pub async fn fetch_file(location: &str) -> Result<String, Error> {
+pub async fn fetch_file(location: &str) -> Result<String, FetchFileError> {
   use async_std::fs::File;
   use async_std::io::ReadExt;
 

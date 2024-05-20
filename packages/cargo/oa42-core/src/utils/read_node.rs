@@ -1,6 +1,7 @@
 use super::{Node, NodeRc};
 use std::iter::once;
 
+#[deprecated]
 pub fn read_node(prefix: &[String], node: NodeRc) -> Vec<(Vec<String>, NodeRc)> {
   match &*node {
     Node::Array(array_value) => once((prefix.to_owned(), node.clone()))
