@@ -3,8 +3,8 @@ use crate::utils::NodeLocation;
 
 #[oa42_macros::model_container]
 pub struct Path {
-  id: usize,
-  location: NodeLocation,
-  pattern: String,
-  operations: Vec<OperationContainer>,
+  pub index: usize,
+  pub location: NodeLocation,
+  pub pattern: String,
+  pub operations: Vec<OperationContainer>,
 }
