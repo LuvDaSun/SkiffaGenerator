@@ -3,14 +3,14 @@ use semver::Version;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-#[derive(Clone, PartialEq, Eq, Hash)]
-pub enum SpecificationDocumentType {
+#[derive(Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum DocumentType {
   OpenApiV30,
   OpenApiV31,
   Swagger2,
 }
 
-impl TryFrom<&NodeRc> for SpecificationDocumentType {
+impl TryFrom<&NodeRc> for DocumentType {
   type Error = ();
 
   fn try_from(value: &NodeRc) -> Result<Self, Self::Error> {

@@ -88,3 +88,9 @@ impl From<surf::Error> for Error {
     Self::HttpError
   }
 }
+
+impl From<()> for Error {
+  fn from(_value: ()) -> Self {
+    Self::Unknown
+  }
+}

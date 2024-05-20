@@ -3,11 +3,13 @@ use crate::error::Error;
 use std::collections::BTreeMap;
 use std::iter::once;
 use std::rc::Rc;
+use wasm_bindgen::prelude::*;
 
 /// Caches nodes (json / yaml) and indexes the nodes by their location.
 /// Nodes have a retrieval location that is the physical (possibly globally
 /// unique) location of the node.
 ///
+#[wasm_bindgen]
 pub struct NodeCache {
   nodes: BTreeMap<NodeLocation, NodeRc>,
 }
@@ -32,10 +34,6 @@ impl NodeCache {
     &mut self,
     retrieval_location: &NodeLocation,
   ) -> Result<(), Error> {
-    if !retrieval_location.is_root() {
-      Err(Error::NotARoot)?
-    }
-
     /*
     If the document is not in the cache
     */
@@ -43,6 +41,7 @@ impl NodeCache {
       /*
       retrieve the document
       */
+      let retrieval_location = retrieval_location.set_root();
       let fetch_location = retrieval_location.to_fetch_string();
       let data = fetch_file(&fetch_location).await?;
       let document_node = serde_yaml::from_str(&data)?;
@@ -112,5 +111,14 @@ impl NodeCache {
     }
 
     Ok(())
+  }
+}
+
+#[cfg(test)]
+mod tests {
+
+  #[test]
+  fn test_1() {
+    //
   }
 }
