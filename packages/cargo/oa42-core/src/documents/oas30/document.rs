@@ -1,30 +1,27 @@
 use crate::{
-  documents::Document,
+  documents::{DocumentContext, DocumentTrait},
   utils::{NodeLocation, NodeRc},
 };
-use std::collections::HashMap;
+use std::rc::Weak;
 
-pub struct SpecificationDocument {
+pub struct Document {
   retrieval_location: NodeLocation,
-
-  /**
-  Nodes that belong to this document, indexed by their (sub)pointer
-  */
-  _nodes: HashMap<Vec<String>, NodeRc>,
+  node: NodeRc,
 }
 
-impl SpecificationDocument {
-  pub fn new(retrieval_location: NodeLocation, _document_node: NodeRc) -> Self {
+impl Document {
+  pub fn new(context: Weak<DocumentContext>, retrieval_location: NodeLocation) -> Self {
+    let context = context.upgrade().unwrap();
+    let node = context.get_node(&retrieval_location).unwrap();
     Self {
       retrieval_location,
-
-      _nodes: Default::default(),
+      node,
     }
   }
 }
 
-impl Document for SpecificationDocument {
-  fn get_consequent_locations(&self) -> Vec<NodeLocation> {
-    Default::default()
+impl DocumentTrait for Document {
+  fn get_consequent_locations(&self) -> Box<dyn Iterator<Item = NodeLocation>> {
+    Box::new(Vec::new().into_iter())
   }
 }

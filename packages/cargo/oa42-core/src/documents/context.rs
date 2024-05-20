@@ -1,36 +1,24 @@
 use super::document::DocumentFactory;
-use super::{Document, DocumentType};
+use super::{DocumentTrait, DocumentType};
 use crate::documents::DocumentConfiguration;
 use crate::documents::{oas30, oas31, swagger2};
 use crate::error::Error;
-use crate::utils::{NodeCache, NodeLocation};
+use crate::utils::{NodeCache, NodeLocation, NodeRc};
 use std::cell::RefCell;
 use std::collections::BTreeMap;
+use std::rc::Rc;
 use wasm_bindgen::prelude::*;
 
-#[wasm_bindgen]
 pub struct DocumentContext {
   cache: RefCell<NodeCache>,
   /**
    * document factories by document type key
    */
   factories: RefCell<BTreeMap<DocumentType, DocumentFactory>>,
-  documents: RefCell<BTreeMap<NodeLocation, Box<dyn Document>>>,
+  documents: RefCell<BTreeMap<NodeLocation, Box<dyn DocumentTrait>>>,
 }
 
 impl DocumentContext {
-  pub fn register_factory(&self, r#type: DocumentType, factory: DocumentFactory) {
-    /*
-    don't check if the factory is already registered here so we can
-    override factories
-    */
-    self.factories.borrow_mut().insert(r#type, factory);
-  }
-}
-
-#[wasm_bindgen]
-impl DocumentContext {
-  #[wasm_bindgen(constructor)]
   pub fn new(cache: NodeCache) -> Self {
     Self {
       cache: RefCell::new(cache),
@@ -39,32 +27,62 @@ impl DocumentContext {
     }
   }
 
+  pub fn register_factory(&self, r#type: DocumentType, factory: DocumentFactory) {
+    /*
+    don't check if the factory is already registered here so we can
+    override factories
+    */
+    self.factories.borrow_mut().insert(r#type, factory);
+  }
+
+  pub fn get_node(&self, retrieval_location: &NodeLocation) -> Option<NodeRc> {
+    /*
+    don't check if the factory is already registered here so we can
+    override factories
+    */
+    self.cache.borrow().get_node(retrieval_location)
+  }
+}
+
+#[wasm_bindgen]
+pub struct DocumentContextContainer(Rc<DocumentContext>);
+
+#[wasm_bindgen]
+impl DocumentContextContainer {
+  #[wasm_bindgen(constructor)]
+  pub fn new(cache: NodeCache) -> Self {
+    Self(Rc::new(DocumentContext::new(cache)))
+  }
+
   #[wasm_bindgen(js_name = "registerWellKnownFactories")]
   pub fn register_well_known_factories(&self) {
-    self.register_factory(
+    let context = Rc::downgrade(&self.0);
+    self.0.register_factory(
       DocumentType::Swagger2,
-      Box::new(|configuration| {
-        Box::new(swagger2::SpecificationDocument::new(
+      Box::new(move |configuration| {
+        Box::new(swagger2::Document::new(
+          context.clone(),
           configuration.retrieval_location,
-          configuration.document_node,
         ))
       }),
     );
-    self.register_factory(
+    let context = Rc::downgrade(&self.0);
+    self.0.register_factory(
       DocumentType::OpenApiV30,
-      Box::new(|configuration| {
-        Box::new(oas30::SpecificationDocument::new(
+      Box::new(move |configuration| {
+        Box::new(oas30::Document::new(
+          context.clone(),
           configuration.retrieval_location,
-          configuration.document_node,
         ))
       }),
     );
-    self.register_factory(
+    let context = Rc::downgrade(&self.0);
+    self.0.register_factory(
       DocumentType::OpenApiV31,
-      Box::new(|configuration| {
-        Box::new(oas31::SpecificationDocument::new(
+      Box::new(move |configuration| {
+        Box::new(oas31::Document::new(
+          context.clone(),
           configuration.retrieval_location,
-          configuration.document_node,
         ))
       }),
     );
@@ -72,17 +90,19 @@ impl DocumentContext {
 
   #[wasm_bindgen(js_name = "loadFromLocation")]
   pub async fn load_from_location(&self, retrieval_location: NodeLocation) -> Result<(), Error> {
-    if self.documents.borrow().contains_key(&retrieval_location) {
+    if self.0.documents.borrow().contains_key(&retrieval_location) {
       return Ok(());
     }
 
     self
+      .0
       .cache
       .borrow_mut()
       .load_from_location(&retrieval_location)
       .await?;
 
     let node = self
+      .0
       .cache
       .borrow()
       .get_node(&retrieval_location)
@@ -91,11 +111,10 @@ impl DocumentContext {
     let document_type = (&node).try_into()?;
 
     let document = {
-      let factories = self.factories.borrow();
+      let factories = self.0.factories.borrow();
       let factory = factories.get(&document_type).ok_or(Error::NotFound)?;
       factory(DocumentConfiguration {
         retrieval_location: retrieval_location.clone(),
-        document_node: node,
       })
     };
 
@@ -106,6 +125,7 @@ impl DocumentContext {
     }
 
     assert!(self
+      .0
       .documents
       .borrow_mut()
       .insert(retrieval_location.clone(), document)

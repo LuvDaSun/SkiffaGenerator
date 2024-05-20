@@ -1,12 +1,11 @@
-use crate::utils::{NodeLocation, NodeRc};
+use crate::utils::NodeLocation;
 
-pub trait Document {
-  fn get_consequent_locations(&self) -> Vec<NodeLocation>;
+pub trait DocumentTrait {
+  fn get_consequent_locations(&self) -> Box<dyn Iterator<Item = NodeLocation>>;
 }
 
 pub struct DocumentConfiguration {
   pub retrieval_location: NodeLocation,
-  pub document_node: NodeRc,
 }
 
-pub type DocumentFactory = Box<dyn Fn(DocumentConfiguration) -> Box<dyn Document>>;
+pub type DocumentFactory = Box<dyn Fn(DocumentConfiguration) -> Box<dyn DocumentTrait>>;
