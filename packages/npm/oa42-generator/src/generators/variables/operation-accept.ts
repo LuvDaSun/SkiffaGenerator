@@ -1,8 +1,8 @@
-import * as models from "../../models/index.js";
+import * as core from "@oa42/core";
 import { itt } from "../../utils/index.js";
 import { getOperationAcceptConstName, getOperationAcceptTypeName } from "../names/index.js";
 
-export function* generateOperationAcceptConstant(operationModel: models.Operation) {
+export function* generateOperationAcceptConstant(operationModel: core.OperationContainer) {
   const operationAcceptTypeName = getOperationAcceptTypeName(operationModel);
   const operationAcceptConstName = getOperationAcceptConstName(operationModel);
 

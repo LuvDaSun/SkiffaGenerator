@@ -51,11 +51,11 @@ export function* generateParametersTsCode(apiModel: models.Api, apiModel1: core.
     }
   `;
 
-  // for (const pathModel of apiModel1.paths) {
-  //   for (const operationModel of pathModel.operations) {
-  //     //
-  //   }
-  // }
+  for (const pathModel of apiModel1.paths) {
+    for (const operationModel of pathModel.operations) {
+      //
+    }
+  }
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {

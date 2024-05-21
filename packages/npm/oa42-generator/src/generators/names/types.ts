@@ -1,3 +1,4 @@
+import * as core from "@oa42/core";
 import * as models from "../../models/index.js";
 import { toPascal } from "../../utils/index.js";
 
@@ -25,7 +26,9 @@ export function getAuthenticationHandlersTypeName() {
   return toPascal("authentication", "handlers");
 }
 
-export function getOperationAcceptTypeName(operationModel: models.Operation) {
+export function getOperationAcceptTypeName(
+  operationModel: core.OperationContainer | models.Operation,
+) {
   return toPascal(operationModel.name, "operation", "accept");
 }
 

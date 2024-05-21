@@ -94,8 +94,8 @@ async function main(options: MainOptions) {
 
   // setup document context
 
-  const nodeCache1 = new core.NodeCache();
-  const documentContext1 = new core.DocumentContextContainer(nodeCache1);
+  const nodeCache = new core.NodeCache();
+  const documentContext1 = new core.DocumentContextContainer(nodeCache);
   documentContext1.registerWellKnownFactories();
 
   await documentContext1.loadFromLocation(core.NodeLocation.parse(specificationLocation));

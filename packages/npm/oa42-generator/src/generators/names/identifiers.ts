@@ -1,3 +1,4 @@
+import * as core from "@oa42/core";
 import * as models from "../../models/index.js";
 import { toCamel } from "../../utils/index.js";
 
@@ -37,7 +38,9 @@ export function getEndpointHandlerName(operationModel: models.Operation) {
   return toCamel(operationModel.name, "endpoint", "handler");
 }
 
-export function getOperationAcceptConstName(operationModel: models.Operation) {
+export function getOperationAcceptConstName(
+  operationModel: core.OperationContainer | models.Operation,
+) {
   return toCamel(operationModel.name, "operation", "accept");
 }
 
