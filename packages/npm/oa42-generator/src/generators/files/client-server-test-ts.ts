@@ -1,4 +1,4 @@
-import { banner } from "@oa42/core";
+import * as core from "@oa42/core";
 import assert from "assert";
 import * as models from "../../models/index.js";
 import { packageInfo } from "../../utils/index.js";
@@ -15,8 +15,11 @@ import {
   getRegisterOperationHandlerName,
 } from "../names/index.js";
 
-export function* generateClientServerTestTsCode(apiModel: models.Api) {
-  yield banner("//", `v${packageInfo.version}`);
+export function* generateClientServerTestTsCode(
+  apiModel: models.Api,
+  apiModel1: core.ApiContainer,
+) {
+  yield core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import assert from "assert/strict";

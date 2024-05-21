@@ -1,4 +1,4 @@
-import { banner } from "@oa42/core";
+import * as core from "@oa42/core";
 import { RouterMode } from "goodrouter";
 import * as models from "../../models/index.js";
 import { packageInfo } from "../../utils/index.js";
@@ -13,8 +13,8 @@ import {
 } from "../types/index.js";
 import { generateCredentialsConstant } from "../variables/default-credentials.js";
 
-export function* generateClientTsCode(apiModel: models.Api) {
-  yield banner("//", `v${packageInfo.version}`);
+export function* generateClientTsCode(apiModel: models.Api, apiModel1: core.ApiContainer) {
+  yield core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import { Router } from "goodrouter";

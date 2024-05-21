@@ -1,4 +1,5 @@
 import * as core from "@oa42/core";
+import assert from "assert";
 import * as path from "path";
 import * as yargs from "yargs";
 import { DocumentContext } from "../documents/document-context.js";
@@ -93,41 +94,38 @@ async function main(options: MainOptions) {
 
   // setup document context
 
-  {
-    const nodeCache = new core.NodeCache();
-    const documentContext = new core.DocumentContextContainer(nodeCache);
-    documentContext.registerWellKnownFactories();
+  const nodeCache1 = new core.NodeCache();
+  const documentContext1 = new core.DocumentContextContainer(nodeCache1);
+  documentContext1.registerWellKnownFactories();
 
-    await documentContext.loadFromLocation(core.NodeLocation.parse(specificationLocation));
+  await documentContext1.loadFromLocation(core.NodeLocation.parse(specificationLocation));
 
-    const apiModel = documentContext.getApiModel(core.NodeLocation.parse(specificationLocation));
-  }
+  const apiModel1 = documentContext1.getApiModel(core.NodeLocation.parse(specificationLocation));
+  assert(apiModel1 != null);
 
-  {
-    using documentContext = new DocumentContext({
-      defaultTypeName,
-      nameMaximumIterations,
-      transformMaximumIterations,
-      requestTypes,
-      responseTypes,
-    });
-    documentContext.registerFactory(swagger2.factory);
-    documentContext.registerFactory(oas30.factory);
-    documentContext.registerFactory(oas31.factory);
+  using documentContext = new DocumentContext({
+    defaultTypeName,
+    nameMaximumIterations,
+    transformMaximumIterations,
+    requestTypes,
+    responseTypes,
+  });
+  documentContext.registerFactory(swagger2.factory);
+  documentContext.registerFactory(oas30.factory);
+  documentContext.registerFactory(oas31.factory);
 
-    // load api model
+  // load api model
 
-    await documentContext.loadFromLocation(specificationLocation);
+  await documentContext.loadFromLocation(specificationLocation);
 
-    const apiModel = documentContext.getApiModel();
-    const specification = documentContext.getSpecification();
+  const apiModel = documentContext.getApiModel();
+  const specification = documentContext.getSpecification();
 
-    // generate code
+  // generate code
 
-    generatePackage(apiModel, specification, {
-      packageDirectoryPath,
-      packageName,
-      packageVersion,
-    });
-  }
+  generatePackage(apiModel, apiModel1, specification, {
+    packageDirectoryPath,
+    packageName,
+    packageVersion,
+  });
 }

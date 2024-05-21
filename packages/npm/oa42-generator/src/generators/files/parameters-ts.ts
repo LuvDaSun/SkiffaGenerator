@@ -1,4 +1,4 @@
-import { banner } from "@oa42/core";
+import * as core from "@oa42/core";
 import * as models from "../../models/index.js";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
@@ -11,8 +11,8 @@ import {
   generateOperationResultParameterTypes,
 } from "../types/index.js";
 
-export function* generateParametersTsCode(apiModel: models.Api) {
-  yield banner("//", `v${packageInfo.version}`);
+export function* generateParametersTsCode(apiModel: models.Api, apiModel1: core.ApiContainer) {
+  yield core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import * as types from "./types.js";
@@ -50,6 +50,12 @@ export function* generateParametersTsCode(apiModel: models.Api) {
       }
     }
   `;
+
+  for (const pathModel of apiModel1.paths) {
+    for (const operationModel of pathModel.operations) {
+      //
+    }
+  }
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {

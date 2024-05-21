@@ -1,3 +1,4 @@
+import * as core from "@oa42/core";
 import fs from "fs";
 import * as jns42generator from "jns42-generator";
 import path from "path";
@@ -24,6 +25,7 @@ export interface PackageConfiguration {
 
 export function generatePackage(
   apiModel: models.Api,
+  apiModel1: core.ApiContainer,
   specification: jns42generator.Specification,
   packageConfiguration: PackageConfiguration,
 ) {
@@ -52,43 +54,43 @@ export function generatePackage(
   }
 
   {
-    const content = generateMainTsCode(apiModel);
+    const content = generateMainTsCode();
     const filePath = path.join(packageDirectoryPath, "src", "main.ts");
     writeContentToFile(filePath, content);
   }
 
   {
-    const content = generateBrowserTsCode(apiModel);
+    const content = generateBrowserTsCode();
     const filePath = path.join(packageDirectoryPath, "src", "browser.ts");
     writeContentToFile(filePath, content);
   }
 
   {
-    const content = generateSharedTsCode(apiModel);
+    const content = generateSharedTsCode(apiModel, apiModel1);
     const filePath = path.join(packageDirectoryPath, "src", "shared.ts");
     writeContentToFile(filePath, content);
   }
 
   {
-    const content = generateParametersTsCode(apiModel);
+    const content = generateParametersTsCode(apiModel, apiModel1);
     const filePath = path.join(packageDirectoryPath, "src", "parameters.ts");
     writeContentToFile(filePath, content);
   }
 
   {
-    const content = generateClientTsCode(apiModel);
+    const content = generateClientTsCode(apiModel, apiModel1);
     const filePath = path.join(packageDirectoryPath, "src", "client.ts");
     writeContentToFile(filePath, content);
   }
 
   {
-    const content = generateServerTsCode(apiModel);
+    const content = generateServerTsCode(apiModel, apiModel1);
     const filePath = path.join(packageDirectoryPath, "src", "server.ts");
     writeContentToFile(filePath, content);
   }
 
   {
-    const content = generateClientServerTestTsCode(apiModel);
+    const content = generateClientServerTestTsCode(apiModel, apiModel1);
     const filePath = path.join(packageDirectoryPath, "src", "client-server.test.ts");
     writeContentToFile(filePath, content);
   }

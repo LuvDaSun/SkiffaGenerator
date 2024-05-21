@@ -1,4 +1,4 @@
-import { banner } from "@oa42/core";
+import * as core from "@oa42/core";
 import { RouterMode } from "goodrouter";
 import * as models from "../../models/index.js";
 import { packageInfo } from "../../utils/index.js";
@@ -16,8 +16,8 @@ import {
   generateServerAuthenticationType,
 } from "../types/index.js";
 
-export function* generateServerTsCode(apiModel: models.Api) {
-  yield banner("//", `v${packageInfo.version}`);
+export function* generateServerTsCode(apiModel: models.Api, apiModel1: core.ApiContainer) {
+  yield core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import { Router } from "goodrouter";
@@ -58,6 +58,12 @@ export function* generateServerTsCode(apiModel: models.Api) {
 
   for (const authenticationModel of apiModel.authentication) {
     yield* generateAuthenticationHandlerType(authenticationModel);
+  }
+
+  for (const pathModel of apiModel1.paths) {
+    for (const operationModel of pathModel.operations) {
+      //
+    }
   }
 
   for (const pathModel of apiModel.paths) {

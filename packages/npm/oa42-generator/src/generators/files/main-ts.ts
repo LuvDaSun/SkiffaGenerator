@@ -1,5 +1,4 @@
-import { banner } from "@oa42/core";
-import * as models from "../../models/index.js";
+import * as core from "@oa42/core";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 
@@ -7,8 +6,8 @@ import { itt } from "../../utils/iterable-text-template.js";
  * Main entrypoint for the package, exports client and server and
  * dependencies
  */
-export function* generateMainTsCode(apiModel: models.Api) {
-  yield banner("//", `v${packageInfo.version}`);
+export function* generateMainTsCode() {
+  yield core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     export * as lib from "oa42-lib";
