@@ -1,9 +1,10 @@
 use wasm_bindgen::prelude::*;
 
+pub struct MethodParseError;
+
 #[wasm_bindgen]
 #[derive(Clone)]
 pub enum Method {
-  Unknown,
   Get,
   Put,
   Post,
@@ -14,18 +15,20 @@ pub enum Method {
   Trace,
 }
 
-impl From<&str> for Method {
-  fn from(value: &str) -> Self {
+impl TryFrom<&str> for Method {
+  type Error = MethodParseError;
+
+  fn try_from(value: &str) -> Result<Self, Self::Error> {
     match value.to_lowercase().as_str() {
-      "get" => Self::Get,
-      "put" => Self::Put,
-      "post" => Self::Post,
-      "delete" => Self::Delete,
-      "options" => Self::Options,
-      "head" => Self::Head,
-      "patch" => Self::Patch,
-      "trace" => Self::Trace,
-      _ => Self::Unknown,
+      "get" => Ok(Self::Get),
+      "put" => Ok(Self::Put),
+      "post" => Ok(Self::Post),
+      "delete" => Ok(Self::Delete),
+      "options" => Ok(Self::Options),
+      "head" => Ok(Self::Head),
+      "patch" => Ok(Self::Patch),
+      "trace" => Ok(Self::Trace),
+      _ => Err(MethodParseError),
     }
   }
 }

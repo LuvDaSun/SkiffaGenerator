@@ -1,7 +1,9 @@
-use crate::utils::NodeLocation;
+use super::Error;
+use crate::{models, utils::NodeLocation};
 
 pub trait DocumentTrait {
   fn get_consequent_locations(&self) -> Box<dyn Iterator<Item = NodeLocation>>;
+  fn get_api_model(&self) -> Result<models::ApiContainer, Error>;
 }
 
 pub struct DocumentConfiguration {

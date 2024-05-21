@@ -24,4 +24,8 @@ impl DocumentTrait for Document {
   fn get_consequent_locations(&self) -> Box<dyn Iterator<Item = NodeLocation>> {
     Box::new(Vec::new().into_iter())
   }
+
+  fn get_api_model(&self) -> Result<crate::models::ApiContainer, crate::documents::Error> {
+    todo!()
+  }
 }

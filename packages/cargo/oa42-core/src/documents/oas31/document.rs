@@ -1,5 +1,6 @@
 use crate::{
-  documents::{DocumentContext, DocumentTrait},
+  documents::{self, DocumentContext, DocumentTrait},
+  models,
   utils::{NodeLocation, NodeRc},
 };
 use std::rc::Weak;
@@ -23,5 +24,9 @@ impl Document {
 impl DocumentTrait for Document {
   fn get_consequent_locations(&self) -> Box<dyn Iterator<Item = NodeLocation>> {
     Box::new(Vec::new().into_iter())
+  }
+
+  fn get_api_model(&self) -> Result<models::ApiContainer, documents::Error> {
+    todo!()
   }
 }
