@@ -57,6 +57,12 @@ export function* generateClientTsCode(apiModel: models.Api, apiModel1: core.ApiC
     yield* generateAuthenticationCredentialType(authenticationModel);
   }
 
+  // for (const pathModel of apiModel1.paths) {
+  //   for (const operationModel of pathModel.operations) {
+  //     //
+  //   }
+  // }
+
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
       yield* generateClientOperationFunction(apiModel, pathModel, operationModel);

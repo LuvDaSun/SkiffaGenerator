@@ -10,11 +10,11 @@ export function* generateSharedTsCode(apiModel: models.Api, apiModel1: core.ApiC
   // for (const authenticationModel of apiModel.authentication) {
   // }
 
-  for (const pathModel of apiModel1.paths) {
-    for (const operationModel of pathModel.operations) {
-      //
-    }
-  }
+  // for (const pathModel of apiModel1.paths) {
+  //   for (const operationModel of pathModel.operations) {
+  //     //
+  //   }
+  // }
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
