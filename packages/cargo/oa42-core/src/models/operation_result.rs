@@ -3,11 +3,11 @@ use crate::utils::NodeLocation;
 
 #[oa42_macros::model_container]
 pub struct OperationResult {
-  location: NodeLocation,
-  description: String,
-  status_kind: String,
-  status_codes: Vec<usize>,
-  header_parameters: Vec<ParameterContainer>,
-  bodies: Vec<BodyContainer>,
-  mockable: bool,
+  pub location: NodeLocation,
+  pub description: Option<String>,
+  pub status_kind: String,
+  pub status_codes: Vec<usize>,
+  pub mockable: bool,
+  pub header_parameters: Vec<ParameterContainer>,
+  pub bodies: Vec<BodyContainer>,
 }

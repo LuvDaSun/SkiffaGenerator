@@ -45,6 +45,12 @@ pub fn model_container(
       #(#getters)*
     }
 
+    impl From<#name> for #container_name {
+      fn from(value: #name) -> Self {
+        #container_name::new(value)
+      }
+    }
+
   };
 
   tokens.into()

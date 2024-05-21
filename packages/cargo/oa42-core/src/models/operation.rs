@@ -6,22 +6,22 @@ use crate::utils::NodeLocation;
 
 #[oa42_macros::model_container]
 pub struct Operation {
-  location: NodeLocation,
-  method: Method,
-  name: String,
-  deprecated: bool,
-  summary: String,
-  description: String,
+  pub location: NodeLocation,
+  pub method: Method,
+  pub name: String,
+  pub summary: Option<String>,
+  pub description: Option<String>,
+  pub deprecated: bool,
+  pub mockable: bool,
   /**
    * all authentications from the second level should pass, any authentications
    * of the first level should pass
    */
-  // authentication_requirements: Vec<Vec<AuthenticationRequirementContainer>>,
-  query_parameters: Vec<ParameterContainer>,
-  header_parameters: Vec<ParameterContainer>,
-  path_parameters: Vec<ParameterContainer>,
-  cookie_parameters: Vec<ParameterContainer>,
-  bodies: Vec<BodyContainer>,
-  operation_results: Vec<OperationResultContainer>,
-  mockable: bool,
+  // pub authentication_requirements: Vec<Vec<AuthenticationRequirementContainer>>,
+  pub query_parameters: Vec<ParameterContainer>,
+  pub header_parameters: Vec<ParameterContainer>,
+  pub path_parameters: Vec<ParameterContainer>,
+  pub cookie_parameters: Vec<ParameterContainer>,
+  pub bodies: Vec<BodyContainer>,
+  pub operation_results: Vec<OperationResultContainer>,
 }
