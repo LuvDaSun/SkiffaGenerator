@@ -36,7 +36,7 @@ impl Path {
     )
   }
 
-  pub fn parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+  pub fn cookie_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
     let member = "parameters";
     Some(
       self
@@ -44,7 +44,74 @@ impl Path {
         .as_object()?
         .get(member)?
         .as_object()?
-        .keys()
+        .into_iter()
+        .filter_map(|(key, value)| {
+          if value.as_object()?.get("in")?.as_str()? == "cookie" {
+            Some(key)
+          } else {
+            None
+          }
+        })
+        .map(move |key| vec![member, key.as_str()]),
+    )
+  }
+
+  pub fn header_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+    let member = "parameters";
+    Some(
+      self
+        .0
+        .as_object()?
+        .get(member)?
+        .as_object()?
+        .into_iter()
+        .filter_map(|(key, value)| {
+          if value.as_object()?.get("in")?.as_str()? == "header" {
+            Some(key)
+          } else {
+            None
+          }
+        })
+        .map(move |key| vec![member, key.as_str()]),
+    )
+  }
+
+  pub fn path_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+    let member = "parameters";
+    Some(
+      self
+        .0
+        .as_object()?
+        .get(member)?
+        .as_object()?
+        .into_iter()
+        .filter_map(|(key, value)| {
+          if value.as_object()?.get("in")?.as_str()? == "path" {
+            Some(key)
+          } else {
+            None
+          }
+        })
+        .map(move |key| vec![member, key.as_str()]),
+    )
+  }
+
+  pub fn query_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+    let member = "parameters";
+    Some(
+      self
+        .0
+        .as_object()?
+        .get(member)?
+        .as_object()?
+        .into_iter()
+        .filter_map(|(key, value)| {
+          if value.as_object()?.get("in")?.as_str()? == "query" {
+            Some(key)
+          } else {
+            None
+          }
+        })
         .map(move |key| vec![member, key.as_str()]),
     )
   }
@@ -60,7 +127,7 @@ pub struct Operation(NodeRc);
 
 impl Operation {
   pub fn name(&self) -> Option<&str> {
-    self.0.as_object()?.get("name")?.as_str()
+    self.0.as_object()?.get("operationId")?.as_str()
   }
 
   pub fn summary(&self) -> Option<&str> {

@@ -10,15 +10,17 @@ pub enum DocumentType {
   Swagger2,
 }
 
+pub struct DocumentTypeError;
+
 impl TryFrom<&NodeRc> for DocumentType {
-  type Error = ();
+  type Error = DocumentTypeError;
 
   fn try_from(value: &NodeRc) -> Result<Self, Self::Error> {
-    let document = value.as_object().ok_or(())?;
+    let document = value.as_object().ok_or(DocumentTypeError)?;
 
     if let Some(version) = document.get("swagger") {
-      let version = version.as_str().ok_or(())?;
-      let version = Version::parse(version).map_err(|_error| ())?;
+      let version = version.as_str().ok_or(DocumentTypeError)?;
+      let version = Version::parse(version).map_err(|_error| DocumentTypeError)?;
 
       if version.major == 2 && version.minor == 0 {
         return Ok(Self::Swagger2);
@@ -26,8 +28,8 @@ impl TryFrom<&NodeRc> for DocumentType {
     }
 
     if let Some(version) = document.get("openapi") {
-      let version = version.as_str().ok_or(())?;
-      let version = Version::parse(version).map_err(|_error| ())?;
+      let version = version.as_str().ok_or(DocumentTypeError)?;
+      let version = Version::parse(version).map_err(|_error| DocumentTypeError)?;
 
       if version.major == 3 && version.minor == 0 {
         return Ok(Self::OpenApiV30);
@@ -38,6 +40,6 @@ impl TryFrom<&NodeRc> for DocumentType {
       }
     }
 
-    return Err(());
+    Err(DocumentTypeError)
   }
 }

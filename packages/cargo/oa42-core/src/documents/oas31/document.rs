@@ -26,7 +26,7 @@ impl DocumentTrait for Document {
     Box::new(Vec::new().into_iter())
   }
 
-  fn get_api_model(&self) -> Result<models::ApiContainer, documents::Error> {
+  fn get_api_model(&self) -> Result<models::ApiContainer, documents::DocumentError> {
     todo!()
   }
 }

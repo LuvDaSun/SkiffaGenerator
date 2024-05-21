@@ -3,6 +3,7 @@ use super::{DocumentTrait, DocumentType};
 use crate::documents::DocumentConfiguration;
 use crate::documents::{oas30, oas31, swagger2};
 use crate::error::Error;
+use crate::models;
 use crate::utils::{NodeCache, NodeLocation, NodeRc};
 use std::cell::RefCell;
 use std::collections::BTreeMap;
@@ -132,5 +133,14 @@ impl DocumentContextContainer {
       .is_none());
 
     Ok(())
+  }
+
+  #[wasm_bindgen(js_name = "getApiModel")]
+  pub fn get_api_model(&self, retrieval_location: &NodeLocation) -> Option<models::ApiContainer> {
+    let documents = self.0.documents.borrow();
+    let document = documents.get(retrieval_location)?;
+    let api_model = document.get_api_model().unwrap();
+
+    Some(api_model)
   }
 }

@@ -1,11 +1,13 @@
-use crate::utils::{FetchFileError, NodeCacheError, ParseError};
+use crate::{
+  documents::DocumentTypeError,
+  utils::{FetchFileError, NodeCacheError, ParseError},
+};
 use std::fmt::Display;
 use wasm_bindgen::prelude::*;
 
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq, Ord, PartialOrd)]
 #[wasm_bindgen]
 pub enum Error {
-  Ok,
   Unknown,
   Conflict,
   NotFound,
@@ -18,6 +20,7 @@ pub enum Error {
   NotARoot,
   NotTheSame,
   InvalidYaml,
+  DocumentTypeError,
 }
 
 impl std::error::Error for Error {}
@@ -25,7 +28,6 @@ impl std::error::Error for Error {}
 impl Display for Error {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     match self {
-      Self::Ok => write!(f, "Ok"),
       Self::Unknown => write!(f, "Unknown"),
       Self::Conflict => write!(f, "Conflict"),
       Self::NotFound => write!(f, "NotFound"),
@@ -38,6 +40,7 @@ impl Display for Error {
       Self::NotARoot => write!(f, "NotARoot"),
       Self::NotTheSame => write!(f, "NotTheSame"),
       Self::InvalidYaml => write!(f, "InvalidYaml"),
+      Self::DocumentTypeError => write!(f, "DocumentTypeError"),
     }
   }
   //
@@ -109,8 +112,8 @@ impl From<FetchFileError> for Error {
   }
 }
 
-impl From<()> for Error {
-  fn from(_value: ()) -> Self {
-    Self::Unknown
+impl From<DocumentTypeError> for Error {
+  fn from(_value: DocumentTypeError) -> Self {
+    Self::DocumentTypeError
   }
 }

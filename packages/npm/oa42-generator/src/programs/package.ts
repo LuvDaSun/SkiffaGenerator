@@ -95,10 +95,12 @@ async function main(options: MainOptions) {
 
   {
     const nodeCache = new core.NodeCache();
-    const documentContext = new core.DocumentContext(nodeCache);
+    const documentContext = new core.DocumentContextContainer(nodeCache);
     documentContext.registerWellKnownFactories();
 
     await documentContext.loadFromLocation(core.NodeLocation.parse(specificationLocation));
+
+    const apiModel = documentContext.getApiModel(core.NodeLocation.parse(specificationLocation));
   }
 
   {

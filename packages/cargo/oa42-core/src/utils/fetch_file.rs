@@ -1,3 +1,5 @@
+use wasm_bindgen::prelude::*;
+
 pub enum FetchFileError {
   IoError,
   HttpError,
@@ -9,6 +11,12 @@ impl From<std::io::Error> for FetchFileError {
   }
 }
 
+impl From<JsValue> for FetchFileError {
+  fn from(_value: JsValue) -> Self {
+    Self::HttpError
+  }
+}
+
 #[cfg(not(target_os = "unknown"))]
 impl From<surf::Error> for FetchFileError {
   fn from(_value: surf::Error) -> Self {
@@ -16,31 +24,22 @@ impl From<surf::Error> for FetchFileError {
   }
 }
 
+#[wasm_bindgen(module = "oa42-lib")]
+extern "C" {
+  #[wasm_bindgen(catch, js_name = "fetchText")]
+  async fn fetch_text_js(location: &str) -> Result<JsValue, JsValue>;
+}
+
 #[cfg(target_os = "unknown")]
-pub async fn fetch_file(location: &str) -> Result<String, FetchFileError> {
-  // use wasm_bindgen::prelude::*;
-  // use wasm_bindgen_futures::JsFuture;
-  // use web_sys::{Request, RequestInit, RequestMode, Response};
+pub async fn fetch_text(location: &str) -> Result<String, FetchFileError> {
+  let text = fetch_text_js(location).await?;
+  let text = text.as_string().unwrap_or_default();
 
-  // let mut opts = RequestInit::new();
-  // opts.method("GET");
-  // opts.mode(RequestMode::Cors);
-
-  // let request = Request::new_with_str_and_init(&url, &opts)?;
-
-  // let window = web_sys::window().unwrap();
-  // let fetch = window.fetch_with_request(&request);
-
-  // let resp_value = JsFuture::from(fetch).await?;
-
-  // let resp: Response = resp_value.dyn_into().unwrap();
-
-  // let json = JsFuture::from(resp.text()?).await?;
-  Ok("{}".to_owned())
+  Ok(text)
 }
 
 #[cfg(not(target_os = "unknown"))]
-pub async fn fetch_file(location: &str) -> Result<String, FetchFileError> {
+pub async fn fetch_text(location: &str) -> Result<String, FetchFileError> {
   use async_std::fs::File;
   use async_std::io::ReadExt;
 

@@ -1,4 +1,4 @@
-use super::{fetch_file, read_node, NodeLocation, NodeRc};
+use super::{fetch_text, read_node, NodeLocation, NodeRc};
 use crate::error::Error;
 use std::collections::BTreeMap;
 use std::hash::Hash;
@@ -216,7 +216,7 @@ where
       */
       let document_location = retrieval_location.set_root();
       let fetch_location = document_location.to_fetch_string();
-      let data = fetch_file(&fetch_location).await?;
+      let data = fetch_text(&fetch_location).await?;
       let document_node = serde_yaml::from_str(&data)?;
       let document_node = Rc::new(document_node);
 

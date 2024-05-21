@@ -1,4 +1,4 @@
-use super::{fetch_file, FetchFileError, Node, NodeLocation, NodeRc};
+use super::{fetch_text, FetchFileError, Node, NodeLocation, NodeRc};
 use std::collections::BTreeMap;
 use std::iter::once;
 use std::rc::Rc;
@@ -13,13 +13,17 @@ pub struct NodeCache {
   nodes: BTreeMap<NodeLocation, NodeRc>,
 }
 
+#[wasm_bindgen]
 impl NodeCache {
+  #[wasm_bindgen(constructor)]
   pub fn new() -> Self {
     Self {
       nodes: Default::default(),
     }
   }
+}
 
+impl NodeCache {
   /// Retrieves all locations in the cache
   ///
   pub fn get_locations(&self) -> impl Iterator<Item = &NodeLocation> {
@@ -48,7 +52,7 @@ impl NodeCache {
       */
       let retrieval_location = retrieval_location.set_root();
       let fetch_location = retrieval_location.to_fetch_string();
-      let data = fetch_file(&fetch_location).await?;
+      let data = fetch_text(&fetch_location).await?;
       let document_node = serde_yaml::from_str(&data)?;
       let document_node = Rc::new(document_node);
 
@@ -142,6 +146,7 @@ impl From<serde_yaml::Error> for NodeCacheError {
   }
 }
 
+#[cfg(not(target_os = "unknown"))]
 #[cfg(test)]
 mod tests {
   use super::NodeCache;

@@ -19,7 +19,7 @@ impl TryFrom<&str> for Method {
   type Error = MethodParseError;
 
   fn try_from(value: &str) -> Result<Self, Self::Error> {
-    match value.to_lowercase().as_str() {
+    match value {
       "get" => Ok(Self::Get),
       "put" => Ok(Self::Put),
       "post" => Ok(Self::Post),

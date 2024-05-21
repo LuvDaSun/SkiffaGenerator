@@ -4,16 +4,16 @@ use wasm_bindgen::prelude::*;
 
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq, Ord, PartialOrd)]
 #[wasm_bindgen]
-pub enum Error {
+pub enum DocumentError {
   Unknown,
   NodeNotFound,
   ParseLocationFailed,
   ParseMethodFailed,
 }
 
-impl std::error::Error for Error {}
+impl std::error::Error for DocumentError {}
 
-impl Display for Error {
+impl Display for DocumentError {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     match self {
       Self::Unknown => write!(f, "Unknown"),
@@ -24,7 +24,7 @@ impl Display for Error {
   }
 }
 
-impl From<ParseError> for Error {
+impl From<ParseError> for DocumentError {
   fn from(value: ParseError) -> Self {
     match value {
       ParseError::InvalidInput => Self::ParseLocationFailed,
@@ -33,7 +33,7 @@ impl From<ParseError> for Error {
   }
 }
 
-impl From<MethodParseError> for Error {
+impl From<MethodParseError> for DocumentError {
   fn from(_value: MethodParseError) -> Self {
     Self::ParseMethodFailed
   }
