@@ -1,5 +1,4 @@
 use crate::{models, utils::NodeRc};
-use std::iter;
 
 pub struct Api(NodeRc);
 
