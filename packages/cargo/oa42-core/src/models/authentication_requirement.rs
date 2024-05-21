@@ -1,5 +1,5 @@
 #[oa42_macros::model_container]
 pub struct AuthenticationRequirement {
-  authentication_name: String,
-  scopes: Vec<String>,
+  pub authentication_name: String,
+  pub scopes: Vec<String>,
 }
