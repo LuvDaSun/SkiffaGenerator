@@ -1,3 +1,4 @@
+import * as core from "@oa42/core";
 import * as models from "../../models/index.js";
 import { itt } from "../../utils/index.js";
 import {
@@ -8,7 +9,7 @@ import {
 
 export function* generateIsRequestParametersFunction(
   apiModel: models.Api,
-  operationModel: models.Operation,
+  operationModel: core.OperationContainer,
 ) {
   const isRequestParametersFunctionName = getIsRequestParametersFunction(operationModel);
   const requestParametersTypeName = getRequestParametersTypeName(operationModel);
@@ -22,7 +23,7 @@ export function* generateIsRequestParametersFunction(
   `;
 }
 
-function* generateBody(apiModel: models.Api, operationModel: models.Operation) {
+function* generateBody(apiModel: models.Api, operationModel: core.OperationContainer) {
   const parameterModels = [
     ...operationModel.queryParameters,
     ...operationModel.headerParameters,
@@ -33,7 +34,7 @@ function* generateBody(apiModel: models.Api, operationModel: models.Operation) {
   for (const parameterModel of parameterModels) {
     const parameterSchemaId = parameterModel.schemaId;
     const parameterTypeName =
-      parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
+      parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId.toString()];
     if (parameterTypeName == null) {
       continue;
     }

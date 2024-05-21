@@ -11,7 +11,7 @@ import {
   generateOperationResultParameterTypes,
 } from "../types/index.js";
 
-export function* generateParametersTsCode(apiModel: models.Api, apiModel1: core.ApiContainer) {
+export function* generateParametersTsCode(apiModelLegacy: models.Api, apiModel: core.ApiContainer) {
   yield core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
@@ -51,21 +51,23 @@ export function* generateParametersTsCode(apiModel: models.Api, apiModel1: core.
     }
   `;
 
-  for (const pathModel of apiModel1.paths) {
+  for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      //
+      yield* generateIsRequestParametersFunction(apiModelLegacy, operationModel);
+      yield* generateOperationParametersTypes(apiModelLegacy, operationModel);
     }
   }
 
-  for (const pathModel of apiModel.paths) {
+  for (const pathModel of apiModelLegacy.paths) {
     for (const operationModel of pathModel.operations) {
-      yield* generateIsRequestParametersFunction(apiModel, operationModel);
-      yield* generateOperationParametersTypes(apiModel, operationModel);
-
       for (const operationResultModel of operationModel.operationResults) {
-        yield* generateIsResponseParametersFunction(apiModel, operationModel, operationResultModel);
+        yield* generateIsResponseParametersFunction(
+          apiModelLegacy,
+          operationModel,
+          operationResultModel,
+        );
         yield* generateOperationResultParameterTypes(
-          apiModel,
+          apiModelLegacy,
           operationModel,
           operationResultModel,
         );

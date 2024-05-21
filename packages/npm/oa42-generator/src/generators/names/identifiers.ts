@@ -48,11 +48,13 @@ export function getAuthenticationMemberName(authenticationModel: models.Authenti
   return toCamel(authenticationModel.name);
 }
 
-export function getParameterMemberName(parameterModel: models.Parameter) {
+export function getParameterMemberName(parameterModel: core.ParameterContainer | models.Parameter) {
   return toCamel(parameterModel.name);
 }
 
-export function getIsRequestParametersFunction(operationModel: models.Operation) {
+export function getIsRequestParametersFunction(
+  operationModel: core.OperationContainer | models.Operation,
+) {
   return toCamel("is", operationModel.name, "request", "parameters");
 }
 

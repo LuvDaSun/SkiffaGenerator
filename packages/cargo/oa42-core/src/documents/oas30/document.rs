@@ -35,7 +35,7 @@ impl Document {
       .into_iter()
       .flatten()
       .sorted()
-      .map(|key| api_location.push_pointer(key.into_iter().map(Into::into).collect()))
+      .map(|pointer| api_location.push_pointer(pointer))
       .enumerate()
       .map(|(index, location)| {
         self.make_path_model(self.dereference_location(location)?, index + 1)
@@ -73,7 +73,7 @@ impl Document {
       .operation_pointers()
       .into_iter()
       .flatten()
-      .map(|key| path_location.push_pointer(key.into_iter().map(Into::into).collect()))
+      .map(|pointer| path_location.push_pointer(pointer))
       .map(|operation_location| {
         self.make_operation_model(path_location.clone(), operation_location)
       })
@@ -115,50 +115,74 @@ impl Document {
       .try_into()?;
 
     let cookie_parameters = iter::empty()
-      .chain(path_node.cookie_parameter_pointers().into_iter().flatten())
+      .chain(
+        path_node
+          .cookie_parameter_pointers()
+          .into_iter()
+          .flatten()
+          .map(|pointer| path_location.push_pointer(pointer)),
+      )
       .chain(
         operation_node
           .cookie_parameter_pointers()
           .into_iter()
-          .flatten(),
+          .flatten()
+          .map(|pointer| operation_location.push_pointer(pointer)),
       )
-      .map(|key| operation_location.push_pointer(key.into_iter().map(Into::into).collect()))
       .map(|location| self.make_parameter_model(self.dereference_location(location)?))
       .collect::<Result<_, DocumentError>>()?;
 
     let header_parameters = iter::empty()
-      .chain(path_node.header_parameter_pointers().into_iter().flatten())
+      .chain(
+        path_node
+          .header_parameter_pointers()
+          .into_iter()
+          .flatten()
+          .map(|pointer| path_location.push_pointer(pointer)),
+      )
       .chain(
         operation_node
           .header_parameter_pointers()
           .into_iter()
-          .flatten(),
+          .flatten()
+          .map(|pointer| operation_location.push_pointer(pointer)),
       )
-      .map(|key| operation_location.push_pointer(key.into_iter().map(Into::into).collect()))
       .map(|location| self.make_parameter_model(self.dereference_location(location)?))
       .collect::<Result<_, DocumentError>>()?;
 
     let path_parameters = iter::empty()
-      .chain(path_node.path_parameter_pointers().into_iter().flatten())
+      .chain(
+        path_node
+          .path_parameter_pointers()
+          .into_iter()
+          .flatten()
+          .map(|pointer| path_location.push_pointer(pointer)),
+      )
       .chain(
         operation_node
           .path_parameter_pointers()
           .into_iter()
-          .flatten(),
+          .flatten()
+          .map(|pointer| operation_location.push_pointer(pointer)),
       )
-      .map(|key| operation_location.push_pointer(key.into_iter().map(Into::into).collect()))
       .map(|location| self.make_parameter_model(self.dereference_location(location)?))
       .collect::<Result<_, DocumentError>>()?;
 
     let query_parameters = iter::empty()
-      .chain(path_node.query_parameter_pointers().into_iter().flatten())
+      .chain(
+        path_node
+          .query_parameter_pointers()
+          .into_iter()
+          .flatten()
+          .map(|pointer| path_location.push_pointer(pointer)),
+      )
       .chain(
         operation_node
           .query_parameter_pointers()
           .into_iter()
-          .flatten(),
+          .flatten()
+          .map(|pointer| operation_location.push_pointer(pointer)),
       )
-      .map(|key| operation_location.push_pointer(key.into_iter().map(Into::into).collect()))
       .map(|location| self.make_parameter_model(self.dereference_location(location)?))
       .collect::<Result<_, DocumentError>>()?;
 
@@ -166,7 +190,7 @@ impl Document {
       .body_pointers()
       .into_iter()
       .flatten()
-      .map(|key| operation_location.push_pointer(key.into_iter().map(Into::into).collect()))
+      .map(|pointer| operation_location.push_pointer(pointer))
       .map(|location| self.make_body_model(self.dereference_location(location)?))
       .collect::<Result<_, DocumentError>>()?;
 
@@ -174,7 +198,7 @@ impl Document {
       .operation_result_pointers()
       .into_iter()
       .flatten()
-      .map(|key| operation_location.push_pointer(key.into_iter().map(Into::into).collect()))
+      .map(|pointer| operation_location.push_pointer(pointer))
       .map(|location| self.make_operation_result_model(self.dereference_location(location)?))
       .collect::<Result<_, DocumentError>>()?;
 
@@ -219,7 +243,7 @@ impl Document {
       .header_parameter_pointers()
       .into_iter()
       .flatten()
-      .map(|key| operation_result_location.push_pointer(key.into_iter().map(Into::into).collect()))
+      .map(|pointer| operation_result_location.push_pointer(pointer))
       .map(|location| self.make_parameter_model(self.dereference_location(location)?))
       .collect::<Result<_, DocumentError>>()?;
 
@@ -227,7 +251,7 @@ impl Document {
       .body_pointers()
       .into_iter()
       .flatten()
-      .map(|key| operation_result_location.push_pointer(key.into_iter().map(Into::into).collect()))
+      .map(|pointer| operation_result_location.push_pointer(pointer))
       .map(|location| self.make_body_model(location))
       .collect::<Result<_, DocumentError>>()?;
 
@@ -259,7 +283,7 @@ impl Document {
 
     let schema_id = body_node
       .schema_pointer()
-      .map(|key| location.push_pointer(key.into_iter().map(Into::into).collect()));
+      .map(|pointer| location.push_pointer(pointer));
 
     Ok(
       models::Body {
@@ -284,7 +308,7 @@ impl Document {
 
     let schema_id = parameter_node
       .schema_pointer()
-      .map(|key| parameter_location.push_pointer(key.into_iter().map(Into::into).collect()));
+      .map(|pointer| parameter_location.push_pointer(pointer));
 
     Ok(
       models::Parameter {

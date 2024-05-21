@@ -45,6 +45,11 @@ impl NodeLocation {
     Self::from_str(input)
   }
 
+  #[wasm_bindgen(js_name = "toString")]
+  pub fn to_string(&self) -> String {
+    self.into()
+  }
+
   #[wasm_bindgen(js_name = "getAnchor")]
   pub fn get_anchor(&self) -> Option<String> {
     if self.hash.len() > 1 {

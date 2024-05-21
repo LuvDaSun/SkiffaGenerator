@@ -24,8 +24,8 @@ export interface PackageConfiguration {
 }
 
 export function generatePackage(
-  apiModel: models.Api,
-  apiModel1: core.ApiContainer,
+  apiModelLegacy: models.Api,
+  apiModel: core.ApiContainer,
   specification: jns42generator.Specification,
   packageConfiguration: PackageConfiguration,
 ) {
@@ -66,31 +66,31 @@ export function generatePackage(
   }
 
   {
-    const content = generateSharedTsCode(apiModel, apiModel1);
+    const content = generateSharedTsCode(apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "shared.ts");
     writeContentToFile(filePath, content);
   }
 
   {
-    const content = generateParametersTsCode(apiModel, apiModel1);
+    const content = generateParametersTsCode(apiModelLegacy, apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "parameters.ts");
     writeContentToFile(filePath, content);
   }
 
   {
-    const content = generateClientTsCode(apiModel, apiModel1);
+    const content = generateClientTsCode(apiModelLegacy, apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "client.ts");
     writeContentToFile(filePath, content);
   }
 
   {
-    const content = generateServerTsCode(apiModel, apiModel1);
+    const content = generateServerTsCode(apiModelLegacy, apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "server.ts");
     writeContentToFile(filePath, content);
   }
 
   {
-    const content = generateClientServerTestTsCode(apiModel, apiModel1);
+    const content = generateClientServerTestTsCode(apiModelLegacy, apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "client-server.test.ts");
     writeContentToFile(filePath, content);
   }

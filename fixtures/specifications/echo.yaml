@@ -7,6 +7,12 @@ info:
 
 paths:
   /echo:
+    parameters:
+      - in: query
+        required: true
+        name: value
+        schema:
+          type: string
     post:
       operationId: echo
       summary: echo
@@ -15,3 +21,4 @@ paths:
           description: Ok
           content:
             text/plain: {}
+            application/octet-stream: {}

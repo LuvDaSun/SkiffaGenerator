@@ -3,7 +3,7 @@ use crate::{models, utils::NodeRc};
 pub struct Api(NodeRc);
 
 impl Api {
-  pub fn path_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+  pub fn path_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
     let member = "paths";
     Some(
       self
@@ -12,7 +12,7 @@ impl Api {
         .get(member)?
         .as_object()?
         .keys()
-        .map(move |key| vec![member, key.as_str()]),
+        .map(move |key| vec![member.to_owned(), key.clone()]),
     )
   }
 }
@@ -25,26 +25,27 @@ impl From<NodeRc> for Api {
 
 pub struct Path(NodeRc);
 impl Path {
-  pub fn operation_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+  pub fn operation_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
     Some(
       self
         .0
         .as_object()?
         .keys()
         .filter(|key| models::Method::try_from(key.as_str()).is_ok())
-        .map(|key| vec![key.as_str()]),
+        .map(|key| vec![key.clone()]),
     )
   }
 
-  pub fn cookie_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+  pub fn cookie_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
     let member = "parameters";
     Some(
       self
         .0
         .as_object()?
         .get(member)?
-        .as_object()?
+        .as_array()?
         .into_iter()
+        .enumerate()
         .filter_map(|(key, value)| {
           if value.as_object()?.get("in")?.as_str()? == "cookie" {
             Some(key)
@@ -52,19 +53,20 @@ impl Path {
             None
           }
         })
-        .map(move |key| vec![member, key.as_str()]),
+        .map(move |key| vec![member.to_owned(), key.to_string()]),
     )
   }
 
-  pub fn header_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+  pub fn header_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
     let member = "parameters";
     Some(
       self
         .0
         .as_object()?
         .get(member)?
-        .as_object()?
+        .as_array()?
         .into_iter()
+        .enumerate()
         .filter_map(|(key, value)| {
           if value.as_object()?.get("in")?.as_str()? == "header" {
             Some(key)
@@ -72,19 +74,20 @@ impl Path {
             None
           }
         })
-        .map(move |key| vec![member, key.as_str()]),
+        .map(move |key| vec![member.to_owned(), key.to_string()]),
     )
   }
 
-  pub fn path_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+  pub fn path_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
     let member = "parameters";
     Some(
       self
         .0
         .as_object()?
         .get(member)?
-        .as_object()?
+        .as_array()?
         .into_iter()
+        .enumerate()
         .filter_map(|(key, value)| {
           if value.as_object()?.get("in")?.as_str()? == "path" {
             Some(key)
@@ -92,19 +95,20 @@ impl Path {
             None
           }
         })
-        .map(move |key| vec![member, key.as_str()]),
+        .map(move |key| vec![member.to_owned(), key.to_string()]),
     )
   }
 
-  pub fn query_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+  pub fn query_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
     let member = "parameters";
     Some(
       self
         .0
         .as_object()?
         .get(member)?
-        .as_object()?
+        .as_array()?
         .into_iter()
+        .enumerate()
         .filter_map(|(key, value)| {
           if value.as_object()?.get("in")?.as_str()? == "query" {
             Some(key)
@@ -112,7 +116,7 @@ impl Path {
             None
           }
         })
-        .map(move |key| vec![member, key.as_str()]),
+        .map(move |key| vec![member.to_owned(), key.to_string()]),
     )
   }
 }
@@ -142,15 +146,16 @@ impl Operation {
     self.0.as_object()?.get("deprecated")?.as_bool()
   }
 
-  pub fn cookie_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+  pub fn cookie_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
     let member = "parameters";
     Some(
       self
         .0
         .as_object()?
         .get(member)?
-        .as_object()?
+        .as_array()?
         .into_iter()
+        .enumerate()
         .filter_map(|(key, value)| {
           if value.as_object()?.get("in")?.as_str()? == "cookie" {
             Some(key)
@@ -158,19 +163,20 @@ impl Operation {
             None
           }
         })
-        .map(move |key| vec![member, key.as_str()]),
+        .map(move |key| vec![member.to_owned(), key.to_string()]),
     )
   }
 
-  pub fn header_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+  pub fn header_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
     let member = "parameters";
     Some(
       self
         .0
         .as_object()?
         .get(member)?
-        .as_object()?
+        .as_array()?
         .into_iter()
+        .enumerate()
         .filter_map(|(key, value)| {
           if value.as_object()?.get("in")?.as_str()? == "header" {
             Some(key)
@@ -178,19 +184,20 @@ impl Operation {
             None
           }
         })
-        .map(move |key| vec![member, key.as_str()]),
+        .map(move |key| vec![member.to_owned(), key.to_string()]),
     )
   }
 
-  pub fn path_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+  pub fn path_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
     let member = "parameters";
     Some(
       self
         .0
         .as_object()?
         .get(member)?
-        .as_object()?
+        .as_array()?
         .into_iter()
+        .enumerate()
         .filter_map(|(key, value)| {
           if value.as_object()?.get("in")?.as_str()? == "path" {
             Some(key)
@@ -198,19 +205,20 @@ impl Operation {
             None
           }
         })
-        .map(move |key| vec![member, key.as_str()]),
+        .map(move |key| vec![member.to_owned(), key.to_string()]),
     )
   }
 
-  pub fn query_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+  pub fn query_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
     let member = "parameters";
     Some(
       self
         .0
         .as_object()?
         .get(member)?
-        .as_object()?
+        .as_array()?
         .into_iter()
+        .enumerate()
         .filter_map(|(key, value)| {
           if value.as_object()?.get("in")?.as_str()? == "query" {
             Some(key)
@@ -218,11 +226,11 @@ impl Operation {
             None
           }
         })
-        .map(move |key| vec![member, key.as_str()]),
+        .map(move |key| vec![member.to_owned(), key.to_string()]),
     )
   }
 
-  pub fn body_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+  pub fn body_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
     let member = "requestBody";
     Some(
       self
@@ -231,11 +239,11 @@ impl Operation {
         .get(member)?
         .as_object()?
         .keys()
-        .map(move |key| vec![member, key.as_str()]),
+        .map(move |key| vec![member.to_owned(), key.clone()]),
     )
   }
 
-  pub fn operation_result_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+  pub fn operation_result_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
     let member = "responses";
     Some(
       self
@@ -244,7 +252,7 @@ impl Operation {
         .get(member)?
         .as_object()?
         .keys()
-        .map(move |key| vec![member, key.as_str()]),
+        .map(move |key| vec![member.to_owned(), key.clone()]),
     )
   }
 }
@@ -262,7 +270,7 @@ impl OperationResult {
     self.0.as_object()?.get("description")?.as_str()
   }
 
-  pub fn header_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+  pub fn header_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
     let member = "headers";
     Some(
       self
@@ -271,11 +279,11 @@ impl OperationResult {
         .get(member)?
         .as_object()?
         .keys()
-        .map(move |key| vec![member, key.as_str()]),
+        .map(move |key| vec![member.to_owned(), key.clone()]),
     )
   }
 
-  pub fn body_pointers(&self) -> Option<impl Iterator<Item = Vec<&str>>> {
+  pub fn body_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
     let member = "content";
     Some(
       self
@@ -284,7 +292,7 @@ impl OperationResult {
         .get(member)?
         .as_object()?
         .keys()
-        .map(move |key| vec![member, key.as_str()]),
+        .map(move |key| vec![member.to_owned(), key.clone()]),
     )
   }
 }
@@ -298,12 +306,12 @@ impl From<NodeRc> for OperationResult {
 pub struct Body(NodeRc);
 
 impl Body {
-  pub fn schema_pointer(&self) -> Option<Vec<&str>> {
+  pub fn schema_pointer(&self) -> Option<Vec<String>> {
     self
       .0
       .as_object()?
       .get("schema")
-      .map(|_value| vec!["schema"])
+      .map(|_value| vec!["schema".to_owned()])
   }
 }
 
@@ -316,12 +324,12 @@ impl From<NodeRc> for Body {
 pub struct Parameter(NodeRc);
 
 impl Parameter {
-  pub fn schema_pointer(&self) -> Option<Vec<&str>> {
+  pub fn schema_pointer(&self) -> Option<Vec<String>> {
     self
       .0
       .as_object()?
       .get("schema")
-      .map(|_value| vec!["schema"])
+      .map(|_value| vec!["schema".to_owned()])
   }
 
   pub fn name(&self) -> Option<&str> {

@@ -1,3 +1,4 @@
+import * as core from "@oa42/core";
 import camelcase from "camelcase";
 import * as models from "../../models/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
@@ -5,7 +6,7 @@ import { getRequestParametersTypeName } from "../names/index.js";
 
 export function* generateOperationParametersTypes(
   apiModel: models.Api,
-  operationModel: models.Operation,
+  operationModel: core.OperationContainer,
 ) {
   const operationRequestParametersName = getRequestParametersTypeName(operationModel);
 
@@ -21,7 +22,7 @@ export function* generateOperationParametersTypes(
       ${parameterModels.map((parameterModel) => {
         const parameterSchemaId = parameterModel.schemaId;
         const parameterTypeName =
-          parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
+          parameterSchemaId == null ? undefined : apiModel.names[parameterSchemaId.toString()];
 
         return itt`
           ${camelcase(parameterModel.name)}${parameterModel.required ? "" : "?"}:

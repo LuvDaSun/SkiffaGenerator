@@ -37,10 +37,6 @@ impl DocumentContext {
   }
 
   pub fn get_node(&self, retrieval_location: &NodeLocation) -> Option<NodeRc> {
-    /*
-    don't check if the factory is already registered here so we can
-    override factories
-    */
     self.cache.borrow().get_node(retrieval_location)
   }
 }
@@ -157,7 +153,7 @@ mod tests {
     let context = DocumentContextContainer::new(cache);
     context.register_well_known_factories();
 
-    let location = NodeLocation::parse("../../../fixtures/specifications/nwd.yaml").unwrap();
+    let location = NodeLocation::parse("../../../fixtures/specifications/echo.yaml").unwrap();
 
     context.load_from_location(location.clone()).await.unwrap();
     let api = context.get_api_model(&location).unwrap();
@@ -167,7 +163,9 @@ mod tests {
     for path in api.paths() {
       assert!(path.id() > 0);
       for operation in path.operations() {
-        operation.name();
+        for parameter in operation.query_parameters() {
+          parameter.name();
+        }
       }
     }
   }

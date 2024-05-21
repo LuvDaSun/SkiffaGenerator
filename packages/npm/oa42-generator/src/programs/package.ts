@@ -95,35 +95,35 @@ async function main(options: MainOptions) {
   // setup document context
 
   const nodeCache = new core.NodeCache();
-  const documentContext1 = new core.DocumentContextContainer(nodeCache);
-  documentContext1.registerWellKnownFactories();
+  const documentContext = new core.DocumentContextContainer(nodeCache);
+  documentContext.registerWellKnownFactories();
 
-  await documentContext1.loadFromLocation(core.NodeLocation.parse(specificationLocation));
+  await documentContext.loadFromLocation(core.NodeLocation.parse(specificationLocation));
 
-  const apiModel1 = documentContext1.getApiModel(core.NodeLocation.parse(specificationLocation));
-  assert(apiModel1 != null);
+  const apiModel = documentContext.getApiModel(core.NodeLocation.parse(specificationLocation));
+  assert(apiModel != null);
 
-  using documentContext = new DocumentContext({
+  using documentContextLegacy = new DocumentContext({
     defaultTypeName,
     nameMaximumIterations,
     transformMaximumIterations,
     requestTypes,
     responseTypes,
   });
-  documentContext.registerFactory(swagger2.factory);
-  documentContext.registerFactory(oas30.factory);
-  documentContext.registerFactory(oas31.factory);
+  documentContextLegacy.registerFactory(swagger2.factory);
+  documentContextLegacy.registerFactory(oas30.factory);
+  documentContextLegacy.registerFactory(oas31.factory);
 
   // load api model
 
-  await documentContext.loadFromLocation(specificationLocation);
+  await documentContextLegacy.loadFromLocation(specificationLocation);
 
-  const apiModel = documentContext.getApiModel();
-  const specification = documentContext.getSpecification();
+  const apiModelLegacy = documentContextLegacy.getApiModel();
+  const specification = documentContextLegacy.getSpecification();
 
   // generate code
 
-  generatePackage(apiModel, apiModel1, specification, {
+  generatePackage(apiModelLegacy, apiModel, specification, {
     packageDirectoryPath,
     packageName,
     packageVersion,

@@ -60,7 +60,9 @@ export function getOutgoingResponseTypeName(operationModel: models.Operation) {
   return toPascal(operationModel.name, "outgoing", "response");
 }
 
-export function getRequestParametersTypeName(operationModel: models.Operation) {
+export function getRequestParametersTypeName(
+  operationModel: core.OperationContainer | models.Operation,
+) {
   return toPascal(operationModel.name, "request", "parameters");
 }
 
