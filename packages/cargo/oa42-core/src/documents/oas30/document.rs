@@ -5,15 +5,15 @@ use crate::{
   utils::NodeLocation,
 };
 use itertools::Itertools;
-use std::{iter, rc::Weak};
+use std::{iter, rc};
 
 pub struct Document {
-  context: Weak<DocumentContext>,
+  context: rc::Weak<DocumentContext>,
   retrieval_location: NodeLocation,
 }
 
 impl Document {
-  pub fn new(context: Weak<DocumentContext>, retrieval_location: NodeLocation) -> Self {
+  pub fn new(context: rc::Weak<DocumentContext>, retrieval_location: NodeLocation) -> Self {
     Self {
       context,
       retrieval_location,
