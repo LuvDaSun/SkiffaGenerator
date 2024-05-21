@@ -67,8 +67,8 @@ export function getRequestParametersTypeName(
 }
 
 export function getResponseParametersTypeName(
-  operationModel: models.Operation,
-  operationResultModel: models.OperationResult,
+  operationModel: core.OperationContainer | models.Operation,
+  operationResultModel: core.OperationResultContainer | models.OperationResult,
 ) {
   return toPascal(operationModel.name, operationResultModel.statusKind, "response", "parameters");
 }

@@ -55,11 +55,7 @@ export function* generateParametersTsCode(apiModelLegacy: models.Api, apiModel: 
     for (const operationModel of pathModel.operations) {
       yield* generateIsRequestParametersFunction(apiModelLegacy, operationModel);
       yield* generateOperationParametersTypes(apiModelLegacy, operationModel);
-    }
-  }
 
-  for (const pathModel of apiModelLegacy.paths) {
-    for (const operationModel of pathModel.operations) {
       for (const operationResultModel of operationModel.operationResults) {
         yield* generateIsResponseParametersFunction(
           apiModelLegacy,

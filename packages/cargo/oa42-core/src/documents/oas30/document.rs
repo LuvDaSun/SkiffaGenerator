@@ -129,7 +129,7 @@ impl Document {
           .flatten()
           .map(|pointer| operation_location.push_pointer(pointer)),
       )
-      .map(|location| self.make_parameter_model(self.dereference_location(location)?))
+      .map(|location| self.make_request_parameter_model(self.dereference_location(location)?))
       .collect::<Result<_, DocumentError>>()?;
 
     let header_parameters = iter::empty()
@@ -147,7 +147,7 @@ impl Document {
           .flatten()
           .map(|pointer| operation_location.push_pointer(pointer)),
       )
-      .map(|location| self.make_parameter_model(self.dereference_location(location)?))
+      .map(|location| self.make_request_parameter_model(self.dereference_location(location)?))
       .collect::<Result<_, DocumentError>>()?;
 
     let path_parameters = iter::empty()
@@ -165,7 +165,7 @@ impl Document {
           .flatten()
           .map(|pointer| operation_location.push_pointer(pointer)),
       )
-      .map(|location| self.make_parameter_model(self.dereference_location(location)?))
+      .map(|location| self.make_request_parameter_model(self.dereference_location(location)?))
       .collect::<Result<_, DocumentError>>()?;
 
     let query_parameters = iter::empty()
@@ -183,7 +183,7 @@ impl Document {
           .flatten()
           .map(|pointer| operation_location.push_pointer(pointer)),
       )
-      .map(|location| self.make_parameter_model(self.dereference_location(location)?))
+      .map(|location| self.make_request_parameter_model(self.dereference_location(location)?))
       .collect::<Result<_, DocumentError>>()?;
 
     let bodies = operation_node
@@ -244,7 +244,7 @@ impl Document {
       .into_iter()
       .flatten()
       .map(|pointer| operation_result_location.push_pointer(pointer))
-      .map(|location| self.make_parameter_model(self.dereference_location(location)?))
+      .map(|location| self.make_response_parameter_model(self.dereference_location(location)?))
       .collect::<Result<_, DocumentError>>()?;
 
     let bodies = operation_result_node
@@ -296,7 +296,7 @@ impl Document {
     )
   }
 
-  fn make_parameter_model(
+  fn make_request_parameter_model(
     &self,
     parameter_location: NodeLocation,
   ) -> Result<models::ParameterContainer, DocumentError> {
@@ -304,7 +304,7 @@ impl Document {
     let parameter_node = context
       .get_node(&parameter_location)
       .ok_or(DocumentError::NodeNotFound)?;
-    let parameter_node: nodes::Parameter = parameter_node.clone().into();
+    let parameter_node: nodes::RequestParameter = parameter_node.clone().into();
 
     let schema_id = parameter_node
       .schema_pointer()
@@ -314,6 +314,39 @@ impl Document {
       models::Parameter {
         location: parameter_location,
         name: parameter_node.name().map(Into::into).unwrap(),
+        required: parameter_node.required().unwrap_or(false),
+        mockable: false,
+        schema_id,
+      }
+      .into(),
+    )
+  }
+
+  fn make_response_parameter_model(
+    &self,
+    parameter_location: NodeLocation,
+  ) -> Result<models::ParameterContainer, DocumentError> {
+    let context = self.context.upgrade().unwrap();
+    let parameter_node = context
+      .get_node(&parameter_location)
+      .ok_or(DocumentError::NodeNotFound)?;
+    let parameter_node: nodes::ResponseParameter = parameter_node.clone().into();
+
+    let schema_id = parameter_node
+      .schema_pointer()
+      .map(|pointer| parameter_location.push_pointer(pointer));
+
+    let name = parameter_location
+      .get_pointer()
+      .unwrap()
+      .into_iter()
+      .last()
+      .unwrap();
+
+    Ok(
+      models::Parameter {
+        location: parameter_location,
+        name,
         required: parameter_node.required().unwrap_or(false),
         mockable: false,
         schema_id,

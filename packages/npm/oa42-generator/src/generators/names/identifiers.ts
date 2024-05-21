@@ -59,8 +59,8 @@ export function getIsRequestParametersFunction(
 }
 
 export function getIsResponseParametersFunction(
-  operationModel: models.Operation,
-  operationResultModel: models.OperationResult,
+  operationModel: core.OperationContainer | models.Operation,
+  operationResultModel: core.OperationResultContainer | models.OperationResult,
 ) {
   return toCamel(
     "is",
