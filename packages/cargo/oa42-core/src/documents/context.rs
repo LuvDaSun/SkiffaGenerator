@@ -144,3 +144,31 @@ impl DocumentContextContainer {
     Some(api_model)
   }
 }
+
+#[cfg(not(target_os = "unknown"))]
+#[cfg(test)]
+mod tests {
+  use super::NodeCache;
+  use super::*;
+
+  #[async_std::test]
+  async fn test_oas30() {
+    let cache = NodeCache::new();
+    let context = DocumentContextContainer::new(cache);
+    context.register_well_known_factories();
+
+    let location = NodeLocation::parse("../../../fixtures/specifications/nwd.yaml").unwrap();
+
+    context.load_from_location(location.clone()).await.unwrap();
+    let api = context.get_api_model(&location).unwrap();
+
+    assert_eq!(api.location(), location);
+
+    for path in api.paths() {
+      assert!(path.id() > 0);
+      for operation in path.operations() {
+        operation.name();
+      }
+    }
+  }
+}

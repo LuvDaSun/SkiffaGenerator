@@ -37,7 +37,9 @@ impl Document {
       .sorted()
       .map(|key| api_location.push_pointer(key.into_iter().map(Into::into).collect()))
       .enumerate()
-      .map(|(index, location)| self.make_path_model(self.dereference_location(location)?, index))
+      .map(|(index, location)| {
+        self.make_path_model(self.dereference_location(location)?, index + 1)
+      })
       .collect::<Result<_, DocumentError>>()?;
 
     Ok(
@@ -52,7 +54,7 @@ impl Document {
   fn make_path_model(
     &self,
     path_location: NodeLocation,
-    index: usize,
+    id: usize,
   ) -> Result<models::PathContainer, DocumentError> {
     let context = self.context.upgrade().unwrap();
     let node = context
@@ -79,7 +81,7 @@ impl Document {
 
     Ok(
       models::Path {
-        index,
+        id,
         location: path_location,
         pattern,
         operations,
