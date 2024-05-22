@@ -1,10 +1,9 @@
-use super::nodes;
+use super::nodes::{self, NodeOrReference};
 use crate::{
   documents::{DocumentContext, DocumentError, DocumentInterface},
   models,
-  utils::NodeLocation,
+  utils::{NodeLocation, NodeRc},
 };
-use itertools::Itertools;
 use std::{iter, rc};
 
 pub struct Document {
@@ -23,22 +22,19 @@ impl Document {
   fn make_api_model(
     &self,
     api_location: NodeLocation,
+    api_node: nodes::Api,
   ) -> Result<models::ApiContainer, DocumentError> {
-    let context = self.context.upgrade().unwrap();
-    let api_node = context
-      .get_node(&api_location)
-      .ok_or(DocumentError::NodeNotFound)?;
-    let api_node: nodes::Api = api_node.clone().into();
-
     let paths = api_node
-      .path_pointers()
+      .paths()
       .into_iter()
       .flatten()
-      .sorted()
-      .map(|pointer| api_location.push_pointer(pointer))
       .enumerate()
-      .map(|(index, location)| {
-        self.make_path_model(self.dereference_location(location)?, index + 1)
+      .map(|(index, (pointer, node))| {
+        let pattern = pointer.last().unwrap().clone();
+        let id = index + 1;
+        let location = api_location.push_pointer(pointer);
+        let (location, node) = self.dereference(location, node)?;
+        self.make_path_model(location, node, id, pattern)
       })
       .collect::<Result<_, DocumentError>>()?;
 
@@ -54,28 +50,24 @@ impl Document {
   fn make_path_model(
     &self,
     path_location: NodeLocation,
+    path_node: nodes::Path,
     id: usize,
+    pattern: String,
   ) -> Result<models::PathContainer, DocumentError> {
-    let context = self.context.upgrade().unwrap();
-    let node = context
-      .get_node(&path_location)
-      .ok_or(DocumentError::NodeNotFound)?;
-
-    let path_node: nodes::Path = node.clone().into();
-    let pattern = path_location
-      .get_pointer()
-      .unwrap()
-      .into_iter()
-      .last()
-      .unwrap();
-
     let operations = path_node
-      .operation_pointers()
+      .operations()
       .into_iter()
       .flatten()
-      .map(|pointer| path_location.push_pointer(pointer))
-      .map(|operation_location| {
-        self.make_operation_model(path_location.clone(), operation_location)
+      .map(|(pointer, node)| {
+        let method = pointer.last().unwrap().as_str().try_into()?;
+        let location = path_location.push_pointer(pointer);
+        self.make_operation_model(
+          path_location.clone(),
+          path_node.clone(),
+          location,
+          node,
+          method,
+        )
       })
       .collect::<Result<_, DocumentError>>()?;
 
@@ -93,98 +85,77 @@ impl Document {
   fn make_operation_model(
     &self,
     path_location: NodeLocation,
+    path_node: nodes::Path,
     operation_location: NodeLocation,
+    operation_node: nodes::Operation,
+    method: models::Method,
   ) -> Result<models::OperationContainer, DocumentError> {
-    let context = self.context.upgrade().unwrap();
-    let path_node = context
-      .get_node(&path_location)
-      .ok_or(DocumentError::NodeNotFound)?;
-    let path_node: nodes::Path = path_node.clone().into();
-    let operation_node = context
-      .get_node(&operation_location)
-      .ok_or(DocumentError::NodeNotFound)?;
-    let operation_node: nodes::Operation = operation_node.clone().into();
-
-    let method = operation_location
-      .get_pointer()
-      .unwrap()
-      .into_iter()
-      .last()
-      .unwrap()
-      .as_str()
-      .try_into()?;
-
-    let cookie_parameters = iter::empty()
+    let all_parameter_nodes = iter::empty()
       .chain(
         path_node
-          .cookie_parameter_pointers()
+          .parameters()
           .into_iter()
           .flatten()
-          .map(|pointer| path_location.push_pointer(pointer)),
+          .map(|(pointer, node)| {
+            let location = path_location.push_pointer(pointer);
+            self.dereference(location, node)
+          }),
       )
       .chain(
         operation_node
-          .cookie_parameter_pointers()
+          .parameters()
           .into_iter()
           .flatten()
-          .map(|pointer| operation_location.push_pointer(pointer)),
+          .map(|(pointer, node)| {
+            let location = operation_location.push_pointer(pointer);
+            self.dereference(location, node)
+          }),
       )
-      .map(|location| self.make_request_parameter_model(self.dereference_location(location)?))
-      .collect::<Result<_, DocumentError>>()?;
+      .collect::<Result<Vec<_>, DocumentError>>()?;
 
-    let header_parameters = iter::empty()
-      .chain(
-        path_node
-          .header_parameter_pointers()
-          .into_iter()
-          .flatten()
-          .map(|pointer| path_location.push_pointer(pointer)),
-      )
-      .chain(
-        operation_node
-          .header_parameter_pointers()
-          .into_iter()
-          .flatten()
-          .map(|pointer| operation_location.push_pointer(pointer)),
-      )
-      .map(|location| self.make_request_parameter_model(self.dereference_location(location)?))
-      .collect::<Result<_, DocumentError>>()?;
+    let cookie_parameters = all_parameter_nodes
+      .iter()
+      .filter_map(|(location, node)| {
+        if node.r#in()? == "cookie" {
+          Some(self.make_parameter_model_request(location.clone(), node.clone()))
+        } else {
+          None
+        }
+      })
+      .collect::<Result<Vec<_>, DocumentError>>()?;
 
-    let path_parameters = iter::empty()
-      .chain(
-        path_node
-          .path_parameter_pointers()
-          .into_iter()
-          .flatten()
-          .map(|pointer| path_location.push_pointer(pointer)),
-      )
-      .chain(
-        operation_node
-          .path_parameter_pointers()
-          .into_iter()
-          .flatten()
-          .map(|pointer| operation_location.push_pointer(pointer)),
-      )
-      .map(|location| self.make_request_parameter_model(self.dereference_location(location)?))
-      .collect::<Result<_, DocumentError>>()?;
+    let header_parameters = all_parameter_nodes
+      .iter()
+      .filter_map(|(location, node)| {
+        if node.r#in()? == "header" {
+          Some(self.make_parameter_model_request(location.clone(), node.clone()))
+        } else {
+          None
+        }
+      })
+      .collect::<Result<Vec<_>, DocumentError>>()?;
 
-    let query_parameters = iter::empty()
-      .chain(
-        path_node
-          .query_parameter_pointers()
-          .into_iter()
-          .flatten()
-          .map(|pointer| path_location.push_pointer(pointer)),
-      )
-      .chain(
-        operation_node
-          .query_parameter_pointers()
-          .into_iter()
-          .flatten()
-          .map(|pointer| operation_location.push_pointer(pointer)),
-      )
-      .map(|location| self.make_request_parameter_model(self.dereference_location(location)?))
-      .collect::<Result<_, DocumentError>>()?;
+    let path_parameters = all_parameter_nodes
+      .iter()
+      .filter_map(|(location, node)| {
+        if node.r#in()? == "path" {
+          Some(self.make_parameter_model_request(location.clone(), node.clone()))
+        } else {
+          None
+        }
+      })
+      .collect::<Result<Vec<_>, DocumentError>>()?;
+
+    let query_parameters = all_parameter_nodes
+      .iter()
+      .filter_map(|(location, node)| {
+        if node.r#in()? == "query" {
+          Some(self.make_parameter_model_request(location.clone(), node.clone()))
+        } else {
+          None
+        }
+      })
+      .collect::<Result<Vec<_>, DocumentError>>()?;
 
     let bodies = operation_node
       .body_pointers()
@@ -296,16 +267,11 @@ impl Document {
     )
   }
 
-  fn make_request_parameter_model(
+  fn make_parameter_model_request(
     &self,
     parameter_location: NodeLocation,
+    parameter_node: nodes::RequestParameter,
   ) -> Result<models::ParameterContainer, DocumentError> {
-    let context = self.context.upgrade().unwrap();
-    let parameter_node = context
-      .get_node(&parameter_location)
-      .ok_or(DocumentError::NodeNotFound)?;
-    let parameter_node: nodes::RequestParameter = parameter_node.clone().into();
-
     let schema_id = parameter_node
       .schema_pointer()
       .map(|pointer| parameter_location.push_pointer(pointer));
@@ -355,6 +321,29 @@ impl Document {
     )
   }
 
+  fn dereference<T>(
+    &self,
+    location: NodeLocation,
+    node: NodeOrReference<T>,
+  ) -> Result<(NodeLocation, T), DocumentError>
+  where
+    T: From<NodeRc>,
+  {
+    match node {
+      NodeOrReference::Reference(reference) => {
+        let reference_location = NodeLocation::parse(&reference)?;
+        let context = self.context.upgrade().unwrap();
+        let location = location.join(&reference_location);
+        let node = context
+          .get_node(&location)
+          .ok_or(DocumentError::NodeNotFound)?;
+        let node = node.into();
+        Ok((location, node))
+      }
+      NodeOrReference::Node(node) => Ok((location, node)),
+    }
+  }
+
   fn dereference_location(&self, location: NodeLocation) -> Result<NodeLocation, DocumentError> {
     let context = self.context.upgrade().unwrap();
     let node = context
@@ -378,6 +367,12 @@ impl DocumentInterface for Document {
   }
 
   fn as_api(&self) -> Result<models::ApiContainer, DocumentError> {
-    self.make_api_model(self.retrieval_location.clone())
+    let context = self.context.upgrade().unwrap();
+    let api_node = context
+      .get_node(&self.retrieval_location)
+      .ok_or(DocumentError::NodeNotFound)?;
+    let api_node: nodes::Api = api_node.clone().into();
+
+    self.make_api_model(self.retrieval_location.clone(), api_node)
   }
 }

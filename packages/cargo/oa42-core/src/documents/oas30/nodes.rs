@@ -1,9 +1,11 @@
 use crate::{models, utils::NodeRc};
+use std::collections::BTreeMap;
 
+#[derive(Clone)]
 pub struct Api(NodeRc);
 
 impl Api {
-  pub fn path_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
+  pub fn paths(&self) -> Option<BTreeMap<Vec<String>, NodeOrReference<Path>>> {
     let member = "paths";
     Some(
       self
@@ -11,8 +13,9 @@ impl Api {
         .as_object()?
         .get(member)?
         .as_object()?
-        .keys()
-        .map(move |key| vec![member.to_owned(), key.clone()]),
+        .into_iter()
+        .map(|(key, node)| (vec![member.to_owned(), key.clone()], node.clone().into()))
+        .collect(),
     )
   }
 }
@@ -23,20 +26,23 @@ impl From<NodeRc> for Api {
   }
 }
 
+#[derive(Clone)]
 pub struct Path(NodeRc);
+
 impl Path {
-  pub fn operation_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
+  pub fn operations(&self) -> Option<BTreeMap<Vec<String>, Operation>> {
     Some(
       self
         .0
         .as_object()?
-        .keys()
-        .filter(|key| models::Method::try_from(key.as_str()).is_ok())
-        .map(|key| vec![key.clone()]),
+        .into_iter()
+        .filter(|(key, _node)| models::Method::try_from(key.as_str()).is_ok())
+        .map(|(key, node)| (vec![key.clone()], node.clone().into()))
+        .collect(),
     )
   }
 
-  pub fn cookie_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
+  pub fn parameters(&self) -> Option<BTreeMap<Vec<String>, NodeOrReference<RequestParameter>>> {
     let member = "parameters";
     Some(
       self
@@ -46,77 +52,13 @@ impl Path {
         .as_array()?
         .into_iter()
         .enumerate()
-        .filter_map(|(key, value)| {
-          if value.as_object()?.get("in")?.as_str()? == "cookie" {
-            Some(key)
-          } else {
-            None
-          }
+        .map(move |(key, node)| {
+          (
+            vec![member.to_owned(), key.to_string()],
+            node.clone().into(),
+          )
         })
-        .map(move |key| vec![member.to_owned(), key.to_string()]),
-    )
-  }
-
-  pub fn header_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
-    let member = "parameters";
-    Some(
-      self
-        .0
-        .as_object()?
-        .get(member)?
-        .as_array()?
-        .into_iter()
-        .enumerate()
-        .filter_map(|(key, value)| {
-          if value.as_object()?.get("in")?.as_str()? == "header" {
-            Some(key)
-          } else {
-            None
-          }
-        })
-        .map(move |key| vec![member.to_owned(), key.to_string()]),
-    )
-  }
-
-  pub fn path_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
-    let member = "parameters";
-    Some(
-      self
-        .0
-        .as_object()?
-        .get(member)?
-        .as_array()?
-        .into_iter()
-        .enumerate()
-        .filter_map(|(key, value)| {
-          if value.as_object()?.get("in")?.as_str()? == "path" {
-            Some(key)
-          } else {
-            None
-          }
-        })
-        .map(move |key| vec![member.to_owned(), key.to_string()]),
-    )
-  }
-
-  pub fn query_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
-    let member = "parameters";
-    Some(
-      self
-        .0
-        .as_object()?
-        .get(member)?
-        .as_array()?
-        .into_iter()
-        .enumerate()
-        .filter_map(|(key, value)| {
-          if value.as_object()?.get("in")?.as_str()? == "query" {
-            Some(key)
-          } else {
-            None
-          }
-        })
-        .map(move |key| vec![member.to_owned(), key.to_string()]),
+        .collect(),
     )
   }
 }
@@ -127,6 +69,7 @@ impl From<NodeRc> for Path {
   }
 }
 
+#[derive(Clone)]
 pub struct Operation(NodeRc);
 
 impl Operation {
@@ -146,7 +89,7 @@ impl Operation {
     self.0.as_object()?.get("deprecated")?.as_bool()
   }
 
-  pub fn cookie_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
+  pub fn parameters(&self) -> Option<BTreeMap<Vec<String>, NodeOrReference<RequestParameter>>> {
     let member = "parameters";
     Some(
       self
@@ -156,77 +99,13 @@ impl Operation {
         .as_array()?
         .into_iter()
         .enumerate()
-        .filter_map(|(key, value)| {
-          if value.as_object()?.get("in")?.as_str()? == "cookie" {
-            Some(key)
-          } else {
-            None
-          }
+        .map(move |(key, node)| {
+          (
+            vec![member.to_owned(), key.to_string()],
+            node.clone().into(),
+          )
         })
-        .map(move |key| vec![member.to_owned(), key.to_string()]),
-    )
-  }
-
-  pub fn header_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
-    let member = "parameters";
-    Some(
-      self
-        .0
-        .as_object()?
-        .get(member)?
-        .as_array()?
-        .into_iter()
-        .enumerate()
-        .filter_map(|(key, value)| {
-          if value.as_object()?.get("in")?.as_str()? == "header" {
-            Some(key)
-          } else {
-            None
-          }
-        })
-        .map(move |key| vec![member.to_owned(), key.to_string()]),
-    )
-  }
-
-  pub fn path_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
-    let member = "parameters";
-    Some(
-      self
-        .0
-        .as_object()?
-        .get(member)?
-        .as_array()?
-        .into_iter()
-        .enumerate()
-        .filter_map(|(key, value)| {
-          if value.as_object()?.get("in")?.as_str()? == "path" {
-            Some(key)
-          } else {
-            None
-          }
-        })
-        .map(move |key| vec![member.to_owned(), key.to_string()]),
-    )
-  }
-
-  pub fn query_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
-    let member = "parameters";
-    Some(
-      self
-        .0
-        .as_object()?
-        .get(member)?
-        .as_array()?
-        .into_iter()
-        .enumerate()
-        .filter_map(|(key, value)| {
-          if value.as_object()?.get("in")?.as_str()? == "query" {
-            Some(key)
-          } else {
-            None
-          }
-        })
-        .map(move |key| vec![member.to_owned(), key.to_string()]),
+        .collect(),
     )
   }
 
@@ -263,6 +142,7 @@ impl From<NodeRc> for Operation {
   }
 }
 
+#[derive(Clone)]
 pub struct OperationResult(NodeRc);
 
 impl OperationResult {
@@ -270,16 +150,23 @@ impl OperationResult {
     self.0.as_object()?.get("description")?.as_str()
   }
 
-  pub fn header_parameter_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
-    let member = "headers";
+  pub fn parameters(&self) -> Option<BTreeMap<Vec<String>, NodeOrReference<RequestParameter>>> {
+    let member = "parameters";
     Some(
       self
         .0
         .as_object()?
         .get(member)?
-        .as_object()?
-        .keys()
-        .map(move |key| vec![member.to_owned(), key.clone()]),
+        .as_array()?
+        .into_iter()
+        .enumerate()
+        .map(move |(key, node)| {
+          (
+            vec![member.to_owned(), key.to_string()],
+            node.clone().into(),
+          )
+        })
+        .collect(),
     )
   }
 
@@ -303,6 +190,7 @@ impl From<NodeRc> for OperationResult {
   }
 }
 
+#[derive(Clone)]
 pub struct Body(NodeRc);
 
 impl Body {
@@ -321,6 +209,7 @@ impl From<NodeRc> for Body {
   }
 }
 
+#[derive(Clone)]
 pub struct RequestParameter(NodeRc);
 
 impl RequestParameter {
@@ -330,6 +219,10 @@ impl RequestParameter {
       .as_object()?
       .get("schema")
       .map(|_value| vec!["schema".to_owned()])
+  }
+
+  pub fn r#in(&self) -> Option<&str> {
+    self.0.as_object()?.get("in")?.as_str()
   }
 
   pub fn name(&self) -> Option<&str> {
@@ -347,6 +240,7 @@ impl From<NodeRc> for RequestParameter {
   }
 }
 
+#[derive(Clone)]
 pub struct ResponseParameter(NodeRc);
 
 impl ResponseParameter {
@@ -369,6 +263,7 @@ impl From<NodeRc> for ResponseParameter {
   }
 }
 
+#[derive(Clone)]
 pub struct Reference(NodeRc);
 
 impl Reference {
@@ -380,5 +275,27 @@ impl Reference {
 impl From<NodeRc> for Reference {
   fn from(value: NodeRc) -> Self {
     Self(value)
+  }
+}
+
+#[derive(Clone)]
+pub enum NodeOrReference<T>
+where
+  T: From<NodeRc>,
+{
+  Node(T),
+  Reference(String),
+}
+
+impl<T> From<NodeRc> for NodeOrReference<T>
+where
+  T: From<NodeRc>,
+{
+  fn from(value: NodeRc) -> Self {
+    let reference_node: Reference = value.clone().into();
+    if let Some(reference) = reference_node.reference() {
+      return NodeOrReference::Reference(reference.to_owned());
+    }
+    NodeOrReference::Node(value.into())
   }
 }
