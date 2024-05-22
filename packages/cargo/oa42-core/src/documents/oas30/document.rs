@@ -249,8 +249,6 @@ impl Document {
     body_node: nodes::Body,
     content_type: String,
   ) -> Result<models::BodyContainer, DocumentError> {
-    let context = self.context.upgrade().unwrap();
-
     let schema_id = body_node
       .schema_pointer()
       .map(|pointer| body_location.push_pointer(pointer));
