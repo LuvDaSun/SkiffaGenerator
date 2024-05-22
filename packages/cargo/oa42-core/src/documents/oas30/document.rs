@@ -329,22 +329,6 @@ impl Document {
       NodeOrReference::Node(node) => Ok((location, node)),
     }
   }
-
-  fn dereference_location(&self, location: NodeLocation) -> Result<NodeLocation, DocumentError> {
-    let context = self.context.upgrade().unwrap();
-    let node = context
-      .get_node(&location)
-      .ok_or(DocumentError::NodeNotFound)?;
-    let reference_node: nodes::Reference = node.clone().into();
-
-    if let Some(reference) = reference_node.reference() {
-      let reference_location = reference.parse()?;
-      let location = location.join(&reference_location);
-      Ok(location)
-    } else {
-      Ok(location)
-    }
-  }
 }
 
 impl DocumentInterface for Document {
