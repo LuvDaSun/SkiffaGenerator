@@ -52,7 +52,7 @@ impl Path {
         .as_array()?
         .into_iter()
         .enumerate()
-        .map(move |(key, node)| {
+        .map(|(key, node)| {
           (
             vec![member.to_owned(), key.to_string()],
             node.clone().into(),
@@ -99,7 +99,7 @@ impl Operation {
         .as_array()?
         .into_iter()
         .enumerate()
-        .map(move |(key, node)| {
+        .map(|(key, node)| {
           (
             vec![member.to_owned(), key.to_string()],
             node.clone().into(),
@@ -109,7 +109,7 @@ impl Operation {
     )
   }
 
-  pub fn body_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
+  pub fn bodies(&self) -> Option<BTreeMap<Vec<String>, Body>> {
     let member = "requestBody";
     Some(
       self
@@ -117,12 +117,15 @@ impl Operation {
         .as_object()?
         .get(member)?
         .as_object()?
-        .keys()
-        .map(move |key| vec![member.to_owned(), key.clone()]),
+        .into_iter()
+        .map(|(key, node)| (vec![member.to_owned(), key.clone()], node.clone().into()))
+        .collect(),
     )
   }
 
-  pub fn operation_result_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
+  pub fn operation_results(
+    &self,
+  ) -> Option<BTreeMap<Vec<String>, NodeOrReference<OperationResult>>> {
     let member = "responses";
     Some(
       self
@@ -130,8 +133,9 @@ impl Operation {
         .as_object()?
         .get(member)?
         .as_object()?
-        .keys()
-        .map(move |key| vec![member.to_owned(), key.clone()]),
+        .into_iter()
+        .map(|(key, node)| (vec![member.to_owned(), key.clone()], node.clone().into()))
+        .collect(),
     )
   }
 }
@@ -150,17 +154,16 @@ impl OperationResult {
     self.0.as_object()?.get("description")?.as_str()
   }
 
-  pub fn parameters(&self) -> Option<BTreeMap<Vec<String>, NodeOrReference<RequestParameter>>> {
-    let member = "parameters";
+  pub fn headers(&self) -> Option<BTreeMap<Vec<String>, NodeOrReference<ResponseHeader>>> {
+    let member = "headers";
     Some(
       self
         .0
         .as_object()?
         .get(member)?
-        .as_array()?
+        .as_object()?
         .into_iter()
-        .enumerate()
-        .map(move |(key, node)| {
+        .map(|(key, node)| {
           (
             vec![member.to_owned(), key.to_string()],
             node.clone().into(),
@@ -170,7 +173,7 @@ impl OperationResult {
     )
   }
 
-  pub fn body_pointers(&self) -> Option<impl Iterator<Item = Vec<String>> + '_> {
+  pub fn bodies(&self) -> Option<BTreeMap<Vec<String>, Body>> {
     let member = "content";
     Some(
       self
@@ -178,8 +181,9 @@ impl OperationResult {
         .as_object()?
         .get(member)?
         .as_object()?
-        .keys()
-        .map(move |key| vec![member.to_owned(), key.clone()]),
+        .into_iter()
+        .map(|(key, node)| (vec![member.to_owned(), key.clone()], node.clone().into()))
+        .collect(),
     )
   }
 }
@@ -241,9 +245,9 @@ impl From<NodeRc> for RequestParameter {
 }
 
 #[derive(Clone)]
-pub struct ResponseParameter(NodeRc);
+pub struct ResponseHeader(NodeRc);
 
-impl ResponseParameter {
+impl ResponseHeader {
   pub fn schema_pointer(&self) -> Option<Vec<String>> {
     self
       .0
@@ -257,7 +261,7 @@ impl ResponseParameter {
   }
 }
 
-impl From<NodeRc> for ResponseParameter {
+impl From<NodeRc> for ResponseHeader {
   fn from(value: NodeRc) -> Self {
     Self(value)
   }

@@ -158,19 +158,26 @@ impl Document {
       .collect::<Result<Vec<_>, DocumentError>>()?;
 
     let bodies = operation_node
-      .body_pointers()
+      .bodies()
       .into_iter()
       .flatten()
-      .map(|pointer| operation_location.push_pointer(pointer))
-      .map(|location| self.make_body_model(self.dereference_location(location)?))
+      .map(|(pointer, node)| {
+        let content_type = pointer.last().unwrap().clone();
+        let location = operation_location.push_pointer(pointer);
+        self.make_body_model(location.clone(), node.clone(), content_type)
+      })
       .collect::<Result<_, DocumentError>>()?;
 
     let operation_results = operation_node
-      .operation_result_pointers()
+      .operation_results()
       .into_iter()
       .flatten()
-      .map(|pointer| operation_location.push_pointer(pointer))
-      .map(|location| self.make_operation_result_model(self.dereference_location(location)?))
+      .map(|(pointer, node)| {
+        let status_kind = pointer.last().unwrap().clone();
+        let location = path_location.push_pointer(pointer);
+        let (location, node) = self.dereference(location, node)?;
+        self.make_operation_result_model(location.clone(), node.clone(), status_kind)
+      })
       .collect::<Result<_, DocumentError>>()?;
 
     Ok(
@@ -186,7 +193,7 @@ impl Document {
         header_parameters,
         path_parameters,
         query_parameters,
-        bodies: bodies,
+        bodies,
         operation_results,
       }
       .into(),
@@ -196,34 +203,30 @@ impl Document {
   fn make_operation_result_model(
     &self,
     operation_result_location: NodeLocation,
+    operation_result_node: nodes::OperationResult,
+    status_kind: String,
   ) -> Result<models::OperationResultContainer, DocumentError> {
-    let context = self.context.upgrade().unwrap();
-    let operation_result_node = context
-      .get_node(&operation_result_location)
-      .ok_or(DocumentError::NodeNotFound)?;
-    let operation_result_node: nodes::OperationResult = operation_result_node.clone().into();
-
-    let status_kind = operation_result_location
-      .get_pointer()
-      .unwrap()
-      .into_iter()
-      .last()
-      .unwrap();
-
     let header_parameters = operation_result_node
-      .header_parameter_pointers()
+      .headers()
       .into_iter()
       .flatten()
-      .map(|pointer| operation_result_location.push_pointer(pointer))
-      .map(|location| self.make_response_parameter_model(self.dereference_location(location)?))
+      .map(|(pointer, node)| {
+        let name = pointer.last().unwrap().clone();
+        let location = operation_result_location.push_pointer(pointer);
+        let (location, node) = self.dereference(location, node)?;
+        self.make_parameter_model_response(location, node, name)
+      })
       .collect::<Result<_, DocumentError>>()?;
 
     let bodies = operation_result_node
-      .body_pointers()
+      .bodies()
       .into_iter()
       .flatten()
-      .map(|pointer| operation_result_location.push_pointer(pointer))
-      .map(|location| self.make_body_model(location))
+      .map(|(pointer, node)| {
+        let content_type = pointer.last().unwrap().clone();
+        let location = operation_result_location.push_pointer(pointer);
+        self.make_body_model(location.clone(), node.clone(), content_type)
+      })
       .collect::<Result<_, DocumentError>>()?;
 
     Ok(
@@ -242,23 +245,19 @@ impl Document {
 
   fn make_body_model(
     &self,
-    location: NodeLocation,
+    body_location: NodeLocation,
+    body_node: nodes::Body,
+    content_type: String,
   ) -> Result<models::BodyContainer, DocumentError> {
     let context = self.context.upgrade().unwrap();
-    let node = context
-      .get_node(&location)
-      .ok_or(DocumentError::NodeNotFound)?;
-    let body_node: nodes::Body = node.clone().into();
-
-    let content_type = location.get_pointer().unwrap().into_iter().last().unwrap();
 
     let schema_id = body_node
       .schema_pointer()
-      .map(|pointer| location.push_pointer(pointer));
+      .map(|pointer| body_location.push_pointer(pointer));
 
     Ok(
       models::Body {
-        location,
+        location: body_location,
         content_type,
         mockable: false,
         schema_id,
@@ -288,32 +287,21 @@ impl Document {
     )
   }
 
-  fn make_response_parameter_model(
+  fn make_parameter_model_response(
     &self,
-    parameter_location: NodeLocation,
+    header_location: NodeLocation,
+    header_node: nodes::ResponseHeader,
+    name: String,
   ) -> Result<models::ParameterContainer, DocumentError> {
-    let context = self.context.upgrade().unwrap();
-    let parameter_node = context
-      .get_node(&parameter_location)
-      .ok_or(DocumentError::NodeNotFound)?;
-    let parameter_node: nodes::ResponseParameter = parameter_node.clone().into();
-
-    let schema_id = parameter_node
+    let schema_id = header_node
       .schema_pointer()
-      .map(|pointer| parameter_location.push_pointer(pointer));
-
-    let name = parameter_location
-      .get_pointer()
-      .unwrap()
-      .into_iter()
-      .last()
-      .unwrap();
+      .map(|pointer| header_location.push_pointer(pointer));
 
     Ok(
       models::Parameter {
-        location: parameter_location,
+        location: header_location,
         name,
-        required: parameter_node.required().unwrap_or(false),
+        required: header_node.required().unwrap_or(false),
         mockable: false,
         schema_id,
       }
