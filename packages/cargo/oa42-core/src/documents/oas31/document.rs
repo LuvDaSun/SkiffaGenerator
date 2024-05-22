@@ -1,5 +1,5 @@
 use crate::{
-  documents::{self, DocumentContext, DocumentTrait},
+  documents::{self, DocumentContext, DocumentInterface},
   models,
   utils::{NodeLocation, NodeRc},
 };
@@ -21,12 +21,12 @@ impl Document {
   }
 }
 
-impl DocumentTrait for Document {
+impl DocumentInterface for Document {
   fn get_consequent_locations(&self) -> Box<dyn Iterator<Item = NodeLocation>> {
     Box::new(Vec::new().into_iter())
   }
 
-  fn get_api_model(&self) -> Result<models::ApiContainer, documents::DocumentError> {
+  fn as_api(&self) -> Result<models::ApiContainer, documents::DocumentError> {
     todo!()
   }
 }

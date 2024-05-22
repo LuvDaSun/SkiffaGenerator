@@ -1,6 +1,6 @@
 use super::nodes;
 use crate::{
-  documents::{DocumentContext, DocumentError, DocumentTrait},
+  documents::{DocumentContext, DocumentError, DocumentInterface},
   models,
   utils::NodeLocation,
 };
@@ -372,12 +372,12 @@ impl Document {
   }
 }
 
-impl DocumentTrait for Document {
+impl DocumentInterface for Document {
   fn get_consequent_locations(&self) -> Box<dyn Iterator<Item = NodeLocation>> {
     Box::new(Vec::new().into_iter())
   }
 
-  fn get_api_model(&self) -> Result<models::ApiContainer, DocumentError> {
+  fn as_api(&self) -> Result<models::ApiContainer, DocumentError> {
     self.make_api_model(self.retrieval_location.clone())
   }
 }

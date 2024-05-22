@@ -1,5 +1,5 @@
-use super::document::DocumentFactory;
-use super::{DocumentTrait, DocumentType};
+use super::interface::DocumentFactory;
+use super::{DocumentInterface, DocumentType};
 use crate::documents::DocumentConfiguration;
 use crate::documents::{oas30, oas31, swagger2};
 use crate::error::Error;
@@ -16,7 +16,7 @@ pub struct DocumentContext {
    * document factories by document type key
    */
   factories: RefCell<BTreeMap<DocumentType, DocumentFactory>>,
-  documents: RefCell<BTreeMap<NodeLocation, Box<dyn DocumentTrait>>>,
+  documents: RefCell<BTreeMap<NodeLocation, Box<dyn DocumentInterface>>>,
 }
 
 impl DocumentContext {
@@ -135,7 +135,7 @@ impl DocumentContextContainer {
   pub fn get_api_model(&self, retrieval_location: &NodeLocation) -> Option<models::ApiContainer> {
     let documents = self.0.documents.borrow();
     let document = documents.get(retrieval_location)?;
-    let api_model = document.get_api_model().unwrap();
+    let api_model = document.as_api().unwrap();
 
     Some(api_model)
   }
