@@ -2,8 +2,8 @@ use super::DocumentError;
 use crate::{models, utils::NodeLocation};
 
 pub trait DocumentInterface {
-  fn get_consequent_locations(&self) -> Box<dyn Iterator<Item = NodeLocation>>;
-  fn as_api(&self) -> Result<models::ApiContainer, DocumentError>;
+  fn get_consequent_locations(&self) -> Vec<NodeLocation>;
+  fn get_api_model(&self) -> Result<models::ApiContainer, DocumentError>;
 }
 
 pub struct DocumentConfiguration {

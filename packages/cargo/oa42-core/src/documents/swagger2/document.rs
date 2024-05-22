@@ -21,11 +21,11 @@ impl Document {
 }
 
 impl DocumentInterface for Document {
-  fn get_consequent_locations(&self) -> Box<dyn Iterator<Item = NodeLocation>> {
-    Box::new(Vec::new().into_iter())
+  fn get_consequent_locations(&self) -> Vec<NodeLocation> {
+    Vec::new()
   }
 
-  fn as_api(&self) -> Result<crate::models::ApiContainer, crate::documents::DocumentError> {
+  fn get_api_model(&self) -> Result<crate::models::ApiContainer, crate::documents::DocumentError> {
     todo!()
   }
 }

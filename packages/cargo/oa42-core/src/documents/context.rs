@@ -135,7 +135,7 @@ impl DocumentContextContainer {
   pub fn get_api_model(&self, retrieval_location: &NodeLocation) -> Option<models::ApiContainer> {
     let documents = self.0.documents.borrow();
     let document = documents.get(retrieval_location)?;
-    let api_model = document.as_api().unwrap();
+    let api_model = document.get_api_model().unwrap();
 
     Some(api_model)
   }

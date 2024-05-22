@@ -332,11 +332,11 @@ impl Document {
 }
 
 impl DocumentInterface for Document {
-  fn get_consequent_locations(&self) -> Box<dyn Iterator<Item = NodeLocation>> {
-    Box::new(Vec::new().into_iter())
+  fn get_consequent_locations(&self) -> Vec<NodeLocation> {
+    Vec::new()
   }
 
-  fn as_api(&self) -> Result<models::ApiContainer, DocumentError> {
+  fn get_api_model(&self) -> Result<models::ApiContainer, DocumentError> {
     let context = self.context.upgrade().unwrap();
     let api_node = context
       .get_node(&self.retrieval_location)
