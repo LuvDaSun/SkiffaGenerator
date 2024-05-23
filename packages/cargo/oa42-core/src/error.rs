@@ -1,5 +1,5 @@
 use crate::{
-  documents::DocumentTypeError,
+  documents::{DocumentError, DocumentTypeError},
   utils::{FetchFileError, NodeCacheError, ParseError},
 };
 use std::fmt::Display;
@@ -115,5 +115,16 @@ impl From<FetchFileError> for Error {
 impl From<DocumentTypeError> for Error {
   fn from(_value: DocumentTypeError) -> Self {
     Self::DocumentTypeError
+  }
+}
+
+impl From<DocumentError> for Error {
+  fn from(value: DocumentError) -> Self {
+    match value {
+      DocumentError::Unknown => Self::Unknown,
+      DocumentError::NodeNotFound => Self::NotFound, // TODO
+      DocumentError::ParseLocationFailed => Self::ParseLocationFailed,
+      DocumentError::ParseMethodFailed => Self::Unknown, // TODO
+    }
   }
 }

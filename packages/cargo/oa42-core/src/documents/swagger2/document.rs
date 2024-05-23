@@ -1,5 +1,6 @@
 use crate::{
-  documents::{DocumentContext, DocumentInterface},
+  documents::{DocumentContext, DocumentError, DocumentInterface},
+  models,
   utils::{NodeLocation, NodeRc},
 };
 use std::rc::Weak;
@@ -21,11 +22,11 @@ impl Document {
 }
 
 impl DocumentInterface for Document {
-  fn get_consequent_locations(&self) -> Vec<NodeLocation> {
-    Vec::new()
+  fn get_consequent_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
+    Ok(Default::default())
   }
 
-  fn get_api_model(&self) -> Result<crate::models::ApiContainer, crate::documents::DocumentError> {
+  fn get_api_model(&self) -> Result<models::ApiContainer, DocumentError> {
     todo!()
   }
 }

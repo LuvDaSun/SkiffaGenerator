@@ -42,7 +42,9 @@ impl Path {
     )
   }
 
-  pub fn parameters(&self) -> Option<BTreeMap<Vec<String>, NodeOrReference<RequestParameter>>> {
+  pub fn request_parameters(
+    &self,
+  ) -> Option<BTreeMap<Vec<String>, NodeOrReference<RequestParameter>>> {
     let member = "parameters";
     Some(
       self
@@ -89,7 +91,9 @@ impl Operation {
     self.0.as_object()?.get("deprecated")?.as_bool()
   }
 
-  pub fn parameters(&self) -> Option<BTreeMap<Vec<String>, NodeOrReference<RequestParameter>>> {
+  pub fn request_parameters(
+    &self,
+  ) -> Option<BTreeMap<Vec<String>, NodeOrReference<RequestParameter>>> {
     let member = "parameters";
     Some(
       self
@@ -154,7 +158,7 @@ impl OperationResult {
     self.0.as_object()?.get("description")?.as_str()
   }
 
-  pub fn headers(&self) -> Option<BTreeMap<Vec<String>, NodeOrReference<ResponseHeader>>> {
+  pub fn response_headers(&self) -> Option<BTreeMap<Vec<String>, NodeOrReference<ResponseHeader>>> {
     let member = "headers";
     Some(
       self
