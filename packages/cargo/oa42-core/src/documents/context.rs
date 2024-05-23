@@ -115,7 +115,7 @@ impl DocumentContextContainer {
       })
     };
 
-    for consequent_location in document.get_consequent_locations()? {
+    for consequent_location in document.get_referenced_locations()? {
       let consequent_retrieval_location = retrieval_location.join(&consequent_location);
 
       Box::pin(self.load_from_location(consequent_retrieval_location)).await?;

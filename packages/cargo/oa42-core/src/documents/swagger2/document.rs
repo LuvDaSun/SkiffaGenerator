@@ -22,7 +22,7 @@ impl Document {
 }
 
 impl DocumentInterface for Document {
-  fn get_consequent_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
+  fn get_referenced_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
     Ok(Default::default())
   }
 

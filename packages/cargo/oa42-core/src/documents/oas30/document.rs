@@ -309,17 +309,17 @@ impl Document {
 
   fn get_consequent_locations_from_api(
     &self,
-    api_location: NodeLocation,
-    api_node: nodes::Api,
+    location: NodeLocation,
+    node: nodes::Api,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
       .chain(
-        api_node
+        node
           .paths()
           .into_iter()
           .flatten()
           .filter_map(|(pointer, node)| {
-            let location = api_location.set_pointer(pointer);
+            let location = location.set_pointer(pointer);
             if let nodes::NodeOrReference::Reference(reference) = node {
               Some((location, reference))
             } else {
@@ -332,12 +332,12 @@ impl Document {
           }),
       )
       .chain(
-        api_node
+        node
           .paths()
           .into_iter()
           .flatten()
           .filter_map(|(pointer, node)| {
-            let location = api_location.set_pointer(pointer);
+            let location = location.set_pointer(pointer);
             if let nodes::NodeOrReference::Node(node) = node {
               Some((location, node))
             } else {
@@ -352,27 +352,27 @@ impl Document {
 
   fn get_consequent_locations_from_path(
     &self,
-    path_location: NodeLocation,
-    path_node: nodes::Path,
+    location: NodeLocation,
+    node: nodes::Path,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
       .chain(
-        path_node
+        node
           .operations()
           .into_iter()
           .flatten()
           .flat_map(|(pointer, node)| {
-            let location = path_location.set_pointer(pointer);
+            let location = location.set_pointer(pointer);
             self.get_consequent_locations_from_operation(location, node)
           }),
       )
       .chain(
-        path_node
+        node
           .request_parameters()
           .into_iter()
           .flatten()
           .filter_map(|(pointer, node)| {
-            let location = path_location.set_pointer(pointer);
+            let location = location.set_pointer(pointer);
             if let nodes::NodeOrReference::Reference(reference) = node {
               Some((location, reference))
             } else {
@@ -390,17 +390,17 @@ impl Document {
 
   fn get_consequent_locations_from_operation(
     &self,
-    operation_location: NodeLocation,
-    operation_node: nodes::Operation,
+    location: NodeLocation,
+    node: nodes::Operation,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
       .chain(
-        operation_node
+        node
           .operation_results()
           .into_iter()
           .flatten()
           .filter_map(|(pointer, node)| {
-            let location = operation_location.set_pointer(pointer);
+            let location = location.set_pointer(pointer);
             if let nodes::NodeOrReference::Reference(reference) = node {
               Some((location, reference))
             } else {
@@ -413,12 +413,12 @@ impl Document {
           }),
       )
       .chain(
-        operation_node
+        node
           .operation_results()
           .into_iter()
           .flatten()
           .filter_map(|(pointer, node)| {
-            let location = operation_location.set_pointer(pointer);
+            let location = location.set_pointer(pointer);
             if let nodes::NodeOrReference::Node(node) = node {
               Some((location, node))
             } else {
@@ -430,12 +430,12 @@ impl Document {
           }),
       )
       .chain(
-        operation_node
+        node
           .request_parameters()
           .into_iter()
           .flatten()
           .filter_map(|(pointer, node)| {
-            let location = operation_location.set_pointer(pointer);
+            let location = location.set_pointer(pointer);
             if let nodes::NodeOrReference::Reference(reference) = node {
               Some((location, reference))
             } else {
@@ -453,17 +453,17 @@ impl Document {
 
   fn get_consequent_locations_from_operation_result(
     &self,
-    operation_result_location: NodeLocation,
-    operation_result_node: nodes::OperationResult,
+    location: NodeLocation,
+    node: nodes::OperationResult,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
       .chain(
-        operation_result_node
+        node
           .response_headers()
           .into_iter()
           .flatten()
           .filter_map(|(pointer, node)| {
-            let location = operation_result_location.set_pointer(pointer);
+            let location = location.set_pointer(pointer);
             if let nodes::NodeOrReference::Reference(reference) = node {
               Some((location, reference))
             } else {
@@ -516,7 +516,7 @@ impl Document {
 }
 
 impl DocumentInterface for Document {
-  fn get_consequent_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
+  fn get_referenced_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
     let api_location = self.retrieval_location.clone();
     let api_node = self.get_node(&api_location)?;
 
