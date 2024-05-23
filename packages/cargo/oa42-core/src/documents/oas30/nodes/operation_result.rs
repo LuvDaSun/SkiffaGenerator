@@ -1,6 +1,6 @@
 use super::*;
 use crate::{
-  documents::{collect_schema_locations, AsNode, GetSchemaLocations},
+  documents::{collect_schema_locations, GetSchemaLocations},
   utils::{NodeLocation, NodeRc},
 };
 use std::{collections::BTreeMap, iter};
@@ -50,12 +50,6 @@ impl OperationResult {
 impl From<NodeRc> for OperationResult {
   fn from(value: NodeRc) -> Self {
     Self(value)
-  }
-}
-
-impl AsNode<Self> for OperationResult {
-  fn as_node(&self) -> Option<&Self> {
-    Some(self)
   }
 }
 

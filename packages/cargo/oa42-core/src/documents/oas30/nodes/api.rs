@@ -1,6 +1,6 @@
 use super::*;
 use crate::{
-  documents::{collect_schema_locations, AsNode, GetSchemaLocations},
+  documents::{collect_schema_locations, GetSchemaLocations},
   utils::{NodeLocation, NodeRc},
 };
 use std::collections::BTreeMap;
@@ -27,12 +27,6 @@ impl Api {
 impl From<NodeRc> for Api {
   fn from(value: NodeRc) -> Self {
     Self(value)
-  }
-}
-
-impl AsNode<Self> for Api {
-  fn as_node(&self) -> Option<&Self> {
-    Some(self)
   }
 }
 

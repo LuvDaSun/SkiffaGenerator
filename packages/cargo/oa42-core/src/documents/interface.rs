@@ -22,7 +22,7 @@ pub trait GetSchemaLocations {
 }
 
 pub(crate) fn collect_schema_locations<N>(
-  nodes: Option<impl iter::IntoIterator<Item = (Vec<String>, impl AsNode<N>)>>,
+  nodes: Option<impl iter::IntoIterator<Item = (Vec<String>, N)>>,
   location: &NodeLocation,
 ) -> Vec<NodeLocation>
 where
@@ -31,14 +31,9 @@ where
   nodes
     .into_iter()
     .flatten()
-    .filter_map(|(pointer, node)| node.as_node().map(|node| (pointer, node.clone())))
     .flat_map(|(pointer, node)| {
       let location = location.push_pointer(pointer);
       node.get_schema_locations(&location)
     })
     .collect()
-}
-
-pub trait AsNode<T> {
-  fn as_node(&self) -> Option<&T>;
 }

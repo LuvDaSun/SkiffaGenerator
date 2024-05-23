@@ -1,6 +1,6 @@
 use super::*;
 use crate::{
-  documents::{collect_schema_locations, AsNode, GetSchemaLocations},
+  documents::{collect_schema_locations, GetSchemaLocations},
   models,
   utils::{NodeLocation, NodeRc},
 };
@@ -48,12 +48,6 @@ impl Path {
 impl From<NodeRc> for Path {
   fn from(value: NodeRc) -> Self {
     Self(value)
-  }
-}
-
-impl AsNode<Self> for Path {
-  fn as_node(&self) -> Option<&Self> {
-    Some(self)
   }
 }
 

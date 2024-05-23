@@ -1,4 +1,4 @@
-use crate::{documents::AsNode, utils::NodeRc};
+use crate::utils::NodeRc;
 
 #[derive(Clone)]
 pub struct Reference(NodeRc);
@@ -12,11 +12,5 @@ impl Reference {
 impl From<NodeRc> for Reference {
   fn from(value: NodeRc) -> Self {
     Self(value)
-  }
-}
-
-impl AsNode<Self> for Reference {
-  fn as_node(&self) -> Option<&Self> {
-    Some(self)
   }
 }

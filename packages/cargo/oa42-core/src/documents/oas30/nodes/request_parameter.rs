@@ -1,10 +1,7 @@
-use super::*;
 use crate::{
-  documents::{AsNode, GetSchemaLocations},
-  models,
+  documents::GetSchemaLocations,
   utils::{NodeLocation, NodeRc},
 };
-use std::collections::BTreeMap;
 
 #[derive(Clone)]
 pub struct RequestParameter(NodeRc);
@@ -34,12 +31,6 @@ impl RequestParameter {
 impl From<NodeRc> for RequestParameter {
   fn from(value: NodeRc) -> Self {
     Self(value)
-  }
-}
-
-impl AsNode<Self> for RequestParameter {
-  fn as_node(&self) -> Option<&Self> {
-    Some(self)
   }
 }
 

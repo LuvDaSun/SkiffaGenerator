@@ -1,10 +1,7 @@
-use super::*;
 use crate::{
-  documents::{AsNode, GetSchemaLocations},
-  models,
+  documents::GetSchemaLocations,
   utils::{NodeLocation, NodeRc},
 };
-use std::{collections::BTreeMap, iter};
 
 #[derive(Clone)]
 pub struct Body(NodeRc);
@@ -22,12 +19,6 @@ impl Body {
 impl From<NodeRc> for Body {
   fn from(value: NodeRc) -> Self {
     Self(value)
-  }
-}
-
-impl AsNode<Self> for Body {
-  fn as_node(&self) -> Option<&Self> {
-    Some(self)
   }
 }
 
