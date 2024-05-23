@@ -1,6 +1,6 @@
 use super::*;
 use crate::{
-  documents::GetSchemaLocations,
+  documents::{AsNode, GetSchemaLocations},
   models,
   utils::{NodeLocation, NodeRc},
 };
@@ -37,8 +37,14 @@ impl From<NodeRc> for RequestParameter {
   }
 }
 
+impl AsNode<Self> for RequestParameter {
+  fn as_node(&self) -> Option<&Self> {
+    Some(self)
+  }
+}
+
 impl GetSchemaLocations for RequestParameter {
-  fn get_schema_locations(&self, location: &NodeLocation) -> Vec<crate::utils::NodeLocation> {
+  fn get_schema_locations(&self, location: &NodeLocation) -> Vec<NodeLocation> {
     self
       .schema_pointer()
       .into_iter()

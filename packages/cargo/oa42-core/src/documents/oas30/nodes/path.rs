@@ -1,6 +1,10 @@
-use crate::{models, utils::NodeRc};
-use std::collections::BTreeMap;
 use super::*;
+use crate::{
+  documents::{collect_schema_locations, AsNode, GetSchemaLocations},
+  models,
+  utils::{NodeLocation, NodeRc},
+};
+use std::{collections::BTreeMap, iter};
 
 #[derive(Clone)]
 pub struct Path(NodeRc);
@@ -44,5 +48,23 @@ impl Path {
 impl From<NodeRc> for Path {
   fn from(value: NodeRc) -> Self {
     Self(value)
+  }
+}
+
+impl AsNode<Self> for Path {
+  fn as_node(&self) -> Option<&Self> {
+    Some(self)
+  }
+}
+
+impl GetSchemaLocations for Path {
+  fn get_schema_locations(&self, location: &NodeLocation) -> Vec<NodeLocation> {
+    iter::empty()
+      .chain(collect_schema_locations(
+        self.request_parameters(),
+        location,
+      ))
+      .chain(collect_schema_locations(self.operations(), location))
+      .collect()
   }
 }

@@ -1,6 +1,9 @@
 use super::*;
-use crate::{models, utils::NodeRc};
-use std::collections::BTreeMap;
+use crate::{
+  documents::{collect_schema_locations, AsNode, GetSchemaLocations},
+  utils::{NodeLocation, NodeRc},
+};
+use std::{collections::BTreeMap, iter};
 
 #[derive(Clone)]
 pub struct OperationResult(NodeRc);
@@ -47,5 +50,20 @@ impl OperationResult {
 impl From<NodeRc> for OperationResult {
   fn from(value: NodeRc) -> Self {
     Self(value)
+  }
+}
+
+impl AsNode<Self> for OperationResult {
+  fn as_node(&self) -> Option<&Self> {
+    Some(self)
+  }
+}
+
+impl GetSchemaLocations for OperationResult {
+  fn get_schema_locations(&self, location: &NodeLocation) -> Vec<NodeLocation> {
+    iter::empty()
+      .chain(collect_schema_locations(self.response_headers(), location))
+      .chain(collect_schema_locations(self.bodies(), location))
+      .collect()
   }
 }

@@ -1,6 +1,4 @@
-use crate::{models, utils::NodeRc};
-use std::collections::BTreeMap;
-use super::*;
+use crate::{documents::AsNode, utils::NodeRc};
 
 #[derive(Clone)]
 pub struct Reference(NodeRc);
@@ -17,3 +15,8 @@ impl From<NodeRc> for Reference {
   }
 }
 
+impl AsNode<Self> for Reference {
+  fn as_node(&self) -> Option<&Self> {
+    Some(self)
+  }
+}
