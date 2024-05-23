@@ -12,10 +12,10 @@ pub struct DocumentConfiguration {
 
 pub type DocumentFactory = Box<dyn Fn(DocumentConfiguration) -> Box<dyn DocumentInterface>>;
 
-pub trait ReferencedLocations {
+pub trait GetReferencedLocations {
   fn get_referenced_locations(&self) -> Result<Vec<NodeLocation>, DocumentError>;
 }
 
-pub trait SchemaLocations {
-  fn get_schema_locations(&self) -> Vec<NodeLocation>;
+pub trait GetSchemaLocations {
+  fn get_schema_locations(&self, location: &NodeLocation) -> Vec<NodeLocation>;
 }

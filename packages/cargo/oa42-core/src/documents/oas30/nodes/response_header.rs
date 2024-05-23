@@ -1,5 +1,9 @@
 use super::*;
-use crate::{models, utils::NodeRc};
+use crate::{
+  documents::GetSchemaLocations,
+  models,
+  utils::{NodeLocation, NodeRc},
+};
 use std::collections::BTreeMap;
 
 #[derive(Clone)]
@@ -22,5 +26,15 @@ impl ResponseHeader {
 impl From<NodeRc> for ResponseHeader {
   fn from(value: NodeRc) -> Self {
     Self(value)
+  }
+}
+
+impl GetSchemaLocations for ResponseHeader {
+  fn get_schema_locations(&self, location: &NodeLocation) -> Vec<crate::utils::NodeLocation> {
+    self
+      .schema_pointer()
+      .into_iter()
+      .map(|pointer| location.push_pointer(pointer))
+      .collect()
   }
 }
