@@ -1,6 +1,6 @@
 use super::*;
 use crate::{
-  documents::{collect_schema_locations, GetSchemaLocations},
+  documents::{collect_schema_locations, oas30::ToNode, GetSchemaLocations},
   models,
   utils::{NodeLocation, NodeRc},
 };
@@ -60,5 +60,11 @@ impl GetSchemaLocations for Path {
       ))
       .chain(collect_schema_locations(self.operations(), location))
       .collect()
+  }
+}
+
+impl ToNode<Path> for Path {
+  fn to_node(self) -> Option<Path> {
+    Some(self)
   }
 }

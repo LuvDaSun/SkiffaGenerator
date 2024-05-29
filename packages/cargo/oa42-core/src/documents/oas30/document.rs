@@ -307,174 +307,123 @@ impl Document {
     )
   }
 
-  fn get_consequent_locations_from_api(
+  fn get_referenced_locations_from_api(
     &self,
     location: NodeLocation,
     node: nodes::Api,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
-      .chain(
-        node
-          .paths()
-          .into_iter()
-          .flatten()
-          .filter_map(|(pointer, node)| {
-            let location = location.set_pointer(pointer);
-            if let nodes::NodeOrReference::Reference(reference) = node {
-              Some((location, reference))
-            } else {
-              None
-            }
-          })
-          .map(|(location, reference)| {
-            let reference_location = NodeLocation::parse(&reference)?;
-            Ok(location.join(&reference_location))
-          }),
-      )
-      .chain(
-        node
-          .paths()
-          .into_iter()
-          .flatten()
-          .filter_map(|(pointer, node)| {
-            let location = location.set_pointer(pointer);
-            if let nodes::NodeOrReference::Node(node) = node {
-              Some((location, node))
-            } else {
-              None
-            }
-          })
-          .flat_map(|(location, node)| self.get_consequent_locations_from_path(location, node)),
-      )
+      .chain(Self::get_referenced_locations_from_reference_entries(
+        location.clone(),
+        node.paths().into_iter().flatten(),
+      ))
+      .chain(Self::get_referenced_locations_from_node_entries(
+        location.clone(),
+        node.paths().into_iter().flatten(),
+        |location, node| self.get_referenced_locations_from_path(location, node),
+      ))
       .collect::<Vec<_>>()
       .into_iter()
   }
 
-  fn get_consequent_locations_from_path(
+  fn get_referenced_locations_from_path(
     &self,
     location: NodeLocation,
     node: nodes::Path,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
-      .chain(
-        node
-          .operations()
-          .into_iter()
-          .flatten()
-          .flat_map(|(pointer, node)| {
-            let location = location.set_pointer(pointer);
-            self.get_consequent_locations_from_operation(location, node)
-          }),
-      )
-      .chain(
-        node
-          .request_parameters()
-          .into_iter()
-          .flatten()
-          .filter_map(|(pointer, node)| {
-            let location = location.set_pointer(pointer);
-            if let nodes::NodeOrReference::Reference(reference) = node {
-              Some((location, reference))
-            } else {
-              None
-            }
-          })
-          .map(|(location, reference)| {
-            let reference_location = NodeLocation::parse(&reference)?;
-            Ok(location.join(&reference_location))
-          }),
-      )
+      .chain(Self::get_referenced_locations_from_node_entries(
+        location.clone(),
+        node.operations().into_iter().flatten(),
+        |location, node| self.get_referenced_locations_from_operation(location, node),
+      ))
+      .chain(Self::get_referenced_locations_from_reference_entries(
+        location.clone(),
+        node.request_parameters().into_iter().flatten(),
+      ))
       .collect::<Vec<_>>()
       .into_iter()
   }
 
-  fn get_consequent_locations_from_operation(
+  fn get_referenced_locations_from_operation(
     &self,
     location: NodeLocation,
     node: nodes::Operation,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
-      .chain(
-        node
-          .operation_results()
-          .into_iter()
-          .flatten()
-          .filter_map(|(pointer, node)| {
-            let location = location.set_pointer(pointer);
-            if let nodes::NodeOrReference::Reference(reference) = node {
-              Some((location, reference))
-            } else {
-              None
-            }
-          })
-          .map(|(location, reference)| {
-            let reference_location = NodeLocation::parse(&reference)?;
-            Ok(location.join(&reference_location))
-          }),
-      )
-      .chain(
-        node
-          .operation_results()
-          .into_iter()
-          .flatten()
-          .filter_map(|(pointer, node)| {
-            let location = location.set_pointer(pointer);
-            if let nodes::NodeOrReference::Node(node) = node {
-              Some((location, node))
-            } else {
-              None
-            }
-          })
-          .flat_map(|(location, node)| {
-            self.get_consequent_locations_from_operation_result(location, node)
-          }),
-      )
-      .chain(
-        node
-          .request_parameters()
-          .into_iter()
-          .flatten()
-          .filter_map(|(pointer, node)| {
-            let location = location.set_pointer(pointer);
-            if let nodes::NodeOrReference::Reference(reference) = node {
-              Some((location, reference))
-            } else {
-              None
-            }
-          })
-          .map(|(location, reference)| {
-            let reference_location = NodeLocation::parse(&reference)?;
-            Ok(location.join(&reference_location))
-          }),
-      )
+      .chain(Self::get_referenced_locations_from_reference_entries(
+        location.clone(),
+        node.operation_results().into_iter().flatten(),
+      ))
+      .chain(Self::get_referenced_locations_from_node_entries(
+        location.clone(),
+        node.operation_results().into_iter().flatten(),
+        |location, node| self.get_referenced_locations_from_operation_result(location, node),
+      ))
+      .chain(Self::get_referenced_locations_from_reference_entries(
+        location.clone(),
+        node.request_parameters().into_iter().flatten(),
+      ))
       .collect::<Vec<_>>()
       .into_iter()
   }
 
-  fn get_consequent_locations_from_operation_result(
+  fn get_referenced_locations_from_operation_result(
     &self,
     location: NodeLocation,
     node: nodes::OperationResult,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
-      .chain(
-        node
-          .response_headers()
-          .into_iter()
-          .flatten()
-          .filter_map(|(pointer, node)| {
-            let location = location.set_pointer(pointer);
-            if let nodes::NodeOrReference::Reference(reference) = node {
-              Some((location, reference))
-            } else {
-              None
-            }
-          })
-          .map(|(location, reference)| {
-            let reference_location = NodeLocation::parse(&reference)?;
-            Ok(location.join(&reference_location))
-          }),
-      )
+      .chain(Self::get_referenced_locations_from_reference_entries(
+        location,
+        node.response_headers().into_iter().flatten(),
+      ))
+      .collect::<Vec<_>>()
+      .into_iter()
+  }
+
+  fn get_referenced_locations_from_reference_entries<N>(
+    location: NodeLocation,
+    entries: impl Iterator<Item = (Vec<String>, nodes::NodeOrReference<N>)>,
+  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>>
+  where
+    N: From<NodeRc>,
+  {
+    entries
+      .filter_map(move |(pointer, node)| {
+        let location = location.set_pointer(pointer);
+        if let nodes::NodeOrReference::Reference(reference) = node {
+          Some((location, reference))
+        } else {
+          None
+        }
+      })
+      .map(|(location, reference)| {
+        let reference_location = NodeLocation::parse(&reference)?;
+        Ok(location.join(&reference_location))
+      })
+  }
+
+  fn get_referenced_locations_from_node_entries<N, SR>(
+    location: NodeLocation,
+    entries: impl Iterator<Item = (Vec<String>, impl ToNode<N>)>,
+    selector: impl Fn(NodeLocation, N) -> SR,
+  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>>
+  where
+    N: From<NodeRc>,
+    SR: Iterator<Item = Result<NodeLocation, DocumentError>>,
+  {
+    entries
+      .filter_map(move |(pointer, node)| {
+        let node = node.to_node();
+        if let Some(node) = node {
+          let location = location.set_pointer(pointer);
+          Some((location, node))
+        } else {
+          None
+        }
+      })
+      .flat_map(|(location, node)| (selector)(location, node))
       .collect::<Vec<_>>()
       .into_iter()
   }
@@ -516,19 +465,27 @@ impl Document {
 }
 
 impl DocumentInterface for Document {
-  fn get_referenced_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
-    let api_location = self.retrieval_location.clone();
-    let api_node = self.get_node(&api_location)?;
-
-    self
-      .get_consequent_locations_from_api(api_location, api_node)
-      .collect()
-  }
-
   fn get_api_model(&self) -> Result<models::ApiContainer, DocumentError> {
     let api_location = self.retrieval_location.clone();
     let api_node = self.get_node(&api_location)?;
 
     self.make_api_model(api_location, api_node)
   }
+
+  fn get_referenced_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
+    let api_location = self.retrieval_location.clone();
+    let api_node = self.get_node(&api_location)?;
+
+    self
+      .get_referenced_locations_from_api(api_location, api_node)
+      .collect()
+  }
+
+  fn get_schema_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
+    todo!()
+  }
+}
+
+pub trait ToNode<T> {
+  fn to_node(self) -> Option<T>;
 }

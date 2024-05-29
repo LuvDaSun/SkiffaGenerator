@@ -1,6 +1,6 @@
 use super::*;
 use crate::{
-  documents::GetSchemaLocations,
+  documents::{oas30::ToNode, GetSchemaLocations},
   utils::{NodeLocation, NodeRc},
 };
 
@@ -34,6 +34,18 @@ where
     match self {
       NodeOrReference::Node(node) => node.get_schema_locations(location),
       NodeOrReference::Reference(_) => Vec::new(),
+    }
+  }
+}
+
+impl<T> ToNode<T> for NodeOrReference<T>
+where
+  T: From<NodeRc>,
+{
+  fn to_node(self) -> Option<T> {
+    match self {
+      NodeOrReference::Node(node) => Some(node),
+      NodeOrReference::Reference(_) => None,
     }
   }
 }

@@ -1,5 +1,5 @@
 use crate::{
-  documents::GetSchemaLocations,
+  documents::{oas30::ToNode, GetSchemaLocations},
   utils::{NodeLocation, NodeRc},
 };
 
@@ -33,5 +33,11 @@ impl GetSchemaLocations for ResponseHeader {
       .into_iter()
       .map(|pointer| location.push_pointer(pointer))
       .collect()
+  }
+}
+
+impl ToNode<ResponseHeader> for ResponseHeader {
+  fn to_node(self) -> Option<ResponseHeader> {
+    Some(self)
   }
 }

@@ -3,6 +3,7 @@ use crate::{models, utils::NodeLocation};
 use std::iter;
 
 pub trait DocumentInterface {
+  fn get_schema_locations(&self) -> Result<Vec<NodeLocation>, DocumentError>;
   fn get_referenced_locations(&self) -> Result<Vec<NodeLocation>, DocumentError>;
   fn get_api_model(&self) -> Result<models::ApiContainer, DocumentError>;
 }

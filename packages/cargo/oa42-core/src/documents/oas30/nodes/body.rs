@@ -1,5 +1,5 @@
 use crate::{
-  documents::GetSchemaLocations,
+  documents::{oas30::ToNode, GetReferencedLocations, GetSchemaLocations},
   utils::{NodeLocation, NodeRc},
 };
 
@@ -29,5 +29,11 @@ impl GetSchemaLocations for Body {
       .into_iter()
       .map(|pointer| location.push_pointer(pointer))
       .collect()
+  }
+}
+
+impl ToNode<Body> for Body {
+  fn to_node(self) -> Option<Body> {
+    Some(self)
   }
 }

@@ -22,11 +22,15 @@ impl Document {
 }
 
 impl DocumentInterface for Document {
-  fn get_referenced_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
-    Ok(Default::default())
+  fn get_api_model(&self) -> Result<models::ApiContainer, DocumentError> {
+    todo!()
   }
 
-  fn get_api_model(&self) -> Result<models::ApiContainer, DocumentError> {
+  fn get_referenced_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
+    todo!()
+  }
+
+  fn get_schema_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
     todo!()
   }
 }
