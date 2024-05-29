@@ -1,6 +1,6 @@
 use super::*;
 use crate::{
-  documents::{collect_schema_locations, oas30::ToNode, GetSchemaLocations},
+  documents::{collect_schema_locations, GetSchemaLocations},
   utils::{NodeLocation, NodeRc},
 };
 use std::{collections::BTreeMap, iter};
@@ -59,11 +59,5 @@ impl GetSchemaLocations for OperationResult {
       .chain(collect_schema_locations(self.response_headers(), location))
       .chain(collect_schema_locations(self.bodies(), location))
       .collect()
-  }
-}
-
-impl ToNode<OperationResult> for OperationResult {
-  fn to_node(self) -> Option<OperationResult> {
-    Some(self)
   }
 }

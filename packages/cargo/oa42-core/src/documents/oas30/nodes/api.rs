@@ -1,6 +1,6 @@
 use super::*;
 use crate::{
-  documents::{collect_schema_locations, oas30::ToNode, GetSchemaLocations},
+  documents::{collect_schema_locations, GetSchemaLocations},
   utils::{NodeLocation, NodeRc},
 };
 use std::collections::BTreeMap;
@@ -33,11 +33,5 @@ impl From<NodeRc> for Api {
 impl GetSchemaLocations for Api {
   fn get_schema_locations(&self, location: &NodeLocation) -> Vec<NodeLocation> {
     collect_schema_locations(self.paths(), location)
-  }
-}
-
-impl ToNode<Api> for Api {
-  fn to_node(self) -> Option<Api> {
-    Some(self)
   }
 }

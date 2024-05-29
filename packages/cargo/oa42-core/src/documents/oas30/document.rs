@@ -18,7 +18,114 @@ impl Document {
       retrieval_location,
     }
   }
+}
 
+impl Document {
+  fn get_referenced_locations_from_reference_entries<N>(
+    location: NodeLocation,
+    entries: impl Iterator<Item = (Vec<String>, nodes::NodeOrReference<N>)>,
+  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>>
+  where
+    N: From<NodeRc>,
+  {
+    entries
+      .filter_map(move |(pointer, node)| {
+        let location = location.set_pointer(pointer);
+        if let nodes::NodeOrReference::Reference(reference) = node {
+          Some((location, reference))
+        } else {
+          None
+        }
+      })
+      .map(|(location, reference)| {
+        let reference_location = NodeLocation::parse(&reference)?;
+        Ok(location.join(&reference_location))
+      })
+  }
+
+  fn get_sub_locations_from_node_entries<N, SR>(
+    location: NodeLocation,
+    entries: impl Iterator<Item = (Vec<String>, N)>,
+    selector: impl Fn(NodeLocation, N) -> SR,
+  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>>
+  where
+    N: From<NodeRc>,
+    SR: Iterator<Item = Result<NodeLocation, DocumentError>>,
+  {
+    entries
+      .map(move |(pointer, node)| {
+        let location = location.set_pointer(pointer);
+        (location, node)
+      })
+      .flat_map(|(location, node)| (selector)(location, node))
+      .collect::<Vec<_>>()
+      .into_iter()
+  }
+
+  fn get_node<T>(&self, location: &NodeLocation) -> Result<T, DocumentError>
+  where
+    T: From<NodeRc>,
+  {
+    let context = self.context.upgrade().unwrap();
+    let node = context
+      .get_node(location)
+      .ok_or(DocumentError::NodeNotFound)?;
+    let node: T = node.clone().into();
+    Ok(node)
+  }
+
+  fn dereference<T>(
+    &self,
+    location: NodeLocation,
+    node: nodes::NodeOrReference<T>,
+  ) -> Result<(NodeLocation, T), DocumentError>
+  where
+    T: From<NodeRc>,
+  {
+    match node {
+      nodes::NodeOrReference::Reference(reference) => {
+        let reference_location = NodeLocation::parse(&reference)?;
+        let context = self.context.upgrade().unwrap();
+        let location = location.join(&reference_location);
+        let node = context
+          .get_node(&location)
+          .ok_or(DocumentError::NodeNotFound)?;
+        let node = node.into();
+        Ok((location, node))
+      }
+      nodes::NodeOrReference::Node(node) => Ok((location, node)),
+    }
+  }
+}
+
+impl DocumentInterface for Document {
+  fn get_api_model(&self) -> Result<models::ApiContainer, DocumentError> {
+    let api_location = self.retrieval_location.clone();
+    let api_node = self.get_node(&api_location)?;
+
+    self.make_api_model(api_location, api_node)
+  }
+
+  fn get_referenced_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
+    let api_location = self.retrieval_location.clone();
+    let api_node = self.get_node(&api_location)?;
+
+    self
+      .get_referenced_locations_from_api(api_location, api_node)
+      .collect()
+  }
+
+  fn get_schema_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
+    let api_location = self.retrieval_location.clone();
+    let api_node = self.get_node(&api_location)?;
+
+    self
+      .get_schema_locations_from_api(api_location, api_node)
+      .collect()
+  }
+}
+
+impl Document {
   fn make_api_model(
     &self,
     api_location: NodeLocation,
@@ -306,7 +413,9 @@ impl Document {
       .into(),
     )
   }
+}
 
+impl Document {
   fn get_referenced_locations_from_api(
     &self,
     location: NodeLocation,
@@ -317,9 +426,13 @@ impl Document {
         location.clone(),
         node.paths().into_iter().flatten(),
       ))
-      .chain(Self::get_referenced_locations_from_node_entries(
+      .chain(Self::get_sub_locations_from_node_entries(
         location.clone(),
-        node.paths().into_iter().flatten(),
+        node
+          .paths()
+          .into_iter()
+          .flatten()
+          .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
         |location, node| self.get_referenced_locations_from_path(location, node),
       ))
       .collect::<Vec<_>>()
@@ -332,7 +445,7 @@ impl Document {
     node: nodes::Path,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
-      .chain(Self::get_referenced_locations_from_node_entries(
+      .chain(Self::get_sub_locations_from_node_entries(
         location.clone(),
         node.operations().into_iter().flatten(),
         |location, node| self.get_referenced_locations_from_operation(location, node),
@@ -355,9 +468,13 @@ impl Document {
         location.clone(),
         node.operation_results().into_iter().flatten(),
       ))
-      .chain(Self::get_referenced_locations_from_node_entries(
+      .chain(Self::get_sub_locations_from_node_entries(
         location.clone(),
-        node.operation_results().into_iter().flatten(),
+        node
+          .operation_results()
+          .into_iter()
+          .flatten()
+          .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
         |location, node| self.get_referenced_locations_from_operation_result(location, node),
       ))
       .chain(Self::get_referenced_locations_from_reference_entries(
@@ -381,111 +498,116 @@ impl Document {
       .collect::<Vec<_>>()
       .into_iter()
   }
+}
 
-  fn get_referenced_locations_from_reference_entries<N>(
+impl Document {
+  fn get_schema_locations_from_api(
+    &self,
     location: NodeLocation,
-    entries: impl Iterator<Item = (Vec<String>, nodes::NodeOrReference<N>)>,
-  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>>
-  where
-    N: From<NodeRc>,
-  {
-    entries
-      .filter_map(move |(pointer, node)| {
-        let location = location.set_pointer(pointer);
-        if let nodes::NodeOrReference::Reference(reference) = node {
-          Some((location, reference))
-        } else {
-          None
-        }
-      })
-      .map(|(location, reference)| {
-        let reference_location = NodeLocation::parse(&reference)?;
-        Ok(location.join(&reference_location))
-      })
-  }
-
-  fn get_referenced_locations_from_node_entries<N, SR>(
-    location: NodeLocation,
-    entries: impl Iterator<Item = (Vec<String>, impl ToNode<N>)>,
-    selector: impl Fn(NodeLocation, N) -> SR,
-  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>>
-  where
-    N: From<NodeRc>,
-    SR: Iterator<Item = Result<NodeLocation, DocumentError>>,
-  {
-    entries
-      .filter_map(move |(pointer, node)| {
-        let node = node.to_node();
-        if let Some(node) = node {
-          let location = location.set_pointer(pointer);
-          Some((location, node))
-        } else {
-          None
-        }
-      })
-      .flat_map(|(location, node)| (selector)(location, node))
+    node: nodes::Api,
+  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
+    iter::empty()
+      .chain(Self::get_sub_locations_from_node_entries(
+        location.clone(),
+        node
+          .paths()
+          .into_iter()
+          .flatten()
+          .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
+        |location, node| self.get_schema_locations_from_path(location, node),
+      ))
       .collect::<Vec<_>>()
       .into_iter()
   }
 
-  fn get_node<T>(&self, location: &NodeLocation) -> Result<T, DocumentError>
-  where
-    T: From<NodeRc>,
-  {
-    let context = self.context.upgrade().unwrap();
-    let node = context
-      .get_node(location)
-      .ok_or(DocumentError::NodeNotFound)?;
-    let node: T = node.clone().into();
-    Ok(node)
-  }
-
-  fn dereference<T>(
+  fn get_schema_locations_from_path(
     &self,
     location: NodeLocation,
-    node: nodes::NodeOrReference<T>,
-  ) -> Result<(NodeLocation, T), DocumentError>
-  where
-    T: From<NodeRc>,
-  {
-    match node {
-      nodes::NodeOrReference::Reference(reference) => {
-        let reference_location = NodeLocation::parse(&reference)?;
-        let context = self.context.upgrade().unwrap();
-        let location = location.join(&reference_location);
-        let node = context
-          .get_node(&location)
-          .ok_or(DocumentError::NodeNotFound)?;
-        let node = node.into();
-        Ok((location, node))
-      }
-      nodes::NodeOrReference::Node(node) => Ok((location, node)),
-    }
-  }
-}
-
-impl DocumentInterface for Document {
-  fn get_api_model(&self) -> Result<models::ApiContainer, DocumentError> {
-    let api_location = self.retrieval_location.clone();
-    let api_node = self.get_node(&api_location)?;
-
-    self.make_api_model(api_location, api_node)
+    node: nodes::Path,
+  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
+    iter::empty()
+      .chain(Self::get_sub_locations_from_node_entries(
+        location.clone(),
+        node.operations().into_iter().flatten(),
+        |location, node| self.get_schema_locations_from_operation(location, node),
+      ))
+      .collect::<Vec<_>>()
+      .into_iter()
   }
 
-  fn get_referenced_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
-    let api_location = self.retrieval_location.clone();
-    let api_node = self.get_node(&api_location)?;
-
-    self
-      .get_referenced_locations_from_api(api_location, api_node)
-      .collect()
+  fn get_schema_locations_from_operation(
+    &self,
+    location: NodeLocation,
+    node: nodes::Operation,
+  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
+    iter::empty()
+      .chain(Self::get_sub_locations_from_node_entries(
+        location.clone(),
+        node
+          .operation_results()
+          .into_iter()
+          .flatten()
+          .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
+        |location, node| self.get_schema_locations_from_operation_result(location, node),
+      ))
+      .collect::<Vec<_>>()
+      .into_iter()
   }
 
-  fn get_schema_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
-    todo!()
+  fn get_schema_locations_from_operation_result(
+    &self,
+    location: NodeLocation,
+    node: nodes::OperationResult,
+  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
+    iter::empty()
+      .chain(Self::get_sub_locations_from_node_entries(
+        location.clone(),
+        node.bodies().into_iter().flatten(),
+        |location, node| self.get_schema_locations_from_body(location, node),
+      ))
+      .collect::<Vec<_>>()
+      .into_iter()
   }
-}
 
-pub trait ToNode<T> {
-  fn to_node(self) -> Option<T>;
+  fn get_schema_locations_from_request_parameter(
+    &self,
+    location: &NodeLocation,
+    node: nodes::RequestParameter,
+  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
+    node
+      .schema_pointer()
+      .into_iter()
+      .map(|pointer| location.push_pointer(pointer))
+      .map(Ok)
+      .collect::<Vec<_>>()
+      .into_iter()
+  }
+
+  fn get_schema_locations_from_response_header(
+    &self,
+    location: &NodeLocation,
+    node: nodes::ResponseHeader,
+  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
+    node
+      .schema_pointer()
+      .into_iter()
+      .map(|pointer| location.push_pointer(pointer))
+      .map(Ok)
+      .collect::<Vec<_>>()
+      .into_iter()
+  }
+
+  fn get_schema_locations_from_body(
+    &self,
+    location: &NodeLocation,
+    node: nodes::Body,
+  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
+    node
+      .schema_pointer()
+      .into_iter()
+      .map(|pointer| location.push_pointer(pointer))
+      .map(Ok)
+      .collect::<Vec<_>>()
+      .into_iter()
+  }
 }
