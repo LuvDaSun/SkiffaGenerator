@@ -1,7 +1,4 @@
-use crate::{
-  documents::GetSchemaLocations,
-  utils::{NodeLocation, NodeRc},
-};
+use crate::utils::NodeRc;
 
 #[derive(Clone)]
 pub struct RequestParameter(NodeRc);

@@ -1,7 +1,4 @@
-use crate::{
-  documents::{GetSchemaLocations},
-  utils::{NodeLocation, NodeRc},
-};
+use crate::utils::NodeRc;
 
 #[derive(Clone)]
 pub struct ResponseHeader(NodeRc);
@@ -23,15 +20,5 @@ impl ResponseHeader {
 impl From<NodeRc> for ResponseHeader {
   fn from(value: NodeRc) -> Self {
     Self(value)
-  }
-}
-
-impl GetSchemaLocations for ResponseHeader {
-  fn get_schema_locations(&self, location: &NodeLocation) -> Vec<NodeLocation> {
-    self
-      .schema_pointer()
-      .into_iter()
-      .map(|pointer| location.push_pointer(pointer))
-      .collect()
   }
 }

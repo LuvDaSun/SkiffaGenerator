@@ -1,7 +1,4 @@
-use crate::{
-  documents::{GetReferencedLocations, GetSchemaLocations},
-  utils::{NodeLocation, NodeRc},
-};
+use crate::utils::NodeRc;
 
 #[derive(Clone)]
 pub struct Body(NodeRc);
@@ -19,15 +16,5 @@ impl Body {
 impl From<NodeRc> for Body {
   fn from(value: NodeRc) -> Self {
     Self(value)
-  }
-}
-
-impl GetSchemaLocations for Body {
-  fn get_schema_locations(&self, location: &NodeLocation) -> Vec<NodeLocation> {
-    self
-      .schema_pointer()
-      .into_iter()
-      .map(|pointer| location.push_pointer(pointer))
-      .collect()
   }
 }

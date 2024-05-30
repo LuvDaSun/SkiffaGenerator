@@ -21,10 +21,10 @@ impl Document {
 }
 
 impl Document {
-  fn get_referenced_locations_from_reference_entries<N>(
-    location: NodeLocation,
-    entries: impl Iterator<Item = (Vec<String>, nodes::NodeOrReference<N>)>,
-  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>>
+  fn get_referenced_locations_from_reference_entries<'a, N>(
+    location: &'a NodeLocation,
+    entries: impl Iterator<Item = (Vec<String>, nodes::NodeOrReference<N>)> + 'a,
+  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> + 'a
   where
     N: From<NodeRc>,
   {
@@ -44,7 +44,7 @@ impl Document {
   }
 
   fn get_sub_locations_from_node_entries<N, SR>(
-    location: NodeLocation,
+    location: &NodeLocation,
     entries: impl Iterator<Item = (Vec<String>, N)>,
     selector: impl Fn(NodeLocation, N) -> SR,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>>
@@ -76,7 +76,7 @@ impl Document {
 
   fn dereference<T>(
     &self,
-    location: NodeLocation,
+    location: &NodeLocation,
     node: nodes::NodeOrReference<T>,
   ) -> Result<(NodeLocation, T), DocumentError>
   where
@@ -93,21 +93,21 @@ impl Document {
         let node = node.into();
         Ok((location, node))
       }
-      nodes::NodeOrReference::Node(node) => Ok((location, node)),
+      nodes::NodeOrReference::Node(node) => Ok((location.clone(), node)),
     }
   }
 }
 
 impl DocumentInterface for Document {
   fn get_api_model(&self) -> Result<models::ApiContainer, DocumentError> {
-    let api_location = self.retrieval_location.clone();
+    let api_location = &self.retrieval_location;
     let api_node = self.get_node(&api_location)?;
 
     self.make_api_model(api_location, api_node)
   }
 
   fn get_referenced_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
-    let api_location = self.retrieval_location.clone();
+    let api_location = &self.retrieval_location;
     let api_node = self.get_node(&api_location)?;
 
     self
@@ -116,7 +116,7 @@ impl DocumentInterface for Document {
   }
 
   fn get_schema_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
-    let api_location = self.retrieval_location.clone();
+    let api_location = &self.retrieval_location;
     let api_node = self.get_node(&api_location)?;
 
     self
@@ -128,7 +128,7 @@ impl DocumentInterface for Document {
 impl Document {
   fn make_api_model(
     &self,
-    api_location: NodeLocation,
+    api_location: &NodeLocation,
     api_node: nodes::Api,
   ) -> Result<models::ApiContainer, DocumentError> {
     let paths = api_node
@@ -140,14 +140,14 @@ impl Document {
         let pattern = pointer.last().unwrap().clone();
         let id = index + 1;
         let location = api_location.push_pointer(pointer);
-        let (location, node) = self.dereference(location, node)?;
-        self.make_path_model(location, node, id, pattern)
+        let (location, node) = self.dereference(&location, node)?;
+        self.make_path_model(&location, node, id, pattern)
       })
       .collect::<Result<_, DocumentError>>()?;
 
     Ok(
       models::Api {
-        location: api_location,
+        location: api_location.clone(),
         paths,
       }
       .into(),
@@ -156,7 +156,7 @@ impl Document {
 
   fn make_path_model(
     &self,
-    path_location: NodeLocation,
+    path_location: &NodeLocation,
     path_node: nodes::Path,
     id: usize,
     pattern: String,
@@ -168,20 +168,14 @@ impl Document {
       .map(|(pointer, node)| {
         let method = pointer.last().unwrap().as_str().try_into()?;
         let location = path_location.push_pointer(pointer);
-        self.make_operation_model(
-          path_location.clone(),
-          path_node.clone(),
-          location,
-          node,
-          method,
-        )
+        self.make_operation_model(path_location, path_node.clone(), &location, node, method)
       })
       .collect::<Result<_, DocumentError>>()?;
 
     Ok(
       models::Path {
         id,
-        location: path_location,
+        location: path_location.clone(),
         pattern,
         operations,
       }
@@ -191,9 +185,9 @@ impl Document {
 
   fn make_operation_model(
     &self,
-    path_location: NodeLocation,
+    path_location: &NodeLocation,
     path_node: nodes::Path,
-    operation_location: NodeLocation,
+    operation_location: &NodeLocation,
     operation_node: nodes::Operation,
     method: models::Method,
   ) -> Result<models::OperationContainer, DocumentError> {
@@ -205,7 +199,7 @@ impl Document {
           .flatten()
           .map(|(pointer, node)| {
             let location = path_location.push_pointer(pointer);
-            self.dereference(location, node)
+            self.dereference(&location, node)
           }),
       )
       .chain(
@@ -215,7 +209,7 @@ impl Document {
           .flatten()
           .map(|(pointer, node)| {
             let location = operation_location.push_pointer(pointer);
-            self.dereference(location, node)
+            self.dereference(&location, node)
           }),
       )
       .collect::<Result<Vec<_>, DocumentError>>()?;
@@ -224,7 +218,7 @@ impl Document {
       .iter()
       .filter_map(|(location, node)| {
         if node.r#in()? == "cookie" {
-          Some(self.make_parameter_model_request(location.clone(), node.clone()))
+          Some(self.make_parameter_model_request(location, node.clone()))
         } else {
           None
         }
@@ -235,7 +229,7 @@ impl Document {
       .iter()
       .filter_map(|(location, node)| {
         if node.r#in()? == "header" {
-          Some(self.make_parameter_model_request(location.clone(), node.clone()))
+          Some(self.make_parameter_model_request(location, node.clone()))
         } else {
           None
         }
@@ -246,7 +240,7 @@ impl Document {
       .iter()
       .filter_map(|(location, node)| {
         if node.r#in()? == "path" {
-          Some(self.make_parameter_model_request(location.clone(), node.clone()))
+          Some(self.make_parameter_model_request(location, node.clone()))
         } else {
           None
         }
@@ -257,7 +251,7 @@ impl Document {
       .iter()
       .filter_map(|(location, node)| {
         if node.r#in()? == "query" {
-          Some(self.make_parameter_model_request(location.clone(), node.clone()))
+          Some(self.make_parameter_model_request(location, node.clone()))
         } else {
           None
         }
@@ -271,7 +265,7 @@ impl Document {
       .map(|(pointer, node)| {
         let content_type = pointer.last().unwrap().clone();
         let location = operation_location.push_pointer(pointer);
-        self.make_body_model(location.clone(), node.clone(), content_type)
+        self.make_body_model(&location, node.clone(), content_type)
       })
       .collect::<Result<_, DocumentError>>()?;
 
@@ -282,14 +276,14 @@ impl Document {
       .map(|(pointer, node)| {
         let status_kind = pointer.last().unwrap().clone();
         let location = path_location.push_pointer(pointer);
-        let (location, node) = self.dereference(location, node)?;
-        self.make_operation_result_model(location.clone(), node.clone(), status_kind)
+        let (location, node) = self.dereference(&location, node)?;
+        self.make_operation_result_model(&location, node.clone(), status_kind)
       })
       .collect::<Result<_, DocumentError>>()?;
 
     Ok(
       models::Operation {
-        location: operation_location,
+        location: operation_location.clone(),
         name: operation_node.name().map(Into::into).unwrap(),
         summary: operation_node.summary().map(Into::into),
         description: operation_node.description().map(Into::into),
@@ -309,7 +303,7 @@ impl Document {
 
   fn make_operation_result_model(
     &self,
-    operation_result_location: NodeLocation,
+    operation_result_location: &NodeLocation,
     operation_result_node: nodes::OperationResult,
     status_kind: String,
   ) -> Result<models::OperationResultContainer, DocumentError> {
@@ -320,8 +314,8 @@ impl Document {
       .map(|(pointer, node)| {
         let name = pointer.last().unwrap().clone();
         let location = operation_result_location.push_pointer(pointer);
-        let (location, node) = self.dereference(location, node)?;
-        self.make_parameter_model_response(location, node, name)
+        let (location, node) = self.dereference(&location, node)?;
+        self.make_parameter_model_response(&location, node, name)
       })
       .collect::<Result<_, DocumentError>>()?;
 
@@ -332,13 +326,13 @@ impl Document {
       .map(|(pointer, node)| {
         let content_type = pointer.last().unwrap().clone();
         let location = operation_result_location.push_pointer(pointer);
-        self.make_body_model(location.clone(), node.clone(), content_type)
+        self.make_body_model(&location, node.clone(), content_type)
       })
       .collect::<Result<_, DocumentError>>()?;
 
     Ok(
       models::OperationResult {
-        location: operation_result_location,
+        location: operation_result_location.clone(),
         description: operation_result_node.description().map(Into::into),
         status_kind,
         status_codes: Vec::new(),
@@ -352,7 +346,7 @@ impl Document {
 
   fn make_body_model(
     &self,
-    body_location: NodeLocation,
+    body_location: &NodeLocation,
     body_node: nodes::Body,
     content_type: String,
   ) -> Result<models::BodyContainer, DocumentError> {
@@ -362,7 +356,7 @@ impl Document {
 
     Ok(
       models::Body {
-        location: body_location,
+        location: body_location.clone(),
         content_type,
         mockable: false,
         schema_id,
@@ -373,7 +367,7 @@ impl Document {
 
   fn make_parameter_model_request(
     &self,
-    parameter_location: NodeLocation,
+    parameter_location: &NodeLocation,
     parameter_node: nodes::RequestParameter,
   ) -> Result<models::ParameterContainer, DocumentError> {
     let schema_id = parameter_node
@@ -382,7 +376,7 @@ impl Document {
 
     Ok(
       models::Parameter {
-        location: parameter_location,
+        location: parameter_location.clone(),
         name: parameter_node.name().map(Into::into).unwrap(),
         required: parameter_node.required().unwrap_or(false),
         mockable: false,
@@ -394,7 +388,7 @@ impl Document {
 
   fn make_parameter_model_response(
     &self,
-    header_location: NodeLocation,
+    header_location: &NodeLocation,
     header_node: nodes::ResponseHeader,
     name: String,
   ) -> Result<models::ParameterContainer, DocumentError> {
@@ -404,7 +398,7 @@ impl Document {
 
     Ok(
       models::Parameter {
-        location: header_location,
+        location: header_location.clone(),
         name,
         required: header_node.required().unwrap_or(false),
         mockable: false,
@@ -418,22 +412,22 @@ impl Document {
 impl Document {
   fn get_referenced_locations_from_api(
     &self,
-    location: NodeLocation,
+    location: &NodeLocation,
     node: nodes::Api,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
       .chain(Self::get_referenced_locations_from_reference_entries(
-        location.clone(),
+        location,
         node.paths().into_iter().flatten(),
       ))
       .chain(Self::get_sub_locations_from_node_entries(
-        location.clone(),
+        location,
         node
           .paths()
           .into_iter()
           .flatten()
           .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
-        |location, node| self.get_referenced_locations_from_path(location, node),
+        |location, node| self.get_referenced_locations_from_path(&location, node),
       ))
       .collect::<Vec<_>>()
       .into_iter()
@@ -441,17 +435,17 @@ impl Document {
 
   fn get_referenced_locations_from_path(
     &self,
-    location: NodeLocation,
+    location: &NodeLocation,
     node: nodes::Path,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
       .chain(Self::get_sub_locations_from_node_entries(
-        location.clone(),
+        location,
         node.operations().into_iter().flatten(),
-        |location, node| self.get_referenced_locations_from_operation(location, node),
+        |location, node| self.get_referenced_locations_from_operation(&location, node),
       ))
       .chain(Self::get_referenced_locations_from_reference_entries(
-        location.clone(),
+        location,
         node.request_parameters().into_iter().flatten(),
       ))
       .collect::<Vec<_>>()
@@ -460,25 +454,25 @@ impl Document {
 
   fn get_referenced_locations_from_operation(
     &self,
-    location: NodeLocation,
+    location: &NodeLocation,
     node: nodes::Operation,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
       .chain(Self::get_referenced_locations_from_reference_entries(
-        location.clone(),
+        location,
         node.operation_results().into_iter().flatten(),
       ))
       .chain(Self::get_sub_locations_from_node_entries(
-        location.clone(),
+        location,
         node
           .operation_results()
           .into_iter()
           .flatten()
           .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
-        |location, node| self.get_referenced_locations_from_operation_result(location, node),
+        |location, node| self.get_referenced_locations_from_operation_result(&location, node),
       ))
       .chain(Self::get_referenced_locations_from_reference_entries(
-        location.clone(),
+        location,
         node.request_parameters().into_iter().flatten(),
       ))
       .collect::<Vec<_>>()
@@ -487,7 +481,7 @@ impl Document {
 
   fn get_referenced_locations_from_operation_result(
     &self,
-    location: NodeLocation,
+    location: &NodeLocation,
     node: nodes::OperationResult,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
@@ -503,18 +497,18 @@ impl Document {
 impl Document {
   fn get_schema_locations_from_api(
     &self,
-    location: NodeLocation,
+    location: &NodeLocation,
     node: nodes::Api,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
       .chain(Self::get_sub_locations_from_node_entries(
-        location.clone(),
+        location,
         node
           .paths()
           .into_iter()
           .flatten()
           .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
-        |location, node| self.get_schema_locations_from_path(location, node),
+        |location, node| self.get_schema_locations_from_path(&location, node),
       ))
       .collect::<Vec<_>>()
       .into_iter()
@@ -522,14 +516,23 @@ impl Document {
 
   fn get_schema_locations_from_path(
     &self,
-    location: NodeLocation,
+    location: &NodeLocation,
     node: nodes::Path,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
       .chain(Self::get_sub_locations_from_node_entries(
-        location.clone(),
+        location,
+        node
+          .request_parameters()
+          .into_iter()
+          .flatten()
+          .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
+        |location, node| self.get_schema_locations_from_request_parameter(&location, node),
+      ))
+      .chain(Self::get_sub_locations_from_node_entries(
+        location,
         node.operations().into_iter().flatten(),
-        |location, node| self.get_schema_locations_from_operation(location, node),
+        |location, node| self.get_schema_locations_from_operation(&location, node),
       ))
       .collect::<Vec<_>>()
       .into_iter()
@@ -537,18 +540,27 @@ impl Document {
 
   fn get_schema_locations_from_operation(
     &self,
-    location: NodeLocation,
+    location: &NodeLocation,
     node: nodes::Operation,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
       .chain(Self::get_sub_locations_from_node_entries(
-        location.clone(),
+        location,
+        node
+          .request_parameters()
+          .into_iter()
+          .flatten()
+          .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
+        |location, node| self.get_schema_locations_from_request_parameter(&location, node),
+      ))
+      .chain(Self::get_sub_locations_from_node_entries(
+        location,
         node
           .operation_results()
           .into_iter()
           .flatten()
           .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
-        |location, node| self.get_schema_locations_from_operation_result(location, node),
+        |location, node| self.get_schema_locations_from_operation_result(&location, node),
       ))
       .collect::<Vec<_>>()
       .into_iter()
@@ -556,14 +568,23 @@ impl Document {
 
   fn get_schema_locations_from_operation_result(
     &self,
-    location: NodeLocation,
+    location: &NodeLocation,
     node: nodes::OperationResult,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     iter::empty()
       .chain(Self::get_sub_locations_from_node_entries(
-        location.clone(),
+        location,
+        node
+          .response_headers()
+          .into_iter()
+          .flatten()
+          .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
+        |location, node| self.get_schema_locations_from_response_header(&location, node),
+      ))
+      .chain(Self::get_sub_locations_from_node_entries(
+        location,
         node.bodies().into_iter().flatten(),
-        |location, node| self.get_schema_locations_from_body(location, node),
+        |location, node| self.get_schema_locations_from_body(&location, node),
       ))
       .collect::<Vec<_>>()
       .into_iter()

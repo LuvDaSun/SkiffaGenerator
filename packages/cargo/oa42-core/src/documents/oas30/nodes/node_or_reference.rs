@@ -1,8 +1,5 @@
 use super::*;
-use crate::{
-  documents::GetSchemaLocations,
-  utils::{NodeLocation, NodeRc},
-};
+use crate::utils::NodeRc;
 
 #[derive(Clone)]
 pub enum NodeOrReference<T>
@@ -35,17 +32,5 @@ where
       return NodeOrReference::Reference(reference.to_owned());
     }
     NodeOrReference::Node(value.into())
-  }
-}
-
-impl<T> GetSchemaLocations for NodeOrReference<T>
-where
-  T: From<NodeRc> + GetSchemaLocations,
-{
-  fn get_schema_locations(&self, location: &NodeLocation) -> Vec<NodeLocation> {
-    match self {
-      NodeOrReference::Node(node) => node.get_schema_locations(location),
-      NodeOrReference::Reference(_) => Vec::new(),
-    }
   }
 }
