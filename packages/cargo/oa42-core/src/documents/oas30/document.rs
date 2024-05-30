@@ -21,10 +21,10 @@ impl Document {
 }
 
 impl Document {
-  fn get_referenced_locations_from_reference_entries<'a, N>(
+  fn get_referenced_locations_from_reference_entries<N>(
     location: NodeLocation,
-    entries: impl Iterator<Item = (Vec<String>, nodes::NodeOrReference<N>)> + 'a,
-  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> + 'a
+    entries: impl Iterator<Item = (Vec<String>, nodes::NodeOrReference<N>)>,
+  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>>
   where
     N: From<NodeRc>,
   {
@@ -43,14 +43,14 @@ impl Document {
       })
   }
 
-  fn get_sub_locations_from_node_entries<'a, N, SR>(
+  fn get_sub_locations_from_node_entries<N, SR>(
     location: NodeLocation,
-    entries: impl Iterator<Item = (Vec<String>, N)> + 'a,
-    selector: impl Fn(NodeLocation, N) -> SR + 'a,
-  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> + 'a
+    entries: impl Iterator<Item = (Vec<String>, N)>,
+    selector: impl Fn(NodeLocation, N) -> SR,
+  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>>
   where
     N: From<NodeRc>,
-    SR: Iterator<Item = Result<NodeLocation, DocumentError>> + 'a,
+    SR: Iterator<Item = Result<NodeLocation, DocumentError>>,
   {
     entries
       .map(move |(pointer, node)| {
