@@ -481,7 +481,7 @@ impl Document {
     &self,
     location: NodeLocation,
     node: nodes::OperationResult,
-  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> + '_ {
+  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     Self::get_referenced_locations_from_reference_entries(
       location,
       node.response_headers().into_iter().flatten(),
@@ -595,7 +595,7 @@ impl Document {
     &self,
     location: NodeLocation,
     node: nodes::RequestParameter,
-  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> + '_ {
+  ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> {
     node
       .schema_pointer()
       .into_iter()
