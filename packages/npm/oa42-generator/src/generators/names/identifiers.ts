@@ -6,21 +6,15 @@ export function getDefaultCredentialsConstantName() {
   return toCamel("default", "credentials");
 }
 
-export function getOperationFunctionName(
-  operationModel: core.OperationContainer | models.Operation,
-) {
+export function getOperationFunctionName(operationModel: core.OperationContainer) {
   return toCamel(operationModel.name);
 }
 
-export function getOperationHandlerName(
-  operationModel: core.OperationContainer | models.Operation,
-) {
+export function getOperationHandlerName(operationModel: core.OperationContainer) {
   return toCamel(operationModel.name);
 }
 
-export function getRegisterOperationHandlerName(
-  operationModel: core.OperationContainer | models.Operation,
-) {
+export function getRegisterOperationHandlerName(operationModel: core.OperationContainer) {
   return toCamel("register", operationModel.name, "operation");
 }
 
@@ -28,11 +22,13 @@ export function getRegisterOperationsHandlerName() {
   return toCamel("register", "operations");
 }
 
-export function getAuthenticationHandlerName(authenticationModel: models.Authentication) {
+export function getAuthenticationHandlerName(authenticationModel: core.AuthenticationContainer) {
   return toCamel(authenticationModel.name);
 }
 
-export function getRegisterAuthenticationHandlerName(authenticationModel: models.Authentication) {
+export function getRegisterAuthenticationHandlerName(
+  authenticationModel: core.AuthenticationContainer,
+) {
   return toCamel("register", authenticationModel.name, "authentication");
 }
 
@@ -40,33 +36,29 @@ export function getRegisterAuthenticationsHandlerName() {
   return toCamel("register", "authentications");
 }
 
-export function getEndpointHandlerName(operationModel: core.OperationContainer | models.Operation) {
+export function getEndpointHandlerName(operationModel: core.OperationContainer) {
   return toCamel(operationModel.name, "endpoint", "handler");
 }
 
-export function getOperationAcceptConstName(
-  operationModel: core.OperationContainer | models.Operation,
-) {
+export function getOperationAcceptConstName(operationModel: core.OperationContainer) {
   return toCamel(operationModel.name, "operation", "accept");
 }
 
-export function getAuthenticationMemberName(authenticationModel: models.Authentication) {
+export function getAuthenticationMemberName(authenticationModel: core.AuthenticationContainer) {
   return toCamel(authenticationModel.name);
 }
 
-export function getParameterMemberName(parameterModel: core.ParameterContainer | models.Parameter) {
+export function getParameterMemberName(parameterModel: core.ParameterContainer) {
   return toCamel(parameterModel.name);
 }
 
-export function getIsRequestParametersFunction(
-  operationModel: core.OperationContainer | models.Operation,
-) {
+export function getIsRequestParametersFunction(operationModel: core.OperationContainer) {
   return toCamel("is", operationModel.name, "request", "parameters");
 }
 
 export function getIsResponseParametersFunction(
-  operationModel: core.OperationContainer | models.Operation,
-  operationResultModel: core.OperationResultContainer | models.OperationResult,
+  operationModel: core.OperationContainer,
+  operationResultModel: core.OperationResultContainer,
 ) {
   return toCamel(
     "is",
@@ -77,21 +69,17 @@ export function getIsResponseParametersFunction(
   );
 }
 
-export function getIsOperationAuthenticationName(
-  operationModel: core.OperationContainer | models.Operation,
-) {
+export function getIsOperationAuthenticationName(operationModel: core.OperationContainer) {
   return toCamel("is", operationModel.name, "authentication");
 }
 
-export function getIsAuthenticationFunctionName(
-  operationModel: core.OperationContainer | models.Operation,
-) {
+export function getIsAuthenticationFunctionName(operationModel: core.OperationContainer) {
   return toCamel("is", operationModel.name, "authentication");
 }
 
 export function getParseParameterFunction(
   apiModelLegacy: models.Api,
-  parameterModel: core.ParameterContainer | models.Parameter,
+  parameterModel: core.ParameterContainer,
 ) {
   const parameterSchemaId = parameterModel.schemaId?.toString();
   if (parameterSchemaId == null) {

@@ -51,16 +51,16 @@ export function* generateClientTsCode(apiModelLegacy: models.Api, apiModel: core
   `;
 
   yield* generateCredentialsConstant();
-  yield* generateCredentialsType(apiModelLegacy);
+  yield* generateCredentialsType(apiModel);
 
-  for (const authenticationModel of apiModelLegacy.authentication) {
+  for (const authenticationModel of apiModel.authentication) {
     yield* generateAuthenticationCredentialType(authenticationModel);
   }
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      yield* generateClientOperationFunction(apiModelLegacy, pathModel, operationModel);
-      yield* generateOperationCredentialsType(apiModelLegacy, operationModel);
+      yield* generateClientOperationFunction(apiModelLegacy, apiModel, pathModel, operationModel);
+      yield* generateOperationCredentialsType(apiModel, operationModel);
       yield* generateOperationOutgoingRequestType(apiModelLegacy, operationModel);
       yield* generateOperationIncomingResponseType(apiModelLegacy, operationModel);
     }

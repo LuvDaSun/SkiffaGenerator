@@ -19,6 +19,7 @@ import {
 
 export function* generateEndpointHandlerMethod(
   apiModelLegacy: models.Api,
+  apiModel: core.ApiContainer,
   operationModel: core.OperationContainer,
 ) {
   const endpointHandlerName = getEndpointHandlerName(operationModel);
@@ -29,7 +30,7 @@ export function* generateEndpointHandlerMethod(
       serverIncomingRequest: lib.ServerIncomingRequest,
     ): Promise<lib.ServerOutgoingResponse> {
       return this.wrappers.endpoint(async () => {
-        ${generateBody(apiModelLegacy, operationModel)}
+        ${generateBody(apiModelLegacy, apiModel, operationModel)}
       });
     }
   `;
@@ -38,7 +39,11 @@ export function* generateEndpointHandlerMethod(
 /**
  * function statements for route handler
  */
-function* generateBody(apiModelLegacy: models.Api, operationModel: core.OperationContainer) {
+function* generateBody(
+  apiModelLegacy: models.Api,
+  apiModel: core.ApiContainer,
+  operationModel: core.OperationContainer,
+) {
   const operationHandlerName = getOperationHandlerName(operationModel);
   const operationIncomingRequestName = getIncomingRequestTypeName(operationModel);
   const requestParametersName = getRequestParametersTypeName(operationModel);
@@ -49,7 +54,7 @@ function* generateBody(apiModelLegacy: models.Api, operationModel: core.Operatio
       group.requirements.map((requirement) => requirement.authenticationName),
     ),
   );
-  const authenticationModels = apiModelLegacy.authentication.filter((authenticationModel) =>
+  const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
     authenticationNames.has(authenticationModel.name),
   );
   const operationAcceptTypeName = getOperationAcceptTypeName(operationModel);

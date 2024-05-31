@@ -51,12 +51,12 @@ export function* generateServerTsCode(apiModelLegacy: models.Api, apiModel: core
     }).loadFromJson(${JSON.stringify(apiModelLegacy.router.saveToJson(RouterMode.Bidirectional))});
   `;
 
-  yield* generateServerAuthenticationType(apiModelLegacy);
-  yield* generateAuthenticationHandlersType(apiModelLegacy);
+  yield* generateServerAuthenticationType(apiModel);
+  yield* generateAuthenticationHandlersType(apiModel);
   yield* generateOperationHandlersType(apiModel);
   yield* generateServerClass(apiModelLegacy, apiModel);
 
-  for (const authenticationModel of apiModelLegacy.authentication) {
+  for (const authenticationModel of apiModel.authentication) {
     yield* generateAuthenticationHandlerType(authenticationModel);
   }
 
@@ -64,8 +64,8 @@ export function* generateServerTsCode(apiModelLegacy: models.Api, apiModel: core
     for (const operationModel of pathModel.operations) {
       yield* generateOperationHandlerType(operationModel);
 
-      yield* generateIsAuthenticationFunction(apiModelLegacy, operationModel);
-      yield* generateOperationAuthenticationType(apiModelLegacy, operationModel);
+      yield* generateIsAuthenticationFunction(apiModel, operationModel);
+      yield* generateOperationAuthenticationType(apiModel, operationModel);
 
       yield* generateOperationIncomingRequestType(apiModelLegacy, operationModel);
       yield* generateOperationOutgoingResponseType(apiModelLegacy, operationModel);

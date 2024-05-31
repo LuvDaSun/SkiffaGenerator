@@ -9,14 +9,14 @@ import {
 } from "../names/index.js";
 
 export function* generateIsAuthenticationFunction(
-  apiModelLegacy: models.Api,
+  apiModel: core.ApiContainer,
   operationModel: core.OperationContainer,
 ) {
   const serverAuthenticationName = getServerAuthenticationTypeName();
   const isAuthenticationFunctionName = getIsAuthenticationFunctionName(operationModel);
   const authenticationTypeName = getOperationAuthenticationTypeName(operationModel);
   const authenticationMap = Object.fromEntries(
-    apiModelLegacy.authentication.map((model) => [model.name, model]),
+    apiModel.authentication.map((model) => [model.name, model]),
   );
 
   yield itt`

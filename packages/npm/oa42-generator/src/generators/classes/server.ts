@@ -69,17 +69,17 @@ function* generateBody(apiModelLegacy: models.Api, apiModel: core.ApiContainer) 
   yield generateRegisterMiddlewareMethod();
   yield generateRequestHandlerMethod(apiModel);
 
-  yield registerAuthenticationHandlersMethod(apiModelLegacy);
+  yield registerAuthenticationHandlersMethod(apiModel);
   yield registerOperationHandlersMethod(apiModel);
 
-  for (const authenticationModel of apiModelLegacy.authentication) {
+  for (const authenticationModel of apiModel.authentication) {
     yield registerAuthenticationHandlerMethod(authenticationModel);
   }
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
       yield registerOperationHandlerMethod(operationModel);
-      yield generateEndpointHandlerMethod(apiModelLegacy, operationModel);
+      yield generateEndpointHandlerMethod(apiModelLegacy, apiModel, operationModel);
     }
   }
 }

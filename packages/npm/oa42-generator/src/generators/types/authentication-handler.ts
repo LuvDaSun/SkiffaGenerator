@@ -1,4 +1,4 @@
-import * as models from "../../models/index.js";
+import * as core from "@oa42/core";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
   getAuthenticationHandlerName,
@@ -8,7 +8,9 @@ import {
   getServerAuthenticationTypeName,
 } from "../names/index.js";
 
-export function* generateAuthenticationHandlerType(authenticationModel: models.Authentication) {
+export function* generateAuthenticationHandlerType(
+  authenticationModel: core.AuthenticationContainer,
+) {
   const serverAuthenticationName = getServerAuthenticationTypeName();
   const handlerTypeName = getAuthenticationHandlerTypeName(authenticationModel);
 
@@ -54,7 +56,7 @@ export function* generateAuthenticationHandlerType(authenticationModel: models.A
   }
 }
 
-export function* generateAuthenticationHandlersType(apiModelLegacy: models.Api) {
+export function* generateAuthenticationHandlersType(apiModel: core.ApiContainer) {
   const serverAuthenticationName = getServerAuthenticationTypeName();
   const typeName = getAuthenticationHandlersTypeName();
 
@@ -65,7 +67,7 @@ export function* generateAuthenticationHandlersType(apiModelLegacy: models.Api) 
   `;
 
   function* body() {
-    for (const authenticationModel of apiModelLegacy.authentication) {
+    for (const authenticationModel of apiModel.authentication) {
       const typeName = getAuthenticationHandlerTypeName(authenticationModel);
       const propertyName = getAuthenticationHandlerName(authenticationModel);
       yield `

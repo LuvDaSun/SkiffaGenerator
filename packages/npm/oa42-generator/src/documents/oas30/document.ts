@@ -13,7 +13,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
     const documentLocation = this.documentLocation;
 
     const paths = [...this.getPathModels()];
-    const authentication = [...this.getAuthenticationModels()];
+    // const authentication = [...this.getAuthenticationModels()];
     const router = new Router<number>();
     for (const pathModel of paths) {
       router.insertRoute(pathModel.id, pathModel.pattern);
@@ -31,9 +31,9 @@ export class Document extends DocumentBase<oas.OasSchema> {
     }
 
     const apiModel: models.Api = {
-      location: documentLocation,
+      // location: documentLocation,
       // paths,
-      authentication,
+      // authentication,
       router,
       names,
     };

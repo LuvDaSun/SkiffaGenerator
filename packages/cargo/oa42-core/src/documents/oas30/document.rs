@@ -143,10 +143,13 @@ impl Document {
       })
       .collect::<Result<_, DocumentError>>()?;
 
+    let authentication = Vec::new(); // TODO
+
     Ok(
       models::Api {
         location: api_location.clone(),
         paths,
+        authentication,
       }
       .into(),
     )

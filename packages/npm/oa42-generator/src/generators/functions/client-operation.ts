@@ -18,6 +18,7 @@ import {
 
 export function* generateClientOperationFunction(
   apiModelLegacy: models.Api,
+  apiModel: core.ApiContainer,
   pathModel: core.PathContainer,
   operationModel: core.OperationContainer,
 ) {
@@ -44,13 +45,14 @@ export function* generateClientOperationFunction(
     operationCredentials: ${credentialsName} = {},
     operationConfiguration: ClientConfiguration = {},
   ): Promise<${operationIncomingResponseName}> {
-    ${generateBody(apiModelLegacy, pathModel, operationModel)}
+    ${generateBody(apiModelLegacy, apiModel, pathModel, operationModel)}
   }
 `;
 }
 
 function* generateBody(
   apiModelLegacy: models.Api,
+  apiModel: core.ApiContainer,
   pathModel: core.PathContainer,
   operationModel: core.OperationContainer,
 ) {
@@ -189,7 +191,7 @@ function* generateBody(
       group.requirements.map((requirement) => requirement.authenticationName),
     ),
   );
-  const authenticationModels = apiModelLegacy.authentication.filter((authenticationModel) =>
+  const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
     authenticationNames.has(authenticationModel.name),
   );
 

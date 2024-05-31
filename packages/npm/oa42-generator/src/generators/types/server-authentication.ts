@@ -1,11 +1,11 @@
-import * as models from "../../models/index.js";
+import * as core from "@oa42/core";
 import { joinIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { getAuthenticationMemberName, getServerAuthenticationTypeName } from "../names/index.js";
 
-export function* generateServerAuthenticationType(apiModelLegacy: models.Api) {
+export function* generateServerAuthenticationType(apiModel: core.ApiContainer) {
   const typeName = getServerAuthenticationTypeName();
-  const authenticationModels = apiModelLegacy.authentication;
+  const authenticationModels = apiModel.authentication;
 
   const typeArgument =
     authenticationModels.length > 0

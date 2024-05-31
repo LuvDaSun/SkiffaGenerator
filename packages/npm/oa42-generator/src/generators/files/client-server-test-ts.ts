@@ -34,7 +34,7 @@ export function* generateClientServerTestTsCode(
 
   yield itt`
     type ApiServerAuthentication = {
-      ${apiModelLegacy.authentication.map((authenticationModel) => itt`${getAuthenticationMemberName(authenticationModel)}: boolean,`)}
+      ${apiModel.authentication.map((authenticationModel) => itt`${getAuthenticationMemberName(authenticationModel)}: boolean,`)}
     };
   `;
 
@@ -53,6 +53,7 @@ export function* generateClientServerTestTsCode(
           if (operationResultModel.bodies.length === 0) {
             yield generateOperationTest(
               apiModelLegacy,
+              apiModel,
               operationModel,
               null,
               operationResultModel,
@@ -66,6 +67,7 @@ export function* generateClientServerTestTsCode(
 
             yield generateOperationTest(
               apiModelLegacy,
+              apiModel,
               operationModel,
               null,
               operationResultModel,
@@ -87,6 +89,7 @@ export function* generateClientServerTestTsCode(
           if (operationResultModel.bodies.length === 0) {
             yield generateOperationTest(
               apiModelLegacy,
+              apiModel,
               operationModel,
               requestBodyModel,
               operationResultModel,
@@ -100,6 +103,7 @@ export function* generateClientServerTestTsCode(
 
             yield generateOperationTest(
               apiModelLegacy,
+              apiModel,
               operationModel,
               requestBodyModel,
               operationResultModel,
@@ -114,6 +118,7 @@ export function* generateClientServerTestTsCode(
 
 function* generateOperationTest(
   apiModelLegacy: models.Api,
+  apiModel: core.ApiContainer,
   operationModel: core.OperationContainer,
   requestBodyModel: core.BodyContainer | null,
   operationResultModel: core.OperationResultContainer,
@@ -124,7 +129,7 @@ function* generateOperationTest(
       group.requirements.map((requirement) => requirement.authenticationName),
     ),
   );
-  const authenticationModels = apiModelLegacy.authentication.filter((authenticationModel) =>
+  const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
     authenticationNames.has(authenticationModel.name),
   );
 

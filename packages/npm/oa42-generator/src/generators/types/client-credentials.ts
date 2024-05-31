@@ -1,5 +1,4 @@
 import * as core from "@oa42/core";
-import * as models from "../../models/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
   getAuthenticationCredentialTypeName,
@@ -8,7 +7,7 @@ import {
   getOperationCredentialsTypeName,
 } from "../names/index.js";
 
-export function* generateCredentialsType(apiModelLegacy: models.Api) {
+export function* generateCredentialsType(apiModel: core.ApiContainer) {
   const typeName = getCredentialsTypeName();
 
   yield itt`
@@ -18,7 +17,7 @@ export function* generateCredentialsType(apiModelLegacy: models.Api) {
   `;
 
   function* body() {
-    for (const authenticationModel of apiModelLegacy.authentication) {
+    for (const authenticationModel of apiModel.authentication) {
       const memberName = getAuthenticationMemberName(authenticationModel);
       const typeName = getAuthenticationCredentialTypeName(authenticationModel);
 
@@ -30,7 +29,7 @@ export function* generateCredentialsType(apiModelLegacy: models.Api) {
 }
 
 export function* generateOperationCredentialsType(
-  apiModelLegacy: models.Api,
+  apiModel: core.ApiContainer,
   operationModel: core.OperationContainer,
 ) {
   const operationCredentialsName = getOperationCredentialsTypeName(operationModel);
@@ -47,7 +46,7 @@ export function* generateOperationCredentialsType(
         group.requirements.map((requirement) => requirement.authenticationName),
       ),
     );
-    const authenticationModels = apiModelLegacy.authentication.filter((authenticationModel) =>
+    const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
       authenticationNames.has(authenticationModel.name),
     );
 
@@ -62,7 +61,9 @@ export function* generateOperationCredentialsType(
   }
 }
 
-export function* generateAuthenticationCredentialType(authenticationModel: models.Authentication) {
+export function* generateAuthenticationCredentialType(
+  authenticationModel: core.AuthenticationContainer,
+) {
   const typeName = getAuthenticationCredentialTypeName(authenticationModel);
 
   yield itt`

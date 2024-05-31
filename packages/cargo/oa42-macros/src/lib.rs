@@ -13,9 +13,11 @@ pub fn model_container(
   let container_name = format_ident!("{}Container", name);
 
   let getters = item.fields.iter().flat_map(|field| {
-    let field_name = field.ident.as_ref()?;
-    let getter_name = format_ident!("{}", field_name);
-    let js_name = field_name.to_string().to_lower_camel_case();
+    let field_name = format_ident!("r#{}", field.ident.as_ref()?);
+    let getter_name = format_ident!("r#{}", field_name);
+    let js_name = format_ident!("{}", field.ident.as_ref()?)
+      .to_string()
+      .to_lower_camel_case();
     let ty = &field.ty;
 
     Some(quote! {
