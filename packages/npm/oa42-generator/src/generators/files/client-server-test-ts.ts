@@ -121,7 +121,7 @@ export function* generateClientServerTestTsCode(
 }
 
 function* generateOperationTest(
-  apiModel: models.Api,
+  apiModelLegacy: models.Api,
   operationModel: models.Operation,
   requestBodyModel: models.Body | null,
   operationResultModel: models.OperationResult,
@@ -132,11 +132,11 @@ function* generateOperationTest(
       requirements.map((requirement) => requirement.authenticationName),
     ),
   );
-  const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
+  const authenticationModels = apiModelLegacy.authentication.filter((authenticationModel) =>
     authenticationNames.has(authenticationModel.name),
   );
 
-  const { names } = apiModel;
+  const { names } = apiModelLegacy;
   const registerOperationHandlerMethodName = getRegisterOperationHandlerName(operationModel);
 
   let testNameParts = new Array<string>();
@@ -243,7 +243,7 @@ function* generateOperationTest(
         continue;
       }
 
-      const validateFunctionName = getIsParameterFunction(apiModel, parameterModel);
+      const validateFunctionName = getIsParameterFunction(apiModelLegacy, parameterModel);
       assert(validateFunctionName != null);
 
       yield itt`
@@ -262,7 +262,7 @@ function* generateOperationTest(
 
       switch (requestBodyModel.contentType) {
         case "application/json": {
-          const validateFunctionName = getIsBodyFunction(apiModel, requestBodyModel);
+          const validateFunctionName = getIsBodyFunction(apiModelLegacy, requestBodyModel);
           assert(validateFunctionName != null);
 
           yield itt`
@@ -290,7 +290,7 @@ function* generateOperationTest(
     } else {
       switch (responseBodyModel.contentType) {
         case "application/json": {
-          const mockFunctionName = getMockBodyFunction(apiModel, responseBodyModel);
+          const mockFunctionName = getMockBodyFunction(apiModelLegacy, responseBodyModel);
           assert(mockFunctionName != null);
 
           const entityExpression = itt`mocks.${mockFunctionName}()`;
@@ -335,7 +335,7 @@ function* generateOperationTest(
     } else {
       switch (requestBodyModel.contentType) {
         case "application/json": {
-          const mockFunctionName = getMockBodyFunction(apiModel, requestBodyModel);
+          const mockFunctionName = getMockBodyFunction(apiModelLegacy, requestBodyModel);
           assert(mockFunctionName != null);
 
           const entityExpression = itt`mocks.${mockFunctionName}()`;
@@ -378,7 +378,7 @@ function* generateOperationTest(
         continue;
       }
 
-      const validateFunctionName = getIsParameterFunction(apiModel, parameterModel);
+      const validateFunctionName = getIsParameterFunction(apiModelLegacy, parameterModel);
       assert(validateFunctionName != null);
 
       yield itt`
@@ -397,7 +397,7 @@ function* generateOperationTest(
 
       switch (responseBodyModel.contentType) {
         case "application/json": {
-          const validateFunctionName = getIsBodyFunction(apiModel, responseBodyModel);
+          const validateFunctionName = getIsBodyFunction(apiModelLegacy, responseBodyModel);
           if (validateFunctionName != null) {
             yield itt`
               { 
@@ -463,7 +463,7 @@ function* generateOperationTest(
         continue;
       }
 
-      const mockFunctionName = getMockParameterFunction(apiModel, parameterModel);
+      const mockFunctionName = getMockParameterFunction(apiModelLegacy, parameterModel);
       assert(mockFunctionName != null);
 
       yield itt`
@@ -478,7 +478,7 @@ function* generateOperationTest(
         continue;
       }
 
-      const mockFunctionName = getMockParameterFunction(apiModel, parameterModel);
+      const mockFunctionName = getMockParameterFunction(apiModelLegacy, parameterModel);
       assert(mockFunctionName != null);
 
       yield itt`

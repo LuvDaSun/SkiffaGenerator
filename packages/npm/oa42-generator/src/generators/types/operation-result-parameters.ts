@@ -5,7 +5,7 @@ import { itt } from "../../utils/iterable-text-template.js";
 import { getResponseParametersTypeName } from "../names/index.js";
 
 export function* generateOperationResultParameterTypes(
-  apiModel: models.Api,
+  apiModelLegacy: models.Api,
   operationModel: core.OperationContainer,
   operationResultModel: core.OperationResultContainer,
 ) {
@@ -23,7 +23,7 @@ export function* generateOperationResultParameterTypes(
         const parameterTypeName =
           parameterSchemaId == null
             ? parameterSchemaId
-            : apiModel.names[parameterSchemaId.toString()];
+            : apiModelLegacy.names[parameterSchemaId.toString()];
 
         return itt`
           ${camelcase(parameterModel.name)}${parameterModel.required ? "" : "?"}:

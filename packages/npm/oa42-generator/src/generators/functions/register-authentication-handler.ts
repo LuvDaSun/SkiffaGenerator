@@ -25,7 +25,7 @@ export function* registerAuthenticationHandlerMethod(authenticationModel: models
   `;
 }
 
-export function* registerAuthenticationHandlersMethod(apiModel: models.Api) {
+export function* registerAuthenticationHandlersMethod(apiModelLegacy: models.Api) {
   const methodName = getRegisterAuthenticationsHandlerName();
   const handlersTypeName = getAuthenticationHandlersTypeName();
 
@@ -40,7 +40,7 @@ export function* registerAuthenticationHandlersMethod(apiModel: models.Api) {
   `;
 
   function* switchBody() {
-    for (const authenticationModel of apiModel.authentication) {
+    for (const authenticationModel of apiModelLegacy.authentication) {
       const registerHandlerMethodName = getRegisterAuthenticationHandlerName(authenticationModel);
       const propertyName = getAuthenticationHandlerName(authenticationModel);
       yield itt`

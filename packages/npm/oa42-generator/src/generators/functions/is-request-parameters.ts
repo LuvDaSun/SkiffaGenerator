@@ -23,7 +23,7 @@ export function* generateIsRequestParametersFunction(
   `;
 }
 
-function* generateBody(apiModel: models.Api, operationModel: core.OperationContainer) {
+function* generateBody(apiModelLegacy: models.Api, operationModel: core.OperationContainer) {
   const parameterModels = [
     ...operationModel.queryParameters,
     ...operationModel.headerParameters,
@@ -34,7 +34,9 @@ function* generateBody(apiModel: models.Api, operationModel: core.OperationConta
   for (const parameterModel of parameterModels) {
     const parameterSchemaId = parameterModel.schemaId;
     const parameterTypeName =
-      parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId.toString()];
+      parameterSchemaId == null
+        ? parameterSchemaId
+        : apiModelLegacy.names[parameterSchemaId.toString()];
     if (parameterTypeName == null) {
       continue;
     }

@@ -17,7 +17,7 @@ import {
 } from "../names/index.js";
 
 export function* generateClientOperationFunction(
-  apiModel: models.Api,
+  apiModelLegacy: models.Api,
   pathModel: core.PathContainer,
   operationModel: core.OperationContainer,
 ) {
@@ -44,13 +44,13 @@ export function* generateClientOperationFunction(
     operationCredentials: ${credentialsName} = {},
     operationConfiguration: ClientConfiguration = {},
   ): Promise<${operationIncomingResponseName}> {
-    ${generateBody(apiModel, pathModel, operationModel)}
+    ${generateBody(apiModelLegacy, pathModel, operationModel)}
   }
 `;
 }
 
 function* generateBody(
-  apiModel: models.Api,
+  apiModelLegacy: models.Api,
   pathModel: core.PathContainer,
   operationModel: core.OperationContainer,
 ) {
@@ -189,7 +189,7 @@ function* generateBody(
       group.requirements.map((requirement) => requirement.authenticationName),
     ),
   );
-  const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
+  const authenticationModels = apiModelLegacy.authentication.filter((authenticationModel) =>
     authenticationNames.has(authenticationModel.name),
   );
 
@@ -283,11 +283,11 @@ function* generateBody(
     `;
 
   if (operationModel.bodies.length === 0) {
-    yield* generateRequestContentTypeCodeBody(apiModel, operationModel);
+    yield* generateRequestContentTypeCodeBody(apiModelLegacy, operationModel);
   } else {
     yield itt`  
         switch(outgoingRequest.contentType){
-          ${generateRequestContentTypeCaseClauses(apiModel, operationModel)}
+          ${generateRequestContentTypeCaseClauses(apiModelLegacy, operationModel)}
         }
       `;
   }
@@ -309,7 +309,7 @@ function* generateBody(
 
   yield itt`
       switch(fetchResponse.status) {
-        ${generateResponseStatusCodeCaseClauses(apiModel, operationModel)}
+        ${generateResponseStatusCodeCaseClauses(apiModelLegacy, operationModel)}
       }
     `;
 

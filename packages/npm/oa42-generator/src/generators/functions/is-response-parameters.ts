@@ -8,7 +8,7 @@ import {
 } from "../names/index.js";
 
 export function* generateIsResponseParametersFunction(
-  apiModel: models.Api,
+  apiModelLegacy: models.Api,
   operationModel: core.OperationContainer,
   operationResultModel: core.OperationResultContainer,
 ) {
@@ -25,18 +25,23 @@ export function* generateIsResponseParametersFunction(
     export function ${isResponseParametersFunctionName}(
       parameters: Partial<Record<keyof ${responseParametersTypeName}, unknown>>,
     ): parameters is ${responseParametersTypeName} {
-      ${generateBody(apiModel, operationResultModel)}
+      ${generateBody(apiModelLegacy, operationResultModel)}
     }
   `;
 }
 
-function* generateBody(apiModel: models.Api, operationResultModel: core.OperationResultContainer) {
+function* generateBody(
+  apiModelLegacy: models.Api,
+  operationResultModel: core.OperationResultContainer,
+) {
   const parameterModels = operationResultModel.headerParameters;
 
   for (const parameterModel of parameterModels) {
     const parameterSchemaId = parameterModel.schemaId;
     const parameterTypeName =
-      parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId.toString()];
+      parameterSchemaId == null
+        ? parameterSchemaId
+        : apiModelLegacy.names[parameterSchemaId.toString()];
     if (parameterTypeName == null) {
       continue;
     }

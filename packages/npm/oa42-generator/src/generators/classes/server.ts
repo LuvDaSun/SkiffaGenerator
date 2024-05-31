@@ -1,3 +1,4 @@
+import * as core from "@oa42/core";
 import * as models from "../../models/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
@@ -32,19 +33,19 @@ import {
  * that is transformed into a `ServerOutgoingResponse` that is the return type
  * of the handle method.
  */
-export function* generateServerClass(apiModelLegacy: models.Api) {
+export function* generateServerClass(apiModelLegacy: models.Api, apiModel: core.ApiContainer) {
   const authenticationTypeName = getServerAuthenticationTypeName();
 
   yield itt`
 export class Server<A extends ${authenticationTypeName} = ${authenticationTypeName}>
   extends lib.ServerBase
 {
-  ${generateBody(apiModelLegacy)}
+  ${generateBody(apiModelLegacy, apiModel)}
 }
 `;
 }
 
-function* generateBody(apiModel: models.Api) {
+function* generateBody(apiModelLegacy: models.Api, apiModel: core.ApiContainer) {
   const authenticationHandlersTypeName = getAuthenticationHandlersTypeName();
   const operationHandlersTypeName = getOperationHandlersTypeName();
 
@@ -68,17 +69,17 @@ function* generateBody(apiModel: models.Api) {
   yield generateRegisterMiddlewareMethod();
   yield generateRequestHandlerMethod(apiModel);
 
-  yield registerAuthenticationHandlersMethod(apiModel);
+  yield registerAuthenticationHandlersMethod(apiModelLegacy);
   yield registerOperationHandlersMethod(apiModel);
 
-  for (const authenticationModel of apiModel.authentication) {
+  for (const authenticationModel of apiModelLegacy.authentication) {
     yield registerAuthenticationHandlerMethod(authenticationModel);
   }
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
       yield registerOperationHandlerMethod(operationModel);
-      yield generateEndpointHandlerMethod(apiModel, operationModel);
+      yield generateEndpointHandlerMethod(apiModelLegacy, operationModel);
     }
   }
 }

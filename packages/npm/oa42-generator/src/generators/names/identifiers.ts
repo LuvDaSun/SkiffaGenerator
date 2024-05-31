@@ -40,7 +40,7 @@ export function getRegisterAuthenticationsHandlerName() {
   return toCamel("register", "authentications");
 }
 
-export function getEndpointHandlerName(operationModel: models.Operation) {
+export function getEndpointHandlerName(operationModel: core.OperationContainer | models.Operation) {
   return toCamel(operationModel.name, "endpoint", "handler");
 }
 
@@ -77,16 +77,20 @@ export function getIsResponseParametersFunction(
   );
 }
 
-export function getIsOperationAuthenticationName(operationModel: models.Operation) {
+export function getIsOperationAuthenticationName(
+  operationModel: core.OperationContainer | models.Operation,
+) {
   return toCamel("is", operationModel.name, "authentication");
 }
 
-export function getIsAuthenticationFunctionName(operationModel: models.Operation) {
+export function getIsAuthenticationFunctionName(
+  operationModel: core.OperationContainer | models.Operation,
+) {
   return toCamel("is", operationModel.name, "authentication");
 }
 
 export function getParseParameterFunction(
-  apiModel: models.Api,
+  apiModelLegacy: models.Api,
   parameterModel: core.ParameterContainer | models.Parameter,
 ) {
   const parameterSchemaId = parameterModel.schemaId?.toString();
@@ -94,7 +98,7 @@ export function getParseParameterFunction(
     return null;
   }
 
-  const parameterTypeName = apiModel.names[parameterSchemaId];
+  const parameterTypeName = apiModelLegacy.names[parameterSchemaId];
   if (parameterTypeName == null) {
     return null;
   }
@@ -102,13 +106,16 @@ export function getParseParameterFunction(
   return toCamel("parse", parameterTypeName);
 }
 
-export function getMockParameterFunction(apiModel: models.Api, parameterModel: models.Parameter) {
+export function getMockParameterFunction(
+  apiModelLegacy: models.Api,
+  parameterModel: models.Parameter,
+) {
   const parameterSchemaId = parameterModel.schemaId;
   if (parameterSchemaId == null) {
     return null;
   }
 
-  const parameterTypeName = apiModel.names[parameterSchemaId];
+  const parameterTypeName = apiModelLegacy.names[parameterSchemaId];
   if (parameterTypeName == null) {
     return null;
   }
@@ -116,13 +123,16 @@ export function getMockParameterFunction(apiModel: models.Api, parameterModel: m
   return toCamel("mock", parameterTypeName);
 }
 
-export function getIsParameterFunction(apiModel: models.Api, parameterModel: models.Parameter) {
+export function getIsParameterFunction(
+  apiModelLegacy: models.Api,
+  parameterModel: models.Parameter,
+) {
   const parameterSchemaId = parameterModel.schemaId;
   if (parameterSchemaId == null) {
     return null;
   }
 
-  const parameterTypeName = apiModel.names[parameterSchemaId];
+  const parameterTypeName = apiModelLegacy.names[parameterSchemaId];
   if (parameterTypeName == null) {
     return null;
   }
@@ -130,13 +140,13 @@ export function getIsParameterFunction(apiModel: models.Api, parameterModel: mod
   return toCamel("is", parameterTypeName);
 }
 
-export function getMockBodyFunction(apiModel: models.Api, bodyModel: models.Body) {
+export function getMockBodyFunction(apiModelLegacy: models.Api, bodyModel: models.Body) {
   const bodySchemaId = bodyModel.schemaId;
   if (bodySchemaId == null) {
     return null;
   }
 
-  const bodyTypeName = apiModel.names[bodySchemaId];
+  const bodyTypeName = apiModelLegacy.names[bodySchemaId];
   if (bodyTypeName == null) {
     return null;
   }
@@ -144,13 +154,13 @@ export function getMockBodyFunction(apiModel: models.Api, bodyModel: models.Body
   return toCamel("mock", bodyTypeName);
 }
 
-export function getIsBodyFunction(apiModel: models.Api, bodyModel: models.Body) {
+export function getIsBodyFunction(apiModelLegacy: models.Api, bodyModel: models.Body) {
   const bodySchemaId = bodyModel.schemaId;
   if (bodySchemaId == null) {
     return null;
   }
 
-  const bodyTypeName = apiModel.names[bodySchemaId];
+  const bodyTypeName = apiModelLegacy.names[bodySchemaId];
   if (bodyTypeName == null) {
     return null;
   }

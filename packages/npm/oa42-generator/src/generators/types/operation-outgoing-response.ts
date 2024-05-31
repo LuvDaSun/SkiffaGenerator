@@ -49,21 +49,26 @@ function* generateParametersContainerType(
 }
 
 function* generateBodyContainerTypes(
-  apiModel: models.Api,
+  apiModelLegacy: models.Api,
   operationModel: core.OperationContainer,
   operationResultModel: core.OperationResultContainer,
 ) {
   if (operationResultModel.bodies.length === 0) {
-    yield* generateBodyContainerType(apiModel, operationModel, operationResultModel);
+    yield* generateBodyContainerType(apiModelLegacy, operationModel, operationResultModel);
   }
 
   for (const bodyModel of operationResultModel.bodies) {
-    yield* generateBodyContainerType(apiModel, operationModel, operationResultModel, bodyModel);
+    yield* generateBodyContainerType(
+      apiModelLegacy,
+      operationModel,
+      operationResultModel,
+      bodyModel,
+    );
   }
 }
 
 function* generateBodyContainerType(
-  apiModel: models.Api,
+  apiModelLegacy: models.Api,
   operationModel: core.OperationContainer,
   operationResultModel: core.OperationResultContainer,
   bodyModel?: core.BodyContainer,
@@ -95,7 +100,7 @@ function* generateBodyContainerType(
     }
     case "application/json": {
       const bodySchemaId = bodyModel.schemaId?.toString();
-      const bodyTypeName = bodySchemaId == null ? bodySchemaId : apiModel.names[bodySchemaId];
+      const bodyTypeName = bodySchemaId == null ? bodySchemaId : apiModelLegacy.names[bodySchemaId];
 
       yield itt`
         lib.OutgoingJsonResponse<
