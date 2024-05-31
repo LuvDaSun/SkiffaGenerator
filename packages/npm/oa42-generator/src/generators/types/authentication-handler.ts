@@ -54,7 +54,7 @@ export function* generateAuthenticationHandlerType(authenticationModel: models.A
   }
 }
 
-export function* generateAuthenticationHandlersType(apiModel: models.Api) {
+export function* generateAuthenticationHandlersType(apiModelLegacy: models.Api) {
   const serverAuthenticationName = getServerAuthenticationTypeName();
   const typeName = getAuthenticationHandlersTypeName();
 
@@ -65,7 +65,7 @@ export function* generateAuthenticationHandlersType(apiModel: models.Api) {
   `;
 
   function* body() {
-    for (const authenticationModel of apiModel.authentication) {
+    for (const authenticationModel of apiModelLegacy.authentication) {
       const typeName = getAuthenticationHandlerTypeName(authenticationModel);
       const propertyName = getAuthenticationHandlerName(authenticationModel);
       yield `

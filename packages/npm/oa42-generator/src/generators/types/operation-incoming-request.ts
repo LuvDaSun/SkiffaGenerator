@@ -1,51 +1,55 @@
+import * as core from "@oa42/core";
 import * as models from "../../models/index.js";
 import { joinIterable, mapIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { getIncomingRequestTypeName, getRequestParametersTypeName } from "../names/index.js";
 
 export function* generateOperationIncomingRequestType(
-  apiModel: models.Api,
-  operationModel: models.Operation,
+  apiModelLegacy: models.Api,
+  operationModel: core.OperationContainer,
 ) {
   const typeName = getIncomingRequestTypeName(operationModel);
 
   yield itt`
     export type ${typeName} = ${joinIterable(
-      mapIterable(generateElements(apiModel, operationModel), (element) => itt`(${element})`),
+      mapIterable(generateElements(apiModelLegacy, operationModel), (element) => itt`(${element})`),
       " |\n",
     )};
   `;
 }
 
-function* generateElements(apiModel: models.Api, operationModel: models.Operation) {
+function* generateElements(apiModelLegacy: models.Api, operationModel: core.OperationContainer) {
   yield itt`
     ${generateParametersContainerType(operationModel)} &
     (
-      ${joinIterable(generateBodyContainerTypes(apiModel, operationModel), " |\n")}
+      ${joinIterable(generateBodyContainerTypes(apiModelLegacy, operationModel), " |\n")}
     )
   `;
 }
 
-function* generateParametersContainerType(operationModel: models.Operation) {
+function* generateParametersContainerType(operationModel: core.OperationContainer) {
   const parametersTypeName = getRequestParametersTypeName(operationModel);
 
   yield `lib.ParametersContainer<parameters.${parametersTypeName}>`;
 }
 
-function* generateBodyContainerTypes(apiModel: models.Api, operationModel: models.Operation) {
+function* generateBodyContainerTypes(
+  apiModelLegacy: models.Api,
+  operationModel: core.OperationContainer,
+) {
   if (operationModel.bodies.length === 0) {
-    yield* generateBodyContainerType(apiModel, operationModel);
+    yield* generateBodyContainerType(apiModelLegacy, operationModel);
   }
 
   for (const bodyModel of operationModel.bodies) {
-    yield* generateBodyContainerType(apiModel, operationModel, bodyModel);
+    yield* generateBodyContainerType(apiModelLegacy, operationModel, bodyModel);
   }
 }
 
 function* generateBodyContainerType(
-  apiModel: models.Api,
-  operationModel: models.Operation,
-  bodyModel?: models.Body,
+  apiModelLegacy: models.Api,
+  operationModel: core.OperationContainer,
+  bodyModel?: core.BodyContainer,
 ) {
   if (bodyModel == null) {
     yield itt`
@@ -64,8 +68,8 @@ function* generateBodyContainerType(
       break;
     }
     case "application/json": {
-      const bodySchemaId = bodyModel.schemaId;
-      const bodyTypeName = bodySchemaId == null ? bodySchemaId : apiModel.names[bodySchemaId];
+      const bodySchemaId = bodyModel.schemaId?.toString();
+      const bodyTypeName = bodySchemaId == null ? bodySchemaId : apiModelLegacy.names[bodySchemaId];
 
       yield itt`
         lib.IncomingJsonRequest<

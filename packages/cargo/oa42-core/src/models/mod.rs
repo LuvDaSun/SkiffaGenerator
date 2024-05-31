@@ -1,5 +1,6 @@
 mod api;
 mod authentication_requirement;
+mod authentication_requirement_group;
 mod body;
 mod method;
 mod operation;
@@ -9,6 +10,7 @@ mod path;
 
 pub use api::*;
 pub use authentication_requirement::*;
+pub use authentication_requirement_group::*;
 pub use body::*;
 pub use method::*;
 pub use operation::*;

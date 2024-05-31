@@ -7,7 +7,7 @@ import {
   getOperationCredentialsTypeName,
 } from "../names/index.js";
 
-export function* generateCredentialsType(apiModel: models.Api) {
+export function* generateCredentialsType(apiModelLegacy: models.Api) {
   const typeName = getCredentialsTypeName();
 
   yield itt`
@@ -17,7 +17,7 @@ export function* generateCredentialsType(apiModel: models.Api) {
   `;
 
   function* body() {
-    for (const authenticationModel of apiModel.authentication) {
+    for (const authenticationModel of apiModelLegacy.authentication) {
       const memberName = getAuthenticationMemberName(authenticationModel);
       const typeName = getAuthenticationCredentialTypeName(authenticationModel);
 
@@ -29,7 +29,7 @@ export function* generateCredentialsType(apiModel: models.Api) {
 }
 
 export function* generateOperationCredentialsType(
-  apiModel: models.Api,
+  apiModelLegacy: models.Api,
   operationModel: models.Operation,
 ) {
   const operationCredentialsName = getOperationCredentialsTypeName(operationModel);
@@ -46,7 +46,7 @@ export function* generateOperationCredentialsType(
         requirements.map((requirement) => requirement.authenticationName),
       ),
     );
-    const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
+    const authenticationModels = apiModelLegacy.authentication.filter((authenticationModel) =>
       authenticationNames.has(authenticationModel.name),
     );
 

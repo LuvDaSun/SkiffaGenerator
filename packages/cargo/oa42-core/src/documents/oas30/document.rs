@@ -195,6 +195,8 @@ impl Document {
     operation_node: nodes::Operation,
     method: models::Method,
   ) -> Result<models::OperationContainer, DocumentError> {
+    let authentication_requirements = Vec::new(); // TODO
+
     let all_parameter_nodes = iter::empty()
       .chain(
         path_node
@@ -293,7 +295,8 @@ impl Document {
         description: operation_node.description().map(Into::into),
         deprecated: operation_node.deprecated().unwrap_or(false),
         method,
-        mockable: false,
+        mockable: false, // TODO
+        authentication_requirements,
         cookie_parameters,
         header_parameters,
         path_parameters,

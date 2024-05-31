@@ -8,13 +8,13 @@ import {
 } from "../names/index.js";
 
 export function* generateOperationAuthenticationType(
-  apiModel: models.Api,
+  apiModelLegacy: models.Api,
   operationModel: models.Operation,
 ) {
   const operationAuthenticationName = getOperationAuthenticationTypeName(operationModel);
   const serverAuthenticationName = getServerAuthenticationTypeName();
   const authenticationMap = Object.fromEntries(
-    apiModel.authentication.map((model) => [model.name, model]),
+    apiModelLegacy.authentication.map((model) => [model.name, model]),
   );
 
   yield itt`

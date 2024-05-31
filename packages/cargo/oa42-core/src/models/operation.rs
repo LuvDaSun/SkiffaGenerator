@@ -1,5 +1,5 @@
 use super::{
-  AuthenticationRequirementContainer, BodyContainer, Method, OperationResultContainer,
+  AuthenticationRequirementGroupContainer, BodyContainer, Method, OperationResultContainer,
   ParameterContainer,
 };
 use crate::utils::NodeLocation;
@@ -17,7 +17,7 @@ pub struct Operation {
    * all authentications from the second level should pass, any authentications
    * of the first level should pass
    */
-  // pub authentication_requirements: Vec<Vec<AuthenticationRequirementContainer>>,
+  pub authentication_requirements: Vec<AuthenticationRequirementGroupContainer>,
   pub query_parameters: Vec<ParameterContainer>,
   pub header_parameters: Vec<ParameterContainer>,
   pub path_parameters: Vec<ParameterContainer>,

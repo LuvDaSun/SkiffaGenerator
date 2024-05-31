@@ -1,23 +1,24 @@
+import * as core from "@oa42/core";
 import * as models from "../../models/index.js";
 import { joinIterable, mapIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { getOutgoingResponseTypeName, getResponseParametersTypeName } from "../names/index.js";
 
 export function* generateOperationOutgoingResponseType(
-  apiModel: models.Api,
-  operationModel: models.Operation,
+  apiModelLegacy: models.Api,
+  operationModel: core.OperationContainer,
 ) {
   const typeName = getOutgoingResponseTypeName(operationModel);
 
   yield itt`
     export type ${typeName} = ${joinIterable(
-      mapIterable(generateElements(apiModel, operationModel), (element) => itt`(${element})`),
+      mapIterable(generateElements(apiModelLegacy, operationModel), (element) => itt`(${element})`),
       " |\n",
     )};
   `;
 }
 
-function* generateElements(apiModel: models.Api, operationModel: models.Operation) {
+function* generateElements(apiModelLegacy: models.Api, operationModel: core.OperationContainer) {
   if (operationModel.operationResults.length === 0) {
     yield itt`never`;
   }
@@ -26,15 +27,15 @@ function* generateElements(apiModel: models.Api, operationModel: models.Operatio
     yield itt`
       ${generateParametersContainerType(operationModel, operationResultModel)} &
       (
-        ${joinIterable(generateBodyContainerTypes(apiModel, operationModel, operationResultModel), " |\n")}
+        ${joinIterable(generateBodyContainerTypes(apiModelLegacy, operationModel, operationResultModel), " |\n")}
       )
     `;
   }
 }
 
 function* generateParametersContainerType(
-  operationModel: models.Operation,
-  operationResultModel: models.OperationResult,
+  operationModel: core.OperationContainer,
+  operationResultModel: core.OperationResultContainer,
 ) {
   const parametersTypeName = getResponseParametersTypeName(operationModel, operationResultModel);
 
@@ -49,8 +50,8 @@ function* generateParametersContainerType(
 
 function* generateBodyContainerTypes(
   apiModel: models.Api,
-  operationModel: models.Operation,
-  operationResultModel: models.OperationResult,
+  operationModel: core.OperationContainer,
+  operationResultModel: core.OperationResultContainer,
 ) {
   if (operationResultModel.bodies.length === 0) {
     yield* generateBodyContainerType(apiModel, operationModel, operationResultModel);
@@ -63,15 +64,15 @@ function* generateBodyContainerTypes(
 
 function* generateBodyContainerType(
   apiModel: models.Api,
-  operationModel: models.Operation,
-  operationResultModel: models.OperationResult,
-  bodyModel?: models.Body,
+  operationModel: core.OperationContainer,
+  operationResultModel: core.OperationResultContainer,
+  bodyModel?: core.BodyContainer,
 ) {
   if (bodyModel == null) {
     yield itt`
       lib.OutgoingEmptyResponse<
         ${joinIterable(
-          operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
+          [...operationResultModel.statusCodes].map((statusCode) => JSON.stringify(statusCode)),
           " |\n",
         )}
       >
@@ -84,7 +85,7 @@ function* generateBodyContainerType(
       yield itt`
         lib.OutgoingTextResponse<
           ${joinIterable(
-            operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
+            [...operationResultModel.statusCodes].map((statusCode) => JSON.stringify(statusCode)),
             " |\n",
           )},
           ${JSON.stringify(bodyModel.contentType)}
@@ -93,13 +94,13 @@ function* generateBodyContainerType(
       break;
     }
     case "application/json": {
-      const bodySchemaId = bodyModel.schemaId;
+      const bodySchemaId = bodyModel.schemaId?.toString();
       const bodyTypeName = bodySchemaId == null ? bodySchemaId : apiModel.names[bodySchemaId];
 
       yield itt`
         lib.OutgoingJsonResponse<
           ${joinIterable(
-            operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
+            [...operationResultModel.statusCodes].map((statusCode) => JSON.stringify(statusCode)),
             " |\n",
           )},
           ${JSON.stringify(bodyModel.contentType)},
@@ -112,7 +113,7 @@ function* generateBodyContainerType(
       yield itt`
         lib.OutgoingStreamResponse<
           ${joinIterable(
-            operationResultModel.statusCodes.map((statusCode) => JSON.stringify(statusCode)),
+            [...operationResultModel.statusCodes].map((statusCode) => JSON.stringify(statusCode)),
             " |\n",
           )},
           ${JSON.stringify(bodyModel.contentType)}

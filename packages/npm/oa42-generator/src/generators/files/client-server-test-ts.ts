@@ -16,8 +16,8 @@ import {
 } from "../names/index.js";
 
 export function* generateClientServerTestTsCode(
-  apiModel: models.Api,
-  apiModel1: core.ApiContainer,
+  apiModelLegacy: models.Api,
+  apiModel: core.ApiContainer,
 ) {
   yield core.banner("//", `v${packageInfo.version}`);
 
@@ -34,17 +34,19 @@ export function* generateClientServerTestTsCode(
 
   yield itt`
     type ApiServerAuthentication = {
-      ${apiModel.authentication.map((authenticationModel) => itt`${getAuthenticationMemberName(authenticationModel)}: boolean,`)}
+      ${apiModelLegacy.authentication.map((authenticationModel) => itt`${getAuthenticationMemberName(authenticationModel)}: boolean,`)}
     };
   `;
 
-  for (const pathModel of apiModel1.paths) {
+  for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      //
+      if (!operationModel.mockable) {
+        continue;
+      }
     }
   }
 
-  for (const pathModel of apiModel.paths) {
+  for (const pathModel of apiModelLegacy.paths) {
     for (const operationModel of pathModel.operations) {
       if (!operationModel.mockable) {
         continue;
@@ -57,7 +59,13 @@ export function* generateClientServerTestTsCode(
           }
 
           if (operationResultModel.bodies.length === 0) {
-            yield generateOperationTest(apiModel, operationModel, null, operationResultModel, null);
+            yield generateOperationTest(
+              apiModelLegacy,
+              operationModel,
+              null,
+              operationResultModel,
+              null,
+            );
           }
           for (const responseBodyModel of operationResultModel.bodies) {
             if (!responseBodyModel.mockable) {
@@ -65,7 +73,7 @@ export function* generateClientServerTestTsCode(
             }
 
             yield generateOperationTest(
-              apiModel,
+              apiModelLegacy,
               operationModel,
               null,
               operationResultModel,
@@ -86,7 +94,7 @@ export function* generateClientServerTestTsCode(
 
           if (operationResultModel.bodies.length === 0) {
             yield generateOperationTest(
-              apiModel,
+              apiModelLegacy,
               operationModel,
               requestBodyModel,
               operationResultModel,
@@ -99,7 +107,7 @@ export function* generateClientServerTestTsCode(
             }
 
             yield generateOperationTest(
-              apiModel,
+              apiModelLegacy,
               operationModel,
               requestBodyModel,
               operationResultModel,

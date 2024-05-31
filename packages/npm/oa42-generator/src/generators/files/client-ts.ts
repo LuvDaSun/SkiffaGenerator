@@ -13,7 +13,7 @@ import {
 } from "../types/index.js";
 import { generateCredentialsConstant } from "../variables/default-credentials.js";
 
-export function* generateClientTsCode(apiModel: models.Api, apiModel1: core.ApiContainer) {
+export function* generateClientTsCode(apiModelLegacy: models.Api, apiModel: core.ApiContainer) {
   yield core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
@@ -47,28 +47,27 @@ export function* generateClientTsCode(apiModel: models.Api, apiModel1: core.ApiC
     const router = new Router({
       parameterValueDecoder: value => value,
       parameterValueEncoder: value => value,
-    }).loadFromJson(${JSON.stringify(apiModel.router.saveToJson(RouterMode.Client))});
+    }).loadFromJson(${JSON.stringify(apiModelLegacy.router.saveToJson(RouterMode.Client))});
   `;
 
   yield* generateCredentialsConstant();
-  yield* generateCredentialsType(apiModel);
+  yield* generateCredentialsType(apiModelLegacy);
 
-  for (const authenticationModel of apiModel.authentication) {
+  for (const authenticationModel of apiModelLegacy.authentication) {
     yield* generateAuthenticationCredentialType(authenticationModel);
-  }
-
-  for (const pathModel of apiModel1.paths) {
-    for (const operationModel of pathModel.operations) {
-      //
-    }
   }
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      yield* generateClientOperationFunction(apiModel, pathModel, operationModel);
-      yield* generateOperationCredentialsType(apiModel, operationModel);
-      yield* generateOperationOutgoingRequestType(apiModel, operationModel);
-      yield* generateOperationIncomingResponseType(apiModel, operationModel);
+      yield* generateClientOperationFunction(apiModelLegacy, pathModel, operationModel);
+    }
+  }
+
+  for (const pathModel of apiModelLegacy.paths) {
+    for (const operationModel of pathModel.operations) {
+      yield* generateOperationCredentialsType(apiModelLegacy, operationModel);
+      yield* generateOperationOutgoingRequestType(apiModelLegacy, operationModel);
+      yield* generateOperationIncomingResponseType(apiModelLegacy, operationModel);
     }
   }
 }

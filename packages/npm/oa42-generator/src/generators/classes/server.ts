@@ -32,14 +32,14 @@ import {
  * that is transformed into a `ServerOutgoingResponse` that is the return type
  * of the handle method.
  */
-export function* generateServerClass(apiModel: models.Api) {
+export function* generateServerClass(apiModelLegacy: models.Api) {
   const authenticationTypeName = getServerAuthenticationTypeName();
 
   yield itt`
 export class Server<A extends ${authenticationTypeName} = ${authenticationTypeName}>
   extends lib.ServerBase
 {
-  ${generateBody(apiModel)}
+  ${generateBody(apiModelLegacy)}
 }
 `;
 }

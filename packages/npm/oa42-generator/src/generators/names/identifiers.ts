@@ -6,15 +6,21 @@ export function getDefaultCredentialsConstantName() {
   return toCamel("default", "credentials");
 }
 
-export function getOperationFunctionName(operationModel: models.Operation) {
+export function getOperationFunctionName(
+  operationModel: core.OperationContainer | models.Operation,
+) {
   return toCamel(operationModel.name);
 }
 
-export function getOperationHandlerName(operationModel: models.Operation) {
+export function getOperationHandlerName(
+  operationModel: core.OperationContainer | models.Operation,
+) {
   return toCamel(operationModel.name);
 }
 
-export function getRegisterOperationHandlerName(operationModel: models.Operation) {
+export function getRegisterOperationHandlerName(
+  operationModel: core.OperationContainer | models.Operation,
+) {
   return toCamel("register", operationModel.name, "operation");
 }
 
@@ -79,8 +85,11 @@ export function getIsAuthenticationFunctionName(operationModel: models.Operation
   return toCamel("is", operationModel.name, "authentication");
 }
 
-export function getParseParameterFunction(apiModel: models.Api, parameterModel: models.Parameter) {
-  const parameterSchemaId = parameterModel.schemaId;
+export function getParseParameterFunction(
+  apiModel: models.Api,
+  parameterModel: core.ParameterContainer | models.Parameter,
+) {
+  const parameterSchemaId = parameterModel.schemaId?.toString();
   if (parameterSchemaId == null) {
     return null;
   }

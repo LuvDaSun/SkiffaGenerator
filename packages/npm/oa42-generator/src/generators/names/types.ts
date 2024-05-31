@@ -10,7 +10,9 @@ export function getAuthenticationHandlerTypeName(authenticationModel: models.Aut
   return toPascal(authenticationModel.name, "authentication", "handler");
 }
 
-export function getOperationHandlerTypeName(operationModel: models.Operation) {
+export function getOperationHandlerTypeName(
+  operationModel: core.OperationContainer | models.Operation,
+) {
   return toPascal(operationModel.name, "operation", "handler");
 }
 
@@ -18,7 +20,9 @@ export function getOperationHandlersTypeName() {
   return toPascal("operation", "handlers");
 }
 
-export function getOperationAuthenticationTypeName(operationModel: models.Operation) {
+export function getOperationAuthenticationTypeName(
+  operationModel: core.OperationContainer | models.Operation,
+) {
   return toPascal(operationModel.name, "authentication");
 }
 
@@ -36,7 +40,9 @@ export function getCredentialsTypeName() {
   return toPascal("credentials");
 }
 
-export function getOperationCredentialsTypeName(operationModel: models.Operation) {
+export function getOperationCredentialsTypeName(
+  operationModel: core.OperationContainer | models.Operation,
+) {
   return toPascal(operationModel.name, "credentials");
 }
 
@@ -44,19 +50,27 @@ export function getAuthenticationCredentialTypeName(authenticationModel: models.
   return toPascal(authenticationModel.name, "credential");
 }
 
-export function getIncomingRequestTypeName(operationModel: models.Operation) {
+export function getIncomingRequestTypeName(
+  operationModel: core.OperationContainer | models.Operation,
+) {
   return toPascal(operationModel.name, "incoming", "request");
 }
 
-export function getIncomingResponseTypeName(operationModel: models.Operation) {
+export function getIncomingResponseTypeName(
+  operationModel: core.OperationContainer | models.Operation,
+) {
   return toPascal(operationModel.name, "incoming", "response");
 }
 
-export function getOutgoingRequestTypeName(operationModel: models.Operation) {
+export function getOutgoingRequestTypeName(
+  operationModel: core.OperationContainer | models.Operation,
+) {
   return toPascal(operationModel.name, "outgoing", "request");
 }
 
-export function getOutgoingResponseTypeName(operationModel: models.Operation) {
+export function getOutgoingResponseTypeName(
+  operationModel: core.OperationContainer | models.Operation,
+) {
   return toPascal(operationModel.name, "outgoing", "response");
 }
 

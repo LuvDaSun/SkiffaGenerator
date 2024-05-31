@@ -1,3 +1,4 @@
+import * as core from "@oa42/core";
 import * as models from "../../models/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
@@ -11,7 +12,7 @@ import {
   getServerAuthenticationTypeName,
 } from "../names/index.js";
 
-export function* generateOperationHandlerType(operationModel: models.Operation) {
+export function* generateOperationHandlerType(operationModel: core.OperationContainer) {
   const operationHandlerTypeName = getOperationHandlerTypeName(operationModel);
   const operationAuthenticationName = getOperationAuthenticationTypeName(operationModel);
   const operationAcceptTypeName = getOperationAcceptTypeName(operationModel);
@@ -29,7 +30,7 @@ export function* generateOperationHandlerType(operationModel: models.Operation) 
   `;
 }
 
-export function* generateOperationHandlersType(apiModel: models.Api) {
+export function* generateOperationHandlersType(apiModelLegacy: models.Api) {
   const serverAuthenticationName = getServerAuthenticationTypeName();
   const typeName = getOperationHandlersTypeName();
 
@@ -40,7 +41,7 @@ export function* generateOperationHandlersType(apiModel: models.Api) {
   `;
 
   function* body() {
-    for (const pathModel of apiModel.paths) {
+    for (const pathModel of apiModelLegacy.paths) {
       for (const operationModel of pathModel.operations) {
         const propertyName = getOperationHandlerName(operationModel);
         const typeName = getOperationHandlerTypeName(operationModel);

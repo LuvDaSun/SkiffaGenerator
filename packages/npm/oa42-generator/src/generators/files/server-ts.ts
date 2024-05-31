@@ -16,7 +16,7 @@ import {
   generateServerAuthenticationType,
 } from "../types/index.js";
 
-export function* generateServerTsCode(apiModel: models.Api, apiModel1: core.ApiContainer) {
+export function* generateServerTsCode(apiModelLegacy: models.Api, apiModel: core.ApiContainer) {
   yield core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
@@ -48,33 +48,32 @@ export function* generateServerTsCode(apiModel: models.Api, apiModel1: core.ApiC
     const router = new Router({
       parameterValueDecoder: value => value,
       parameterValueEncoder: value => value,
-    }).loadFromJson(${JSON.stringify(apiModel.router.saveToJson(RouterMode.Bidirectional))});
+    }).loadFromJson(${JSON.stringify(apiModelLegacy.router.saveToJson(RouterMode.Bidirectional))});
   `;
 
-  yield* generateServerAuthenticationType(apiModel);
-  yield* generateAuthenticationHandlersType(apiModel);
-  yield* generateOperationHandlersType(apiModel);
-  yield* generateServerClass(apiModel);
+  yield* generateServerAuthenticationType(apiModelLegacy);
+  yield* generateAuthenticationHandlersType(apiModelLegacy);
+  yield* generateOperationHandlersType(apiModelLegacy);
+  yield* generateServerClass(apiModelLegacy);
 
-  for (const authenticationModel of apiModel.authentication) {
+  for (const authenticationModel of apiModelLegacy.authentication) {
     yield* generateAuthenticationHandlerType(authenticationModel);
-  }
-
-  for (const pathModel of apiModel1.paths) {
-    for (const operationModel of pathModel.operations) {
-      //
-    }
   }
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      yield* generateIsAuthenticationFunction(apiModel, operationModel);
-
-      yield* generateOperationAuthenticationType(apiModel, operationModel);
       yield* generateOperationHandlerType(operationModel);
 
-      yield* generateOperationIncomingRequestType(apiModel, operationModel);
-      yield* generateOperationOutgoingResponseType(apiModel, operationModel);
+      yield* generateOperationIncomingRequestType(apiModelLegacy, operationModel);
+      yield* generateOperationOutgoingResponseType(apiModelLegacy, operationModel);
+    }
+  }
+
+  for (const pathModel of apiModelLegacy.paths) {
+    for (const operationModel of pathModel.operations) {
+      yield* generateIsAuthenticationFunction(apiModelLegacy, operationModel);
+
+      yield* generateOperationAuthenticationType(apiModelLegacy, operationModel);
     }
   }
 }

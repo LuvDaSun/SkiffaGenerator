@@ -8,7 +8,7 @@ import {
 } from "../names/index.js";
 
 export function* generateIsRequestParametersFunction(
-  apiModel: models.Api,
+  apiModelLegacy: models.Api,
   operationModel: core.OperationContainer,
 ) {
   const isRequestParametersFunctionName = getIsRequestParametersFunction(operationModel);
@@ -18,7 +18,7 @@ export function* generateIsRequestParametersFunction(
     export function ${isRequestParametersFunctionName}(
       parameters: Partial<Record<keyof ${requestParametersTypeName}, unknown>>,
     ): parameters is ${requestParametersTypeName} {
-      ${generateBody(apiModel, operationModel)}
+      ${generateBody(apiModelLegacy, operationModel)}
     }
   `;
 }
