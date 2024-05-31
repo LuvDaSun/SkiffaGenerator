@@ -1,6 +1,5 @@
 import * as core from "@oa42/core";
 import assert from "assert";
-import * as models from "../../models/index.js";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
@@ -16,7 +15,7 @@ import {
 } from "../names/index.js";
 
 export function* generateClientServerTestTsCode(
-  apiModelLegacy: models.Api,
+  names: Record<string, string>,
   apiModel: core.ApiContainer,
 ) {
   yield core.banner("//", `v${packageInfo.version}`);
@@ -52,7 +51,7 @@ export function* generateClientServerTestTsCode(
 
           if (operationResultModel.bodies.length === 0) {
             yield generateOperationTest(
-              apiModelLegacy,
+              names,
               apiModel,
               operationModel,
               null,
@@ -66,7 +65,7 @@ export function* generateClientServerTestTsCode(
             }
 
             yield generateOperationTest(
-              apiModelLegacy,
+              names,
               apiModel,
               operationModel,
               null,
@@ -88,7 +87,7 @@ export function* generateClientServerTestTsCode(
 
           if (operationResultModel.bodies.length === 0) {
             yield generateOperationTest(
-              apiModelLegacy,
+              names,
               apiModel,
               operationModel,
               requestBodyModel,
@@ -102,7 +101,7 @@ export function* generateClientServerTestTsCode(
             }
 
             yield generateOperationTest(
-              apiModelLegacy,
+              names,
               apiModel,
               operationModel,
               requestBodyModel,
@@ -117,7 +116,7 @@ export function* generateClientServerTestTsCode(
 }
 
 function* generateOperationTest(
-  apiModelLegacy: models.Api,
+  names: Record<string, string>,
   apiModel: core.ApiContainer,
   operationModel: core.OperationContainer,
   requestBodyModel: core.BodyContainer | null,
@@ -133,7 +132,6 @@ function* generateOperationTest(
     authenticationNames.has(authenticationModel.name),
   );
 
-  const { names } = apiModelLegacy;
   const registerOperationHandlerMethodName = getRegisterOperationHandlerName(operationModel);
 
   let testNameParts = new Array<string>();
@@ -240,7 +238,7 @@ function* generateOperationTest(
         continue;
       }
 
-      const validateFunctionName = getIsParameterFunction(apiModelLegacy, parameterModel);
+      const validateFunctionName = getIsParameterFunction(names, parameterModel);
       assert(validateFunctionName != null);
 
       yield itt`
@@ -259,7 +257,7 @@ function* generateOperationTest(
 
       switch (requestBodyModel.contentType) {
         case "application/json": {
-          const validateFunctionName = getIsBodyFunction(apiModelLegacy, requestBodyModel);
+          const validateFunctionName = getIsBodyFunction(names, requestBodyModel);
           assert(validateFunctionName != null);
 
           yield itt`
@@ -287,7 +285,7 @@ function* generateOperationTest(
     } else {
       switch (responseBodyModel.contentType) {
         case "application/json": {
-          const mockFunctionName = getMockBodyFunction(apiModelLegacy, responseBodyModel);
+          const mockFunctionName = getMockBodyFunction(names, responseBodyModel);
           assert(mockFunctionName != null);
 
           const entityExpression = itt`mocks.${mockFunctionName}()`;
@@ -332,7 +330,7 @@ function* generateOperationTest(
     } else {
       switch (requestBodyModel.contentType) {
         case "application/json": {
-          const mockFunctionName = getMockBodyFunction(apiModelLegacy, requestBodyModel);
+          const mockFunctionName = getMockBodyFunction(names, requestBodyModel);
           assert(mockFunctionName != null);
 
           const entityExpression = itt`mocks.${mockFunctionName}()`;
@@ -375,7 +373,7 @@ function* generateOperationTest(
         continue;
       }
 
-      const validateFunctionName = getIsParameterFunction(apiModelLegacy, parameterModel);
+      const validateFunctionName = getIsParameterFunction(names, parameterModel);
       assert(validateFunctionName != null);
 
       yield itt`
@@ -394,7 +392,7 @@ function* generateOperationTest(
 
       switch (responseBodyModel.contentType) {
         case "application/json": {
-          const validateFunctionName = getIsBodyFunction(apiModelLegacy, responseBodyModel);
+          const validateFunctionName = getIsBodyFunction(names, responseBodyModel);
           if (validateFunctionName != null) {
             yield itt`
               { 
@@ -460,7 +458,7 @@ function* generateOperationTest(
         continue;
       }
 
-      const mockFunctionName = getMockParameterFunction(apiModelLegacy, parameterModel);
+      const mockFunctionName = getMockParameterFunction(names, parameterModel);
       assert(mockFunctionName != null);
 
       yield itt`
@@ -475,7 +473,7 @@ function* generateOperationTest(
         continue;
       }
 
-      const mockFunctionName = getMockParameterFunction(apiModelLegacy, parameterModel);
+      const mockFunctionName = getMockParameterFunction(names, parameterModel);
       assert(mockFunctionName != null);
 
       yield itt`

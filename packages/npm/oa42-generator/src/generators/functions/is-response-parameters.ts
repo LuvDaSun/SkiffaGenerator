@@ -1,5 +1,4 @@
 import * as core from "@oa42/core";
-import * as models from "../../models/index.js";
 import { itt } from "../../utils/index.js";
 import {
   getIsResponseParametersFunction,
@@ -8,7 +7,7 @@ import {
 } from "../names/index.js";
 
 export function* generateIsResponseParametersFunction(
-  apiModelLegacy: models.Api,
+  names: Record<string, string>,
   operationModel: core.OperationContainer,
   operationResultModel: core.OperationResultContainer,
 ) {
@@ -25,13 +24,13 @@ export function* generateIsResponseParametersFunction(
     export function ${isResponseParametersFunctionName}(
       parameters: Partial<Record<keyof ${responseParametersTypeName}, unknown>>,
     ): parameters is ${responseParametersTypeName} {
-      ${generateBody(apiModelLegacy, operationResultModel)}
+      ${generateBody(names, operationResultModel)}
     }
   `;
 }
 
 function* generateBody(
-  apiModelLegacy: models.Api,
+  names: Record<string, string>,
   operationResultModel: core.OperationResultContainer,
 ) {
   const parameterModels = operationResultModel.headerParameters;
@@ -39,9 +38,7 @@ function* generateBody(
   for (const parameterModel of parameterModels) {
     const parameterSchemaId = parameterModel.schemaId;
     const parameterTypeName =
-      parameterSchemaId == null
-        ? parameterSchemaId
-        : apiModelLegacy.names[parameterSchemaId.toString()];
+      parameterSchemaId == null ? parameterSchemaId : names[parameterSchemaId.toString()];
     if (parameterTypeName == null) {
       continue;
     }

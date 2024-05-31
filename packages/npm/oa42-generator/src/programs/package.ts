@@ -118,12 +118,11 @@ async function main(options: MainOptions) {
 
   await documentContextLegacy.loadFromLocation(specificationLocation);
 
-  const apiModelLegacy = documentContextLegacy.getApiModel();
   const specification = documentContextLegacy.getSpecification();
 
   // generate code
 
-  generatePackage(apiModelLegacy, apiModel, specification, {
+  generatePackage(apiModel, specification, {
     packageDirectoryPath,
     packageName,
     packageVersion,

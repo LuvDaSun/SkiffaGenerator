@@ -1,5 +1,4 @@
 import * as core from "@oa42/core";
-import * as models from "../../models/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
   generateEndpointHandlerMethod,
@@ -33,19 +32,19 @@ import {
  * that is transformed into a `ServerOutgoingResponse` that is the return type
  * of the handle method.
  */
-export function* generateServerClass(apiModelLegacy: models.Api, apiModel: core.ApiContainer) {
+export function* generateServerClass(names: Record<string, string>, apiModel: core.ApiContainer) {
   const authenticationTypeName = getServerAuthenticationTypeName();
 
   yield itt`
 export class Server<A extends ${authenticationTypeName} = ${authenticationTypeName}>
   extends lib.ServerBase
 {
-  ${generateBody(apiModelLegacy, apiModel)}
+  ${generateBody(names, apiModel)}
 }
 `;
 }
 
-function* generateBody(apiModelLegacy: models.Api, apiModel: core.ApiContainer) {
+function* generateBody(names: Record<string, string>, apiModel: core.ApiContainer) {
   const authenticationHandlersTypeName = getAuthenticationHandlersTypeName();
   const operationHandlersTypeName = getOperationHandlersTypeName();
 
@@ -79,7 +78,7 @@ function* generateBody(apiModelLegacy: models.Api, apiModel: core.ApiContainer) 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
       yield registerOperationHandlerMethod(operationModel);
-      yield generateEndpointHandlerMethod(apiModelLegacy, apiModel, operationModel);
+      yield generateEndpointHandlerMethod(names, apiModel, operationModel);
     }
   }
 }

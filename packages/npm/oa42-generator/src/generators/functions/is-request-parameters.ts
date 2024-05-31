@@ -1,5 +1,4 @@
 import * as core from "@oa42/core";
-import * as models from "../../models/index.js";
 import { itt } from "../../utils/index.js";
 import {
   getIsRequestParametersFunction,
@@ -8,7 +7,7 @@ import {
 } from "../names/index.js";
 
 export function* generateIsRequestParametersFunction(
-  apiModelLegacy: models.Api,
+  names: Record<string, string>,
   operationModel: core.OperationContainer,
 ) {
   const isRequestParametersFunctionName = getIsRequestParametersFunction(operationModel);
@@ -18,12 +17,12 @@ export function* generateIsRequestParametersFunction(
     export function ${isRequestParametersFunctionName}(
       parameters: Partial<Record<keyof ${requestParametersTypeName}, unknown>>,
     ): parameters is ${requestParametersTypeName} {
-      ${generateBody(apiModelLegacy, operationModel)}
+      ${generateBody(names, operationModel)}
     }
   `;
 }
 
-function* generateBody(apiModelLegacy: models.Api, operationModel: core.OperationContainer) {
+function* generateBody(names: Record<string, string>, operationModel: core.OperationContainer) {
   const parameterModels = [
     ...operationModel.queryParameters,
     ...operationModel.headerParameters,
@@ -34,9 +33,7 @@ function* generateBody(apiModelLegacy: models.Api, operationModel: core.Operatio
   for (const parameterModel of parameterModels) {
     const parameterSchemaId = parameterModel.schemaId;
     const parameterTypeName =
-      parameterSchemaId == null
-        ? parameterSchemaId
-        : apiModelLegacy.names[parameterSchemaId.toString()];
+      parameterSchemaId == null ? parameterSchemaId : names[parameterSchemaId.toString()];
     if (parameterTypeName == null) {
       continue;
     }

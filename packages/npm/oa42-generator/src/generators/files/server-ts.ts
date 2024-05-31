@@ -1,6 +1,5 @@
 import * as core from "@oa42/core";
-import { RouterMode } from "goodrouter";
-import * as models from "../../models/index.js";
+import { Router, RouterMode } from "goodrouter";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateServerClass } from "../classes/index.js";
@@ -16,7 +15,11 @@ import {
   generateServerAuthenticationType,
 } from "../types/index.js";
 
-export function* generateServerTsCode(apiModelLegacy: models.Api, apiModel: core.ApiContainer) {
+export function* generateServerTsCode(
+  names: Record<string, string>,
+  router: Router<number>,
+  apiModel: core.ApiContainer,
+) {
   yield core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
@@ -48,13 +51,13 @@ export function* generateServerTsCode(apiModelLegacy: models.Api, apiModel: core
     const router = new Router({
       parameterValueDecoder: value => value,
       parameterValueEncoder: value => value,
-    }).loadFromJson(${JSON.stringify(apiModelLegacy.router.saveToJson(RouterMode.Bidirectional))});
+    }).loadFromJson(${JSON.stringify(router.saveToJson(RouterMode.Bidirectional))});
   `;
 
   yield* generateServerAuthenticationType(apiModel);
   yield* generateAuthenticationHandlersType(apiModel);
   yield* generateOperationHandlersType(apiModel);
-  yield* generateServerClass(apiModelLegacy, apiModel);
+  yield* generateServerClass(names, apiModel);
 
   for (const authenticationModel of apiModel.authentication) {
     yield* generateAuthenticationHandlerType(authenticationModel);
@@ -67,8 +70,8 @@ export function* generateServerTsCode(apiModelLegacy: models.Api, apiModel: core
       yield* generateIsAuthenticationFunction(apiModel, operationModel);
       yield* generateOperationAuthenticationType(apiModel, operationModel);
 
-      yield* generateOperationIncomingRequestType(apiModelLegacy, operationModel);
-      yield* generateOperationOutgoingResponseType(apiModelLegacy, operationModel);
+      yield* generateOperationIncomingRequestType(names, operationModel);
+      yield* generateOperationOutgoingResponseType(names, operationModel);
     }
   }
 }

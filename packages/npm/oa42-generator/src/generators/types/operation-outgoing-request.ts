@@ -1,28 +1,27 @@
 import * as core from "@oa42/core";
-import * as models from "../../models/index.js";
 import { joinIterable, mapIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { getOutgoingRequestTypeName, getRequestParametersTypeName } from "../names/index.js";
 
 export function* generateOperationOutgoingRequestType(
-  apiModelLegacy: models.Api,
+  names: Record<string, string>,
   operationModel: core.OperationContainer,
 ) {
   const typeName = getOutgoingRequestTypeName(operationModel);
 
   yield itt`
     export type ${typeName} = ${joinIterable(
-      mapIterable(generateElements(apiModelLegacy, operationModel), (element) => itt`(${element})`),
+      mapIterable(generateElements(names, operationModel), (element) => itt`(${element})`),
       " |\n",
     )};
   `;
 }
 
-function* generateElements(apiModelLegacy: models.Api, operationModel: core.OperationContainer) {
+function* generateElements(names: Record<string, string>, operationModel: core.OperationContainer) {
   yield itt`
     ${generateParametersContainerType(operationModel)} &
     (
-      ${joinIterable(generateBodyContainerTypes(apiModelLegacy, operationModel), " |\n")}
+      ${joinIterable(generateBodyContainerTypes(names, operationModel), " |\n")}
     )
   `;
 }
@@ -44,20 +43,20 @@ function* generateParametersContainerType(operationModel: core.OperationContaine
 }
 
 function* generateBodyContainerTypes(
-  apiModelLegacy: models.Api,
+  names: Record<string, string>,
   operationModel: core.OperationContainer,
 ) {
   if (operationModel.bodies.length === 0) {
-    yield* generateBodyContainerType(apiModelLegacy, operationModel);
+    yield* generateBodyContainerType(names, operationModel);
   }
 
   for (const bodyModel of operationModel.bodies) {
-    yield* generateBodyContainerType(apiModelLegacy, operationModel, bodyModel);
+    yield* generateBodyContainerType(names, operationModel, bodyModel);
   }
 }
 
 function* generateBodyContainerType(
-  apiModelLegacy: models.Api,
+  names: Record<string, string>,
   operationModel: core.OperationContainer,
   bodyModel?: core.BodyContainer,
 ) {
@@ -79,7 +78,7 @@ function* generateBodyContainerType(
     }
     case "application/json": {
       const bodySchemaId = bodyModel.schemaId?.toString();
-      const bodyTypeName = bodySchemaId == null ? bodySchemaId : apiModelLegacy.names[bodySchemaId];
+      const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
 
       yield itt`
         lib.OutgoingJsonRequest<

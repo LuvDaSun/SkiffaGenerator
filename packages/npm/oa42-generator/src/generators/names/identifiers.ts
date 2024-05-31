@@ -1,5 +1,4 @@
 import * as core from "@oa42/core";
-import * as models from "../../models/index.js";
 import { toCamel } from "../../utils/index.js";
 
 export function getDefaultCredentialsConstantName() {
@@ -78,7 +77,7 @@ export function getIsAuthenticationFunctionName(operationModel: core.OperationCo
 }
 
 export function getParseParameterFunction(
-  apiModelLegacy: models.Api,
+  names: Record<string, string>,
   parameterModel: core.ParameterContainer,
 ) {
   const parameterSchemaId = parameterModel.schemaId?.toString();
@@ -86,7 +85,7 @@ export function getParseParameterFunction(
     return null;
   }
 
-  const parameterTypeName = apiModelLegacy.names[parameterSchemaId];
+  const parameterTypeName = names[parameterSchemaId];
   if (parameterTypeName == null) {
     return null;
   }
@@ -95,7 +94,7 @@ export function getParseParameterFunction(
 }
 
 export function getMockParameterFunction(
-  apiModelLegacy: models.Api,
+  names: Record<string, string>,
   parameterModel: core.ParameterContainer,
 ) {
   const parameterSchemaId = parameterModel.schemaId?.toString();
@@ -103,7 +102,7 @@ export function getMockParameterFunction(
     return null;
   }
 
-  const parameterTypeName = apiModelLegacy.names[parameterSchemaId];
+  const parameterTypeName = names[parameterSchemaId];
   if (parameterTypeName == null) {
     return null;
   }
@@ -112,7 +111,7 @@ export function getMockParameterFunction(
 }
 
 export function getIsParameterFunction(
-  apiModelLegacy: models.Api,
+  names: Record<string, string>,
   parameterModel: core.ParameterContainer,
 ) {
   const parameterSchemaId = parameterModel.schemaId?.toString();
@@ -120,7 +119,7 @@ export function getIsParameterFunction(
     return null;
   }
 
-  const parameterTypeName = apiModelLegacy.names[parameterSchemaId];
+  const parameterTypeName = names[parameterSchemaId];
   if (parameterTypeName == null) {
     return null;
   }
@@ -128,13 +127,13 @@ export function getIsParameterFunction(
   return toCamel("is", parameterTypeName);
 }
 
-export function getMockBodyFunction(apiModelLegacy: models.Api, bodyModel: core.BodyContainer) {
+export function getMockBodyFunction(names: Record<string, string>, bodyModel: core.BodyContainer) {
   const bodySchemaId = bodyModel.schemaId?.toString();
   if (bodySchemaId == null) {
     return null;
   }
 
-  const bodyTypeName = apiModelLegacy.names[bodySchemaId];
+  const bodyTypeName = names[bodySchemaId];
   if (bodyTypeName == null) {
     return null;
   }
@@ -142,13 +141,13 @@ export function getMockBodyFunction(apiModelLegacy: models.Api, bodyModel: core.
   return toCamel("mock", bodyTypeName);
 }
 
-export function getIsBodyFunction(apiModelLegacy: models.Api, bodyModel: core.BodyContainer) {
+export function getIsBodyFunction(names: Record<string, string>, bodyModel: core.BodyContainer) {
   const bodySchemaId = bodyModel.schemaId?.toString();
   if (bodySchemaId == null) {
     return null;
   }
 
-  const bodyTypeName = apiModelLegacy.names[bodySchemaId];
+  const bodyTypeName = names[bodySchemaId];
   if (bodyTypeName == null) {
     return null;
   }

@@ -1,6 +1,5 @@
 import * as core from "@oa42/core";
-import { RouterMode } from "goodrouter";
-import * as models from "../../models/index.js";
+import { Router, RouterMode } from "goodrouter";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateClientOperationFunction } from "../functions/client-operation.js";
@@ -13,7 +12,11 @@ import {
 } from "../types/index.js";
 import { generateCredentialsConstant } from "../variables/default-credentials.js";
 
-export function* generateClientTsCode(apiModelLegacy: models.Api, apiModel: core.ApiContainer) {
+export function* generateClientTsCode(
+  names: Record<string, string>,
+  router: Router<number>,
+  apiModel: core.ApiContainer,
+) {
   yield core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
@@ -47,7 +50,7 @@ export function* generateClientTsCode(apiModelLegacy: models.Api, apiModel: core
     const router = new Router({
       parameterValueDecoder: value => value,
       parameterValueEncoder: value => value,
-    }).loadFromJson(${JSON.stringify(apiModelLegacy.router.saveToJson(RouterMode.Client))});
+    }).loadFromJson(${JSON.stringify(router.saveToJson(RouterMode.Client))});
   `;
 
   yield* generateCredentialsConstant();
@@ -59,10 +62,10 @@ export function* generateClientTsCode(apiModelLegacy: models.Api, apiModel: core
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      yield* generateClientOperationFunction(apiModelLegacy, apiModel, pathModel, operationModel);
+      yield* generateClientOperationFunction(names, apiModel, pathModel, operationModel);
       yield* generateOperationCredentialsType(apiModel, operationModel);
-      yield* generateOperationOutgoingRequestType(apiModelLegacy, operationModel);
-      yield* generateOperationIncomingResponseType(apiModelLegacy, operationModel);
+      yield* generateOperationOutgoingRequestType(names, operationModel);
+      yield* generateOperationIncomingResponseType(names, operationModel);
     }
   }
 }
