@@ -1,3 +1,4 @@
+import * as core from "@oa42/core";
 import * as models from "../../models/index.js";
 import { itt, joinIterable } from "../../utils/index.js";
 import {
@@ -9,7 +10,7 @@ import {
 
 export function* generateIsAuthenticationFunction(
   apiModelLegacy: models.Api,
-  operationModel: models.Operation,
+  operationModel: core.OperationContainer,
 ) {
   const serverAuthenticationName = getServerAuthenticationTypeName();
   const isAuthenticationFunctionName = getIsAuthenticationFunctionName(operationModel);
@@ -31,22 +32,22 @@ export function* generateIsAuthenticationFunction(
     return;
   }
 
-  function* generateOrRules(requirements: models.AuthenticationRequirement[][]) {
+  function* generateOrRules(groups: core.AuthenticationRequirementGroupContainer[]) {
+    if (groups.length === 0) {
+      yield JSON.stringify(true);
+    }
+
+    for (const group of groups) {
+      yield joinIterable(generateAndRules(group.requirements), " && ");
+    }
+  }
+
+  function* generateAndRules(requirements: models.AuthenticationRequirement[]) {
     if (requirements.length === 0) {
       yield JSON.stringify(true);
     }
 
-    for (const subRequirements of requirements) {
-      yield joinIterable(generateAndRules(subRequirements), " && ");
-    }
-  }
-
-  function* generateAndRules(subRequirements: models.AuthenticationRequirement[]) {
-    if (subRequirements.length === 0) {
-      yield JSON.stringify(true);
-    }
-
-    for (const requirement of subRequirements) {
+    for (const requirement of requirements) {
       const authenticationModel = authenticationMap[requirement.authenticationName];
       const memberName = getAuthenticationMemberName(authenticationModel);
       yield itt`(${JSON.stringify(memberName)} in authentication && authentication.${memberName} != null)`;

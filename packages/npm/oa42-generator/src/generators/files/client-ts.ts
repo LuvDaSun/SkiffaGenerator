@@ -60,11 +60,6 @@ export function* generateClientTsCode(apiModelLegacy: models.Api, apiModel: core
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
       yield* generateClientOperationFunction(apiModelLegacy, pathModel, operationModel);
-    }
-  }
-
-  for (const pathModel of apiModelLegacy.paths) {
-    for (const operationModel of pathModel.operations) {
       yield* generateOperationCredentialsType(apiModelLegacy, operationModel);
       yield* generateOperationOutgoingRequestType(apiModelLegacy, operationModel);
       yield* generateOperationIncomingResponseType(apiModelLegacy, operationModel);

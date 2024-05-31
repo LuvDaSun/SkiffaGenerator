@@ -1,3 +1,4 @@
+import * as core from "@oa42/core";
 import * as models from "../../models/index.js";
 import { joinIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
@@ -9,7 +10,7 @@ import {
 
 export function* generateOperationAuthenticationType(
   apiModelLegacy: models.Api,
-  operationModel: models.Operation,
+  operationModel: core.OperationContainer,
 ) {
   const operationAuthenticationName = getOperationAuthenticationTypeName(operationModel);
   const serverAuthenticationName = getServerAuthenticationTypeName();
@@ -27,13 +28,13 @@ export function* generateOperationAuthenticationType(
     yield joinIterable(generateUnionTypes(operationModel.authenticationRequirements), "|\n");
   }
 
-  function* generateUnionTypes(requirements: models.AuthenticationRequirement[][]) {
-    if (requirements.length === 0) {
+  function* generateUnionTypes(groups: core.AuthenticationRequirementGroupContainer[]) {
+    if (groups.length === 0) {
       yield JSON.stringify({});
     }
 
-    for (const subRequirements of requirements) {
-      yield itt`Pick<A, ${joinIterable(generatePickUnionTypes(subRequirements), " | ")}>`;
+    for (const group of groups) {
+      yield itt`Pick<A, ${joinIterable(generatePickUnionTypes(group.requirements), " | ")}>`;
     }
   }
 

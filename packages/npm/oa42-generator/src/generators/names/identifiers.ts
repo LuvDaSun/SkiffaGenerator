@@ -108,9 +108,9 @@ export function getParseParameterFunction(
 
 export function getMockParameterFunction(
   apiModelLegacy: models.Api,
-  parameterModel: models.Parameter,
+  parameterModel: core.ParameterContainer,
 ) {
-  const parameterSchemaId = parameterModel.schemaId;
+  const parameterSchemaId = parameterModel.schemaId?.toString();
   if (parameterSchemaId == null) {
     return null;
   }
@@ -125,9 +125,9 @@ export function getMockParameterFunction(
 
 export function getIsParameterFunction(
   apiModelLegacy: models.Api,
-  parameterModel: models.Parameter,
+  parameterModel: core.ParameterContainer,
 ) {
-  const parameterSchemaId = parameterModel.schemaId;
+  const parameterSchemaId = parameterModel.schemaId?.toString();
   if (parameterSchemaId == null) {
     return null;
   }
@@ -140,8 +140,8 @@ export function getIsParameterFunction(
   return toCamel("is", parameterTypeName);
 }
 
-export function getMockBodyFunction(apiModelLegacy: models.Api, bodyModel: models.Body) {
-  const bodySchemaId = bodyModel.schemaId;
+export function getMockBodyFunction(apiModelLegacy: models.Api, bodyModel: core.BodyContainer) {
+  const bodySchemaId = bodyModel.schemaId?.toString();
   if (bodySchemaId == null) {
     return null;
   }
@@ -154,8 +154,8 @@ export function getMockBodyFunction(apiModelLegacy: models.Api, bodyModel: model
   return toCamel("mock", bodyTypeName);
 }
 
-export function getIsBodyFunction(apiModelLegacy: models.Api, bodyModel: models.Body) {
-  const bodySchemaId = bodyModel.schemaId;
+export function getIsBodyFunction(apiModelLegacy: models.Api, bodyModel: core.BodyContainer) {
+  const bodySchemaId = bodyModel.schemaId?.toString();
   if (bodySchemaId == null) {
     return null;
   }

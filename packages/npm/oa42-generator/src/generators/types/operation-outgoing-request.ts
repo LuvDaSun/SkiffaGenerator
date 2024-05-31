@@ -1,3 +1,4 @@
+import * as core from "@oa42/core";
 import * as models from "../../models/index.js";
 import { joinIterable, mapIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
@@ -5,7 +6,7 @@ import { getOutgoingRequestTypeName, getRequestParametersTypeName } from "../nam
 
 export function* generateOperationOutgoingRequestType(
   apiModelLegacy: models.Api,
-  operationModel: models.Operation,
+  operationModel: core.OperationContainer,
 ) {
   const typeName = getOutgoingRequestTypeName(operationModel);
 
@@ -17,7 +18,7 @@ export function* generateOperationOutgoingRequestType(
   `;
 }
 
-function* generateElements(apiModelLegacy: models.Api, operationModel: models.Operation) {
+function* generateElements(apiModelLegacy: models.Api, operationModel: core.OperationContainer) {
   yield itt`
     ${generateParametersContainerType(operationModel)} &
     (
@@ -26,7 +27,7 @@ function* generateElements(apiModelLegacy: models.Api, operationModel: models.Op
   `;
 }
 
-function* generateParametersContainerType(operationModel: models.Operation) {
+function* generateParametersContainerType(operationModel: core.OperationContainer) {
   const parametersTypeName = getRequestParametersTypeName(operationModel);
 
   const required =
@@ -42,7 +43,10 @@ function* generateParametersContainerType(operationModel: models.Operation) {
   }
 }
 
-function* generateBodyContainerTypes(apiModelLegacy: models.Api, operationModel: models.Operation) {
+function* generateBodyContainerTypes(
+  apiModelLegacy: models.Api,
+  operationModel: core.OperationContainer,
+) {
   if (operationModel.bodies.length === 0) {
     yield* generateBodyContainerType(apiModelLegacy, operationModel);
   }
@@ -54,8 +58,8 @@ function* generateBodyContainerTypes(apiModelLegacy: models.Api, operationModel:
 
 function* generateBodyContainerType(
   apiModelLegacy: models.Api,
-  operationModel: models.Operation,
-  bodyModel?: models.Body,
+  operationModel: core.OperationContainer,
+  bodyModel?: core.BodyContainer,
 ) {
   if (bodyModel == null) {
     yield itt`
@@ -74,7 +78,7 @@ function* generateBodyContainerType(
       break;
     }
     case "application/json": {
-      const bodySchemaId = bodyModel.schemaId;
+      const bodySchemaId = bodyModel.schemaId?.toString();
       const bodyTypeName = bodySchemaId == null ? bodySchemaId : apiModelLegacy.names[bodySchemaId];
 
       yield itt`

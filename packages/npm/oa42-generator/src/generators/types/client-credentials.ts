@@ -1,3 +1,4 @@
+import * as core from "@oa42/core";
 import * as models from "../../models/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
@@ -30,7 +31,7 @@ export function* generateCredentialsType(apiModelLegacy: models.Api) {
 
 export function* generateOperationCredentialsType(
   apiModelLegacy: models.Api,
-  operationModel: models.Operation,
+  operationModel: core.OperationContainer,
 ) {
   const operationCredentialsName = getOperationCredentialsTypeName(operationModel);
 
@@ -42,8 +43,8 @@ export function* generateOperationCredentialsType(
 
   function* body() {
     const authenticationNames = new Set(
-      operationModel.authenticationRequirements.flatMap((requirements) =>
-        requirements.map((requirement) => requirement.authenticationName),
+      operationModel.authenticationRequirements.flatMap((group) =>
+        group.requirements.map((requirement) => requirement.authenticationName),
       ),
     );
     const authenticationModels = apiModelLegacy.authentication.filter((authenticationModel) =>

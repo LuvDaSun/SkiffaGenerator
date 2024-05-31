@@ -32,7 +32,7 @@ export class Document extends DocumentBase<oas.OasSchema> {
 
     const apiModel: models.Api = {
       location: documentLocation,
-      paths,
+      // paths,
       authentication,
       router,
       names,

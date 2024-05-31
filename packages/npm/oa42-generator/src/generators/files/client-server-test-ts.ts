@@ -43,14 +43,6 @@ export function* generateClientServerTestTsCode(
       if (!operationModel.mockable) {
         continue;
       }
-    }
-  }
-
-  for (const pathModel of apiModelLegacy.paths) {
-    for (const operationModel of pathModel.operations) {
-      if (!operationModel.mockable) {
-        continue;
-      }
 
       if (operationModel.bodies.length === 0) {
         for (const operationResultModel of operationModel.operationResults) {
@@ -122,14 +114,14 @@ export function* generateClientServerTestTsCode(
 
 function* generateOperationTest(
   apiModelLegacy: models.Api,
-  operationModel: models.Operation,
-  requestBodyModel: models.Body | null,
-  operationResultModel: models.OperationResult,
-  responseBodyModel: models.Body | null,
+  operationModel: core.OperationContainer,
+  requestBodyModel: core.BodyContainer | null,
+  operationResultModel: core.OperationResultContainer,
+  responseBodyModel: core.BodyContainer | null,
 ) {
   const authenticationNames = new Set(
-    operationModel.authenticationRequirements.flatMap((requirements) =>
-      requirements.map((requirement) => requirement.authenticationName),
+    operationModel.authenticationRequirements.flatMap((group) =>
+      group.requirements.map((requirement) => requirement.authenticationName),
     ),
   );
   const authenticationModels = apiModelLegacy.authentication.filter((authenticationModel) =>

@@ -53,8 +53,8 @@ export function* generateServerTsCode(apiModelLegacy: models.Api, apiModel: core
 
   yield* generateServerAuthenticationType(apiModelLegacy);
   yield* generateAuthenticationHandlersType(apiModelLegacy);
-  yield* generateOperationHandlersType(apiModelLegacy);
-  yield* generateServerClass(apiModelLegacy);
+  yield* generateOperationHandlersType(apiModel);
+  yield* generateServerClass(apiModelLegacy, apiModel);
 
   for (const authenticationModel of apiModelLegacy.authentication) {
     yield* generateAuthenticationHandlerType(authenticationModel);
@@ -64,16 +64,11 @@ export function* generateServerTsCode(apiModelLegacy: models.Api, apiModel: core
     for (const operationModel of pathModel.operations) {
       yield* generateOperationHandlerType(operationModel);
 
+      yield* generateIsAuthenticationFunction(apiModelLegacy, operationModel);
+      yield* generateOperationAuthenticationType(apiModelLegacy, operationModel);
+
       yield* generateOperationIncomingRequestType(apiModelLegacy, operationModel);
       yield* generateOperationOutgoingResponseType(apiModelLegacy, operationModel);
-    }
-  }
-
-  for (const pathModel of apiModelLegacy.paths) {
-    for (const operationModel of pathModel.operations) {
-      yield* generateIsAuthenticationFunction(apiModelLegacy, operationModel);
-
-      yield* generateOperationAuthenticationType(apiModelLegacy, operationModel);
     }
   }
 }
