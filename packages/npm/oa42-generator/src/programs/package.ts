@@ -4,8 +4,6 @@ import assert from "assert";
 import * as jns42Generator from "jns42-generator";
 import * as path from "path";
 import * as yargs from "yargs";
-import { DocumentContext } from "../documents/document-context.js";
-import * as oas30 from "../documents/oas30/index.js";
 import { generatePackage } from "../generators/index.js";
 
 export function configurePackageProgram(argv: yargs.Argv) {
@@ -39,11 +37,6 @@ export function configurePackageProgram(argv: yargs.Argv) {
           type: "string",
           default: "schema",
         })
-        .option("name-maximum-iterations", {
-          description: "maximum number of iterations for finding unique names",
-          type: "number",
-          default: 5,
-        })
         .option("transform-maximum-iterations", {
           description: "maximum number of iterations for transforming",
           type: "number",
@@ -71,7 +64,6 @@ interface MainOptions {
   packageName: string;
   packageVersion: string;
   defaultTypeName: string;
-  nameMaximumIterations: number;
   transformMaximumIterations: number;
   requestTypes: string[];
   responseTypes: string[];
@@ -86,7 +78,6 @@ async function main(options: MainOptions) {
     packageName,
     packageVersion,
     defaultTypeName,
-    nameMaximumIterations,
     transformMaximumIterations,
     requestTypes,
     responseTypes,
@@ -111,8 +102,8 @@ async function main(options: MainOptions) {
     await jns42Context.loadFromLocation(
       documentSchema.schemaLocation.toString(),
       documentSchema.schemaLocation.toString(),
-      documentSchema.antecedentLocation.toString(),
-      this.getDefaultSchemaId(),
+      documentSchema.documentLocation.toString(),
+      documentSchema.defaultSchemaId,
     );
   }
 
@@ -120,15 +111,6 @@ async function main(options: MainOptions) {
     defaultTypeName,
     transformMaximumIterations,
   });
-
-  using documentContextLegacy = new DocumentContext({
-    defaultTypeName,
-    nameMaximumIterations,
-    transformMaximumIterations,
-    requestTypes,
-    responseTypes,
-  });
-  documentContextLegacy.registerFactory(oas30.factory);
 
   // generate code
 
