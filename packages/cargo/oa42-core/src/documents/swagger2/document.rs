@@ -24,7 +24,7 @@ impl Document {
 
 impl DocumentInterface for Document {
   fn get_default_schema_id(&self) -> String {
-    todo!()
+    "http://swagger.io/v2/schema.json#/definitions/schema".to_owned()
   }
 
   fn get_document_location(&self) -> NodeLocation {
