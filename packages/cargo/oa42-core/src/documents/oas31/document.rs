@@ -24,7 +24,7 @@ impl Document {
 
 impl DocumentInterface for Document {
   fn get_default_schema_id(&self) -> String {
-    todo!()
+    "https://spec.openapis.org/oas/3.1/dialect/base".to_owned()
   }
 
   fn get_document_location(&self) -> NodeLocation {
