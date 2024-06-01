@@ -118,5 +118,7 @@ async function main(options: MainOptions) {
     packageDirectoryPath,
     packageName,
     packageVersion,
+    requestTypes,
+    responseTypes,
   });
 }
