@@ -97,6 +97,14 @@ impl Document {
 }
 
 impl DocumentInterface for Document {
+  fn get_default_schema_id(&self) -> String {
+    "https://spec.openapis.org/oas/3.0/schema/2021-09-28#/definitions/Schema".to_owned()
+  }
+
+  fn get_document_location(&self) -> NodeLocation {
+    self.retrieval_location.clone()
+  }
+
   fn get_api_model(&self) -> Result<models::ApiContainer, DocumentError> {
     let api_location = self.retrieval_location.clone();
     let api_node = self.get_node(&api_location)?;

@@ -1,5 +1,7 @@
-import * as core from "@oa42/core";
+import * as jns42Core from "@jns42/core";
+import * as oa42Core from "@oa42/core";
 import assert from "assert";
+import * as jns42Generator from "jns42-generator";
 import * as path from "path";
 import * as yargs from "yargs";
 import { DocumentContext } from "../documents/document-context.js";
@@ -92,14 +94,32 @@ async function main(options: MainOptions) {
 
   // setup document context
 
-  const nodeCache = new core.NodeCache();
-  const documentContext = new core.DocumentContextContainer(nodeCache);
-  documentContext.registerWellKnownFactories();
+  const nodeCache = new oa42Core.NodeCache();
 
-  await documentContext.loadFromLocation(core.NodeLocation.parse(specificationLocation));
+  const jns42Context = jns42Core.DocumentContext.new();
+  jns42Context.registerWellKnownFactories();
 
-  const apiModel = documentContext.getApiModel(core.NodeLocation.parse(specificationLocation));
+  const oa42Context = new oa42Core.DocumentContextContainer(nodeCache);
+  oa42Context.registerWellKnownFactories();
+
+  await oa42Context.loadFromLocation(oa42Core.NodeLocation.parse(specificationLocation));
+
+  const apiModel = oa42Context.getApiModel(oa42Core.NodeLocation.parse(specificationLocation));
   assert(apiModel != null);
+
+  for (const documentSchema of oa42Context.getSchemas()) {
+    await jns42Context.loadFromLocation(
+      documentSchema.schemaLocation.toString(),
+      documentSchema.schemaLocation.toString(),
+      documentSchema.antecedentLocation.toString(),
+      this.getDefaultSchemaId(),
+    );
+  }
+
+  const specification = jns42Generator.loadSpecification(jns42Context, {
+    defaultTypeName,
+    transformMaximumIterations,
+  });
 
   using documentContextLegacy = new DocumentContext({
     defaultTypeName,
@@ -109,12 +129,6 @@ async function main(options: MainOptions) {
     responseTypes,
   });
   documentContextLegacy.registerFactory(oas30.factory);
-
-  // load api model
-
-  await documentContextLegacy.loadFromLocation(specificationLocation);
-
-  const specification = documentContextLegacy.getSpecification();
 
   // generate code
 

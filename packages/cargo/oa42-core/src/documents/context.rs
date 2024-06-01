@@ -139,6 +139,35 @@ impl DocumentContextContainer {
 
     Some(api_model)
   }
+
+  #[wasm_bindgen(js_name = "getSchemas")]
+  pub fn get_schemas(&self) -> Vec<DocumentSchemaContainer> {
+    let documents = self.0.documents.borrow();
+    documents
+      .values()
+      .flat_map(|document| {
+        document
+          .get_schema_locations()
+          .into_iter()
+          .flatten()
+          .map(|schema_location| {
+            DocumentSchema {
+              schema_location,
+              document_location: document.get_document_location(),
+              default_schema_id: document.get_default_schema_id(),
+            }
+            .into()
+          })
+      })
+      .collect()
+  }
+}
+
+#[oa42_macros::model_container]
+pub struct DocumentSchema {
+  pub schema_location: NodeLocation,
+  pub document_location: NodeLocation,
+  pub default_schema_id: String,
 }
 
 #[cfg(not(target_os = "unknown"))]

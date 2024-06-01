@@ -5,6 +5,7 @@ use crate::{
 };
 use std::rc::Weak;
 
+#[allow(dead_code)]
 pub struct Document {
   retrieval_location: NodeLocation,
   node: NodeRc,
@@ -22,6 +23,14 @@ impl Document {
 }
 
 impl DocumentInterface for Document {
+  fn get_default_schema_id(&self) -> String {
+    todo!()
+  }
+
+  fn get_document_location(&self) -> NodeLocation {
+    self.retrieval_location.clone()
+  }
+
   fn get_api_model(&self) -> Result<models::ApiContainer, DocumentError> {
     todo!()
   }
