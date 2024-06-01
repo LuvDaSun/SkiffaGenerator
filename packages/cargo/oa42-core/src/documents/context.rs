@@ -47,7 +47,8 @@ pub struct DocumentContextContainer(Rc<DocumentContext>);
 #[wasm_bindgen]
 impl DocumentContextContainer {
   #[wasm_bindgen(constructor)]
-  pub fn new(cache: NodeCache) -> Self {
+  pub fn new() -> Self {
+    let cache = NodeCache::new();
     Self(Rc::new(DocumentContext::new(cache)))
   }
 
@@ -173,13 +174,11 @@ pub struct DocumentSchema {
 #[cfg(not(target_os = "unknown"))]
 #[cfg(test)]
 mod tests {
-  use super::NodeCache;
   use super::*;
 
   #[async_std::test]
   async fn test_oas30() {
-    let cache = NodeCache::new();
-    let context = DocumentContextContainer::new(cache);
+    let context = DocumentContextContainer::new();
     context.register_well_known_factories();
 
     let location = NodeLocation::parse("../../../fixtures/specifications/echo.yaml").unwrap();

@@ -85,12 +85,10 @@ async function main(options: MainOptions) {
 
   // setup document context
 
-  const nodeCache = new oa42Core.NodeCache();
-
   const jns42Context = jns42Core.DocumentContext.new();
   jns42Context.registerWellKnownFactories();
 
-  const oa42Context = new oa42Core.DocumentContextContainer(nodeCache);
+  const oa42Context = new oa42Core.DocumentContextContainer();
   oa42Context.registerWellKnownFactories();
 
   await oa42Context.loadFromLocation(oa42Core.NodeLocation.parse(specificationLocation));
