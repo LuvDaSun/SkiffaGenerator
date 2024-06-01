@@ -4,8 +4,6 @@ import * as path from "path";
 import * as yargs from "yargs";
 import { DocumentContext } from "../documents/document-context.js";
 import * as oas30 from "../documents/oas30/index.js";
-import * as oas31 from "../documents/oas31/index.js";
-import * as swagger2 from "../documents/swagger2/index.js";
 import { generatePackage } from "../generators/index.js";
 
 export function configurePackageProgram(argv: yargs.Argv) {
@@ -110,9 +108,7 @@ async function main(options: MainOptions) {
     requestTypes,
     responseTypes,
   });
-  documentContextLegacy.registerFactory(swagger2.factory);
   documentContextLegacy.registerFactory(oas30.factory);
-  documentContextLegacy.registerFactory(oas31.factory);
 
   // load api model
 
