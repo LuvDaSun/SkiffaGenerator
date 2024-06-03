@@ -1,6 +1,6 @@
 use crate::{
   documents::{DocumentError, DocumentTypeError},
-  utils::{FetchFileError, NodeCacheError, ParseError},
+  utils::{FetchTextError, NodeCacheError, ParseError},
 };
 use std::fmt::Display;
 use wasm_bindgen::prelude::*;
@@ -103,11 +103,11 @@ impl From<NodeCacheError> for Error {
   }
 }
 
-impl From<FetchFileError> for Error {
-  fn from(value: FetchFileError) -> Self {
+impl From<FetchTextError> for Error {
+  fn from(value: FetchTextError) -> Self {
     match value {
-      FetchFileError::IoError => Self::IoError,
-      FetchFileError::HttpError => Self::HttpError,
+      FetchTextError::IoError => Self::IoError,
+      FetchTextError::HttpError => Self::HttpError,
     }
   }
 }

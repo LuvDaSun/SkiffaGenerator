@@ -1,4 +1,4 @@
-use super::{fetch_text, FetchFileError, Node, NodeLocation, NodeRc};
+use super::{fetch_text, FetchTextError, Node, NodeLocation, NodeRc};
 use std::collections::BTreeMap;
 use std::iter::once;
 use std::rc::Rc;
@@ -127,11 +127,11 @@ pub enum NodeCacheError {
   HttpError,
 }
 
-impl From<FetchFileError> for NodeCacheError {
-  fn from(value: FetchFileError) -> Self {
+impl From<FetchTextError> for NodeCacheError {
+  fn from(value: FetchTextError) -> Self {
     match value {
-      FetchFileError::IoError => NodeCacheError::IoError,
-      FetchFileError::HttpError => NodeCacheError::HttpError,
+      FetchTextError::IoError => NodeCacheError::IoError,
+      FetchTextError::HttpError => NodeCacheError::HttpError,
     }
   }
 }

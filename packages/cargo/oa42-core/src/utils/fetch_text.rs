@@ -1,24 +1,24 @@
 use wasm_bindgen::prelude::*;
 
-pub enum FetchFileError {
+pub enum FetchTextError {
   IoError,
   HttpError,
 }
 
-impl From<std::io::Error> for FetchFileError {
+impl From<std::io::Error> for FetchTextError {
   fn from(_value: std::io::Error) -> Self {
     Self::IoError
   }
 }
 
-impl From<JsValue> for FetchFileError {
+impl From<JsValue> for FetchTextError {
   fn from(_value: JsValue) -> Self {
     Self::HttpError
   }
 }
 
 #[cfg(not(target_os = "unknown"))]
-impl From<surf::Error> for FetchFileError {
+impl From<surf::Error> for FetchTextError {
   fn from(_value: surf::Error) -> Self {
     Self::HttpError
   }
@@ -31,7 +31,7 @@ extern "C" {
 }
 
 #[cfg(target_os = "unknown")]
-pub async fn fetch_text(location: &str) -> Result<String, FetchFileError> {
+pub async fn fetch_text(location: &str) -> Result<String, FetchTextError> {
   let text = fetch_text_js(location).await?;
   let text = text.as_string().unwrap_or_default();
 
@@ -39,7 +39,7 @@ pub async fn fetch_text(location: &str) -> Result<String, FetchFileError> {
 }
 
 #[cfg(not(target_os = "unknown"))]
-pub async fn fetch_text(location: &str) -> Result<String, FetchFileError> {
+pub async fn fetch_text(location: &str) -> Result<String, FetchTextError> {
   use async_std::fs::File;
   use async_std::io::ReadExt;
 
