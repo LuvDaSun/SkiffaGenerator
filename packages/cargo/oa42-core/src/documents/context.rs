@@ -88,46 +88,51 @@ impl DocumentContextContainer {
 
   #[wasm_bindgen(js_name = "loadFromLocation")]
   pub async fn load_from_location(&self, retrieval_location: NodeLocation) -> Result<(), Error> {
-    if self.0.documents.borrow().contains_key(&retrieval_location) {
-      return Ok(());
+    let mut queue = Vec::new();
+    queue.push(retrieval_location);
+
+    while let Some(retrieval_location) = queue.pop() {
+      if self.0.documents.borrow().contains_key(&retrieval_location) {
+        continue;
+      }
+
+      self
+        .0
+        .cache
+        .borrow_mut()
+        .load_from_location(&retrieval_location)
+        .await?;
+
+      let node = self
+        .0
+        .cache
+        .borrow()
+        .get_node(&retrieval_location)
+        .ok_or(Error::NotFound)?;
+
+      let document_type = (&node).try_into()?;
+
+      let document = {
+        let factories = self.0.factories.borrow();
+        let factory = factories.get(&document_type).ok_or(Error::NotFound)?;
+        factory(DocumentConfiguration {
+          retrieval_location: retrieval_location.clone(),
+        })
+      };
+
+      for referenced_location in document.get_referenced_locations()? {
+        let referenced_retrieval_location = retrieval_location.join(&referenced_location);
+
+        queue.push(referenced_retrieval_location);
+      }
+
+      assert!(self
+        .0
+        .documents
+        .borrow_mut()
+        .insert(retrieval_location.clone(), document)
+        .is_none());
     }
-
-    self
-      .0
-      .cache
-      .borrow_mut()
-      .load_from_location(&retrieval_location)
-      .await?;
-
-    let node = self
-      .0
-      .cache
-      .borrow()
-      .get_node(&retrieval_location)
-      .ok_or(Error::NotFound)?;
-
-    let document_type = (&node).try_into()?;
-
-    let document = {
-      let factories = self.0.factories.borrow();
-      let factory = factories.get(&document_type).ok_or(Error::NotFound)?;
-      factory(DocumentConfiguration {
-        retrieval_location: retrieval_location.clone(),
-      })
-    };
-
-    for consequent_location in document.get_referenced_locations()? {
-      let consequent_retrieval_location = retrieval_location.join(&consequent_location);
-
-      Box::pin(self.load_from_location(consequent_retrieval_location)).await?;
-    }
-
-    assert!(self
-      .0
-      .documents
-      .borrow_mut()
-      .insert(retrieval_location.clone(), document)
-      .is_none());
 
     Ok(())
   }
