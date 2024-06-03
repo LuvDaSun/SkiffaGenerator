@@ -21,8 +21,8 @@ serde_yaml = "^0.9.31"
 once_cell = "^1.19.0"
 regex = "^1.10.3"
 urlencoding = "2.1.3"
-wasm-bindgen = "0.2.92"
 semver = "1.0.23"
+wasm-bindgen = "0.2.92"
 wasm-bindgen-futures = "0.4.42"
 web-sys = { version = "0.3.69", features = ["Window", "Request", "Response", "Headers","RequestInit", "RequestMode"] }
 oa42-macros = { path = "../oa42-macros" }
