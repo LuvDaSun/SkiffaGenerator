@@ -2,7 +2,7 @@ use super::interface::DocumentFactory;
 use super::{DocumentInterface, DocumentType};
 use crate::documents::DocumentConfiguration;
 use crate::documents::{oas30, oas31, swagger2};
-use crate::error::Error;
+use crate::error::Oa42Error;
 use crate::models;
 use jns42_core::utils::{NodeCache, NodeLocation};
 use std::cell::RefCell;
@@ -42,13 +42,12 @@ impl DocumentContext {
 }
 
 #[wasm_bindgen]
-pub struct DocumentContextContainer(Rc<DocumentContext>);
+pub struct Oa42DocumentContextContainer(Rc<DocumentContext>);
 
 #[wasm_bindgen]
-impl DocumentContextContainer {
+impl Oa42DocumentContextContainer {
   #[wasm_bindgen(constructor)]
-  pub fn new() -> Self {
-    let cache = NodeCache::new();
+  pub fn new(cache: NodeCache) -> Self {
     Self(Rc::new(DocumentContext::new(cache)))
   }
 
@@ -88,7 +87,10 @@ impl DocumentContextContainer {
 
   #[wasm_bindgen(js_name = "loadFromLocation")]
   #[allow(clippy::await_holding_refcell_ref)]
-  pub async fn load_from_location(&self, retrieval_location: NodeLocation) -> Result<(), Error> {
+  pub async fn load_from_location(
+    &self,
+    retrieval_location: NodeLocation,
+  ) -> Result<(), Oa42Error> {
     let mut queue = Vec::new();
     queue.push(retrieval_location);
 
@@ -109,12 +111,12 @@ impl DocumentContextContainer {
         .cache
         .borrow()
         .get_node(&retrieval_location)
-        .ok_or(Error::NotFound)?
+        .ok_or(Oa42Error::NotFound)?
         .try_into()?;
 
       let document = {
         let factories = self.0.factories.borrow();
-        let factory = factories.get(&document_type).ok_or(Error::NotFound)?;
+        let factory = factories.get(&document_type).ok_or(Oa42Error::NotFound)?;
         factory(DocumentConfiguration {
           retrieval_location: retrieval_location.clone(),
         })
@@ -169,9 +171,9 @@ impl DocumentContextContainer {
   }
 }
 
-impl Default for DocumentContextContainer {
+impl Default for Oa42DocumentContextContainer {
   fn default() -> Self {
-    Self::new()
+    Self::new(NodeCache::new())
   }
 }
 
@@ -189,7 +191,7 @@ mod tests {
 
   #[async_std::test]
   async fn test_oas30() {
-    let context = DocumentContextContainer::new();
+    let context = Oa42DocumentContextContainer::default();
     context.register_well_known_factories();
 
     let location: NodeLocation = "../../../fixtures/specifications/echo.yaml"

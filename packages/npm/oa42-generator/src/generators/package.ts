@@ -31,14 +31,13 @@ export function generatePackage(
   packageConfiguration: PackageConfiguration,
 ) {
   const names = {} as Record<string, string>;
-  for (const [key, item] of [...specification.typesArena].map(
-    (item, index) => [index, item] as const,
-  )) {
+  for (let key = 0; key < specification.typesArena.count(); key++) {
+    const item = specification.typesArena.getItem(key);
     const { location } = item;
     if (location == null) {
       continue;
     }
-    names[location] = specification.names.getName(key).toPascalCase();
+    names[location.toString()] = specification.names.getName(key).toPascalCase();
   }
 
   const router = new Router<number>();

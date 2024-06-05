@@ -1,5 +1,4 @@
-import * as jns42Core from "@jns42/core";
-import * as oa42Core from "@oa42/core";
+import * as core from "@oa42/core";
 import assert from "assert";
 import * as jns42Generator from "jns42-generator";
 import * as path from "path";
@@ -85,22 +84,24 @@ async function main(options: MainOptions) {
 
   // setup document context
 
-  const jns42Context = jns42Core.DocumentContext.new();
+  const nodeCache = new core.NodeCache();
+
+  const jns42Context = new core.DocumentContextContainer(nodeCache);
   jns42Context.registerWellKnownFactories();
 
-  const oa42Context = new oa42Core.DocumentContextContainer();
+  const oa42Context = new core.Oa42DocumentContextContainer(nodeCache);
   oa42Context.registerWellKnownFactories();
 
-  await oa42Context.loadFromLocation(oa42Core.NodeLocation.parse(specificationLocation));
+  await oa42Context.loadFromLocation(core.NodeLocation.parse(specificationLocation));
 
-  const apiModel = oa42Context.getApiModel(oa42Core.NodeLocation.parse(specificationLocation));
+  const apiModel = oa42Context.getApiModel(core.NodeLocation.parse(specificationLocation));
   assert(apiModel != null);
 
   for (const documentSchema of oa42Context.getSchemas()) {
     await jns42Context.loadFromLocation(
-      documentSchema.schemaLocation.toString(),
-      documentSchema.schemaLocation.toString(),
-      documentSchema.documentLocation.toString(),
+      documentSchema.schemaLocation.clone(),
+      documentSchema.schemaLocation.clone(),
+      documentSchema.documentLocation.clone(),
       documentSchema.defaultSchemaId,
     );
   }

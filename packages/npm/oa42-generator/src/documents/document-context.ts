@@ -1,5 +1,4 @@
 import { NodeLocation } from "@oa42/core";
-import { loadYAML } from "../utils/index.js";
 import { DocumentBase } from "./document-base.js";
 
 export interface DocumentConfiguration {
@@ -28,36 +27,8 @@ export class DocumentContext {
     //
   }
 
-  [Symbol.dispose]() {
-    this.document?.[Symbol.dispose]();
-  }
-
   public registerFactory(factory: DocumentFactory) {
     this.factories.push(factory);
-  }
-
-  public async loadFromLocation(documentLocation: string) {
-    const documentNode = await loadYAML(documentLocation);
-    await this.loadFromDocument(documentLocation, documentNode);
-  }
-
-  public async loadFromDocument(documentLocation: string, documentNode: unknown) {
-    for (const factory of this.factories) {
-      const document = factory({
-        documentLocation: NodeLocation.parse(documentLocation),
-        documentNode,
-        configuration: this.configuration,
-      });
-      if (document != null) {
-        await document.load();
-        this.document = document;
-        break;
-      }
-    }
-
-    if (this.document == null) {
-      throw new Error("unable to load document");
-    }
   }
 
   public getApiModel() {

@@ -20,14 +20,13 @@ export class Document extends DocumentBase<oas.OasSchema> {
     }
 
     const names = {} as Record<string, string>;
-    for (const [key, item] of [...this.specification.typesArena].map(
-      (item, index) => [index, item] as const,
-    )) {
+    for (let key = 0; key < this.specification.typesArena.count(); key++) {
+      const item = this.specification.typesArena.getItem(key);
       const { location } = item;
       if (location == null) {
         continue;
       }
-      names[location] = this.specification.names.getName(key).toPascalCase();
+      names[location.toString()] = this.specification.names.getName(key).toPascalCase();
     }
 
     const apiModel: models.Api = {
