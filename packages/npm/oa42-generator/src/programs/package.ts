@@ -84,9 +84,9 @@ async function main(options: MainOptions) {
 
   // setup document context
 
-  const nodeCache = new core.NodeCache();
+  const nodeCache = new core.NodeCacheContainer();
 
-  const jns42Context = new core.DocumentContextContainer(nodeCache);
+  const jns42Context = new core.Jns42DocumentContextContainer(nodeCache);
   jns42Context.registerWellKnownFactories();
 
   const oa42Context = new core.Oa42DocumentContextContainer(nodeCache);

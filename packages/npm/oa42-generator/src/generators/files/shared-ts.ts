@@ -4,7 +4,7 @@ import { generateOperationAcceptType } from "../types/index.js";
 import { generateOperationAcceptConstant } from "../variables/operation-accept.js";
 
 export function* generateSharedTsCode(apiModel: core.ApiContainer) {
-  yield core.banner("//", `v${packageInfo.version}`);
+  yield core.oa42Banner("//", `v${packageInfo.version}`);
 
   // for (const authenticationModel of apiModel.authentication) {
   // }

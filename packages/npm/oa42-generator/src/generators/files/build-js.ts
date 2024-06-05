@@ -7,7 +7,7 @@ export function* generateBuildJsCode() {
     #!/usr/bin/env node
   `;
 
-  yield core.banner("//", `v${packageInfo.version}`);
+  yield core.oa42Banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import cp from "child_process";

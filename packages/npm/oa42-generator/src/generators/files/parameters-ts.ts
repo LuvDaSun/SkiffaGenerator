@@ -14,7 +14,7 @@ export function* generateParametersTsCode(
   names: Record<string, string>,
   apiModel: core.ApiContainer,
 ) {
-  yield core.banner("//", `v${packageInfo.version}`);
+  yield core.oa42Banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import * as types from "./types.js";

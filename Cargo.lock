@@ -1106,9 +1106,9 @@ checksum = "49f1f14873335454500d59611f1cf4a4b0f786f9ac11f4312a78e4cf2566695b"
 
 [[package]]
 name = "jns42-core"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ea5b76d1727c440de0d5c68a1f53080388b91554e566737f7487afac7642c6e4"
+checksum = "79961137a96d384d31b2645dbb2c4a9a70f1ae74c8a4d32a4768e759c371957a"
 dependencies = [
  "async-std",
  "futures",

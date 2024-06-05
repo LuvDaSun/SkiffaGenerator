@@ -3,7 +3,7 @@ import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 
 export function* generateRollupConfigJsCode() {
-  yield core.banner("//", `v${packageInfo.version}`);
+  yield core.oa42Banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import path from "path";

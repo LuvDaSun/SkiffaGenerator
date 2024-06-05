@@ -4,14 +4,14 @@ use crate::documents::DocumentConfiguration;
 use crate::documents::{oas30, oas31, swagger2};
 use crate::error::Oa42Error;
 use crate::models;
-use jns42_core::utils::{NodeCache, NodeLocation};
+use jns42_core::utils::{NodeCache, NodeCacheContainer, NodeLocation};
 use std::cell::RefCell;
 use std::collections::BTreeMap;
-use std::rc::Rc;
+use std::rc;
 use wasm_bindgen::prelude::*;
 
 pub struct DocumentContext {
-  cache: RefCell<NodeCache>,
+  cache: rc::Rc<RefCell<NodeCache>>,
   /**
    * document factories by document type key
    */
@@ -20,9 +20,9 @@ pub struct DocumentContext {
 }
 
 impl DocumentContext {
-  pub fn new(cache: NodeCache) -> Self {
+  pub fn new(cache: rc::Rc<RefCell<NodeCache>>) -> Self {
     Self {
-      cache: RefCell::new(cache),
+      cache,
       factories: Default::default(),
       documents: Default::default(),
     }
@@ -42,18 +42,18 @@ impl DocumentContext {
 }
 
 #[wasm_bindgen]
-pub struct Oa42DocumentContextContainer(Rc<DocumentContext>);
+pub struct Oa42DocumentContextContainer(rc::Rc<DocumentContext>);
 
 #[wasm_bindgen]
 impl Oa42DocumentContextContainer {
   #[wasm_bindgen(constructor)]
-  pub fn new(cache: NodeCache) -> Self {
-    Self(Rc::new(DocumentContext::new(cache)))
+  pub fn new(cache: NodeCacheContainer) -> Self {
+    Self(rc::Rc::new(DocumentContext::new(cache.into())))
   }
 
   #[wasm_bindgen(js_name = "registerWellKnownFactories")]
   pub fn register_well_known_factories(&self) {
-    let context = Rc::downgrade(&self.0);
+    let context = rc::Rc::downgrade(&self.0);
     self.0.register_factory(
       DocumentType::Swagger2,
       Box::new(move |configuration| {
@@ -63,7 +63,7 @@ impl Oa42DocumentContextContainer {
         ))
       }),
     );
-    let context = Rc::downgrade(&self.0);
+    let context = rc::Rc::downgrade(&self.0);
     self.0.register_factory(
       DocumentType::OpenApiV30,
       Box::new(move |configuration| {
@@ -73,7 +73,7 @@ impl Oa42DocumentContextContainer {
         ))
       }),
     );
-    let context = Rc::downgrade(&self.0);
+    let context = rc::Rc::downgrade(&self.0);
     self.0.register_factory(
       DocumentType::OpenApiV31,
       Box::new(move |configuration| {
@@ -173,7 +173,7 @@ impl Oa42DocumentContextContainer {
 
 impl Default for Oa42DocumentContextContainer {
   fn default() -> Self {
-    Self::new(NodeCache::new())
+    Self::new(Default::default())
   }
 }
 

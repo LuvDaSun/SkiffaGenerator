@@ -7,7 +7,7 @@ import { itt } from "../../utils/iterable-text-template.js";
  * dependencies
  */
 export function* generateMainTsCode() {
-  yield core.banner("//", `v${packageInfo.version}`);
+  yield core.oa42Banner("//", `v${packageInfo.version}`);
 
   yield itt`
     export * as lib from "oa42-lib";
