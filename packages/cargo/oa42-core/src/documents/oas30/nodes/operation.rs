@@ -1,9 +1,9 @@
 use super::*;
-use crate::utils::NodeRc;
+
 use std::collections::BTreeMap;
 
 #[derive(Clone)]
-pub struct Operation(NodeRc);
+pub struct Operation(serde_json::Value);
 
 impl Operation {
   pub fn name(&self) -> Option<&str> {
@@ -32,7 +32,7 @@ impl Operation {
         .as_object()?
         .get(member)?
         .as_array()?
-        .into_iter()
+        .iter()
         .enumerate()
         .map(|(key, node)| {
           (
@@ -75,8 +75,8 @@ impl Operation {
   }
 }
 
-impl From<NodeRc> for Operation {
-  fn from(value: NodeRc) -> Self {
+impl From<serde_json::Value> for Operation {
+  fn from(value: serde_json::Value) -> Self {
     Self(value)
   }
 }

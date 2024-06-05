@@ -1,9 +1,8 @@
 use super::*;
-use crate::utils::NodeRc;
 use std::collections::BTreeMap;
 
 #[derive(Clone)]
-pub struct Api(NodeRc);
+pub struct Api(serde_json::Value);
 
 impl Api {
   pub fn paths(&self) -> Option<BTreeMap<Vec<String>, NodeOrReference<Path>>> {
@@ -21,8 +20,8 @@ impl Api {
   }
 }
 
-impl From<NodeRc> for Api {
-  fn from(value: NodeRc) -> Self {
+impl From<serde_json::Value> for Api {
+  fn from(value: serde_json::Value) -> Self {
     Self(value)
   }
 }

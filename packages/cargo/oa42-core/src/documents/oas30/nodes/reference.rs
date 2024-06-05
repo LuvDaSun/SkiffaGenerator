@@ -1,7 +1,5 @@
-use crate::utils::NodeRc;
-
 #[derive(Clone)]
-pub struct Reference(NodeRc);
+pub struct Reference(serde_json::Value);
 
 impl Reference {
   pub fn reference(&self) -> Option<&str> {
@@ -9,8 +7,8 @@ impl Reference {
   }
 }
 
-impl From<NodeRc> for Reference {
-  fn from(value: NodeRc) -> Self {
+impl From<serde_json::Value> for Reference {
+  fn from(value: serde_json::Value) -> Self {
     Self(value)
   }
 }

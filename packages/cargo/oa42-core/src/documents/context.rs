@@ -4,7 +4,7 @@ use crate::documents::DocumentConfiguration;
 use crate::documents::{oas30, oas31, swagger2};
 use crate::error::Error;
 use crate::models;
-use crate::utils::{NodeCache, NodeLocation, NodeRc};
+use jns42_core::utils::{NodeCache, NodeLocation};
 use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::rc::Rc;
@@ -36,8 +36,8 @@ impl DocumentContext {
     self.factories.borrow_mut().insert(r#type, factory);
   }
 
-  pub fn get_node(&self, retrieval_location: &NodeLocation) -> Option<NodeRc> {
-    self.cache.borrow().get_node(retrieval_location)
+  pub fn get_node(&self, retrieval_location: &NodeLocation) -> Option<serde_json::Value> {
+    self.cache.borrow().get_node(retrieval_location).cloned()
   }
 }
 
@@ -87,6 +87,7 @@ impl DocumentContextContainer {
   }
 
   #[wasm_bindgen(js_name = "loadFromLocation")]
+  #[allow(clippy::await_holding_refcell_ref)]
   pub async fn load_from_location(&self, retrieval_location: NodeLocation) -> Result<(), Error> {
     let mut queue = Vec::new();
     queue.push(retrieval_location);
@@ -103,14 +104,13 @@ impl DocumentContextContainer {
         .load_from_location(&retrieval_location)
         .await?;
 
-      let node = self
+      let document_type = self
         .0
         .cache
         .borrow()
         .get_node(&retrieval_location)
-        .ok_or(Error::NotFound)?;
-
-      let document_type = (&node).try_into()?;
+        .ok_or(Error::NotFound)?
+        .try_into()?;
 
       let document = {
         let factories = self.0.factories.borrow();
@@ -169,6 +169,12 @@ impl DocumentContextContainer {
   }
 }
 
+impl Default for DocumentContextContainer {
+  fn default() -> Self {
+    Self::new()
+  }
+}
+
 #[oa42_macros::model_container]
 pub struct DocumentSchema {
   pub schema_location: NodeLocation,
@@ -186,7 +192,9 @@ mod tests {
     let context = DocumentContextContainer::new();
     context.register_well_known_factories();
 
-    let location = NodeLocation::parse("../../../fixtures/specifications/echo.yaml").unwrap();
+    let location: NodeLocation = "../../../fixtures/specifications/echo.yaml"
+      .parse()
+      .unwrap();
 
     context.load_from_location(location.clone()).await.unwrap();
     let api = context.get_api_model(&location).unwrap();

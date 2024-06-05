@@ -1,7 +1,7 @@
-use crate::utils::NodeRc;
+
 
 #[derive(Clone)]
-pub struct ResponseHeader(NodeRc);
+pub struct ResponseHeader(serde_json::Value);
 
 impl ResponseHeader {
   pub fn schema_pointer(&self) -> Option<Vec<String>> {
@@ -17,8 +17,8 @@ impl ResponseHeader {
   }
 }
 
-impl From<NodeRc> for ResponseHeader {
-  fn from(value: NodeRc) -> Self {
+impl From<serde_json::Value> for ResponseHeader {
+  fn from(value: serde_json::Value) -> Self {
     Self(value)
   }
 }

@@ -1,7 +1,5 @@
-use crate::utils::NodeRc;
-
 #[derive(Clone)]
-pub struct Body(NodeRc);
+pub struct Body(serde_json::Value);
 
 impl Body {
   pub fn schema_pointer(&self) -> Option<Vec<String>> {
@@ -13,8 +11,8 @@ impl Body {
   }
 }
 
-impl From<NodeRc> for Body {
-  fn from(value: NodeRc) -> Self {
+impl From<serde_json::Value> for Body {
+  fn from(value: serde_json::Value) -> Self {
     Self(value)
   }
 }

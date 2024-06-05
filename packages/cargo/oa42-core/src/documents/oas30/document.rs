@@ -2,8 +2,8 @@ use super::nodes;
 use crate::{
   documents::{DocumentContext, DocumentError, DocumentInterface},
   models,
-  utils::{NodeLocation, NodeRc},
 };
+use jns42_core::utils::NodeLocation;
 use std::{iter, rc};
 
 pub struct Document {
@@ -26,7 +26,7 @@ impl Document {
     entries: impl Iterator<Item = (Vec<String>, nodes::NodeOrReference<N>)>,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>>
   where
-    N: From<NodeRc>,
+    N: From<serde_json::Value>,
   {
     entries
       .filter_map(move |(pointer, node)| {
@@ -38,7 +38,7 @@ impl Document {
         }
       })
       .map(|(location, reference)| {
-        let reference_location = NodeLocation::parse(&reference)?;
+        let reference_location: NodeLocation = reference.parse()?;
         Ok(location.join(&reference_location))
       })
   }
@@ -49,7 +49,7 @@ impl Document {
     selector: impl Fn(NodeLocation, N) -> SR,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>>
   where
-    N: From<NodeRc>,
+    N: From<serde_json::Value>,
     SR: Iterator<Item = Result<NodeLocation, DocumentError>>,
   {
     entries
@@ -62,7 +62,7 @@ impl Document {
 
   fn get_node<T>(&self, location: &NodeLocation) -> Result<T, DocumentError>
   where
-    T: From<NodeRc>,
+    T: From<serde_json::Value>,
   {
     let context = self.context.upgrade().unwrap();
     let node = context
@@ -78,16 +78,17 @@ impl Document {
     node: nodes::NodeOrReference<T>,
   ) -> Result<(NodeLocation, T), DocumentError>
   where
-    T: From<NodeRc>,
+    T: From<serde_json::Value>,
   {
     match node {
       nodes::NodeOrReference::Reference(reference) => {
-        let reference_location = NodeLocation::parse(&reference)?;
+        let reference_location: NodeLocation = reference.parse()?;
         let context = self.context.upgrade().unwrap();
         let location = location.join(&reference_location);
         let node = context
           .get_node(&location)
-          .ok_or(DocumentError::NodeNotFound)?;
+          .ok_or(DocumentError::NodeNotFound)?
+          .clone();
         let node = node.into();
         Ok((location, node))
       }
@@ -444,7 +445,7 @@ impl Document {
           .paths()
           .into_iter()
           .flatten()
-          .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
+          .filter_map(|(pointer, node)| node.into_node().map(|node| (pointer, node))),
         |location, node| self.get_referenced_locations_from_path(location, node),
       ))
   }
@@ -482,7 +483,7 @@ impl Document {
           .operation_results()
           .into_iter()
           .flatten()
-          .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
+          .filter_map(|(pointer, node)| node.into_node().map(|node| (pointer, node))),
         |location, node| self.get_referenced_locations_from_operation_result(location, node),
       ))
       .chain(Self::get_referenced_locations_from_reference_entries(
@@ -515,7 +516,7 @@ impl Document {
         .paths()
         .into_iter()
         .flatten()
-        .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
+        .filter_map(|(pointer, node)| node.into_node().map(|node| (pointer, node))),
       |location, node| self.get_schema_locations_from_path(location, node),
     )
   }
@@ -532,7 +533,7 @@ impl Document {
           .request_parameters()
           .into_iter()
           .flatten()
-          .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
+          .filter_map(|(pointer, node)| node.into_node().map(|node| (pointer, node))),
         |location, node| self.get_schema_locations_from_request_parameter(location, node),
       ))
       .chain(Self::get_sub_locations_from_node_entries(
@@ -554,7 +555,7 @@ impl Document {
           .request_parameters()
           .into_iter()
           .flatten()
-          .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
+          .filter_map(|(pointer, node)| node.into_node().map(|node| (pointer, node))),
         |location, node| self.get_schema_locations_from_request_parameter(location, node),
       ))
       .chain(Self::get_sub_locations_from_node_entries(
@@ -563,7 +564,7 @@ impl Document {
           .operation_results()
           .into_iter()
           .flatten()
-          .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
+          .filter_map(|(pointer, node)| node.into_node().map(|node| (pointer, node))),
         |location, node| {
           self
             .get_schema_locations_from_operation_result(location, node)
@@ -585,7 +586,7 @@ impl Document {
           .response_headers()
           .into_iter()
           .flatten()
-          .filter_map(|(pointer, node)| node.to_node().map(|node| (pointer, node))),
+          .filter_map(|(pointer, node)| node.into_node().map(|node| (pointer, node))),
         |location, node| {
           self
             .get_schema_locations_from_response_header(location, node)

@@ -39,16 +39,16 @@
   ],
   "dependencies": {
     "@opentelemetry/api": "^1.8.0",
-    "@opentelemetry/instrumentation": "^0.51.0",
-    "@types/node": "^18.19.32",
+    "@opentelemetry/instrumentation": "^0.51.1",
+    "@types/node": "^18.19.34",
     "oa42-lib": "^0.10.5",
-    "tslib": "^2.6.2",
-    "type-fest": "^4.18.1"
+    "tslib": "^2.6.3",
+    "type-fest": "^4.19.0"
   },
   "devDependencies": {
-    "@rollup/plugin-replace": "^5.0.5",
+    "@rollup/plugin-replace": "^5.0.6",
     "@tsconfig/node18": "^18.2.4",
-    "rollup": "^4.17.2",
+    "rollup": "^4.18.0",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "typescript": "^5.4.5"
   },

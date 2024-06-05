@@ -1,14 +1,14 @@
 use crate::{
   documents::{DocumentContext, DocumentError, DocumentInterface},
   models,
-  utils::{NodeLocation, NodeRc},
 };
+use jns42_core::utils::NodeLocation;
 use std::rc::Weak;
 
 #[allow(dead_code)]
 pub struct Document {
   retrieval_location: NodeLocation,
-  node: NodeRc,
+  node: serde_json::Value,
 }
 
 impl Document {
@@ -17,7 +17,7 @@ impl Document {
     let node = context.get_node(&retrieval_location).unwrap();
     Self {
       retrieval_location,
-      node,
+      node: node.clone(),
     }
   }
 }

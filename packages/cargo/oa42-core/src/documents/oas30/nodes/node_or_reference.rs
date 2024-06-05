@@ -1,10 +1,9 @@
 use super::*;
-use crate::utils::NodeRc;
 
 #[derive(Clone)]
 pub enum NodeOrReference<T>
 where
-  T: From<NodeRc>,
+  T: From<serde_json::Value>,
 {
   Node(T),
   Reference(String),
@@ -12,9 +11,9 @@ where
 
 impl<T> NodeOrReference<T>
 where
-  T: From<NodeRc>,
+  T: From<serde_json::Value>,
 {
-  pub fn to_node(self) -> Option<T> {
+  pub fn into_node(self) -> Option<T> {
     match self {
       NodeOrReference::Node(node) => Some(node),
       NodeOrReference::Reference(_) => None,
@@ -22,11 +21,11 @@ where
   }
 }
 
-impl<T> From<NodeRc> for NodeOrReference<T>
+impl<T> From<serde_json::Value> for NodeOrReference<T>
 where
-  T: From<NodeRc>,
+  T: From<serde_json::Value>,
 {
-  fn from(value: NodeRc) -> Self {
+  fn from(value: serde_json::Value) -> Self {
     let reference_node: Reference = value.clone().into();
     if let Some(reference) = reference_node.reference() {
       return NodeOrReference::Reference(reference.to_owned());

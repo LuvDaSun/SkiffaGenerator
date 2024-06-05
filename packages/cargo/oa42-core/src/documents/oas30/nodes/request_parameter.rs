@@ -1,7 +1,7 @@
-use crate::utils::NodeRc;
+
 
 #[derive(Clone)]
-pub struct RequestParameter(NodeRc);
+pub struct RequestParameter(serde_json::Value);
 
 impl RequestParameter {
   pub fn schema_pointer(&self) -> Option<Vec<String>> {
@@ -25,8 +25,8 @@ impl RequestParameter {
   }
 }
 
-impl From<NodeRc> for RequestParameter {
-  fn from(value: NodeRc) -> Self {
+impl From<serde_json::Value> for RequestParameter {
+  fn from(value: serde_json::Value) -> Self {
     Self(value)
   }
 }

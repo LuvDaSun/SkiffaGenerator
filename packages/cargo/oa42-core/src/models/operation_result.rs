@@ -1,5 +1,5 @@
 use super::{BodyContainer, ParameterContainer};
-use crate::utils::NodeLocation;
+use jns42_core::utils::NodeLocation;
 
 #[oa42_macros::model_container]
 pub struct OperationResult {

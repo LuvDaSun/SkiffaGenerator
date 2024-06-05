@@ -1,4 +1,3 @@
-use crate::utils::NodeRc;
 use semver::Version;
 use wasm_bindgen::prelude::*;
 
@@ -12,10 +11,10 @@ pub enum DocumentType {
 
 pub struct DocumentTypeError;
 
-impl TryFrom<&NodeRc> for DocumentType {
+impl TryFrom<&serde_json::Value> for DocumentType {
   type Error = DocumentTypeError;
 
-  fn try_from(value: &NodeRc) -> Result<Self, Self::Error> {
+  fn try_from(value: &serde_json::Value) -> Result<Self, Self::Error> {
     let document = value.as_object().ok_or(DocumentTypeError)?;
 
     if let Some(version) = document.get("swagger") {

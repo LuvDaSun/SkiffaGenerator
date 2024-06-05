@@ -1,4 +1,5 @@
-use crate::{models::MethodParseError, utils::ParseError};
+use crate::models::MethodParseError;
+use jns42_core::utils::ParseLocationError;
 use std::fmt::Display;
 use wasm_bindgen::prelude::*;
 
@@ -17,19 +18,16 @@ impl Display for DocumentError {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     match self {
       Self::Unknown => write!(f, "Unknown"),
-      Self::NodeNotFound => write!(f, "Conflict"),
+      Self::NodeNotFound => write!(f, "NodeNotFound"),
       Self::ParseLocationFailed => write!(f, "ParseLocationFailed"),
       Self::ParseMethodFailed => write!(f, "ParseMethodFailed"),
     }
   }
 }
 
-impl From<ParseError> for DocumentError {
-  fn from(value: ParseError) -> Self {
-    match value {
-      ParseError::InvalidInput => Self::ParseLocationFailed,
-      ParseError::DecodeError => Self::ParseLocationFailed,
-    }
+impl From<ParseLocationError> for DocumentError {
+  fn from(_value: ParseLocationError) -> Self {
+    Self::ParseLocationFailed
   }
 }
 
