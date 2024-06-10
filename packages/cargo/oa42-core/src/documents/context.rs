@@ -8,10 +8,11 @@ use jns42_core::utils::{NodeCache, NodeCacheContainer, NodeLocation};
 use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::rc;
+use tokio::sync;
 use wasm_bindgen::prelude::*;
 
 pub struct DocumentContext {
-  cache: rc::Rc<RefCell<NodeCache>>,
+  cache: rc::Rc<sync::Mutex<NodeCache>>,
   /**
    * document factories by document type key
    */
@@ -20,7 +21,7 @@ pub struct DocumentContext {
 }
 
 impl DocumentContext {
-  pub fn new(cache: rc::Rc<RefCell<NodeCache>>) -> Self {
+  pub fn new(cache: rc::Rc<sync::Mutex<NodeCache>>) -> Self {
     Self {
       cache,
       factories: Default::default(),
@@ -37,7 +38,11 @@ impl DocumentContext {
   }
 
   pub fn get_node(&self, retrieval_location: &NodeLocation) -> Option<serde_json::Value> {
-    self.cache.borrow().get_node(retrieval_location).cloned()
+    self
+      .cache
+      .blocking_lock()
+      .get_node(retrieval_location)
+      .cloned()
   }
 }
 
@@ -86,7 +91,6 @@ impl Oa42DocumentContextContainer {
   }
 
   #[wasm_bindgen(js_name = "loadFromLocation")]
-  #[allow(clippy::await_holding_refcell_ref)]
   pub async fn load_from_location(
     &self,
     retrieval_location: NodeLocation,
@@ -102,14 +106,16 @@ impl Oa42DocumentContextContainer {
       self
         .0
         .cache
-        .borrow_mut()
+        .lock()
+        .await
         .load_from_location(&retrieval_location)
         .await?;
 
       let document_type = self
         .0
         .cache
-        .borrow()
+        .lock()
+        .await
         .get_node(&retrieval_location)
         .ok_or(Oa42Error::NotFound)?
         .try_into()?;
@@ -189,7 +195,7 @@ pub struct DocumentSchema {
 mod tests {
   use super::*;
 
-  #[async_std::test]
+  #[tokio::test]
   async fn test_oas30() {
     let context = Oa42DocumentContextContainer::default();
     context.register_well_known_factories();
