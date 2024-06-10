@@ -1,5 +1,3 @@
-
-
 #[derive(Clone)]
 pub struct RequestParameter(serde_json::Value);
 

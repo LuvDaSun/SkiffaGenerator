@@ -1,5 +1,3 @@
-
-
 #[derive(Clone)]
 pub struct ResponseHeader(serde_json::Value);
 
