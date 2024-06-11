@@ -1,7 +1,6 @@
 import * as oa42Core from "@oa42/core";
 import * as jns42generator from "jns42-generator";
 import * as models from "../models/index.js";
-import { readNode } from "../utils/index.js";
 import { DocumentConfiguration } from "./document-context.js";
 
 export abstract class DocumentBase<N = unknown> {
@@ -10,13 +9,7 @@ export abstract class DocumentBase<N = unknown> {
     protected readonly documentLocation: oa42Core.NodeLocation,
     protected readonly documentNode: N,
     protected readonly configuration: DocumentConfiguration,
-  ) {
-    for (const [pointer, node] of readNode([], documentNode)) {
-      const nodeLocation = documentLocation.pushPointer(pointer);
-      const nodeId = nodeLocation.toString();
-      this.nodes[nodeId] = node;
-    }
-  }
+  ) {}
 
   public getSpecification(): jns42generator.Specification {
     return this.specification;
