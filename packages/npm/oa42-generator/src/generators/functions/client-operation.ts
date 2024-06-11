@@ -1,4 +1,4 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import { itt } from "../../utils/index.js";
 import {
   getAuthenticationMemberName,
@@ -17,9 +17,9 @@ import {
 
 export function* generateClientOperationFunction(
   names: Record<string, string>,
-  apiModel: core.ApiContainer,
-  pathModel: core.PathContainer,
-  operationModel: core.OperationContainer,
+  apiModel: oa42Core.ApiContainer,
+  pathModel: oa42Core.PathContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   const operationFunctionName = getOperationFunctionName(operationModel);
   const operationOutgoingRequestName = getOutgoingRequestTypeName(operationModel);
@@ -51,9 +51,9 @@ export function* generateClientOperationFunction(
 
 function* generateBody(
   names: Record<string, string>,
-  apiModel: core.ApiContainer,
-  pathModel: core.PathContainer,
-  operationModel: core.OperationContainer,
+  apiModel: oa42Core.ApiContainer,
+  pathModel: oa42Core.PathContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   const operationIncomingResponseName = getIncomingResponseTypeName(operationModel);
   const operationAcceptConstName = getOperationAcceptConstName(operationModel);
@@ -296,7 +296,7 @@ function* generateBody(
   yield itt`
       const requestInit: RequestInit = {
         headers: requestHeaders,
-        method: ${JSON.stringify(core.Method[operationModel.method].toUpperCase())},
+        method: ${JSON.stringify(oa42Core.Method[operationModel.method].toUpperCase())},
         redirect: "manual",
         body,
       };
@@ -321,7 +321,7 @@ function* generateBody(
 
 function* generateRequestContentTypeCaseClauses(
   names: Record<string, string>,
-  operationModel: core.OperationContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   for (const bodyModel of operationModel.bodies) {
     yield itt`
@@ -342,7 +342,7 @@ function* generateRequestContentTypeCaseClauses(
 
 function* generateResponseStatusCodeCaseClauses(
   names: Record<string, string>,
-  operationModel: core.OperationContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   for (const operationResultModel of operationModel.operationResults) {
     const statusCodes = [...operationResultModel.statusCodes];
@@ -369,8 +369,8 @@ function* generateResponseStatusCodeCaseClauses(
 
 function* generateOperationResultBody(
   names: Record<string, string>,
-  operationModel: core.OperationContainer,
-  operationResultModel: core.OperationResultContainer,
+  operationModel: oa42Core.OperationContainer,
+  operationResultModel: oa42Core.OperationResultContainer,
 ) {
   const responseParametersName = getResponseParametersTypeName(
     operationModel,
@@ -431,7 +431,7 @@ function* generateOperationResultBody(
 
 function* generateOperationResultContentTypeCaseClauses(
   names: Record<string, string>,
-  operationResultModel: core.OperationResultContainer,
+  operationResultModel: oa42Core.OperationResultContainer,
 ) {
   for (const bodyModel of operationResultModel.bodies) {
     yield itt`
@@ -451,8 +451,8 @@ function* generateOperationResultContentTypeCaseClauses(
 
 function* generateRequestContentTypeCodeBody(
   names: Record<string, string>,
-  operationModel: core.OperationContainer,
-  bodyModel?: core.BodyContainer,
+  operationModel: oa42Core.OperationContainer,
+  bodyModel?: oa42Core.BodyContainer,
 ) {
   if (bodyModel == null) {
     yield itt`
@@ -550,7 +550,7 @@ function* generateRequestContentTypeCodeBody(
 
 function* generateOperationResultContentTypeBody(
   names: Record<string, string>,
-  bodyModel?: core.BodyContainer,
+  bodyModel?: oa42Core.BodyContainer,
 ) {
   if (bodyModel == null) {
     yield itt`

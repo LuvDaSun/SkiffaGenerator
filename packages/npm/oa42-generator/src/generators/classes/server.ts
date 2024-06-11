@@ -1,4 +1,4 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
   generateEndpointHandlerMethod,
@@ -32,7 +32,10 @@ import {
  * that is transformed into a `ServerOutgoingResponse` that is the return type
  * of the handle method.
  */
-export function* generateServerClass(names: Record<string, string>, apiModel: core.ApiContainer) {
+export function* generateServerClass(
+  names: Record<string, string>,
+  apiModel: oa42Core.ApiContainer,
+) {
   const authenticationTypeName = getServerAuthenticationTypeName();
 
   yield itt`
@@ -44,7 +47,7 @@ export class Server<A extends ${authenticationTypeName} = ${authenticationTypeNa
 `;
 }
 
-function* generateBody(names: Record<string, string>, apiModel: core.ApiContainer) {
+function* generateBody(names: Record<string, string>, apiModel: oa42Core.ApiContainer) {
   const authenticationHandlersTypeName = getAuthenticationHandlersTypeName();
   const operationHandlersTypeName = getOperationHandlersTypeName();
 

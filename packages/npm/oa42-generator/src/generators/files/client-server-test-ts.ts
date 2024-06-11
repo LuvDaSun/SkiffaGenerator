@@ -1,4 +1,4 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import assert from "assert";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
@@ -16,9 +16,9 @@ import {
 
 export function* generateClientServerTestTsCode(
   names: Record<string, string>,
-  apiModel: core.ApiContainer,
+  apiModel: oa42Core.ApiContainer,
 ) {
-  yield core.oa42Banner("//", `v${packageInfo.version}`);
+  yield oa42Core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import assert from "assert/strict";
@@ -117,11 +117,11 @@ export function* generateClientServerTestTsCode(
 
 function* generateOperationTest(
   names: Record<string, string>,
-  apiModel: core.ApiContainer,
-  operationModel: core.OperationContainer,
-  requestBodyModel: core.BodyContainer | null,
-  operationResultModel: core.OperationResultContainer,
-  responseBodyModel: core.BodyContainer | null,
+  apiModel: oa42Core.ApiContainer,
+  operationModel: oa42Core.OperationContainer,
+  requestBodyModel: oa42Core.BodyContainer | null,
+  operationResultModel: oa42Core.OperationResultContainer,
+  responseBodyModel: oa42Core.BodyContainer | null,
 ) {
   const authenticationNames = new Set(
     operationModel.authenticationRequirements.flatMap((group) =>

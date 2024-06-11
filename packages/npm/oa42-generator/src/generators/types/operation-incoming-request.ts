@@ -1,11 +1,11 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import { joinIterable, mapIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { getIncomingRequestTypeName, getRequestParametersTypeName } from "../names/index.js";
 
 export function* generateOperationIncomingRequestType(
   names: Record<string, string>,
-  operationModel: core.OperationContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   const typeName = getIncomingRequestTypeName(operationModel);
 
@@ -17,7 +17,10 @@ export function* generateOperationIncomingRequestType(
   `;
 }
 
-function* generateElements(names: Record<string, string>, operationModel: core.OperationContainer) {
+function* generateElements(
+  names: Record<string, string>,
+  operationModel: oa42Core.OperationContainer,
+) {
   yield itt`
     ${generateParametersContainerType(operationModel)} &
     (
@@ -26,7 +29,7 @@ function* generateElements(names: Record<string, string>, operationModel: core.O
   `;
 }
 
-function* generateParametersContainerType(operationModel: core.OperationContainer) {
+function* generateParametersContainerType(operationModel: oa42Core.OperationContainer) {
   const parametersTypeName = getRequestParametersTypeName(operationModel);
 
   yield `lib.ParametersContainer<parameters.${parametersTypeName}>`;
@@ -34,7 +37,7 @@ function* generateParametersContainerType(operationModel: core.OperationContaine
 
 function* generateBodyContainerTypes(
   names: Record<string, string>,
-  operationModel: core.OperationContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   if (operationModel.bodies.length === 0) {
     yield* generateBodyContainerType(names, operationModel);
@@ -47,8 +50,8 @@ function* generateBodyContainerTypes(
 
 function* generateBodyContainerType(
   names: Record<string, string>,
-  operationModel: core.OperationContainer,
-  bodyModel?: core.BodyContainer,
+  operationModel: oa42Core.OperationContainer,
+  bodyModel?: oa42Core.BodyContainer,
 ) {
   if (bodyModel == null) {
     yield itt`

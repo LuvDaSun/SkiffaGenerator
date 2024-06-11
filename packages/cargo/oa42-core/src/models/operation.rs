@@ -2,7 +2,7 @@ use super::{
   AuthenticationRequirementGroupContainer, BodyContainer, Method, OperationResultContainer,
   ParameterContainer,
 };
-use jns42_core::utils::NodeLocation;
+use crate::utils::NodeLocation;
 
 #[oa42_macros::model_container]
 pub struct Operation {

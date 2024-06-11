@@ -1,4 +1,4 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 
@@ -7,7 +7,7 @@ import { itt } from "../../utils/iterable-text-template.js";
  * dependencies
  */
 export function* generateMainTsCode() {
-  yield core.oa42Banner("//", `v${packageInfo.version}`);
+  yield oa42Core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     export * as lib from "oa42-lib";

@@ -1,4 +1,4 @@
-use jns42_core::utils::NodeLocation;
+use crate::utils::NodeLocation;
 
 #[oa42_macros::model_container]
 pub struct Parameter {

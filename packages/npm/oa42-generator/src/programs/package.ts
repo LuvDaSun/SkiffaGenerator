@@ -1,4 +1,4 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import assert from "assert";
 import * as jns42Generator from "jns42-generator";
 import * as path from "path";
@@ -84,17 +84,17 @@ async function main(options: MainOptions) {
 
   // setup document context
 
-  const nodeCache = new core.NodeCacheContainer();
+  const nodeCache = new oa42Core.NodeCacheContainer();
 
-  const jns42Context = new core.Jns42DocumentContextContainer(nodeCache);
+  const jns42Context = new oa42Core.Jns42DocumentContextContainer(nodeCache);
   jns42Context.registerWellKnownFactories();
 
-  const oa42Context = new core.Oa42DocumentContextContainer(nodeCache);
+  const oa42Context = new oa42Core.DocumentContextContainer();
   oa42Context.registerWellKnownFactories();
 
-  await oa42Context.loadFromLocation(core.NodeLocation.parse(specificationLocation));
+  await oa42Context.loadFromLocation(oa42Core.NodeLocation.parse(specificationLocation));
 
-  const apiModel = oa42Context.getApiModel(core.NodeLocation.parse(specificationLocation));
+  const apiModel = oa42Context.getApiModel(oa42Core.NodeLocation.parse(specificationLocation));
   assert(apiModel != null);
 
   for (const documentSchema of oa42Context.getSchemas()) {
@@ -105,7 +105,6 @@ async function main(options: MainOptions) {
       documentSchema.defaultSchemaId,
     );
   }
-
   const specification = jns42Generator.loadSpecification(jns42Context, {
     defaultTypeName,
     transformMaximumIterations,

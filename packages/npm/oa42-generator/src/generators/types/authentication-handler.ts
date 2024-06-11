@@ -1,4 +1,4 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
   getAuthenticationHandlerName,
@@ -9,7 +9,7 @@ import {
 } from "../names/index.js";
 
 export function* generateAuthenticationHandlerType(
-  authenticationModel: core.AuthenticationContainer,
+  authenticationModel: oa42Core.AuthenticationContainer,
 ) {
   const serverAuthenticationName = getServerAuthenticationTypeName();
   const handlerTypeName = getAuthenticationHandlerTypeName(authenticationModel);
@@ -56,7 +56,7 @@ export function* generateAuthenticationHandlerType(
   }
 }
 
-export function* generateAuthenticationHandlersType(apiModel: core.ApiContainer) {
+export function* generateAuthenticationHandlersType(apiModel: oa42Core.ApiContainer) {
   const serverAuthenticationName = getServerAuthenticationTypeName();
   const typeName = getAuthenticationHandlersTypeName();
 

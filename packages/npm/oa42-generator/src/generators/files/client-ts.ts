@@ -1,4 +1,4 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import { Router, RouterMode } from "goodrouter";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
@@ -15,9 +15,9 @@ import { generateCredentialsConstant } from "../variables/default-credentials.js
 export function* generateClientTsCode(
   names: Record<string, string>,
   router: Router<number>,
-  apiModel: core.ApiContainer,
+  apiModel: oa42Core.ApiContainer,
 ) {
-  yield core.oa42Banner("//", `v${packageInfo.version}`);
+  yield oa42Core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import { Router } from "goodrouter";

@@ -2,17 +2,17 @@ use super::interface::DocumentFactory;
 use super::{DocumentInterface, DocumentType};
 use crate::documents::DocumentConfiguration;
 use crate::documents::{oas30, oas31, swagger2};
-use crate::error::Oa42Error;
+use crate::error::Error;
 use crate::models;
-use jns42_core::utils::{NodeCache, NodeCacheContainer, NodeLocation};
+use crate::utils::{NodeCache, NodeLocation};
 use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::rc;
-use tokio::sync;
 use wasm_bindgen::prelude::*;
 
+#[derive(Default)]
 pub struct DocumentContext {
-  cache: rc::Rc<sync::Mutex<NodeCache>>,
+  cache: rc::Rc<RefCell<NodeCache>>,
   /**
    * document factories by document type key
    */
@@ -21,12 +21,8 @@ pub struct DocumentContext {
 }
 
 impl DocumentContext {
-  pub fn new(cache: rc::Rc<sync::Mutex<NodeCache>>) -> Self {
-    Self {
-      cache,
-      factories: Default::default(),
-      documents: Default::default(),
-    }
+  pub fn new() -> Self {
+    Self::default()
   }
 
   pub fn register_factory(&self, r#type: DocumentType, factory: DocumentFactory) {
@@ -38,22 +34,19 @@ impl DocumentContext {
   }
 
   pub fn get_node(&self, retrieval_location: &NodeLocation) -> Option<serde_json::Value> {
-    self
-      .cache
-      .blocking_lock()
-      .get_node(retrieval_location)
-      .cloned()
+    self.cache.borrow().get_node(retrieval_location).cloned()
   }
 }
 
 #[wasm_bindgen]
-pub struct Oa42DocumentContextContainer(rc::Rc<DocumentContext>);
+#[derive(Default)]
+pub struct DocumentContextContainer(rc::Rc<DocumentContext>);
 
 #[wasm_bindgen]
-impl Oa42DocumentContextContainer {
+impl DocumentContextContainer {
   #[wasm_bindgen(constructor)]
-  pub fn new(cache: NodeCacheContainer) -> Self {
-    Self(rc::Rc::new(DocumentContext::new(cache.into())))
+  pub fn new() -> Self {
+    Self::default()
   }
 
   #[wasm_bindgen(js_name = "registerWellKnownFactories")]
@@ -91,10 +84,8 @@ impl Oa42DocumentContextContainer {
   }
 
   #[wasm_bindgen(js_name = "loadFromLocation")]
-  pub async fn load_from_location(
-    &self,
-    retrieval_location: NodeLocation,
-  ) -> Result<(), Oa42Error> {
+  #[allow(clippy::await_holding_refcell_ref)]
+  pub async fn load_from_location(&self, retrieval_location: NodeLocation) -> Result<(), Error> {
     let mut queue = Vec::new();
     queue.push(retrieval_location);
 
@@ -106,23 +97,21 @@ impl Oa42DocumentContextContainer {
       self
         .0
         .cache
-        .lock()
-        .await
+        .borrow_mut()
         .load_from_location(&retrieval_location)
         .await?;
 
       let document_type = self
         .0
         .cache
-        .lock()
-        .await
+        .borrow()
         .get_node(&retrieval_location)
-        .ok_or(Oa42Error::NotFound)?
+        .ok_or(Error::NotFound)?
         .try_into()?;
 
       let document = {
         let factories = self.0.factories.borrow();
-        let factory = factories.get(&document_type).ok_or(Oa42Error::NotFound)?;
+        let factory = factories.get(&document_type).ok_or(Error::NotFound)?;
         factory(DocumentConfiguration {
           retrieval_location: retrieval_location.clone(),
         })
@@ -177,12 +166,6 @@ impl Oa42DocumentContextContainer {
   }
 }
 
-impl Default for Oa42DocumentContextContainer {
-  fn default() -> Self {
-    Self::new(Default::default())
-  }
-}
-
 #[oa42_macros::model_container]
 pub struct DocumentSchema {
   pub schema_location: NodeLocation,
@@ -197,7 +180,7 @@ mod tests {
 
   #[tokio::test]
   async fn test_oas30() {
-    let context = Oa42DocumentContextContainer::default();
+    let context = DocumentContextContainer::default();
     context.register_well_known_factories();
 
     let location: NodeLocation = "../../../fixtures/specifications/echo.yaml"

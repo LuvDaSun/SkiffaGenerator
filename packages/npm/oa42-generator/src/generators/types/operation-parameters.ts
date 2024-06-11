@@ -1,11 +1,11 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import camelcase from "camelcase";
 import { itt } from "../../utils/iterable-text-template.js";
 import { getRequestParametersTypeName } from "../names/index.js";
 
 export function* generateOperationParametersTypes(
   names: Record<string, string>,
-  operationModel: core.OperationContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   const operationRequestParametersName = getRequestParametersTypeName(operationModel);
 

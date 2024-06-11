@@ -2,7 +2,7 @@ use crate::{
   documents::{DocumentContext, DocumentError, DocumentInterface},
   models,
 };
-use jns42_core::utils::NodeLocation;
+use crate::utils::NodeLocation;
 use std::rc::Weak;
 
 #[allow(dead_code)]

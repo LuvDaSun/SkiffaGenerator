@@ -1,9 +1,9 @@
 use super::nodes;
+use crate::utils::NodeLocation;
 use crate::{
   documents::{DocumentContext, DocumentError, DocumentInterface},
   models,
 };
-use jns42_core::utils::NodeLocation;
 use std::{iter, rc};
 
 pub struct Document {
@@ -30,7 +30,7 @@ impl Document {
   {
     entries
       .filter_map(move |(pointer, node)| {
-        let location = location.set_pointer(pointer);
+        let location = location.push_pointer(pointer);
         if let nodes::NodeOrReference::Reference(reference) = node {
           Some((location, reference))
         } else {
@@ -54,7 +54,7 @@ impl Document {
   {
     entries
       .map(move |(pointer, node)| {
-        let location = location.set_pointer(pointer);
+        let location = location.push_pointer(pointer);
         (location, node)
       })
       .flat_map(move |(location, node)| (selector)(location, node))

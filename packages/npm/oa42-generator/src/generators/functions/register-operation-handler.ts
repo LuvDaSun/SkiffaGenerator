@@ -1,4 +1,4 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import { itt } from "../../utils/index.js";
 import {
   getOperationHandlerName,
@@ -8,7 +8,7 @@ import {
   getRegisterOperationsHandlerName,
 } from "../names/index.js";
 
-export function* registerOperationHandlerMethod(operationModel: core.OperationContainer) {
+export function* registerOperationHandlerMethod(operationModel: oa42Core.OperationContainer) {
   const handlerPropertyName = getOperationHandlerName(operationModel);
   const handlerTypeName = getOperationHandlerTypeName(operationModel);
   const registerHandlerMethodName = getRegisterOperationHandlerName(operationModel);
@@ -37,7 +37,7 @@ export function* registerOperationHandlerMethod(operationModel: core.OperationCo
   `;
 }
 
-export function* registerOperationHandlersMethod(apiModel: core.ApiContainer) {
+export function* registerOperationHandlersMethod(apiModel: oa42Core.ApiContainer) {
   const methodName = getRegisterOperationsHandlerName();
   const handlersTypeName = getOperationHandlersTypeName();
 

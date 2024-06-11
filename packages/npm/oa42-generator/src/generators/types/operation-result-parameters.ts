@@ -1,12 +1,12 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import camelcase from "camelcase";
 import { itt } from "../../utils/iterable-text-template.js";
 import { getResponseParametersTypeName } from "../names/index.js";
 
 export function* generateOperationResultParameterTypes(
   names: Record<string, string>,
-  operationModel: core.OperationContainer,
-  operationResultModel: core.OperationResultContainer,
+  operationModel: oa42Core.OperationContainer,
+  operationResultModel: oa42Core.OperationResultContainer,
 ) {
   const operationResponseParametersName = getResponseParametersTypeName(
     operationModel,

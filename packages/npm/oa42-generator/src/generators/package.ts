@@ -1,4 +1,4 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import fs from "fs";
 import { Router } from "goodrouter";
 import * as jns42generator from "jns42-generator";
@@ -26,7 +26,7 @@ export interface PackageConfiguration {
 }
 
 export function generatePackage(
-  apiModel: core.ApiContainer,
+  apiModel: oa42Core.ApiContainer,
   specification: jns42generator.Specification,
   packageConfiguration: PackageConfiguration,
 ) {

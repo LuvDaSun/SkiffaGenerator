@@ -1,4 +1,4 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import { itt } from "../../utils/index.js";
 import {
   getAuthenticationHandlerName,
@@ -18,8 +18,8 @@ import {
 
 export function* generateEndpointHandlerMethod(
   names: Record<string, string>,
-  apiModel: core.ApiContainer,
-  operationModel: core.OperationContainer,
+  apiModel: oa42Core.ApiContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   const endpointHandlerName = getEndpointHandlerName(operationModel);
 
@@ -40,8 +40,8 @@ export function* generateEndpointHandlerMethod(
  */
 function* generateBody(
   names: Record<string, string>,
-  apiModel: core.ApiContainer,
-  operationModel: core.OperationContainer,
+  apiModel: oa42Core.ApiContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   const operationHandlerName = getOperationHandlerName(operationModel);
   const operationIncomingRequestName = getIncomingRequestTypeName(operationModel);
@@ -344,7 +344,7 @@ function* generateBody(
 
 function* generateRequestContentTypeCodeCaseClauses(
   names: Record<string, string>,
-  operationModel: core.OperationContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   for (const bodyModel of operationModel.bodies) {
     yield itt`
@@ -363,7 +363,7 @@ function* generateRequestContentTypeCodeCaseClauses(
 
 function* generateRequestContentTypeCodeBody(
   names: Record<string, string>,
-  bodyModel?: core.BodyContainer,
+  bodyModel?: oa42Core.BodyContainer,
 ) {
   if (bodyModel == null) {
     yield itt`
@@ -466,7 +466,7 @@ function* generateRequestContentTypeCodeBody(
 
 function* generateStatusCodeCaseClauses(
   names: Record<string, string>,
-  operationModel: core.OperationContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   for (const operationResultModel of operationModel.operationResults) {
     const statusCodes = [...operationResultModel.statusCodes];
@@ -493,8 +493,8 @@ function* generateStatusCodeCaseClauses(
 
 function* generateOperationResultBody(
   names: Record<string, string>,
-  operationModel: core.OperationContainer,
-  operationResultModel: core.OperationResultContainer,
+  operationModel: oa42Core.OperationContainer,
+  operationResultModel: oa42Core.OperationResultContainer,
 ) {
   const isResponseParametersFunction = getIsResponseParametersFunction(
     operationModel,
@@ -554,7 +554,7 @@ function* generateOperationResultBody(
 
 function* generateOperationResultContentTypeCaseClauses(
   names: Record<string, string>,
-  operationResultModel: core.OperationResultContainer,
+  operationResultModel: oa42Core.OperationResultContainer,
 ) {
   for (const bodyModel of operationResultModel.bodies) {
     yield itt`
@@ -574,7 +574,7 @@ function* generateOperationResultContentTypeCaseClauses(
 
 function* generateOperationResultContentTypeBody(
   names: Record<string, string>,
-  bodyModel?: core.BodyContainer,
+  bodyModel?: oa42Core.BodyContainer,
 ) {
   if (bodyModel == null) {
     yield itt`

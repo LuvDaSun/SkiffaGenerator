@@ -1,4 +1,4 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 
@@ -7,7 +7,7 @@ export function* generateCleanJsCode() {
     #!/usr/bin/env node
   `;
 
-  yield core.oa42Banner("//", `v${packageInfo.version}`);
+  yield oa42Core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import fs from "fs";

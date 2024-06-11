@@ -1,4 +1,4 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
   getAuthenticationCredentialTypeName,
@@ -7,7 +7,7 @@ import {
   getOperationCredentialsTypeName,
 } from "../names/index.js";
 
-export function* generateCredentialsType(apiModel: core.ApiContainer) {
+export function* generateCredentialsType(apiModel: oa42Core.ApiContainer) {
   const typeName = getCredentialsTypeName();
 
   yield itt`
@@ -29,8 +29,8 @@ export function* generateCredentialsType(apiModel: core.ApiContainer) {
 }
 
 export function* generateOperationCredentialsType(
-  apiModel: core.ApiContainer,
-  operationModel: core.OperationContainer,
+  apiModel: oa42Core.ApiContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   const operationCredentialsName = getOperationCredentialsTypeName(operationModel);
 
@@ -62,7 +62,7 @@ export function* generateOperationCredentialsType(
 }
 
 export function* generateAuthenticationCredentialType(
-  authenticationModel: core.AuthenticationContainer,
+  authenticationModel: oa42Core.AuthenticationContainer,
 ) {
   const typeName = getAuthenticationCredentialTypeName(authenticationModel);
 

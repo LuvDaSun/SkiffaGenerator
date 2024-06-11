@@ -1,8 +1,8 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import { itt } from "../../utils/index.js";
 import { getOperationAcceptTypeName } from "../names/index.js";
 
-export function* generateOperationAcceptType(operationModel: core.OperationContainer) {
+export function* generateOperationAcceptType(operationModel: oa42Core.OperationContainer) {
   const operationAcceptTypeName = getOperationAcceptTypeName(operationModel);
 
   const operationAccepts = [

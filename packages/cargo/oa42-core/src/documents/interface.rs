@@ -1,6 +1,6 @@
 use super::DocumentError;
 use crate::models;
-use jns42_core::utils::NodeLocation;
+use crate::utils::NodeLocation;
 
 pub trait DocumentInterface {
   fn get_default_schema_id(&self) -> String;

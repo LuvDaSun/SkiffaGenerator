@@ -1,11 +1,11 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import { itt, packageInfo } from "../../utils/index.js";
 
 /**
  * Code generator that generates code only for browsers
  */
 export function* generateBrowserTsCode() {
-  yield core.oa42Banner("//", `v${packageInfo.version}`);
+  yield oa42Core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     export * from "./types.js";

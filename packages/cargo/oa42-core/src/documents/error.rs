@@ -1,5 +1,5 @@
 use crate::models::MethodParseError;
-use jns42_core::utils::ParseLocationError;
+use crate::utils::ParseLocationError;
 use std::fmt::Display;
 use wasm_bindgen::prelude::*;
 

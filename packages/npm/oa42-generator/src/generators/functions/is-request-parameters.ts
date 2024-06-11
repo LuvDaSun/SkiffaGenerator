@@ -1,4 +1,4 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import { itt } from "../../utils/index.js";
 import {
   getIsRequestParametersFunction,
@@ -8,7 +8,7 @@ import {
 
 export function* generateIsRequestParametersFunction(
   names: Record<string, string>,
-  operationModel: core.OperationContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   const isRequestParametersFunctionName = getIsRequestParametersFunction(operationModel);
   const requestParametersTypeName = getRequestParametersTypeName(operationModel);
@@ -22,7 +22,7 @@ export function* generateIsRequestParametersFunction(
   `;
 }
 
-function* generateBody(names: Record<string, string>, operationModel: core.OperationContainer) {
+function* generateBody(names: Record<string, string>, operationModel: oa42Core.OperationContainer) {
   const parameterModels = [
     ...operationModel.queryParameters,
     ...operationModel.headerParameters,

@@ -1,4 +1,4 @@
-import * as core from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import * as models from "../../models/index.js";
 import { itt, joinIterable } from "../../utils/index.js";
 import {
@@ -9,8 +9,8 @@ import {
 } from "../names/index.js";
 
 export function* generateIsAuthenticationFunction(
-  apiModel: core.ApiContainer,
-  operationModel: core.OperationContainer,
+  apiModel: oa42Core.ApiContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   const serverAuthenticationName = getServerAuthenticationTypeName();
   const isAuthenticationFunctionName = getIsAuthenticationFunctionName(operationModel);
@@ -32,7 +32,7 @@ export function* generateIsAuthenticationFunction(
     return;
   }
 
-  function* generateOrRules(groups: core.AuthenticationRequirementGroupContainer[]) {
+  function* generateOrRules(groups: oa42Core.AuthenticationRequirementGroupContainer[]) {
     if (groups.length === 0) {
       yield JSON.stringify(true);
     }
