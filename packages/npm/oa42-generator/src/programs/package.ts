@@ -1,3 +1,4 @@
+import * as jns42Core from "@jns42/core";
 import * as oa42Core from "@oa42/core";
 import assert from "assert";
 import * as jns42Generator from "jns42-generator";
@@ -84,9 +85,7 @@ async function main(options: MainOptions) {
 
   // setup document context
 
-  const nodeCache = new oa42Core.NodeCacheContainer();
-
-  const jns42Context = new oa42Core.Jns42DocumentContextContainer(nodeCache);
+  const jns42Context = new jns42Core.DocumentContextContainer();
   jns42Context.registerWellKnownFactories();
 
   const oa42Context = new oa42Core.DocumentContextContainer();
@@ -99,9 +98,9 @@ async function main(options: MainOptions) {
 
   for (const documentSchema of oa42Context.getSchemas()) {
     await jns42Context.loadFromLocation(
-      documentSchema.schemaLocation.clone(),
-      documentSchema.schemaLocation.clone(),
-      documentSchema.documentLocation.clone(),
+      jns42Core.NodeLocation.parse(documentSchema.schemaLocation.toString()),
+      jns42Core.NodeLocation.parse(documentSchema.schemaLocation.toString()),
+      jns42Core.NodeLocation.parse(documentSchema.documentLocation.toString()),
       documentSchema.defaultSchemaId,
     );
   }
