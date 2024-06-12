@@ -12,7 +12,7 @@ paths:
         required: true
         name: value
         schema:
-          $ref: fields.yaml#/$defs/non-empty-string
+          $ref: echo/fields.yaml#/$defs/non-empty-string
     post:
       operationId: echo
       summary: echo
@@ -23,7 +23,7 @@ paths:
             value:
               required: true
               schema:
-                $ref: fields.yaml#/$defs/non-empty-string
+                $ref: echo/fields.yaml#/$defs/non-empty-string
           content:
             text/plain: {}
             application/octet-stream: {}

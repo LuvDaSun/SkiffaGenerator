@@ -1,0 +1,1011 @@
+openapi: 3.0.2
+
+info:
+  title: Nationaal Watersportdiploma API
+  description: |-
+    Nationaal Watersportdiploma API
+  version: 0.1.0
+
+security:
+  - open-id: []
+  - api-key: []
+
+paths:
+  /me:
+    get:
+      operationId: me
+      summary: Retrieves information about the current user (if any)
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserModel"
+
+  /discipline:
+    get:
+      operationId: listDisciplines
+      tags:
+        - discipline
+      summary: Lists all disciplines
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DisciplineModel"
+        "404":
+          description: Not found
+        "403":
+          description: Forbidden
+
+  /discipline/{discipline-key}:
+    parameters:
+      - in: path
+        name: discipline-key
+        required: true
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/HandleOrId"
+    get:
+      operationId: retrieveDiscipline
+      tags:
+        - discipline
+      summary: Retrieves a single discipline
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DisciplineModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /discipline/{discipline-key}/curricula:
+    parameters:
+      - in: path
+        name: discipline-key
+        required: true
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/HandleOrId"
+    get:
+      operationId: listCurriculaByDiscipline
+      tags:
+        - curriculum
+      summary: List a curricula by discipline
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CurriculumModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /programs:
+    get:
+      operationId: listPrograms
+      summary: Retrieve a list of programs
+      description: >-
+        Retrieve a list of programs. The list will be paginated and the provided
+        query parameters allow filtering the returned programs.
+      tags:
+        - program
+
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProgramModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /program/{program-key}/curricula:
+    parameters:
+      - in: path
+        name: program-key
+        required: true
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/HandleOrId"
+    get:
+      operationId: listCurriculaByProgram
+      tags:
+        - curriculum
+      summary: List curricula by program
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CurriculumModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /find-certificate:
+    get:
+      parameters:
+        - in: query
+          name: certificate-handle
+          required: true
+          schema:
+            $ref: "nwd/fields.yaml#/$defs/CertificateHandle"
+        - in: query
+          name: issuedAt
+          required: true
+          schema:
+            type: string
+
+      operationId: find-certificate
+      summary: Find certificate by handle and issue date
+
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CertificateModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /list-certificates-by-number:
+    get:
+      parameters:
+        - in: query
+          name: numbers
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: "nwd/fields.yaml#/$defs/CertificateHandle"
+
+      operationId: listCertificatesByNumber
+      tags:
+        - certificate
+      summary: List certificates by number
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CertificateModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /certificate/{certificate-key}:
+    parameters:
+      - in: query
+        name: certificate-key
+        required: true
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/CertificateHandleOrId"
+
+    get:
+      operationId: get-certificate
+      summary: Get certificate by handle or id
+
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CertificateModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /locations:
+    get:
+      operationId: get-locations
+      summary: Get all locations
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LocationModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+    post:
+      operationId: create-location
+      summary: Creates a new location
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLocationModel"
+
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    $ref: "nwd/fields.yaml#/$defs/Id"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /location/{location-key}:
+    parameters:
+      - in: path
+        required: true
+        name: location-key
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/HandleOrId"
+
+    get:
+      operationId: get-location
+      summary: Get location
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LocationModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /location/{location-key}/persons:
+    parameters:
+      - in: path
+        required: true
+        name: location-key
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/HandleOrId"
+
+    get:
+      operationId: listPersonsForLocation
+      summary: List persons for a location
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PersonModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+    post:
+      operationId: createPersonForLocation
+      summary: create a person for a location
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePersonModel"
+
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "nwd/bases.yaml#/$defs/IdContainer"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /location/{location-key}/certificate:
+    parameters:
+      - in: path
+        required: true
+        name: location-key
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/HandleOrId"
+
+    get:
+      operationId: get-location-certificates
+      summary: Get all certificates for location
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LocationCertificateModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+    post:
+      operationId: create-location-certificate
+      summary: Creates a new certificate for a location
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLocationCertificateModel"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    $ref: "nwd/fields.yaml#/$defs/Id"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+
+  /location/{location-key}/cohort:
+    parameters:
+      - in: path
+        required: true
+        name: location-key
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/HandleOrId"
+
+    get:
+      operationId: get-location-cohorts
+      summary: Get all cohorts for location
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LocationCohortModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+    post:
+      operationId: create-location-cohort
+      summary: Creates a new cohort for a location
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLocationCohortModel"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    $ref: "nwd/fields.yaml#/$defs/Id"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /country:
+    get:
+      operationId: listCountries
+      tags:
+        - country
+      summary: Lists all countries
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CountryModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /curriculum/{curriculum-key}/gear-types:
+    parameters:
+      - in: path
+        name: curriculum-key
+        required: true
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/HandleOrId"
+    get:
+      operationId: listGearTypesByCurriculum
+      tags:
+        - gear-type
+      summary: List gear typers by curriculum
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GearTypeModel"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+components:
+  schemas:
+    # Entities
+
+    UserModel:
+      type: object
+      allOf:
+        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
+      required:
+        - handle
+      properties:
+        handle:
+          $ref: "nwd/fields.yaml#/$defs/Handle"
+
+    DisciplineModel:
+      type: object
+      allOf:
+        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
+        - $ref: "nwd/bases.yaml#/$defs/CudFields"
+      required:
+        - handle
+        - title
+        - weight
+      properties:
+        handle:
+          $ref: "nwd/fields.yaml#/$defs/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+        weight:
+          $ref: "nwd/fields.yaml#/$defs/PositiveInteger"
+
+    CurriculumModel:
+      type: object
+      allOf:
+        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
+        - $ref: "nwd/bases.yaml#/$defs/CudFields"
+      required:
+        - startedAt
+        - programId
+        - revision
+        - modules
+      properties:
+        startedAt:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Date"
+        programId:
+          $ref: "nwd/fields.yaml#/$defs/Id"
+        revision:
+          $ref: "nwd/fields.yaml#/$defs/Revision"
+        modules:
+          type: array
+          items:
+            $ref: "#/components/schemas/ModuleModel"
+
+    ModuleModel:
+      type: object
+      allOf:
+        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
+        - $ref: "nwd/bases.yaml#/$defs/CudFields"
+      required:
+        - handle
+        - title
+        - type
+        - isRequired
+        - weight
+        - competencies
+      properties:
+        handle:
+          $ref: "nwd/fields.yaml#/$defs/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+        type:
+          oneOf:
+            - nullable: true
+            - enum:
+                - "knowledge"
+                - "skill"
+        isRequired:
+          type: boolean
+        weight:
+          $ref: "nwd/fields.yaml#/$defs/PositiveInteger"
+        competencies:
+          type: array
+          items:
+            $ref: "#/components/schemas/CompetencyModel"
+
+    CompetencyModel:
+      type: object
+      allOf:
+        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
+        - $ref: "nwd/bases.yaml#/$defs/CudFields"
+      required:
+        - handle
+        - title
+        - type
+        - isRequired
+        - requirement
+        - weight
+      properties:
+        handle:
+          $ref: "nwd/fields.yaml#/$defs/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+        type:
+          oneOf:
+            - nullable: true
+            - enum:
+                - "knowledge"
+                - "skill"
+        isRequired:
+          type: boolean
+        requirement:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+        weight:
+          $ref: "nwd/fields.yaml#/$defs/PositiveInteger"
+
+    ProgramModel:
+      type: object
+      allOf:
+        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
+        - $ref: "nwd/bases.yaml#/$defs/CudFields"
+      required:
+        - handle
+        - title
+        - degree
+        - discipline
+        - categories
+      properties:
+        handle:
+          $ref: "nwd/fields.yaml#/$defs/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+        degree:
+          $ref: "#/components/schemas/DegreeModel"
+        discipline:
+          $ref: "#/components/schemas/DisciplineModel"
+        categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChildCategoryModel"
+
+    LocationModel:
+      type: object
+      allOf:
+        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
+        - $ref: "nwd/bases.yaml#/$defs/CudFields"
+      required:
+        - handle
+        - name
+        - websiteUrl
+        - shortDescription
+        - logo
+        - logoSquare
+        - logoCertificate
+      properties:
+        handle:
+          $ref: "nwd/fields.yaml#/$defs/Handle"
+        name:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+        websiteUrl:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Url"
+        shortDescription:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+        logo:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/ImageModel"
+        logoSquare:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/ImageModel"
+        logoCertificate:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/ImageModel"
+
+    CreateLocationModel:
+      type: object
+      required:
+        - handle
+        - title
+      properties:
+        handle:
+          $ref: "nwd/fields.yaml#/$defs/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+
+    LocationCohortModel:
+      type: object
+      allOf:
+        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
+      required:
+        - handle
+        - title
+      properties:
+        handle:
+          $ref: "nwd/fields.yaml#/$defs/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+
+    CreateLocationCohortModel:
+      type: object
+      required:
+        - handle
+        - title
+      properties:
+        handle:
+          $ref: "nwd/fields.yaml#/$defs/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+
+    CertificateModel:
+      type: object
+      allOf:
+        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
+        - $ref: "nwd/bases.yaml#/$defs/CudFields"
+      required:
+        - handle
+        - studentCurriculumId
+        - issuedAt
+        - visibleFrom
+      properties:
+        handle:
+          $ref: "nwd/fields.yaml#/$defs/Handle"
+        studentCurriculumId:
+          $ref: "nwd/fields.yaml#/$defs/Id"
+        issuedAt:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Date"
+        visibleFrom:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Date"
+
+    DegreeModel:
+      type: object
+      allOf:
+        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
+        - $ref: "nwd/bases.yaml#/$defs/CudFields"
+      required:
+        - handle
+        - title
+        - rang
+      properties:
+        handle:
+          $ref: "nwd/fields.yaml#/$defs/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+        rang:
+          $ref: "nwd/fields.yaml#/$defs/PositiveInteger"
+
+    CategoryModel:
+      type: object
+      allOf:
+        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
+        - $ref: "nwd/bases.yaml#/$defs/CudFields"
+      required:
+        - handle
+        - title
+        - description
+        - weight
+      properties:
+        handle:
+          $ref: "nwd/fields.yaml#/$defs/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+        description:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+        weight:
+          $ref: "nwd/fields.yaml#/$defs/PositiveInteger"
+
+    ChildCategoryModel:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/CategoryModel"
+      required:
+        - parent
+      properties:
+        parent:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/CategoryModel"
+
+    LocationCertificateModel:
+      type: object
+      allOf:
+        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
+      required:
+        - handle
+        - title
+      properties:
+        handle:
+          $ref: "nwd/fields.yaml#/$defs/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+
+    CreateLocationCertificateModel:
+      type: object
+      required:
+        - handle
+        - title
+      properties:
+        handle:
+          $ref: "nwd/fields.yaml#/$defs/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+
+    CountryModel:
+      type: object
+      required:
+        - code
+        - name
+      properties:
+        code:
+          $ref: "nwd/fields.yaml#/$defs/Code"
+        name:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+
+    GearTypeModel:
+      type: object
+      allOf:
+        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
+        - $ref: "nwd/bases.yaml#/$defs/CudFields"
+      required:
+        - handle
+        - title
+      properties:
+        handle:
+          $ref: "nwd/fields.yaml#/$defs/Handle"
+        title:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+
+    ImageModel:
+      type: object
+      allOf:
+        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
+        - $ref: "nwd/bases.yaml#/$defs/CuFields"
+      required:
+        - name
+        - url
+        - type
+        - alt
+        - mimeType
+        - size
+        - transformUrl
+        - width
+        - height
+      properties:
+        name:
+          $ref: "nwd/fields.yaml#/$defs/Text"
+        url:
+          $ref: "nwd/fields.yaml#/$defs/Url"
+        type:
+          enum:
+            - image
+        alt:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+        mimeType:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/MimeType"
+        size:
+          $ref: "nwd/fields.yaml#/$defs/PositiveInteger"
+        transformUrl:
+          $ref: "nwd/fields.yaml#/$defs/Url"
+        width:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/PositiveInteger"
+        height:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/PositiveInteger"
+
+    PersonModel:
+      type: object
+      allOf:
+        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
+        - $ref: "nwd/bases.yaml#/$defs/CudFields"
+      required:
+        - userId
+        - firstName
+        - lastNamePrefix
+        - lastName
+        - dateOfBirth
+        - birthCity
+        - birthCountry
+        - actors
+      properties:
+        userId:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Id"
+        firstName:
+          $ref: "nwd/fields.yaml#/$defs/Text"
+        lastNamePrefix:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+        lastName:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+        dateOfBirth:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Date"
+        birthCity:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+        birthCountry:
+          oneOf:
+            - nullable: true
+            - $ref: "#/components/schemas/CountryModel"
+        actors:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActorModel"
+
+    CreatePersonModel:
+      type: object
+      required:
+        - email
+        - firstName
+        - lastNamePrefix
+        - lastName
+        - dateOfBirth
+        - birthCity
+        - birthCountry
+      properties:
+        email:
+          $ref: "nwd/fields.yaml#/$defs/Email"
+        firstName:
+          $ref: "nwd/fields.yaml#/$defs/Text"
+        lastNamePrefix:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Text"
+        lastName:
+          $ref: "nwd/fields.yaml#/$defs/Text"
+        dateOfBirth:
+          $ref: "nwd/fields.yaml#/$defs/Date"
+        birthCity:
+          $ref: "nwd/fields.yaml#/$defs/Text"
+        birthCountry:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Code"
+
+    ActorModel:
+      type: object
+      allOf:
+        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
+        - $ref: "nwd/bases.yaml#/$defs/CudFields"
+      required:
+        - type
+        - locationId
+        - personId
+      properties:
+        type:
+          enum:
+            - student
+            - instructor
+            - location_admin
+            - application
+            - system
+        locationId:
+          $ref: "nwd/fields.yaml#/$defs/Id"
+        personId:
+          oneOf:
+            - nullable: true
+            - $ref: "nwd/fields.yaml#/$defs/Id"
+
+  securitySchemes:
+    # this should be transformed into oauth authentication once the generator supports it
+    open-id:
+      type: http
+      description: Default authentication mechanism
+      scheme: bearer
+
+    api-key:
+      type: apiKey
+      name: x-api-key
+      in: header
