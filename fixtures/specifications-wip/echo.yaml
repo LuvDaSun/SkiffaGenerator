@@ -1,0 +1,29 @@
+openapi: 3.0.2
+
+info:
+  title: echo
+  description: echo
+  version: 0.1.0
+
+paths:
+  /echo:
+    parameters:
+      - in: query
+        required: true
+        name: value
+        schema:
+          $ref: fields.yaml#/$defs/non-empty-string
+    post:
+      operationId: echo
+      summary: echo
+      responses:
+        "200":
+          description: Ok
+          headers:
+            value:
+              required: true
+              schema:
+                $ref: fields.yaml#/$defs/non-empty-string
+          content:
+            text/plain: {}
+            application/octet-stream: {}
