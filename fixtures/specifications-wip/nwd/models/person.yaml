@@ -16,29 +16,29 @@ required:
 properties:
   userId:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/Id"
   firstName:
     $ref: "../fields.yaml#/$defs/Text"
   lastNamePrefix:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/Text"
   lastName:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/Text"
   dateOfBirth:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/Date"
   birthCity:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/Text"
   birthCountry:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "country.yaml"
   actors:
     type: array

@@ -16,7 +16,7 @@ properties:
     $ref: "../fields.yaml#/$defs/Text"
   lastNamePrefix:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/Text"
   lastName:
     $ref: "../fields.yaml#/$defs/Text"
@@ -26,5 +26,5 @@ properties:
     $ref: "../fields.yaml#/$defs/Text"
   birthCountry:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/Code"

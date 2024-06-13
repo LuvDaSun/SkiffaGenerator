@@ -24,11 +24,11 @@ properties:
       - image
   alt:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/Text"
   mimeType:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/MimeType"
   size:
     $ref: "../fields.yaml#/$defs/PositiveInteger"
@@ -36,9 +36,9 @@ properties:
     $ref: "../fields.yaml#/$defs/Url"
   width:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/PositiveInteger"
   height:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/PositiveInteger"

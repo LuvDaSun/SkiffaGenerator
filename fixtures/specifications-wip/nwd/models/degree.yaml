@@ -13,7 +13,7 @@ properties:
     $ref: "../fields.yaml#/$defs/Handle"
   title:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/Text"
   rang:
     $ref: "../fields.yaml#/$defs/PositiveInteger"

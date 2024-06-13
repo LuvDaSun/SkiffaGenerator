@@ -12,7 +12,7 @@ required:
 properties:
   startedAt:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/Date"
   programId:
     $ref: "../fields.yaml#/$defs/Id"

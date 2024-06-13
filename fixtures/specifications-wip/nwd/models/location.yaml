@@ -17,25 +17,25 @@ properties:
     $ref: "../fields.yaml#/$defs/Handle"
   name:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/Text"
   websiteUrl:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/Url"
   shortDescription:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/Text"
   logo:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "image.yaml"
   logoSquare:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "image.yaml"
   logoCertificate:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "image.yaml"

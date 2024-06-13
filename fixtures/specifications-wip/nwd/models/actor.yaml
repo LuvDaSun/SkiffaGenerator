@@ -20,5 +20,5 @@ properties:
     $ref: "../fields.yaml#/$defs/Id"
   personId:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/Id"

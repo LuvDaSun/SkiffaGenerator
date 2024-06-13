@@ -16,9 +16,9 @@ properties:
     $ref: "../fields.yaml#/$defs/Id"
   issuedAt:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/Date"
   visibleFrom:
     oneOf:
-      - nullable: true
+      - type: "null"
       - $ref: "../fields.yaml#/$defs/Date"
