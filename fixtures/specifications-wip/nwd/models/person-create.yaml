@@ -1,0 +1,30 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
+type: object
+required:
+  - email
+  - firstName
+  - lastNamePrefix
+  - lastName
+  - dateOfBirth
+  - birthCity
+  - birthCountry
+properties:
+  email:
+    $ref: "../fields.yaml#/$defs/Email"
+  firstName:
+    $ref: "../fields.yaml#/$defs/Text"
+  lastNamePrefix:
+    oneOf:
+      - nullable: true
+      - $ref: "../fields.yaml#/$defs/Text"
+  lastName:
+    $ref: "../fields.yaml#/$defs/Text"
+  dateOfBirth:
+    $ref: "../fields.yaml#/$defs/Date"
+  birthCity:
+    $ref: "../fields.yaml#/$defs/Text"
+  birthCountry:
+    oneOf:
+      - nullable: true
+      - $ref: "../fields.yaml#/$defs/Code"

@@ -21,7 +21,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserModel"
+                $ref: "nwd/models/user.yaml"
 
   /discipline:
     get:
@@ -37,7 +37,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/DisciplineModel"
+                  $ref: "nwd/models/discipline.yaml"
         "404":
           description: Not found
         "403":
@@ -61,7 +61,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DisciplineModel"
+                $ref: "nwd/models/discipline.yaml"
         "403":
           description: Forbidden
         "404":
@@ -87,7 +87,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/CurriculumModel"
+                  $ref: "nwd/models/curriculum.yaml"
         "403":
           description: Forbidden
         "404":
@@ -111,7 +111,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ProgramModel"
+                  $ref: "nwd/models/program.yaml"
         "403":
           description: Forbidden
         "404":
@@ -137,7 +137,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/CurriculumModel"
+                  $ref: "nwd/models/curriculum.yaml"
         "403":
           description: Forbidden
         "404":
@@ -166,7 +166,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CertificateModel"
+                $ref: "nwd/models/certificate.yaml"
         "403":
           description: Forbidden
         "404":
@@ -195,7 +195,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/CertificateModel"
+                  $ref: "nwd/models/certificate.yaml"
         "403":
           description: Forbidden
         "404":
@@ -219,7 +219,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CertificateModel"
+                $ref: "nwd/models/certificate.yaml"
         "403":
           description: Forbidden
         "404":
@@ -237,7 +237,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/LocationModel"
+                  $ref: "nwd/models/location.yaml"
         "403":
           description: Forbidden
         "404":
@@ -250,7 +250,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateLocationModel"
+              $ref: "nwd/models/location-create.yaml"
 
       responses:
         "201":
@@ -286,7 +286,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LocationModel"
+                $ref: "nwd/models/location.yaml"
         "403":
           description: Forbidden
         "404":
@@ -311,7 +311,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/PersonModel"
+                  $ref: "nwd/models/person.yaml"
         "403":
           description: Forbidden
         "404":
@@ -324,7 +324,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreatePersonModel"
+              $ref: "nwd/models/person-create.yaml"
 
       responses:
         "201":
@@ -357,7 +357,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/LocationCertificateModel"
+                  $ref: "nwd/models/location-certificate.yaml"
         "403":
           description: Forbidden
         "404":
@@ -370,7 +370,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateLocationCertificateModel"
+              $ref: "nwd/models/location-certificate-create.yaml"
       responses:
         "201":
           description: Created
@@ -407,7 +407,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/LocationCohortModel"
+                  $ref: "nwd/models/location-cohort.yaml"
         "403":
           description: Forbidden
         "404":
@@ -420,7 +420,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateLocationCohortModel"
+              $ref: "nwd/models/location-cohort-create.yaml"
       responses:
         "201":
           description: Created
@@ -452,7 +452,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/CountryModel"
+                  $ref: "nwd/models/country.yaml"
         "403":
           description: Forbidden
         "404":
@@ -478,7 +478,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/GearTypeModel"
+                  $ref: "nwd/models/gear-type.yaml"
         "403":
           description: Forbidden
         "404":
@@ -487,16 +487,6 @@ paths:
 components:
   schemas:
     # Entities
-
-    UserModel:
-      type: object
-      allOf:
-        - $ref: "nwd/bases.yaml#/$defs/IdContainer"
-      required:
-        - handle
-      properties:
-        handle:
-          $ref: "nwd/fields.yaml#/$defs/Handle"
 
     DisciplineModel:
       type: object
@@ -539,7 +529,7 @@ components:
         modules:
           type: array
           items:
-            $ref: "#/components/schemas/ModuleModel"
+            $ref: "nwd/models/module.yaml"
 
     ModuleModel:
       type: object
@@ -573,7 +563,7 @@ components:
         competencies:
           type: array
           items:
-            $ref: "#/components/schemas/CompetencyModel"
+            $ref: "nwd/models/competency.yaml"
 
     CompetencyModel:
       type: object
@@ -628,13 +618,13 @@ components:
             - nullable: true
             - $ref: "nwd/fields.yaml#/$defs/Text"
         degree:
-          $ref: "#/components/schemas/DegreeModel"
+          $ref: "nwd/models/degree.yaml"
         discipline:
-          $ref: "#/components/schemas/DisciplineModel"
+          $ref: "nwd/models/discipline.yaml"
         categories:
           type: array
           items:
-            $ref: "#/components/schemas/ChildCategoryModel"
+            $ref: "nwd/models/child-category.yaml"
 
     LocationModel:
       type: object
@@ -667,15 +657,15 @@ components:
         logo:
           oneOf:
             - nullable: true
-            - $ref: "#/components/schemas/ImageModel"
+            - $ref: "nwd/models/image.yaml"
         logoSquare:
           oneOf:
             - nullable: true
-            - $ref: "#/components/schemas/ImageModel"
+            - $ref: "nwd/models/image.yaml"
         logoCertificate:
           oneOf:
             - nullable: true
-            - $ref: "#/components/schemas/ImageModel"
+            - $ref: "nwd/models/image.yaml"
 
     CreateLocationModel:
       type: object
@@ -788,14 +778,14 @@ components:
     ChildCategoryModel:
       type: object
       allOf:
-        - $ref: "#/components/schemas/CategoryModel"
+        - $ref: "nwd/models/category.yaml"
       required:
         - parent
       properties:
         parent:
           oneOf:
             - nullable: true
-            - $ref: "#/components/schemas/CategoryModel"
+            - $ref: "nwd/models/category.yaml"
 
     LocationCertificateModel:
       type: object
@@ -938,11 +928,11 @@ components:
         birthCountry:
           oneOf:
             - nullable: true
-            - $ref: "#/components/schemas/CountryModel"
+            - $ref: "nwd/models/country.yaml"
         actors:
           type: array
           items:
-            $ref: "#/components/schemas/ActorModel"
+            $ref: "nwd/models/actor.yaml"
 
     CreatePersonModel:
       type: object

@@ -1,0 +1,46 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
+type: object
+allOf:
+  - $ref: "../bases.yaml#/$defs/IdContainer"
+  - $ref: "../bases.yaml#/$defs/CudFields"
+required:
+  - userId
+  - firstName
+  - lastNamePrefix
+  - lastName
+  - dateOfBirth
+  - birthCity
+  - birthCountry
+  - actors
+properties:
+  userId:
+    oneOf:
+      - nullable: true
+      - $ref: "../fields.yaml#/$defs/Id"
+  firstName:
+    $ref: "../fields.yaml#/$defs/Text"
+  lastNamePrefix:
+    oneOf:
+      - nullable: true
+      - $ref: "../fields.yaml#/$defs/Text"
+  lastName:
+    oneOf:
+      - nullable: true
+      - $ref: "../fields.yaml#/$defs/Text"
+  dateOfBirth:
+    oneOf:
+      - nullable: true
+      - $ref: "../fields.yaml#/$defs/Date"
+  birthCity:
+    oneOf:
+      - nullable: true
+      - $ref: "../fields.yaml#/$defs/Text"
+  birthCountry:
+    oneOf:
+      - nullable: true
+      - $ref: "country.yaml"
+  actors:
+    type: array
+    items:
+      $ref: "actor.yaml"

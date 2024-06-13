@@ -1,0 +1,12 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
+type: object
+allOf:
+  - $ref: "category.yaml"
+required:
+  - parent
+properties:
+  parent:
+    oneOf:
+      - type: "null"
+      - $ref: "category.yaml"

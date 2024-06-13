@@ -1,0 +1,27 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
+type: object
+allOf:
+  - $ref: "../bases.yaml#/$defs/IdContainer"
+  - $ref: "../bases.yaml#/$defs/CudFields"
+required:
+  - handle
+  - title
+  - degree
+  - discipline
+  - categories
+properties:
+  handle:
+    $ref: "../fields.yaml#/$defs/Handle"
+  title:
+    oneOf:
+      - nullable: true
+      - $ref: "../fields.yaml#/$defs/Text"
+  degree:
+    $ref: "degree.yaml"
+  discipline:
+    $ref: "discipline.yaml"
+  categories:
+    type: array
+    items:
+      $ref: "child-category.yaml"

@@ -1,0 +1,24 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
+type: object
+allOf:
+  - $ref: "../bases.yaml#/$defs/IdContainer"
+  - $ref: "../bases.yaml#/$defs/CudFields"
+required:
+  - handle
+  - studentCurriculumId
+  - issuedAt
+  - visibleFrom
+properties:
+  handle:
+    $ref: "../fields.yaml#/$defs/Handle"
+  studentCurriculumId:
+    $ref: "../fields.yaml#/$defs/Id"
+  issuedAt:
+    oneOf:
+      - nullable: true
+      - $ref: "../fields.yaml#/$defs/Date"
+  visibleFrom:
+    oneOf:
+      - nullable: true
+      - $ref: "../fields.yaml#/$defs/Date"
