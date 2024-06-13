@@ -5,41 +5,23 @@ allOf:
   - $ref: "../bases.yaml#/$defs/IdContainer"
   - $ref: "../bases.yaml#/$defs/CudFields"
 required:
-  - userId
   - firstName
-  - lastNamePrefix
-  - lastName
-  - dateOfBirth
-  - birthCity
-  - birthCountry
   - actors
 properties:
   userId:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Id"
+    $ref: "../fields.yaml#/$defs/Id"
   firstName:
     $ref: "../fields.yaml#/$defs/Text"
   lastNamePrefix:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Text"
+    $ref: "../fields.yaml#/$defs/Text"
   lastName:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Text"
+    $ref: "../fields.yaml#/$defs/Text"
   dateOfBirth:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Date"
+    $ref: "../fields.yaml#/$defs/Date"
   birthCity:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Text"
+    $ref: "../fields.yaml#/$defs/Text"
   birthCountry:
-    oneOf:
-      - type: "null"
-      - $ref: "country.yaml"
+    $ref: "country.yaml"
   actors:
     type: array
     items:

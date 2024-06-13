@@ -6,19 +6,13 @@ allOf:
   - $ref: "../bases.yaml#/$defs/CudFields"
 required:
   - handle
-  - title
-  - description
   - weight
 properties:
   handle:
     $ref: "../fields.yaml#/$defs/Handle"
   title:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Text"
+    $ref: "../fields.yaml#/$defs/Text"
   description:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Text"
+    $ref: "../fields.yaml#/$defs/Text"
   weight:
     $ref: "../fields.yaml#/$defs/PositiveInteger"

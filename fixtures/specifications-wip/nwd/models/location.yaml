@@ -6,36 +6,18 @@ allOf:
   - $ref: "../bases.yaml#/$defs/CudFields"
 required:
   - handle
-  - name
-  - websiteUrl
-  - shortDescription
-  - logo
-  - logoSquare
-  - logoCertificate
 properties:
   handle:
     $ref: "../fields.yaml#/$defs/Handle"
   name:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Text"
+    $ref: "../fields.yaml#/$defs/Text"
   websiteUrl:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Url"
+    $ref: "../fields.yaml#/$defs/Url"
   shortDescription:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Text"
+    $ref: "../fields.yaml#/$defs/Text"
   logo:
-    oneOf:
-      - type: "null"
-      - $ref: "image.yaml"
+    $ref: "image.yaml"
   logoSquare:
-    oneOf:
-      - type: "null"
-      - $ref: "image.yaml"
+    $ref: "image.yaml"
   logoCertificate:
-    oneOf:
-      - type: "null"
-      - $ref: "image.yaml"
+    $ref: "image.yaml"

@@ -7,7 +7,6 @@ allOf:
 required:
   - type
   - locationId
-  - personId
 properties:
   type:
     enum:
@@ -19,6 +18,4 @@ properties:
   locationId:
     $ref: "../fields.yaml#/$defs/Id"
   personId:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Id"
+    $ref: "../fields.yaml#/$defs/Id"

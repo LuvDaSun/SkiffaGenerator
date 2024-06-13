@@ -5,15 +5,12 @@ allOf:
   - $ref: "../bases.yaml#/$defs/IdContainer"
   - $ref: "../bases.yaml#/$defs/CudFields"
 required:
-  - startedAt
   - programId
   - revision
   - modules
 properties:
   startedAt:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Date"
+    $ref: "../fields.yaml#/$defs/Date"
   programId:
     $ref: "../fields.yaml#/$defs/Id"
   revision:

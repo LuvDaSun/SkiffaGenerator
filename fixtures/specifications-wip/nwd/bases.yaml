@@ -14,16 +14,13 @@ $defs:
     required:
       - createdAt
       - updatedAt
-      - deletedAt
     properties:
       createdAt:
         $ref: "fields.yaml#/$defs/Date"
       updatedAt:
         $ref: "fields.yaml#/$defs/Date"
       deletedAt:
-        oneOf:
-          - type: null
-          - $ref: "fields.yaml#/$defs/Date"
+        $ref: "fields.yaml#/$defs/Date"
 
   CuFields:
     type: object

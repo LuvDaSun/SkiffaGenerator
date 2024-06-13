@@ -4,20 +4,16 @@ type: object
 required:
   - email
   - firstName
-  - lastNamePrefix
   - lastName
   - dateOfBirth
   - birthCity
-  - birthCountry
 properties:
   email:
     $ref: "../fields.yaml#/$defs/Email"
   firstName:
     $ref: "../fields.yaml#/$defs/Text"
   lastNamePrefix:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Text"
+    $ref: "../fields.yaml#/$defs/Text"
   lastName:
     $ref: "../fields.yaml#/$defs/Text"
   dateOfBirth:
@@ -25,6 +21,4 @@ properties:
   birthCity:
     $ref: "../fields.yaml#/$defs/Text"
   birthCountry:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Code"
+    $ref: "../fields.yaml#/$defs/Code"

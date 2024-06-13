@@ -7,18 +7,12 @@ allOf:
 required:
   - handle
   - studentCurriculumId
-  - issuedAt
-  - visibleFrom
 properties:
   handle:
     $ref: "../fields.yaml#/$defs/Handle"
   studentCurriculumId:
     $ref: "../fields.yaml#/$defs/Id"
   issuedAt:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Date"
+    $ref: "../fields.yaml#/$defs/Date"
   visibleFrom:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Date"
+    $ref: "../fields.yaml#/$defs/Date"

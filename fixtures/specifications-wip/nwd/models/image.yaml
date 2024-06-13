@@ -8,12 +8,8 @@ required:
   - name
   - url
   - type
-  - alt
-  - mimeType
   - size
   - transformUrl
-  - width
-  - height
 properties:
   name:
     $ref: "../fields.yaml#/$defs/Text"
@@ -23,22 +19,14 @@ properties:
     enum:
       - image
   alt:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/Text"
+    $ref: "../fields.yaml#/$defs/Text"
   mimeType:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/MimeType"
+    $ref: "../fields.yaml#/$defs/MimeType"
   size:
     $ref: "../fields.yaml#/$defs/PositiveInteger"
   transformUrl:
     $ref: "../fields.yaml#/$defs/Url"
   width:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/PositiveInteger"
+    $ref: "../fields.yaml#/$defs/PositiveInteger"
   height:
-    oneOf:
-      - type: "null"
-      - $ref: "../fields.yaml#/$defs/PositiveInteger"
+    $ref: "../fields.yaml#/$defs/PositiveInteger"
