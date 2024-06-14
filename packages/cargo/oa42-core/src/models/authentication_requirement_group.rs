@@ -2,7 +2,6 @@ use super::{AuthenticationRequirement, AuthenticationRequirementContainer};
 use std::rc;
 use wasm_bindgen::prelude::*;
 
-#[derive(Clone)]
 pub struct AuthenticationRequirementGroup {
   pub requirements: Vec<rc::Rc<AuthenticationRequirement>>,
 }

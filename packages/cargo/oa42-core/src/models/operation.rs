@@ -6,7 +6,6 @@ use crate::utils::NodeLocation;
 use std::rc;
 use wasm_bindgen::prelude::*;
 
-#[derive(Clone)]
 pub struct Operation {
   pub location: NodeLocation,
   pub method: Method,

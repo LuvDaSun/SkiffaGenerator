@@ -1,7 +1,6 @@
 use std::rc;
 use wasm_bindgen::prelude::*;
 
-#[derive(Clone)]
 pub struct AuthenticationRequirement {
   pub authentication_name: String,
   pub scopes: Vec<String>,

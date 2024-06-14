@@ -3,7 +3,6 @@ use crate::utils::NodeLocation;
 use std::rc;
 use wasm_bindgen::prelude::*;
 
-#[derive(Clone)]
 pub struct Path {
   pub id: usize,
   pub location: NodeLocation,

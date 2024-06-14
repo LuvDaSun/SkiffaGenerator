@@ -1,7 +1,6 @@
 use std::rc;
 use wasm_bindgen::prelude::*;
 
-#[derive(Clone)]
 pub struct Authentication {
   pub name: String,
   pub r#type: String,

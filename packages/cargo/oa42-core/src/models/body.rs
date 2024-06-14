@@ -2,7 +2,6 @@ use crate::utils::NodeLocation;
 use std::rc;
 use wasm_bindgen::prelude::*;
 
-#[derive(Clone)]
 pub struct Body {
   pub location: NodeLocation,
   pub content_type: String,
