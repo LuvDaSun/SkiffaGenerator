@@ -13,7 +13,7 @@ pub struct AuthenticationRequirementGroupContainer(rc::Rc<AuthenticationRequirem
 
 #[wasm_bindgen]
 impl AuthenticationRequirementGroupContainer {
-  #[wasm_bindgen(getter = requirements)]
+  #[wasm_bindgen(getter, js_name = "requirements")]
   pub fn requirements(&self) -> Vec<AuthenticationRequirementContainer> {
     self
       .0

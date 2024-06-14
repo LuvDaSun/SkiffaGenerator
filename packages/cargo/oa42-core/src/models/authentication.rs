@@ -15,22 +15,22 @@ pub struct AuthenticationContainer(rc::Rc<Authentication>);
 
 #[wasm_bindgen]
 impl AuthenticationContainer {
-  #[wasm_bindgen(getter = name)]
+  #[wasm_bindgen(getter, js_name = "name")]
   pub fn name(&self) -> String {
     self.0.name.clone()
   }
 
-  #[wasm_bindgen(getter = parameterType)]
-  pub fn parameter_type(&self) -> String {
+  #[wasm_bindgen(getter, js_name = "type")]
+  pub fn r#type(&self) -> String {
     self.0.r#type.clone()
   }
 
-  #[wasm_bindgen(getter = parameterIn)]
-  pub fn parameter_in(&self) -> Option<String> {
+  #[wasm_bindgen(getter, js_name = "in")]
+  pub fn r#in(&self) -> Option<String> {
     self.0.r#in.clone()
   }
 
-  #[wasm_bindgen(getter = scheme)]
+  #[wasm_bindgen(getter, js_name = "scheme")]
   pub fn scheme(&self) -> Option<String> {
     self.0.scheme.clone()
   }

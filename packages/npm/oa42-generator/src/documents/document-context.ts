@@ -1,4 +1,3 @@
-import { NodeLocation } from "@oa42/core";
 import { DocumentBase } from "./document-base.js";
 
 export interface DocumentConfiguration {
@@ -10,7 +9,7 @@ export interface DocumentConfiguration {
 }
 
 export interface DocumentInitializer<N = unknown> {
-  documentLocation: NodeLocation;
+  documentLocation: string;
   documentNode: N;
   configuration: DocumentConfiguration;
 }

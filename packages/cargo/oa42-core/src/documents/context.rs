@@ -180,17 +180,17 @@ pub struct DocumentSchemaContainer(rc::Rc<DocumentSchema>);
 
 #[wasm_bindgen]
 impl DocumentSchemaContainer {
-  #[wasm_bindgen(getter = schemaLocation)]
+  #[wasm_bindgen(getter, js_name = "schemaLocation")]
   pub fn schema_location(&self) -> String {
     self.0.schema_location.to_string()
   }
 
-  #[wasm_bindgen(getter = documentLocation)]
+  #[wasm_bindgen(getter, js_name = "documentLocation")]
   pub fn document_location(&self) -> String {
     self.0.document_location.to_string()
   }
 
-  #[wasm_bindgen(getter = defaultSchemaId)]
+  #[wasm_bindgen(getter, js_name = "defaultSchemaId")]
   pub fn default_schema_id(&self) -> String {
     self.0.default_schema_id.clone()
   }

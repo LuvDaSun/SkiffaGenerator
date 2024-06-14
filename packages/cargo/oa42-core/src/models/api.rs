@@ -16,12 +16,12 @@ pub struct ApiContainer(rc::Rc<Api>);
 
 #[wasm_bindgen]
 impl ApiContainer {
-  #[wasm_bindgen(getter = location)]
+  #[wasm_bindgen(getter, js_name = "location")]
   pub fn location(&self) -> String {
     self.0.location.to_string()
   }
 
-  #[wasm_bindgen(getter = paths)]
+  #[wasm_bindgen(getter, js_name = "paths")]
   pub fn paths(&self) -> Vec<PathContainer> {
     self
       .0
@@ -32,7 +32,7 @@ impl ApiContainer {
       .collect()
   }
 
-  #[wasm_bindgen(getter = authentication)]
+  #[wasm_bindgen(getter, js_name = "authentication")]
   pub fn authentication(&self) -> Vec<AuthenticationContainer> {
     self
       .0

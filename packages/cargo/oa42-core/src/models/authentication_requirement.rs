@@ -13,12 +13,12 @@ pub struct AuthenticationRequirementContainer(rc::Rc<AuthenticationRequirement>)
 
 #[wasm_bindgen]
 impl AuthenticationRequirementContainer {
-  #[wasm_bindgen(getter = authenticationName)]
+  #[wasm_bindgen(getter, js_name = "authenticationName")]
   pub fn authentication_name(&self) -> String {
     self.0.authentication_name.clone()
   }
 
-  #[wasm_bindgen(getter = scopes)]
+  #[wasm_bindgen(getter, js_name = "scopes")]
   pub fn scopes(&self) -> Vec<String> {
     self.0.scopes.clone()
   }

@@ -1,7 +1,5 @@
-import { NodeLocation } from "@oa42/core";
-
 export interface Parameter {
-  location: NodeLocation;
+  location: string;
   name: string;
   required: boolean;
   schemaId?: string;

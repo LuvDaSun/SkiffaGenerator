@@ -1,7 +1,5 @@
-import { NodeLocation } from "@oa42/core";
-
 export interface Body {
-  location: NodeLocation;
+  location: string;
   contentType: string;
   schemaId?: string;
   mockable: boolean;

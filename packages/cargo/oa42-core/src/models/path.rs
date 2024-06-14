@@ -17,22 +17,22 @@ pub struct PathContainer(rc::Rc<Path>);
 
 #[wasm_bindgen]
 impl PathContainer {
-  #[wasm_bindgen(getter = id)]
+  #[wasm_bindgen(getter, js_name = "id")]
   pub fn id(&self) -> usize {
     self.0.id
   }
 
-  #[wasm_bindgen(getter = location)]
+  #[wasm_bindgen(getter, js_name = "location")]
   pub fn location(&self) -> String {
     self.0.location.to_string()
   }
 
-  #[wasm_bindgen(getter = pattern)]
+  #[wasm_bindgen(getter, js_name = "pattern")]
   pub fn pattern(&self) -> String {
     self.0.pattern.clone()
   }
 
-  #[wasm_bindgen(getter = operations)]
+  #[wasm_bindgen(getter, js_name = "operations")]
   pub fn operations(&self) -> Vec<OperationContainer> {
     self
       .0

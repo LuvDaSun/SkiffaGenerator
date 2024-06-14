@@ -17,27 +17,27 @@ pub struct ParameterContainer(rc::Rc<Parameter>);
 
 #[wasm_bindgen]
 impl ParameterContainer {
-  #[wasm_bindgen(getter = location)]
+  #[wasm_bindgen(getter, js_name = "location")]
   pub fn location(&self) -> String {
     self.0.location.to_string()
   }
 
-  #[wasm_bindgen(getter = name)]
+  #[wasm_bindgen(getter, js_name = "name")]
   pub fn name(&self) -> String {
     self.0.name.clone()
   }
 
-  #[wasm_bindgen(getter = required)]
+  #[wasm_bindgen(getter, js_name = "required")]
   pub fn required(&self) -> bool {
     self.0.required
   }
 
-  #[wasm_bindgen(getter = schemaId)]
+  #[wasm_bindgen(getter, js_name = "schemaId")]
   pub fn schema_id(&self) -> Option<String> {
     Some(self.0.schema_id.as_ref()?.to_string())
   }
 
-  #[wasm_bindgen(getter = mockable)]
+  #[wasm_bindgen(getter, js_name = "mockable")]
   pub fn mockable(&self) -> bool {
     self.0.mockable
   }

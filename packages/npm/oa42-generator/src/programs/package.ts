@@ -91,9 +91,9 @@ async function main(options: MainOptions) {
   const oa42Context = new oa42Core.DocumentContextContainer();
   oa42Context.registerWellKnownFactories();
 
-  await oa42Context.loadFromLocation(oa42Core.NodeLocation.parse(specificationLocation));
+  await oa42Context.loadFromLocation(specificationLocation);
 
-  const apiModel = oa42Context.getApiModel(oa42Core.NodeLocation.parse(specificationLocation));
+  const apiModel = oa42Context.getApiModel(specificationLocation);
   assert(apiModel != null);
 
   for (const documentSchema of oa42Context.getSchemas()) {

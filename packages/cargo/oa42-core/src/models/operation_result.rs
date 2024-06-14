@@ -20,32 +20,32 @@ pub struct OperationResultContainer(rc::Rc<OperationResult>);
 
 #[wasm_bindgen]
 impl OperationResultContainer {
-  #[wasm_bindgen(getter = location)]
+  #[wasm_bindgen(getter, js_name = "location")]
   pub fn location(&self) -> String {
     self.0.location.to_string()
   }
 
-  #[wasm_bindgen(getter = description)]
+  #[wasm_bindgen(getter, js_name = "description")]
   pub fn description(&self) -> Option<String> {
     self.0.description.clone()
   }
 
-  #[wasm_bindgen(getter = statusKind)]
+  #[wasm_bindgen(getter, js_name = "statusKind")]
   pub fn status_kind(&self) -> String {
     self.0.status_kind.clone()
   }
 
-  #[wasm_bindgen(getter = statusCodes)]
+  #[wasm_bindgen(getter, js_name = "statusCodes")]
   pub fn status_codes(&self) -> Vec<usize> {
     self.0.status_codes.clone()
   }
 
-  #[wasm_bindgen(getter = mockable)]
+  #[wasm_bindgen(getter, js_name = "mockable")]
   pub fn mockable(&self) -> bool {
     self.0.mockable
   }
 
-  #[wasm_bindgen(getter = headerParameters)]
+  #[wasm_bindgen(getter, js_name = "headerParameters")]
   pub fn header_parameters(&self) -> Vec<ParameterContainer> {
     self
       .0
@@ -56,7 +56,7 @@ impl OperationResultContainer {
       .collect()
   }
 
-  #[wasm_bindgen(getter = bodies)]
+  #[wasm_bindgen(getter, js_name = "bodies")]
   pub fn bodies(&self) -> Vec<BodyContainer> {
     self
       .0

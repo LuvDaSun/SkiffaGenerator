@@ -1,7 +1,7 @@
 import { Router } from "goodrouter";
 
 export interface Api {
-  // location: NodeLocation;
+  // location: string;
   // paths: Array<Path>;
   // authentication: Array<Authentication>;
   router: Router<number>;
