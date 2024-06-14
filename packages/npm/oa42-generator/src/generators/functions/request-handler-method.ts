@@ -46,7 +46,7 @@ function* generateOperationCaseClauses(pathModel: oa42Core.PathContainer) {
     const endpointHandlerName = getEndpointHandlerName(operationModel);
 
     yield itt`
-      case ${JSON.stringify(oa42Core.Method[operationModel.method].toUpperCase())}:
+      case ${JSON.stringify(operationModel.method.toUpperCase())}:
         return this.${endpointHandlerName}(
           pathParameters,
           serverIncomingRequest,

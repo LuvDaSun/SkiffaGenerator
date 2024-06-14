@@ -296,7 +296,7 @@ function* generateBody(
   yield itt`
       const requestInit: RequestInit = {
         headers: requestHeaders,
-        method: ${JSON.stringify(oa42Core.Method[operationModel.method].toUpperCase())},
+        method: ${JSON.stringify(operationModel.method.toUpperCase())},
         redirect: "manual",
         body,
       };
