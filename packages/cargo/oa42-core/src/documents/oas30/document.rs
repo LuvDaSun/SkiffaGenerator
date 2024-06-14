@@ -325,7 +325,6 @@ impl Document {
       })
       .collect::<Result<Vec<_>, DocumentError>>()?;
 
-    // TODO make status kind an enum and support it properly (default last)
     operation_results.sort_by_key(|operation_result| operation_result.status_kind);
 
     Ok(models::Operation {
@@ -355,7 +354,7 @@ impl Document {
   ) -> Result<models::OperationResult, DocumentError> {
     let status_codes = status_kind
       .into_iter()
-      .filter(|value| !status_codes_available.remove(value))
+      .filter(|value| status_codes_available.remove(value))
       .collect();
 
     let header_parameters = operation_result_node
