@@ -3,7 +3,7 @@ use crate::{
   documents::{DocumentContext, DocumentError, DocumentInterface},
   models,
 };
-use std::rc::Weak;
+use std::rc;
 
 #[allow(dead_code)]
 pub struct Document {
@@ -12,7 +12,7 @@ pub struct Document {
 }
 
 impl Document {
-  pub fn new(context: Weak<DocumentContext>, retrieval_location: NodeLocation) -> Self {
+  pub fn new(context: rc::Weak<DocumentContext>, retrieval_location: NodeLocation) -> Self {
     let context = context.upgrade().unwrap();
     let node = context.get_node(&retrieval_location).unwrap();
     Self {
@@ -31,7 +31,7 @@ impl DocumentInterface for Document {
     self.retrieval_location.clone()
   }
 
-  fn get_api_model(&self) -> Result<models::ApiContainer, DocumentError> {
+  fn get_api_model(&self) -> Result<rc::Rc<models::Api>, DocumentError> {
     todo!()
   }
 

@@ -4,6 +4,7 @@ use crate::{
   documents::{DocumentContext, DocumentError, DocumentInterface},
   models,
 };
+use std::collections::BTreeSet;
 use std::{iter, rc};
 
 pub struct Document {
@@ -106,11 +107,11 @@ impl DocumentInterface for Document {
     self.retrieval_location.clone()
   }
 
-  fn get_api_model(&self) -> Result<models::ApiContainer, DocumentError> {
+  fn get_api_model(&self) -> Result<rc::Rc<models::Api>, DocumentError> {
     let api_location = self.retrieval_location.clone();
     let api_node = self.get_node(&api_location)?;
 
-    self.make_api_model(api_location, api_node)
+    self.make_api_model(api_location, api_node).map(rc::Rc::new)
   }
 
   fn get_referenced_locations(&self) -> Result<Vec<NodeLocation>, DocumentError> {
@@ -137,7 +138,7 @@ impl Document {
     &self,
     api_location: NodeLocation,
     api_node: nodes::Api,
-  ) -> Result<models::ApiContainer, DocumentError> {
+  ) -> Result<models::Api, DocumentError> {
     let paths = api_node
       .paths()
       .into_iter()
@@ -148,20 +149,19 @@ impl Document {
         let id = index + 1;
         let location = api_location.push_pointer(pointer);
         let (location, node) = self.dereference(&location, node)?;
-        self.make_path_model(location, node, id, pattern)
+        self
+          .make_path_model(location, node, id, pattern)
+          .map(rc::Rc::new)
       })
       .collect::<Result<_, DocumentError>>()?;
 
     let authentication = Vec::new(); // TODO
 
-    Ok(
-      models::Api {
-        location: api_location.clone(),
-        paths,
-        authentication,
-      }
-      .into(),
-    )
+    Ok(models::Api {
+      location: api_location.clone(),
+      paths,
+      authentication,
+    })
   }
 
   fn make_path_model(
@@ -170,7 +170,7 @@ impl Document {
     path_node: nodes::Path,
     id: usize,
     pattern: String,
-  ) -> Result<models::PathContainer, DocumentError> {
+  ) -> Result<models::Path, DocumentError> {
     let operations = path_node
       .operations()
       .into_iter()
@@ -178,25 +178,24 @@ impl Document {
       .map(|(pointer, node)| {
         let method = pointer.last().unwrap().as_str().try_into()?;
         let location = path_location.push_pointer(pointer);
-        self.make_operation_model(
-          path_location.clone(),
-          path_node.clone(),
-          location,
-          node,
-          method,
-        )
+        self
+          .make_operation_model(
+            path_location.clone(),
+            path_node.clone(),
+            location,
+            node,
+            method,
+          )
+          .map(rc::Rc::new)
       })
       .collect::<Result<_, DocumentError>>()?;
 
-    Ok(
-      models::Path {
-        id,
-        location: path_location.clone(),
-        pattern,
-        operations,
-      }
-      .into(),
-    )
+    Ok(models::Path {
+      id,
+      location: path_location.clone(),
+      pattern,
+      operations,
+    })
   }
 
   fn make_operation_model(
@@ -206,7 +205,8 @@ impl Document {
     operation_location: NodeLocation,
     operation_node: nodes::Operation,
     method: models::Method,
-  ) -> Result<models::OperationContainer, DocumentError> {
+  ) -> Result<models::Operation, DocumentError> {
+    let mut status_codes_available = BTreeSet::new();
     let authentication_requirements = Vec::new(); // TODO
 
     let all_parameter_nodes = iter::empty()
@@ -236,7 +236,11 @@ impl Document {
       .iter()
       .filter_map(|(location, node)| {
         if node.r#in()? == "cookie" {
-          Some(self.make_parameter_model_request(location.clone(), node.clone()))
+          Some(
+            self
+              .make_parameter_model_request(location.clone(), node.clone())
+              .map(rc::Rc::new),
+          )
         } else {
           None
         }
@@ -247,7 +251,11 @@ impl Document {
       .iter()
       .filter_map(|(location, node)| {
         if node.r#in()? == "header" {
-          Some(self.make_parameter_model_request(location.clone(), node.clone()))
+          Some(
+            self
+              .make_parameter_model_request(location.clone(), node.clone())
+              .map(rc::Rc::new),
+          )
         } else {
           None
         }
@@ -258,7 +266,11 @@ impl Document {
       .iter()
       .filter_map(|(location, node)| {
         if node.r#in()? == "path" {
-          Some(self.make_parameter_model_request(location.clone(), node.clone()))
+          Some(
+            self
+              .make_parameter_model_request(location.clone(), node.clone())
+              .map(rc::Rc::new),
+          )
         } else {
           None
         }
@@ -269,7 +281,11 @@ impl Document {
       .iter()
       .filter_map(|(location, node)| {
         if node.r#in()? == "query" {
-          Some(self.make_parameter_model_request(location.clone(), node.clone()))
+          Some(
+            self
+              .make_parameter_model_request(location.clone(), node.clone())
+              .map(rc::Rc::new),
+          )
         } else {
           None
         }
@@ -283,11 +299,13 @@ impl Document {
       .map(|(pointer, node)| {
         let content_type = pointer.last().unwrap().clone();
         let location = operation_location.push_pointer(pointer);
-        self.make_body_model(location, node.clone(), content_type)
+        self
+          .make_body_model(location, node.clone(), content_type)
+          .map(rc::Rc::new)
       })
       .collect::<Result<_, DocumentError>>()?;
 
-    let operation_results = operation_node
+    let mut operation_results = operation_node
       .operation_results()
       .into_iter()
       .flatten()
@@ -295,29 +313,36 @@ impl Document {
         let status_kind = pointer.last().unwrap().clone();
         let location = path_location.push_pointer(pointer);
         let (location, node) = self.dereference(&location, node)?;
-        self.make_operation_result_model(location, node.clone(), status_kind)
+        self
+          .make_operation_result_model(
+            location,
+            node.clone(),
+            status_kind,
+            &mut status_codes_available,
+          )
+          .map(rc::Rc::new)
       })
-      .collect::<Result<_, DocumentError>>()?;
+      .collect::<Result<Vec<_>, DocumentError>>()?;
 
-    Ok(
-      models::Operation {
-        location: operation_location.clone(),
-        name: operation_node.name().map(Into::into).unwrap(),
-        summary: operation_node.summary().map(Into::into),
-        description: operation_node.description().map(Into::into),
-        deprecated: operation_node.deprecated().unwrap_or(false),
-        method,
-        mockable: false, // TODO
-        authentication_requirements,
-        cookie_parameters,
-        header_parameters,
-        path_parameters,
-        query_parameters,
-        bodies,
-        operation_results,
-      }
-      .into(),
-    )
+    // TODO make status kind an enum and support it properly (default last)
+    operation_results.sort_by_key(|operation_result| operation_result.status_kind.clone());
+
+    Ok(models::Operation {
+      location: operation_location.clone(),
+      name: operation_node.name().map(Into::into).unwrap(),
+      summary: operation_node.summary().map(Into::into),
+      description: operation_node.description().map(Into::into),
+      deprecated: operation_node.deprecated().unwrap_or(false),
+      method,
+      mockable: false, // TODO
+      authentication_requirements,
+      cookie_parameters,
+      header_parameters,
+      path_parameters,
+      query_parameters,
+      bodies,
+      operation_results,
+    })
   }
 
   fn make_operation_result_model(
@@ -325,7 +350,12 @@ impl Document {
     operation_result_location: NodeLocation,
     operation_result_node: nodes::OperationResult,
     status_kind: String,
-  ) -> Result<models::OperationResultContainer, DocumentError> {
+    _status_codes_available: &mut BTreeSet<usize>,
+  ) -> Result<models::OperationResult, DocumentError> {
+    let status_codes = Vec::new();
+
+    // TODO populate status_codes
+
     let header_parameters = operation_result_node
       .response_headers()
       .into_iter()
@@ -334,7 +364,9 @@ impl Document {
         let name = pointer.last().unwrap().clone();
         let location = operation_result_location.push_pointer(pointer);
         let (location, node) = self.dereference(&location, node)?;
-        self.make_parameter_model_response(location, node, name)
+        self
+          .make_parameter_model_response(location, node, name)
+          .map(rc::Rc::new)
       })
       .collect::<Result<_, DocumentError>>()?;
 
@@ -345,22 +377,21 @@ impl Document {
       .map(|(pointer, node)| {
         let content_type = pointer.last().unwrap().clone();
         let location = operation_result_location.push_pointer(pointer);
-        self.make_body_model(location, node.clone(), content_type)
+        self
+          .make_body_model(location, node.clone(), content_type)
+          .map(rc::Rc::new)
       })
       .collect::<Result<_, DocumentError>>()?;
 
-    Ok(
-      models::OperationResult {
-        location: operation_result_location.clone(),
-        description: operation_result_node.description().map(Into::into),
-        status_kind,
-        status_codes: Vec::new(),
-        mockable: false,
-        header_parameters,
-        bodies,
-      }
-      .into(),
-    )
+    Ok(models::OperationResult {
+      location: operation_result_location.clone(),
+      description: operation_result_node.description().map(Into::into),
+      status_kind,
+      status_codes,
+      mockable: false,
+      header_parameters,
+      bodies,
+    })
   }
 
   fn make_body_model(
@@ -368,41 +399,35 @@ impl Document {
     body_location: NodeLocation,
     body_node: nodes::Body,
     content_type: String,
-  ) -> Result<models::BodyContainer, DocumentError> {
+  ) -> Result<models::Body, DocumentError> {
     let schema_id = body_node
       .schema_pointer()
       .map(|pointer| body_location.push_pointer(pointer));
 
-    Ok(
-      models::Body {
-        location: body_location.clone(),
-        content_type,
-        mockable: false,
-        schema_id,
-      }
-      .into(),
-    )
+    Ok(models::Body {
+      location: body_location.clone(),
+      content_type,
+      mockable: false,
+      schema_id,
+    })
   }
 
   fn make_parameter_model_request(
     &self,
     parameter_location: NodeLocation,
     parameter_node: nodes::RequestParameter,
-  ) -> Result<models::ParameterContainer, DocumentError> {
+  ) -> Result<models::Parameter, DocumentError> {
     let schema_id = parameter_node
       .schema_pointer()
       .map(|pointer| parameter_location.push_pointer(pointer));
 
-    Ok(
-      models::Parameter {
-        location: parameter_location.clone(),
-        name: parameter_node.name().map(Into::into).unwrap(),
-        required: parameter_node.required().unwrap_or(false),
-        mockable: false,
-        schema_id,
-      }
-      .into(),
-    )
+    Ok(models::Parameter {
+      location: parameter_location.clone(),
+      name: parameter_node.name().map(Into::into).unwrap(),
+      required: parameter_node.required().unwrap_or(false),
+      mockable: false,
+      schema_id,
+    })
   }
 
   fn make_parameter_model_response(
@@ -410,21 +435,18 @@ impl Document {
     header_location: NodeLocation,
     header_node: nodes::ResponseHeader,
     name: String,
-  ) -> Result<models::ParameterContainer, DocumentError> {
+  ) -> Result<models::Parameter, DocumentError> {
     let schema_id = header_node
       .schema_pointer()
       .map(|pointer| header_location.push_pointer(pointer));
 
-    Ok(
-      models::Parameter {
-        location: header_location.clone(),
-        name,
-        required: header_node.required().unwrap_or(false),
-        mockable: false,
-        schema_id,
-      }
-      .into(),
-    )
+    Ok(models::Parameter {
+      location: header_location.clone(),
+      name,
+      required: header_node.required().unwrap_or(false),
+      mockable: false,
+      schema_id,
+    })
   }
 }
 

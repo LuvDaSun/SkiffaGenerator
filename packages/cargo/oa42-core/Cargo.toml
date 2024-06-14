@@ -25,7 +25,6 @@ semver = "1.0.23"
 wasm-bindgen = "0.2.92"
 wasm-bindgen-futures = "0.4.42"
 gloo = "0.11.0"
-oa42-macros = { path = "../oa42-macros" }
 
 [target.'cfg(not(target_os = "unknown"))'.dependencies]
 surf = "2.3.2"

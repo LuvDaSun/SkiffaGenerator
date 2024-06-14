@@ -185,7 +185,7 @@ impl From<serde_yaml::Error> for NodeCacheError {
   }
 }
 
-#[cfg(not(target_os = "unknown"))]
+#[cfg(not(target_arch = "wasm32"))]
 #[cfg(test)]
 mod tests {
   use super::*;
@@ -194,24 +194,26 @@ mod tests {
   async fn test_load_from_location() {
     let mut cache = NodeCache::new();
 
-    let location: NodeLocation = "../../../fixtures/specifications/nwd.yaml".parse().unwrap();
+    let location: NodeLocation = "../../../fixtures/specification/nwd.yaml".parse().unwrap();
 
     cache.load_from_location(&location).await.unwrap();
 
     cache.get_node(&location).unwrap();
 
     cache
-      .get_node(&location.set_pointer(vec!["paths".into(), "/me".into()]))
+      .get_node(&location.set_pointer(vec!["definitions".into(), "main-category".into()]))
       .unwrap();
 
     let node = cache
       .get_node(&location.set_pointer(vec![
-        "paths".into(),
-        "/me".into(),
-        "get".into(),
-        "operationId".into(),
+        "definitions".into(),
+        "main-category".into(),
+        "description".into(),
       ]))
       .unwrap();
-    assert_eq!(*node, serde_json::Value::String("me".into()));
+    assert_eq!(
+      *node,
+      serde_json::Value::String("Full main category entity".into())
+    );
   }
 }

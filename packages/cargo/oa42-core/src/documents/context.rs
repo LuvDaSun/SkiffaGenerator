@@ -85,7 +85,8 @@ impl DocumentContextContainer {
 
   #[wasm_bindgen(js_name = "loadFromLocation")]
   #[allow(clippy::await_holding_refcell_ref)]
-  pub async fn load_from_location(&self, retrieval_location: NodeLocation) -> Result<(), Error> {
+  pub async fn load_from_location(&self, retrieval_location: &str) -> Result<(), Error> {
+    let retrieval_location = retrieval_location.parse().unwrap();
     let mut queue = Vec::new();
     queue.push(retrieval_location);
 
@@ -135,12 +136,13 @@ impl DocumentContextContainer {
   }
 
   #[wasm_bindgen(js_name = "getApiModel")]
-  pub fn get_api_model(&self, retrieval_location: &NodeLocation) -> Option<models::ApiContainer> {
+  pub fn get_api_model(&self, retrieval_location: &str) -> Option<models::ApiContainer> {
+    let retrieval_location = retrieval_location.parse().unwrap();
     let documents = self.0.documents.borrow();
-    let document = documents.get(retrieval_location)?;
+    let document = documents.get(&retrieval_location)?;
     let api_model = document.get_api_model().unwrap();
 
-    Some(api_model)
+    Some(api_model.into())
   }
 
   #[wasm_bindgen(js_name = "getSchemas")]
@@ -154,11 +156,11 @@ impl DocumentContextContainer {
           .into_iter()
           .flatten()
           .map(|schema_location| {
-            DocumentSchema {
+            rc::Rc::new(DocumentSchema {
               schema_location,
               document_location: document.get_document_location(),
               default_schema_id: document.get_default_schema_id(),
-            }
+            })
             .into()
           })
       })
@@ -166,11 +168,38 @@ impl DocumentContextContainer {
   }
 }
 
-#[oa42_macros::model_container]
 pub struct DocumentSchema {
   pub schema_location: NodeLocation,
   pub document_location: NodeLocation,
   pub default_schema_id: String,
+}
+
+#[wasm_bindgen]
+#[derive(Clone)]
+pub struct DocumentSchemaContainer(rc::Rc<DocumentSchema>);
+
+#[wasm_bindgen]
+impl DocumentSchemaContainer {
+  #[wasm_bindgen(getter = schemaLocation)]
+  pub fn schema_location(&self) -> String {
+    self.0.schema_location.to_string()
+  }
+
+  #[wasm_bindgen(getter = documentLocation)]
+  pub fn document_location(&self) -> String {
+    self.0.document_location.to_string()
+  }
+
+  #[wasm_bindgen(getter = defaultSchemaId)]
+  pub fn default_schema_id(&self) -> String {
+    self.0.default_schema_id.clone()
+  }
+}
+
+impl From<rc::Rc<DocumentSchema>> for DocumentSchemaContainer {
+  fn from(interior: rc::Rc<DocumentSchema>) -> Self {
+    Self(interior)
+  }
 }
 
 #[cfg(not(target_os = "unknown"))]
@@ -183,14 +212,12 @@ mod tests {
     let context = DocumentContextContainer::default();
     context.register_well_known_factories();
 
-    let location: NodeLocation = "../../../fixtures/specifications/echo.yaml"
-      .parse()
-      .unwrap();
+    let location = "../../../fixtures/specifications/echo.yaml";
 
-    context.load_from_location(location.clone()).await.unwrap();
-    let api = context.get_api_model(&location).unwrap();
+    context.load_from_location(location).await.unwrap();
+    let api = context.get_api_model(location).unwrap();
 
-    assert_eq!(api.location(), location);
+    assert_eq!(api.location(), location.to_string());
 
     for path in api.paths() {
       assert!(path.id() > 0);

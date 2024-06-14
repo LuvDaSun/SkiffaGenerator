@@ -32,10 +32,6 @@
       "name": "cargo/oa42-core",
       "path": "packages/cargo/oa42-core",
     },
-    {
-      "name": "cargo/oa42-macros",
-      "path": "packages/cargo/oa42-macros",
-    },
   ],
   "settings": {
     "window.title": "OpenApi42",
