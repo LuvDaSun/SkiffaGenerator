@@ -11,6 +11,7 @@ pub enum Error {
   NotFound,
   ParseLocationFailed,
   ParseMethodFailed,
+  ParseStatusKindFailed,
   DocumentTypeError,
   FetchError,
   SerializationError,
@@ -26,6 +27,7 @@ impl Display for Error {
       Self::NotFound => write!(f, "NotFound"),
       Self::ParseLocationFailed => write!(f, "ParseLocationFailed"),
       Self::ParseMethodFailed => write!(f, "ParseMethodFailed"),
+      Self::ParseStatusKindFailed => write!(f, "ParseStatusKindFailed"),
       Self::DocumentTypeError => write!(f, "DocumentTypeError"),
       Self::FetchError => write!(f, "FetchError"),
       Self::SerializationError => write!(f, "SerializationError"),
@@ -63,6 +65,7 @@ impl From<DocumentError> for Error {
       DocumentError::NodeNotFound => Self::NotFound,
       DocumentError::ParseLocationFailed => Self::ParseLocationFailed,
       DocumentError::ParseMethodFailed => Self::ParseMethodFailed,
+      DocumentError::ParseStatusKindFailed => Self::ParseStatusKindFailed,
     }
   }
 }

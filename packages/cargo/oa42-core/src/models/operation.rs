@@ -35,8 +35,8 @@ impl OperationContainer {
   }
 
   #[wasm_bindgen(getter, js_name = "method")]
-  pub fn method(&self) -> Method {
-    self.0.method.clone()
+  pub fn method(&self) -> String {
+    self.0.method.to_string()
   }
 
   #[wasm_bindgen(getter, js_name = "name")]

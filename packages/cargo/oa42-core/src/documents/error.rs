@@ -1,4 +1,4 @@
-use crate::models::MethodParseError;
+use crate::models::{MethodParseError, StatusKindParseError};
 use crate::utils::ParseLocationError;
 use std::fmt::Display;
 use wasm_bindgen::prelude::*;
@@ -10,6 +10,7 @@ pub enum DocumentError {
   NodeNotFound,
   ParseLocationFailed,
   ParseMethodFailed,
+  ParseStatusKindFailed,
 }
 
 impl std::error::Error for DocumentError {}
@@ -21,6 +22,7 @@ impl Display for DocumentError {
       Self::NodeNotFound => write!(f, "NodeNotFound"),
       Self::ParseLocationFailed => write!(f, "ParseLocationFailed"),
       Self::ParseMethodFailed => write!(f, "ParseMethodFailed"),
+      Self::ParseStatusKindFailed => write!(f, "ParseStatusKindFailed"),
     }
   }
 }
@@ -34,5 +36,11 @@ impl From<ParseLocationError> for DocumentError {
 impl From<MethodParseError> for DocumentError {
   fn from(_value: MethodParseError) -> Self {
     Self::ParseMethodFailed
+  }
+}
+
+impl From<StatusKindParseError> for DocumentError {
+  fn from(_value: StatusKindParseError) -> Self {
+    Self::ParseStatusKindFailed
   }
 }

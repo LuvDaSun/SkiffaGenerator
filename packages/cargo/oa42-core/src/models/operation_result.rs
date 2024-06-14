@@ -1,4 +1,4 @@
-use super::{Body, BodyContainer, Parameter, ParameterContainer};
+use super::{Body, BodyContainer, Parameter, ParameterContainer, StatusKind};
 use crate::utils::NodeLocation;
 use std::rc;
 use wasm_bindgen::prelude::*;
@@ -6,7 +6,7 @@ use wasm_bindgen::prelude::*;
 pub struct OperationResult {
   pub location: NodeLocation,
   pub description: Option<String>,
-  pub status_kind: String,
+  pub status_kind: StatusKind,
   pub status_codes: Vec<usize>,
   pub mockable: bool,
   pub header_parameters: Vec<rc::Rc<Parameter>>,
@@ -31,7 +31,7 @@ impl OperationResultContainer {
 
   #[wasm_bindgen(getter, js_name = "statusKind")]
   pub fn status_kind(&self) -> String {
-    self.0.status_kind.clone()
+    self.0.status_kind.to_string()
   }
 
   #[wasm_bindgen(getter, js_name = "statusCodes")]

@@ -1,4 +1,5 @@
 use super::nodes;
+use crate::models::StatusKind;
 use crate::utils::NodeLocation;
 use crate::{
   documents::{DocumentContext, DocumentError, DocumentInterface},
@@ -176,7 +177,7 @@ impl Document {
       .into_iter()
       .flatten()
       .map(|(pointer, node)| {
-        let method = pointer.last().unwrap().as_str().try_into()?;
+        let method = pointer.last().unwrap().as_str().parse()?;
         let location = path_location.push_pointer(pointer);
         self
           .make_operation_model(
@@ -206,7 +207,7 @@ impl Document {
     operation_node: nodes::Operation,
     method: models::Method,
   ) -> Result<models::Operation, DocumentError> {
-    let mut status_codes_available = BTreeSet::new();
+    let mut status_codes_available = (100..600).collect();
     let authentication_requirements = Vec::new(); // TODO
 
     let all_parameter_nodes = iter::empty()
@@ -310,7 +311,7 @@ impl Document {
       .into_iter()
       .flatten()
       .map(|(pointer, node)| {
-        let status_kind = pointer.last().unwrap().clone();
+        let status_kind = pointer.last().unwrap().clone().parse()?;
         let location = path_location.push_pointer(pointer);
         let (location, node) = self.dereference(&location, node)?;
         self
@@ -325,7 +326,7 @@ impl Document {
       .collect::<Result<Vec<_>, DocumentError>>()?;
 
     // TODO make status kind an enum and support it properly (default last)
-    operation_results.sort_by_key(|operation_result| operation_result.status_kind.clone());
+    operation_results.sort_by_key(|operation_result| operation_result.status_kind);
 
     Ok(models::Operation {
       location: operation_location.clone(),
@@ -349,12 +350,13 @@ impl Document {
     &self,
     operation_result_location: NodeLocation,
     operation_result_node: nodes::OperationResult,
-    status_kind: String,
-    _status_codes_available: &mut BTreeSet<usize>,
+    status_kind: StatusKind,
+    status_codes_available: &mut BTreeSet<usize>,
   ) -> Result<models::OperationResult, DocumentError> {
-    let status_codes = Vec::new();
-
-    // TODO populate status_codes
+    let status_codes = status_kind
+      .into_iter()
+      .filter(|value| !status_codes_available.remove(value))
+      .collect();
 
     let header_parameters = operation_result_node
       .response_headers()

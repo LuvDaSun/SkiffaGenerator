@@ -12,7 +12,7 @@ impl Path {
         .0
         .as_object()?
         .into_iter()
-        .filter(|(key, _node)| models::Method::try_from(key.as_str()).is_ok())
+        .filter(|(key, _node)| key.as_str().parse::<models::Method>().is_ok())
         .map(|(key, node)| (vec![key.clone()], node.clone().into()))
         .collect(),
     )

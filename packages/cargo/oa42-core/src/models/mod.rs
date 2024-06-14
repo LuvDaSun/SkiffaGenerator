@@ -8,6 +8,7 @@ mod operation;
 mod operation_result;
 mod parameter;
 mod path;
+mod status_kind;
 
 pub use api::*;
 pub use authentication::*;
@@ -19,3 +20,4 @@ pub use operation::*;
 pub use operation_result::*;
 pub use parameter::*;
 pub use path::*;
+pub use status_kind::*;
