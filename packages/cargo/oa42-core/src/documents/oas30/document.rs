@@ -156,7 +156,19 @@ impl Document {
       })
       .collect::<Result<_, DocumentError>>()?;
 
-    let authentication = Vec::new(); // TODO
+    let authentication = api_node
+      .security_schemes()
+      .into_iter()
+      .flatten()
+      .map(|(pointer, node)| {
+        let name = pointer.last().unwrap().clone();
+        let location = api_location.push_pointer(pointer);
+        let (location, node) = self.dereference(&location, node)?;
+        self
+          .make_authentication_model(location, node, name)
+          .map(rc::Rc::new)
+      })
+      .collect::<Result<_, DocumentError>>()?;
 
     Ok(models::Api {
       location: api_location.clone(),
@@ -447,6 +459,26 @@ impl Document {
       required: header_node.required().unwrap_or(false),
       mockable: false,
       schema_id,
+    })
+  }
+
+  fn make_authentication_model(
+    &self,
+    security_scheme_location: NodeLocation,
+    security_scheme_node: nodes::SecurityScheme,
+    name: String,
+  ) -> Result<models::Authentication, DocumentError> {
+    Ok(models::Authentication {
+      location: security_scheme_location.clone(),
+      name,
+      r#in: security_scheme_node.r#in().map(Into::into),
+      description: security_scheme_node.description().map(Into::into),
+      scheme: security_scheme_node.scheme().map(Into::into),
+      r#type: security_scheme_node
+        .r#type()
+        .map(Into::into)
+        .unwrap_or_default(),
+      parameter_name: security_scheme_node.parameter_name().map(Into::into),
     })
   }
 }
