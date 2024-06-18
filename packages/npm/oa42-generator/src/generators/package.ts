@@ -31,6 +31,7 @@ export function generatePackage(
   packageConfiguration: PackageConfiguration,
 ) {
   const names = {} as Record<string, string>;
+  const mockables = new Set<string>();
   for (let key = 0; key < specification.typesArena.count(); key++) {
     const item = specification.typesArena.getItem(key);
     const { location } = item;
@@ -38,6 +39,9 @@ export function generatePackage(
       continue;
     }
     names[location.toString()] = specification.names.getName(key).toPascalCase();
+    if (jns42generator.isMockable(specification.typesArena, key)) {
+      mockables.add(location.toString());
+    }
   }
 
   const router = new Router<number>();
@@ -107,7 +111,7 @@ export function generatePackage(
   }
 
   {
-    const content = generateClientServerTestTsCode(names, apiModel);
+    const content = generateClientServerTestTsCode(names, mockables, apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "client-server.test.ts");
     writeContentToFile(filePath, content);
   }

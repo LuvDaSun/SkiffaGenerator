@@ -1,6 +1,12 @@
 import * as oa42Core from "@oa42/core";
 import assert from "assert";
-import { packageInfo } from "../../utils/index.js";
+import {
+  isBodyModelMockable,
+  isOperationModelMockable,
+  isOperationResultModelMockable,
+  isParameterModelMockable,
+  packageInfo,
+} from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
   getAuthenticationMemberName,
@@ -16,6 +22,7 @@ import {
 
 export function* generateClientServerTestTsCode(
   names: Record<string, string>,
+  mockables: Set<string>,
   apiModel: oa42Core.ApiContainer,
 ) {
   yield oa42Core.banner("//", `v${packageInfo.version}`);
@@ -39,19 +46,20 @@ export function* generateClientServerTestTsCode(
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      if (!operationModel.mockable) {
+      if (!isOperationModelMockable(operationModel, mockables)) {
         continue;
       }
 
       if (operationModel.bodies.length === 0) {
         for (const operationResultModel of operationModel.operationResults) {
-          if (!operationResultModel.mockable) {
+          if (!isOperationResultModelMockable(operationResultModel, mockables)) {
             continue;
           }
 
           if (operationResultModel.bodies.length === 0) {
             yield generateOperationTest(
               names,
+              mockables,
               apiModel,
               operationModel,
               null,
@@ -60,12 +68,13 @@ export function* generateClientServerTestTsCode(
             );
           }
           for (const responseBodyModel of operationResultModel.bodies) {
-            if (!responseBodyModel.mockable) {
+            if (!isBodyModelMockable(responseBodyModel, mockables)) {
               continue;
             }
 
             yield generateOperationTest(
               names,
+              mockables,
               apiModel,
               operationModel,
               null,
@@ -76,18 +85,19 @@ export function* generateClientServerTestTsCode(
         }
       }
       for (const requestBodyModel of operationModel.bodies) {
-        if (!requestBodyModel.mockable) {
+        if (!isBodyModelMockable(requestBodyModel, mockables)) {
           continue;
         }
 
         for (const operationResultModel of operationModel.operationResults) {
-          if (!operationResultModel.mockable) {
+          if (!isOperationResultModelMockable(operationResultModel, mockables)) {
             continue;
           }
 
           if (operationResultModel.bodies.length === 0) {
             yield generateOperationTest(
               names,
+              mockables,
               apiModel,
               operationModel,
               requestBodyModel,
@@ -96,12 +106,13 @@ export function* generateClientServerTestTsCode(
             );
           }
           for (const responseBodyModel of operationResultModel.bodies) {
-            if (!responseBodyModel.mockable) {
+            if (!isBodyModelMockable(responseBodyModel, mockables)) {
               continue;
             }
 
             yield generateOperationTest(
               names,
+              mockables,
               apiModel,
               operationModel,
               requestBodyModel,
@@ -117,6 +128,7 @@ export function* generateClientServerTestTsCode(
 
 function* generateOperationTest(
   names: Record<string, string>,
+  mockables: Set<string>,
   apiModel: oa42Core.ApiContainer,
   operationModel: oa42Core.OperationContainer,
   requestBodyModel: oa42Core.BodyContainer | null,
@@ -234,7 +246,7 @@ function* generateOperationTest(
       ...operationModel.pathParameters,
       ...operationModel.queryParameters,
     ]) {
-      if (!parameterModel.mockable) {
+      if (!isParameterModelMockable(parameterModel, mockables)) {
         continue;
       }
 
@@ -269,6 +281,9 @@ function* generateOperationTest(
             `;
           break;
         }
+
+        default:
+          throw new Error("unsupported content-type");
       }
     }
 
@@ -302,6 +317,9 @@ function* generateOperationTest(
           `;
           break;
         }
+
+        default:
+          throw new Error("unsupported content-type");
       }
     }
   }
@@ -357,6 +375,9 @@ function* generateOperationTest(
 
           break;
         }
+
+        default:
+          throw new Error("unsupported content-type");
       }
     }
 
@@ -369,7 +390,7 @@ function* generateOperationTest(
     `;
 
     for (const parameterModel of operationResultModel.headerParameters) {
-      if (!parameterModel.mockable) {
+      if (!isParameterModelMockable(parameterModel, mockables)) {
         continue;
       }
 
@@ -404,6 +425,9 @@ function* generateOperationTest(
           }
           break;
         }
+
+        default:
+          throw new Error("unsupported content-type");
       }
     }
   }
@@ -454,7 +478,7 @@ function* generateOperationTest(
       ...operationModel.pathParameters,
       ...operationModel.queryParameters,
     ]) {
-      if (!parameterModel.mockable) {
+      if (!isParameterModelMockable(parameterModel, mockables)) {
         continue;
       }
 
@@ -469,7 +493,7 @@ function* generateOperationTest(
 
   function* generateResponseParametersMockBody() {
     for (const parameterModel of operationResultModel.headerParameters) {
-      if (!parameterModel.mockable) {
+      if (!isParameterModelMockable(parameterModel, mockables)) {
         continue;
       }
 

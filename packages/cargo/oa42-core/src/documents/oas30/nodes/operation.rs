@@ -46,14 +46,22 @@ impl Operation {
 
   pub fn bodies(&self) -> Option<BTreeMap<Vec<String>, Body>> {
     let member = "requestBody";
+    let member_1 = "content";
     Some(
       self
         .0
         .as_object()?
         .get(member)?
         .as_object()?
+        .get(member_1)?
+        .as_object()?
         .into_iter()
-        .map(|(key, node)| (vec![member.to_owned(), key.clone()], node.clone().into()))
+        .map(|(key, node)| {
+          (
+            vec![member.to_owned(), member_1.to_owned(), key.clone()],
+            node.clone().into(),
+          )
+        })
         .collect(),
     )
   }
