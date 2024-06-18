@@ -1,6 +1,6 @@
 {
   "name": "oa42-generator",
-  "version": "0.10.6",
+  "version": "0.10.7",
   "sideEffects": false,
   "description": "",
   "type": "module",
@@ -46,7 +46,7 @@
     "@jns42/oas-v3-0": "^0.17.4",
     "@jns42/oas-v3-1": "^0.17.4",
     "@jns42/swagger-v2": "^0.17.4",
-    "@oa42/core": "^0.2.0",
+    "@oa42/core": "^0.2.1",
     "@types/node": "^18.19.36",
     "@types/yargs": "^17.0.32",
     "camelcase": "^8.0.0",
