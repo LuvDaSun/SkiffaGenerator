@@ -1,5 +1,4 @@
 import * as oa42Core from "@oa42/core";
-import * as models from "../../models/index.js";
 import { joinIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
@@ -38,7 +37,7 @@ export function* generateOperationAuthenticationType(
     }
   }
 
-  function* generatePickUnionTypes(subRequirements: models.AuthenticationRequirement[]) {
+  function* generatePickUnionTypes(subRequirements: oa42Core.AuthenticationRequirementContainer[]) {
     if (subRequirements.length === 0) {
       yield JSON.stringify({});
     }

@@ -1,5 +1,4 @@
 import * as oa42Core from "@oa42/core";
-import * as models from "../../models/index.js";
 import { itt, joinIterable } from "../../utils/index.js";
 import {
   getAuthenticationMemberName,
@@ -42,7 +41,7 @@ export function* generateIsAuthenticationFunction(
     }
   }
 
-  function* generateAndRules(requirements: models.AuthenticationRequirement[]) {
+  function* generateAndRules(requirements: oa42Core.AuthenticationRequirementContainer[]) {
     if (requirements.length === 0) {
       yield JSON.stringify(true);
     }
