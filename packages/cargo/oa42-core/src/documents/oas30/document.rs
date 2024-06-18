@@ -334,7 +334,7 @@ impl Document {
       .flatten()
       .map(|(pointer, node)| {
         let status_kind: StatusKind = pointer.last().unwrap().clone().parse()?;
-        let location = path_location.push_pointer(pointer);
+        let location = operation_location.push_pointer(pointer);
         let (location, node) = self.dereference(&location, node)?;
         Ok((status_kind, location, node))
       })
