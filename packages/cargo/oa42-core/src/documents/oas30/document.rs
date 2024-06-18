@@ -340,6 +340,8 @@ impl Document {
       })
       .collect::<Result<Vec<_>, DocumentError>>()?;
 
+    // order is important here, we want to take things from the status_codes_available in the
+    // right order, so that is status codes first, then classes, then what is left is default
     operation_results.sort_by_key(|(status_kind, _location, _node)| *status_kind);
 
     let operation_results = operation_results
