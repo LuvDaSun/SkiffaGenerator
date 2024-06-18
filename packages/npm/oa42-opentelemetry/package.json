@@ -40,10 +40,10 @@
   "dependencies": {
     "@opentelemetry/api": "^1.8.0",
     "@opentelemetry/instrumentation": "^0.51.1",
-    "@types/node": "^18.19.34",
-    "oa42-lib": "^0.10.5",
+    "@types/node": "^18.19.36",
+    "oa42-lib": "^0.10.6",
     "tslib": "^2.6.3",
-    "type-fest": "^4.20.0"
+    "type-fest": "^4.20.1"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.7",
