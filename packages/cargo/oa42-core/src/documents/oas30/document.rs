@@ -1,11 +1,11 @@
 use super::nodes;
-use crate::models::StatusKind;
+use crate::models::{AuthenticationRequirement, AuthenticationRequirementGroup, StatusKind};
 use crate::utils::NodeLocation;
 use crate::{
   documents::{DocumentContext, DocumentError, DocumentInterface},
   models,
 };
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::{iter, rc};
 
 pub struct Document {
@@ -151,7 +151,7 @@ impl Document {
         let location = api_location.push_pointer(pointer);
         let (location, node) = self.dereference(&location, node)?;
         self
-          .make_path_model(location, node, id, pattern)
+          .make_path_model(api_node.clone(), location, node, id, pattern)
           .map(rc::Rc::new)
       })
       .collect::<Result<_, DocumentError>>()?;
@@ -179,6 +179,7 @@ impl Document {
 
   fn make_path_model(
     &self,
+    api_node: nodes::Api,
     path_location: NodeLocation,
     path_node: nodes::Path,
     id: usize,
@@ -193,6 +194,7 @@ impl Document {
         let location = path_location.push_pointer(pointer);
         self
           .make_operation_model(
+            api_node.clone(),
             path_location.clone(),
             path_node.clone(),
             location,
@@ -213,6 +215,7 @@ impl Document {
 
   fn make_operation_model(
     &self,
+    api_node: nodes::Api,
     path_location: NodeLocation,
     path_node: nodes::Path,
     operation_location: NodeLocation,
@@ -220,7 +223,13 @@ impl Document {
     method: models::Method,
   ) -> Result<models::Operation, DocumentError> {
     let mut status_codes_available = (100..600).collect();
-    let authentication_requirements = Vec::new(); // TODO
+    let authentication_requirements = iter::empty()
+      .chain(api_node.security())
+      .chain(operation_node.security())
+      .flatten()
+      .map(|requirements| self.make_authentication_requirement_group(requirements))
+      .map(rc::Rc::new)
+      .collect();
 
     let all_parameter_nodes = iter::empty()
       .chain(
@@ -480,6 +489,30 @@ impl Document {
         .unwrap_or_default(),
       parameter_name: security_scheme_node.parameter_name().map(Into::into),
     })
+  }
+
+  fn make_authentication_requirement_group(
+    &self,
+    requirements: BTreeMap<String, Vec<String>>,
+  ) -> AuthenticationRequirementGroup {
+    AuthenticationRequirementGroup {
+      requirements: requirements
+        .into_iter()
+        .map(|(name, scopes)| self.make_authentication_requirement(name, scopes))
+        .map(rc::Rc::new)
+        .collect(),
+    }
+  }
+
+  fn make_authentication_requirement(
+    &self,
+    name: String,
+    scopes: Vec<String>,
+  ) -> AuthenticationRequirement {
+    AuthenticationRequirement {
+      authentication_name: name,
+      scopes,
+    }
   }
 }
 

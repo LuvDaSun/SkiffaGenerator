@@ -73,6 +73,37 @@ impl Operation {
         .collect(),
     )
   }
+
+  pub fn security(&self) -> Option<Vec<BTreeMap<String, Vec<String>>>> {
+    let member = "security";
+    Some(
+      self
+        .0
+        .as_object()?
+        .get(member)?
+        .as_array()?
+        .iter()
+        .filter_map(|value| {
+          Some(
+            value
+              .as_object()?
+              .iter()
+              .filter_map(|(key, value)| {
+                Some((
+                  key.to_owned(),
+                  value
+                    .as_array()?
+                    .iter()
+                    .filter_map(|value| Some(value.as_str()?.to_owned()))
+                    .collect(),
+                ))
+              })
+              .collect(),
+          )
+        })
+        .collect(),
+    )
+  }
 }
 
 impl From<serde_json::Value> for Operation {
