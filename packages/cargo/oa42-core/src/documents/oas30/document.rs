@@ -223,9 +223,10 @@ impl Document {
     method: models::Method,
   ) -> Result<models::Operation, DocumentError> {
     let mut status_codes_available = (100..600).collect();
-    let authentication_requirements = iter::empty()
-      .chain(api_node.security())
-      .chain(operation_node.security())
+    let authentication_requirements = None
+      .or_else(|| operation_node.security())
+      .or_else(|| api_node.security())
+      .into_iter()
       .flatten()
       .map(|requirements| self.make_authentication_requirement_group(requirements))
       .map(rc::Rc::new)
