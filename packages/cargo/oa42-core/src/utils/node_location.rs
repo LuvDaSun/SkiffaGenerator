@@ -1,7 +1,6 @@
 use once_cell::sync::Lazy;
 use regex::{Regex, RegexBuilder};
-use std::{error::Error, fmt::Display, hash::Hash, iter::once, str::FromStr};
-use wasm_bindgen::prelude::*;
+use std::{error::Error, fmt, hash::Hash, iter, str::FromStr};
 
 pub static URL_REGEX: Lazy<Regex> = Lazy::new(|| {
   RegexBuilder::new(r"^([a-z]+\:(?:\/\/)?[^\/]*)?([^\?\#]*?)?(\?.*?)?(\#.*?)?$")
@@ -16,7 +15,6 @@ pub static URL_REGEX: Lazy<Regex> = Lazy::new(|| {
 )]
 #[serde(try_from = "&str")]
 #[serde(into = "String")]
-#[wasm_bindgen]
 pub struct NodeLocation {
   origin: String,
   path: Vec<String>,
@@ -24,7 +22,6 @@ pub struct NodeLocation {
   hash: Vec<String>,
 }
 
-#[wasm_bindgen]
 impl NodeLocation {
   fn new(origin: String, path: Vec<String>, query: String, hash: Vec<String>) -> Self {
     Self {
@@ -35,40 +32,30 @@ impl NodeLocation {
     }
   }
 
-  #[wasm_bindgen(js_name = "parse")]
-  pub fn parse(input: &str) -> Result<NodeLocation, ParseError> {
-    Self::from_str(input)
-  }
-
-  #[wasm_bindgen(js_name = "getAnchor")]
   pub fn get_anchor(&self) -> Option<String> {
     if self.hash.len() > 1 {
       None
     } else {
-      self.hash.first().map(|part| part.clone())
+      self.hash.first().cloned()
     }
   }
 
-  #[wasm_bindgen(js_name = "getPointer")]
   pub fn get_pointer(&self) -> Option<Vec<String>> {
     if self.hash.len() > 1 {
-      Some(self.hash.iter().skip(1).map(|part| part.clone()).collect())
+      Some(self.hash.iter().skip(1).cloned().collect())
     } else {
       None
     }
   }
 
-  #[wasm_bindgen(js_name = "getPath")]
   pub fn get_path(&self) -> Vec<String> {
-    self.path.iter().map(|value| value.clone()).collect()
+    self.path.to_vec()
   }
 
-  #[wasm_bindgen(js_name = "getHash")]
   pub fn get_hash(&self) -> Vec<String> {
-    self.hash.iter().map(|value| value.clone()).collect()
+    self.hash.to_vec()
   }
 
-  #[wasm_bindgen(js_name = "isRoot")]
   pub fn is_root(&self) -> bool {
     self.hash.is_empty()
   }
@@ -76,27 +63,24 @@ impl NodeLocation {
   /*
   Set the anchor of this location, replacing the pointer.
   */
-  #[wasm_bindgen(js_name = "setAnchor")]
   pub fn set_anchor(&self, value: String) -> Self {
     let mut cloned = self.clone();
-    cloned.hash = once(value).collect();
+    cloned.hash = iter::once(value).collect();
     cloned
   }
 
   /*
   Replace pointer
   */
-  #[wasm_bindgen(js_name = "setPointer")]
   pub fn set_pointer(&self, value: Vec<String>) -> Self {
     let mut cloned = self.clone();
-    cloned.hash = normalize_hash(once(String::new()).chain(value));
+    cloned.hash = normalize_hash(iter::once(String::new()).chain(value));
     cloned
   }
 
   /*
-  Removes pointer and anchor (the has) from this location.
+  Removes pointer and anchor (the hash) from this location.
   */
-  #[wasm_bindgen(js_name = "setRoot")]
   pub fn set_root(&self) -> Self {
     let mut cloned = self.clone();
     cloned.hash = Default::default();
@@ -104,9 +88,25 @@ impl NodeLocation {
   }
 
   /*
+  Return a location that is the parent of this one
+  */
+  pub fn set_parent(&self) -> Self {
+    let pointer = self.get_pointer();
+    let Some(mut pointer) = pointer else {
+      return self.clone();
+    };
+    pointer.pop();
+
+    if pointer.is_empty() {
+      self.set_root()
+    } else {
+      self.set_pointer(pointer)
+    }
+  }
+
+  /*
   Append to pointer
   */
-  #[wasm_bindgen(js_name = "pushPointer")]
   pub fn push_pointer(&self, value: Vec<String>) -> Self {
     let pointer: Vec<_> = self
       .get_pointer()
@@ -122,7 +122,6 @@ impl NodeLocation {
   Get the part of the location before the hash. This could be used to get data from a server
   or file system.
   */
-  #[wasm_bindgen(js_name = "toFetchString")]
   pub fn to_fetch_string(&self) -> String {
     let origin = &self.origin;
     let path = self
@@ -136,7 +135,6 @@ impl NodeLocation {
     return origin.to_string() + path.as_str() + query.as_str();
   }
 
-  #[wasm_bindgen(js_name = "join")]
   pub fn join(&self, other: &NodeLocation) -> Self {
     if !other.origin.is_empty() {
       return other.clone();
@@ -185,12 +183,14 @@ impl NodeLocation {
 }
 
 impl TryFrom<&str> for NodeLocation {
-  type Error = ParseError;
+  type Error = ParseLocationError;
 
   fn try_from(value: &str) -> Result<Self, Self::Error> {
     let input = value.replace('\\', "/");
 
-    let input_captures = URL_REGEX.captures(&input).ok_or(ParseError::InvalidInput)?;
+    let input_captures = URL_REGEX
+      .captures(&input)
+      .ok_or(ParseLocationError::InvalidInput)?;
 
     let origin_capture = input_captures.get(1);
     let path_capture = input_captures.get(2);
@@ -210,7 +210,7 @@ impl TryFrom<&str> for NodeLocation {
     } else {
       path
         .split('/')
-        .map(|part| urlencoding::decode(part).map_err(|_error| ParseError::DecodeError))
+        .map(|part| urlencoding::decode(part).map_err(|_error| ParseLocationError::DecodeError))
         .map(|part| part.map(unescape_hash))
         .collect::<Result<_, _>>()?
     };
@@ -226,7 +226,7 @@ impl TryFrom<&str> for NodeLocation {
       .unwrap_or_default();
     let hash = hash
       .split('/')
-      .map(|part| urlencoding::decode(part).map_err(|_error| ParseError::DecodeError))
+      .map(|part| urlencoding::decode(part).map_err(|_error| ParseLocationError::DecodeError))
       .map(|part| part.map(unescape_hash))
       .collect::<Result<_, _>>()?;
 
@@ -264,7 +264,7 @@ impl From<NodeLocation> for String {
   }
 }
 
-impl Display for NodeLocation {
+impl fmt::Display for NodeLocation {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     let s: String = self.into();
     write!(f, "{}", s)
@@ -272,7 +272,7 @@ impl Display for NodeLocation {
 }
 
 impl FromStr for NodeLocation {
-  type Err = ParseError;
+  type Err = ParseLocationError;
 
   fn from_str(input: &str) -> Result<Self, Self::Err> {
     input.try_into()
@@ -280,22 +280,21 @@ impl FromStr for NodeLocation {
 }
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
-#[wasm_bindgen]
-pub enum ParseError {
+pub enum ParseLocationError {
   InvalidInput,
   DecodeError,
 }
 
-impl Display for ParseError {
+impl fmt::Display for ParseLocationError {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     match self {
-      ParseError::InvalidInput => write!(f, "Invalid input"),
-      ParseError::DecodeError => write!(f, "Decode error"),
+      ParseLocationError::InvalidInput => write!(f, "Invalid input"),
+      ParseLocationError::DecodeError => write!(f, "Decode error"),
     }
   }
 }
 
-impl Error for ParseError {}
+impl Error for ParseLocationError {}
 
 fn escape_hash(input: impl AsRef<str>) -> String {
   input.as_ref().replace('~', "~0").replace('/', "~1")

@@ -6,16 +6,21 @@ words:
   - Bulthuis
   - camelcase
   - cdylib
+  - clippy
   - elmerbulthuis
   - endregion
   - esbenp
+  - gloo
   - goodrouter
+  - itertools
+  - mockables
   - oneshot
   - openapi
   - opentelemetry
   - patsubst
   - prestart
   - Promisable
+  - Quickstart
   - remle
   - repr
   - rlib

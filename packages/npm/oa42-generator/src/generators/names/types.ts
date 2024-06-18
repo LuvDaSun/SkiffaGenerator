@@ -1,15 +1,17 @@
-import * as models from "../../models/index.js";
+import * as oa42Core from "@oa42/core";
 import { toPascal } from "../../utils/index.js";
 
 export function getServerAuthenticationTypeName() {
   return toPascal("server", "authentication");
 }
 
-export function getAuthenticationHandlerTypeName(authenticationModel: models.Authentication) {
+export function getAuthenticationHandlerTypeName(
+  authenticationModel: oa42Core.AuthenticationContainer,
+) {
   return toPascal(authenticationModel.name, "authentication", "handler");
 }
 
-export function getOperationHandlerTypeName(operationModel: models.Operation) {
+export function getOperationHandlerTypeName(operationModel: oa42Core.OperationContainer) {
   return toPascal(operationModel.name, "operation", "handler");
 }
 
@@ -17,7 +19,7 @@ export function getOperationHandlersTypeName() {
   return toPascal("operation", "handlers");
 }
 
-export function getOperationAuthenticationTypeName(operationModel: models.Operation) {
+export function getOperationAuthenticationTypeName(operationModel: oa42Core.OperationContainer) {
   return toPascal(operationModel.name, "authentication");
 }
 
@@ -25,7 +27,7 @@ export function getAuthenticationHandlersTypeName() {
   return toPascal("authentication", "handlers");
 }
 
-export function getOperationAcceptTypeName(operationModel: models.Operation) {
+export function getOperationAcceptTypeName(operationModel: oa42Core.OperationContainer) {
   return toPascal(operationModel.name, "operation", "accept");
 }
 
@@ -33,37 +35,39 @@ export function getCredentialsTypeName() {
   return toPascal("credentials");
 }
 
-export function getOperationCredentialsTypeName(operationModel: models.Operation) {
+export function getOperationCredentialsTypeName(operationModel: oa42Core.OperationContainer) {
   return toPascal(operationModel.name, "credentials");
 }
 
-export function getAuthenticationCredentialTypeName(authenticationModel: models.Authentication) {
+export function getAuthenticationCredentialTypeName(
+  authenticationModel: oa42Core.AuthenticationContainer,
+) {
   return toPascal(authenticationModel.name, "credential");
 }
 
-export function getIncomingRequestTypeName(operationModel: models.Operation) {
+export function getIncomingRequestTypeName(operationModel: oa42Core.OperationContainer) {
   return toPascal(operationModel.name, "incoming", "request");
 }
 
-export function getIncomingResponseTypeName(operationModel: models.Operation) {
+export function getIncomingResponseTypeName(operationModel: oa42Core.OperationContainer) {
   return toPascal(operationModel.name, "incoming", "response");
 }
 
-export function getOutgoingRequestTypeName(operationModel: models.Operation) {
+export function getOutgoingRequestTypeName(operationModel: oa42Core.OperationContainer) {
   return toPascal(operationModel.name, "outgoing", "request");
 }
 
-export function getOutgoingResponseTypeName(operationModel: models.Operation) {
+export function getOutgoingResponseTypeName(operationModel: oa42Core.OperationContainer) {
   return toPascal(operationModel.name, "outgoing", "response");
 }
 
-export function getRequestParametersTypeName(operationModel: models.Operation) {
+export function getRequestParametersTypeName(operationModel: oa42Core.OperationContainer) {
   return toPascal(operationModel.name, "request", "parameters");
 }
 
 export function getResponseParametersTypeName(
-  operationModel: models.Operation,
-  operationResultModel: models.OperationResult,
+  operationModel: oa42Core.OperationContainer,
+  operationResultModel: oa42Core.OperationResultContainer,
 ) {
   return toPascal(operationModel.name, operationResultModel.statusKind, "response", "parameters");
 }

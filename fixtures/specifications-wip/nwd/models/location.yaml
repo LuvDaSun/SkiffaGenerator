@@ -1,0 +1,23 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
+type: object
+allOf:
+  - $ref: "../bases.yaml#/$defs/IdContainer"
+  - $ref: "../bases.yaml#/$defs/CudFields"
+required:
+  - handle
+properties:
+  handle:
+    $ref: "../fields.yaml#/$defs/Handle"
+  name:
+    $ref: "../fields.yaml#/$defs/Text"
+  websiteUrl:
+    $ref: "../fields.yaml#/$defs/Url"
+  shortDescription:
+    $ref: "../fields.yaml#/$defs/Text"
+  logo:
+    $ref: "image.yaml"
+  logoSquare:
+    $ref: "image.yaml"
+  logoCertificate:
+    $ref: "image.yaml"

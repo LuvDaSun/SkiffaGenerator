@@ -1,4 +1,4 @@
-import * as models from "../../models/index.js";
+import * as oa42Core from "@oa42/core";
 import { itt } from "../../utils/index.js";
 import {
   getIsRequestParametersFunction,
@@ -7,8 +7,8 @@ import {
 } from "../names/index.js";
 
 export function* generateIsRequestParametersFunction(
-  apiModel: models.Api,
-  operationModel: models.Operation,
+  names: Record<string, string>,
+  operationModel: oa42Core.OperationContainer,
 ) {
   const isRequestParametersFunctionName = getIsRequestParametersFunction(operationModel);
   const requestParametersTypeName = getRequestParametersTypeName(operationModel);
@@ -17,12 +17,12 @@ export function* generateIsRequestParametersFunction(
     export function ${isRequestParametersFunctionName}(
       parameters: Partial<Record<keyof ${requestParametersTypeName}, unknown>>,
     ): parameters is ${requestParametersTypeName} {
-      ${generateBody(apiModel, operationModel)}
+      ${generateBody(names, operationModel)}
     }
   `;
 }
 
-function* generateBody(apiModel: models.Api, operationModel: models.Operation) {
+function* generateBody(names: Record<string, string>, operationModel: oa42Core.OperationContainer) {
   const parameterModels = [
     ...operationModel.queryParameters,
     ...operationModel.headerParameters,
@@ -33,7 +33,7 @@ function* generateBody(apiModel: models.Api, operationModel: models.Operation) {
   for (const parameterModel of parameterModels) {
     const parameterSchemaId = parameterModel.schemaId;
     const parameterTypeName =
-      parameterSchemaId == null ? parameterSchemaId : apiModel.names[parameterSchemaId];
+      parameterSchemaId == null ? parameterSchemaId : names[parameterSchemaId.toString()];
     if (parameterTypeName == null) {
       continue;
     }

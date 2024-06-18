@@ -1,22 +1,20 @@
-use crate::utils::ParseError;
+use crate::documents::{DocumentError, DocumentTypeError};
+use crate::utils::{NodeCacheError, ParseLocationError};
 use std::fmt::Display;
+use wasm_bindgen::prelude::*;
 
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq, Ord, PartialOrd)]
-#[repr(usize)]
+#[wasm_bindgen]
 pub enum Error {
-  Ok = 0,
   Unknown,
   Conflict,
   NotFound,
   ParseLocationFailed,
-  HttpError,
-  IoError,
-  NulMissing,
-  Utf8Error,
-  InvalidJson,
-  NotARoot,
-  NotTheSame,
-  InvalidYaml,
+  ParseMethodFailed,
+  ParseStatusKindFailed,
+  DocumentTypeError,
+  FetchError,
+  SerializationError,
 }
 
 impl std::error::Error for Error {}
@@ -24,66 +22,50 @@ impl std::error::Error for Error {}
 impl Display for Error {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     match self {
-      Self::Ok => write!(f, "Ok"),
       Self::Unknown => write!(f, "Unknown"),
       Self::Conflict => write!(f, "Conflict"),
       Self::NotFound => write!(f, "NotFound"),
       Self::ParseLocationFailed => write!(f, "ParseLocationFailed"),
-      Self::HttpError => write!(f, "HttpError"),
-      Self::IoError => write!(f, "IoError"),
-      Self::NulMissing => write!(f, "NulMissing"),
-      Self::Utf8Error => write!(f, "Utf8Error"),
-      Self::InvalidJson => write!(f, "InvalidJson"),
-      Self::NotARoot => write!(f, "NotARoot"),
-      Self::NotTheSame => write!(f, "NotTheSame"),
-      Self::InvalidYaml => write!(f, "InvalidYaml"),
+      Self::ParseMethodFailed => write!(f, "ParseMethodFailed"),
+      Self::ParseStatusKindFailed => write!(f, "ParseStatusKindFailed"),
+      Self::DocumentTypeError => write!(f, "DocumentTypeError"),
+      Self::FetchError => write!(f, "FetchError"),
+      Self::SerializationError => write!(f, "SerializationError"),
     }
   }
   //
 }
 
-impl From<ParseError> for Error {
-  fn from(value: ParseError) -> Self {
+impl From<ParseLocationError> for Error {
+  fn from(_value: ParseLocationError) -> Self {
+    Self::ParseLocationFailed
+  }
+}
+
+impl From<NodeCacheError> for Error {
+  fn from(value: NodeCacheError) -> Self {
     match value {
-      ParseError::InvalidInput => Self::ParseLocationFailed,
-      ParseError::DecodeError => Self::ParseLocationFailed,
+      NodeCacheError::Conflict => Self::Conflict,
+      NodeCacheError::FetchError => Self::FetchError,
+      NodeCacheError::SerializationError => Self::SerializationError,
     }
   }
 }
 
-impl From<std::ffi::NulError> for Error {
-  fn from(_value: std::ffi::NulError) -> Self {
-    Self::NulMissing
+impl From<DocumentTypeError> for Error {
+  fn from(_value: DocumentTypeError) -> Self {
+    Self::DocumentTypeError
   }
 }
 
-impl From<std::str::Utf8Error> for Error {
-  fn from(_value: std::str::Utf8Error) -> Self {
-    Self::Utf8Error
-  }
-}
-
-impl From<serde_json::Error> for Error {
-  fn from(_value: serde_json::Error) -> Self {
-    Self::InvalidJson
-  }
-}
-
-impl From<serde_yaml::Error> for Error {
-  fn from(_value: serde_yaml::Error) -> Self {
-    Self::InvalidYaml
-  }
-}
-
-impl From<std::io::Error> for Error {
-  fn from(_value: std::io::Error) -> Self {
-    Self::IoError
-  }
-}
-
-#[cfg(not(target_os = "unknown"))]
-impl From<surf::Error> for Error {
-  fn from(_value: surf::Error) -> Self {
-    Self::HttpError
+impl From<DocumentError> for Error {
+  fn from(value: DocumentError) -> Self {
+    match value {
+      DocumentError::Unknown => Self::Unknown,
+      DocumentError::NodeNotFound => Self::NotFound,
+      DocumentError::ParseLocationFailed => Self::ParseLocationFailed,
+      DocumentError::ParseMethodFailed => Self::ParseMethodFailed,
+      DocumentError::ParseStatusKindFailed => Self::ParseStatusKindFailed,
+    }
   }
 }

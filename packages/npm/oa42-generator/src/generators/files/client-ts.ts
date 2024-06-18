@@ -1,6 +1,5 @@
-import { banner } from "@oa42/core";
-import { RouterMode } from "goodrouter";
-import * as models from "../../models/index.js";
+import * as oa42Core from "@oa42/core";
+import { Router, RouterMode } from "goodrouter";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateClientOperationFunction } from "../functions/client-operation.js";
@@ -13,8 +12,12 @@ import {
 } from "../types/index.js";
 import { generateCredentialsConstant } from "../variables/default-credentials.js";
 
-export function* generateClientTsCode(apiModel: models.Api) {
-  yield banner("//", `v${packageInfo.version}`);
+export function* generateClientTsCode(
+  names: Record<string, string>,
+  router: Router<number>,
+  apiModel: oa42Core.ApiContainer,
+) {
+  yield oa42Core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import { Router } from "goodrouter";
@@ -47,7 +50,7 @@ export function* generateClientTsCode(apiModel: models.Api) {
     const router = new Router({
       parameterValueDecoder: value => value,
       parameterValueEncoder: value => value,
-    }).loadFromJson(${JSON.stringify(apiModel.router.saveToJson(RouterMode.Client))});
+    }).loadFromJson(${JSON.stringify(router.saveToJson(RouterMode.Client))});
   `;
 
   yield* generateCredentialsConstant();
@@ -59,10 +62,10 @@ export function* generateClientTsCode(apiModel: models.Api) {
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      yield* generateClientOperationFunction(apiModel, pathModel, operationModel);
+      yield* generateClientOperationFunction(names, apiModel, pathModel, operationModel);
       yield* generateOperationCredentialsType(apiModel, operationModel);
-      yield* generateOperationOutgoingRequestType(apiModel, operationModel);
-      yield* generateOperationIncomingResponseType(apiModel, operationModel);
+      yield* generateOperationOutgoingRequestType(names, operationModel);
+      yield* generateOperationIncomingResponseType(names, operationModel);
     }
   }
 }

@@ -1,7 +1,8 @@
+import * as oa42Core from "@oa42/core";
 import fs from "fs";
+import { Router } from "goodrouter";
 import * as jns42generator from "jns42-generator";
 import path from "path";
-import * as models from "../models/index.js";
 import { NestedText, flattenNestedText, itt, splitIterableText } from "../utils/index.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
 import { generateBuildJsCode } from "./files/build-js.js";
@@ -20,13 +21,35 @@ export interface PackageConfiguration {
   packageName: string;
   packageVersion: string;
   packageDirectoryPath: string;
+  requestTypes: string[];
+  responseTypes: string[];
 }
 
 export function generatePackage(
-  apiModel: models.Api,
+  apiModel: oa42Core.ApiContainer,
   specification: jns42generator.Specification,
   packageConfiguration: PackageConfiguration,
 ) {
+  const names = {} as Record<string, string>;
+  const mockables = new Set<string>();
+  for (let key = 0; key < specification.typesArena.count(); key++) {
+    const item = specification.typesArena.getItem(key);
+    const { location } = item;
+    if (location == null) {
+      continue;
+    }
+    names[location.toString()] = specification.names.getName(key).toPascalCase();
+    if (jns42generator.isMockable(specification.typesArena, key)) {
+      mockables.add(location.toString());
+    }
+  }
+
+  const router = new Router<number>();
+  const paths = apiModel.paths;
+  for (const pathModel of paths) {
+    router.insertRoute(pathModel.id, pathModel.pattern);
+  }
+
   const { packageDirectoryPath, packageName, packageVersion } = packageConfiguration;
 
   fs.mkdirSync(packageDirectoryPath, { recursive: true });
@@ -52,13 +75,13 @@ export function generatePackage(
   }
 
   {
-    const content = generateMainTsCode(apiModel);
+    const content = generateMainTsCode();
     const filePath = path.join(packageDirectoryPath, "src", "main.ts");
     writeContentToFile(filePath, content);
   }
 
   {
-    const content = generateBrowserTsCode(apiModel);
+    const content = generateBrowserTsCode();
     const filePath = path.join(packageDirectoryPath, "src", "browser.ts");
     writeContentToFile(filePath, content);
   }
@@ -70,25 +93,25 @@ export function generatePackage(
   }
 
   {
-    const content = generateParametersTsCode(apiModel);
+    const content = generateParametersTsCode(names, apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "parameters.ts");
     writeContentToFile(filePath, content);
   }
 
   {
-    const content = generateClientTsCode(apiModel);
+    const content = generateClientTsCode(names, router, apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "client.ts");
     writeContentToFile(filePath, content);
   }
 
   {
-    const content = generateServerTsCode(apiModel);
+    const content = generateServerTsCode(names, router, apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "server.ts");
     writeContentToFile(filePath, content);
   }
 
   {
-    const content = generateClientServerTestTsCode(apiModel);
+    const content = generateClientServerTestTsCode(names, mockables, apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "client-server.test.ts");
     writeContentToFile(filePath, content);
   }

@@ -1,12 +1,11 @@
-import { banner } from "@oa42/core";
-import * as models from "../../models/index.js";
+import * as oa42Core from "@oa42/core";
 import { itt, packageInfo } from "../../utils/index.js";
 
 /**
  * Code generator that generates code only for browsers
  */
-export function* generateBrowserTsCode(apiModel: models.Api) {
-  yield banner("//", `v${packageInfo.version}`);
+export function* generateBrowserTsCode() {
+  yield oa42Core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     export * from "./types.js";

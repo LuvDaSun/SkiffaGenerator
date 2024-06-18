@@ -1,0 +1,21 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
+type: object
+allOf:
+  - $ref: "../bases.yaml#/$defs/IdContainer"
+  - $ref: "../bases.yaml#/$defs/CudFields"
+required:
+  - type
+  - locationId
+properties:
+  type:
+    enum:
+      - student
+      - instructor
+      - location_admin
+      - application
+      - system
+  locationId:
+    $ref: "../fields.yaml#/$defs/Id"
+  personId:
+    $ref: "../fields.yaml#/$defs/Id"

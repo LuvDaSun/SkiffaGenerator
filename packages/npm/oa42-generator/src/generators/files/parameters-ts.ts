@@ -1,5 +1,4 @@
-import { banner } from "@oa42/core";
-import * as models from "../../models/index.js";
+import * as oa42Core from "@oa42/core";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
@@ -11,8 +10,11 @@ import {
   generateOperationResultParameterTypes,
 } from "../types/index.js";
 
-export function* generateParametersTsCode(apiModel: models.Api) {
-  yield banner("//", `v${packageInfo.version}`);
+export function* generateParametersTsCode(
+  names: Record<string, string>,
+  apiModel: oa42Core.ApiContainer,
+) {
+  yield oa42Core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import * as types from "./types.js";
@@ -53,16 +55,12 @@ export function* generateParametersTsCode(apiModel: models.Api) {
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      yield* generateIsRequestParametersFunction(apiModel, operationModel);
-      yield* generateOperationParametersTypes(apiModel, operationModel);
+      yield* generateIsRequestParametersFunction(names, operationModel);
+      yield* generateOperationParametersTypes(names, operationModel);
 
       for (const operationResultModel of operationModel.operationResults) {
-        yield* generateIsResponseParametersFunction(apiModel, operationModel, operationResultModel);
-        yield* generateOperationResultParameterTypes(
-          apiModel,
-          operationModel,
-          operationResultModel,
-        );
+        yield* generateIsResponseParametersFunction(names, operationModel, operationResultModel);
+        yield* generateOperationResultParameterTypes(names, operationModel, operationResultModel);
       }
     }
   }

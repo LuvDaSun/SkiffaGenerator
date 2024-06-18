@@ -1,0 +1,24 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
+type: object
+required:
+  - email
+  - firstName
+  - lastName
+  - dateOfBirth
+  - birthCity
+properties:
+  email:
+    $ref: "../fields.yaml#/$defs/Email"
+  firstName:
+    $ref: "../fields.yaml#/$defs/Text"
+  lastNamePrefix:
+    $ref: "../fields.yaml#/$defs/Text"
+  lastName:
+    $ref: "../fields.yaml#/$defs/Text"
+  dateOfBirth:
+    $ref: "../fields.yaml#/$defs/Date"
+  birthCity:
+    $ref: "../fields.yaml#/$defs/Text"
+  birthCountry:
+    $ref: "../fields.yaml#/$defs/Code"

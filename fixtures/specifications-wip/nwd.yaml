@@ -1,0 +1,498 @@
+openapi: 3.0.2
+
+info:
+  title: Nationaal Watersportdiploma API
+  description: |-
+    Nationaal Watersportdiploma API
+  version: 0.1.0
+
+security:
+  - open-id: []
+  - api-key: []
+
+paths:
+  /me:
+    get:
+      operationId: me
+      summary: Retrieves information about the current user (if any)
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "nwd/models/user.yaml"
+
+  /discipline:
+    get:
+      operationId: listDisciplines
+      tags:
+        - discipline
+      summary: Lists all disciplines
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "nwd/models/discipline.yaml"
+        "404":
+          description: Not found
+        "403":
+          description: Forbidden
+
+  /discipline/{discipline-key}:
+    parameters:
+      - in: path
+        name: discipline-key
+        required: true
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/HandleOrId"
+    get:
+      operationId: retrieveDiscipline
+      tags:
+        - discipline
+      summary: Retrieves a single discipline
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "nwd/models/discipline.yaml"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /discipline/{discipline-key}/curricula:
+    parameters:
+      - in: path
+        name: discipline-key
+        required: true
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/HandleOrId"
+    get:
+      operationId: listCurriculaByDiscipline
+      tags:
+        - curriculum
+      summary: List a curricula by discipline
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "nwd/models/curriculum.yaml"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /programs:
+    get:
+      operationId: listPrograms
+      summary: Retrieve a list of programs
+      description: >-
+        Retrieve a list of programs. The list will be paginated and the provided
+        query parameters allow filtering the returned programs.
+      tags:
+        - program
+
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "nwd/models/program.yaml"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /program/{program-key}/curricula:
+    parameters:
+      - in: path
+        name: program-key
+        required: true
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/HandleOrId"
+    get:
+      operationId: listCurriculaByProgram
+      tags:
+        - curriculum
+      summary: List curricula by program
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "nwd/models/curriculum.yaml"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /find-certificate:
+    get:
+      parameters:
+        - in: query
+          name: certificate-handle
+          required: true
+          schema:
+            $ref: "nwd/fields.yaml#/$defs/CertificateHandle"
+        - in: query
+          name: issuedAt
+          required: true
+          schema:
+            type: string
+
+      operationId: find-certificate
+      summary: Find certificate by handle and issue date
+
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "nwd/models/certificate.yaml"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /list-certificates-by-number:
+    get:
+      parameters:
+        - in: query
+          name: numbers
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: "nwd/fields.yaml#/$defs/CertificateHandle"
+
+      operationId: listCertificatesByNumber
+      tags:
+        - certificate
+      summary: List certificates by number
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "nwd/models/certificate.yaml"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /certificate/{certificate-key}:
+    parameters:
+      - in: query
+        name: certificate-key
+        required: true
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/CertificateHandleOrId"
+
+    get:
+      operationId: get-certificate
+      summary: Get certificate by handle or id
+
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "nwd/models/certificate.yaml"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /locations:
+    get:
+      operationId: get-locations
+      summary: Get all locations
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "nwd/models/location.yaml"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+    post:
+      operationId: create-location
+      summary: Creates a new location
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "nwd/models/location-create.yaml"
+
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    $ref: "nwd/fields.yaml#/$defs/Id"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /location/{location-key}:
+    parameters:
+      - in: path
+        required: true
+        name: location-key
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/HandleOrId"
+
+    get:
+      operationId: get-location
+      summary: Get location
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "nwd/models/location.yaml"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /location/{location-key}/persons:
+    parameters:
+      - in: path
+        required: true
+        name: location-key
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/HandleOrId"
+
+    get:
+      operationId: listPersonsForLocation
+      summary: List persons for a location
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "nwd/models/person.yaml"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+    post:
+      operationId: createPersonForLocation
+      summary: create a person for a location
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "nwd/models/person-create.yaml"
+
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "nwd/bases.yaml#/$defs/IdContainer"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /location/{location-key}/certificate:
+    parameters:
+      - in: path
+        required: true
+        name: location-key
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/HandleOrId"
+
+    get:
+      operationId: get-location-certificates
+      summary: Get all certificates for location
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "nwd/models/location-certificate.yaml"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+    post:
+      operationId: create-location-certificate
+      summary: Creates a new certificate for a location
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "nwd/models/location-certificate-create.yaml"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    $ref: "nwd/fields.yaml#/$defs/Id"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+
+  /location/{location-key}/cohort:
+    parameters:
+      - in: path
+        required: true
+        name: location-key
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/HandleOrId"
+
+    get:
+      operationId: get-location-cohorts
+      summary: Get all cohorts for location
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "nwd/models/location-cohort.yaml"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+    post:
+      operationId: create-location-cohort
+      summary: Creates a new cohort for a location
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "nwd/models/location-cohort-create.yaml"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    $ref: "nwd/fields.yaml#/$defs/Id"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /country:
+    get:
+      operationId: listCountries
+      tags:
+        - country
+      summary: Lists all countries
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "nwd/models/country.yaml"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /curriculum/{curriculum-key}/gear-types:
+    parameters:
+      - in: path
+        name: curriculum-key
+        required: true
+        schema:
+          $ref: "nwd/fields.yaml#/$defs/HandleOrId"
+    get:
+      operationId: listGearTypesByCurriculum
+      tags:
+        - gear-type
+      summary: List gear typers by curriculum
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "nwd/models/gear-type.yaml"
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+components:
+  securitySchemes:
+    # this should be transformed into oauth authentication once the generator supports it
+    open-id:
+      type: http
+      description: Default authentication mechanism
+      scheme: bearer
+
+    api-key:
+      type: apiKey
+      name: x-api-key
+      in: header

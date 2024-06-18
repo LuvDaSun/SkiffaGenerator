@@ -1,0 +1,21 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
+type: object
+allOf:
+  - $ref: "../bases.yaml#/$defs/IdContainer"
+  - $ref: "../bases.yaml#/$defs/CudFields"
+required:
+  - programId
+  - revision
+  - modules
+properties:
+  startedAt:
+    $ref: "../fields.yaml#/$defs/Date"
+  programId:
+    $ref: "../fields.yaml#/$defs/Id"
+  revision:
+    $ref: "../fields.yaml#/$defs/Revision"
+  modules:
+    type: array
+    items:
+      $ref: "module.yaml"

@@ -1,11 +1,10 @@
-import { banner } from "@oa42/core";
-import * as models from "../../models/index.js";
+import * as oa42Core from "@oa42/core";
 import { packageInfo } from "../../utils/index.js";
 import { generateOperationAcceptType } from "../types/index.js";
 import { generateOperationAcceptConstant } from "../variables/operation-accept.js";
 
-export function* generateSharedTsCode(apiModel: models.Api) {
-  yield banner("//", `v${packageInfo.version}`);
+export function* generateSharedTsCode(apiModel: oa42Core.ApiContainer) {
+  yield oa42Core.banner("//", `v${packageInfo.version}`);
 
   // for (const authenticationModel of apiModel.authentication) {
   // }
