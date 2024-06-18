@@ -333,9 +333,18 @@ impl Document {
       .into_iter()
       .flatten()
       .map(|(pointer, node)| {
-        let status_kind = pointer.last().unwrap().clone().parse()?;
+        let status_kind: StatusKind = pointer.last().unwrap().clone().parse()?;
         let location = path_location.push_pointer(pointer);
         let (location, node) = self.dereference(&location, node)?;
+        Ok((status_kind, location, node))
+      })
+      .collect::<Result<Vec<_>, DocumentError>>()?;
+
+    operation_results.sort_by_key(|(status_kind, _location, _node)| *status_kind);
+
+    let operation_results = operation_results
+      .into_iter()
+      .map(|(status_kind, location, node)| {
         self
           .make_operation_result_model(
             location,
@@ -346,8 +355,6 @@ impl Document {
           .map(rc::Rc::new)
       })
       .collect::<Result<Vec<_>, DocumentError>>()?;
-
-    operation_results.sort_by_key(|operation_result| operation_result.status_kind);
 
     Ok(models::Operation {
       location: operation_location.clone(),
