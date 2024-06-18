@@ -8,7 +8,6 @@ pub struct OperationResult {
   pub description: Option<String>,
   pub status_kind: StatusKind,
   pub status_codes: Vec<usize>,
-  pub mockable: bool,
   pub header_parameters: Vec<rc::Rc<Parameter>>,
   pub bodies: Vec<rc::Rc<Body>>,
 }
@@ -37,11 +36,6 @@ impl OperationResultContainer {
   #[wasm_bindgen(getter, js_name = "statusCodes")]
   pub fn status_codes(&self) -> Vec<usize> {
     self.0.status_codes.clone()
-  }
-
-  #[wasm_bindgen(getter, js_name = "mockable")]
-  pub fn mockable(&self) -> bool {
-    self.0.mockable
   }
 
   #[wasm_bindgen(getter, js_name = "headerParameters")]

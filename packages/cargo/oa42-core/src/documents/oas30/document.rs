@@ -326,7 +326,7 @@ impl Document {
           .make_body_model(location, node.clone(), content_type)
           .map(rc::Rc::new)
       })
-      .collect::<Result<_, DocumentError>>()?;
+      .collect::<Result<Vec<_>, DocumentError>>()?;
 
     let mut operation_results = operation_node
       .operation_results()
@@ -365,7 +365,6 @@ impl Document {
       description: operation_node.description().map(Into::into),
       deprecated: operation_node.deprecated().unwrap_or(false),
       method,
-      mockable: false, // TODO
       authentication_requirements,
       cookie_parameters,
       header_parameters,
@@ -400,7 +399,7 @@ impl Document {
           .make_parameter_model_response(location, node, name)
           .map(rc::Rc::new)
       })
-      .collect::<Result<_, DocumentError>>()?;
+      .collect::<Result<Vec<_>, DocumentError>>()?;
 
     let bodies = operation_result_node
       .bodies()
@@ -413,14 +412,13 @@ impl Document {
           .make_body_model(location, node.clone(), content_type)
           .map(rc::Rc::new)
       })
-      .collect::<Result<_, DocumentError>>()?;
+      .collect::<Result<Vec<_>, DocumentError>>()?;
 
     Ok(models::OperationResult {
       location: operation_result_location.clone(),
       description: operation_result_node.description().map(Into::into),
       status_kind,
       status_codes,
-      mockable: false,
       header_parameters,
       bodies,
     })
@@ -439,7 +437,6 @@ impl Document {
     Ok(models::Body {
       location: body_location.clone(),
       content_type,
-      mockable: false,
       schema_id,
     })
   }
@@ -457,7 +454,6 @@ impl Document {
       location: parameter_location.clone(),
       name: parameter_node.name().map(Into::into).unwrap(),
       required: parameter_node.required().unwrap_or(false),
-      mockable: false,
       schema_id,
     })
   }
@@ -476,7 +472,6 @@ impl Document {
       location: header_location.clone(),
       name,
       required: header_node.required().unwrap_or(false),
-      mockable: false,
       schema_id,
     })
   }

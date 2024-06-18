@@ -6,7 +6,6 @@ pub struct Body {
   pub location: NodeLocation,
   pub content_type: String,
   pub schema_id: Option<NodeLocation>,
-  pub mockable: bool,
 }
 
 #[derive(Clone)]
@@ -28,11 +27,6 @@ impl BodyContainer {
   #[wasm_bindgen(getter, js_name = "schemaId")]
   pub fn schema_id(&self) -> Option<String> {
     Some(self.0.schema_id.as_ref()?.to_string())
-  }
-
-  #[wasm_bindgen(getter, js_name = "mockable")]
-  pub fn mockable(&self) -> bool {
-    self.0.mockable
   }
 }
 

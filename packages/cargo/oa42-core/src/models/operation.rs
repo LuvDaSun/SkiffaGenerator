@@ -13,7 +13,6 @@ pub struct Operation {
   pub summary: Option<String>,
   pub description: Option<String>,
   pub deprecated: bool,
-  pub mockable: bool,
   pub authentication_requirements: Vec<rc::Rc<AuthenticationRequirementGroup>>,
   pub query_parameters: Vec<rc::Rc<Parameter>>,
   pub header_parameters: Vec<rc::Rc<Parameter>>,
@@ -57,11 +56,6 @@ impl OperationContainer {
   #[wasm_bindgen(getter, js_name = "deprecated")]
   pub fn deprecated(&self) -> bool {
     self.0.deprecated
-  }
-
-  #[wasm_bindgen(getter, js_name = "mockable")]
-  pub fn mockable(&self) -> bool {
-    self.0.mockable
   }
 
   #[wasm_bindgen(getter, js_name = "authenticationRequirements")]

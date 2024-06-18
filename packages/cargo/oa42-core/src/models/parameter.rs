@@ -7,7 +7,6 @@ pub struct Parameter {
   pub name: String,
   pub required: bool,
   pub schema_id: Option<NodeLocation>,
-  pub mockable: bool,
 }
 
 #[derive(Clone)]
@@ -34,11 +33,6 @@ impl ParameterContainer {
   #[wasm_bindgen(getter, js_name = "schemaId")]
   pub fn schema_id(&self) -> Option<String> {
     Some(self.0.schema_id.as_ref()?.to_string())
-  }
-
-  #[wasm_bindgen(getter, js_name = "mockable")]
-  pub fn mockable(&self) -> bool {
-    self.0.mockable
   }
 }
 
