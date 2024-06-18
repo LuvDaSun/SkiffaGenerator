@@ -212,7 +212,7 @@ mod tests {
     let context = DocumentContextContainer::default();
     context.register_well_known_factories();
 
-    let location = "../../../fixtures/specifications/echo.yaml";
+    let location = "../../../fixtures/specifications/echo.yaml#";
 
     context.load_from_location(location).await.unwrap();
     let api = context.get_api_model(location).unwrap();
