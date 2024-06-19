@@ -1,9 +1,9 @@
+import * as jns42Core from "@jns42/core";
+import * as oa42Core from "@oa42/core";
+import assert from "assert";
+import * as jns42Generator from "jns42-generator";
 import * as path from "path";
 import * as yargs from "yargs";
-import { DocumentContext } from "../documents/document-context.js";
-import * as oas30 from "../documents/oas30/index.js";
-import * as oas31 from "../documents/oas31/index.js";
-import * as swagger2 from "../documents/swagger2/index.js";
 import { generatePackage } from "../generators/index.js";
 
 export function configurePackageProgram(argv: yargs.Argv) {
@@ -35,12 +35,7 @@ export function configurePackageProgram(argv: yargs.Argv) {
         .option("default-type-name", {
           description: "default name for types",
           type: "string",
-          default: "@jns42/document",
-        })
-        .option("name-maximum-iterations", {
-          description: "maximum number of iterations for finding unique names",
-          type: "number",
-          default: 5,
+          default: "schema",
         })
         .option("transform-maximum-iterations", {
           description: "maximum number of iterations for transforming",
@@ -69,7 +64,6 @@ interface MainOptions {
   packageName: string;
   packageVersion: string;
   defaultTypeName: string;
-  nameMaximumIterations: number;
   transformMaximumIterations: number;
   requestTypes: string[];
   responseTypes: string[];
@@ -84,7 +78,6 @@ async function main(options: MainOptions) {
     packageName,
     packageVersion,
     defaultTypeName,
-    nameMaximumIterations,
     transformMaximumIterations,
     requestTypes,
     responseTypes,
@@ -92,23 +85,29 @@ async function main(options: MainOptions) {
 
   // setup document context
 
-  using documentContext = new DocumentContext({
+  const jns42Context = new jns42Core.DocumentContextContainer();
+  jns42Context.registerWellKnownFactories();
+
+  const oa42Context = new oa42Core.DocumentContextContainer();
+  oa42Context.registerWellKnownFactories();
+
+  await oa42Context.loadFromLocation(specificationLocation);
+
+  const apiModel = oa42Context.getApiModel(specificationLocation);
+  assert(apiModel != null);
+
+  for (const documentSchema of oa42Context.getSchemas()) {
+    await jns42Context.loadFromLocation(
+      documentSchema.schemaLocation.toString(),
+      documentSchema.schemaLocation.toString(),
+      documentSchema.documentLocation.toString(),
+      documentSchema.defaultSchemaId,
+    );
+  }
+  const specification = jns42Generator.loadSpecification(jns42Context, {
     defaultTypeName,
-    nameMaximumIterations,
     transformMaximumIterations,
-    requestTypes,
-    responseTypes,
   });
-  documentContext.registerFactory(swagger2.factory);
-  documentContext.registerFactory(oas30.factory);
-  documentContext.registerFactory(oas31.factory);
-
-  // load api model
-
-  await documentContext.loadFromLocation(specificationLocation);
-
-  const apiModel = documentContext.getApiModel();
-  const specification = documentContext.getSpecification();
 
   // generate code
 
@@ -116,5 +115,7 @@ async function main(options: MainOptions) {
     packageDirectoryPath,
     packageName,
     packageVersion,
+    requestTypes,
+    responseTypes,
   });
 }

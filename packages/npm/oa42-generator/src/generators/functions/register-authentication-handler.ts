@@ -1,4 +1,4 @@
-import * as models from "../../models/index.js";
+import * as oa42Core from "@oa42/core";
 import { itt } from "../../utils/index.js";
 import {
   getAuthenticationHandlerName,
@@ -8,7 +8,9 @@ import {
   getRegisterAuthenticationsHandlerName,
 } from "../names/index.js";
 
-export function* registerAuthenticationHandlerMethod(authenticationModel: models.Authentication) {
+export function* registerAuthenticationHandlerMethod(
+  authenticationModel: oa42Core.AuthenticationContainer,
+) {
   const registerHandlerMethodName = getRegisterAuthenticationHandlerName(authenticationModel);
   const handlerTypeName = getAuthenticationHandlerTypeName(authenticationModel);
   const handlerPropertyName = getAuthenticationHandlerName(authenticationModel);
@@ -25,7 +27,7 @@ export function* registerAuthenticationHandlerMethod(authenticationModel: models
   `;
 }
 
-export function* registerAuthenticationHandlersMethod(apiModel: models.Api) {
+export function* registerAuthenticationHandlersMethod(apiModel: oa42Core.ApiContainer) {
   const methodName = getRegisterAuthenticationsHandlerName();
   const handlersTypeName = getAuthenticationHandlersTypeName();
 

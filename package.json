@@ -13,7 +13,7 @@
     "formatting": "prettier --check *"
   },
   "devDependencies": {
-    "cspell": "^8.8.0",
-    "prettier": "^3.2.5"
+    "cspell": "^8.8.4",
+    "prettier": "^3.3.2"
   }
 }

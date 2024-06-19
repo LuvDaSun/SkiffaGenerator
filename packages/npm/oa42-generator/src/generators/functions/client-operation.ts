@@ -1,4 +1,4 @@
-import * as models from "../../models/index.js";
+import * as oa42Core from "@oa42/core";
 import { itt } from "../../utils/index.js";
 import {
   getAuthenticationMemberName,
@@ -16,9 +16,10 @@ import {
 } from "../names/index.js";
 
 export function* generateClientOperationFunction(
-  apiModel: models.Api,
-  pathModel: models.Path,
-  operationModel: models.Operation,
+  names: Record<string, string>,
+  apiModel: oa42Core.ApiContainer,
+  pathModel: oa42Core.PathContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   const operationFunctionName = getOperationFunctionName(operationModel);
   const operationOutgoingRequestName = getOutgoingRequestTypeName(operationModel);
@@ -27,8 +28,8 @@ export function* generateClientOperationFunction(
 
   const jsDoc = [
     operationModel.deprecated ? "@deprecated" : "",
-    operationModel.summary,
-    operationModel.description,
+    operationModel.summary ?? "",
+    operationModel.description ?? "",
   ]
     .map((line) => line.trim())
     .filter((line) => line.length > 0)
@@ -43,15 +44,16 @@ export function* generateClientOperationFunction(
     operationCredentials: ${credentialsName} = {},
     operationConfiguration: ClientConfiguration = {},
   ): Promise<${operationIncomingResponseName}> {
-    ${generateBody(apiModel, pathModel, operationModel)}
+    ${generateBody(names, apiModel, pathModel, operationModel)}
   }
 `;
 }
 
 function* generateBody(
-  apiModel: models.Api,
-  pathModel: models.Path,
-  operationModel: models.Operation,
+  names: Record<string, string>,
+  apiModel: oa42Core.ApiContainer,
+  pathModel: oa42Core.PathContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   const operationIncomingResponseName = getIncomingResponseTypeName(operationModel);
   const operationAcceptConstName = getOperationAcceptConstName(operationModel);
@@ -184,8 +186,8 @@ function* generateBody(
   }
 
   const authenticationNames = new Set(
-    operationModel.authenticationRequirements.flatMap((requirements) =>
-      requirements.map((requirement) => requirement.authenticationName),
+    operationModel.authenticationRequirements.flatMap((group) =>
+      group.requirements.map((requirement) => requirement.authenticationName),
     ),
   );
   const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
@@ -282,11 +284,11 @@ function* generateBody(
     `;
 
   if (operationModel.bodies.length === 0) {
-    yield* generateRequestContentTypeCodeBody(apiModel, operationModel);
+    yield* generateRequestContentTypeCodeBody(names, operationModel);
   } else {
     yield itt`  
         switch(outgoingRequest.contentType){
-          ${generateRequestContentTypeCaseClauses(apiModel, operationModel)}
+          ${generateRequestContentTypeCaseClauses(names, operationModel)}
         }
       `;
   }
@@ -308,7 +310,7 @@ function* generateBody(
 
   yield itt`
       switch(fetchResponse.status) {
-        ${generateResponseStatusCodeCaseClauses(apiModel, operationModel)}
+        ${generateResponseStatusCodeCaseClauses(names, operationModel)}
       }
     `;
 
@@ -318,15 +320,15 @@ function* generateBody(
 }
 
 function* generateRequestContentTypeCaseClauses(
-  apiModel: models.Api,
-  operationModel: models.Operation,
+  names: Record<string, string>,
+  operationModel: oa42Core.OperationContainer,
 ) {
   for (const bodyModel of operationModel.bodies) {
     yield itt`
       case ${JSON.stringify(bodyModel.contentType)}: {
         requestHeaders.append("content-type", outgoingRequest.contentType);
 
-        ${generateRequestContentTypeCodeBody(apiModel, operationModel, bodyModel)}
+        ${generateRequestContentTypeCodeBody(names, operationModel, bodyModel)}
         break;
       }
     `;
@@ -339,8 +341,8 @@ function* generateRequestContentTypeCaseClauses(
 }
 
 function* generateResponseStatusCodeCaseClauses(
-  apiModel: models.Api,
-  operationModel: models.Operation,
+  names: Record<string, string>,
+  operationModel: oa42Core.OperationContainer,
 ) {
   for (const operationResultModel of operationModel.operationResults) {
     const statusCodes = [...operationResultModel.statusCodes];
@@ -351,7 +353,7 @@ function* generateResponseStatusCodeCaseClauses(
       if (statusCodes.length === 0) {
         yield itt`
           {
-            ${generateOperationResultBody(apiModel, operationModel, operationResultModel)}
+            ${generateOperationResultBody(names, operationModel, operationResultModel)}
             break;
           }
         `;
@@ -366,9 +368,9 @@ function* generateResponseStatusCodeCaseClauses(
 }
 
 function* generateOperationResultBody(
-  apiModel: models.Api,
-  operationModel: models.Operation,
-  operationResultModel: models.OperationResult,
+  names: Record<string, string>,
+  operationModel: oa42Core.OperationContainer,
+  operationResultModel: oa42Core.OperationResultContainer,
 ) {
   const responseParametersName = getResponseParametersTypeName(
     operationModel,
@@ -383,7 +385,7 @@ function* generateOperationResultBody(
     const responseParameters = {
       ${operationResultModel.headerParameters.map((parameterModel) => {
         const parameterName = getParameterMemberName(parameterModel);
-        const parseParameterFunction = getParseParameterFunction(apiModel, parameterModel);
+        const parseParameterFunction = getParseParameterFunction(names, parameterModel);
 
         if (parseParameterFunction == null) {
           return `
@@ -412,7 +414,7 @@ function* generateOperationResultBody(
   `;
 
   if (operationResultModel.bodies.length === 0) {
-    yield* generateOperationResultContentTypeBody(apiModel);
+    yield* generateOperationResultContentTypeBody(names);
     return;
   } else {
     yield itt`
@@ -421,21 +423,21 @@ function* generateOperationResultBody(
       }
 
       switch(responseContentType) {
-        ${generateOperationResultContentTypeCaseClauses(apiModel, operationResultModel)}
+        ${generateOperationResultContentTypeCaseClauses(names, operationResultModel)}
       }
     `;
   }
 }
 
 function* generateOperationResultContentTypeCaseClauses(
-  apiModel: models.Api,
-  operationResultModel: models.OperationResult,
+  names: Record<string, string>,
+  operationResultModel: oa42Core.OperationResultContainer,
 ) {
   for (const bodyModel of operationResultModel.bodies) {
     yield itt`
       case ${JSON.stringify(bodyModel.contentType)}:
       {
-        ${generateOperationResultContentTypeBody(apiModel, bodyModel)}
+        ${generateOperationResultContentTypeBody(names, bodyModel)}
         break;
       }
     `;
@@ -448,9 +450,9 @@ function* generateOperationResultContentTypeCaseClauses(
 }
 
 function* generateRequestContentTypeCodeBody(
-  apiModel: models.Api,
-  operationModel: models.Operation,
-  bodyModel?: models.Body,
+  names: Record<string, string>,
+  operationModel: oa42Core.OperationContainer,
+  bodyModel?: oa42Core.BodyContainer,
 ) {
   if (bodyModel == null) {
     yield itt`
@@ -481,8 +483,8 @@ function* generateRequestContentTypeCodeBody(
     }
 
     case "application/json": {
-      const bodySchemaId = bodyModel.schemaId;
-      const bodyTypeName = bodySchemaId == null ? bodySchemaId : apiModel.names[bodySchemaId];
+      const bodySchemaId = bodyModel.schemaId?.toString();
+      const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
       const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
 
       yield itt`
@@ -546,7 +548,10 @@ function* generateRequestContentTypeCodeBody(
   }
 }
 
-function* generateOperationResultContentTypeBody(apiModel: models.Api, bodyModel?: models.Body) {
+function* generateOperationResultContentTypeBody(
+  names: Record<string, string>,
+  bodyModel?: oa42Core.BodyContainer,
+) {
   if (bodyModel == null) {
     yield itt`
       incomingResponse = {
@@ -593,8 +598,8 @@ function* generateOperationResultContentTypeBody(apiModel: models.Api, bodyModel
     }
 
     case "application/json": {
-      const bodySchemaId = bodyModel.schemaId;
-      const bodyTypeName = bodySchemaId == null ? bodySchemaId : apiModel.names[bodySchemaId];
+      const bodySchemaId = bodyModel.schemaId?.toString();
+      const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
       const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
 
       yield itt`

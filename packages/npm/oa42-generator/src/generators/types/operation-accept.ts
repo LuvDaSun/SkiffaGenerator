@@ -1,10 +1,9 @@
-import * as models from "../../models/index.js";
+import * as oa42Core from "@oa42/core";
 import { itt } from "../../utils/index.js";
-import { getOperationAcceptConstName, getOperationAcceptTypeName } from "../names/index.js";
+import { getOperationAcceptTypeName } from "../names/index.js";
 
-export function* generateOperationAcceptType(operationModel: models.Operation) {
+export function* generateOperationAcceptType(operationModel: oa42Core.OperationContainer) {
   const operationAcceptTypeName = getOperationAcceptTypeName(operationModel);
-  const operationAcceptConstName = getOperationAcceptConstName(operationModel);
 
   const operationAccepts = [
     ...new Set(

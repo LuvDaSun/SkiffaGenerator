@@ -1,7 +1,12 @@
-import { banner } from "@oa42/core";
+import * as oa42Core from "@oa42/core";
 import assert from "assert";
-import * as models from "../../models/index.js";
-import { packageInfo } from "../../utils/index.js";
+import {
+  isBodyModelMockable,
+  isOperationModelMockable,
+  isOperationResultModelMockable,
+  isParameterModelMockable,
+  packageInfo,
+} from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
   getAuthenticationMemberName,
@@ -15,8 +20,12 @@ import {
   getRegisterOperationHandlerName,
 } from "../names/index.js";
 
-export function* generateClientServerTestTsCode(apiModel: models.Api) {
-  yield banner("//", `v${packageInfo.version}`);
+export function* generateClientServerTestTsCode(
+  names: Record<string, string>,
+  mockables: Set<string>,
+  apiModel: oa42Core.ApiContainer,
+) {
+  yield oa42Core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import assert from "assert/strict";
@@ -37,25 +46,35 @@ export function* generateClientServerTestTsCode(apiModel: models.Api) {
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      if (!operationModel.mockable) {
+      if (!isOperationModelMockable(operationModel, mockables)) {
         continue;
       }
 
       if (operationModel.bodies.length === 0) {
         for (const operationResultModel of operationModel.operationResults) {
-          if (!operationResultModel.mockable) {
+          if (!isOperationResultModelMockable(operationResultModel, mockables)) {
             continue;
           }
 
           if (operationResultModel.bodies.length === 0) {
-            yield generateOperationTest(apiModel, operationModel, null, operationResultModel, null);
+            yield generateOperationTest(
+              names,
+              mockables,
+              apiModel,
+              operationModel,
+              null,
+              operationResultModel,
+              null,
+            );
           }
           for (const responseBodyModel of operationResultModel.bodies) {
-            if (!responseBodyModel.mockable) {
+            if (!isBodyModelMockable(responseBodyModel, mockables)) {
               continue;
             }
 
             yield generateOperationTest(
+              names,
+              mockables,
               apiModel,
               operationModel,
               null,
@@ -66,17 +85,19 @@ export function* generateClientServerTestTsCode(apiModel: models.Api) {
         }
       }
       for (const requestBodyModel of operationModel.bodies) {
-        if (!requestBodyModel.mockable) {
+        if (!isBodyModelMockable(requestBodyModel, mockables)) {
           continue;
         }
 
         for (const operationResultModel of operationModel.operationResults) {
-          if (!operationResultModel.mockable) {
+          if (!isOperationResultModelMockable(operationResultModel, mockables)) {
             continue;
           }
 
           if (operationResultModel.bodies.length === 0) {
             yield generateOperationTest(
+              names,
+              mockables,
               apiModel,
               operationModel,
               requestBodyModel,
@@ -85,11 +106,13 @@ export function* generateClientServerTestTsCode(apiModel: models.Api) {
             );
           }
           for (const responseBodyModel of operationResultModel.bodies) {
-            if (!responseBodyModel.mockable) {
+            if (!isBodyModelMockable(responseBodyModel, mockables)) {
               continue;
             }
 
             yield generateOperationTest(
+              names,
+              mockables,
               apiModel,
               operationModel,
               requestBodyModel,
@@ -104,22 +127,23 @@ export function* generateClientServerTestTsCode(apiModel: models.Api) {
 }
 
 function* generateOperationTest(
-  apiModel: models.Api,
-  operationModel: models.Operation,
-  requestBodyModel: models.Body | null,
-  operationResultModel: models.OperationResult,
-  responseBodyModel: models.Body | null,
+  names: Record<string, string>,
+  mockables: Set<string>,
+  apiModel: oa42Core.ApiContainer,
+  operationModel: oa42Core.OperationContainer,
+  requestBodyModel: oa42Core.BodyContainer | null,
+  operationResultModel: oa42Core.OperationResultContainer,
+  responseBodyModel: oa42Core.BodyContainer | null,
 ) {
   const authenticationNames = new Set(
-    operationModel.authenticationRequirements.flatMap((requirements) =>
-      requirements.map((requirement) => requirement.authenticationName),
+    operationModel.authenticationRequirements.flatMap((group) =>
+      group.requirements.map((requirement) => requirement.authenticationName),
     ),
   );
   const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
     authenticationNames.has(authenticationModel.name),
   );
 
-  const { names } = apiModel;
   const registerOperationHandlerMethodName = getRegisterOperationHandlerName(operationModel);
 
   let testNameParts = new Array<string>();
@@ -222,11 +246,11 @@ function* generateOperationTest(
       ...operationModel.pathParameters,
       ...operationModel.queryParameters,
     ]) {
-      if (!parameterModel.mockable) {
+      if (!isParameterModelMockable(parameterModel, mockables)) {
         continue;
       }
 
-      const validateFunctionName = getIsParameterFunction(apiModel, parameterModel);
+      const validateFunctionName = getIsParameterFunction(names, parameterModel);
       assert(validateFunctionName != null);
 
       yield itt`
@@ -245,7 +269,7 @@ function* generateOperationTest(
 
       switch (requestBodyModel.contentType) {
         case "application/json": {
-          const validateFunctionName = getIsBodyFunction(apiModel, requestBodyModel);
+          const validateFunctionName = getIsBodyFunction(names, requestBodyModel);
           assert(validateFunctionName != null);
 
           yield itt`
@@ -257,6 +281,9 @@ function* generateOperationTest(
             `;
           break;
         }
+
+        default:
+          throw new Error("unsupported content-type");
       }
     }
 
@@ -273,7 +300,7 @@ function* generateOperationTest(
     } else {
       switch (responseBodyModel.contentType) {
         case "application/json": {
-          const mockFunctionName = getMockBodyFunction(apiModel, responseBodyModel);
+          const mockFunctionName = getMockBodyFunction(names, responseBodyModel);
           assert(mockFunctionName != null);
 
           const entityExpression = itt`mocks.${mockFunctionName}()`;
@@ -290,6 +317,9 @@ function* generateOperationTest(
           `;
           break;
         }
+
+        default:
+          throw new Error("unsupported content-type");
       }
     }
   }
@@ -318,7 +348,7 @@ function* generateOperationTest(
     } else {
       switch (requestBodyModel.contentType) {
         case "application/json": {
-          const mockFunctionName = getMockBodyFunction(apiModel, requestBodyModel);
+          const mockFunctionName = getMockBodyFunction(names, requestBodyModel);
           assert(mockFunctionName != null);
 
           const entityExpression = itt`mocks.${mockFunctionName}()`;
@@ -345,6 +375,9 @@ function* generateOperationTest(
 
           break;
         }
+
+        default:
+          throw new Error("unsupported content-type");
       }
     }
 
@@ -357,11 +390,11 @@ function* generateOperationTest(
     `;
 
     for (const parameterModel of operationResultModel.headerParameters) {
-      if (!parameterModel.mockable) {
+      if (!isParameterModelMockable(parameterModel, mockables)) {
         continue;
       }
 
-      const validateFunctionName = getIsParameterFunction(apiModel, parameterModel);
+      const validateFunctionName = getIsParameterFunction(names, parameterModel);
       assert(validateFunctionName != null);
 
       yield itt`
@@ -380,7 +413,7 @@ function* generateOperationTest(
 
       switch (responseBodyModel.contentType) {
         case "application/json": {
-          const validateFunctionName = getIsBodyFunction(apiModel, responseBodyModel);
+          const validateFunctionName = getIsBodyFunction(names, responseBodyModel);
           if (validateFunctionName != null) {
             yield itt`
               { 
@@ -392,6 +425,9 @@ function* generateOperationTest(
           }
           break;
         }
+
+        default:
+          throw new Error("unsupported content-type");
       }
     }
   }
@@ -442,11 +478,11 @@ function* generateOperationTest(
       ...operationModel.pathParameters,
       ...operationModel.queryParameters,
     ]) {
-      if (!parameterModel.mockable) {
+      if (!isParameterModelMockable(parameterModel, mockables)) {
         continue;
       }
 
-      const mockFunctionName = getMockParameterFunction(apiModel, parameterModel);
+      const mockFunctionName = getMockParameterFunction(names, parameterModel);
       assert(mockFunctionName != null);
 
       yield itt`
@@ -457,11 +493,11 @@ function* generateOperationTest(
 
   function* generateResponseParametersMockBody() {
     for (const parameterModel of operationResultModel.headerParameters) {
-      if (!parameterModel.mockable) {
+      if (!isParameterModelMockable(parameterModel, mockables)) {
         continue;
       }
 
-      const mockFunctionName = getMockParameterFunction(apiModel, parameterModel);
+      const mockFunctionName = getMockParameterFunction(names, parameterModel);
       assert(mockFunctionName != null);
 
       yield itt`

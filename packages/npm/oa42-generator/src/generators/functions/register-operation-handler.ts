@@ -1,4 +1,4 @@
-import * as models from "../../models/index.js";
+import * as oa42Core from "@oa42/core";
 import { itt } from "../../utils/index.js";
 import {
   getOperationHandlerName,
@@ -8,15 +8,15 @@ import {
   getRegisterOperationsHandlerName,
 } from "../names/index.js";
 
-export function* registerOperationHandlerMethod(operationModel: models.Operation) {
+export function* registerOperationHandlerMethod(operationModel: oa42Core.OperationContainer) {
   const handlerPropertyName = getOperationHandlerName(operationModel);
   const handlerTypeName = getOperationHandlerTypeName(operationModel);
   const registerHandlerMethodName = getRegisterOperationHandlerName(operationModel);
 
   const jsDoc = [
     operationModel.deprecated ? "@deprecated" : "",
-    operationModel.summary,
-    operationModel.description,
+    operationModel.summary ?? "",
+    operationModel.description ?? "",
   ]
     .map((line) => line.trim())
     .filter((line) => line.length > 0)
@@ -37,7 +37,7 @@ export function* registerOperationHandlerMethod(operationModel: models.Operation
   `;
 }
 
-export function* registerOperationHandlersMethod(apiModel: models.Api) {
+export function* registerOperationHandlersMethod(apiModel: oa42Core.ApiContainer) {
   const methodName = getRegisterOperationsHandlerName();
   const handlersTypeName = getOperationHandlersTypeName();
 

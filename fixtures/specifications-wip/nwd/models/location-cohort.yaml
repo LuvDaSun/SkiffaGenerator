@@ -1,0 +1,12 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
+type: object
+allOf:
+  - $ref: "../bases.yaml#/$defs/IdContainer"
+required:
+  - handle
+properties:
+  handle:
+    $ref: "../fields.yaml#/$defs/Handle"
+  title:
+    $ref: "../fields.yaml#/$defs/Text"

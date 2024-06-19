@@ -1,0 +1,32 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
+type: object
+allOf:
+  - $ref: "../bases.yaml#/$defs/IdContainer"
+  - $ref: "../bases.yaml#/$defs/CuFields"
+required:
+  - name
+  - url
+  - type
+  - size
+  - transformUrl
+properties:
+  name:
+    $ref: "../fields.yaml#/$defs/Text"
+  url:
+    $ref: "../fields.yaml#/$defs/Url"
+  type:
+    enum:
+      - image
+  alt:
+    $ref: "../fields.yaml#/$defs/Text"
+  mimeType:
+    $ref: "../fields.yaml#/$defs/MimeType"
+  size:
+    $ref: "../fields.yaml#/$defs/PositiveInteger"
+  transformUrl:
+    $ref: "../fields.yaml#/$defs/Url"
+  width:
+    $ref: "../fields.yaml#/$defs/PositiveInteger"
+  height:
+    $ref: "../fields.yaml#/$defs/PositiveInteger"

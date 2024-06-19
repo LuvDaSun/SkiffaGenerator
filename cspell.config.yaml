@@ -2,13 +2,20 @@ version: "0.2"
 words:
   - appsignal
   - AZAZ
+  - bindgen
   - Bulthuis
   - camelcase
   - cdylib
+  - clippy
   - elmerbulthuis
   - endregion
   - esbenp
+  - gloo
   - goodrouter
+  - itertools
+  - mockables
+  - Nationaal
+  - nawadi
   - oneshot
   - openapi
   - opentelemetry
@@ -23,6 +30,7 @@ words:
   - ryanluker
   - serde
   - urlencoding
+  - Watersportdiploma
   - welkom
 useGitignore: true
 files:

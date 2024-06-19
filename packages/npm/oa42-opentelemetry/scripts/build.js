@@ -9,7 +9,7 @@ const projectRoot = path.resolve(dirname, "..");
 
 const options = { shell: true, stdio: "inherit", env: process.env, cwd: projectRoot };
 
+cp.execFileSync("npm", ["--workspace", "oa42-lib", "run", "build"], options);
+
 cp.execFileSync("tsc", [], options);
 cp.execFileSync("rollup", ["--config", path.resolve(projectRoot, "rollup.config.js")], options);
-
-cp.execFileSync("npm", ["--workspace", "oa42-lib", "run", "build"], options);

@@ -1,6 +1,5 @@
-import { banner } from "@oa42/core";
-import { RouterMode } from "goodrouter";
-import * as models from "../../models/index.js";
+import * as oa42Core from "@oa42/core";
+import { Router, RouterMode } from "goodrouter";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateServerClass } from "../classes/index.js";
@@ -16,8 +15,12 @@ import {
   generateServerAuthenticationType,
 } from "../types/index.js";
 
-export function* generateServerTsCode(apiModel: models.Api) {
-  yield banner("//", `v${packageInfo.version}`);
+export function* generateServerTsCode(
+  names: Record<string, string>,
+  router: Router<number>,
+  apiModel: oa42Core.ApiContainer,
+) {
+  yield oa42Core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import { Router } from "goodrouter";
@@ -48,13 +51,13 @@ export function* generateServerTsCode(apiModel: models.Api) {
     const router = new Router({
       parameterValueDecoder: value => value,
       parameterValueEncoder: value => value,
-    }).loadFromJson(${JSON.stringify(apiModel.router.saveToJson(RouterMode.Bidirectional))});
+    }).loadFromJson(${JSON.stringify(router.saveToJson(RouterMode.Bidirectional))});
   `;
 
   yield* generateServerAuthenticationType(apiModel);
   yield* generateAuthenticationHandlersType(apiModel);
   yield* generateOperationHandlersType(apiModel);
-  yield* generateServerClass(apiModel);
+  yield* generateServerClass(names, apiModel);
 
   for (const authenticationModel of apiModel.authentication) {
     yield* generateAuthenticationHandlerType(authenticationModel);
@@ -62,13 +65,13 @@ export function* generateServerTsCode(apiModel: models.Api) {
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      yield* generateIsAuthenticationFunction(apiModel, operationModel);
-
-      yield* generateOperationAuthenticationType(apiModel, operationModel);
       yield* generateOperationHandlerType(operationModel);
 
-      yield* generateOperationIncomingRequestType(apiModel, operationModel);
-      yield* generateOperationOutgoingResponseType(apiModel, operationModel);
+      yield* generateIsAuthenticationFunction(apiModel, operationModel);
+      yield* generateOperationAuthenticationType(apiModel, operationModel);
+
+      yield* generateOperationIncomingRequestType(names, operationModel);
+      yield* generateOperationOutgoingResponseType(names, operationModel);
     }
   }
 }

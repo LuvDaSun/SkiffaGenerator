@@ -1,4 +1,4 @@
-import * as models from "../../models/index.js";
+import * as oa42Core from "@oa42/core";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
   getAuthenticationCredentialTypeName,
@@ -7,7 +7,7 @@ import {
   getOperationCredentialsTypeName,
 } from "../names/index.js";
 
-export function* generateCredentialsType(apiModel: models.Api) {
+export function* generateCredentialsType(apiModel: oa42Core.ApiContainer) {
   const typeName = getCredentialsTypeName();
 
   yield itt`
@@ -29,8 +29,8 @@ export function* generateCredentialsType(apiModel: models.Api) {
 }
 
 export function* generateOperationCredentialsType(
-  apiModel: models.Api,
-  operationModel: models.Operation,
+  apiModel: oa42Core.ApiContainer,
+  operationModel: oa42Core.OperationContainer,
 ) {
   const operationCredentialsName = getOperationCredentialsTypeName(operationModel);
 
@@ -42,8 +42,8 @@ export function* generateOperationCredentialsType(
 
   function* body() {
     const authenticationNames = new Set(
-      operationModel.authenticationRequirements.flatMap((requirements) =>
-        requirements.map((requirement) => requirement.authenticationName),
+      operationModel.authenticationRequirements.flatMap((group) =>
+        group.requirements.map((requirement) => requirement.authenticationName),
       ),
     );
     const authenticationModels = apiModel.authentication.filter((authenticationModel) =>
@@ -61,7 +61,9 @@ export function* generateOperationCredentialsType(
   }
 }
 
-export function* generateAuthenticationCredentialType(authenticationModel: models.Authentication) {
+export function* generateAuthenticationCredentialType(
+  authenticationModel: oa42Core.AuthenticationContainer,
+) {
   const typeName = getAuthenticationCredentialTypeName(authenticationModel);
 
   yield itt`

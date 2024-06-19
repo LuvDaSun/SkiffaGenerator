@@ -1,0 +1,18 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
+type: object
+allOf:
+  - $ref: "../bases.yaml#/$defs/IdContainer"
+  - $ref: "../bases.yaml#/$defs/CudFields"
+required:
+  - handle
+  - studentCurriculumId
+properties:
+  handle:
+    $ref: "../fields.yaml#/$defs/Handle"
+  studentCurriculumId:
+    $ref: "../fields.yaml#/$defs/Id"
+  issuedAt:
+    $ref: "../fields.yaml#/$defs/Date"
+  visibleFrom:
+    $ref: "../fields.yaml#/$defs/Date"
