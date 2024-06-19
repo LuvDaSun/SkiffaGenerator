@@ -2,6 +2,11 @@
 
 Because OpenApi is the answer to everything!
 
+We love our early bird sponsors!
+
+[<img src="assets/nawadi.svg" alt="Nationaal Watersportdiploma" width="100" />](https://www.nationaalwatersportdiploma.nl/)
+
+
 ## Installing
 
 First, install dependencies via `npm install`.

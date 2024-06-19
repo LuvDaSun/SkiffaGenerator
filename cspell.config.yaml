@@ -14,6 +14,8 @@ words:
   - goodrouter
   - itertools
   - mockables
+  - Nationaal
+  - nawadi
   - oneshot
   - openapi
   - opentelemetry
@@ -28,6 +30,7 @@ words:
   - ryanluker
   - serde
   - urlencoding
+  - Watersportdiploma
   - welkom
 useGitignore: true
 files:
