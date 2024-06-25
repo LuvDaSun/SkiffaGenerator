@@ -18,8 +18,8 @@ export function* generateMainTsCode() {
     export * as parameters from "./parameters.js";
     export * as mocks from "./mocks.js";
 
-    export * from "./shared.js";
-    export * from "./client.js";
-    export * from "./server.js";
-    `;
+    export * as shared from "./shared.js";
+    export * as client from "./client.js";
+    export * as server from "./server.js";
+  `;
 }
