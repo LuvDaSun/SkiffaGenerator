@@ -98,9 +98,9 @@ async function main(options: MainOptions) {
 
   for (const documentSchema of oa42Context.getSchemas()) {
     await jns42Context.loadFromLocation(
-      documentSchema.schemaLocation.toString(),
-      documentSchema.schemaLocation.toString(),
-      documentSchema.documentLocation.toString(),
+      documentSchema.schemaLocation,
+      documentSchema.schemaLocation,
+      documentSchema.documentLocation,
       documentSchema.defaultSchemaId,
     );
   }
