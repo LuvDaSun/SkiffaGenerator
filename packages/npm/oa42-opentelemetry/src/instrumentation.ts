@@ -14,7 +14,7 @@ export const defaultInstrumentationConfiguration = {
   enabled: true,
 };
 
-export class Instrumentation extends InstrumentationBase {
+export class Instrumentation extends InstrumentationBase<InstrumentationConfiguration> {
   constructor(configuration: InstrumentationConfiguration = {}) {
     const configurationWithDefaults = { ...defaultInstrumentationConfiguration, ...configuration };
     super(packageInfo.name ?? "", packageInfo.version ?? "", configurationWithDefaults);
