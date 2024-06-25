@@ -38,3 +38,5 @@ files:
   - "**"
 enableFiletypes:
   - "*"
+ignorePaths:
+  - assets/
