@@ -87,7 +87,7 @@ export function parametersFromEntries(iterable: Iterable<[string, string]>): Par
 
 export function* parametersToEntries(parameters: Parameters): Iterable<[string, string]> {
   for (const name of Object.keys(parameters)) {
-    yield* getParameterValues(parameters, name).map((value) => [name, value]);
+    yield* getParameterValues(parameters, name).map((value) => [name, value] as [string, string]);
   }
 }
 

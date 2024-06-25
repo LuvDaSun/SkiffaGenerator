@@ -96,7 +96,7 @@ function* generateBodyContainerType(
       break;
     }
     case "application/json": {
-      const bodySchemaId = bodyModel.schemaId?.toString();
+      const bodySchemaId = bodyModel.schemaId;
       const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
 
       yield itt`

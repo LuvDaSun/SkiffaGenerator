@@ -6,9 +6,18 @@ import {
 import * as lib from "oa42-lib";
 import { packageInfo } from "./utils/index.js";
 
-export class Instrumentation extends InstrumentationBase {
-  constructor() {
-    super(packageInfo.name ?? "", packageInfo.version ?? "");
+export interface InstrumentationConfiguration {
+  enabled?: boolean;
+}
+
+export const defaultInstrumentationConfiguration = {
+  enabled: true,
+};
+
+export class Instrumentation extends InstrumentationBase<InstrumentationConfiguration> {
+  constructor(configuration: InstrumentationConfiguration = {}) {
+    const configurationWithDefaults = { ...defaultInstrumentationConfiguration, ...configuration };
+    super(packageInfo.name ?? "", packageInfo.version ?? "", configurationWithDefaults);
   }
 
   private originalServerWrappers?: lib.ServerWrappers;

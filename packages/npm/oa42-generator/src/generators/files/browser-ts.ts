@@ -8,11 +8,15 @@ export function* generateBrowserTsCode() {
   yield oa42Core.banner("//", `v${packageInfo.version}`);
 
   yield itt`
-    export * from "./types.js";
-    export * from "./validators.js";
-    export * from "./parsers.js";
-    export * from "./parameters.js";
-    export * from "./shared.js";
-    export * from "./client.js";
+    export * as lib from "oa42-lib";
+
+    export * as types from "./types.js";
+    export * as validators from "./validators.js";
+    export * as parsers from "./parsers.js";
+    export * as parameters from "./parameters.js";
+    export * as mocks from "./mocks.js";
+
+    export * as shared from "./shared.js";
+    export * as client from "./client.js";
   `;
 }
