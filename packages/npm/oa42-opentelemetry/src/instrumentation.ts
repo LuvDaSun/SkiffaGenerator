@@ -10,9 +10,14 @@ export interface InstrumentationConfiguration {
   enabled?: boolean;
 }
 
+export const defaultInstrumentationConfiguration = {
+  enabled: true,
+};
+
 export class Instrumentation extends InstrumentationBase {
   constructor(configuration: InstrumentationConfiguration = {}) {
-    super(packageInfo.name ?? "", packageInfo.version ?? "", configuration);
+    const configurationWithDefaults = { ...defaultInstrumentationConfiguration, ...configuration };
+    super(packageInfo.name ?? "", packageInfo.version ?? "", configurationWithDefaults);
   }
 
   private originalServerWrappers?: lib.ServerWrappers;
