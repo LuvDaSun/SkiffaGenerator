@@ -396,7 +396,7 @@ function* generateRequestContentTypeCodeBody(
     }
 
     case "application/json": {
-      const bodySchemaId = bodyModel.schemaId?.toString();
+      const bodySchemaId = bodyModel.schemaId;
       const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
       const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
 
@@ -613,7 +613,7 @@ function* generateOperationResultContentTypeBody(
     }
 
     case "application/json": {
-      const bodySchemaId = bodyModel.schemaId?.toString();
+      const bodySchemaId = bodyModel.schemaId;
       const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
       const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
 

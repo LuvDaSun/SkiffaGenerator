@@ -38,7 +38,7 @@ function* generateBody(
   for (const parameterModel of parameterModels) {
     const parameterSchemaId = parameterModel.schemaId;
     const parameterTypeName =
-      parameterSchemaId == null ? parameterSchemaId : names[parameterSchemaId.toString()];
+      parameterSchemaId == null ? parameterSchemaId : names[parameterSchemaId];
     if (parameterTypeName == null) {
       continue;
     }

@@ -82,7 +82,7 @@ export function getParseParameterFunction(
   names: Record<string, string>,
   parameterModel: oa42Core.ParameterContainer,
 ) {
-  const parameterSchemaId = parameterModel.schemaId?.toString();
+  const parameterSchemaId = parameterModel.schemaId;
   if (parameterSchemaId == null) {
     return null;
   }
@@ -99,7 +99,7 @@ export function getMockParameterFunction(
   names: Record<string, string>,
   parameterModel: oa42Core.ParameterContainer,
 ) {
-  const parameterSchemaId = parameterModel.schemaId?.toString();
+  const parameterSchemaId = parameterModel.schemaId;
   if (parameterSchemaId == null) {
     return null;
   }
@@ -116,7 +116,7 @@ export function getIsParameterFunction(
   names: Record<string, string>,
   parameterModel: oa42Core.ParameterContainer,
 ) {
-  const parameterSchemaId = parameterModel.schemaId?.toString();
+  const parameterSchemaId = parameterModel.schemaId;
   if (parameterSchemaId == null) {
     return null;
   }
@@ -133,7 +133,7 @@ export function getMockBodyFunction(
   names: Record<string, string>,
   bodyModel: oa42Core.BodyContainer,
 ) {
-  const bodySchemaId = bodyModel.schemaId?.toString();
+  const bodySchemaId = bodyModel.schemaId;
   if (bodySchemaId == null) {
     return null;
   }
@@ -150,7 +150,7 @@ export function getIsBodyFunction(
   names: Record<string, string>,
   bodyModel: oa42Core.BodyContainer,
 ) {
-  const bodySchemaId = bodyModel.schemaId?.toString();
+  const bodySchemaId = bodyModel.schemaId;
   if (bodySchemaId == null) {
     return null;
   }

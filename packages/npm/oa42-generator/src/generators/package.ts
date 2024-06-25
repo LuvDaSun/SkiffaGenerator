@@ -38,9 +38,13 @@ export function generatePackage(
     if (location == null) {
       continue;
     }
-    names[location.toString()] = specification.names.getName(key).toPascalCase();
+    const name = specification.names.getName(key);
+    if (name == null) {
+      continue;
+    }
+    names[location] = name.toPascalCase();
     if (jns42generator.isMockable(specification.typesArena, key)) {
-      mockables.add(location.toString());
+      mockables.add(location);
     }
   }
 

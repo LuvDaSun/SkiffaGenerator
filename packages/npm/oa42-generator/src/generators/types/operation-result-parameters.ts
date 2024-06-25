@@ -20,7 +20,7 @@ export function* generateOperationResultParameterTypes(
       ${parameterModels.map((parameterModel) => {
         const parameterSchemaId = parameterModel.schemaId;
         const parameterTypeName =
-          parameterSchemaId == null ? parameterSchemaId : names[parameterSchemaId.toString()];
+          parameterSchemaId == null ? parameterSchemaId : names[parameterSchemaId];
 
         return itt`
           ${camelcase(parameterModel.name)}${parameterModel.required ? "" : "?"}:
