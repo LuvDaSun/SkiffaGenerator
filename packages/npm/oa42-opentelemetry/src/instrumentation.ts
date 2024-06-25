@@ -6,9 +6,13 @@ import {
 import * as lib from "oa42-lib";
 import { packageInfo } from "./utils/index.js";
 
+export interface InstrumentationConfiguration {
+  enabled?: boolean;
+}
+
 export class Instrumentation extends InstrumentationBase {
-  constructor() {
-    super(packageInfo.name ?? "", packageInfo.version ?? "");
+  constructor(configuration: InstrumentationConfiguration = {}) {
+    super(packageInfo.name ?? "", packageInfo.version ?? "", configuration);
   }
 
   private originalServerWrappers?: lib.ServerWrappers;
