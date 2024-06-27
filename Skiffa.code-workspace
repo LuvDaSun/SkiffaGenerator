@@ -9,32 +9,32 @@
       "path": "fixtures",
     },
     {
-      "name": "npm/oa42-generator",
-      "path": "packages/npm/oa42-generator",
+      "name": "npm/skiffa-generator",
+      "path": "packages/npm/skiffa-generator",
     },
     {
-      "name": "npm/oa42-lib",
-      "path": "packages/npm/oa42-lib",
+      "name": "npm/skiffa-lib",
+      "path": "packages/npm/skiffa-lib",
     },
     {
-      "name": "npm/oa42-opentelemetry",
-      "path": "packages/npm/oa42-opentelemetry",
+      "name": "npm/skiffa-opentelemetry",
+      "path": "packages/npm/skiffa-opentelemetry",
     },
     {
-      "name": "npm/oa42-appsignal",
-      "path": "packages/npm/oa42-appsignal",
+      "name": "npm/skiffa-appsignal",
+      "path": "packages/npm/skiffa-appsignal",
     },
     {
-      "name": "npm/oa42-core",
-      "path": "packages/npm/oa42-core",
+      "name": "npm/skiffa-core",
+      "path": "packages/npm/skiffa-core",
     },
     {
-      "name": "cargo/oa42-core",
-      "path": "packages/cargo/oa42-core",
+      "name": "cargo/skiffa-core",
+      "path": "packages/cargo/skiffa-core",
     },
   ],
   "settings": {
-    "window.title": "OpenApi42",
+    "window.title": "Skiffa",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll": "always",

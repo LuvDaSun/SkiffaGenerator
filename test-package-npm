@@ -11,7 +11,7 @@ ERROR=0
 for F in $(ls fixtures/specifications/*.yaml); do
   echo $(basename $F .yaml)
 
-  npx oa42-generator package \
+  npx skiffa-generator package \
     $F \
     --package-directory .package-npm/specifications/$(basename $F .yaml) \
     --package-name $(basename $F .yaml) \

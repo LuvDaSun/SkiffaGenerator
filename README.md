@@ -1,6 +1,6 @@
-# OpenApi42
+# Skiffa
 
-Because OpenApi is the answer to everything!
+With love from Scheveningen!
 
 We love our early bird sponsors!
 
