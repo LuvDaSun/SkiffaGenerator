@@ -1,9 +1,9 @@
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 
 export function* generateRollupConfigJsCode() {
-  yield oa42Core.banner("//", `v${packageInfo.version}`);
+  yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import path from "path";

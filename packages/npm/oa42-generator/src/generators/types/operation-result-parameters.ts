@@ -1,12 +1,12 @@
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 import camelcase from "camelcase";
 import { itt } from "../../utils/iterable-text-template.js";
 import { getResponseParametersTypeName } from "../names/index.js";
 
 export function* generateOperationResultParameterTypes(
   names: Record<string, string>,
-  operationModel: oa42Core.OperationContainer,
-  operationResultModel: oa42Core.OperationResultContainer,
+  operationModel: skiffaCore.OperationContainer,
+  operationResultModel: skiffaCore.OperationResultContainer,
 ) {
   const operationResponseParametersName = getResponseParametersTypeName(
     operationModel,

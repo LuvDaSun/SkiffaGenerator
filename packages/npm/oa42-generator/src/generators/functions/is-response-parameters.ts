@@ -1,4 +1,4 @@
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 import { itt } from "../../utils/index.js";
 import {
   getIsResponseParametersFunction,
@@ -8,8 +8,8 @@ import {
 
 export function* generateIsResponseParametersFunction(
   names: Record<string, string>,
-  operationModel: oa42Core.OperationContainer,
-  operationResultModel: oa42Core.OperationResultContainer,
+  operationModel: skiffaCore.OperationContainer,
+  operationResultModel: skiffaCore.OperationResultContainer,
 ) {
   const isResponseParametersFunctionName = getIsResponseParametersFunction(
     operationModel,
@@ -31,7 +31,7 @@ export function* generateIsResponseParametersFunction(
 
 function* generateBody(
   names: Record<string, string>,
-  operationResultModel: oa42Core.OperationResultContainer,
+  operationResultModel: skiffaCore.OperationResultContainer,
 ) {
   const parameterModels = operationResultModel.headerParameters;
 

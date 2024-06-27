@@ -1,4 +1,4 @@
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
   getAuthenticationCredentialTypeName,
@@ -7,7 +7,7 @@ import {
   getOperationCredentialsTypeName,
 } from "../names/index.js";
 
-export function* generateCredentialsType(apiModel: oa42Core.ApiContainer) {
+export function* generateCredentialsType(apiModel: skiffaCore.ApiContainer) {
   const typeName = getCredentialsTypeName();
 
   yield itt`
@@ -29,8 +29,8 @@ export function* generateCredentialsType(apiModel: oa42Core.ApiContainer) {
 }
 
 export function* generateOperationCredentialsType(
-  apiModel: oa42Core.ApiContainer,
-  operationModel: oa42Core.OperationContainer,
+  apiModel: skiffaCore.ApiContainer,
+  operationModel: skiffaCore.OperationContainer,
 ) {
   const operationCredentialsName = getOperationCredentialsTypeName(operationModel);
 
@@ -62,7 +62,7 @@ export function* generateOperationCredentialsType(
 }
 
 export function* generateAuthenticationCredentialType(
-  authenticationModel: oa42Core.AuthenticationContainer,
+  authenticationModel: skiffaCore.AuthenticationContainer,
 ) {
   const typeName = getAuthenticationCredentialTypeName(authenticationModel);
 

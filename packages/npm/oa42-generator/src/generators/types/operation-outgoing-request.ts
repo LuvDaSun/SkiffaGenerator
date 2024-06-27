@@ -1,11 +1,11 @@
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 import { joinIterable, mapIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { getOutgoingRequestTypeName, getRequestParametersTypeName } from "../names/index.js";
 
 export function* generateOperationOutgoingRequestType(
   names: Record<string, string>,
-  operationModel: oa42Core.OperationContainer,
+  operationModel: skiffaCore.OperationContainer,
 ) {
   const typeName = getOutgoingRequestTypeName(operationModel);
 
@@ -19,7 +19,7 @@ export function* generateOperationOutgoingRequestType(
 
 function* generateElements(
   names: Record<string, string>,
-  operationModel: oa42Core.OperationContainer,
+  operationModel: skiffaCore.OperationContainer,
 ) {
   yield itt`
     ${generateParametersContainerType(operationModel)} &
@@ -29,7 +29,7 @@ function* generateElements(
   `;
 }
 
-function* generateParametersContainerType(operationModel: oa42Core.OperationContainer) {
+function* generateParametersContainerType(operationModel: skiffaCore.OperationContainer) {
   const parametersTypeName = getRequestParametersTypeName(operationModel);
 
   const required =
@@ -47,7 +47,7 @@ function* generateParametersContainerType(operationModel: oa42Core.OperationCont
 
 function* generateBodyContainerTypes(
   names: Record<string, string>,
-  operationModel: oa42Core.OperationContainer,
+  operationModel: skiffaCore.OperationContainer,
 ) {
   if (operationModel.bodies.length === 0) {
     yield* generateBodyContainerType(names, operationModel);
@@ -60,8 +60,8 @@ function* generateBodyContainerTypes(
 
 function* generateBodyContainerType(
   names: Record<string, string>,
-  operationModel: oa42Core.OperationContainer,
-  bodyModel?: oa42Core.BodyContainer,
+  operationModel: skiffaCore.OperationContainer,
+  bodyModel?: skiffaCore.BodyContainer,
 ) {
   if (bodyModel == null) {
     yield itt`

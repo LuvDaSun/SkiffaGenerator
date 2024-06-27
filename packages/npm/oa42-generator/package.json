@@ -1,5 +1,5 @@
 {
-  "name": "oa42-generator",
+  "name": "skiffa-generator",
   "version": "0.11.0",
   "sideEffects": false,
   "description": "",
@@ -19,7 +19,7 @@
     "./bundled/**"
   ],
   "bin": {
-    "oa42-generator": "bundled/program.js"
+    "skiffa-generator": "bundled/program.js"
   },
   "scripts": {
     "prepack": "node ./scripts/build.js",
@@ -30,12 +30,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/LuvDaSun/OpenApi42"
+    "url": "git+ssh://git@github.com/LuvDaSun/Skiffa"
   },
   "author": "LuvDaSun Software B.V.",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/LuvDaSun/OpenApi42/issues"
+    "url": "https://github.com/LuvDaSun/Skiffa/issues"
   },
   "keywords": [
     "openapi",
@@ -46,13 +46,13 @@
     "@jns42/oas-v3-0": "^0.17.4",
     "@jns42/oas-v3-1": "^0.17.4",
     "@jns42/swagger-v2": "^0.17.4",
-    "@oa42/core": "^0.2.2",
+    "@skiffa/core": "^0.2.2",
     "@types/node": "^18.19.39",
     "@types/yargs": "^17.0.32",
     "camelcase": "^8.0.0",
     "goodrouter": "^2.1.6",
     "jns42-generator": "^0.21.0",
-    "oa42-lib": "^0.10.6",
+    "skiffa-lib": "^0.10.6",
     "tslib": "^2.6.3",
     "type-fest": "^4.20.1",
     "yaml": "^2.4.5",

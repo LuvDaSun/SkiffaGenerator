@@ -1,4 +1,4 @@
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 import { itt } from "../../utils/index.js";
 import {
   getOperationHandlerName,
@@ -8,7 +8,7 @@ import {
   getRegisterOperationsHandlerName,
 } from "../names/index.js";
 
-export function* registerOperationHandlerMethod(operationModel: oa42Core.OperationContainer) {
+export function* registerOperationHandlerMethod(operationModel: skiffaCore.OperationContainer) {
   const handlerPropertyName = getOperationHandlerName(operationModel);
   const handlerTypeName = getOperationHandlerTypeName(operationModel);
   const registerHandlerMethodName = getRegisterOperationHandlerName(operationModel);
@@ -37,7 +37,7 @@ export function* registerOperationHandlerMethod(operationModel: oa42Core.Operati
   `;
 }
 
-export function* registerOperationHandlersMethod(apiModel: oa42Core.ApiContainer) {
+export function* registerOperationHandlersMethod(apiModel: skiffaCore.ApiContainer) {
   const methodName = getRegisterOperationsHandlerName();
   const handlersTypeName = getOperationHandlersTypeName();
 

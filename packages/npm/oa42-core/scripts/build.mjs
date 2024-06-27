@@ -17,7 +17,7 @@ const options = {
 
 cp.execFileSync(
   "cargo",
-  ["build", "--package", "oa42-core", "--target", "wasm32-unknown-unknown", "--release"],
+  ["build", "--package", "skiffa-core", "--target", "wasm32-unknown-unknown", "--release"],
   options,
 );
 cp.execFileSync(
@@ -27,7 +27,7 @@ cp.execFileSync(
     "nodejs",
     "--out-dir",
     path.resolve(projectRoot, "dist"),
-    path.resolve(workspaceRoot, "target", "wasm32-unknown-unknown", "release", "oa42_core.wasm"),
+    path.resolve(workspaceRoot, "target", "wasm32-unknown-unknown", "release", "skiffa_core.wasm"),
   ],
   options,
 );

@@ -1,4 +1,4 @@
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 import { itt, joinIterable } from "../../utils/index.js";
 import {
   getAuthenticationMemberName,
@@ -8,8 +8,8 @@ import {
 } from "../names/index.js";
 
 export function* generateIsAuthenticationFunction(
-  apiModel: oa42Core.ApiContainer,
-  operationModel: oa42Core.OperationContainer,
+  apiModel: skiffaCore.ApiContainer,
+  operationModel: skiffaCore.OperationContainer,
 ) {
   const serverAuthenticationName = getServerAuthenticationTypeName();
   const isAuthenticationFunctionName = getIsAuthenticationFunctionName(operationModel);
@@ -31,7 +31,7 @@ export function* generateIsAuthenticationFunction(
     return;
   }
 
-  function* generateOrRules(groups: oa42Core.AuthenticationRequirementGroupContainer[]) {
+  function* generateOrRules(groups: skiffaCore.AuthenticationRequirementGroupContainer[]) {
     if (groups.length === 0) {
       yield JSON.stringify(true);
     }
@@ -41,7 +41,7 @@ export function* generateIsAuthenticationFunction(
     }
   }
 
-  function* generateAndRules(requirements: oa42Core.AuthenticationRequirementContainer[]) {
+  function* generateAndRules(requirements: skiffaCore.AuthenticationRequirementContainer[]) {
     if (requirements.length === 0) {
       yield JSON.stringify(true);
     }

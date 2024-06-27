@@ -1,4 +1,4 @@
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 import { Router, RouterMode } from "goodrouter";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
@@ -18,9 +18,9 @@ import {
 export function* generateServerTsCode(
   names: Record<string, string>,
   router: Router<number>,
-  apiModel: oa42Core.ApiContainer,
+  apiModel: skiffaCore.ApiContainer,
 ) {
-  yield oa42Core.banner("//", `v${packageInfo.version}`);
+  yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import { Router } from "goodrouter";
@@ -29,7 +29,7 @@ export function* generateServerTsCode(
     import * as validators from "./validators.js";
     import * as parsers from "./parsers.js";
     import * as shared from "./shared.js";
-    import * as lib from "oa42-lib";
+    import * as lib from "skiffa-lib";
   `;
 
   yield itt`

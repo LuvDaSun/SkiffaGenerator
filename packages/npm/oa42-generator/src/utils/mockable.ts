@@ -1,7 +1,7 @@
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 
 export function isOperationModelMockable(
-  model: oa42Core.OperationContainer,
+  model: skiffaCore.OperationContainer,
   mockables: Set<string>,
 ) {
   return (
@@ -19,7 +19,7 @@ export function isOperationModelMockable(
 }
 
 export function isOperationResultModelMockable(
-  model: oa42Core.OperationResultContainer,
+  model: skiffaCore.OperationResultContainer,
   mockables: Set<string>,
 ) {
   return (
@@ -29,7 +29,7 @@ export function isOperationResultModelMockable(
   );
 }
 
-export function isBodyModelMockable(model: oa42Core.BodyContainer, mockables: Set<string>) {
+export function isBodyModelMockable(model: skiffaCore.BodyContainer, mockables: Set<string>) {
   return (
     (model.schemaId == null || mockables.has(model.schemaId)) &&
     model.contentType === "application/json"
@@ -37,7 +37,7 @@ export function isBodyModelMockable(model: oa42Core.BodyContainer, mockables: Se
 }
 
 export function isParameterModelMockable(
-  model: oa42Core.ParameterContainer,
+  model: skiffaCore.ParameterContainer,
   mockables: Set<string>,
 ) {
   return model.schemaId == null || mockables.has(model.schemaId) || !model.required;

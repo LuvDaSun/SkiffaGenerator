@@ -1,4 +1,4 @@
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 import { itt } from "../../utils/index.js";
 import {
   getAuthenticationHandlerName,
@@ -9,7 +9,7 @@ import {
 } from "../names/index.js";
 
 export function* registerAuthenticationHandlerMethod(
-  authenticationModel: oa42Core.AuthenticationContainer,
+  authenticationModel: skiffaCore.AuthenticationContainer,
 ) {
   const registerHandlerMethodName = getRegisterAuthenticationHandlerName(authenticationModel);
   const handlerTypeName = getAuthenticationHandlerTypeName(authenticationModel);
@@ -27,7 +27,7 @@ export function* registerAuthenticationHandlerMethod(
   `;
 }
 
-export function* registerAuthenticationHandlersMethod(apiModel: oa42Core.ApiContainer) {
+export function* registerAuthenticationHandlersMethod(apiModel: skiffaCore.ApiContainer) {
   const methodName = getRegisterAuthenticationsHandlerName();
   const handlersTypeName = getAuthenticationHandlersTypeName();
 

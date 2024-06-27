@@ -29,7 +29,7 @@ pub fn banner(prefix: &str, version: &str) -> String {
       "{}   ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝     ╚═╝     ╚═╝╚══════╝",
       prefix
     ),
-    format!("{}   {:47} -- www.OpenApi42.org", prefix, version),
+    format!("{}   {:47} -- www.Skiffa.org", prefix, version),
   ]
   .join("\n")
 }

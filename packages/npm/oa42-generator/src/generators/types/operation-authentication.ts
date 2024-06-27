@@ -1,4 +1,4 @@
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 import { joinIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
@@ -8,8 +8,8 @@ import {
 } from "../names/index.js";
 
 export function* generateOperationAuthenticationType(
-  apiModel: oa42Core.ApiContainer,
-  operationModel: oa42Core.OperationContainer,
+  apiModel: skiffaCore.ApiContainer,
+  operationModel: skiffaCore.OperationContainer,
 ) {
   const operationAuthenticationName = getOperationAuthenticationTypeName(operationModel);
   const serverAuthenticationName = getServerAuthenticationTypeName();
@@ -27,7 +27,7 @@ export function* generateOperationAuthenticationType(
     yield joinIterable(generateUnionTypes(operationModel.authenticationRequirements), "|\n");
   }
 
-  function* generateUnionTypes(groups: oa42Core.AuthenticationRequirementGroupContainer[]) {
+  function* generateUnionTypes(groups: skiffaCore.AuthenticationRequirementGroupContainer[]) {
     if (groups.length === 0) {
       yield JSON.stringify({});
     }
@@ -37,7 +37,9 @@ export function* generateOperationAuthenticationType(
     }
   }
 
-  function* generatePickUnionTypes(subRequirements: oa42Core.AuthenticationRequirementContainer[]) {
+  function* generatePickUnionTypes(
+    subRequirements: skiffaCore.AuthenticationRequirementContainer[],
+  ) {
     if (subRequirements.length === 0) {
       yield JSON.stringify({});
     }

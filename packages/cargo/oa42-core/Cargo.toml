@@ -1,13 +1,13 @@
 [package]
-name = "oa42-core"
+name = "skiffa-core"
 version = "0.1.0"
 edition = "2021"
-description = "Core of oa42"
+description = "Core of skiffa"
 license = "ISC"
 authors = ["Elmer Bulthuis"]
-homepage = "https://www.OpenApi42.org"
+homepage = "https://www.Skiffa.org"
 keywords = ["openapi", "api"]
-repository = "git@github.com:LuvDaSun/OpenApi42"
+repository = "git@github.com:LuvDaSun/Skiffa"
 
 [badges]
 maintenance = { status = "actively-developed" }

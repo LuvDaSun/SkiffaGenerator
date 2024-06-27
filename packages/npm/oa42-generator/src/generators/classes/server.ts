@@ -1,4 +1,4 @@
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
   generateEndpointHandlerMethod,
@@ -17,7 +17,7 @@ import {
 
 /**
  * Generated the server class. This is the server that is generated from the
- * specification. It inherits from the `ServerBase` class in `oa42-lib`.
+ * specification. It inherits from the `ServerBase` class in `skiffa-lib`.
  *
  * The class sets up routing on instantiation, then it's up to the user to
  * register handlers for all operations via the `register...Operation` methods.
@@ -34,7 +34,7 @@ import {
  */
 export function* generateServerClass(
   names: Record<string, string>,
-  apiModel: oa42Core.ApiContainer,
+  apiModel: skiffaCore.ApiContainer,
 ) {
   const authenticationTypeName = getServerAuthenticationTypeName();
 
@@ -47,7 +47,7 @@ export class Server<A extends ${authenticationTypeName} = ${authenticationTypeNa
 `;
 }
 
-function* generateBody(names: Record<string, string>, apiModel: oa42Core.ApiContainer) {
+function* generateBody(names: Record<string, string>, apiModel: skiffaCore.ApiContainer) {
   const authenticationHandlersTypeName = getAuthenticationHandlersTypeName();
   const operationHandlersTypeName = getOperationHandlersTypeName();
 

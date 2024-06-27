@@ -1,19 +1,19 @@
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 import { toCamel } from "../../utils/index.js";
 
 export function getDefaultCredentialsConstantName() {
   return toCamel("default", "credentials");
 }
 
-export function getOperationFunctionName(operationModel: oa42Core.OperationContainer) {
+export function getOperationFunctionName(operationModel: skiffaCore.OperationContainer) {
   return toCamel(operationModel.name);
 }
 
-export function getOperationHandlerName(operationModel: oa42Core.OperationContainer) {
+export function getOperationHandlerName(operationModel: skiffaCore.OperationContainer) {
   return toCamel(operationModel.name);
 }
 
-export function getRegisterOperationHandlerName(operationModel: oa42Core.OperationContainer) {
+export function getRegisterOperationHandlerName(operationModel: skiffaCore.OperationContainer) {
   return toCamel("register", operationModel.name, "operation");
 }
 
@@ -22,13 +22,13 @@ export function getRegisterOperationsHandlerName() {
 }
 
 export function getAuthenticationHandlerName(
-  authenticationModel: oa42Core.AuthenticationContainer,
+  authenticationModel: skiffaCore.AuthenticationContainer,
 ) {
   return toCamel(authenticationModel.name);
 }
 
 export function getRegisterAuthenticationHandlerName(
-  authenticationModel: oa42Core.AuthenticationContainer,
+  authenticationModel: skiffaCore.AuthenticationContainer,
 ) {
   return toCamel("register", authenticationModel.name, "authentication");
 }
@@ -37,29 +37,31 @@ export function getRegisterAuthenticationsHandlerName() {
   return toCamel("register", "authentications");
 }
 
-export function getEndpointHandlerName(operationModel: oa42Core.OperationContainer) {
+export function getEndpointHandlerName(operationModel: skiffaCore.OperationContainer) {
   return toCamel(operationModel.name, "endpoint", "handler");
 }
 
-export function getOperationAcceptConstName(operationModel: oa42Core.OperationContainer) {
+export function getOperationAcceptConstName(operationModel: skiffaCore.OperationContainer) {
   return toCamel(operationModel.name, "operation", "accept");
 }
 
-export function getAuthenticationMemberName(authenticationModel: oa42Core.AuthenticationContainer) {
+export function getAuthenticationMemberName(
+  authenticationModel: skiffaCore.AuthenticationContainer,
+) {
   return toCamel(authenticationModel.name);
 }
 
-export function getParameterMemberName(parameterModel: oa42Core.ParameterContainer) {
+export function getParameterMemberName(parameterModel: skiffaCore.ParameterContainer) {
   return toCamel(parameterModel.name);
 }
 
-export function getIsRequestParametersFunction(operationModel: oa42Core.OperationContainer) {
+export function getIsRequestParametersFunction(operationModel: skiffaCore.OperationContainer) {
   return toCamel("is", operationModel.name, "request", "parameters");
 }
 
 export function getIsResponseParametersFunction(
-  operationModel: oa42Core.OperationContainer,
-  operationResultModel: oa42Core.OperationResultContainer,
+  operationModel: skiffaCore.OperationContainer,
+  operationResultModel: skiffaCore.OperationResultContainer,
 ) {
   return toCamel(
     "is",
@@ -70,17 +72,17 @@ export function getIsResponseParametersFunction(
   );
 }
 
-export function getIsOperationAuthenticationName(operationModel: oa42Core.OperationContainer) {
+export function getIsOperationAuthenticationName(operationModel: skiffaCore.OperationContainer) {
   return toCamel("is", operationModel.name, "authentication");
 }
 
-export function getIsAuthenticationFunctionName(operationModel: oa42Core.OperationContainer) {
+export function getIsAuthenticationFunctionName(operationModel: skiffaCore.OperationContainer) {
   return toCamel("is", operationModel.name, "authentication");
 }
 
 export function getParseParameterFunction(
   names: Record<string, string>,
-  parameterModel: oa42Core.ParameterContainer,
+  parameterModel: skiffaCore.ParameterContainer,
 ) {
   const parameterSchemaId = parameterModel.schemaId;
   if (parameterSchemaId == null) {
@@ -97,7 +99,7 @@ export function getParseParameterFunction(
 
 export function getMockParameterFunction(
   names: Record<string, string>,
-  parameterModel: oa42Core.ParameterContainer,
+  parameterModel: skiffaCore.ParameterContainer,
 ) {
   const parameterSchemaId = parameterModel.schemaId;
   if (parameterSchemaId == null) {
@@ -114,7 +116,7 @@ export function getMockParameterFunction(
 
 export function getIsParameterFunction(
   names: Record<string, string>,
-  parameterModel: oa42Core.ParameterContainer,
+  parameterModel: skiffaCore.ParameterContainer,
 ) {
   const parameterSchemaId = parameterModel.schemaId;
   if (parameterSchemaId == null) {
@@ -131,7 +133,7 @@ export function getIsParameterFunction(
 
 export function getMockBodyFunction(
   names: Record<string, string>,
-  bodyModel: oa42Core.BodyContainer,
+  bodyModel: skiffaCore.BodyContainer,
 ) {
   const bodySchemaId = bodyModel.schemaId;
   if (bodySchemaId == null) {
@@ -148,7 +150,7 @@ export function getMockBodyFunction(
 
 export function getIsBodyFunction(
   names: Record<string, string>,
-  bodyModel: oa42Core.BodyContainer,
+  bodyModel: skiffaCore.BodyContainer,
 ) {
   const bodySchemaId = bodyModel.schemaId;
   if (bodySchemaId == null) {

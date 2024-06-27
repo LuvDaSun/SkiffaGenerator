@@ -1,3 +1,3 @@
-# oa42-opentelemetry
+# skiffa-opentelemetry
 
-Opentelemetry instrumentation for oa42 servers and clients.
+Opentelemetry instrumentation for skiffa servers and clients.

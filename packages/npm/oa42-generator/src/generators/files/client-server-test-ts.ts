@@ -1,4 +1,4 @@
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 import assert from "assert";
 import {
   isBodyModelMockable,
@@ -23,14 +23,14 @@ import {
 export function* generateClientServerTestTsCode(
   names: Record<string, string>,
   mockables: Set<string>,
-  apiModel: oa42Core.ApiContainer,
+  apiModel: skiffaCore.ApiContainer,
 ) {
-  yield oa42Core.banner("//", `v${packageInfo.version}`);
+  yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
   yield itt`
     import assert from "assert/strict";
     import test from "node:test";
-    import * as lib from "oa42-lib";
+    import * as lib from "skiffa-lib";
 
     import * as server from "./server.js";
     import * as client from "./client.js";
@@ -129,11 +129,11 @@ export function* generateClientServerTestTsCode(
 function* generateOperationTest(
   names: Record<string, string>,
   mockables: Set<string>,
-  apiModel: oa42Core.ApiContainer,
-  operationModel: oa42Core.OperationContainer,
-  requestBodyModel: oa42Core.BodyContainer | null,
-  operationResultModel: oa42Core.OperationResultContainer,
-  responseBodyModel: oa42Core.BodyContainer | null,
+  apiModel: skiffaCore.ApiContainer,
+  operationModel: skiffaCore.OperationContainer,
+  requestBodyModel: skiffaCore.BodyContainer | null,
+  operationResultModel: skiffaCore.OperationResultContainer,
+  responseBodyModel: skiffaCore.BodyContainer | null,
 ) {
   const authenticationNames = new Set(
     operationModel.authenticationRequirements.flatMap((group) =>

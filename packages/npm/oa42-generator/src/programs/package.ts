@@ -1,5 +1,5 @@
 import * as jns42Core from "@jns42/core";
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 import assert from "assert";
 import * as jns42Generator from "jns42-generator";
 import * as path from "path";
@@ -88,15 +88,15 @@ async function main(options: MainOptions) {
   const jns42Context = new jns42Core.DocumentContextContainer();
   jns42Context.registerWellKnownFactories();
 
-  const oa42Context = new oa42Core.DocumentContextContainer();
-  oa42Context.registerWellKnownFactories();
+  const skiffaContext = new skiffaCore.DocumentContextContainer();
+  skiffaContext.registerWellKnownFactories();
 
-  await oa42Context.loadFromLocation(specificationLocation);
+  await skiffaContext.loadFromLocation(specificationLocation);
 
-  const apiModel = oa42Context.getApiModel(specificationLocation);
+  const apiModel = skiffaContext.getApiModel(specificationLocation);
   assert(apiModel != null);
 
-  for (const documentSchema of oa42Context.getSchemas()) {
+  for (const documentSchema of skiffaContext.getSchemas()) {
     await jns42Context.loadFromLocation(
       documentSchema.schemaLocation,
       documentSchema.schemaLocation,

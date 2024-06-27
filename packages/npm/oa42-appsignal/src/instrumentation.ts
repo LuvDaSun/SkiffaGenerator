@@ -4,7 +4,7 @@ import {
   InstrumentationBase,
   InstrumentationNodeModuleDefinition,
 } from "@opentelemetry/instrumentation";
-import * as lib from "oa42-lib";
+import * as lib from "skiffa-lib";
 import { packageInfo } from "./utils/index.js";
 
 export interface InstrumentationConfiguration {
@@ -24,8 +24,8 @@ export class Instrumentation extends InstrumentationBase<InstrumentationConfigur
   private originalServerWrappers?: lib.ServerWrappers;
   protected init() {
     return new InstrumentationNodeModuleDefinition(
-      "oa42-lib",
-      [packageInfo.dependencies?.["oa42-lib"] ?? "*"],
+      "skiffa-lib",
+      [packageInfo.dependencies?.["skiffa-lib"] ?? "*"],
       (moduleExports, moduleVersion) => {
         this.originalServerWrappers = moduleExports.defaultServerWrappers;
         instrument(moduleExports.defaultServerWrappers);

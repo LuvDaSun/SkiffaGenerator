@@ -1,15 +1,15 @@
 {
-  "name": "@oa42/core",
+  "name": "@skiffa/core",
   "version": "0.2.2",
   "sideEffects": false,
   "description": "core library",
   "type": "commonjs",
-  "module": "./dist/oa42_core.js",
-  "types": "./dist/oa42_core.d.ts",
+  "module": "./dist/skiffa_core.js",
+  "types": "./dist/skiffa_core.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/oa42_core.js",
-      "types": "./dist/oa42_core.d.ts"
+      "import": "./dist/skiffa_core.js",
+      "types": "./dist/skiffa_core.d.ts"
     }
   },
   "files": [
@@ -22,19 +22,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/LuvDaSun/OpenApi42.git"
+    "url": "git+ssh://git@github.com/LuvDaSun/Skiffa.git"
   },
   "author": "LuvDaSun Software B.V.",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/LuvDaSun/OpenApi42/issues"
+    "url": "https://github.com/LuvDaSun/Skiffa/issues"
   },
   "keywords": [
     "openapi",
     "api",
     "core"
   ],
-  "homepage": "https://www.OpenApi42.org",
+  "homepage": "https://www.Skiffa.org",
   "devDependencies": {},
   "dependencies": {},
   "engines": {

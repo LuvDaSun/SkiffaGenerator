@@ -1,11 +1,11 @@
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 import { joinIterable, mapIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { getOutgoingResponseTypeName, getResponseParametersTypeName } from "../names/index.js";
 
 export function* generateOperationOutgoingResponseType(
   names: Record<string, string>,
-  operationModel: oa42Core.OperationContainer,
+  operationModel: skiffaCore.OperationContainer,
 ) {
   const typeName = getOutgoingResponseTypeName(operationModel);
 
@@ -19,7 +19,7 @@ export function* generateOperationOutgoingResponseType(
 
 function* generateElements(
   names: Record<string, string>,
-  operationModel: oa42Core.OperationContainer,
+  operationModel: skiffaCore.OperationContainer,
 ) {
   if (operationModel.operationResults.length === 0) {
     yield itt`never`;
@@ -36,8 +36,8 @@ function* generateElements(
 }
 
 function* generateParametersContainerType(
-  operationModel: oa42Core.OperationContainer,
-  operationResultModel: oa42Core.OperationResultContainer,
+  operationModel: skiffaCore.OperationContainer,
+  operationResultModel: skiffaCore.OperationResultContainer,
 ) {
   const parametersTypeName = getResponseParametersTypeName(operationModel, operationResultModel);
 
@@ -52,8 +52,8 @@ function* generateParametersContainerType(
 
 function* generateBodyContainerTypes(
   names: Record<string, string>,
-  operationModel: oa42Core.OperationContainer,
-  operationResultModel: oa42Core.OperationResultContainer,
+  operationModel: skiffaCore.OperationContainer,
+  operationResultModel: skiffaCore.OperationResultContainer,
 ) {
   if (operationResultModel.bodies.length === 0) {
     yield* generateBodyContainerType(names, operationModel, operationResultModel);
@@ -66,9 +66,9 @@ function* generateBodyContainerTypes(
 
 function* generateBodyContainerType(
   names: Record<string, string>,
-  operationModel: oa42Core.OperationContainer,
-  operationResultModel: oa42Core.OperationResultContainer,
-  bodyModel?: oa42Core.BodyContainer,
+  operationModel: skiffaCore.OperationContainer,
+  operationResultModel: skiffaCore.OperationResultContainer,
+  bodyModel?: skiffaCore.BodyContainer,
 ) {
   if (bodyModel == null) {
     yield itt`

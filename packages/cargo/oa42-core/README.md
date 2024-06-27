@@ -1,4 +1,4 @@
-## OpenApi42 core
+## Skiffa core
 
 This project contains all generic code to generate client and server code from OpenApi 3.0 and 3.1 and Swagger 2 standards.
 

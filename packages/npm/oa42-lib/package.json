@@ -1,5 +1,5 @@
 {
-  "name": "oa42-lib",
+  "name": "skiffa-lib",
   "version": "0.10.6",
   "description": "",
   "type": "module",
@@ -28,12 +28,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/LuvDaSun/OpenApi42.git"
+    "url": "git+ssh://git@github.com/LuvDaSun/Skiffa.git"
   },
   "author": "LuvDaSun Software B.V.",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/LuvDaSun/OpenApi42/issues"
+    "url": "https://github.com/LuvDaSun/Skiffa/issues"
   },
   "keywords": [
     "openapi",

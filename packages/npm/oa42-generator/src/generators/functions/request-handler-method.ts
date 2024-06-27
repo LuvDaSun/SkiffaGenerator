@@ -1,8 +1,8 @@
-import * as oa42Core from "@oa42/core";
+import * as skiffaCore from "@skiffa/core";
 import { itt } from "../../utils/index.js";
 import { getEndpointHandlerName } from "../names/index.js";
 
-export function* generateRequestHandlerMethod(apiModel: oa42Core.ApiContainer) {
+export function* generateRequestHandlerMethod(apiModel: skiffaCore.ApiContainer) {
   yield itt`
     protected requestHandler(
       serverIncomingRequest: lib.ServerIncomingRequest,
@@ -14,7 +14,7 @@ export function* generateRequestHandlerMethod(apiModel: oa42Core.ApiContainer) {
   `;
 }
 
-function* generateBody(apiModel: oa42Core.ApiContainer) {
+function* generateBody(apiModel: skiffaCore.ApiContainer) {
   yield itt`
     const [pathId, pathParameters] =
       router.parseRoute(serverIncomingRequest.path);
@@ -26,7 +26,7 @@ function* generateBody(apiModel: oa42Core.ApiContainer) {
     }
   `;
 }
-function* generatePathCaseClauses(apiModel: oa42Core.ApiContainer) {
+function* generatePathCaseClauses(apiModel: skiffaCore.ApiContainer) {
   for (const pathModel of apiModel.paths) {
     yield itt`
       case ${JSON.stringify(pathModel.id)}: 
@@ -41,7 +41,7 @@ function* generatePathCaseClauses(apiModel: oa42Core.ApiContainer) {
       throw new lib.NoRouteFound()
   `;
 }
-function* generateOperationCaseClauses(pathModel: oa42Core.PathContainer) {
+function* generateOperationCaseClauses(pathModel: skiffaCore.PathContainer) {
   for (const operationModel of pathModel.operations) {
     const endpointHandlerName = getEndpointHandlerName(operationModel);
 
