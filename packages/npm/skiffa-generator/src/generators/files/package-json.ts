@@ -27,7 +27,7 @@ export function generatePackageJsonData(name: string, version: string) {
     },
     author: "",
     license: "ISC",
-    dependencies: withDependencies(["@types/node", "goodrouter", "skiffa-lib"]),
+    dependencies: withDependencies(["@types/node", "goodrouter", "@skiffa/lib"]),
     devDependencies: withDependencies(["typescript", "rollup", "@tsconfig/node18"]),
     engines: {
       node: ">=18",

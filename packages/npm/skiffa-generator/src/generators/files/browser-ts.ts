@@ -8,7 +8,7 @@ export function* generateBrowserTsCode() {
   yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
   yield itt`
-    export * as lib from "skiffa-lib";
+    export * as lib from "@skiffa/lib";
 
     export * as types from "./types.js";
     export * as validators from "./validators.js";

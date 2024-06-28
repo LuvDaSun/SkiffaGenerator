@@ -30,7 +30,7 @@ export function* generateClientServerTestTsCode(
   yield itt`
     import assert from "assert/strict";
     import test from "node:test";
-    import * as lib from "skiffa-lib";
+    import * as lib from "@skiffa/lib";
 
     import * as server from "./server.js";
     import * as client from "./client.js";

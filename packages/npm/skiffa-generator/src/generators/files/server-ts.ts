@@ -29,7 +29,7 @@ export function* generateServerTsCode(
     import * as validators from "./validators.js";
     import * as parsers from "./parsers.js";
     import * as shared from "./shared.js";
-    import * as lib from "skiffa-lib";
+    import * as lib from "@skiffa/lib";
   `;
 
   yield itt`

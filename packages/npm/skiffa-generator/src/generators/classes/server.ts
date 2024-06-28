@@ -17,7 +17,7 @@ import {
 
 /**
  * Generated the server class. This is the server that is generated from the
- * specification. It inherits from the `ServerBase` class in `skiffa-lib`.
+ * specification. It inherits from the `ServerBase` class in `@skiffa/lib`.
  *
  * The class sets up routing on instantiation, then it's up to the user to
  * register handlers for all operations via the `register...Operation` methods.
