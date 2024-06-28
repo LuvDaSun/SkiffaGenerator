@@ -2,6 +2,8 @@
 
 With love from Scheveningen!
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/DaG5JReOYEw?si=wpNd7q338XLjX93N" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 We love our early bird sponsors!
 
 [<img src="assets/nawadi.svg" alt="Nationaal Watersportdiploma" width="100" />](https://www.nationaalwatersportdiploma.nl/)
