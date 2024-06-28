@@ -1,0 +1,58 @@
+{
+  "name": "@skiffa/appsignal",
+  "version": "0.2.5",
+  "description": "",
+  "type": "module",
+  "main": "./bundled/main.cjs",
+  "module": "./bundles/main.js",
+  "types": "./typed/main.d.ts",
+  "exports": {
+    ".": {
+      "require": "./bundled/main.cjs",
+      "import": "./bundled/main.js",
+      "types": "./typed/main.d.ts"
+    }
+  },
+  "files": [
+    "./typed/**",
+    "./bundled/**"
+  ],
+  "scripts": {
+    "prepack": "node ./scripts/build.js",
+    "pretest": "tsc",
+    "build": "node ./scripts/build.js",
+    "clean": "node ./scripts/clean.js",
+    "test": "node --test ./transpiled/**/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/LuvDaSun/Skiffa.git"
+  },
+  "author": "LuvDaSun Software B.V.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LuvDaSun/Skiffa/issues"
+  },
+  "keywords": [
+    "openapi",
+    "appsignal"
+  ],
+  "dependencies": {
+    "@appsignal/nodejs": "^3.4.7",
+    "@opentelemetry/api": "^1.9.0",
+    "@skiffa/lib": "^0.10.6",
+    "@types/node": "^18.19.39",
+    "tslib": "^2.6.3",
+    "type-fest": "^4.20.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-replace": "^5.0.7",
+    "@tsconfig/node18": "^18.2.4",
+    "rollup": "^4.18.0",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "typescript": "^5.5.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

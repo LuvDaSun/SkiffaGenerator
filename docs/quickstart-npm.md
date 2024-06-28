@@ -1,8 +1,8 @@
 # Quickstart with NPM
 
-Use the OpenApi42 generator to instantly create an NPM package from an OpenApi specification, including a client and a server. Publish this package to NPM or use it in your monorepo from Node.js or your browser.
+Use the Skiffa generator to instantly create an NPM package from an OpenApi specification, including a client and a server. Publish this package to NPM or use it in your monorepo from Node.js or your browser.
 
-To get started first you will need an OpenApi schema. Here is one that you could use to get started (taken from the OpenApi42-Examples repository):
+To get started first you will need an OpenApi schema. Here is one that you could use to get started (taken from the Skiffa-Examples repository):
 
 ```yaml
 openapi: 3.0.2
@@ -11,7 +11,7 @@ info:
   title: Reverse API
   description: |-
     This API is able to take a string and reverse it. It has only one endpoint! Use this API
-    to get started with OpenApi42.
+    to get started with Skiffa.
   version: 0.1.0
 
 paths:
@@ -31,10 +31,10 @@ paths:
             "text/plain": {}
 ```
 
-Put it in a file called `reverse-api.yaml`. Then run the OpenApi42 generator.
+Put it in a file called `reverse-api.yaml`. Then run the Skiffa generator.
 
 ```sh
-npx oa42-generator reverse-api.yaml --package-directory reverse-api --package-name reverse-api --package-version 0.1.0
+npx skiffa-generator reverse-api.yaml --package-directory reverse-api --package-name reverse-api --package-version 0.1.0
 ```
 
 This will create a package in the `reverse-api` directory. The package has the name `reverse-api` and version `0.1.0`. You could install dependencies of the package via `npm install` and then build the package via `npm run build`. You could publish the package to npm.org (or any other NPM package host) or use the package from your monorepo.
@@ -89,7 +89,7 @@ This wil print:
 remle
 ```
 
-But, as OpenApi42 generator also generates client code we can also use our generated package to call the server. All operations are exposed as functions from the generated code.
+But, as Skiffa generator also generates client code we can also use our generated package to call the server. All operations are exposed as functions from the generated code.
 
 > One reason to use functions is that the code is tree shakable. This is especially important when using the generated code in a browser.
 

@@ -1,0 +1,43 @@
+{
+  "name": "@skiffa/core",
+  "version": "0.2.3",
+  "sideEffects": false,
+  "description": "core library",
+  "type": "commonjs",
+  "module": "./dist/skiffa_core.js",
+  "types": "./dist/skiffa_core.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/skiffa_core.js",
+      "types": "./dist/skiffa_core.d.ts"
+    }
+  },
+  "files": [
+    "./dist/**"
+  ],
+  "scripts": {
+    "prepack": "node ./scripts/build.mjs",
+    "build": "node ./scripts/build.mjs",
+    "clean": "node ./scripts/clean.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/LuvDaSun/Skiffa.git"
+  },
+  "author": "LuvDaSun Software B.V.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LuvDaSun/Skiffa/issues"
+  },
+  "keywords": [
+    "openapi",
+    "api",
+    "core"
+  ],
+  "homepage": "https://www.Skiffa.org",
+  "devDependencies": {},
+  "dependencies": {},
+  "engines": {
+    "node": ">=18"
+  }
+}
