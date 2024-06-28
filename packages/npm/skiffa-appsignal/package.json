@@ -1,5 +1,5 @@
 {
-  "name": "skiffa-appsignal",
+  "name": "@skiffa/appsignal",
   "version": "0.2.5",
   "description": "",
   "type": "module",
