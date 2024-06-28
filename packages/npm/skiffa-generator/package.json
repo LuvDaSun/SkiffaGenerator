@@ -43,6 +43,7 @@
   ],
   "dependencies": {
     "@jns42/core": "^0.7.0",
+    "@jns42/generator": "^0.21.1",
     "@jns42/oas-v3-0": "^0.17.4",
     "@jns42/oas-v3-1": "^0.17.4",
     "@jns42/swagger-v2": "^0.17.4",
@@ -52,7 +53,6 @@
     "@types/yargs": "^17.0.32",
     "camelcase": "^8.0.0",
     "goodrouter": "^2.1.6",
-    "@jns42/generator": "^0.21.0",
     "tslib": "^2.6.3",
     "type-fest": "^4.20.1",
     "yaml": "^2.4.5",
