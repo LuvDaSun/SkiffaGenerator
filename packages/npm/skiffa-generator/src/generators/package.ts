@@ -1,7 +1,7 @@
 import * as skiffaCore from "@skiffa/core";
 import fs from "fs";
 import { Router } from "goodrouter";
-import * as jns42generator from "jns42-generator";
+import * as jns42generator from "@jns42/generator";
 import path from "path";
 import { NestedText, flattenNestedText, itt, splitIterableText } from "../utils/index.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
