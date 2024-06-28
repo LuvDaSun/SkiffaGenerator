@@ -47,7 +47,7 @@
     "@jns42/oas-v3-0": "^0.17.4",
     "@jns42/oas-v3-1": "^0.17.4",
     "@jns42/swagger-v2": "^0.17.4",
-    "@skiffa/core": "^0.2.2",
+    "@skiffa/core": "^0.2.3",
     "@skiffa/lib": "^0.10.6",
     "@types/node": "^18.19.39",
     "@types/yargs": "^17.0.32",
