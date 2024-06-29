@@ -71,6 +71,27 @@ impl Api {
         .collect(),
     )
   }
+
+  // pub fn schema_component_pointers(&self) -> Option<BTreeSet<Vec<String>>> {
+  //   Some(
+  //     self
+  //       .0
+  //       .as_object()?
+  //       .get("components")?
+  //       .as_object()?
+  //       .get("schemas")?
+  //       .as_object()?
+  //       .keys()
+  //       .map(|key| {
+  //         vec![
+  //           "components".to_owned(),
+  //           "schemas".to_owned(),
+  //           key.to_owned(),
+  //         ]
+  //       })
+  //       .collect(),
+  //   )
+  // }
 }
 
 impl From<serde_json::Value> for Api {

@@ -1,7 +1,7 @@
 import * as jns42Core from "@jns42/core";
+import * as jns42Generator from "@jns42/generator";
 import * as skiffaCore from "@skiffa/core";
 import assert from "assert";
-import * as jns42Generator from "@jns42/generator";
 import * as path from "path";
 import * as yargs from "yargs";
 import { generatePackage } from "../generators/index.js";
@@ -108,6 +108,13 @@ async function main(options: MainOptions) {
     defaultTypeName,
     transformMaximumIterations,
   });
+
+  for (let key = 0; key < specification.typesArena.count(); key++) {
+    const name = specification.names.getName(key);
+    if (name != null) {
+      debugger;
+    }
+  }
 
   // generate code
 
