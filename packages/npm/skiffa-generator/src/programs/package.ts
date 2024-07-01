@@ -109,13 +109,6 @@ async function main(options: MainOptions) {
     transformMaximumIterations,
   });
 
-  for (let key = 0; key < specification.typesArena.count(); key++) {
-    const name = specification.names.getName(key);
-    if (name != null) {
-      debugger;
-    }
-  }
-
   // generate code
 
   generatePackage(apiModel, specification, {
