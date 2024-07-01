@@ -603,15 +603,24 @@ impl Document {
     location: NodeLocation,
     node: nodes::Api,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> + '_ {
-    Self::get_sub_locations_from_node_entries(
-      location.clone(),
-      node
-        .paths()
-        .into_iter()
-        .flatten()
-        .filter_map(|(pointer, node)| node.into_node().map(|node| (pointer, node))),
-      |location, node| self.get_schema_locations_from_path(location, node),
-    )
+    iter::empty()
+      // .chain({
+      //   let location = location.clone();
+      //   node
+      //     .schema_component_pointers()
+      //     .into_iter()
+      //     .flatten()
+      //     .map(move |pointer| Ok(location.push_pointer(pointer)))
+      // })
+      .chain(Self::get_sub_locations_from_node_entries(
+        location.clone(),
+        node
+          .paths()
+          .into_iter()
+          .flatten()
+          .filter_map(|(pointer, node)| node.into_node().map(|node| (pointer, node))),
+        |location, node| self.get_schema_locations_from_path(location, node),
+      ))
   }
 
   fn get_schema_locations_from_path(
