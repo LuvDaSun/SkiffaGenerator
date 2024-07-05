@@ -11,6 +11,7 @@ export function* generateFacadeTsCode(
   yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
   yield itt`
+    export * as lib from "@skiffa/lib";
     import * as client from "./client.js";
   `;
 

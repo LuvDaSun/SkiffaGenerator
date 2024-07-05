@@ -11,7 +11,6 @@ export function* generateMainTsCode() {
 
   yield itt`
     export * as lib from "@skiffa/lib";
-
     export * as types from "./types.js";
     export * as validators from "./validators.js";
     export * as parsers from "./parsers.js";
