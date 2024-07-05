@@ -2,6 +2,7 @@ import * as skiffaCore from "@skiffa/core";
 import { Router } from "goodrouter";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
+import { generateFacadeOperationFunction } from "../functions/index.js";
 
 export function* generateFacadeTsCode(
   names: Record<string, string>,
@@ -11,7 +12,7 @@ export function* generateFacadeTsCode(
   yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
   yield itt`
-    export * as lib from "@skiffa/lib";
+    import * as lib from "@skiffa/lib";
     import * as client from "./client.js";
   `;
 
@@ -21,7 +22,7 @@ export function* generateFacadeTsCode(
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      //
+      yield* generateFacadeOperationFunction(names, apiModel, pathModel, operationModel);
     }
   }
 }

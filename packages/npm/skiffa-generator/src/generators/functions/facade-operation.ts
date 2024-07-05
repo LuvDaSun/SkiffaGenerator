@@ -27,8 +27,8 @@ export function* generateFacadeOperationFunction(
   export async function ${operationFunctionName}(
     parameters: Record<string, unknown>,
     entity: unknown,    
-    operationCredentials: ${credentialsName} = {},
-    operationConfiguration: ClientConfiguration = {},
+    operationCredentials: client.${credentialsName} = {},
+    operationConfiguration: client.ClientConfiguration = {},
   ): Promise<unknown> {
     ${generateBody(names, apiModel, pathModel, operationModel)}
   }
@@ -43,18 +43,14 @@ function* generateBody(
 ) {
   const operationFunctionName = getOperationFunctionName(operationModel);
   yield itt`
-    const result = client.${operationFunctionName}({
+    const result = await client.${operationFunctionName}({
       parameters,
       contentType: "application/json",
       entity: () => entity,
     });
 
-    if (result.status < 200) {
-      throw new lib.UnexpectedStatusCode(fetchResponse.status)  
-    }
-
-    if (result.status >= 300) {
-      throw new lib.UnexpectedStatusCode(fetchResponse.status)  
+    if (result.status < 200 || result.status >= 300) {
+      throw new lib.UnexpectedStatusCode(result.status)  
     }
 
     const resultEntity = await result.entity();
