@@ -1,7 +1,7 @@
+import * as jns42generator from "@jns42/generator";
 import * as skiffaCore from "@skiffa/core";
 import fs from "fs";
 import { Router } from "goodrouter";
-import * as jns42generator from "@jns42/generator";
 import path from "path";
 import { NestedText, flattenNestedText, itt, splitIterableText } from "../utils/index.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
@@ -9,6 +9,7 @@ import { generateBuildJsCode } from "./files/build-js.js";
 import { generateCleanJsCode } from "./files/clean-js.js";
 import { generateClientServerTestTsCode } from "./files/client-server-test-ts.js";
 import { generateClientTsCode } from "./files/client-ts.js";
+import { generateFacadeTsCode } from "./files/facade-ts.js";
 import { generateMainTsCode } from "./files/main-ts.js";
 import { generatePackageJsonData } from "./files/package-json.js";
 import { generateParametersTsCode } from "./files/parameters-ts.js";
@@ -105,6 +106,12 @@ export function generatePackage(
   {
     const content = generateClientTsCode(names, router, apiModel);
     const filePath = path.join(packageDirectoryPath, "src", "client.ts");
+    writeContentToFile(filePath, content);
+  }
+
+  {
+    const content = generateFacadeTsCode(names, router, apiModel);
+    const filePath = path.join(packageDirectoryPath, "src", "facade.ts");
     writeContentToFile(filePath, content);
   }
 
