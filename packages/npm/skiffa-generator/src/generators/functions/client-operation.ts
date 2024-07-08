@@ -317,7 +317,7 @@ function* generateBody(
 
   yield itt`
       switch(fetchResponse.status) {
-        ${generateResponseStatusCodeCaseClauses(names, operationModel)}
+        ${generateResponseStatusCodeCaseClauses(names, operationModel, responseTypes)}
       }
     `;
 
@@ -353,6 +353,7 @@ function* generateRequestContentTypeCaseClauses(
 function* generateResponseStatusCodeCaseClauses(
   names: Record<string, string>,
   operationModel: skiffaCore.OperationContainer,
+  responseTypes: Array<string>,
 ) {
   for (const operationResultModel of operationModel.operationResults) {
     const statusCodes = [...operationResultModel.statusCodes];
@@ -363,7 +364,7 @@ function* generateResponseStatusCodeCaseClauses(
       if (statusCodes.length === 0) {
         yield itt`
           {
-            ${generateOperationResultBody(names, operationModel, operationResultModel)}
+            ${generateOperationResultBody(names, operationModel, operationResultModel, responseTypes)}
             break;
           }
         `;

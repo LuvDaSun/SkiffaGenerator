@@ -123,7 +123,13 @@ export function generatePackage(
   }
 
   {
-    const content = generateClientServerTestTsCode(names, mockables, apiModel);
+    const content = generateClientServerTestTsCode(
+      names,
+      mockables,
+      apiModel,
+      requestTypes,
+      responseTypes,
+    );
     const filePath = path.join(packageDirectoryPath, "src", "client-server.test.ts");
     writeContentToFile(filePath, content);
   }

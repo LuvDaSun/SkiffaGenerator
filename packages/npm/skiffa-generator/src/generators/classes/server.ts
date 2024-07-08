@@ -35,6 +35,8 @@ import {
 export function* generateServerClass(
   names: Record<string, string>,
   apiModel: skiffaCore.ApiContainer,
+  requestTypes: Array<string>,
+  responseTypes: Array<string>,
 ) {
   const authenticationTypeName = getServerAuthenticationTypeName();
 
@@ -42,12 +44,17 @@ export function* generateServerClass(
 export class Server<A extends ${authenticationTypeName} = ${authenticationTypeName}>
   extends lib.ServerBase
 {
-  ${generateBody(names, apiModel)}
+  ${generateBody(names, apiModel, requestTypes, responseTypes)}
 }
 `;
 }
 
-function* generateBody(names: Record<string, string>, apiModel: skiffaCore.ApiContainer) {
+function* generateBody(
+  names: Record<string, string>,
+  apiModel: skiffaCore.ApiContainer,
+  requestTypes: Array<string>,
+  responseTypes: Array<string>,
+) {
   const authenticationHandlersTypeName = getAuthenticationHandlersTypeName();
   const operationHandlersTypeName = getOperationHandlersTypeName();
 
@@ -81,7 +88,13 @@ function* generateBody(names: Record<string, string>, apiModel: skiffaCore.ApiCo
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
       yield registerOperationHandlerMethod(operationModel);
-      yield generateEndpointHandlerMethod(names, apiModel, operationModel);
+      yield generateEndpointHandlerMethod(
+        names,
+        apiModel,
+        operationModel,
+        requestTypes,
+        responseTypes,
+      );
     }
   }
 }

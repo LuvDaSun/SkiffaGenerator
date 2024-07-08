@@ -64,10 +64,17 @@ export function* generateClientTsCode(
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      yield* generateClientOperationFunction(names, apiModel, pathModel, operationModel);
+      yield* generateClientOperationFunction(
+        names,
+        apiModel,
+        pathModel,
+        operationModel,
+        requestTypes,
+        responseTypes,
+      );
       yield* generateOperationCredentialsType(apiModel, operationModel);
-      yield* generateOperationOutgoingRequestType(names, operationModel);
-      yield* generateOperationIncomingResponseType(names, operationModel);
+      yield* generateOperationOutgoingRequestType(names, operationModel, requestTypes);
+      yield* generateOperationIncomingResponseType(names, operationModel, responseTypes);
     }
   }
 }
