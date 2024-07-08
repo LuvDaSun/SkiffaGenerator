@@ -29,8 +29,8 @@ export function* generateFacadeOperationFunction(
     operationModel.queryParameters.length > 0 &&
     operationModel.headerParameters.length > 0 &&
     operationModel.cookieParameters.length > 0;
+  const hasEntity = operationModel.bodies.length > 0;
 
-  const hasEntity = true;
   const parametersTypeName = getRequestParametersTypeName(operationModel);
 
   yield itt`
@@ -61,14 +61,14 @@ function* generateBody(
     operationModel.queryParameters.length > 0 &&
     operationModel.headerParameters.length > 0 &&
     operationModel.cookieParameters.length > 0;
-
-  const hasEntity = true;
+  const hasEntity = operationModel.bodies.length > 0;
+  const requestEntityContentType = operationModel.bodies[0]?.contentType ?? null;
 
   yield itt`
     const result = await client.${operationFunctionName}({
       parameters: ${hasParameters ? "requestParameters" : "{}"},
-      contentType: "application/json",
-      entity: () => entity,
+      contentType: ${JSON.stringify(requestEntityContentType)},
+      ${hasEntity ? "entity: () => entity," : ""}
     });
 
     if (result.status < 200 || result.status >= 300) {
