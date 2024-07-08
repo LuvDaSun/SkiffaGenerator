@@ -1,6 +1,6 @@
 import * as skiffaCore from "@skiffa/core";
 import { itt } from "../../utils/index.js";
-import { selectRequestBodies } from "../helpers.js";
+import { selectBodies } from "../helpers.js";
 import {
   getOperationCredentialsTypeName,
   getOperationFunctionName,
@@ -32,7 +32,7 @@ export function* generateFacadeOperationFunction(
     operationModel.queryParameters.length > 0 &&
     operationModel.headerParameters.length > 0 &&
     operationModel.cookieParameters.length > 0;
-  const requestBodies = selectRequestBodies(operationModel, requestTypes);
+  const requestBodies = selectBodies(operationModel, requestTypes);
   const hasEntity = requestBodies.length > 0;
   const parametersTypeName = getRequestParametersTypeName(operationModel);
 
@@ -66,7 +66,7 @@ function* generateBody(
     operationModel.queryParameters.length > 0 &&
     operationModel.headerParameters.length > 0 &&
     operationModel.cookieParameters.length > 0;
-  const requestBodies = selectRequestBodies(operationModel, requestTypes);
+  const requestBodies = selectBodies(operationModel, requestTypes);
   const hasEntity = requestBodies.length > 0;
   const requestEntityContentType = requestBodies[0]?.contentType ?? null;
 

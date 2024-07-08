@@ -1,6 +1,6 @@
 import * as skiffaCore from "@skiffa/core";
 
-export function selectRequestBodies(
+export function selectBodies(
   model: skiffaCore.OperationContainer | skiffaCore.OperationResultContainer,
   contentTypes: Array<string>,
 ) {
