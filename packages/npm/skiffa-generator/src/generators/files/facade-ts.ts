@@ -8,6 +8,8 @@ export function* generateFacadeTsCode(
   names: Record<string, string>,
   router: Router<number>,
   apiModel: skiffaCore.ApiContainer,
+  requestTypes: Array<string>,
+  responseTypes: Array<string>,
 ) {
   yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
@@ -23,7 +25,14 @@ export function* generateFacadeTsCode(
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      yield* generateFacadeOperationFunction(names, apiModel, pathModel, operationModel);
+      yield* generateFacadeOperationFunction(
+        names,
+        apiModel,
+        pathModel,
+        operationModel,
+        requestTypes,
+        responseTypes,
+      );
     }
   }
 }

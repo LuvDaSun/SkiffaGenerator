@@ -11,6 +11,8 @@ export function* generateFacadeOperationFunction(
   apiModel: skiffaCore.ApiContainer,
   pathModel: skiffaCore.PathContainer,
   operationModel: skiffaCore.OperationContainer,
+  requestTypes: Array<string>,
+  responseTypes: Array<string>,
 ) {
   const operationFunctionName = getOperationFunctionName(operationModel);
   const credentialsName = getOperationCredentialsTypeName(operationModel);
@@ -29,7 +31,15 @@ export function* generateFacadeOperationFunction(
     operationModel.queryParameters.length > 0 &&
     operationModel.headerParameters.length > 0 &&
     operationModel.cookieParameters.length > 0;
-  const hasEntity = operationModel.bodies.length > 0;
+
+  const requestBodiesMap = Object.fromEntries(
+    operationModel.bodies.map((bodyModel) => [bodyModel.contentType, bodyModel]),
+  );
+  const requestBodies = requestTypes
+    .map((requestType) => requestBodiesMap[requestType])
+    .filter((bodyModel) => bodyModel != null);
+
+  const hasEntity = requestBodies.length > 0;
 
   const parametersTypeName = getRequestParametersTypeName(operationModel);
 
@@ -43,7 +53,7 @@ export function* generateFacadeOperationFunction(
     operationCredentials: client.${credentialsName} = {},
     operationConfiguration: client.ClientConfiguration = {},
   ): Promise<unknown> {
-    ${generateBody(names, apiModel, pathModel, operationModel)}
+    ${generateBody(names, apiModel, pathModel, operationModel, requestTypes, responseTypes)}
   }
 `;
 }
@@ -53,6 +63,8 @@ function* generateBody(
   apiModel: skiffaCore.ApiContainer,
   pathModel: skiffaCore.PathContainer,
   operationModel: skiffaCore.OperationContainer,
+  requestTypes: Array<string>,
+  responseTypes: Array<string>,
 ) {
   const operationFunctionName = getOperationFunctionName(operationModel);
 
@@ -61,8 +73,17 @@ function* generateBody(
     operationModel.queryParameters.length > 0 &&
     operationModel.headerParameters.length > 0 &&
     operationModel.cookieParameters.length > 0;
-  const hasEntity = operationModel.bodies.length > 0;
-  const requestEntityContentType = operationModel.bodies[0]?.contentType ?? null;
+
+  const requestBodiesMap = Object.fromEntries(
+    operationModel.bodies.map((bodyModel) => [bodyModel.contentType, bodyModel]),
+  );
+  const requestBodies = requestTypes
+    .map((requestType) => requestBodiesMap[requestType])
+    .filter((bodyModel) => bodyModel != null);
+
+  const hasEntity = requestBodies.length > 0;
+
+  const requestEntityContentType = requestBodies[0]?.contentType ?? null;
 
   yield itt`
     const result = await client.${operationFunctionName}({

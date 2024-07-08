@@ -55,7 +55,8 @@ export function generatePackage(
     router.insertRoute(pathModel.id, pathModel.pattern);
   }
 
-  const { packageDirectoryPath, packageName, packageVersion } = packageConfiguration;
+  const { packageDirectoryPath, packageName, packageVersion, requestTypes, responseTypes } =
+    packageConfiguration;
 
   fs.mkdirSync(packageDirectoryPath, { recursive: true });
   fs.mkdirSync(path.join(packageDirectoryPath, "src"), { recursive: true });
@@ -110,7 +111,7 @@ export function generatePackage(
   }
 
   {
-    const content = generateFacadeTsCode(names, router, apiModel);
+    const content = generateFacadeTsCode(names, router, apiModel, requestTypes, responseTypes);
     const filePath = path.join(packageDirectoryPath, "src", "facade.ts");
     writeContentToFile(filePath, content);
   }
