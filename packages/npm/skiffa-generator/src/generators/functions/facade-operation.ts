@@ -1,5 +1,6 @@
 import * as skiffaCore from "@skiffa/core";
 import { itt } from "../../utils/index.js";
+import { selectRequestBodies } from "../helpers.js";
 import {
   getOperationCredentialsTypeName,
   getOperationFunctionName,
@@ -31,16 +32,8 @@ export function* generateFacadeOperationFunction(
     operationModel.queryParameters.length > 0 &&
     operationModel.headerParameters.length > 0 &&
     operationModel.cookieParameters.length > 0;
-
-  const requestBodiesMap = Object.fromEntries(
-    operationModel.bodies.map((bodyModel) => [bodyModel.contentType, bodyModel]),
-  );
-  const requestBodies = requestTypes
-    .map((requestType) => requestBodiesMap[requestType])
-    .filter((bodyModel) => bodyModel != null);
-
+  const requestBodies = selectRequestBodies(operationModel, requestTypes);
   const hasEntity = requestBodies.length > 0;
-
   const parametersTypeName = getRequestParametersTypeName(operationModel);
 
   yield itt`
@@ -73,16 +66,8 @@ function* generateBody(
     operationModel.queryParameters.length > 0 &&
     operationModel.headerParameters.length > 0 &&
     operationModel.cookieParameters.length > 0;
-
-  const requestBodiesMap = Object.fromEntries(
-    operationModel.bodies.map((bodyModel) => [bodyModel.contentType, bodyModel]),
-  );
-  const requestBodies = requestTypes
-    .map((requestType) => requestBodiesMap[requestType])
-    .filter((bodyModel) => bodyModel != null);
-
+  const requestBodies = selectRequestBodies(operationModel, requestTypes);
   const hasEntity = requestBodies.length > 0;
-
   const requestEntityContentType = requestBodies[0]?.contentType ?? null;
 
   yield itt`

@@ -93,7 +93,7 @@ export function generatePackage(
   }
 
   {
-    const content = generateSharedTsCode(apiModel);
+    const content = generateSharedTsCode(apiModel, responseTypes);
     const filePath = path.join(packageDirectoryPath, "src", "shared.ts");
     writeContentToFile(filePath, content);
   }
@@ -105,7 +105,7 @@ export function generatePackage(
   }
 
   {
-    const content = generateClientTsCode(names, router, apiModel);
+    const content = generateClientTsCode(names, router, apiModel, requestTypes, responseTypes);
     const filePath = path.join(packageDirectoryPath, "src", "client.ts");
     writeContentToFile(filePath, content);
   }
@@ -117,7 +117,7 @@ export function generatePackage(
   }
 
   {
-    const content = generateServerTsCode(names, router, apiModel);
+    const content = generateServerTsCode(names, router, apiModel, requestTypes, responseTypes);
     const filePath = path.join(packageDirectoryPath, "src", "server.ts");
     writeContentToFile(filePath, content);
   }

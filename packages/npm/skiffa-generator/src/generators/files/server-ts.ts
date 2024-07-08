@@ -19,6 +19,8 @@ export function* generateServerTsCode(
   names: Record<string, string>,
   router: Router<number>,
   apiModel: skiffaCore.ApiContainer,
+  requestTypes: Array<string>,
+  responseTypes: Array<string>,
 ) {
   yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
