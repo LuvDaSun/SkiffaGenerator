@@ -1,5 +1,6 @@
 import * as skiffaCore from "@skiffa/core";
 import { itt } from "../../utils/index.js";
+import { selectBodies } from "../helpers.js";
 import {
   getAuthenticationHandlerName,
   getAuthenticationMemberName,
@@ -20,6 +21,8 @@ export function* generateEndpointHandlerMethod(
   names: Record<string, string>,
   apiModel: skiffaCore.ApiContainer,
   operationModel: skiffaCore.OperationContainer,
+  requestTypes: Array<string>,
+  responseTypes: Array<string>,
 ) {
   const endpointHandlerName = getEndpointHandlerName(operationModel);
 
@@ -29,7 +32,7 @@ export function* generateEndpointHandlerMethod(
       serverIncomingRequest: lib.ServerIncomingRequest,
     ): Promise<lib.ServerOutgoingResponse> {
       return this.wrappers.endpoint(async () => {
-        ${generateBody(names, apiModel, operationModel)}
+        ${generateBody(names, apiModel, operationModel, requestTypes, responseTypes)}
       });
     }
   `;
@@ -42,6 +45,8 @@ function* generateBody(
   names: Record<string, string>,
   apiModel: skiffaCore.ApiContainer,
   operationModel: skiffaCore.OperationContainer,
+  requestTypes: Array<string>,
+  responseTypes: Array<string>,
 ) {
   const operationHandlerName = getOperationHandlerName(operationModel);
   const operationIncomingRequestName = getIncomingRequestTypeName(operationModel);
@@ -239,7 +244,9 @@ function* generateBody(
     let incomingRequest: ${operationIncomingRequestName};
   `;
 
-  if (operationModel.bodies.length === 0) {
+  const requestBodyModels = selectBodies(operationModel, requestTypes);
+
+  if (requestBodyModels.length === 0) {
     yield* generateRequestContentTypeCodeBody(names);
   } else {
     yield itt`
@@ -248,7 +255,7 @@ function* generateBody(
       }
 
       switch(requestContentType) {
-        ${generateRequestContentTypeCodeCaseClauses(names, operationModel)};
+        ${generateRequestContentTypeCodeCaseClauses(names, operationModel, requestTypes)};
       }
     `;
   }
@@ -271,7 +278,7 @@ function* generateBody(
   yield itt`
     let serverOutgoingResponse: lib.ServerOutgoingResponse;
     switch(outgoingResponse.status) {
-      ${generateStatusCodeCaseClauses(names, operationModel)}
+      ${generateStatusCodeCaseClauses(names, operationModel, responseTypes)}
     }
   `;
 
@@ -345,8 +352,11 @@ function* generateBody(
 function* generateRequestContentTypeCodeCaseClauses(
   names: Record<string, string>,
   operationModel: skiffaCore.OperationContainer,
+  requestTypes: Array<string>,
 ) {
-  for (const bodyModel of operationModel.bodies) {
+  const requestBodyModels = selectBodies(operationModel, requestTypes);
+
+  for (const bodyModel of requestBodyModels) {
     yield itt`
       case ${JSON.stringify(bodyModel.contentType)}:
       {
@@ -467,6 +477,7 @@ function* generateRequestContentTypeCodeBody(
 function* generateStatusCodeCaseClauses(
   names: Record<string, string>,
   operationModel: skiffaCore.OperationContainer,
+  responseTypes: Array<string>,
 ) {
   for (const operationResultModel of operationModel.operationResults) {
     const statusCodes = [...operationResultModel.statusCodes];
@@ -477,7 +488,7 @@ function* generateStatusCodeCaseClauses(
       if (statusCodes.length === 0) {
         yield itt`
           {
-            ${generateOperationResultBody(names, operationModel, operationResultModel)}
+            ${generateOperationResultBody(names, operationModel, operationResultModel, responseTypes)}
             break;
           }
         `;
@@ -495,6 +506,7 @@ function* generateOperationResultBody(
   names: Record<string, string>,
   operationModel: skiffaCore.OperationContainer,
   operationResultModel: skiffaCore.OperationResultContainer,
+  responseTypes: Array<string>,
 ) {
   const isResponseParametersFunction = getIsResponseParametersFunction(
     operationModel,
@@ -540,13 +552,15 @@ function* generateOperationResultBody(
     }
   }
 
-  if (operationResultModel.bodies.length === 0) {
+  const responseBodyModels = selectBodies(operationResultModel, responseTypes);
+
+  if (responseBodyModels.length === 0) {
     yield* generateOperationResultContentTypeBody(names);
     return;
   } else {
     yield itt`
       switch(outgoingResponse.contentType) {
-        ${generateOperationResultContentTypeCaseClauses(names, operationResultModel)}
+        ${generateOperationResultContentTypeCaseClauses(names, operationResultModel, responseTypes)}
       }
     `;
   }
@@ -555,8 +569,11 @@ function* generateOperationResultBody(
 function* generateOperationResultContentTypeCaseClauses(
   names: Record<string, string>,
   operationResultModel: skiffaCore.OperationResultContainer,
+  responseTypes: Array<string>,
 ) {
-  for (const bodyModel of operationResultModel.bodies) {
+  const responseBodyModels = selectBodies(operationResultModel, responseTypes);
+
+  for (const bodyModel of responseBodyModels) {
     yield itt`
       case ${JSON.stringify(bodyModel.contentType)}:
       {

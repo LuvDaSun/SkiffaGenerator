@@ -32,8 +32,8 @@ export function* generateFacadeOperationFunction(
     operationModel.queryParameters.length > 0 &&
     operationModel.headerParameters.length > 0 &&
     operationModel.cookieParameters.length > 0;
-  const requestBodies = selectBodies(operationModel, requestTypes);
-  const hasEntity = requestBodies.length > 0;
+  const requestBodyModels = selectBodies(operationModel, requestTypes);
+  const hasEntity = requestBodyModels.length > 0;
   const parametersTypeName = getRequestParametersTypeName(operationModel);
 
   yield itt`
@@ -66,9 +66,9 @@ function* generateBody(
     operationModel.queryParameters.length > 0 &&
     operationModel.headerParameters.length > 0 &&
     operationModel.cookieParameters.length > 0;
-  const requestBodies = selectBodies(operationModel, requestTypes);
-  const hasEntity = requestBodies.length > 0;
-  const requestEntityContentType = requestBodies[0]?.contentType ?? null;
+  const requestBodyModels = selectBodies(operationModel, requestTypes);
+  const hasEntity = requestBodyModels.length > 0;
+  const requestEntityContentType = requestBodyModels[0]?.contentType ?? null;
 
   yield itt`
     const result = await client.${operationFunctionName}({

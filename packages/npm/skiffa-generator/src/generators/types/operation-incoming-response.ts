@@ -1,17 +1,22 @@
 import * as skiffaCore from "@skiffa/core";
 import { joinIterable, mapIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
+import { selectBodies } from "../helpers.js";
 import { getIncomingResponseTypeName, getResponseParametersTypeName } from "../names/index.js";
 
 export function* generateOperationIncomingResponseType(
   names: Record<string, string>,
   operationModel: skiffaCore.OperationContainer,
+  responseTypes: Array<string>,
 ) {
   const typeName = getIncomingResponseTypeName(operationModel);
 
   yield itt`
     export type ${typeName} = ${joinIterable(
-      mapIterable(generateElements(names, operationModel), (element) => itt`(${element})`),
+      mapIterable(
+        generateElements(names, operationModel, responseTypes),
+        (element) => itt`(${element})`,
+      ),
       " |\n",
     )};
   `;
@@ -20,6 +25,7 @@ export function* generateOperationIncomingResponseType(
 function* generateElements(
   names: Record<string, string>,
   operationModel: skiffaCore.OperationContainer,
+  responseTypes: Array<string>,
 ) {
   if (operationModel.operationResults.length === 0) {
     yield itt`never`;
@@ -29,7 +35,7 @@ function* generateElements(
     yield itt`
       ${generateParametersContainerType(operationModel, operationResultModel)} &
       (
-        ${joinIterable(generateBodyContainerTypes(names, operationModel, operationResultModel), " |\n")}
+        ${joinIterable(generateBodyContainerTypes(names, operationModel, operationResultModel, responseTypes), " |\n")}
       )
     `;
   }
@@ -48,12 +54,15 @@ function* generateBodyContainerTypes(
   names: Record<string, string>,
   operationModel: skiffaCore.OperationContainer,
   operationResultModel: skiffaCore.OperationResultContainer,
+  responseTypes: Array<string>,
 ) {
-  if (operationResultModel.bodies.length === 0) {
+  const responseBodyModels = selectBodies(operationResultModel, responseTypes);
+
+  if (responseBodyModels.length === 0) {
     yield* generateBodyContainerType(names, operationModel, operationResultModel);
   }
 
-  for (const bodyModel of operationResultModel.bodies) {
+  for (const bodyModel of responseBodyModels) {
     yield* generateBodyContainerType(names, operationModel, operationResultModel, bodyModel);
   }
 }

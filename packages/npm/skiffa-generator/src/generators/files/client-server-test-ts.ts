@@ -8,6 +8,7 @@ import {
   packageInfo,
 } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
+import { selectBodies } from "../helpers.js";
 import {
   getAuthenticationMemberName,
   getIsBodyFunction,
@@ -24,6 +25,8 @@ export function* generateClientServerTestTsCode(
   names: Record<string, string>,
   mockables: Set<string>,
   apiModel: skiffaCore.ApiContainer,
+  requestTypes: Array<string>,
+  responseTypes: Array<string>,
 ) {
   yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
@@ -50,13 +53,16 @@ export function* generateClientServerTestTsCode(
         continue;
       }
 
-      if (operationModel.bodies.length === 0) {
+      const requestBodyModels = selectBodies(operationModel, requestTypes);
+      if (requestBodyModels.length === 0) {
         for (const operationResultModel of operationModel.operationResults) {
           if (!isOperationResultModelMockable(operationResultModel, mockables)) {
             continue;
           }
 
-          if (operationResultModel.bodies.length === 0) {
+          const responseBodyModels = selectBodies(operationResultModel, responseTypes);
+
+          if (responseBodyModels.length === 0) {
             yield generateOperationTest(
               names,
               mockables,
@@ -67,7 +73,7 @@ export function* generateClientServerTestTsCode(
               null,
             );
           }
-          for (const responseBodyModel of operationResultModel.bodies) {
+          for (const responseBodyModel of responseBodyModels) {
             if (!isBodyModelMockable(responseBodyModel, mockables)) {
               continue;
             }
@@ -84,7 +90,7 @@ export function* generateClientServerTestTsCode(
           }
         }
       }
-      for (const requestBodyModel of operationModel.bodies) {
+      for (const requestBodyModel of requestBodyModels) {
         if (!isBodyModelMockable(requestBodyModel, mockables)) {
           continue;
         }
@@ -94,7 +100,9 @@ export function* generateClientServerTestTsCode(
             continue;
           }
 
-          if (operationResultModel.bodies.length === 0) {
+          const responseBodyModels = selectBodies(operationResultModel, responseTypes);
+
+          if (responseBodyModels.length === 0) {
             yield generateOperationTest(
               names,
               mockables,
@@ -105,7 +113,7 @@ export function* generateClientServerTestTsCode(
               null,
             );
           }
-          for (const responseBodyModel of operationResultModel.bodies) {
+          for (const responseBodyModel of responseBodyModels) {
             if (!isBodyModelMockable(responseBodyModel, mockables)) {
               continue;
             }
