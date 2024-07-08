@@ -14,6 +14,7 @@ export function* generateFacadeTsCode(
   yield itt`
     import * as lib from "@skiffa/lib";
     import * as client from "./client.js";
+    import * as parameters from "./parameters.js";
   `;
 
   for (const authenticationModel of apiModel.authentication) {
