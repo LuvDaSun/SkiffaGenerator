@@ -76,12 +76,82 @@ function* generateBody(
       contentType: ${JSON.stringify(requestEntityContentType)},
       ${hasEntity ? "entity: () => entity," : ""}
     });
+  `;
 
-    if (result.status < 200 || result.status >= 300) {
-      throw new lib.UnexpectedStatusCode(result.status)  
+  const operationResultModels = operationModel.operationResults.filter((operationResultModel) =>
+    operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 300),
+  );
+
+  for (const operationResultModel of operationResultModels) {
+    yield itt`
+      switch(result.status) {
+        ${generateStatusCodesCaseClauses(operationResultModels, responseTypes)}
+      }
+    `;
+  }
+}
+
+function* generateStatusCodesCaseClauses(
+  operationResultModels: Array<skiffaCore.OperationResultContainer>,
+  responseTypes: Array<string>,
+) {
+  for (const operationResultModel of operationResultModels) {
+    const statusCodes = [...operationResultModel.statusCodes];
+    let statusCode;
+    while ((statusCode = statusCodes.shift()) != null) {
+      yield itt`case ${JSON.stringify(statusCode)}:`;
+      // it's te last one!
+      if (statusCodes.length === 0) {
+        yield itt`
+          {
+            ${generateStatusCodeCaseBody(operationResultModel, responseTypes)}
+            break;
+          }
+        `;
+      }
     }
 
-    const resultEntity = await result.entity();
-    return resultEntity;
+    yield itt`
+      default:
+        throw new lib.UnexpectedStatusCode(result.status)  
+    `;
+  }
+}
+
+function* generateStatusCodeCaseBody(
+  operationResultModel: skiffaCore.OperationResultContainer,
+  responseTypes: Array<string>,
+) {
+  const responseBodyModels = selectBodies(operationResultModel, responseTypes);
+  yield itt`
+    switch(result.contentType) {
+      ${generateContentTypesCaseClauses(operationResultModel, responseBodyModels)}
+    }
+  `;
+}
+
+function* generateContentTypesCaseClauses(
+  operationResultModel: skiffaCore.OperationResultContainer,
+  responseBodyModels: Array<skiffaCore.BodyContainer>,
+) {
+  for (const bodyModel of responseBodyModels) {
+    yield itt`case ${JSON.stringify(bodyModel.contentType)}:`;
+    yield itt`
+        {
+          ${generateContentTypeCaseBody(bodyModel)}
+          break;
+        }
+      `;
+  }
+
+  yield itt`
+    default:
+      throw new lib.UnexpectedContentType(result.contentType)  
+    `;
+}
+
+function* generateContentTypeCaseBody(responseBodyModel: skiffaCore.BodyContainer) {
+  yield itt`
+    throw "todo";
   `;
 }
