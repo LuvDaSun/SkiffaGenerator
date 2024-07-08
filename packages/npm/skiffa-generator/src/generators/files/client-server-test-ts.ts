@@ -1,14 +1,14 @@
 import * as skiffaCore from "@skiffa/core";
 import assert from "assert";
+import { packageInfo } from "../../utils/index.js";
+import { itt } from "../../utils/iterable-text-template.js";
 import {
   isBodyModelMockable,
   isOperationModelMockable,
   isOperationResultModelMockable,
   isParameterModelMockable,
-  packageInfo,
-} from "../../utils/index.js";
-import { itt } from "../../utils/iterable-text-template.js";
-import { selectBodies } from "../helpers.js";
+  selectBodies,
+} from "../helpers.js";
 import {
   getAuthenticationMemberName,
   getIsBodyFunction,
