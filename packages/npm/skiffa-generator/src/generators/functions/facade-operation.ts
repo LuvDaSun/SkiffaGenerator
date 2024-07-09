@@ -125,7 +125,7 @@ function* generateReturnType(
           if (index > 0) {
             yield " | ";
           }
-          yield "void";
+          yield "undefined";
           index++;
           break;
         }
@@ -176,7 +176,8 @@ function* generateReturnType(
                 .filter((statusCode) => statusCode >= 200 && statusCode < 300)
                 .map((value) => JSON.stringify(value))
                 .join(" | ")},
-              void,
+                null,
+                undefined,
             ]`;
             index++;
             break;
@@ -195,6 +196,7 @@ function* generateReturnType(
                 .filter((statusCode) => statusCode >= 200 && statusCode < 300)
                 .map((value) => JSON.stringify(value))
                 .join(" | ")},
+              ${JSON.stringify(responseBodyModel.contentType)},
               ${responseEntityTypeName == null ? "unknown" : `types.${responseEntityTypeName}`}
             ]`;
             index++;
@@ -297,12 +299,12 @@ function* generateStatusCodesCaseClauses(
         `;
       }
     }
-
-    yield itt`
-      default:
-        throw new lib.UnexpectedStatusCode(result.status)  
-    `;
   }
+
+  yield itt`
+    default:
+      throw "cannot happen"
+  `;
 }
 
 function* generateStatusCodeCaseBody(
