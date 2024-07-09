@@ -109,9 +109,9 @@ export function* generateFacadeOperationFunction(
     /**
       ${jsDoc}
     */
-    export async function ${operationFunctionName}(...argument: [
-      ${generateOperationArgumentType(names, operationModel, requestTypes, state)}
-    ]): Promise<${generateOperationReturnType(names, operationResultModels, responseTypes, state)}> {
+    export async function ${operationFunctionName}(
+      ...argument: ${generateOperationArgumentType(names, operationModel, requestTypes, state)}
+    ): Promise<${generateOperationReturnType(names, operationResultModels, responseTypes, state)}> {
       ${generateBody(operationModel, requestTypes, responseTypes, state)}
     }
   `;
