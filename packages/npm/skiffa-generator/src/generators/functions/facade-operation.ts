@@ -99,9 +99,9 @@ function* generateOperationReturnType(
     operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 300),
   );
 
-  const level = 0;
   switch (operationResultModels.length) {
     case 0: {
+      // no operation result
       yield "never";
       break;
     }
@@ -113,7 +113,7 @@ function* generateOperationReturnType(
         operationModel,
         operationResultModel,
         responseTypes,
-        level,
+        0,
       );
       break;
     }
@@ -129,7 +129,7 @@ function* generateOperationReturnType(
           operationModel,
           operationResultModel,
           responseTypes,
-          level + 1,
+          1,
         );
         index++;
       }
@@ -150,25 +150,13 @@ function* generateOperationResultReturnType(
   switch (responseBodyModels.length) {
     case 0: {
       //  no response body
-      yield generateResponseBodyReturnType(
-        names,
-        operationModel,
-        operationResultModel,
-        null,
-        level,
-      );
+      yield generateResponseBodyReturnType(names, operationResultModel, null, level);
       break;
     }
     case 1: {
-      //  default response body
+      // default response body
       const [responseBodyModel] = responseBodyModels;
-      yield generateResponseBodyReturnType(
-        names,
-        operationModel,
-        operationResultModel,
-        responseBodyModel,
-        level,
-      );
+      yield generateResponseBodyReturnType(names, operationResultModel, responseBodyModel, level);
       break;
     }
     default: {
@@ -180,7 +168,6 @@ function* generateOperationResultReturnType(
         }
         yield generateResponseBodyReturnType(
           names,
-          operationModel,
           operationResultModel,
           responseBodyModel,
           level + 1,
@@ -194,7 +181,6 @@ function* generateOperationResultReturnType(
 
 function* generateResponseBodyReturnType(
   names: Record<string, string>,
-  operationModel: skiffaCore.OperationContainer,
   operationResultModel: skiffaCore.OperationResultContainer,
   responseBodyModel: skiffaCore.BodyContainer | null,
   level: number,
