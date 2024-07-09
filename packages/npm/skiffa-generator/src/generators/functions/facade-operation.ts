@@ -23,6 +23,21 @@ import {
  *
  * And then there is an optional argument for credentials and configuration. These can also be
  * set globally and probably never have to be passed to the function.
+ *
+ * The generated function may return a tuple.
+ *
+ * The first field of the tuple is the statusCode, this field is only there if multiple
+ * statusCodes are possible in the 200 - 300 range.
+ *
+ * The next field is the return parameters (headers). May be omitted if parameters are empty.
+ *
+ * The third field is the response content type. It is only available is there is at least one
+ * response with a status code in the 200 - 300 range that has multiple content types.
+ *
+ * The last field is the body of the response. This may be omitted if none of the status codes
+ * result in a response with a body.
+ *
+ * If the tuple is only one field, then we do not return the tuple, but only the field
  */
 
 export function* generateFacadeOperationFunction(
