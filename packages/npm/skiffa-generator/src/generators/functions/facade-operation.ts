@@ -239,6 +239,12 @@ function* generateBody(
 
   const operationOutgoingRequestName = getOutgoingRequestTypeName(operationModel);
 
+  const operationResultModels = operationModel.operationResults.filter((operationResultModel) =>
+    operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 300),
+  );
+
+  const level = operationResultModels.length > 1 ? 1 : 0;
+
   yield itt`
     const result = await client.${operationFunctionName}(
       {
@@ -253,7 +259,7 @@ function* generateBody(
 
   yield itt`
     switch(result.status) {
-      ${generateStatusCodesCaseClauses(operationModel, responseTypes)}
+      ${generateStatusCodesCaseClauses(operationModel, responseTypes, level)}
     }
   `;
 }
@@ -261,6 +267,7 @@ function* generateBody(
 function* generateStatusCodesCaseClauses(
   operationModel: skiffaCore.OperationContainer,
   responseTypes: Array<string>,
+  level: number,
 ) {
   for (const operationResultModel of operationModel.operationResults) {
     {
@@ -274,7 +281,7 @@ function* generateStatusCodesCaseClauses(
         if (statusCodes.length === 0) {
           yield itt`
           {
-            ${generateStatusCodeCaseBody(operationResultModel, responseTypes)}
+            ${generateStatusCodeCaseBody(operationResultModel, responseTypes, level)}
             break;
           }
         `;
@@ -307,26 +314,44 @@ function* generateStatusCodesCaseClauses(
 function* generateStatusCodeCaseBody(
   operationResultModel: skiffaCore.OperationResultContainer,
   responseTypes: Array<string>,
+  level: number,
 ) {
   const responseBodyModels = selectBodies(operationResultModel, responseTypes);
-  yield itt`
-    switch(result.contentType) {
-      ${generateContentTypesCaseClauses(operationResultModel, responseBodyModels)}
+  switch (responseBodyModels.length) {
+    case 0: {
+      yield itt`
+        return;
+      `;
     }
-  `;
+    case 1: {
+      yield itt`
+        switch(result.contentType) {
+          ${generateContentTypesCaseClauses(operationResultModel, responseBodyModels, level)}
+        }
+      `;
+    }
+    default: {
+      yield itt`
+        switch(result.contentType) {
+          ${generateContentTypesCaseClauses(operationResultModel, responseBodyModels, level + 1)}
+        }
+      `;
+      break;
+    }
+  }
 }
 
 function* generateContentTypesCaseClauses(
   operationResultModel: skiffaCore.OperationResultContainer,
   responseBodyModels: Array<skiffaCore.BodyContainer>,
+  level: number,
 ) {
   for (const bodyModel of responseBodyModels) {
-    yield itt`case ${JSON.stringify(bodyModel.contentType)}:`;
     yield itt`
-        {
-          return (${generateContentEntityExpression(bodyModel)});
-        }
-      `;
+      case ${JSON.stringify(bodyModel.contentType)}: {
+        ${generateContentReturnStatement(bodyModel, level)}
+      }
+    `;
   }
 
   yield itt`
@@ -335,17 +360,42 @@ function* generateContentTypesCaseClauses(
     `;
 }
 
+function* generateContentReturnStatement(
+  responseBodyModel: skiffaCore.BodyContainer,
+  level: number,
+) {
+  switch (level) {
+    case 0:
+      yield itt`
+        return (${generateContentEntityExpression(responseBodyModel)});
+      `;
+      break;
+
+    case 1:
+      yield itt`
+        return [result.contentType, ${generateContentEntityExpression(responseBodyModel)}];
+      `;
+      break;
+
+    case 2:
+      yield itt`
+        return [result.status, result.contentType, ${generateContentEntityExpression(responseBodyModel)}];
+      `;
+      break;
+  }
+}
+
 function* generateContentEntityExpression(responseBodyModel: skiffaCore.BodyContainer) {
   switch (responseBodyModel.contentType) {
     case "application/json":
       yield itt`
-        result.entity()
+        await result.entity()
       `;
       break;
 
     case "text/plain":
       yield itt`
-        result.value()
+        await result.value()
       `;
       break;
 
