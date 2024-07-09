@@ -70,7 +70,7 @@ export function* generateFacadeOperationFunction(
         ${hasEntityArgument ? `entity: ${requestEntityTypeName == null ? "unknown" : `types.${requestEntityTypeName}`},` : ""}
         operationCredentials?: client.${credentialsName},
         operationConfiguration?: client.ClientConfiguration,
-      ): Promise<${generateReturnType(names, apiModel, pathModel, operationModel, requestTypes, responseTypes)}>;
+      ): Promise<${generateOperationReturnType(names, apiModel, pathModel, operationModel, requestTypes, responseTypes)}>;
     `;
   }
 
@@ -84,13 +84,13 @@ export function* generateFacadeOperationFunction(
       ${hasEntityArgument ? `entity: unknown,` : ""}
       operationCredentials: client.${credentialsName} = {},
       operationConfiguration: client.ClientConfiguration = {},
-    ): Promise<${generateReturnType(names, apiModel, pathModel, operationModel, requestTypes, responseTypes)}> {
+    ): Promise<${generateOperationReturnType(names, apiModel, pathModel, operationModel, requestTypes, responseTypes)}> {
       ${generateBody(names, apiModel, pathModel, operationModel, requestTypes, responseTypes)}
     }
   `;
 }
 
-function* generateReturnType(
+function* generateOperationReturnType(
   names: Record<string, string>,
   apiModel: skiffaCore.ApiContainer,
   pathModel: skiffaCore.PathContainer,
@@ -115,6 +115,10 @@ function* generateReturnType(
         requestTypes,
         responseTypes,
       );
+    }
+
+    if (operationResultModels.length === 0) {
+      yield "void";
     }
   } else {
     if (defaultOperationResultModel != null) {
@@ -149,6 +153,10 @@ function* generateOperationResultReturnType(
   if (defaultResponseBodyModel == null) {
     for (const responseBodyModel of responseBodyModels) {
       yield generateResponseBodyReturnType(names, responseBodyModel);
+    }
+
+    if (responseBodyModels.length === 0) {
+      yield "void";
     }
   } else {
     yield generateResponseBodyReturnType(names, defaultResponseBodyModel);
