@@ -84,7 +84,7 @@ export function* generateFacadeOperationFunction(
       ${hasEntityArgument ? `entity: unknown,` : ""}
       operationCredentials: client.${credentialsName} = {},
       operationConfiguration: client.ClientConfiguration = {},
-    ): Promise<${generateReturnType(names, apiModel, pathModel, operationModel, requestTypes, responseTypes)}> {
+    ): Promise<${generateReturnType(names, operationModel, responseTypes)}> {
       ${generateBody(names, apiModel, pathModel, operationModel, requestTypes, responseTypes)}
     }
   `;
@@ -92,10 +92,7 @@ export function* generateFacadeOperationFunction(
 
 function* generateReturnType(
   names: Record<string, string>,
-  apiModel: skiffaCore.ApiContainer,
-  pathModel: skiffaCore.PathContainer,
   operationModel: skiffaCore.OperationContainer,
-  requestTypes: Array<string>,
   responseTypes: Array<string>,
 ) {
   const operationResultModels = operationModel.operationResults.filter((operationResultModel) =>
