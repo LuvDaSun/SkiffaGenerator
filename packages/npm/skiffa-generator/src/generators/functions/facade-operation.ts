@@ -60,6 +60,9 @@ export function* generateFacadeOperationFunction(
     .filter((line) => line.length > 0)
     .join("\n");
 
+  const operationResultModels = operationModel.operationResults.filter((operationResultModel) =>
+    operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 300),
+  );
   const requestBodyModels = selectBodies(operationModel, requestTypes);
 
   const hasParametersArgument =
@@ -69,6 +72,17 @@ export function* generateFacadeOperationFunction(
     operationModel.cookieParameters.length > 0;
   const hasContentTypeArgument = requestBodyModels.length > 1;
   const hasEntityArgument = requestBodyModels.length > 0;
+
+  const hasStatusResult = operationResultModels.length > 1;
+  const hasParametersResult = operationResultModels.some(
+    (model) => model.headerParameters.length > 0,
+  );
+  const hasContentTypeResult = operationResultModels.some(
+    (model) => selectBodies(model, responseTypes).length > 1,
+  );
+  const hasEntityResult = operationResultModels.some(
+    (model) => selectBodies(model, responseTypes).length > 0,
+  );
 
   const parametersTypeName = getRequestParametersTypeName(operationModel);
 
@@ -85,7 +99,7 @@ export function* generateFacadeOperationFunction(
         ${hasEntityArgument ? `entity: ${requestEntityTypeName == null ? "unknown" : `types.${requestEntityTypeName}`},` : ""}
         operationCredentials?: client.${credentialsName},
         operationConfiguration?: client.ClientConfiguration,
-      ): Promise<${generateOperationReturnType(names, operationModel, responseTypes)}>;
+      ): Promise<${generateOperationReturnType(names, operationResultModels, responseTypes, hasStatusResult, hasParametersResult, hasContentTypeResult, hasEntityResult)}>;
     `;
   }
 
@@ -99,7 +113,7 @@ export function* generateFacadeOperationFunction(
       ${hasEntityArgument ? `entity: unknown,` : ""}
       operationCredentials: client.${credentialsName} = {},
       operationConfiguration: client.ClientConfiguration = {},
-    ): Promise<${generateOperationReturnType(names, operationModel, responseTypes)}> {
+    ): Promise<${generateOperationReturnType(names, operationResultModels, responseTypes, hasStatusResult, hasParametersResult, hasContentTypeResult, hasEntityResult)}> {
       ${generateBody(names, apiModel, pathModel, operationModel, requestTypes, responseTypes)}
     }
   `;
@@ -107,13 +121,13 @@ export function* generateFacadeOperationFunction(
 
 function* generateOperationReturnType(
   names: Record<string, string>,
-  operationModel: skiffaCore.OperationContainer,
+  operationResultModels: Array<skiffaCore.OperationResultContainer>,
   responseTypes: Array<string>,
+  hasStatusResult: boolean,
+  hasParametersResult: boolean,
+  hasContentTypeResult: boolean,
+  hasEntityResult: boolean,
 ) {
-  const operationResultModels = operationModel.operationResults.filter((operationResultModel) =>
-    operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 300),
-  );
-
   switch (operationResultModels.length) {
     case 0: {
       // no operation result
@@ -125,10 +139,12 @@ function* generateOperationReturnType(
       const [operationResultModel] = operationResultModels;
       yield generateOperationResultReturnType(
         names,
-        operationModel,
         operationResultModel,
         responseTypes,
-        0,
+        hasStatusResult,
+        hasParametersResult,
+        hasContentTypeResult,
+        hasEntityResult,
       );
       break;
     }
@@ -141,10 +157,12 @@ function* generateOperationReturnType(
         }
         yield generateOperationResultReturnType(
           names,
-          operationModel,
           operationResultModel,
           responseTypes,
-          1,
+          hasStatusResult,
+          hasParametersResult,
+          hasContentTypeResult,
+          hasEntityResult,
         );
         index++;
       }
@@ -155,23 +173,41 @@ function* generateOperationReturnType(
 
 function* generateOperationResultReturnType(
   names: Record<string, string>,
-  operationModel: skiffaCore.OperationContainer,
   operationResultModel: skiffaCore.OperationResultContainer,
   responseTypes: Array<string>,
-  level: number,
+  hasStatusResult: boolean,
+  hasParametersResult: boolean,
+  hasContentTypeResult: boolean,
+  hasEntityResult: boolean,
 ) {
   const responseBodyModels = selectBodies(operationResultModel, responseTypes);
 
   switch (responseBodyModels.length) {
     case 0: {
       //  no response body
-      yield generateResponseBodyReturnType(names, operationResultModel, null, level);
+      yield generateResponseBodyReturnType(
+        names,
+        operationResultModel,
+        null,
+        hasStatusResult,
+        hasParametersResult,
+        hasContentTypeResult,
+        hasEntityResult,
+      );
       break;
     }
     case 1: {
       // default response body
       const [responseBodyModel] = responseBodyModels;
-      yield generateResponseBodyReturnType(names, operationResultModel, responseBodyModel, level);
+      yield generateResponseBodyReturnType(
+        names,
+        operationResultModel,
+        responseBodyModel,
+        hasStatusResult,
+        hasParametersResult,
+        hasContentTypeResult,
+        hasEntityResult,
+      );
       break;
     }
     default: {
@@ -185,7 +221,10 @@ function* generateOperationResultReturnType(
           names,
           operationResultModel,
           responseBodyModel,
-          level + 1,
+          hasStatusResult,
+          hasParametersResult,
+          hasContentTypeResult,
+          hasEntityResult,
         );
         index++;
       }
@@ -198,33 +237,56 @@ function* generateResponseBodyReturnType(
   names: Record<string, string>,
   operationResultModel: skiffaCore.OperationResultContainer,
   responseBodyModel: skiffaCore.BodyContainer | null,
-  level: number,
+  hasStatusResult: boolean,
+  hasParametersResult: boolean,
+  hasContentTypeResult: boolean,
+  hasEntityResult: boolean,
 ) {
   const responseEntityTypeName =
     responseBodyModel?.schemaId == null ? null : names[responseBodyModel.schemaId];
 
-  switch (level) {
+  const tuple = new Array<string>();
+
+  if (hasStatusResult) {
+    tuple.push(
+      [...operationResultModel.statusCodes]
+        .filter((statusCode) => statusCode >= 200 && statusCode < 300)
+        .map((value) => JSON.stringify(value))
+        .join(" | "),
+    );
+  }
+
+  if (hasParametersResult) {
+    tuple.push(`result.parameters`);
+  }
+
+  if (hasContentTypeResult) {
+    tuple.push(JSON.stringify(responseBodyModel?.contentType ?? null));
+  }
+
+  if (hasEntityResult) {
+    tuple.push(
+      responseBodyModel == null
+        ? "undefined"
+        : responseEntityTypeName == null
+          ? "unknown"
+          : `types.${responseEntityTypeName}`,
+    );
+  }
+
+  switch (tuple.length) {
     case 0:
-      yield `
-        ${responseBodyModel == null ? "undefined" : responseEntityTypeName == null ? "unknown" : `types.${responseEntityTypeName}`},
-      `;
+      yield "never";
       break;
 
     case 1:
-      yield `[
-        ${JSON.stringify(responseBodyModel?.contentType ?? null)},
-        ${responseBodyModel == null ? "undefined" : responseEntityTypeName == null ? "unknown" : `types.${responseEntityTypeName}`},
-      ]`;
+      const [element] = tuple;
+      yield element;
       break;
 
-    case 2:
+    default:
       yield `[
-        ${[...operationResultModel.statusCodes]
-          .filter((statusCode) => statusCode >= 200 && statusCode < 300)
-          .map((value) => JSON.stringify(value))
-          .join(" | ")},
-        ${JSON.stringify(responseBodyModel?.contentType ?? null)},
-        ${responseBodyModel == null ? "undefined" : responseEntityTypeName == null ? "unknown" : `types.${responseEntityTypeName}`},
+        ${tuple.map((element) => `${element}, `).join("")}
       ]`;
       break;
   }
