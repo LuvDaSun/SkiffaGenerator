@@ -70,7 +70,7 @@ export function* generateFacadeOperationFunction(
         ${hasEntityArgument ? `entity: ${requestEntityTypeName == null ? "unknown" : `types.${requestEntityTypeName}`},` : ""}
         operationCredentials?: client.${credentialsName},
         operationConfiguration?: client.ClientConfiguration,
-      ): Promise<${generateReturnType(names, apiModel, pathModel, operationModel, requestTypes, responseTypes)}>;
+      ): Promise<${generateOperationReturnType(names, operationModel, responseTypes)}>;
     `;
   }
 
@@ -84,13 +84,13 @@ export function* generateFacadeOperationFunction(
       ${hasEntityArgument ? `entity: unknown,` : ""}
       operationCredentials: client.${credentialsName} = {},
       operationConfiguration: client.ClientConfiguration = {},
-    ): Promise<${generateReturnType(names, operationModel, responseTypes)}> {
+    ): Promise<${generateOperationReturnType(names, operationModel, responseTypes)}> {
       ${generateBody(names, apiModel, pathModel, operationModel, requestTypes, responseTypes)}
     }
   `;
 }
 
-function* generateReturnType(
+function* generateOperationReturnType(
   names: Record<string, string>,
   operationModel: skiffaCore.OperationContainer,
   responseTypes: Array<string>,
@@ -99,130 +99,133 @@ function* generateReturnType(
     operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 300),
   );
 
-  let index = 0;
-
+  const level = 0;
   switch (operationResultModels.length) {
     case 0: {
-      // there is no result! This will always result in an error
-      if (index > 0) {
-        yield " | ";
-      }
       yield "never";
-      index++;
       break;
     }
     case 1: {
       // default operation result
       const [operationResultModel] = operationResultModels;
-      const responseBodyModels = selectBodies(operationResultModel, responseTypes);
-
-      switch (responseBodyModels.length) {
-        case 0: {
-          // default operation result and no response body
-          if (index > 0) {
-            yield " | ";
-          }
-          yield "undefined";
-          index++;
-          break;
-        }
-        case 1: {
-          // default operation result and default response body
-          const [responseBodyModel] = responseBodyModels;
-          const responseEntityTypeName =
-            responseBodyModel.schemaId == null ? null : names[responseBodyModel.schemaId];
-          if (index > 0) {
-            yield " | ";
-          }
-          yield responseEntityTypeName == null ? "unknown" : `types.${responseEntityTypeName}`;
-          index++;
-          break;
-        }
-        default: {
-          // default operation result and multiple response bodies
-          for (const responseBodyModel of responseBodyModels) {
-            const responseEntityTypeName =
-              responseBodyModel.schemaId == null ? null : names[responseBodyModel.schemaId];
-            if (index > 0) {
-              yield " | ";
-            }
-            yield `[
-              ${JSON.stringify(responseBodyModel.contentType)},
-              ${responseEntityTypeName == null ? "unknown" : `types.${responseEntityTypeName}`},
-            ]`;
-            index++;
-          }
-          break;
-        }
-      }
+      yield generateOperationResultReturnType(
+        names,
+        operationModel,
+        operationResultModel,
+        responseTypes,
+        level,
+      );
       break;
     }
     default: {
       // multiple operation results
+      let index = 0;
       for (const operationResultModel of operationResultModels) {
-        const responseBodyModels = selectBodies(operationResultModel, responseTypes);
-
-        switch (responseBodyModels.length) {
-          case 0: {
-            // multiple operation results, no response body
-            if (index > 0) {
-              yield " | ";
-            }
-            yield `[
-              ${[...operationResultModel.statusCodes]
-                .filter((statusCode) => statusCode >= 200 && statusCode < 300)
-                .map((value) => JSON.stringify(value))
-                .join(" | ")},
-                null,
-                undefined,
-            ]`;
-            index++;
-            break;
-          }
-          case 1: {
-            // multiple operation results, default response body
-            const [responseBodyModel] = responseBodyModels;
-            const responseEntityTypeName =
-              responseBodyModel.schemaId == null ? null : names[responseBodyModel.schemaId];
-
-            if (index > 0) {
-              yield " | ";
-            }
-            yield `[
-              ${[...operationResultModel.statusCodes]
-                .filter((statusCode) => statusCode >= 200 && statusCode < 300)
-                .map((value) => JSON.stringify(value))
-                .join(" | ")},
-              ${JSON.stringify(responseBodyModel.contentType)},
-              ${responseEntityTypeName == null ? "unknown" : `types.${responseEntityTypeName}`}
-            ]`;
-            index++;
-            break;
-          }
-          default: {
-            // multiple operation results, multiple response bodies
-            for (const responseBodyModel of responseBodyModels) {
-              const responseEntityTypeName =
-                responseBodyModel.schemaId == null ? null : names[responseBodyModel.schemaId];
-
-              if (index > 0) {
-                yield " | ";
-              }
-              yield `[
-                ${[...operationResultModel.statusCodes]
-                  .filter((statusCode) => statusCode >= 200 && statusCode < 300)
-                  .map((value) => JSON.stringify(value))
-                  .join(" | ")},
-                ${JSON.stringify(responseBodyModel.contentType)},
-                ${responseEntityTypeName == null ? "unknown" : `types.${responseEntityTypeName}`},
-              ]`;
-              index++;
-            }
-            break;
-          }
+        if (index > 0) {
+          yield " | ";
         }
+        yield generateOperationResultReturnType(
+          names,
+          operationModel,
+          operationResultModel,
+          responseTypes,
+          level + 1,
+        );
+        index++;
       }
+      break;
     }
+  }
+}
+
+function* generateOperationResultReturnType(
+  names: Record<string, string>,
+  operationModel: skiffaCore.OperationContainer,
+  operationResultModel: skiffaCore.OperationResultContainer,
+  responseTypes: Array<string>,
+  level: number,
+) {
+  const responseBodyModels = selectBodies(operationResultModel, responseTypes);
+
+  switch (responseBodyModels.length) {
+    case 0: {
+      //  no response body
+      yield generateResponseBodyReturnType(
+        names,
+        operationModel,
+        operationResultModel,
+        null,
+        level,
+      );
+      break;
+    }
+    case 1: {
+      //  default response body
+      const [responseBodyModel] = responseBodyModels;
+      yield generateResponseBodyReturnType(
+        names,
+        operationModel,
+        operationResultModel,
+        responseBodyModel,
+        level,
+      );
+      break;
+    }
+    default: {
+      // multiple response bodies
+      let index = 0;
+      for (const responseBodyModel of responseBodyModels) {
+        if (index > 0) {
+          yield " | ";
+        }
+        yield generateResponseBodyReturnType(
+          names,
+          operationModel,
+          operationResultModel,
+          responseBodyModel,
+          level + 1,
+        );
+        index++;
+      }
+      break;
+    }
+  }
+}
+
+function* generateResponseBodyReturnType(
+  names: Record<string, string>,
+  operationModel: skiffaCore.OperationContainer,
+  operationResultModel: skiffaCore.OperationResultContainer,
+  responseBodyModel: skiffaCore.BodyContainer | null,
+  level: number,
+) {
+  const responseEntityTypeName =
+    responseBodyModel?.schemaId == null ? null : names[responseBodyModel.schemaId];
+
+  switch (level) {
+    case 0:
+      yield `
+        ${responseBodyModel == null ? "undefined" : responseEntityTypeName == null ? "unknown" : `types.${responseEntityTypeName}`},
+      `;
+      break;
+
+    case 1:
+      yield `[
+        ${JSON.stringify(responseBodyModel?.contentType ?? null)},
+        ${responseBodyModel == null ? "undefined" : responseEntityTypeName == null ? "unknown" : `types.${responseEntityTypeName}`},
+      ]`;
+      break;
+
+    case 2:
+      yield `[
+        ${[...operationResultModel.statusCodes]
+          .filter((statusCode) => statusCode >= 200 && statusCode < 300)
+          .map((value) => JSON.stringify(value))
+          .join(" | ")},
+        ${JSON.stringify(responseBodyModel?.contentType ?? null)},
+        ${responseBodyModel == null ? "undefined" : responseEntityTypeName == null ? "unknown" : `types.${responseEntityTypeName}`},
+      ]`;
+      break;
   }
 }
 

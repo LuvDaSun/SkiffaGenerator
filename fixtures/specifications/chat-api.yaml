@@ -19,8 +19,6 @@ paths:
               schema: { $ref: "#/components/schemas/message" }
             text/plain:
               schema: { $ref: "#/components/schemas/text" }
-        "204":
-          description: No Content
 
   /messages:
     get:
@@ -32,6 +30,9 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/messages" }
+        "204":
+          description: No Content
+
     post:
       operationId: new-message
       summary: Create a new message
