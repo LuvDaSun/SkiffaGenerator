@@ -26,14 +26,7 @@ export function* generateFacadeTsCode(
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      yield* generateFacadeOperationFunction(
-        names,
-        apiModel,
-        pathModel,
-        operationModel,
-        requestTypes,
-        responseTypes,
-      );
+      yield* generateFacadeOperationFunction(names, operationModel, requestTypes, responseTypes);
     }
   }
 }

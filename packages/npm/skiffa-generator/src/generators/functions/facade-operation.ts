@@ -8,6 +8,17 @@ import {
   getRequestParametersTypeName,
 } from "../names/index.js";
 
+interface State {
+  hasParametersArgument: boolean;
+  hasContentTypeArgument: boolean;
+  hasEntityArgument: boolean;
+
+  hasStatusReturn: boolean;
+  hasParametersReturn: boolean;
+  hasContentTypeReturn: boolean;
+  hasEntityReturn: boolean;
+}
+
 /**
  * Generates code for the facade (aka simple client). These functions call the advanced client.
  * These functions make it a bit easier to work with the API.
@@ -42,8 +53,6 @@ import {
 
 export function* generateFacadeOperationFunction(
   names: Record<string, string>,
-  apiModel: skiffaCore.ApiContainer,
-  pathModel: skiffaCore.PathContainer,
   operationModel: skiffaCore.OperationContainer,
   requestTypes: Array<string>,
   responseTypes: Array<string>,
@@ -84,6 +93,17 @@ export function* generateFacadeOperationFunction(
     (model) => selectBodies(model, responseTypes).length > 0,
   );
 
+  const state: State = {
+    hasParametersArgument,
+    hasContentTypeArgument,
+    hasEntityArgument,
+
+    hasStatusReturn: hasStatusResult,
+    hasParametersReturn: hasParametersResult,
+    hasContentTypeReturn: hasContentTypeResult,
+    hasEntityReturn: hasEntityResult,
+  };
+
   const parametersTypeName = getRequestParametersTypeName(operationModel);
 
   for (const requestBodyModel of requestBodyModels) {
@@ -99,7 +119,7 @@ export function* generateFacadeOperationFunction(
         ${hasEntityArgument ? `entity: ${requestEntityTypeName == null ? "unknown" : `types.${requestEntityTypeName}`},` : ""}
         operationCredentials?: client.${credentialsName},
         operationConfiguration?: client.ClientConfiguration,
-      ): Promise<${generateOperationReturnType(names, operationResultModels, responseTypes, hasStatusResult, hasParametersResult, hasContentTypeResult, hasEntityResult)}>;
+      ): Promise<${generateOperationReturnType(names, operationResultModels, responseTypes, state)}>;
     `;
   }
 
@@ -113,8 +133,8 @@ export function* generateFacadeOperationFunction(
       ${hasEntityArgument ? `entity: unknown,` : ""}
       operationCredentials: client.${credentialsName} = {},
       operationConfiguration: client.ClientConfiguration = {},
-    ): Promise<${generateOperationReturnType(names, operationResultModels, responseTypes, hasStatusResult, hasParametersResult, hasContentTypeResult, hasEntityResult)}> {
-      ${generateBody(names, apiModel, pathModel, operationModel, requestTypes, responseTypes)}
+    ): Promise<${generateOperationReturnType(names, operationResultModels, responseTypes, state)}> {
+      ${generateBody(operationModel, requestTypes, responseTypes, state)}
     }
   `;
 }
@@ -123,10 +143,7 @@ function* generateOperationReturnType(
   names: Record<string, string>,
   operationResultModels: Array<skiffaCore.OperationResultContainer>,
   responseTypes: Array<string>,
-  hasStatusResult: boolean,
-  hasParametersResult: boolean,
-  hasContentTypeResult: boolean,
-  hasEntityResult: boolean,
+  state: State,
 ) {
   switch (operationResultModels.length) {
     case 0: {
@@ -137,15 +154,7 @@ function* generateOperationReturnType(
     case 1: {
       // default operation result
       const [operationResultModel] = operationResultModels;
-      yield generateOperationResultReturnType(
-        names,
-        operationResultModel,
-        responseTypes,
-        hasStatusResult,
-        hasParametersResult,
-        hasContentTypeResult,
-        hasEntityResult,
-      );
+      yield generateOperationResultReturnType(names, operationResultModel, responseTypes, state);
       break;
     }
     default: {
@@ -155,15 +164,7 @@ function* generateOperationReturnType(
         if (index > 0) {
           yield " | ";
         }
-        yield generateOperationResultReturnType(
-          names,
-          operationResultModel,
-          responseTypes,
-          hasStatusResult,
-          hasParametersResult,
-          hasContentTypeResult,
-          hasEntityResult,
-        );
+        yield generateOperationResultReturnType(names, operationResultModel, responseTypes, state);
         index++;
       }
       break;
@@ -175,39 +176,20 @@ function* generateOperationResultReturnType(
   names: Record<string, string>,
   operationResultModel: skiffaCore.OperationResultContainer,
   responseTypes: Array<string>,
-  hasStatusResult: boolean,
-  hasParametersResult: boolean,
-  hasContentTypeResult: boolean,
-  hasEntityResult: boolean,
+  state: State,
 ) {
   const responseBodyModels = selectBodies(operationResultModel, responseTypes);
 
   switch (responseBodyModels.length) {
     case 0: {
       //  no response body
-      yield generateResponseBodyReturnType(
-        names,
-        operationResultModel,
-        null,
-        hasStatusResult,
-        hasParametersResult,
-        hasContentTypeResult,
-        hasEntityResult,
-      );
+      yield generateResponseBodyReturnType(names, operationResultModel, null, state);
       break;
     }
     case 1: {
       // default response body
       const [responseBodyModel] = responseBodyModels;
-      yield generateResponseBodyReturnType(
-        names,
-        operationResultModel,
-        responseBodyModel,
-        hasStatusResult,
-        hasParametersResult,
-        hasContentTypeResult,
-        hasEntityResult,
-      );
+      yield generateResponseBodyReturnType(names, operationResultModel, responseBodyModel, state);
       break;
     }
     default: {
@@ -217,15 +199,7 @@ function* generateOperationResultReturnType(
         if (index > 0) {
           yield " | ";
         }
-        yield generateResponseBodyReturnType(
-          names,
-          operationResultModel,
-          responseBodyModel,
-          hasStatusResult,
-          hasParametersResult,
-          hasContentTypeResult,
-          hasEntityResult,
-        );
+        yield generateResponseBodyReturnType(names, operationResultModel, responseBodyModel, state);
         index++;
       }
       break;
@@ -237,11 +211,15 @@ function* generateResponseBodyReturnType(
   names: Record<string, string>,
   operationResultModel: skiffaCore.OperationResultContainer,
   responseBodyModel: skiffaCore.BodyContainer | null,
-  hasStatusResult: boolean,
-  hasParametersResult: boolean,
-  hasContentTypeResult: boolean,
-  hasEntityResult: boolean,
+  state: State,
 ) {
+  const {
+    hasStatusReturn: hasStatusResult,
+    hasParametersReturn: hasParametersResult,
+    hasContentTypeReturn: hasContentTypeResult,
+    hasEntityReturn: hasEntityResult,
+  } = state;
+
   const responseEntityTypeName =
     responseBodyModel?.schemaId == null ? null : names[responseBodyModel.schemaId];
 
@@ -276,7 +254,7 @@ function* generateResponseBodyReturnType(
 
   switch (tuple.length) {
     case 0:
-      yield "never";
+      yield "void";
       break;
 
     case 1:
@@ -293,34 +271,17 @@ function* generateResponseBodyReturnType(
 }
 
 function* generateBody(
-  names: Record<string, string>,
-  apiModel: skiffaCore.ApiContainer,
-  pathModel: skiffaCore.PathContainer,
   operationModel: skiffaCore.OperationContainer,
   requestTypes: Array<string>,
   responseTypes: Array<string>,
+  state: State,
 ) {
+  const { hasParametersArgument, hasContentTypeArgument, hasEntityArgument } = state;
+
   const operationFunctionName = getOperationFunctionName(operationModel);
-
   const requestBodyModels = selectBodies(operationModel, requestTypes);
-
-  const hasParametersArgument =
-    operationModel.pathParameters.length > 0 ||
-    operationModel.queryParameters.length > 0 ||
-    operationModel.headerParameters.length > 0 ||
-    operationModel.cookieParameters.length > 0;
-  const hasContentTypeArgument = requestBodyModels.length > 1;
-  const hasEntityArgument = requestBodyModels.length > 0;
-
   const defaultRequestBodyModel = requestBodyModels.length === 1 ? requestBodyModels[0] : null;
-
   const operationOutgoingRequestName = getOutgoingRequestTypeName(operationModel);
-
-  const operationResultModels = operationModel.operationResults.filter((operationResultModel) =>
-    operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 300),
-  );
-
-  const level = operationResultModels.length > 1 ? 1 : 0;
 
   yield itt`
     const result = await client.${operationFunctionName}(
@@ -336,7 +297,7 @@ function* generateBody(
 
   yield itt`
     switch(result.status) {
-      ${generateStatusCodesCaseClauses(operationModel, responseTypes, level)}
+      ${generateStatusCodesCaseClauses(operationModel, responseTypes, state)}
     }
   `;
 }
@@ -344,7 +305,7 @@ function* generateBody(
 function* generateStatusCodesCaseClauses(
   operationModel: skiffaCore.OperationContainer,
   responseTypes: Array<string>,
-  level: number,
+  state: State,
 ) {
   for (const operationResultModel of operationModel.operationResults) {
     {
@@ -358,7 +319,7 @@ function* generateStatusCodesCaseClauses(
         if (statusCodes.length === 0) {
           yield itt`
           {
-            ${generateStatusCodeCaseBody(operationResultModel, responseTypes, level)}
+            ${generateStatusCodeCaseBody(operationResultModel, responseTypes, state)}
             break;
           }
         `;
@@ -391,26 +352,17 @@ function* generateStatusCodesCaseClauses(
 function* generateStatusCodeCaseBody(
   operationResultModel: skiffaCore.OperationResultContainer,
   responseTypes: Array<string>,
-  level: number,
+  state: State,
 ) {
   const responseBodyModels = selectBodies(operationResultModel, responseTypes);
   switch (responseBodyModels.length) {
     case 0: {
-      yield itt`
-        return;
-      `;
-    }
-    case 1: {
-      yield itt`
-        switch(result.contentType) {
-          ${generateContentTypesCaseClauses(operationResultModel, responseBodyModels, level)}
-        }
-      `;
+      yield generateContentReturnStatement(null, state);
     }
     default: {
       yield itt`
         switch(result.contentType) {
-          ${generateContentTypesCaseClauses(operationResultModel, responseBodyModels, level + 1)}
+          ${generateContentTypesCaseClauses(operationResultModel, responseBodyModels, state)}
         }
       `;
       break;
@@ -421,12 +373,12 @@ function* generateStatusCodeCaseBody(
 function* generateContentTypesCaseClauses(
   operationResultModel: skiffaCore.OperationResultContainer,
   responseBodyModels: Array<skiffaCore.BodyContainer>,
-  level: number,
+  state: State,
 ) {
   for (const bodyModel of responseBodyModels) {
     yield itt`
       case ${JSON.stringify(bodyModel.contentType)}: {
-        ${generateContentReturnStatement(bodyModel, level)}
+        ${generateContentReturnStatement(bodyModel, state)}
       }
     `;
   }
@@ -438,46 +390,68 @@ function* generateContentTypesCaseClauses(
 }
 
 function* generateContentReturnStatement(
-  responseBodyModel: skiffaCore.BodyContainer,
-  level: number,
+  responseBodyModel: skiffaCore.BodyContainer | null,
+  state: State,
 ) {
-  switch (level) {
+  const {
+    hasStatusReturn: hasStatusResult,
+    hasParametersReturn: hasParametersResult,
+    hasContentTypeReturn: hasContentTypeResult,
+    hasEntityReturn: hasEntityResult,
+  } = state;
+
+  const tuple = new Array<string>();
+
+  if (hasStatusResult) {
+    tuple.push("result.status");
+  }
+
+  if (hasParametersResult) {
+    tuple.push(`result.parameters`);
+  }
+
+  if (hasContentTypeResult) {
+    tuple.push(`result.contentType`);
+  }
+
+  if (hasEntityResult) {
+    tuple.push(
+      responseBodyModel == null ? "undefined" : generateContentEntityExpression(responseBodyModel),
+    );
+  }
+
+  switch (tuple.length) {
     case 0:
-      yield itt`
-        return (${generateContentEntityExpression(responseBodyModel)});
-      `;
+      yield "return;";
       break;
 
     case 1:
-      yield itt`
-        return [result.contentType, ${generateContentEntityExpression(responseBodyModel)}];
-      `;
+      const [element] = tuple;
+      yield `return (${element});`;
       break;
 
-    case 2:
-      yield itt`
-        return [result.status, result.contentType, ${generateContentEntityExpression(responseBodyModel)}];
-      `;
+    default:
+      yield `return [
+        ${tuple.map((element) => `${element}, `).join("")}
+      ]`;
       break;
   }
 }
 
-function* generateContentEntityExpression(responseBodyModel: skiffaCore.BodyContainer) {
+function generateContentEntityExpression(responseBodyModel: skiffaCore.BodyContainer) {
   switch (responseBodyModel.contentType) {
     case "application/json":
-      yield itt`
+      return `
         await result.entity()
       `;
-      break;
 
     case "text/plain":
-      yield itt`
+      return `
         await result.value()
       `;
-      break;
 
     default:
-      yield itt`
+      return `
         result.stream()
       `;
   }
