@@ -32,6 +32,8 @@ paths:
               schema: { $ref: "#/components/schemas/messages" }
         "204":
           description: No Content
+        "401":
+          description: Unauthorized
 
     post:
       operationId: new-message

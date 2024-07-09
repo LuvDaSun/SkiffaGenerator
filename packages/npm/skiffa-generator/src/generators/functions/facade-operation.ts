@@ -251,38 +251,49 @@ function* generateBody(
     );
   `;
 
-  const operationResultModels = operationModel.operationResults.filter((operationResultModel) =>
-    operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 300),
-  );
-
-  for (const operationResultModel of operationResultModels) {
-    yield itt`
-      switch(result.status) {
-        ${generateStatusCodesCaseClauses(operationResultModels, responseTypes)}
-      }
-    `;
-  }
+  yield itt`
+    switch(result.status) {
+      ${generateStatusCodesCaseClauses(operationModel, responseTypes)}
+    }
+  `;
 }
 
 function* generateStatusCodesCaseClauses(
-  operationResultModels: Array<skiffaCore.OperationResultContainer>,
+  operationModel: skiffaCore.OperationContainer,
   responseTypes: Array<string>,
 ) {
-  for (const operationResultModel of operationResultModels) {
-    const statusCodes = [...operationResultModel.statusCodes].filter(
-      (statusCode) => statusCode >= 200 && statusCode < 300,
-    );
-    let statusCode;
-    while ((statusCode = statusCodes.shift()) != null) {
-      yield itt`case ${JSON.stringify(statusCode)}:`;
-      // it's te last one!
-      if (statusCodes.length === 0) {
-        yield itt`
+  for (const operationResultModel of operationModel.operationResults) {
+    {
+      const statusCodes = [...operationResultModel.statusCodes].filter(
+        (statusCode) => statusCode >= 200 && statusCode < 300,
+      );
+      let statusCode;
+      while ((statusCode = statusCodes.shift()) != null) {
+        yield itt`case ${JSON.stringify(statusCode)}:`;
+        // it's te last one!
+        if (statusCodes.length === 0) {
+          yield itt`
           {
             ${generateStatusCodeCaseBody(operationResultModel, responseTypes)}
             break;
           }
         `;
+        }
+      }
+    }
+    {
+      const statusCodes = [...operationResultModel.statusCodes].filter(
+        (statusCode) => !(statusCode >= 200 && statusCode < 300),
+      );
+      let statusCode;
+      while ((statusCode = statusCodes.shift()) != null) {
+        yield itt`case ${JSON.stringify(statusCode)}:`;
+        // it's te last one!
+        if (statusCodes.length === 0) {
+          yield itt`
+            throw new lib.UnexpectedStatusCode(result.status);
+          `;
+        }
       }
     }
   }
@@ -320,7 +331,7 @@ function* generateContentTypesCaseClauses(
 
   yield itt`
     default:
-      throw new lib.ClientResponseUnexpectedContentType();
+      throw "cannot happen";
     `;
 }
 
