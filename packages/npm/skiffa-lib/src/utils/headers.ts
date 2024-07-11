@@ -63,7 +63,7 @@ export function parseAcceptHeader<T extends string>(values: string[]) {
 
         const values: Record<string, string> = {};
         for (const part of parts) {
-          const pair = part.split(/\s*=\s*/, 2);
+          const pair = part.split(/\s*=\s*/, 2) as [string, string];
           if (pair.length !== 2) continue;
 
           const [key, value] = pair;
