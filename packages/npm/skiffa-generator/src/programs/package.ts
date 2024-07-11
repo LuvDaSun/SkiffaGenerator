@@ -57,7 +57,6 @@ export function configurePackageProgram(argv: yargs.Argv) {
         .option("base-url", {
           description: "The default location from where the api is served",
           type: "string",
-          default: "http://localhost:3000",
         }),
     (argv) => main(argv),
   );
@@ -72,14 +71,14 @@ interface MainOptions {
   transformMaximumIterations: number;
   requestTypes: string[];
   responseTypes: string[];
-  baseUrl: string;
+  baseUrl?: string;
 }
 
 async function main(options: MainOptions) {
   // read from options
 
   const packageDirectoryPath = path.resolve(options.packageDirectory);
-  const baseUrl = new URL(options.baseUrl);
+  const baseUrl = options.baseUrl == null ? undefined : new URL(options.baseUrl);
   const {
     specificationLocation,
     packageName,

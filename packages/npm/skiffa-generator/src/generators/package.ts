@@ -24,7 +24,7 @@ export interface PackageConfiguration {
   packageDirectoryPath: string;
   requestTypes: string[];
   responseTypes: string[];
-  baseUrl: URL;
+  baseUrl?: URL;
 }
 
 export function generatePackage(
