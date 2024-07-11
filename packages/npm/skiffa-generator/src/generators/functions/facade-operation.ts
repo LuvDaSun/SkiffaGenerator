@@ -103,52 +103,93 @@ export function* generateFacadeOperationFunction(
     hasEntityReturn,
   };
 
-  const parametersTypeName = getRequestParametersTypeName(operationModel);
+  const credentialsName = getOperationCredentialsTypeName(operationModel);
 
-  yield itt`
+  if (requestBodyModels.length > 1) {
+    for (const requestBodyModel of requestBodyModels) {
+      const requestEntityTypeName =
+        requestBodyModel?.schemaId == null ? null : names[requestBodyModel.schemaId];
+
+      const functionArguments = new Array<string>();
+
+      if (hasParametersArgument) {
+        const parametersTypeName = getRequestParametersTypeName(operationModel);
+        functionArguments.push(`parameters: parameters.${parametersTypeName}`);
+      }
+
+      if (hasContentTypeArgument) {
+        functionArguments.push(
+          `contentType: ${JSON.stringify(requestBodyModel?.contentType ?? null)}`,
+        );
+      }
+
+      if (hasEntityArgument) {
+        functionArguments.push(
+          `entity: ${
+            requestBodyModel == null
+              ? "undefined"
+              : requestEntityTypeName == null
+                ? "unknown"
+                : `types.${requestEntityTypeName}`
+          }`,
+        );
+      }
+
+      functionArguments.push(`operationCredentials: client.${credentialsName}`);
+      functionArguments.push(`operationConfiguration: client.ClientConfiguration`);
+
+      yield itt`export function ${operationFunctionName}(
+      ${functionArguments.map((element) => `${element},\n`).join("")}
+    ): Promise<${generateOperationReturnType(names, operationResultModels, responseTypes, state)}>;`;
+    }
+  }
+
+  {
+    const functionArguments = new Array<string>();
+
+    if (hasParametersArgument) {
+      const parametersTypeName = getRequestParametersTypeName(operationModel);
+      functionArguments.push(`parameters: parameters.${parametersTypeName}`);
+    }
+
+    if (hasContentTypeArgument) {
+      functionArguments.push(
+        `contentType: ${requestBodyModels
+          .map((model) => model.contentType)
+          .map((value) => JSON.stringify(value))
+          .join(" | ")}`,
+      );
+    }
+
+    if (hasEntityArgument) {
+      functionArguments.push(
+        `entity: ${requestBodyModels
+          .map((requestBodyModel) => {
+            const requestEntityTypeName =
+              requestBodyModel?.schemaId == null ? null : names[requestBodyModel.schemaId];
+
+            return requestBodyModel == null
+              ? "undefined"
+              : requestEntityTypeName == null
+                ? "unknown"
+                : `types.${requestEntityTypeName}`;
+          })
+          .join(" | ")}`,
+      );
+    }
+
+    functionArguments.push(`operationCredentials: client.${credentialsName} = {}`);
+    functionArguments.push(`operationConfiguration: client.ClientConfiguration = {}`);
+    yield itt`
     /**
       ${jsDoc}
     */
     export async function ${operationFunctionName}(
-      ...argument: ${generateOperationArgumentType(names, operationModel, requestTypes, state)}
+      ${functionArguments.map((element) => `${element},\n`).join("")}
     ): Promise<${generateOperationReturnType(names, operationResultModels, responseTypes, state)}> {
       ${generateBody(operationModel, requestTypes, responseTypes, state)}
     }
   `;
-}
-
-function* generateOperationArgumentType(
-  names: Record<string, string>,
-  operationModel: skiffaCore.OperationContainer,
-  requestTypes: Array<string>,
-  state: State,
-) {
-  const requestBodyModels = selectBodies(operationModel, requestTypes);
-
-  switch (requestBodyModels.length) {
-    case 0: {
-      //  no response body
-      yield generateRequestBodyArgumentType(names, operationModel, null, state);
-      break;
-    }
-    case 1: {
-      // default response body
-      const [requestBodyModel] = requestBodyModels;
-      yield generateRequestBodyArgumentType(names, operationModel, requestBodyModel, state);
-      break;
-    }
-    default: {
-      // multiple response bodies
-      let index = 0;
-      for (const requestBodyModel of requestBodyModels) {
-        if (index > 0) {
-          yield " | ";
-        }
-        yield generateRequestBodyArgumentType(names, operationModel, requestBodyModel, state);
-        index++;
-      }
-      break;
-    }
   }
 }
 
@@ -220,48 +261,6 @@ function* generateOperationResultReturnType(
   }
 }
 
-function* generateRequestBodyArgumentType(
-  names: Record<string, string>,
-  operationModel: skiffaCore.OperationContainer,
-  requestBodyModel: skiffaCore.BodyContainer | null,
-  state: State,
-) {
-  const { hasParametersArgument, hasContentTypeArgument, hasEntityArgument } = state;
-
-  const requestEntityTypeName =
-    requestBodyModel?.schemaId == null ? null : names[requestBodyModel.schemaId];
-  const credentialsName = getOperationCredentialsTypeName(operationModel);
-
-  const tuple = new Array<string>();
-
-  if (hasParametersArgument) {
-    tuple.push(`parameters: result.parameters`);
-  }
-
-  if (hasContentTypeArgument) {
-    tuple.push(`contentType: ${JSON.stringify(requestBodyModel?.contentType ?? null)}`);
-  }
-
-  if (hasEntityArgument) {
-    tuple.push(
-      `entity: ${
-        requestBodyModel == null
-          ? "undefined"
-          : requestEntityTypeName == null
-            ? "unknown"
-            : `types.${requestEntityTypeName}`
-      }`,
-    );
-  }
-
-  tuple.push(`operationCredentials: client.${credentialsName}`);
-  tuple.push(`operationConfiguration: client.ClientConfiguration`);
-
-  yield `[
-    ${tuple.map((element) => `${element}, `).join("")}
-  ]`;
-}
-
 function* generateResponseBodyReturnType(
   names: Record<string, string>,
   operationResultModel: skiffaCore.OperationResultContainer,
@@ -314,7 +313,7 @@ function* generateResponseBodyReturnType(
 
     default:
       yield `[
-        ${tuple.map((element) => `${element}, `).join("")}
+        ${tuple.map((element) => `${element},\n`).join("")}
       ]`;
       break;
   }
@@ -477,7 +476,7 @@ function* generateContentReturnStatement(
 
     default:
       yield `return [
-        ${tuple.map((element) => `${element}, `).join("")}
+        ${tuple.map((element) => `${element},\n`).join("")}
       ]`;
       break;
   }
