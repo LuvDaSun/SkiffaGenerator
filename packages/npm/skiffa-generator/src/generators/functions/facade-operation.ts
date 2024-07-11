@@ -6,6 +6,7 @@ import {
   getOperationFunctionName,
   getOutgoingRequestTypeName,
   getRequestParametersTypeName,
+  getResponseParametersTypeName,
 } from "../names.js";
 
 interface State {
@@ -135,7 +136,7 @@ export function* generateFacadeOperationFunction(
 
       yield itt`export function ${operationFunctionName}(
       ${functionArguments.map((element) => `${element},\n`).join("")}
-    ): Promise<${generateOperationReturnType(names, operationResultModels, responseTypes, state)}>;`;
+    ): Promise<${generateOperationReturnType(names, operationModel, operationResultModels, responseTypes, state)}>;`;
     }
   }
 
@@ -179,7 +180,7 @@ export function* generateFacadeOperationFunction(
     */
     export async function ${operationFunctionName}(
       ${functionArguments.map((element) => `${element},\n`).join("")}
-    ): Promise<${generateOperationReturnType(names, operationResultModels, responseTypes, state)}> {
+    ): Promise<${generateOperationReturnType(names, operationModel, operationResultModels, responseTypes, state)}> {
       ${generateBody(operationModel, requestTypes, responseTypes, state)}
     }
   `;
@@ -188,6 +189,7 @@ export function* generateFacadeOperationFunction(
 
 function* generateOperationReturnType(
   names: Record<string, string>,
+  operationModel: skiffaCore.OperationContainer,
   operationResultModels: Array<skiffaCore.OperationResultContainer>,
   responseTypes: Array<string>,
   state: State,
@@ -198,20 +200,20 @@ function* generateOperationReturnType(
       yield "never";
       break;
     }
-    case 1: {
-      // default operation result
-      const [operationResultModel] = operationResultModels;
-      yield generateOperationResultReturnType(names, operationResultModel, responseTypes, state);
-      break;
-    }
     default: {
-      // multiple operation results
+      // one or multiple operation results
       let index = 0;
       for (const operationResultModel of operationResultModels) {
         if (index > 0) {
           yield " | ";
         }
-        yield generateOperationResultReturnType(names, operationResultModel, responseTypes, state);
+        yield generateOperationResultReturnType(
+          names,
+          operationModel,
+          operationResultModel,
+          responseTypes,
+          state,
+        );
         index++;
       }
       break;
@@ -221,6 +223,7 @@ function* generateOperationReturnType(
 
 function* generateOperationResultReturnType(
   names: Record<string, string>,
+  operationModel: skiffaCore.OperationContainer,
   operationResultModel: skiffaCore.OperationResultContainer,
   responseTypes: Array<string>,
   state: State,
@@ -230,23 +233,29 @@ function* generateOperationResultReturnType(
   switch (responseBodyModels.length) {
     case 0: {
       //  no response body
-      yield generateResponseBodyReturnType(names, operationResultModel, null, state);
-      break;
-    }
-    case 1: {
-      // default response body
-      const [responseBodyModel] = responseBodyModels;
-      yield generateResponseBodyReturnType(names, operationResultModel, responseBodyModel, state);
+      yield generateResponseBodyReturnType(
+        names,
+        operationModel,
+        operationResultModel,
+        null,
+        state,
+      );
       break;
     }
     default: {
-      // multiple response bodies
+      // one or multiple response bodies
       let index = 0;
       for (const responseBodyModel of responseBodyModels) {
         if (index > 0) {
           yield " | ";
         }
-        yield generateResponseBodyReturnType(names, operationResultModel, responseBodyModel, state);
+        yield generateResponseBodyReturnType(
+          names,
+          operationModel,
+          operationResultModel,
+          responseBodyModel,
+          state,
+        );
         index++;
       }
       break;
@@ -256,6 +265,7 @@ function* generateOperationResultReturnType(
 
 function* generateResponseBodyReturnType(
   names: Record<string, string>,
+  operationModel: skiffaCore.OperationContainer,
   operationResultModel: skiffaCore.OperationResultContainer,
   responseBodyModel: skiffaCore.BodyContainer | null,
   state: State,
@@ -277,7 +287,8 @@ function* generateResponseBodyReturnType(
   }
 
   if (hasParametersReturn) {
-    tuple.push(`result.parameters`);
+    const parametersTypeName = getResponseParametersTypeName(operationModel, operationResultModel);
+    tuple.push(`parameters.${parametersTypeName}`);
   }
 
   if (hasContentTypeReturn) {
