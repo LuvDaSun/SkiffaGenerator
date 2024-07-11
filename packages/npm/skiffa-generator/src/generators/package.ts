@@ -24,6 +24,7 @@ export interface PackageConfiguration {
   packageDirectoryPath: string;
   requestTypes: string[];
   responseTypes: string[];
+  baseUrl: URL;
 }
 
 export function generatePackage(
@@ -55,8 +56,14 @@ export function generatePackage(
     router.insertRoute(pathModel.id, pathModel.pattern);
   }
 
-  const { packageDirectoryPath, packageName, packageVersion, requestTypes, responseTypes } =
-    packageConfiguration;
+  const {
+    packageDirectoryPath,
+    packageName,
+    packageVersion,
+    requestTypes,
+    responseTypes,
+    baseUrl,
+  } = packageConfiguration;
 
   fs.mkdirSync(packageDirectoryPath, { recursive: true });
   fs.mkdirSync(path.join(packageDirectoryPath, "src"), { recursive: true });
@@ -105,7 +112,14 @@ export function generatePackage(
   }
 
   {
-    const content = generateClientTsCode(names, router, apiModel, requestTypes, responseTypes);
+    const content = generateClientTsCode(
+      names,
+      router,
+      apiModel,
+      requestTypes,
+      responseTypes,
+      baseUrl,
+    );
     const filePath = path.join(packageDirectoryPath, "src", "client.ts");
     writeContentToFile(filePath, content);
   }

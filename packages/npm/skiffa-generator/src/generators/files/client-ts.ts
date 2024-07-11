@@ -18,6 +18,7 @@ export function* generateClientTsCode(
   apiModel: skiffaCore.ApiContainer,
   requestTypes: Array<string>,
   responseTypes: Array<string>,
+  baseUrl: URL,
 ) {
   yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
@@ -41,6 +42,7 @@ export function* generateClientTsCode(
     }
 
     export const defaultClientConfiguration = {
+      baseUrl: ${JSON.stringify(baseUrl.toString())},
       validateIncomingEntity: true,
       validateIncomingParameters: true,
       validateOutgoingEntity: false,
