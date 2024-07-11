@@ -128,8 +128,8 @@ export function* generateFacadeOperationFunction(
             requestBodyModel == null
               ? "undefined"
               : requestEntityTypeName == null
-                ? "unknown"
-                : `types.${requestEntityTypeName}`
+                ? "Promise<unknown>"
+                : `Promise<types.${requestEntityTypeName}>`
           }`,
         );
       }
@@ -300,8 +300,8 @@ function* generateResponseBodyReturnType(
       responseBodyModel == null
         ? "undefined"
         : responseEntityTypeName == null
-          ? "unknown"
-          : `types.${responseEntityTypeName}`,
+          ? "Promise<unknown>"
+          : `Promise<types.${responseEntityTypeName}>`,
     );
   }
 
@@ -491,12 +491,12 @@ function generateContentEntityExpression(responseBodyModel: skiffaCore.BodyConta
   switch (responseBodyModel.contentType) {
     case "application/json":
       return `
-        await result.entity()
+        result.entity()
       `;
 
     case "text/plain":
       return `
-        await result.value()
+        result.value()
       `;
 
     default:

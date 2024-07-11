@@ -1,4 +1,3 @@
-import { Promisable } from "type-fest";
 import { StatusCode } from "../utils/status-code.js";
 
 //#region interfaces
@@ -27,12 +26,12 @@ export type IncomingTextResponse<S extends StatusCode, C extends string> = {
 
 export type OutgoingTextContainer =
   | { stream(signal?: AbortSignal): AsyncIterable<Uint8Array> }
-  | { value(): Promisable<string> }
+  | { value(): Promise<string> }
   | { lines(signal?: AbortSignal): AsyncIterable<string> };
 
 export type IncomingTextContainer = {
   stream(signal?: AbortSignal): AsyncIterable<Uint8Array>;
-} & { value(): Promisable<string> } & {
+} & { value(): Promise<string> } & {
   lines(signal?: AbortSignal): AsyncIterable<string>;
 };
 
@@ -41,7 +40,7 @@ export type IncomingTextContainer = {
 //#region serialization
 
 export async function* serializeTextValue(
-  valuePromise: Promisable<string>,
+  valuePromise: Promise<string>,
 ): AsyncIterable<Uint8Array> {
   const encoder = new TextEncoder();
 

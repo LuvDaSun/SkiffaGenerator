@@ -1,4 +1,3 @@
-import { Promisable } from "type-fest";
 import { StatusCode } from "../utils.js";
 import { deserializeTextLines, deserializeTextValue } from "./text.js";
 
@@ -28,12 +27,12 @@ export type IncomingJsonResponse<S extends StatusCode, C extends string, T> = {
 
 export type OutgoingJsonContainer<T> =
   | { stream(signal?: AbortSignal): AsyncIterable<Uint8Array> }
-  | { entity(): Promisable<T> }
+  | { entity(): Promise<T> }
   | { entities(signal?: AbortSignal): AsyncIterable<T> };
 
 export type IncomingJsonContainer<T> = {
   stream(signal?: AbortSignal): AsyncIterable<Uint8Array>;
-} & { entity(): Promisable<T> } & {
+} & { entity(): Promise<T> } & {
   entities(signal?: AbortSignal): AsyncIterable<T>;
 };
 
@@ -42,7 +41,7 @@ export type IncomingJsonContainer<T> = {
 //#region serialization
 
 export async function* serializeJsonEntity(
-  asyncEntity: Promisable<unknown>,
+  asyncEntity: Promise<unknown>,
 ): AsyncIterable<Uint8Array> {
   const encoder = new TextEncoder();
 

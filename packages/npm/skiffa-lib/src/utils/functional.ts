@@ -1,5 +1,3 @@
-import { Promisable } from "type-fest";
-
 export async function* mapAsyncIterable<T, R>(
   iterable: Iterable<T> | AsyncIterable<T>,
   mapper: (value: T) => R,
@@ -9,11 +7,8 @@ export async function* mapAsyncIterable<T, R>(
   }
 }
 
-export async function mapPromisable<T, R>(
-  promisable: Promisable<T>,
-  mapper: (value: T) => R,
-): Promise<R> {
-  const value = await promisable;
+export async function mapPromise<T, R>(promise: Promise<T>, mapper: (value: T) => R): Promise<R> {
+  const value = await promise;
   return mapper(value);
 }
 
