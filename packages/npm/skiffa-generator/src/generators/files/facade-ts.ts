@@ -23,7 +23,7 @@ export function* generateFacadeTsCode(
   `;
 
   yield itt`
-    export const defaultClientConfiguration = {
+    export const defaultClientConfiguration: client.ClientConfiguration = {
       baseUrl: ${baseUrl == null ? "undefined" : JSON.stringify(baseUrl.toString())},
       validateIncomingEntity: true,
       validateIncomingParameters: true,
