@@ -7,6 +7,19 @@ info:
   version: 0.0.0
 
 paths:
+  /last-message:
+    get:
+      operationId: get-last-message
+      summary: Get last message
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/message" }
+            text/plain:
+              schema: { $ref: "#/components/schemas/text" }
+
   /messages:
     get:
       operationId: get-messages
@@ -17,6 +30,11 @@ paths:
           content:
             application/json:
               schema: { $ref: "#/components/schemas/messages" }
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+
     post:
       operationId: new-message
       summary: Create a new message
@@ -24,6 +42,8 @@ paths:
         content:
           application/json:
             schema: { $ref: "#/components/schemas/message" }
+          text/plain:
+            schema: { $ref: "#/components/schemas/text" }
       responses:
         "201":
           description: Created

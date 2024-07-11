@@ -1,17 +1,22 @@
 import * as skiffaCore from "@skiffa/core";
 import { joinIterable, mapIterable } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
+import { selectBodies } from "../helpers.js";
 import { getOutgoingRequestTypeName, getRequestParametersTypeName } from "../names/index.js";
 
 export function* generateOperationOutgoingRequestType(
   names: Record<string, string>,
   operationModel: skiffaCore.OperationContainer,
+  requestTypes: Array<string>,
 ) {
   const typeName = getOutgoingRequestTypeName(operationModel);
 
   yield itt`
     export type ${typeName} = ${joinIterable(
-      mapIterable(generateElements(names, operationModel), (element) => itt`(${element})`),
+      mapIterable(
+        generateElements(names, operationModel, requestTypes),
+        (element) => itt`(${element})`,
+      ),
       " |\n",
     )};
   `;
@@ -20,11 +25,12 @@ export function* generateOperationOutgoingRequestType(
 function* generateElements(
   names: Record<string, string>,
   operationModel: skiffaCore.OperationContainer,
+  requestTypes: Array<string>,
 ) {
   yield itt`
     ${generateParametersContainerType(operationModel)} &
     (
-      ${joinIterable(generateBodyContainerTypes(names, operationModel), " |\n")}
+      ${joinIterable(generateBodyContainerTypes(names, operationModel, requestTypes), " |\n")}
     )
   `;
 }
@@ -48,12 +54,15 @@ function* generateParametersContainerType(operationModel: skiffaCore.OperationCo
 function* generateBodyContainerTypes(
   names: Record<string, string>,
   operationModel: skiffaCore.OperationContainer,
+  requestTypes: Array<string>,
 ) {
-  if (operationModel.bodies.length === 0) {
+  const requestBodyModels = selectBodies(operationModel, requestTypes);
+
+  if (requestBodyModels.length === 0) {
     yield* generateBodyContainerType(names, operationModel);
   }
 
-  for (const bodyModel of operationModel.bodies) {
+  for (const bodyModel of requestBodyModels) {
     yield* generateBodyContainerType(names, operationModel, bodyModel);
   }
 }

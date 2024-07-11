@@ -19,6 +19,8 @@ export function* generateServerTsCode(
   names: Record<string, string>,
   router: Router<number>,
   apiModel: skiffaCore.ApiContainer,
+  requestTypes: Array<string>,
+  responseTypes: Array<string>,
 ) {
   yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
@@ -57,7 +59,7 @@ export function* generateServerTsCode(
   yield* generateServerAuthenticationType(apiModel);
   yield* generateAuthenticationHandlersType(apiModel);
   yield* generateOperationHandlersType(apiModel);
-  yield* generateServerClass(names, apiModel);
+  yield* generateServerClass(names, apiModel, requestTypes, responseTypes);
 
   for (const authenticationModel of apiModel.authentication) {
     yield* generateAuthenticationHandlerType(authenticationModel);
@@ -70,8 +72,8 @@ export function* generateServerTsCode(
       yield* generateIsAuthenticationFunction(apiModel, operationModel);
       yield* generateOperationAuthenticationType(apiModel, operationModel);
 
-      yield* generateOperationIncomingRequestType(names, operationModel);
-      yield* generateOperationOutgoingResponseType(names, operationModel);
+      yield* generateOperationIncomingRequestType(names, operationModel, requestTypes);
+      yield* generateOperationOutgoingResponseType(names, operationModel, responseTypes);
     }
   }
 }

@@ -8,11 +8,11 @@ import { generatePackage } from "../generators/index.js";
 
 export function configurePackageProgram(argv: yargs.Argv) {
   return argv.command(
-    "package [specification-url]",
-    "create package from specification-url",
+    "package [specification-location]",
+    "create package from specification location",
     (yargs) =>
       yargs
-        .positional("specification-url", {
+        .positional("specification-location", {
           description: "url to download specification from",
           type: "string",
           demandOption: true,
@@ -53,13 +53,17 @@ export function configurePackageProgram(argv: yargs.Argv) {
           type: "string",
           array: true,
           default: ["application/json", "multipart/form-data", "text/plain"],
+        })
+        .option("base-url", {
+          description: "The default location from where the api is served",
+          type: "string",
         }),
     (argv) => main(argv),
   );
 }
 
 interface MainOptions {
-  specificationUrl: string;
+  specificationLocation: string;
   packageDirectory: string;
   packageName: string;
   packageVersion: string;
@@ -67,14 +71,16 @@ interface MainOptions {
   transformMaximumIterations: number;
   requestTypes: string[];
   responseTypes: string[];
+  baseUrl?: string;
 }
 
 async function main(options: MainOptions) {
   // read from options
 
-  let specificationLocation = options.specificationUrl;
   const packageDirectoryPath = path.resolve(options.packageDirectory);
+  const baseUrl = options.baseUrl == null ? undefined : new URL(options.baseUrl);
   const {
+    specificationLocation,
     packageName,
     packageVersion,
     defaultTypeName,
@@ -117,5 +123,6 @@ async function main(options: MainOptions) {
     packageVersion,
     requestTypes,
     responseTypes,
+    baseUrl,
   });
 }

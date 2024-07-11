@@ -10,12 +10,13 @@ import {
   generateOperationIncomingResponseType,
   generateOperationOutgoingRequestType,
 } from "../types/index.js";
-import { generateCredentialsConstant } from "../variables/default-credentials.js";
 
 export function* generateClientTsCode(
   names: Record<string, string>,
   router: Router<number>,
   apiModel: skiffaCore.ApiContainer,
+  requestTypes: Array<string>,
+  responseTypes: Array<string>,
 ) {
   yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
@@ -37,13 +38,6 @@ export function* generateClientTsCode(
       validateOutgoingEntity?: boolean;
       validateOutgoingParameters?: boolean;
     }
-
-    export const defaultClientConfiguration = {
-      validateIncomingEntity: true,
-      validateIncomingParameters: true,
-      validateOutgoingEntity: false,
-      validateOutgoingParameters: false,
-    };
   `;
 
   yield itt`
@@ -53,7 +47,6 @@ export function* generateClientTsCode(
     }).loadFromJson(${JSON.stringify(router.saveToJson(RouterMode.Client))});
   `;
 
-  yield* generateCredentialsConstant();
   yield* generateCredentialsType(apiModel);
 
   for (const authenticationModel of apiModel.authentication) {
@@ -62,10 +55,17 @@ export function* generateClientTsCode(
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      yield* generateClientOperationFunction(names, apiModel, pathModel, operationModel);
+      yield* generateClientOperationFunction(
+        names,
+        apiModel,
+        pathModel,
+        operationModel,
+        requestTypes,
+        responseTypes,
+      );
       yield* generateOperationCredentialsType(apiModel, operationModel);
-      yield* generateOperationOutgoingRequestType(names, operationModel);
-      yield* generateOperationIncomingResponseType(names, operationModel);
+      yield* generateOperationOutgoingRequestType(names, operationModel, requestTypes);
+      yield* generateOperationIncomingResponseType(names, operationModel, responseTypes);
     }
   }
 }

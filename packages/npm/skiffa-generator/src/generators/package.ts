@@ -1,7 +1,7 @@
+import * as jns42generator from "@jns42/generator";
 import * as skiffaCore from "@skiffa/core";
 import fs from "fs";
 import { Router } from "goodrouter";
-import * as jns42generator from "@jns42/generator";
 import path from "path";
 import { NestedText, flattenNestedText, itt, splitIterableText } from "../utils/index.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
@@ -9,6 +9,7 @@ import { generateBuildJsCode } from "./files/build-js.js";
 import { generateCleanJsCode } from "./files/clean-js.js";
 import { generateClientServerTestTsCode } from "./files/client-server-test-ts.js";
 import { generateClientTsCode } from "./files/client-ts.js";
+import { generateFacadeTsCode } from "./files/facade-ts.js";
 import { generateMainTsCode } from "./files/main-ts.js";
 import { generatePackageJsonData } from "./files/package-json.js";
 import { generateParametersTsCode } from "./files/parameters-ts.js";
@@ -23,6 +24,7 @@ export interface PackageConfiguration {
   packageDirectoryPath: string;
   requestTypes: string[];
   responseTypes: string[];
+  baseUrl?: URL;
 }
 
 export function generatePackage(
@@ -54,7 +56,14 @@ export function generatePackage(
     router.insertRoute(pathModel.id, pathModel.pattern);
   }
 
-  const { packageDirectoryPath, packageName, packageVersion } = packageConfiguration;
+  const {
+    packageDirectoryPath,
+    packageName,
+    packageVersion,
+    requestTypes,
+    responseTypes,
+    baseUrl,
+  } = packageConfiguration;
 
   fs.mkdirSync(packageDirectoryPath, { recursive: true });
   fs.mkdirSync(path.join(packageDirectoryPath, "src"), { recursive: true });
@@ -91,7 +100,7 @@ export function generatePackage(
   }
 
   {
-    const content = generateSharedTsCode(apiModel);
+    const content = generateSharedTsCode(apiModel, responseTypes);
     const filePath = path.join(packageDirectoryPath, "src", "shared.ts");
     writeContentToFile(filePath, content);
   }
@@ -103,19 +112,38 @@ export function generatePackage(
   }
 
   {
-    const content = generateClientTsCode(names, router, apiModel);
+    const content = generateClientTsCode(names, router, apiModel, requestTypes, responseTypes);
     const filePath = path.join(packageDirectoryPath, "src", "client.ts");
     writeContentToFile(filePath, content);
   }
 
   {
-    const content = generateServerTsCode(names, router, apiModel);
+    const content = generateFacadeTsCode(
+      names,
+      router,
+      apiModel,
+      requestTypes,
+      responseTypes,
+      baseUrl,
+    );
+    const filePath = path.join(packageDirectoryPath, "src", "facade.ts");
+    writeContentToFile(filePath, content);
+  }
+
+  {
+    const content = generateServerTsCode(names, router, apiModel, requestTypes, responseTypes);
     const filePath = path.join(packageDirectoryPath, "src", "server.ts");
     writeContentToFile(filePath, content);
   }
 
   {
-    const content = generateClientServerTestTsCode(names, mockables, apiModel);
+    const content = generateClientServerTestTsCode(
+      names,
+      mockables,
+      apiModel,
+      requestTypes,
+      responseTypes,
+    );
     const filePath = path.join(packageDirectoryPath, "src", "client-server.test.ts");
     writeContentToFile(filePath, content);
   }

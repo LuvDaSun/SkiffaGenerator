@@ -1,8 +1,8 @@
 import * as skiffaCore from "@skiffa/core";
 import { itt } from "../../utils/index.js";
+import { selectBodies } from "../helpers.js";
 import {
   getAuthenticationMemberName,
-  getDefaultCredentialsConstantName,
   getIncomingResponseTypeName,
   getIsRequestParametersFunction,
   getIsResponseParametersFunction,
@@ -20,6 +20,8 @@ export function* generateClientOperationFunction(
   apiModel: skiffaCore.ApiContainer,
   pathModel: skiffaCore.PathContainer,
   operationModel: skiffaCore.OperationContainer,
+  requestTypes: Array<string>,
+  responseTypes: Array<string>,
 ) {
   const operationFunctionName = getOperationFunctionName(operationModel);
   const operationOutgoingRequestName = getOutgoingRequestTypeName(operationModel);
@@ -41,10 +43,10 @@ export function* generateClientOperationFunction(
    */
   export async function ${operationFunctionName}(
     outgoingRequest: ${operationOutgoingRequestName},
-    operationCredentials: ${credentialsName} = {},
-    operationConfiguration: ClientConfiguration = {},
+    credentials: ${credentialsName},
+    configuration: ClientConfiguration,
   ): Promise<${operationIncomingResponseName}> {
-    ${generateBody(names, apiModel, pathModel, operationModel)}
+    ${generateBody(names, apiModel, pathModel, operationModel, requestTypes, responseTypes)}
   }
 `;
 }
@@ -54,19 +56,12 @@ function* generateBody(
   apiModel: skiffaCore.ApiContainer,
   pathModel: skiffaCore.PathContainer,
   operationModel: skiffaCore.OperationContainer,
+  requestTypes: Array<string>,
+  responseTypes: Array<string>,
 ) {
   const operationIncomingResponseName = getIncomingResponseTypeName(operationModel);
   const operationAcceptConstName = getOperationAcceptConstName(operationModel);
   const isRequestParametersFunction = getIsRequestParametersFunction(operationModel);
-  const defaultCredentialsName = getDefaultCredentialsConstantName();
-
-  yield itt`
-    const credentials = {...operationCredentials, ...${defaultCredentialsName}}
-  `;
-
-  yield itt`
-    const configuration = {...operationConfiguration, ...defaultClientConfiguration}
-  `;
 
   yield itt`
     const {
@@ -283,12 +278,14 @@ function* generateBody(
     let body: BodyInit | null;  
     `;
 
-  if (operationModel.bodies.length === 0) {
+  const requestBodyModels = selectBodies(operationModel, requestTypes);
+
+  if (requestBodyModels.length === 0) {
     yield* generateRequestContentTypeCodeBody(names, operationModel);
   } else {
     yield itt`  
         switch(outgoingRequest.contentType){
-          ${generateRequestContentTypeCaseClauses(names, operationModel)}
+          ${generateRequestContentTypeCaseClauses(names, operationModel, requestTypes)}
         }
       `;
   }
@@ -310,7 +307,7 @@ function* generateBody(
 
   yield itt`
       switch(fetchResponse.status) {
-        ${generateResponseStatusCodeCaseClauses(names, operationModel)}
+        ${generateResponseStatusCodeCaseClauses(names, operationModel, responseTypes)}
       }
     `;
 
@@ -322,8 +319,11 @@ function* generateBody(
 function* generateRequestContentTypeCaseClauses(
   names: Record<string, string>,
   operationModel: skiffaCore.OperationContainer,
+  requestTypes: Array<string>,
 ) {
-  for (const bodyModel of operationModel.bodies) {
+  const requestBodyModels = selectBodies(operationModel, requestTypes);
+
+  for (const bodyModel of requestBodyModels) {
     yield itt`
       case ${JSON.stringify(bodyModel.contentType)}: {
         requestHeaders.append("content-type", outgoingRequest.contentType);
@@ -343,6 +343,7 @@ function* generateRequestContentTypeCaseClauses(
 function* generateResponseStatusCodeCaseClauses(
   names: Record<string, string>,
   operationModel: skiffaCore.OperationContainer,
+  responseTypes: Array<string>,
 ) {
   for (const operationResultModel of operationModel.operationResults) {
     const statusCodes = [...operationResultModel.statusCodes];
@@ -353,7 +354,7 @@ function* generateResponseStatusCodeCaseClauses(
       if (statusCodes.length === 0) {
         yield itt`
           {
-            ${generateOperationResultBody(names, operationModel, operationResultModel)}
+            ${generateOperationResultBody(names, operationModel, operationResultModel, responseTypes)}
             break;
           }
         `;
@@ -371,6 +372,7 @@ function* generateOperationResultBody(
   names: Record<string, string>,
   operationModel: skiffaCore.OperationContainer,
   operationResultModel: skiffaCore.OperationResultContainer,
+  responseTypes: Array<string>,
 ) {
   const responseParametersName = getResponseParametersTypeName(
     operationModel,
@@ -413,7 +415,9 @@ function* generateOperationResultBody(
     }
   `;
 
-  if (operationResultModel.bodies.length === 0) {
+  const responseBodyModels = selectBodies(operationResultModel, responseTypes);
+
+  if (responseBodyModels.length === 0) {
     yield* generateOperationResultContentTypeBody(names);
     return;
   } else {
@@ -423,7 +427,7 @@ function* generateOperationResultBody(
       }
 
       switch(responseContentType) {
-        ${generateOperationResultContentTypeCaseClauses(names, operationResultModel)}
+        ${generateOperationResultContentTypeCaseClauses(names, operationResultModel, responseTypes)}
       }
     `;
   }
@@ -432,8 +436,11 @@ function* generateOperationResultBody(
 function* generateOperationResultContentTypeCaseClauses(
   names: Record<string, string>,
   operationResultModel: skiffaCore.OperationResultContainer,
+  responseTypes: Array<string>,
 ) {
-  for (const bodyModel of operationResultModel.bodies) {
+  const responseBodyModels = selectBodies(operationResultModel, responseTypes);
+
+  for (const bodyModel of responseBodyModels) {
     yield itt`
       case ${JSON.stringify(bodyModel.contentType)}:
       {

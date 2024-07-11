@@ -3,6 +3,7 @@ export * from "./build-js.js";
 export * from "./clean-js.js";
 export * from "./client-server-test-ts.js";
 export * from "./client-ts.js";
+export * from "./facade-ts.js";
 export * from "./main-ts.js";
 export * from "./package-json.js";
 export * from "./parameters-ts.js";
