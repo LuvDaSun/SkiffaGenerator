@@ -112,7 +112,13 @@ export function generatePackage(
   }
 
   {
-    const content = generateClientTsCode(
+    const content = generateClientTsCode(names, router, apiModel, requestTypes, responseTypes);
+    const filePath = path.join(packageDirectoryPath, "src", "client.ts");
+    writeContentToFile(filePath, content);
+  }
+
+  {
+    const content = generateFacadeTsCode(
       names,
       router,
       apiModel,
@@ -120,12 +126,6 @@ export function generatePackage(
       responseTypes,
       baseUrl,
     );
-    const filePath = path.join(packageDirectoryPath, "src", "client.ts");
-    writeContentToFile(filePath, content);
-  }
-
-  {
-    const content = generateFacadeTsCode(names, router, apiModel, requestTypes, responseTypes);
     const filePath = path.join(packageDirectoryPath, "src", "facade.ts");
     writeContentToFile(filePath, content);
   }

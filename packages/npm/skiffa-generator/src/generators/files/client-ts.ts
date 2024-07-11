@@ -10,7 +10,6 @@ import {
   generateOperationIncomingResponseType,
   generateOperationOutgoingRequestType,
 } from "../types/index.js";
-import { generateCredentialsConstant } from "../variables/default-credentials.js";
 
 export function* generateClientTsCode(
   names: Record<string, string>,
@@ -18,7 +17,6 @@ export function* generateClientTsCode(
   apiModel: skiffaCore.ApiContainer,
   requestTypes: Array<string>,
   responseTypes: Array<string>,
-  baseUrl: URL | undefined,
 ) {
   yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
@@ -40,14 +38,6 @@ export function* generateClientTsCode(
       validateOutgoingEntity?: boolean;
       validateOutgoingParameters?: boolean;
     }
-
-    export const defaultClientConfiguration = {
-      baseUrl: ${baseUrl == null ? "undefined" : JSON.stringify(baseUrl.toString())},
-      validateIncomingEntity: true,
-      validateIncomingParameters: true,
-      validateOutgoingEntity: false,
-      validateOutgoingParameters: false,
-    };
   `;
 
   yield itt`
@@ -57,7 +47,6 @@ export function* generateClientTsCode(
     }).loadFromJson(${JSON.stringify(router.saveToJson(RouterMode.Client))});
   `;
 
-  yield* generateCredentialsConstant();
   yield* generateCredentialsType(apiModel);
 
   for (const authenticationModel of apiModel.authentication) {

@@ -3,6 +3,7 @@ import { Router } from "goodrouter";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateFacadeOperationFunction } from "../functions/index.js";
+import { generateDefaultCredentialsConstant } from "../variables/index.js";
 
 export function* generateFacadeTsCode(
   names: Record<string, string>,
@@ -10,6 +11,7 @@ export function* generateFacadeTsCode(
   apiModel: skiffaCore.ApiContainer,
   requestTypes: Array<string>,
   responseTypes: Array<string>,
+  baseUrl: URL | undefined,
 ) {
   yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
@@ -19,6 +21,18 @@ export function* generateFacadeTsCode(
     import * as parameters from "./parameters.js";
     import * as types from "./types.js";
   `;
+
+  yield itt`
+    export const defaultClientConfiguration = {
+      baseUrl: ${baseUrl == null ? "undefined" : JSON.stringify(baseUrl.toString())},
+      validateIncomingEntity: true,
+      validateIncomingParameters: true,
+      validateOutgoingEntity: false,
+      validateOutgoingParameters: false,
+    };
+  `;
+
+  yield* generateDefaultCredentialsConstant();
 
   for (const authenticationModel of apiModel.authentication) {
     //

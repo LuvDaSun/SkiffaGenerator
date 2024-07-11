@@ -2,7 +2,7 @@ import * as skiffaCore from "@skiffa/core";
 import { itt } from "../../utils/index.js";
 import { selectBodies } from "../helpers.js";
 import {
-  getOperationCredentialsTypeName,
+  getDefaultCredentialsConstantName,
   getOperationFunctionName,
   getOutgoingRequestTypeName,
   getRequestParametersTypeName,
@@ -103,8 +103,6 @@ export function* generateFacadeOperationFunction(
     hasEntityReturn,
   };
 
-  const credentialsName = getOperationCredentialsTypeName(operationModel);
-
   if (requestBodyModels.length > 1) {
     for (const requestBodyModel of requestBodyModels) {
       const requestEntityTypeName =
@@ -134,9 +132,6 @@ export function* generateFacadeOperationFunction(
           }`,
         );
       }
-
-      functionArguments.push(`operationCredentials: client.${credentialsName}`);
-      functionArguments.push(`operationConfiguration: client.ClientConfiguration`);
 
       yield itt`export function ${operationFunctionName}(
       ${functionArguments.map((element) => `${element},\n`).join("")}
@@ -178,8 +173,6 @@ export function* generateFacadeOperationFunction(
       );
     }
 
-    functionArguments.push(`operationCredentials: client.${credentialsName} = {}`);
-    functionArguments.push(`operationConfiguration: client.ClientConfiguration = {}`);
     yield itt`
     /**
       ${jsDoc}
@@ -331,6 +324,7 @@ function* generateBody(
   const requestBodyModels = selectBodies(operationModel, requestTypes);
   const defaultRequestBodyModel = requestBodyModels.length === 1 ? requestBodyModels[0] : null;
   const operationOutgoingRequestName = getOutgoingRequestTypeName(operationModel);
+  const credentialsConstantName = getDefaultCredentialsConstantName();
 
   yield itt`
     const result = await client.${operationFunctionName}(
@@ -339,8 +333,8 @@ function* generateBody(
         ${hasContentTypeArgument ? "contentType" : `contentType: ${JSON.stringify(defaultRequestBodyModel?.contentType ?? null)}`},
         ${hasEntityArgument ? "entity: () => entity," : ""}
       } as client.${operationOutgoingRequestName},
-      operationCredentials,
-      operationConfiguration,
+      ${credentialsConstantName},
+      defaultClientConfiguration,
     );
   `;
 

@@ -44,8 +44,8 @@ export function* generateClientOperationFunction(
    */
   export async function ${operationFunctionName}(
     outgoingRequest: ${operationOutgoingRequestName},
-    operationCredentials: ${credentialsName} = {},
-    operationConfiguration: ClientConfiguration = {},
+    credentials: ${credentialsName},
+    configuration: ClientConfiguration,
   ): Promise<${operationIncomingResponseName}> {
     ${generateBody(names, apiModel, pathModel, operationModel, requestTypes, responseTypes)}
   }
@@ -64,14 +64,6 @@ function* generateBody(
   const operationAcceptConstName = getOperationAcceptConstName(operationModel);
   const isRequestParametersFunction = getIsRequestParametersFunction(operationModel);
   const defaultCredentialsName = getDefaultCredentialsConstantName();
-
-  yield itt`
-    const credentials = {...operationCredentials, ...${defaultCredentialsName}}
-  `;
-
-  yield itt`
-    const configuration = {...operationConfiguration, ...defaultClientConfiguration}
-  `;
 
   yield itt`
     const {

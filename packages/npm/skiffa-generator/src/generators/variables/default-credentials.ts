@@ -1,7 +1,7 @@
 import { itt } from "../../utils/index.js";
 import { getCredentialsTypeName, getDefaultCredentialsConstantName } from "../names/index.js";
 
-export function* generateCredentialsConstant() {
+export function* generateDefaultCredentialsConstant() {
   const typeName = getCredentialsTypeName();
   const constantName = getDefaultCredentialsConstantName();
 
