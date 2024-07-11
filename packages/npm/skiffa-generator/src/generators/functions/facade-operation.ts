@@ -1,12 +1,12 @@
 import * as skiffaCore from "@skiffa/core";
-import { itt } from "../../utils/index.js";
+import { itt } from "../../utils.js";
 import { selectBodies } from "../helpers.js";
 import {
   getDefaultCredentialsConstantName,
   getOperationFunctionName,
   getOutgoingRequestTypeName,
   getRequestParametersTypeName,
-} from "../names/index.js";
+} from "../names.js";
 
 interface State {
   hasParametersArgument: boolean;

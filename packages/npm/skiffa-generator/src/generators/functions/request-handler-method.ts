@@ -1,6 +1,6 @@
 import * as skiffaCore from "@skiffa/core";
-import { itt } from "../../utils/index.js";
-import { getEndpointHandlerName } from "../names/index.js";
+import { itt } from "../../utils.js";
+import { getEndpointHandlerName } from "../names.js";
 
 export function* generateRequestHandlerMethod(apiModel: skiffaCore.ApiContainer) {
   yield itt`

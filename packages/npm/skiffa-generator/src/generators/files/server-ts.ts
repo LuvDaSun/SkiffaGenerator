@@ -1,8 +1,8 @@
 import * as skiffaCore from "@skiffa/core";
 import { Router, RouterMode } from "goodrouter";
-import { packageInfo } from "../../utils/index.js";
+import { packageInfo } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { generateServerClass } from "../classes/index.js";
+import { generateServerClass } from "../classes.js";
 import { generateIsAuthenticationFunction } from "../functions/is-authentication.js";
 import {
   generateAuthenticationHandlerType,
@@ -13,7 +13,7 @@ import {
   generateOperationIncomingRequestType,
   generateOperationOutgoingResponseType,
   generateServerAuthenticationType,
-} from "../types/index.js";
+} from "../types.js";
 
 export function* generateServerTsCode(
   names: Record<string, string>,

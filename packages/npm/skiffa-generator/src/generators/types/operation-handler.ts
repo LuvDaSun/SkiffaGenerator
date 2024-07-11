@@ -9,7 +9,7 @@ import {
   getOperationHandlersTypeName,
   getOutgoingResponseTypeName,
   getServerAuthenticationTypeName,
-} from "../names/index.js";
+} from "../names.js";
 
 export function* generateOperationHandlerType(operationModel: skiffaCore.OperationContainer) {
   const operationHandlerTypeName = getOperationHandlerTypeName(operationModel);

@@ -1,5 +1,5 @@
-import * as errors from "../errors/index.js";
-import { ServerMiddleware } from "../server/index.js";
+import * as errors from "../errors.js";
+import { ServerMiddleware } from "../server.js";
 
 export function createErrorMiddleware(): ServerMiddleware {
   return async function errorMiddleware(request, next) {

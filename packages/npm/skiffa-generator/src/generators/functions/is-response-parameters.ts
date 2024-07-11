@@ -1,10 +1,10 @@
 import * as skiffaCore from "@skiffa/core";
-import { itt } from "../../utils/index.js";
+import { itt } from "../../utils.js";
 import {
   getIsResponseParametersFunction,
   getParameterMemberName,
   getResponseParametersTypeName,
-} from "../names/index.js";
+} from "../names.js";
 
 export function* generateIsResponseParametersFunction(
   names: Record<string, string>,

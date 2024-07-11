@@ -1,5 +1,5 @@
 import * as skiffaCore from "@skiffa/core";
-import { toPascal } from "../../utils/index.js";
+import { toPascal } from "../../utils.js";
 
 export function getServerAuthenticationTypeName() {
   return toPascal("server", "authentication");

@@ -1,12 +1,12 @@
 import * as skiffaCore from "@skiffa/core";
-import { itt } from "../../utils/index.js";
+import { itt } from "../../utils.js";
 import {
   getOperationHandlerName,
   getOperationHandlerTypeName,
   getOperationHandlersTypeName,
   getRegisterOperationHandlerName,
   getRegisterOperationsHandlerName,
-} from "../names/index.js";
+} from "../names.js";
 
 export function* registerOperationHandlerMethod(operationModel: skiffaCore.OperationContainer) {
   const handlerPropertyName = getOperationHandlerName(operationModel);

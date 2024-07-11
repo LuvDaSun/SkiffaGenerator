@@ -1,11 +1,11 @@
 import * as skiffaCore from "@skiffa/core";
-import { joinIterable } from "../../utils/index.js";
+import { joinIterable } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
   getAuthenticationMemberName,
   getOperationAuthenticationTypeName,
   getServerAuthenticationTypeName,
-} from "../names/index.js";
+} from "../names.js";
 
 export function* generateOperationAuthenticationType(
   apiModel: skiffaCore.ApiContainer,

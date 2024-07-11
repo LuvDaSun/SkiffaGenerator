@@ -1,6 +1,6 @@
 import * as skiffaCore from "@skiffa/core";
 import { Router, RouterMode } from "goodrouter";
-import { packageInfo } from "../../utils/index.js";
+import { packageInfo } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateClientOperationFunction } from "../functions/client-operation.js";
 import {
@@ -9,7 +9,7 @@ import {
   generateOperationCredentialsType,
   generateOperationIncomingResponseType,
   generateOperationOutgoingRequestType,
-} from "../types/index.js";
+} from "../types.js";
 
 export function* generateClientTsCode(
   names: Record<string, string>,

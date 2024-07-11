@@ -1,4 +1,4 @@
-import { itt } from "../../utils/index.js";
+import { itt } from "../../utils.js";
 
 export function* generateRegisterMiddlewareMethod() {
   yield itt`

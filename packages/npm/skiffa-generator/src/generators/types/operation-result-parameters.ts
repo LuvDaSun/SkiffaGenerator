@@ -1,7 +1,7 @@
 import * as skiffaCore from "@skiffa/core";
 import camelcase from "camelcase";
 import { itt } from "../../utils/iterable-text-template.js";
-import { getResponseParametersTypeName } from "../names/index.js";
+import { getResponseParametersTypeName } from "../names.js";
 
 export function* generateOperationResultParameterTypes(
   names: Record<string, string>,

@@ -1,5 +1,5 @@
 import { Promisable } from "type-fest";
-import { StatusCode } from "../utils/index.js";
+import { StatusCode } from "../utils.js";
 import { deserializeTextLines, deserializeTextValue } from "./text.js";
 
 //#region interfaces

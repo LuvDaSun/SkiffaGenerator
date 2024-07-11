@@ -6,7 +6,7 @@ import {
   getAuthenticationHandlersTypeName,
   getAuthenticationMemberName,
   getServerAuthenticationTypeName,
-} from "../names/index.js";
+} from "../names.js";
 
 export function* generateAuthenticationHandlerType(
   authenticationModel: skiffaCore.AuthenticationContainer,

@@ -1,5 +1,5 @@
 import * as skiffaCore from "@skiffa/core";
-import { itt, packageInfo } from "../../utils/index.js";
+import { itt, packageInfo } from "../../utils.js";
 
 /**
  * Code generator that generates code only for browsers

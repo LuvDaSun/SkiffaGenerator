@@ -5,7 +5,7 @@ import {
   getAuthenticationMemberName,
   getCredentialsTypeName,
   getOperationCredentialsTypeName,
-} from "../names/index.js";
+} from "../names.js";
 
 export function* generateCredentialsType(apiModel: skiffaCore.ApiContainer) {
   const typeName = getCredentialsTypeName();

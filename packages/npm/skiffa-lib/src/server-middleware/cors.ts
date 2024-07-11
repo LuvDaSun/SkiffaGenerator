@@ -1,6 +1,6 @@
 import { second } from "msecs";
-import { ServerMiddleware, ServerOutgoingResponse } from "../server/index.js";
-import { methods } from "../utils/index.js";
+import { ServerMiddleware, ServerOutgoingResponse } from "../server.js";
+import { methods } from "../utils.js";
 
 export interface CorsMiddlewareConfiguration {
   /**

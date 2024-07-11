@@ -1,14 +1,14 @@
 import * as skiffaCore from "@skiffa/core";
-import { packageInfo } from "../../utils/index.js";
+import { packageInfo } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
   generateIsRequestParametersFunction,
   generateIsResponseParametersFunction,
-} from "../functions/index.js";
+} from "../functions.js";
 import {
   generateOperationParametersTypes,
   generateOperationResultParameterTypes,
-} from "../types/index.js";
+} from "../types.js";
 
 export function* generateParametersTsCode(
   names: Record<string, string>,
