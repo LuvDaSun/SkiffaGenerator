@@ -3,7 +3,7 @@ import { Router } from "goodrouter";
 import { packageInfo } from "../../utils/index.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateFacadeOperationFunction } from "../functions/index.js";
-import { generateDefaultCredentialsConstant } from "../variables/index.js";
+import { getCredentialsTypeName, getDefaultCredentialsConstantName } from "../names/index.js";
 
 export function* generateFacadeTsCode(
   names: Record<string, string>,
@@ -32,7 +32,12 @@ export function* generateFacadeTsCode(
     };
   `;
 
-  yield* generateDefaultCredentialsConstant();
+  const credentialsTypeName = getCredentialsTypeName();
+  const credentialsConstantName = getDefaultCredentialsConstantName();
+
+  yield itt`
+    export const ${credentialsConstantName}: client.${credentialsTypeName} = {};
+  `;
 
   for (const authenticationModel of apiModel.authentication) {
     //

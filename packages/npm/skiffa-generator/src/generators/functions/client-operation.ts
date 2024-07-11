@@ -3,7 +3,6 @@ import { itt } from "../../utils/index.js";
 import { selectBodies } from "../helpers.js";
 import {
   getAuthenticationMemberName,
-  getDefaultCredentialsConstantName,
   getIncomingResponseTypeName,
   getIsRequestParametersFunction,
   getIsResponseParametersFunction,
@@ -63,7 +62,6 @@ function* generateBody(
   const operationIncomingResponseName = getIncomingResponseTypeName(operationModel);
   const operationAcceptConstName = getOperationAcceptConstName(operationModel);
   const isRequestParametersFunction = getIsRequestParametersFunction(operationModel);
-  const defaultCredentialsName = getDefaultCredentialsConstantName();
 
   yield itt`
     const {
