@@ -1,9 +1,9 @@
 import * as skiffaCore from "@skiffa/core";
 import { Router } from "goodrouter";
-import { packageInfo } from "../../utils/index.js";
+import { packageInfo } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { generateFacadeOperationFunction } from "../functions/index.js";
-import { getCredentialsTypeName, getDefaultCredentialsConstantName } from "../names/index.js";
+import { generateFacadeOperationFunction } from "../functions.js";
+import { getCredentialsTypeName, getDefaultCredentialsConstantName } from "../names.js";
 
 export function* generateFacadeTsCode(
   names: Record<string, string>,

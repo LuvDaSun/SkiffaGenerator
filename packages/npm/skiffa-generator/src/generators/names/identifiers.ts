@@ -1,5 +1,5 @@
 import * as skiffaCore from "@skiffa/core";
-import { toCamel } from "../../utils/index.js";
+import { toCamel } from "../../utils.js";
 
 export function getDefaultCredentialsConstantName() {
   return toCamel("default", "credentials");

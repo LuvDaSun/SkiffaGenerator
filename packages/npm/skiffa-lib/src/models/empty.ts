@@ -1,4 +1,4 @@
-import { StatusCode } from "../utils/index.js";
+import { StatusCode } from "../utils.js";
 
 export type OutgoingEmptyRequest = {
   readonly contentType: null;

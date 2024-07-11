@@ -4,7 +4,7 @@ import * as skiffaCore from "@skiffa/core";
 import assert from "assert";
 import * as path from "path";
 import * as yargs from "yargs";
-import { generatePackage } from "../generators/index.js";
+import { generatePackage } from "../generators.js";
 
 export function configurePackageProgram(argv: yargs.Argv) {
   return argv.command(

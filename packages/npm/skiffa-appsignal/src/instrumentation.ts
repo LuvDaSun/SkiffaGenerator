@@ -5,7 +5,7 @@ import {
   InstrumentationNodeModuleDefinition,
 } from "@opentelemetry/instrumentation";
 import * as lib from "@skiffa/lib";
-import { packageInfo } from "./utils/index.js";
+import { packageInfo } from "./utils.js";
 
 export interface InstrumentationConfiguration {
   enabled?: boolean;

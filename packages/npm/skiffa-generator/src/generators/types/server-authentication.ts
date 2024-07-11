@@ -1,7 +1,7 @@
 import * as skiffaCore from "@skiffa/core";
-import { joinIterable } from "../../utils/index.js";
+import { joinIterable } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { getAuthenticationMemberName, getServerAuthenticationTypeName } from "../names/index.js";
+import { getAuthenticationMemberName, getServerAuthenticationTypeName } from "../names.js";
 
 export function* generateServerAuthenticationType(apiModel: skiffaCore.ApiContainer) {
   const typeName = getServerAuthenticationTypeName();

@@ -1,8 +1,8 @@
 import * as skiffaCore from "@skiffa/core";
-import { joinIterable, mapIterable } from "../../utils/index.js";
+import { joinIterable, mapIterable } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { selectBodies } from "../helpers.js";
-import { getIncomingResponseTypeName, getResponseParametersTypeName } from "../names/index.js";
+import { getIncomingResponseTypeName, getResponseParametersTypeName } from "../names.js";
 
 export function* generateOperationIncomingResponseType(
   names: Record<string, string>,

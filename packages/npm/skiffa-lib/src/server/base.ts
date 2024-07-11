@@ -2,7 +2,7 @@ import assert from "assert";
 import * as http from "http";
 import * as http2 from "http2";
 import { Readable, Writable, finished } from "stream";
-import { Parameters, StatusCode } from "../utils/index.js";
+import { Parameters, StatusCode } from "../utils.js";
 import { defaultServerWrappers } from "./wrapper.js";
 
 export interface ServerIncomingRequest {

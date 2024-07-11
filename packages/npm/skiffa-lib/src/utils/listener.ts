@@ -1,6 +1,6 @@
 import assert from "assert";
 import http from "http";
-import { ServerBase } from "../server/index.js";
+import { ServerBase } from "../server.js";
 
 export interface Listener {
   port: number;

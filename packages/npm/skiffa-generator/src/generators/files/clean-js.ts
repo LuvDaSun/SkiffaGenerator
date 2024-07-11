@@ -1,5 +1,5 @@
 import * as skiffaCore from "@skiffa/core";
-import { packageInfo } from "../../utils/index.js";
+import { packageInfo } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
 
 export function* generateCleanJsCode() {

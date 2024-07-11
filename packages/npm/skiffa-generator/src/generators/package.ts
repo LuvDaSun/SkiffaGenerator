@@ -3,7 +3,7 @@ import * as skiffaCore from "@skiffa/core";
 import fs from "fs";
 import { Router } from "goodrouter";
 import path from "path";
-import { NestedText, flattenNestedText, itt, splitIterableText } from "../utils/index.js";
+import { NestedText, flattenNestedText, itt, splitIterableText } from "../utils.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
 import { generateBuildJsCode } from "./files/build-js.js";
 import { generateCleanJsCode } from "./files/clean-js.js";

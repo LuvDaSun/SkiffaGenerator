@@ -8,12 +8,12 @@ import {
   registerAuthenticationHandlersMethod,
   registerOperationHandlerMethod,
   registerOperationHandlersMethod,
-} from "../functions/index.js";
+} from "../functions.js";
 import {
   getAuthenticationHandlersTypeName,
   getOperationHandlersTypeName,
   getServerAuthenticationTypeName,
-} from "../names/index.js";
+} from "../names.js";
 
 /**
  * Generated the server class. This is the server that is generated from the

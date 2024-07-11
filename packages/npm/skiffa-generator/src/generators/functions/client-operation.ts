@@ -1,5 +1,5 @@
 import * as skiffaCore from "@skiffa/core";
-import { itt } from "../../utils/index.js";
+import { itt } from "../../utils.js";
 import { selectBodies } from "../helpers.js";
 import {
   getAuthenticationMemberName,
@@ -13,7 +13,7 @@ import {
   getParameterMemberName,
   getParseParameterFunction,
   getResponseParametersTypeName,
-} from "../names/index.js";
+} from "../names.js";
 
 export function* generateClientOperationFunction(
   names: Record<string, string>,

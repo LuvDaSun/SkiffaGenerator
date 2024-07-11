@@ -1,6 +1,6 @@
 import * as skiffaCore from "@skiffa/core";
 import assert from "assert";
-import { packageInfo } from "../../utils/index.js";
+import { packageInfo } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
   isBodyModelMockable,
@@ -19,7 +19,7 @@ import {
   getParameterMemberName,
   getRegisterAuthenticationHandlerName,
   getRegisterOperationHandlerName,
-} from "../names/index.js";
+} from "../names.js";
 
 export function* generateClientServerTestTsCode(
   names: Record<string, string>,

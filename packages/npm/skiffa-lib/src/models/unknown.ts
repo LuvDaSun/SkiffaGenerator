@@ -1,4 +1,4 @@
-import { StatusCode } from "../utils/index.js";
+import { StatusCode } from "../utils.js";
 
 export type OutgoingUnknownResponse<S extends StatusCode> = {
   readonly status: S;

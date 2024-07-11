@@ -1,5 +1,5 @@
 import fs from "fs/promises";
-import { ServerMiddleware } from "../server/index.js";
+import { ServerMiddleware } from "../server.js";
 
 // all of this should move to @skiffa/lib
 

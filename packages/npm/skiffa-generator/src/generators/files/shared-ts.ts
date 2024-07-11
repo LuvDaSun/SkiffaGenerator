@@ -1,6 +1,6 @@
 import * as skiffaCore from "@skiffa/core";
-import { packageInfo } from "../../utils/index.js";
-import { generateOperationAcceptType } from "../types/index.js";
+import { packageInfo } from "../../utils.js";
+import { generateOperationAcceptType } from "../types.js";
 import { generateOperationAcceptConstant } from "../variables/operation-accept.js";
 
 export function* generateSharedTsCode(
