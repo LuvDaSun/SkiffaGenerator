@@ -27,7 +27,7 @@ export function* generateClientTsCode(
     import * as validators from "./validators.js";
     import * as parsers from "./parsers.js";
     import * as shared from "./shared.js";
-    import { router } as lib from "./router.js";
+    import { router } from "./router.js";
   `;
 
   yield itt`

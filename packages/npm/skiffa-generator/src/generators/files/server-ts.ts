@@ -31,7 +31,7 @@ export function* generateServerTsCode(
     import * as parsers from "./parsers.js";
     import * as shared from "./shared.js";
     import * as lib from "@skiffa/lib";
-    import { router } as lib from "./router.js";
+    import { router } from "./router.js";
   `;
 
   yield itt`

@@ -320,7 +320,7 @@ function* generateOperationTest(
                 ${generateResponseParametersMockBody()}
               },
               contentType: ${JSON.stringify(responseBodyModel.contentType)},
-              entity: () => ${entityExpression},
+              entity: async () => ${entityExpression},
             }
           `;
           break;
@@ -366,7 +366,7 @@ function* generateOperationTest(
               {
                 contentType: ${JSON.stringify(requestBodyModel.contentType)},
                 parameters: {${generateRequestParametersMockBody()}},
-                entity: () => ${entityExpression},
+                entity: async () => ${entityExpression},
               },
               {
                 ${generateCredentialsMockContent()}

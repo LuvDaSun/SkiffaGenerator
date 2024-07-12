@@ -128,8 +128,8 @@ export function* generateFacadeOperationFunction(
             requestBodyModel == null
               ? "undefined"
               : requestEntityTypeName == null
-                ? "Promise<unknown>"
-                : `Promise<types.${requestEntityTypeName}>`
+                ? "unknown"
+                : `types.${requestEntityTypeName}`
           }`,
         );
       }
@@ -347,7 +347,7 @@ function* generateBody(
       {
         ${hasParametersArgument ? "parameters" : "parameters: {}"},
         ${hasContentTypeArgument ? "contentType" : `contentType: ${JSON.stringify(defaultRequestBodyModel?.contentType ?? null)}`},
-        ${hasEntityArgument ? "entity: () => entity," : ""}
+        ${hasEntityArgument ? "entity: async () => entity," : ""}
       } as client.${operationOutgoingRequestName},
       ${credentialsConstantName},
       defaultClientConfiguration,
