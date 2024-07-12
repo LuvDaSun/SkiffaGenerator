@@ -14,6 +14,7 @@ import { generateMainTsCode } from "./files/main-ts.js";
 import { generatePackageJsonData } from "./files/package-json.js";
 import { generateParametersTsCode } from "./files/parameters-ts.js";
 import { generateRollupConfigJsCode } from "./files/rollup-config-js.js";
+import { generateRouterTsCode } from "./files/router-ts.js";
 import { generateServerTsCode } from "./files/server-ts.js";
 import { generateSharedTsCode } from "./files/shared-ts.js";
 import { generateTsconfigJsonData } from "./files/tsconfig-json.js";
@@ -102,6 +103,12 @@ export function generatePackage(
   {
     const content = generateSharedTsCode(apiModel, responseTypes);
     const filePath = path.join(packageDirectoryPath, "src", "shared.ts");
+    writeContentToFile(filePath, content);
+  }
+
+  {
+    const content = generateRouterTsCode(router);
+    const filePath = path.join(packageDirectoryPath, "src", "router.ts");
     writeContentToFile(filePath, content);
   }
 

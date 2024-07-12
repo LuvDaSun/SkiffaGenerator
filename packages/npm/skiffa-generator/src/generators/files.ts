@@ -8,6 +8,7 @@ export * from "./files/main-ts.js";
 export * from "./files/package-json.js";
 export * from "./files/parameters-ts.js";
 export * from "./files/rollup-config-js.js";
+export * from "./files/router-ts.js";
 export * from "./files/server-ts.js";
 export * from "./files/shared-ts.js";
 export * from "./files/tsconfig-json.js";

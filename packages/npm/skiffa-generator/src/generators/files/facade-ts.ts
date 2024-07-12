@@ -20,6 +20,7 @@ export function* generateFacadeTsCode(
     import * as client from "./client.js";
     import * as parameters from "./parameters.js";
     import * as types from "./types.js";
+    import { router } as lib from "./router.js";
   `;
 
   yield itt`

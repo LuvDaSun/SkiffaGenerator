@@ -1,5 +1,5 @@
 import * as skiffaCore from "@skiffa/core";
-import { Router, RouterMode } from "goodrouter";
+import { Router } from "goodrouter";
 import { packageInfo } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateServerClass } from "../classes.js";
@@ -25,13 +25,13 @@ export function* generateServerTsCode(
   yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
   yield itt`
-    import { Router } from "goodrouter";
     import * as parameters from "./parameters.js";
     import * as types from "./types.js";
     import * as validators from "./validators.js";
     import * as parsers from "./parsers.js";
     import * as shared from "./shared.js";
     import * as lib from "@skiffa/lib";
+    import { router } as lib from "./router.js";
   `;
 
   yield itt`
@@ -47,13 +47,6 @@ export function* generateServerTsCode(
       validateOutgoingEntity: false,
       validateOutgoingParameters: false,
     };
-  `;
-
-  yield itt`
-    const router = new Router({
-      parameterValueDecoder: value => value,
-      parameterValueEncoder: value => value,
-    }).loadFromJson(${JSON.stringify(router.saveToJson(RouterMode.Bidirectional))});
   `;
 
   yield* generateServerAuthenticationType(apiModel);
