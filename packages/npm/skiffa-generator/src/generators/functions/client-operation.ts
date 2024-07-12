@@ -518,19 +518,56 @@ function* generateRequestContentTypeCodeBody(
         if("stream" in outgoingRequest) {
           stream = outgoingRequest.stream(undefined);
         }
-        else if("entities" in outgoingRequest) {
-          let entities = outgoingRequest.entities(undefined);
-          if(validateOutgoingEntity) {
-            entities = lib.mapAsyncIterable(entities, mapAssertEntity);
-          }
-          stream = lib.serializeJsonEntities(entities);
-        }
         else if("entity" in outgoingRequest) {
           let entity = outgoingRequest.entity();
           if(validateOutgoingEntity) {
             entity = lib.mapPromise(entity, mapAssertEntity);
           }
           stream = lib.serializeJsonEntity(entity);
+        }
+        else {
+          throw new lib.Unreachable();
+        }
+        body = await lib.collectStream(stream);
+      `;
+      break;
+    }
+
+    case "application/x-ndjson": {
+      const bodySchemaId = bodyModel.schemaId;
+      const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
+      const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
+
+      yield itt`
+        const mapAssertEntity = (entity: unknown) => {
+          ${
+            isBodyTypeFunction == null
+              ? ""
+              : itt`
+            if(!validators.${isBodyTypeFunction}(entity)) {
+              const lastError = validators.getLastValidationError();
+              throw new lib.ClientResponseEntityValidationFailed(
+                lastError.path,
+                lastError.rule,
+              );
+            }
+          `
+          }
+          return entity;
+        };
+      `;
+
+      yield itt`
+        let stream: AsyncIterable<Uint8Array>;
+        if("stream" in outgoingRequest) {
+          stream = outgoingRequest.stream(undefined);
+        }
+        else if("entities" in outgoingRequest) {
+          let entities = outgoingRequest.entities(undefined);
+          if(validateOutgoingEntity) {
+            entities = lib.mapAsyncIterable(entities, mapAssertEntity);
+          }
+          stream = lib.serializeNdjsonEntities(entities);
         }
         else {
           throw new lib.Unreachable();
@@ -636,16 +673,6 @@ function* generateOperationResultContentTypeBody(
           stream: (signal) => {
             return stream(signal)
           },
-          entities(signal) {
-            let entities = lib.deserializeJsonEntities(
-              stream,
-              signal,
-            ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
-            if(validateIncomingEntity) {
-              entities = lib.mapAsyncIterable(entities, mapAssertEntity);
-            }
-            return entities;
-          },
           entity() {
             let entity = lib.deserializeJsonEntity(
               stream
@@ -654,6 +681,53 @@ function* generateOperationResultContentTypeBody(
               entity = lib.mapPromise(entity, mapAssertEntity);
             }
             return entity;
+          },
+        }
+      `;
+      break;
+    }
+
+    case "application/x-ndjson": {
+      const bodySchemaId = bodyModel.schemaId;
+      const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
+      const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
+
+      yield itt`
+        const mapAssertEntity = (entity: unknown) => {
+          ${
+            isBodyTypeFunction == null
+              ? ""
+              : itt`
+            if(!validators.${isBodyTypeFunction}(entity)) {
+              const lastError = validators.getLastValidationError();
+              throw new lib.ClientResponseEntityValidationFailed(
+                lastError.path,
+                lastError.rule,
+              );
+            }
+          `
+          }
+          return entity;
+        };
+      `;
+
+      yield itt`
+        incomingResponse = {
+          status: fetchResponse.status,
+          contentType: responseContentType,
+          parameters: responseParameters,
+          stream: (signal) => {
+            return stream(signal)
+          },
+          entities(signal) {
+            let entities = lib.deserializeNdjsonEntities(
+              stream,
+              signal,
+            ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
+            if(validateIncomingEntity) {
+              entities = lib.mapAsyncIterable(entities, mapAssertEntity);
+            }
+            return entities;
           },
         }
       `;

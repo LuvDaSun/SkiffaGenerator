@@ -494,6 +494,11 @@ function generateContentEntityExpression(responseBodyModel: skiffaCore.BodyConta
         result.entity()
       `;
 
+    case "application/x-ndjson":
+      return `
+        result.entities()
+      `;
+
     case "text/plain":
       return `
         result.value()

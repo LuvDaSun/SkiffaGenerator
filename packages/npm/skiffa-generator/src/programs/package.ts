@@ -52,7 +52,12 @@ export function configurePackageProgram(argv: yargs.Argv) {
           description: "Preferred response content-types",
           type: "string",
           array: true,
-          default: ["application/json", "multipart/form-data", "text/plain"],
+          default: [
+            "application/x-ndjson",
+            "application/json",
+            "multipart/form-data",
+            "text/plain",
+          ],
         })
         .option("base-url", {
           description: "The default location from where the api is served",

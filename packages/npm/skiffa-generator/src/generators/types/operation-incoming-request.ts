@@ -78,6 +78,7 @@ function* generateBodyContainerType(
       `;
       break;
     }
+
     case "application/json": {
       const bodySchemaId = bodyModel.schemaId;
       const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
@@ -90,6 +91,20 @@ function* generateBodyContainerType(
       `;
       break;
     }
+
+    case "application/x-ndjson": {
+      const bodySchemaId = bodyModel.schemaId;
+      const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
+
+      yield itt`
+        lib.IncomingNdjsonRequest<
+          ${JSON.stringify(bodyModel.contentType)},
+          ${bodyTypeName == null ? "unknown" : itt`types.${bodyTypeName}`}
+        >
+      `;
+      break;
+    }
+
     default: {
       yield itt`
         lib.IncomingStreamRequest<
