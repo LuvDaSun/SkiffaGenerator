@@ -70,10 +70,14 @@ function* generateBodyContainerType(
   }
 
   switch (bodyModel.contentType) {
-    case "text/plain": {
+    case "application/x-ndjson": {
+      const bodySchemaId = bodyModel.schemaId;
+      const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
+
       yield itt`
-        lib.IncomingTextRequest<
-          ${JSON.stringify(bodyModel.contentType)}
+        lib.IncomingNdjsonRequest<
+          ${JSON.stringify(bodyModel.contentType)},
+          ${bodyTypeName == null ? "unknown" : itt`types.${bodyTypeName}`}
         >
       `;
       break;
@@ -92,14 +96,10 @@ function* generateBodyContainerType(
       break;
     }
 
-    case "application/x-ndjson": {
-      const bodySchemaId = bodyModel.schemaId;
-      const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
-
+    case "text/plain": {
       yield itt`
-        lib.IncomingNdjsonRequest<
-          ${JSON.stringify(bodyModel.contentType)},
-          ${bodyTypeName == null ? "unknown" : itt`types.${bodyTypeName}`}
+        lib.IncomingTextRequest<
+          ${JSON.stringify(bodyModel.contentType)}
         >
       `;
       break;

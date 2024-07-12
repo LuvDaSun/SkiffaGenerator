@@ -274,6 +274,7 @@ function* generateResponseBodyReturnType(
 
   const responseEntityTypeName =
     responseBodyModel?.schemaId == null ? null : names[responseBodyModel.schemaId];
+  const isStream = responseBodyModel?.contentType === "application/x-ndjson";
 
   const tuple = new Array<string>();
 
@@ -300,8 +301,12 @@ function* generateResponseBodyReturnType(
       responseBodyModel == null
         ? "undefined"
         : responseEntityTypeName == null
-          ? "Promise<unknown>"
-          : `Promise<types.${responseEntityTypeName}>`,
+          ? isStream
+            ? "(signal: AbortSignal) => AsyncIterable<unknown>"
+            : "Promise<unknown>"
+          : isStream
+            ? `(signal: AbortSignal) => AsyncIterable<types.${responseEntityTypeName}>`
+            : `Promise<types.${responseEntityTypeName}>`,
     );
   }
 
@@ -489,14 +494,14 @@ function* generateContentReturnStatement(
 
 function generateContentEntityExpression(responseBodyModel: skiffaCore.BodyContainer) {
   switch (responseBodyModel.contentType) {
+    case "application/x-ndjson":
+      return `
+        result.entities
+      `;
+
     case "application/json":
       return `
         result.entity()
-      `;
-
-    case "application/x-ndjson":
-      return `
-        result.entities()
       `;
 
     case "text/plain":

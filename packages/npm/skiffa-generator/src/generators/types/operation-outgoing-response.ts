@@ -92,14 +92,18 @@ function* generateBodyContainerType(
   }
 
   switch (bodyModel.contentType) {
-    case "text/plain": {
+    case "application/x-ndjson": {
+      const bodySchemaId = bodyModel.schemaId;
+      const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
+
       yield itt`
-        lib.OutgoingTextResponse<
+        lib.OutgoingNdjsonResponse<
           ${joinIterable(
             [...operationResultModel.statusCodes].map((statusCode) => JSON.stringify(statusCode)),
             " |\n",
           )},
-          ${JSON.stringify(bodyModel.contentType)}
+          ${JSON.stringify(bodyModel.contentType)},
+          ${bodyTypeName == null ? "unknown" : itt`types.${bodyTypeName}`}
         >
       `;
       break;
@@ -122,18 +126,14 @@ function* generateBodyContainerType(
       break;
     }
 
-    case "application/x-ndjson": {
-      const bodySchemaId = bodyModel.schemaId;
-      const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
-
+    case "text/plain": {
       yield itt`
-        lib.OutgoingNdjsonResponse<
+        lib.OutgoingTextResponse<
           ${joinIterable(
             [...operationResultModel.statusCodes].map((statusCode) => JSON.stringify(statusCode)),
             " |\n",
           )},
-          ${JSON.stringify(bodyModel.contentType)},
-          ${bodyTypeName == null ? "unknown" : itt`types.${bodyTypeName}`}
+          ${JSON.stringify(bodyModel.contentType)}
         >
       `;
       break;
