@@ -26,14 +26,11 @@ export type IncomingTextResponse<S extends StatusCode, C extends string> = {
 
 export type OutgoingTextContainer =
   | { stream(signal?: AbortSignal): AsyncIterable<Uint8Array> }
-  | { value(): Promise<string> }
-  | { lines(signal?: AbortSignal): AsyncIterable<string> };
+  | { value(): Promise<string> };
 
 export type IncomingTextContainer = {
   stream(signal?: AbortSignal): AsyncIterable<Uint8Array>;
-} & { value(): Promise<string> } & {
-  lines(signal?: AbortSignal): AsyncIterable<string>;
-};
+} & { value(): Promise<string> };
 
 //#endregion
 

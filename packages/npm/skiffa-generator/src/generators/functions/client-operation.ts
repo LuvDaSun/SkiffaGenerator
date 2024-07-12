@@ -563,9 +563,6 @@ function* generateRequestContentTypeCodeBody(
         if("stream" in outgoingRequest) {
           stream = outgoingRequest.stream();
         }
-        else if("lines" in outgoingRequest) {
-          stream = lib.serializeTextLines(outgoingRequest.lines());
-        }
         else if("value" in outgoingRequest) {
           stream = lib.serializeTextValue(outgoingRequest.value());
         }
@@ -722,9 +719,6 @@ function* generateOperationResultContentTypeBody(
           parameters: responseParameters,
           stream: (signal) => {
             return stream(signal)
-          },
-          lines(signal) {
-            return lib.deserializeTextLines(stream, signal);
           },
           value() {
             return lib.deserializeTextValue(stream);

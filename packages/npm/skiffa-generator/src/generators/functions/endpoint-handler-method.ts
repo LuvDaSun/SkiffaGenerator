@@ -485,9 +485,6 @@ function* generateRequestContentTypeCodeBody(
           stream(signal) {
             return serverIncomingRequest.stream(signal);
           },
-          lines(signal) {
-            return lib.deserializeTextLines(serverIncomingRequest.stream, signal);
-          },
           value() {
             return lib.deserializeTextValue(serverIncomingRequest.stream);
           },
@@ -747,9 +744,6 @@ function* generateOperationResultContentTypeBody(
           stream(signal) {
             if("stream" in outgoingResponse) {
               return outgoingResponse.stream(signal);
-            }
-            else if("lines" in outgoingResponse) {
-              return lib.serializeTextLines(outgoingResponse.lines(signal));
             }
             else if("value" in outgoingResponse) {
               return lib.serializeTextValue(outgoingResponse.value());
