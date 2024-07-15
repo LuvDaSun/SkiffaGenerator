@@ -31,10 +31,6 @@ export function getOperationAcceptTypeName(operationModel: skiffaCore.OperationC
   return toPascal(operationModel.name, "operation", "accept");
 }
 
-export function getCredentialsTypeName() {
-  return toPascal("credentials");
-}
-
 export function getOperationCredentialsTypeName(operationModel: skiffaCore.OperationContainer) {
   return toPascal(operationModel.name, "credentials");
 }

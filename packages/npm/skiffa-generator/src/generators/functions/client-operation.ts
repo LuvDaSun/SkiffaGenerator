@@ -66,9 +66,9 @@ function* generateBody(
   yield itt`
     const {
       baseUrl,
-      validateIncomingEntity,
+      validateIncomingBody,
       validateIncomingParameters,
-      validateOutgoingEntity,
+      validateOutgoingBody,
       validateOutgoingParameters,
     } = configuration;
 
@@ -500,7 +500,7 @@ function* generateRequestContentTypeCodeBody(
         }
         else if("entities" in outgoingRequest) {
           let entities = outgoingRequest.entities(undefined);
-          if(validateOutgoingEntity) {
+          if(validateOutgoingBody) {
             entities = lib.mapAsyncIterable(entities, mapAssertEntity);
           }
           stream = lib.serializeNdjsonEntities(entities);
@@ -544,7 +544,7 @@ function* generateRequestContentTypeCodeBody(
         }
         else if("entity" in outgoingRequest) {
           let entity = outgoingRequest.entity();
-          if(validateOutgoingEntity) {
+          if(validateOutgoingBody) {
             entity = lib.mapPromise(entity, mapAssertEntity);
           }
           stream = lib.serializeJsonEntity(entity);
@@ -655,7 +655,7 @@ function* generateOperationResultContentTypeBody(
               stream,
               signal,
             ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
-            if(validateIncomingEntity) {
+            if(validateIncomingBody) {
               entities = lib.mapAsyncIterable(entities, mapAssertEntity);
             }
             return entities;
@@ -701,7 +701,7 @@ function* generateOperationResultContentTypeBody(
             let entity = lib.deserializeJsonEntity(
               stream
             ) as Promise<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
-            if(validateIncomingEntity) {
+            if(validateIncomingBody) {
               entity = lib.mapPromise(entity, mapAssertEntity);
             }
             return entity;

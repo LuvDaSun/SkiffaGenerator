@@ -188,9 +188,9 @@ function* generateOperationTest(
     yield itt`
       const apiServer = new server.Server<ApiServerAuthentication>({
         validateIncomingParameters: false,
-        validateIncomingEntity: false,
+        validateIncomingBody: false,
         validateOutgoingParameters: false,
-        validateOutgoingEntity: false,
+        validateOutgoingBody: false,
       });
       apiServer.${registerOperationHandlerMethodName}(async (incomingRequest, authentication, accepts) => {
         ${generateServerOperationHandler()}
@@ -347,9 +347,9 @@ function* generateOperationTest(
           {
             baseUrl,
             validateIncomingParameters: false,
-            validateIncomingEntity: false,
+            validateIncomingBody: false,
             validateOutgoingParameters: false,
-            validateOutgoingEntity: false,
+            validateOutgoingBody: false,
           },
     );
       `;
@@ -374,9 +374,9 @@ function* generateOperationTest(
               {
                 baseUrl,
                 validateIncomingParameters: false,
-                validateIncomingEntity: false,
+                validateIncomingBody: false,
                 validateOutgoingParameters: false,
-                validateOutgoingEntity: false,
+                validateOutgoingBody: false,
               },
             );
           `;

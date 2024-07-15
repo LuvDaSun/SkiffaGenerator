@@ -1,10 +1,6 @@
 import * as skiffaCore from "@skiffa/core";
 import { toCamel } from "../../utils.js";
 
-export function getDefaultCredentialsConstantName() {
-  return toCamel("default", "credentials");
-}
-
 export function getOperationFunctionName(operationModel: skiffaCore.OperationContainer) {
   return toCamel(operationModel.name);
 }

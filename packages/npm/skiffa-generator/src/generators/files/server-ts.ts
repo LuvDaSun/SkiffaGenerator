@@ -36,15 +36,15 @@ export function* generateServerTsCode(
 
   yield itt`
     export interface ServerConfiguration {
-      validateIncomingEntity: boolean;
+      validateIncomingBody: boolean;
       validateIncomingParameters: boolean;
-      validateOutgoingEntity: boolean;
+      validateOutgoingBody: boolean;
       validateOutgoingParameters: boolean;
     }
     export const defaultServerConfiguration: ServerConfiguration = {
-      validateIncomingEntity: true,
+      validateIncomingBody: true,
       validateIncomingParameters: true,
-      validateOutgoingEntity: false,
+      validateOutgoingBody: false,
       validateOutgoingParameters: false,
     };
   `;

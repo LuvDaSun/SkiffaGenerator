@@ -66,9 +66,9 @@ function* generateBody(
 
   yield itt`
     const { 
-      validateIncomingEntity,
+      validateIncomingBody,
       validateIncomingParameters,
-      validateOutgoingEntity,
+      validateOutgoingBody,
       validateOutgoingParameters,
     } = this.configuration;
   `;
@@ -422,7 +422,7 @@ function* generateRequestContentTypeCodeBody(
               serverIncomingRequest.stream,
               signal,
             ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
-            if(validateIncomingEntity) {
+            if(validateIncomingBody) {
               entities = lib.mapAsyncIterable(entities, mapAssertEntity);
             }
             return entities;
@@ -467,7 +467,7 @@ function* generateRequestContentTypeCodeBody(
             let entity = lib.deserializeJsonEntity(
               serverIncomingRequest.stream
             ) as Promise<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
-            if(validateIncomingEntity) {
+            if(validateIncomingBody) {
               entity = lib.mapPromise(entity, mapAssertEntity);
             }
             return entity;
@@ -672,7 +672,7 @@ function* generateOperationResultContentTypeBody(
             }
             else if("entities" in outgoingResponse) {
               let entities = outgoingResponse.entities(signal);
-              if(validateOutgoingEntity) {
+              if(validateOutgoingBody) {
                 entities = lib.mapAsyncIterable(entities, mapAssertEntity);
               }
               return lib.serializeNdjsonEntities(outgoingResponse.entities(signal));
@@ -721,7 +721,7 @@ function* generateOperationResultContentTypeBody(
             }
             else if("entity" in outgoingResponse) {
               let entity = outgoingResponse.entity();
-              if(validateOutgoingEntity) {
+              if(validateOutgoingBody) {
                 entity = lib.mapPromise(entity, mapAssertEntity);
               }
               return lib.serializeJsonEntity(entity);

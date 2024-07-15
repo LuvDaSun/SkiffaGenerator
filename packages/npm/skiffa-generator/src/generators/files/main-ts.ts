@@ -20,5 +20,6 @@ export function* generateMainTsCode() {
     export * as client from "./client.js";
     export * as facade from "./facade.js";
     export * as server from "./server.js";
+    export * as router from "./router.js";
   `;
 }

@@ -2,7 +2,7 @@ import * as skiffaCore from "@skiffa/core";
 import { itt } from "../../utils.js";
 import { selectBodies } from "../helpers.js";
 import {
-  getDefaultCredentialsConstantName,
+  getOperationCredentialsTypeName,
   getOperationFunctionName,
   getOutgoingRequestTypeName,
   getRequestParametersTypeName,
@@ -59,6 +59,7 @@ export function* generateFacadeOperationFunction(
   responseTypes: Array<string>,
 ) {
   const operationFunctionName = getOperationFunctionName(operationModel);
+  const credentialsName = getOperationCredentialsTypeName(operationModel);
 
   const jsDoc = [
     operationModel.deprecated ? "@deprecated" : "",
@@ -134,9 +135,18 @@ export function* generateFacadeOperationFunction(
         );
       }
 
-      yield itt`export function ${operationFunctionName}(
-      ${functionArguments.map((element) => `${element},\n`).join("")}
-    ): Promise<${generateOperationReturnType(names, operationModel, operationResultModels, responseTypes, state)}>;`;
+      functionArguments.push(
+        `configurationOptions?: Partial<client.ClientConfiguration & client.${credentialsName}>`,
+      );
+
+      yield itt`
+        /**
+          ${jsDoc}
+        */
+        export function ${operationFunctionName}(
+          ${functionArguments.map((element) => `${element},\n`).join("")}
+        ): Promise<${generateOperationReturnType(names, operationModel, operationResultModels, responseTypes, state)}>;
+      `;
     }
   }
 
@@ -174,16 +184,20 @@ export function* generateFacadeOperationFunction(
       );
     }
 
+    functionArguments.push(
+      `configurationOptions: Partial<client.ClientConfiguration & client.${credentialsName}> = {}`,
+    );
+
     yield itt`
-    /**
-      ${jsDoc}
-    */
-    export async function ${operationFunctionName}(
-      ${functionArguments.map((element) => `${element},\n`).join("")}
-    ): Promise<${generateOperationReturnType(names, operationModel, operationResultModels, responseTypes, state)}> {
-      ${generateBody(operationModel, requestTypes, responseTypes, state)}
-    }
-  `;
+      /**
+        ${jsDoc}
+      */
+      export async function ${operationFunctionName}(
+        ${functionArguments.map((element) => `${element},\n`).join("")}
+      ): Promise<${generateOperationReturnType(names, operationModel, operationResultModels, responseTypes, state)}> {
+        ${generateBody(operationModel, requestTypes, responseTypes, state)}
+      }
+    `;
   }
 }
 
@@ -340,7 +354,13 @@ function* generateBody(
   const requestBodyModels = selectBodies(operationModel, requestTypes);
   const defaultRequestBodyModel = requestBodyModels.length === 1 ? requestBodyModels[0] : null;
   const operationOutgoingRequestName = getOutgoingRequestTypeName(operationModel);
-  const credentialsConstantName = getDefaultCredentialsConstantName();
+
+  yield itt`
+    const configuration = {
+      ...defaultClientConfiguration,
+      ...configurationOptions,
+    };
+  `;
 
   yield itt`
     const result = await client.${operationFunctionName}(
@@ -349,8 +369,8 @@ function* generateBody(
         ${hasContentTypeArgument ? "contentType" : `contentType: ${JSON.stringify(defaultRequestBodyModel?.contentType ?? null)}`},
         ${hasEntityArgument ? "entity: async () => entity," : ""}
       } as client.${operationOutgoingRequestName},
-      ${credentialsConstantName},
-      defaultClientConfiguration,
+      configuration,
+      configuration,
     );
   `;
 

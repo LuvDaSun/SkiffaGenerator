@@ -3,9 +3,9 @@ import { Router } from "goodrouter";
 import { packageInfo } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateClientOperationFunction } from "../functions/client-operation.js";
+import { getAuthenticationCredentialTypeName, getAuthenticationMemberName } from "../names.js";
 import {
   generateAuthenticationCredentialType,
-  generateCredentialsType,
   generateOperationCredentialsType,
   generateOperationIncomingResponseType,
   generateOperationOutgoingRequestType,
@@ -30,17 +30,27 @@ export function* generateClientTsCode(
     import { router } from "./router.js";
   `;
 
+  function* getCredentialFields() {
+    for (const authenticationModel of apiModel.authentication) {
+      const memberName = getAuthenticationMemberName(authenticationModel);
+      const typeName = getAuthenticationCredentialTypeName(authenticationModel);
+
+      yield `
+        ${memberName}?: ${typeName};
+      `;
+    }
+  }
+
   yield itt`
     export interface ClientConfiguration {
       baseUrl?: URL;
-      validateIncomingEntity?: boolean;
+      validateIncomingBody?: boolean;
       validateIncomingParameters?: boolean;
-      validateOutgoingEntity?: boolean;
+      validateOutgoingBody?: boolean;
       validateOutgoingParameters?: boolean;
+      ${getCredentialFields()}
     }
   `;
-
-  yield* generateCredentialsType(apiModel);
 
   for (const authenticationModel of apiModel.authentication) {
     yield* generateAuthenticationCredentialType(authenticationModel);

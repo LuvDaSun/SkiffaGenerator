@@ -3,7 +3,6 @@ import { Router } from "goodrouter";
 import { packageInfo } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { generateFacadeOperationFunction } from "../functions.js";
-import { getCredentialsTypeName, getDefaultCredentialsConstantName } from "../names.js";
 
 export function* generateFacadeTsCode(
   names: Record<string, string>,
@@ -26,18 +25,11 @@ export function* generateFacadeTsCode(
   yield itt`
     export const defaultClientConfiguration: client.ClientConfiguration = {
       baseUrl: ${baseUrl == null ? "undefined" : JSON.stringify(baseUrl.toString())},
-      validateIncomingEntity: true,
+      validateIncomingBody: true,
       validateIncomingParameters: true,
-      validateOutgoingEntity: false,
+      validateOutgoingBody: false,
       validateOutgoingParameters: false,
     };
-  `;
-
-  const credentialsTypeName = getCredentialsTypeName();
-  const credentialsConstantName = getDefaultCredentialsConstantName();
-
-  yield itt`
-    export const ${credentialsConstantName}: client.${credentialsTypeName} = {};
   `;
 
   for (const authenticationModel of apiModel.authentication) {
