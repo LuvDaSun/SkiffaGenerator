@@ -271,10 +271,10 @@ export function* generateFacadeOperationFunction(
           : responseEntityTypeName == null
             ? isStream
               ? "(signal: AbortSignal) => AsyncIterable<unknown>"
-              : "Promise<unknown>"
+              : "unknown"
             : isStream
               ? `(signal: AbortSignal) => AsyncIterable<types.${responseEntityTypeName}>`
-              : `Promise<types.${responseEntityTypeName}>`,
+              : `types.${responseEntityTypeName}`,
       );
     }
 
@@ -925,7 +925,7 @@ export function* generateFacadeOperationFunction(
                     };
                   `
                 }
-                resultBody = lib.mapPromise(resultBody, mapAssertEntity);
+                resultBody = await lib.mapPromise(resultBody, mapAssertEntity);
               }
             `;
 
@@ -964,7 +964,7 @@ export function* generateFacadeOperationFunction(
                     };
                   `
                 }
-                resultBody = lib.mapPromise(resultBody, mapAssertEntity);
+                resultBody = await lib.mapPromise(resultBody, mapAssertEntity);
               }
             `;
             returnArguments.push(`resultBody`);
