@@ -713,7 +713,9 @@ export function* generateFacadeOperationFunction(
 
   function* generateResponseStatusCodeCaseClauses() {
     for (const operationResultModel of operationModel.operationResults) {
-      const statusCodes = [...operationResultModel.statusCodes];
+      const statusCodes = [...operationResultModel.statusCodes].filter(
+        (statusCode) => statusCode >= 200 && statusCode < 300,
+      );
       let statusCode;
       while ((statusCode = statusCodes.shift()) != null) {
         yield itt`case ${JSON.stringify(statusCode)}:`;
