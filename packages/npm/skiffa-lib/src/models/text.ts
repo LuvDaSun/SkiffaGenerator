@@ -36,12 +36,9 @@ export type IncomingTextContainer = {
 
 //#region serialization
 
-export async function* serializeTextValue(
-  valuePromise: Promise<string>,
-): AsyncIterable<Uint8Array> {
+export async function* serializeTextValue(value: string): AsyncIterable<Uint8Array> {
   const encoder = new TextEncoder();
 
-  const value = await valuePromise;
   yield encoder.encode(value);
 }
 
@@ -82,7 +79,9 @@ export async function* deserializeTextLines(
     yield* flush();
   }
 
-  if (buffer.length > 0) yield buffer;
+  if (buffer.length > 0) {
+    yield buffer;
+  }
 
   function* flush() {
     while (true) {

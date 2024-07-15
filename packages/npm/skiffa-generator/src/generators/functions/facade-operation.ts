@@ -539,29 +539,23 @@ export function* generateFacadeOperationFunction(
     }
 
     yield itt`
-        const requestInit: RequestInit = {
-          headers: requestHeaders,
-          method: ${JSON.stringify(operationModel.method.toUpperCase())},
-          redirect: "manual",
-          body: fetchBody,
-        };
-        const fetchResponse = await fetch(url, requestInit);
-    
-        const responseContentType = 
-          fetchResponse.headers.get("content-type");
-    
-        let incomingResponse: unknown;
-      `;
+      const requestInit: RequestInit = {
+        headers: requestHeaders,
+        method: ${JSON.stringify(operationModel.method.toUpperCase())},
+        redirect: "manual",
+        body: fetchBody,
+      };
+      const fetchResponse = await fetch(url, requestInit);
+  
+      const responseContentType = 
+        fetchResponse.headers.get("content-type");
+    `;
 
     yield itt`
-        switch(fetchResponse.status) {
-          ${generateResponseStatusCodeCaseClauses()}
-        }
-      `;
-
-    yield itt`
-        return incomingResponse;
-      `;
+      switch(fetchResponse.status) {
+        ${generateResponseStatusCodeCaseClauses()}
+      }
+    `;
   }
 
   function* generateRequestContentTypeCaseClauses() {
@@ -571,7 +565,6 @@ export function* generateFacadeOperationFunction(
           requestHeaders.append("content-type", ${JSON.stringify(bodyModel.contentType)});
   
           ${generateRequestContentTypeCodeBody(bodyModel)}
-          break;
         }
       `;
     }
@@ -597,7 +590,7 @@ export function* generateFacadeOperationFunction(
         const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
 
         yield itt`
-          let entities = body(undefined);
+          let entities = body(undefined) as AsyncIterable<${bodyTypeName === null ? "unknown" : `types.${bodyTypeName}`}>;
          `;
 
         if (isBodyTypeFunction != null) {
@@ -622,6 +615,10 @@ export function* generateFacadeOperationFunction(
           const stream = lib.serializeNdjsonEntities(entities);
           fetchBody = await lib.collectStream(stream);
         `;
+
+        yield itt`
+          break;
+        `;
         break;
       }
 
@@ -630,11 +627,11 @@ export function* generateFacadeOperationFunction(
         const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
         const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
 
-        yield itt`
-          let entity = body;
-        `;
-
         if (isBodyTypeFunction != null) {
+          yield itt`
+            let entity = body as ${bodyTypeName === null ? "unknown" : `types.${bodyTypeName}`};
+          `;
+
           yield itt`
             if(configuration.validateOutgoingBody) {
               const mapAssertEntity = (entity: unknown) => {
@@ -647,7 +644,7 @@ export function* generateFacadeOperationFunction(
                 }
                 return entity;
               };
-              entity = lib.mapPromise(entity, mapAssertEntity);
+              entity = mapAssertEntity(entity);
             }
           `;
         }
@@ -655,6 +652,10 @@ export function* generateFacadeOperationFunction(
         yield itt`
           const stream = lib.serializeJsonEntity(entity);
           fetchBody = await lib.collectStream(stream);
+        `;
+
+        yield itt`
+          break;
         `;
         break;
       }
@@ -665,7 +666,7 @@ export function* generateFacadeOperationFunction(
         const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
 
         yield itt`
-          let entity = body;
+          let entity = body as ${bodyTypeName === null ? "unknown" : `types.${bodyTypeName}`};
         `;
 
         if (isBodyTypeFunction != null) {
@@ -681,7 +682,7 @@ export function* generateFacadeOperationFunction(
                 }
                 return entity;
               };
-              bodyIterable = lib.mapAsyncIterable(entities, mapAssertEntity);
+              entity = mapAssertEntity(entity);
             }
           `;
         }
@@ -690,6 +691,10 @@ export function* generateFacadeOperationFunction(
           const stream = lib.serializeTextValue(entity);
           fetchBody = await lib.collectStream(stream);
         `;
+
+        yield itt`
+          break;
+        `;
         break;
       }
 
@@ -697,6 +702,10 @@ export function* generateFacadeOperationFunction(
         yield itt`
           let stream = body(undefined);
           fetchBody = await lib.collectStream(stream);
+        `;
+
+        yield itt`
+          break;
         `;
       }
     }
@@ -834,8 +843,6 @@ export function* generateFacadeOperationFunction(
       if (bodyModel == null) {
         returnArguments.push(`undefined`);
       } else {
-        returnArguments.push(`resultBody`);
-
         yield itt`
         const responseBody = fetchResponse.body;
         if (responseBody == null) {
@@ -884,6 +891,8 @@ export function* generateFacadeOperationFunction(
                 }
               }
             `;
+
+            returnArguments.push(`resultBody`);
             break;
           }
 
@@ -917,6 +926,8 @@ export function* generateFacadeOperationFunction(
                 resultBody = lib.mapPromise(resultBody, mapAssertEntity);
               }
             `;
+
+            returnArguments.push(`resultBody`);
             break;
           }
 
@@ -928,7 +939,11 @@ export function* generateFacadeOperationFunction(
 
             yield itt`
               const textValue = lib.deserializeTextValue(stream);
-              let resultBody = ${parseBodyFunction == null ? "textValue" : `lib.mapPromise(textValue, parsers.${parseBodyFunction})`};
+              let resultBody = ${
+                parseBodyFunction == null
+                  ? "textValue"
+                  : `lib.mapPromise(textValue, parsers.${parseBodyFunction})`
+              } as Promise<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;;
             
               if(configuration.validateIncomingBody) {
                 ${
@@ -949,14 +964,13 @@ export function* generateFacadeOperationFunction(
                 }
                 resultBody = lib.mapPromise(resultBody, mapAssertEntity);
               }
-          `;
+            `;
+            returnArguments.push(`resultBody`);
             break;
           }
 
           default: {
-            yield itt`
-              const resultBody = stream;
-            `;
+            returnArguments.push(`stream`);
           }
         }
       }
