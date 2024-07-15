@@ -15,10 +15,13 @@ export function* generateFacadeTsCode(
   yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
   yield itt`
-    import * as lib from "@skiffa/lib";
     import * as client from "./client.js";
+    import * as lib from "@skiffa/lib";
     import * as parameters from "./parameters.js";
     import * as types from "./types.js";
+    import * as validators from "./validators.js";
+    import * as parsers from "./parsers.js";
+    import * as shared from "./shared.js";
     import { router } from "./router.js";
   `;
 
@@ -38,7 +41,14 @@ export function* generateFacadeTsCode(
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      yield* generateFacadeOperationFunction(names, operationModel, requestTypes, responseTypes);
+      yield* generateFacadeOperationFunction(
+        names,
+        apiModel,
+        pathModel,
+        operationModel,
+        requestTypes,
+        responseTypes,
+      );
     }
   }
 }
