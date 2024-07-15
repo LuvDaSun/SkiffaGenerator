@@ -32,6 +32,12 @@ export function* generateFacadeTsCode(
     };
   `;
 
+  yield itt`
+    if(configuration.baseUrl == null) {
+      throw new Error("please set baseUrl");
+    }
+  `;
+
   for (const authenticationModel of apiModel.authentication) {
     //
   }

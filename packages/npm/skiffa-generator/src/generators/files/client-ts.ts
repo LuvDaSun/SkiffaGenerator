@@ -30,7 +30,18 @@ export function* generateClientTsCode(
     import { router } from "./router.js";
   `;
 
-  function* getCredentialFields() {
+  yield itt`
+    export interface ClientConfiguration {
+      baseUrl?: URL;
+      validateIncomingBody?: boolean;
+      validateIncomingParameters?: boolean;
+      validateOutgoingBody?: boolean;
+      validateOutgoingParameters?: boolean;
+      ${generateCredentialFields()}
+    }
+  `;
+
+  function* generateCredentialFields() {
     for (const authenticationModel of apiModel.authentication) {
       const memberName = getAuthenticationMemberName(authenticationModel);
       const typeName = getAuthenticationCredentialTypeName(authenticationModel);
@@ -40,17 +51,6 @@ export function* generateClientTsCode(
       `;
     }
   }
-
-  yield itt`
-    export interface ClientConfiguration {
-      baseUrl?: URL;
-      validateIncomingBody?: boolean;
-      validateIncomingParameters?: boolean;
-      validateOutgoingBody?: boolean;
-      validateOutgoingParameters?: boolean;
-      ${getCredentialFields()}
-    }
-  `;
 
   for (const authenticationModel of apiModel.authentication) {
     yield* generateAuthenticationCredentialType(authenticationModel);
