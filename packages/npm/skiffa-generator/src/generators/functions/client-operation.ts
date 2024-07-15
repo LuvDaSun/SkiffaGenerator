@@ -43,8 +43,7 @@ export function* generateClientOperationFunction(
    */
   export async function ${operationFunctionName}(
     outgoingRequest: ${operationOutgoingRequestName},
-    credentials: ${credentialsName},
-    configuration: ClientConfiguration,
+    configuration: ClientConfiguration & ${credentialsName},
   ): Promise<${operationIncomingResponseName}> {
     ${generateBody(names, apiModel, pathModel, operationModel, requestTypes, responseTypes)}
   }
@@ -64,20 +63,6 @@ function* generateBody(
   const isRequestParametersFunction = getIsRequestParametersFunction(operationModel);
 
   yield itt`
-    const {
-      baseUrl,
-      validateIncomingBody,
-      validateIncomingParameters,
-      validateOutgoingBody,
-      validateOutgoingParameters,
-    } = configuration;
-
-    if(baseUrl == null) {
-      throw new Error("please set baseUrl");
-    }
-  `;
-
-  yield itt`
     const pathParameters = {};
     const queryParameters = {};
     const requestHeaders = new Headers();
@@ -85,7 +70,7 @@ function* generateBody(
   `;
 
   yield itt`
-    if(validateOutgoingParameters) {
+    if(configuration.validateOutgoingParameters) {
       if(!parameters.${isRequestParametersFunction}(outgoingRequest.parameters ?? {})) {
         const lastError = parameters.getLastParameterValidationError();
         throw new lib.ClientRequestParameterValidationFailed(
@@ -195,8 +180,8 @@ function* generateBody(
         switch (authenticationModel.in) {
           case "query": {
             yield itt`
-              if(credentials.${getAuthenticationMemberName(authenticationModel)} != null) {
-                queryParameters.append(${JSON.stringify(authenticationModel.name)}, credentials.${getAuthenticationMemberName(authenticationModel)});
+              if(configuration.${getAuthenticationMemberName(authenticationModel)} != null) {
+                queryParameters.append(${JSON.stringify(authenticationModel.name)}, configuration.${getAuthenticationMemberName(authenticationModel)});
               }
             `;
             break;
@@ -204,8 +189,8 @@ function* generateBody(
 
           case "header": {
             yield itt`
-              if(credentials.${getAuthenticationMemberName(authenticationModel)} != null) {
-                requestHeaders.append(${JSON.stringify(authenticationModel.name)}, credentials.${getAuthenticationMemberName(authenticationModel)});
+              if(configuration.${getAuthenticationMemberName(authenticationModel)} != null) {
+                requestHeaders.append(${JSON.stringify(authenticationModel.name)}, configuration.${getAuthenticationMemberName(authenticationModel)});
               }
             `;
             break;
@@ -213,8 +198,8 @@ function* generateBody(
 
           case "cookie": {
             yield itt`
-              if(credentials.${getAuthenticationMemberName(authenticationModel)} != null) {
-                cookieParameters.append(${JSON.stringify(authenticationModel.name)}, credentials.${getAuthenticationMemberName(authenticationModel)});
+              if(configuration.${getAuthenticationMemberName(authenticationModel)} != null) {
+                cookieParameters.append(${JSON.stringify(authenticationModel.name)}, configuration.${getAuthenticationMemberName(authenticationModel)});
               }
             `;
             break;
@@ -228,16 +213,16 @@ function* generateBody(
         switch (authenticationModel.scheme) {
           case "basic":
             yield itt`
-              if(credentials.${getAuthenticationMemberName(authenticationModel)} != null) {
-                requestHeaders.append("authorization", lib.stringifyBasicAuthorizationHeader(credentials.${getAuthenticationMemberName(authenticationModel)}));
+              if(configuration.${getAuthenticationMemberName(authenticationModel)} != null) {
+                requestHeaders.append("authorization", lib.stringifyBasicAuthorizationHeader(configuration.${getAuthenticationMemberName(authenticationModel)}));
               }
             `;
             break;
 
           case "bearer":
             yield itt`
-              if(credentials.${getAuthenticationMemberName(authenticationModel)} != null) {
-                requestHeaders.append("authorization", lib.stringifyAuthorizationHeader("Bearer", credentials.${getAuthenticationMemberName(authenticationModel)}));
+              if(configuration.${getAuthenticationMemberName(authenticationModel)} != null) {
+                requestHeaders.append("authorization", lib.stringifyAuthorizationHeader("Bearer", configuration.${getAuthenticationMemberName(authenticationModel)}));
               }
             `;
             break;
@@ -274,7 +259,7 @@ function* generateBody(
 
     requestHeaders.append("accept", lib.stringifyAcceptHeader(shared.${operationAcceptConstName}));
 
-    const url = new URL(path, baseUrl);
+    const url = new URL(path, configuration.baseUrl);
     let body: BodyInit | null;  
     `;
 
@@ -403,7 +388,7 @@ function* generateOperationResultBody(
       })}
     } as parameters.${responseParametersName};
 
-    if(validateIncomingParameters) {
+    if(configuration.validateIncomingParameters) {
       if(!parameters.${isResponseParametersFunction}(responseParameters)) {
         const lastError = parameters.getLastParameterValidationError();
         throw new lib.ClientResponseParameterValidationFailed(
@@ -500,7 +485,7 @@ function* generateRequestContentTypeCodeBody(
         }
         else if("entities" in outgoingRequest) {
           let entities = outgoingRequest.entities(undefined);
-          if(validateOutgoingBody) {
+          if(configuration.validateOutgoingBody) {
             entities = lib.mapAsyncIterable(entities, mapAssertEntity);
           }
           stream = lib.serializeNdjsonEntities(entities);
@@ -544,7 +529,7 @@ function* generateRequestContentTypeCodeBody(
         }
         else if("entity" in outgoingRequest) {
           let entity = outgoingRequest.entity();
-          if(validateOutgoingBody) {
+          if(configuration.validateOutgoingBody) {
             entity = lib.mapPromise(entity, mapAssertEntity);
           }
           stream = lib.serializeJsonEntity(entity);
@@ -655,7 +640,7 @@ function* generateOperationResultContentTypeBody(
               stream,
               signal,
             ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
-            if(validateIncomingBody) {
+            if(configuration.validateIncomingBody) {
               entities = lib.mapAsyncIterable(entities, mapAssertEntity);
             }
             return entities;
@@ -701,7 +686,7 @@ function* generateOperationResultContentTypeBody(
             let entity = lib.deserializeJsonEntity(
               stream
             ) as Promise<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
-            if(validateIncomingBody) {
+            if(configuration.validateIncomingBody) {
               entity = lib.mapPromise(entity, mapAssertEntity);
             }
             return entity;

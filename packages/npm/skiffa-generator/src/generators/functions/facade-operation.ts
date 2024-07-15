@@ -363,13 +363,18 @@ function* generateBody(
   `;
 
   yield itt`
+    if(configuration.baseUrl == null) {
+      throw new Error("please set baseUrl");
+    }
+  `;
+
+  yield itt`
     const result = await client.${operationFunctionName}(
       {
         ${hasParametersArgument ? "parameters" : "parameters: {}"},
         ${hasContentTypeArgument ? "contentType" : `contentType: ${JSON.stringify(defaultRequestBodyModel?.contentType ?? null)}`},
         ${hasEntityArgument ? "entity: async () => entity," : ""}
       } as client.${operationOutgoingRequestName},
-      configuration,
       configuration,
     );
   `;
