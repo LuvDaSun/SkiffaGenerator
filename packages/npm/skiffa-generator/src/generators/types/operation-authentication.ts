@@ -1,4 +1,5 @@
 import * as skiffaCore from "@skiffa/core";
+import assert from "assert";
 import { joinIterable } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import {
@@ -46,6 +47,7 @@ export function* generateOperationAuthenticationType(
 
     for (const requirement of subRequirements) {
       const authenticationModel = authenticationMap[requirement.authenticationName];
+      assert(authenticationModel != null);
       const memberName = getAuthenticationMemberName(authenticationModel);
       yield JSON.stringify(memberName);
     }

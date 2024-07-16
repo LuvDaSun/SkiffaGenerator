@@ -24,7 +24,7 @@ export function* generateOperationHandlerType(operationModel: skiffaCore.Operati
       (
         incomingRequest: ${operationIncomingRequestName},
         authentication: ${operationAuthenticationName}<A>,
-        accepts: shared.${operationAcceptTypeName}[]
+        accepts: accept.${operationAcceptTypeName}[]
       ) => Promise<${operationOutgoingResponseName}>
   `;
 }

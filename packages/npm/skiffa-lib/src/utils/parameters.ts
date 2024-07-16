@@ -40,7 +40,11 @@ export function parseParameterEntries(
         if (index % 2 === 0) {
           entries.push([element, ""]);
         } else {
-          entries[entries.length - 1][1] = element;
+          const entry = entries[entries.length - 1];
+          if (entry == null) {
+            throw new Error("expected entry");
+          }
+          entry[1] = element;
         }
         return entries;
       }, new Array<[string, string]>());

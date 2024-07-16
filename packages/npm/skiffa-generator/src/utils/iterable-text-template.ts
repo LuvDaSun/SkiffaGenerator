@@ -6,10 +6,15 @@ export function* iterableTextTemplate(
 ): Iterable<NestedText> {
   for (let index = 0; index < strings.length + values.length; index++) {
     if (index % 2 === 0) {
-      yield strings[index / 2];
+      const stringValue = strings[index / 2];
+      if (stringValue != null) {
+        yield stringValue;
+      }
     } else {
       const value = values[(index - 1) / 2];
-      yield value;
+      if (value != null) {
+        yield value;
+      }
     }
   }
 }

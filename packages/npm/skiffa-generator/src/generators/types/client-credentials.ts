@@ -3,30 +3,8 @@ import { itt } from "../../utils/iterable-text-template.js";
 import {
   getAuthenticationCredentialTypeName,
   getAuthenticationMemberName,
-  getCredentialsTypeName,
   getOperationCredentialsTypeName,
 } from "../names.js";
-
-export function* generateCredentialsType(apiModel: skiffaCore.ApiContainer) {
-  const typeName = getCredentialsTypeName();
-
-  yield itt`
-    export type ${typeName} = {
-      ${body()}
-    };
-  `;
-
-  function* body() {
-    for (const authenticationModel of apiModel.authentication) {
-      const memberName = getAuthenticationMemberName(authenticationModel);
-      const typeName = getAuthenticationCredentialTypeName(authenticationModel);
-
-      yield `
-        ${memberName}?: ${typeName},
-      `;
-    }
-  }
-}
 
 export function* generateOperationCredentialsType(
   apiModel: skiffaCore.ApiContainer,

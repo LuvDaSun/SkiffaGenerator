@@ -4,18 +4,18 @@ import fs from "fs";
 import { Router } from "goodrouter";
 import path from "path";
 import { NestedText, flattenNestedText, itt, splitIterableText } from "../utils.js";
+import { generateAcceptTsCode } from "./files/accept-ts.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
 import { generateBuildJsCode } from "./files/build-js.js";
 import { generateCleanJsCode } from "./files/clean-js.js";
 import { generateClientServerTestTsCode } from "./files/client-server-test-ts.js";
 import { generateClientTsCode } from "./files/client-ts.js";
-import { generateFacadeTsCode } from "./files/facade-ts.js";
 import { generateMainTsCode } from "./files/main-ts.js";
 import { generatePackageJsonData } from "./files/package-json.js";
 import { generateParametersTsCode } from "./files/parameters-ts.js";
 import { generateRollupConfigJsCode } from "./files/rollup-config-js.js";
+import { generateRouterTsCode } from "./files/router-ts.js";
 import { generateServerTsCode } from "./files/server-ts.js";
-import { generateSharedTsCode } from "./files/shared-ts.js";
 import { generateTsconfigJsonData } from "./files/tsconfig-json.js";
 
 export interface PackageConfiguration {
@@ -100,8 +100,14 @@ export function generatePackage(
   }
 
   {
-    const content = generateSharedTsCode(apiModel, responseTypes);
-    const filePath = path.join(packageDirectoryPath, "src", "shared.ts");
+    const content = generateAcceptTsCode(apiModel, responseTypes);
+    const filePath = path.join(packageDirectoryPath, "src", "accept.ts");
+    writeContentToFile(filePath, content);
+  }
+
+  {
+    const content = generateRouterTsCode(router);
+    const filePath = path.join(packageDirectoryPath, "src", "router.ts");
     writeContentToFile(filePath, content);
   }
 
@@ -112,13 +118,7 @@ export function generatePackage(
   }
 
   {
-    const content = generateClientTsCode(names, router, apiModel, requestTypes, responseTypes);
-    const filePath = path.join(packageDirectoryPath, "src", "client.ts");
-    writeContentToFile(filePath, content);
-  }
-
-  {
-    const content = generateFacadeTsCode(
+    const content = generateClientTsCode(
       names,
       router,
       apiModel,
@@ -126,7 +126,7 @@ export function generatePackage(
       responseTypes,
       baseUrl,
     );
-    const filePath = path.join(packageDirectoryPath, "src", "facade.ts");
+    const filePath = path.join(packageDirectoryPath, "src", "client.ts");
     writeContentToFile(filePath, content);
   }
 

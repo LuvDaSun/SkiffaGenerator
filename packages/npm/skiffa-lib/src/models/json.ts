@@ -1,6 +1,5 @@
-import { Promisable } from "type-fest";
 import { StatusCode } from "../utils.js";
-import { deserializeTextLines, deserializeTextValue } from "./text.js";
+import { deserializeTextValue } from "./text.js";
 
 //#region interfaces
 
@@ -28,37 +27,22 @@ export type IncomingJsonResponse<S extends StatusCode, C extends string, T> = {
 
 export type OutgoingJsonContainer<T> =
   | { stream(signal?: AbortSignal): AsyncIterable<Uint8Array> }
-  | { entity(): Promisable<T> }
-  | { entities(signal?: AbortSignal): AsyncIterable<T> };
+  | { entity(): Promise<T> };
 
 export type IncomingJsonContainer<T> = {
   stream(signal?: AbortSignal): AsyncIterable<Uint8Array>;
-} & { entity(): Promisable<T> } & {
-  entities(signal?: AbortSignal): AsyncIterable<T>;
-};
+} & { entity(): Promise<T> };
 
 //#endregion
 
 //#region serialization
 
 export async function* serializeJsonEntity(
-  asyncEntity: Promisable<unknown>,
+  entity: unknown | Promise<unknown>,
 ): AsyncIterable<Uint8Array> {
   const encoder = new TextEncoder();
 
-  const entity = await asyncEntity;
-  yield encoder.encode(JSON.stringify(entity));
-}
-
-export async function* serializeJsonEntities(
-  entities: AsyncIterable<unknown>,
-): AsyncIterable<Uint8Array> {
-  const encoder = new TextEncoder();
-
-  for await (const entity of entities) {
-    yield encoder.encode(JSON.stringify(entity));
-    yield encoder.encode("\n");
-  }
+  yield encoder.encode(JSON.stringify(await entity));
 }
 
 export async function deserializeJsonEntity(
@@ -70,21 +54,6 @@ export async function deserializeJsonEntity(
   const entity = JSON.parse(trimmed);
 
   return entity;
-}
-
-export async function* deserializeJsonEntities(
-  stream: (signal?: AbortSignal) => AsyncIterable<Uint8Array>,
-  signal?: AbortSignal,
-): AsyncIterable<unknown> {
-  const lines = deserializeTextLines(stream, signal);
-
-  for await (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-    const entity = JSON.parse(trimmed);
-
-    yield entity;
-  }
 }
 
 //#endregion

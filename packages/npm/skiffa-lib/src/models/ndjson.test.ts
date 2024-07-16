@@ -2,11 +2,11 @@ import assert from "assert";
 import test from "node:test";
 import { PassThrough } from "stream";
 import { isNativeError } from "util/types";
-import { deserializeJsonEntities, serializeJsonEntities } from "./json.js";
+import { deserializeNdjsonEntities, serializeNdjsonEntities } from "./ndjson.js";
 
-test("serialize-json-iterable", async () => {
+test("serialize-ndjson-iterable", async () => {
   const iterable = new PassThrough({ objectMode: true });
-  const stream = serializeJsonEntities(iterable);
+  const stream = serializeNdjsonEntities(iterable);
 
   iterable.write("a");
   iterable.write("");
@@ -41,7 +41,7 @@ true
 
 test("deserialize-json-iterable", async (t) => {
   const stream = new PassThrough();
-  const iterable = deserializeJsonEntities(() => stream);
+  const iterable = deserializeNdjsonEntities(() => stream);
 
   stream.write(`"a"
         
@@ -68,9 +68,9 @@ true
   assert.deepEqual(actual, expected);
 });
 
-test("deserialize-json-iterable error", async (t) => {
+test("deserialize-ndjson-iterable error", async (t) => {
   const stream = new PassThrough();
-  const iterable = deserializeJsonEntities(() => stream);
+  const iterable = deserializeNdjsonEntities(() => stream);
 
   stream.write('"a"\n');
   stream.write('"b"\n');

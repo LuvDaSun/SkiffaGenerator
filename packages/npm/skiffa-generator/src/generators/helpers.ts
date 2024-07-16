@@ -17,6 +17,8 @@ export function selectBodies(
 export function isOperationModelMockable(
   model: skiffaCore.OperationContainer,
   mockables: Set<string>,
+  requestTypes: Array<string>,
+  responseTypes: Array<string>,
 ) {
   return (
     [
@@ -26,20 +28,23 @@ export function isOperationModelMockable(
       ...model.cookieParameters,
     ].every((model) => isParameterModelMockable(model, mockables)) &&
     (model.bodies.length == 0 ||
-      model.bodies.some((model) => isBodyModelMockable(model, mockables))) &&
+      selectBodies(model, requestTypes).some((model) => isBodyModelMockable(model, mockables))) &&
     (model.operationResults.length == 0 ||
-      model.operationResults.some((model) => isOperationResultModelMockable(model, mockables)))
+      model.operationResults.some((model) =>
+        isOperationResultModelMockable(model, mockables, responseTypes),
+      ))
   );
 }
 
 export function isOperationResultModelMockable(
   model: skiffaCore.OperationResultContainer,
   mockables: Set<string>,
+  responseTypes: Array<string>,
 ) {
   return (
     [...model.headerParameters].every((model) => isParameterModelMockable(model, mockables)) &&
     (model.bodies.length == 0 ||
-      model.bodies.some((model) => isBodyModelMockable(model, mockables)))
+      selectBodies(model, responseTypes).some((model) => isBodyModelMockable(model, mockables)))
   );
 }
 

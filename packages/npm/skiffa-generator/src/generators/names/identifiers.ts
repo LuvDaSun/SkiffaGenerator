@@ -1,10 +1,6 @@
 import * as skiffaCore from "@skiffa/core";
 import { toCamel } from "../../utils.js";
 
-export function getDefaultCredentialsConstantName() {
-  return toCamel("default", "credentials");
-}
-
 export function getOperationFunctionName(operationModel: skiffaCore.OperationContainer) {
   return toCamel(operationModel.name);
 }
@@ -163,4 +159,21 @@ export function getIsBodyFunction(
   }
 
   return toCamel("is", bodyTypeName);
+}
+
+export function getParseBodyFunction(
+  names: Record<string, string>,
+  bodyModel: skiffaCore.BodyContainer,
+) {
+  const bodySchemaId = bodyModel.schemaId;
+  if (bodySchemaId == null) {
+    return null;
+  }
+
+  const bodyTypeName = names[bodySchemaId];
+  if (bodyTypeName == null) {
+    return null;
+  }
+
+  return toCamel("parse", bodyTypeName);
 }

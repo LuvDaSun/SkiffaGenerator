@@ -1,4 +1,5 @@
 import * as skiffaCore from "@skiffa/core";
+import assert from "assert";
 import { itt, joinIterable } from "../../utils.js";
 import {
   getAuthenticationMemberName,
@@ -48,6 +49,7 @@ export function* generateIsAuthenticationFunction(
 
     for (const requirement of requirements) {
       const authenticationModel = authenticationMap[requirement.authenticationName];
+      assert(authenticationModel != null);
       const memberName = getAuthenticationMemberName(authenticationModel);
       yield itt`(${JSON.stringify(memberName)} in authentication && authentication.${memberName} != null)`;
     }

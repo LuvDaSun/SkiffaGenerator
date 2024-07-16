@@ -1,14 +1,12 @@
 import * as skiffaCore from "@skiffa/core";
-import { Router, RouterMode } from "goodrouter";
+import { Router } from "goodrouter";
 import { packageInfo } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { generateClientOperationFunction } from "../functions/client-operation.js";
+import { generateClientOperationFunction } from "../functions.js";
+import { getAuthenticationCredentialTypeName, getAuthenticationMemberName } from "../names.js";
 import {
   generateAuthenticationCredentialType,
-  generateCredentialsType,
   generateOperationCredentialsType,
-  generateOperationIncomingResponseType,
-  generateOperationOutgoingRequestType,
 } from "../types.js";
 
 export function* generateClientTsCode(
@@ -17,38 +15,50 @@ export function* generateClientTsCode(
   apiModel: skiffaCore.ApiContainer,
   requestTypes: Array<string>,
   responseTypes: Array<string>,
+  baseUrl: URL | undefined,
 ) {
   yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
   yield itt`
-    import { Router } from "goodrouter";
-    import * as parameters from "./parameters.js";
+    import * as lib from "@skiffa/lib";
+    import * as $parameters from "./parameters.js";
     import * as types from "./types.js";
     import * as validators from "./validators.js";
     import * as parsers from "./parsers.js";
-    import * as shared from "./shared.js";
-    import * as lib from "@skiffa/lib";
+    import * as accept from "./accept.js";
+    import { router } from "./router.js";
   `;
 
   yield itt`
-    export interface ClientConfiguration {
-      baseUrl?: URL;
-      validateIncomingEntity?: boolean;
-      validateIncomingParameters?: boolean;
-      validateOutgoingEntity?: boolean;
-      validateOutgoingParameters?: boolean;
+    export const defaultClientConfiguration: ClientConfiguration = {
+      baseUrl: ${baseUrl == null ? "undefined" : JSON.stringify(baseUrl.toString())},
+      validateIncomingEntity: true,
+      validateIncomingParameters: true,
+      validateOutgoingEntity: false,
+      validateOutgoingParameters: false,
+    };
+  `;
+  yield itt`
+  export interface ClientConfiguration {
+    baseUrl?: URL;
+    validateIncomingEntity?: boolean;
+    validateIncomingParameters?: boolean;
+    validateOutgoingEntity?: boolean;
+    validateOutgoingParameters?: boolean;
+    ${generateCredentialFields()}
+  }
+`;
+
+  function* generateCredentialFields() {
+    for (const authenticationModel of apiModel.authentication) {
+      const memberName = getAuthenticationMemberName(authenticationModel);
+      const typeName = getAuthenticationCredentialTypeName(authenticationModel);
+
+      yield `
+      ${memberName}?: ${typeName};
+    `;
     }
-  `;
-
-  yield itt`
-    const router = new Router({
-      parameterValueDecoder: value => value,
-      parameterValueEncoder: value => value,
-    }).loadFromJson(${JSON.stringify(router.saveToJson(RouterMode.Client))});
-  `;
-
-  yield* generateCredentialsType(apiModel);
-
+  }
   for (const authenticationModel of apiModel.authentication) {
     yield* generateAuthenticationCredentialType(authenticationModel);
   }
@@ -64,8 +74,6 @@ export function* generateClientTsCode(
         responseTypes,
       );
       yield* generateOperationCredentialsType(apiModel, operationModel);
-      yield* generateOperationOutgoingRequestType(names, operationModel, requestTypes);
-      yield* generateOperationIncomingResponseType(names, operationModel, responseTypes);
     }
   }
 }
