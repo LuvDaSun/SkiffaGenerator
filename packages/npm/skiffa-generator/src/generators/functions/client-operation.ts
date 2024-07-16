@@ -108,7 +108,7 @@ export function* generateClientOperationFunction(
 
     if (hasParametersArgument) {
       const parametersTypeName = getRequestParametersTypeName(operationModel);
-      functionArguments.push(`parameters: parameters.${parametersTypeName}`);
+      functionArguments.push(`parameters: $parameters.${parametersTypeName}`);
     }
 
     if (hasContentTypeArgument) {
@@ -148,7 +148,7 @@ export function* generateClientOperationFunction(
 
     if (hasParametersArgument) {
       const parametersTypeName = getRequestParametersTypeName(operationModel);
-      functionArguments.push(`parameters: parameters.${parametersTypeName}`);
+      functionArguments.push(`parameters: $parameters.${parametersTypeName}`);
     }
 
     if (hasContentTypeArgument) {
@@ -265,7 +265,7 @@ export function* generateClientOperationFunction(
         operationModel,
         operationResultModel,
       );
-      tuple.push(`parameters.${parametersTypeName}`);
+      tuple.push(`$parameters.${parametersTypeName}`);
     }
 
     if (hasContentTypeReturn) {
@@ -338,8 +338,8 @@ export function* generateClientOperationFunction(
     if (hasParametersArgument) {
       yield itt`
         if(configuration.validateOutgoingParameters) {
-          if(!parameters.${isRequestParametersFunction}(parameters)) {
-            const lastError = parameters.getLastParameterValidationError();
+          if(!$parameters.${isRequestParametersFunction}(parameters)) {
+            const lastError = $parameters.getLastParameterValidationError();
             throw new lib.ClientRequestParameterValidationFailed(
               lastError.parameterName,
               lastError.path,
@@ -355,7 +355,7 @@ export function* generateClientOperationFunction(
           lib.addParameter(
             pathParameters,
             ${JSON.stringify(parameterModel.name)},
-            outgoingRequest.parameters.${parameterName} == null ? "" : String(outgoingRequest.parameters.${parameterName}),
+            parameters.${parameterName} == null ? "" : String(parameters.${parameterName}),
           );
         `;
 
@@ -363,7 +363,7 @@ export function* generateClientOperationFunction(
           yield addParameterCode;
         } else {
           yield itt`
-            if (outgoingRequest.parameters.${parameterName} !== undefined) {
+            if (parameters.${parameterName} !== undefined) {
               ${addParameterCode}    
             }
           `;
@@ -376,7 +376,7 @@ export function* generateClientOperationFunction(
           lib.addParameter(
             queryParameters,
             ${JSON.stringify(parameterModel.name)},
-            outgoingRequest.parameters.${parameterName} == null ? "" : String(outgoingRequest.parameters.${parameterName}),
+            parameters.${parameterName} == null ? "" : String(parameters.${parameterName}),
           );
         `;
 
@@ -384,7 +384,7 @@ export function* generateClientOperationFunction(
           yield addParameterCode;
         } else {
           yield itt`
-            if (outgoingRequest.parameters.${parameterName} !== undefined) {
+            if (parameters.${parameterName} !== undefined) {
               ${addParameterCode}    
             }
           `;
@@ -396,7 +396,7 @@ export function* generateClientOperationFunction(
         const addParameterCode = itt`
           requestHeaders.append(
             ${JSON.stringify(parameterModel.name)}, 
-            outgoingRequest.parameters.${parameterName} == null ? "" : String(outgoingRequest.parameters.${parameterName}),
+            parameters.${parameterName} == null ? "" : String(parameters.${parameterName}),
           );
         `;
 
@@ -404,7 +404,7 @@ export function* generateClientOperationFunction(
           yield addParameterCode;
         } else {
           yield itt`
-            if (outgoingRequest.parameters.${parameterName} !== undefined) {
+            if (parameters.${parameterName} !== undefined) {
               ${addParameterCode}    
             }
           `;
@@ -417,7 +417,7 @@ export function* generateClientOperationFunction(
           lib.addParameter(
             cookieParameters,
             ${JSON.stringify(parameterModel.name)},
-            outgoingRequest.parameters.${parameterName} == null ? "" : String(outgoingRequest.parameters.${parameterName}),
+            parameters.${parameterName} == null ? "" : String(parameters.${parameterName}),
           );
         `;
 
@@ -425,7 +425,7 @@ export function* generateClientOperationFunction(
           yield addParameterCode;
         } else {
           yield itt`
-            if (outgoingRequest.parameters.${parameterName} !== undefined) {
+            if (parameters.${parameterName} !== undefined) {
               ${addParameterCode}    
             }
           `;
@@ -731,11 +731,11 @@ export function* generateClientOperationFunction(
               )})),
             `;
           })}
-        } as parameters.${responseParametersName};
+        } as $parameters.${responseParametersName};
     
         if(configuration.validateIncomingParameters) {
-          if(!parameters.${isResponseParametersFunction}(responseParameters)) {
-            const lastError = parameters.getLastParameterValidationError();
+          if(!$parameters.${isResponseParametersFunction}(responseParameters)) {
+            const lastError = $parameters.getLastParameterValidationError();
             throw new lib.ClientResponseParameterValidationFailed(
               lastError.parameterName,
               lastError.path,
@@ -910,7 +910,7 @@ export function* generateClientOperationFunction(
                 const resultText = await lib.deserializeTextValue(stream);
                 const resultEntity = ${
                   parseBodyFunction == null
-                    ? "textValue"
+                    ? "resultText"
                     : `parsers.${parseBodyFunction}(resultText)`
                 } as ${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`};
               `;

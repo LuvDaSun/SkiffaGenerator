@@ -11,9 +11,9 @@ ERROR=0
 for F in $(ls fixtures/specifications/*.yaml); do
   echo $(basename $F .yaml)
 
-  npx skiffa-generator package \
+  node packages/npm/skiffa-generator/bundled/program.js package \
     $F \
-    --package-directory .package-npm/specifications/$(basename $F .yaml) \
+    --package-directory generated/npm/specifications/$(basename $F .yaml) \
     --package-name $(basename $F .yaml) \
     --package-version "0.0.0" \
 
@@ -21,13 +21,13 @@ for F in $(ls fixtures/specifications/*.yaml); do
     ERROR=1
   fi;
 
-  ( cd .package-npm/specifications/$(basename $F .yaml) ; npm install)
+  ( cd generated/npm/specifications/$(basename $F .yaml) ; npm install)
 
   if [ $? -ne 0 ]; then
     ERROR=1
   fi;
 
-  ( cd .package-npm/specifications/$(basename $F .yaml) ; npm test)
+  ( cd generated/npm/specifications/$(basename $F .yaml) ; npm test)
 
   if [ $? -ne 0 ]; then
     ERROR=1
