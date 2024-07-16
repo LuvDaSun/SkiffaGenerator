@@ -3,12 +3,14 @@ import { itt } from "../../utils.js";
 import { selectBodies } from "../helpers.js";
 import {
   getAuthenticationMemberName,
+  getIsBodyFunction,
   getIsRequestParametersFunction,
   getIsResponseParametersFunction,
   getOperationAcceptConstName,
   getOperationCredentialsTypeName,
   getOperationFunctionName,
   getParameterMemberName,
+  getParseBodyFunction,
   getParseParameterFunction,
   getRequestParametersTypeName,
   getResponseParametersTypeName,
@@ -92,50 +94,56 @@ export function* generateFacadeOperationFunction(
 
   if (requestBodyModels.length > 1) {
     for (const requestBodyModel of requestBodyModels) {
-      const requestEntityTypeName =
-        requestBodyModel?.schemaId == null ? null : names[requestBodyModel.schemaId];
+      yield* generateFunctionSignature(requestBodyModel);
+    }
+  }
 
-      const functionArguments = new Array<string>();
+  yield* generateFunctionImplementation();
 
-      if (hasParametersArgument) {
-        const parametersTypeName = getRequestParametersTypeName(operationModel);
-        functionArguments.push(`parameters: parameters.${parametersTypeName}`);
-      }
+  function* generateFunctionSignature(requestBodyModel: skiffaCore.BodyContainer) {
+    const requestEntityTypeName =
+      requestBodyModel?.schemaId == null ? null : names[requestBodyModel.schemaId];
 
-      if (hasContentTypeArgument) {
-        functionArguments.push(
-          `contentType: ${JSON.stringify(requestBodyModel?.contentType ?? null)}`,
-        );
-      }
+    const functionArguments = new Array<string>();
 
-      if (hasEntityArgument) {
-        functionArguments.push(
-          `body: ${
-            requestBodyModel == null
-              ? "undefined"
-              : requestEntityTypeName == null
-                ? "unknown"
-                : `types.${requestEntityTypeName}`
-          }`,
-        );
-      }
+    if (hasParametersArgument) {
+      const parametersTypeName = getRequestParametersTypeName(operationModel);
+      functionArguments.push(`parameters: parameters.${parametersTypeName}`);
+    }
 
+    if (hasContentTypeArgument) {
       functionArguments.push(
-        `configurationOptions?: Partial<client.ClientConfiguration & client.${credentialsName}>`,
+        `contentType: ${JSON.stringify(requestBodyModel?.contentType ?? null)}`,
       );
+    }
 
-      yield itt`
+    if (hasEntityArgument) {
+      functionArguments.push(
+        `entity: ${
+          requestBodyModel == null
+            ? "undefined"
+            : requestEntityTypeName == null
+              ? "unknown"
+              : `types.${requestEntityTypeName}`
+        }`,
+      );
+    }
+
+    functionArguments.push(
+      `configurationOptions?: Partial<client.ClientConfiguration & client.${credentialsName}>`,
+    );
+
+    yield itt`
         /**
           ${jsDoc}
         */
         export function ${operationFunctionName}(
           ${functionArguments.map((element) => `${element},\n`).join("")}
-        ): Promise<${generateOperationReturnType()}>;
+        ): Promise<${generateFunctionReturnType()}>;
       `;
-    }
   }
 
-  {
+  function* generateFunctionImplementation() {
     const functionArguments = new Array<string>();
 
     if (hasParametersArgument) {
@@ -154,7 +162,7 @@ export function* generateFacadeOperationFunction(
 
     if (hasEntityArgument) {
       functionArguments.push(
-        `body: ${requestBodyModels
+        `entity: ${requestBodyModels
           .map((requestBodyModel) => {
             const requestEntityTypeName =
               requestBodyModel?.schemaId == null ? null : names[requestBodyModel.schemaId];
@@ -179,13 +187,13 @@ export function* generateFacadeOperationFunction(
       */
       export async function ${operationFunctionName}(
         ${functionArguments.map((element) => `${element},\n`).join("")}
-      ): Promise<${generateOperationReturnType()}> {
-        ${generateBody()}
+      ): Promise<${generateFunctionReturnType()}> {
+        ${generateFunctionBody()}
       }
     `;
   }
 
-  function* generateOperationReturnType() {
+  function* generateFunctionReturnType() {
     switch (operationResultModels.length) {
       case 0: {
         // no operation result
@@ -296,10 +304,12 @@ export function* generateFacadeOperationFunction(
     }
   }
 
-  function* generateBody() {
+  function* generateFunctionBody() {
     const requestBodyModels = selectBodies(operationModel, requestTypes);
     const isRequestParametersFunction = getIsRequestParametersFunction(operationModel);
     const operationAcceptConstName = getOperationAcceptConstName(operationModel);
+
+    // first we setup some variables so we can work with them alter
 
     yield itt`
       const configuration = {
@@ -314,6 +324,8 @@ export function* generateFacadeOperationFunction(
       }
     `;
 
+    // lets fill some request parameters
+
     yield itt`
       const pathParameters = {};
       const queryParameters = {};
@@ -321,10 +333,12 @@ export function* generateFacadeOperationFunction(
       const cookieParameters = {};
     `;
 
+    // if there are no parameters, then we
+
     if (hasParametersArgument) {
       yield itt`
         if(configuration.validateOutgoingParameters) {
-          if(!parameters.${isRequestParametersFunction}(outgoingRequest.parameters ?? {})) {
+          if(!parameters.${isRequestParametersFunction}(parameters)) {
             const lastError = parameters.getLastParameterValidationError();
             throw new lib.ClientRequestParameterValidationFailed(
               lastError.parameterName,
@@ -419,6 +433,8 @@ export function* generateFacadeOperationFunction(
       }
     }
 
+    // setup authentication for this operation
+
     {
       const authenticationNames = new Set(
         operationModel.authenticationRequirements.flatMap((group) =>
@@ -430,6 +446,7 @@ export function* generateFacadeOperationFunction(
       );
 
       for (const authenticationModel of authenticationModels) {
+        // TODO this should be in a function or something, it's dirty!
         switch (authenticationModel.type) {
           case "apiKey":
             switch (authenticationModel.in) {
@@ -495,6 +512,8 @@ export function* generateFacadeOperationFunction(
       }
     }
 
+    // prepare path and headers for the actual request
+
     yield itt`
       const path =
         router.stringifyRoute(
@@ -516,11 +535,14 @@ export function* generateFacadeOperationFunction(
       requestHeaders.append("accept", lib.stringifyAcceptHeader(shared.${operationAcceptConstName}));
 
       const url = new URL(path, configuration.baseUrl);
-      let fetchBody: BodyInit | null;  
+      let body: BodyInit | null;  
     `;
+
+    // prepare entity for the request
 
     switch (requestBodyModels.length) {
       case 0: {
+        // empty request
         yield* generateRequestContentTypeCodeBody();
         break;
       }
@@ -538,12 +560,105 @@ export function* generateFacadeOperationFunction(
       }
     }
 
+    function* generateRequestContentTypeCaseClauses() {
+      for (const bodyModel of requestBodyModels) {
+        yield itt`
+          case ${JSON.stringify(bodyModel.contentType)}: {
+            requestHeaders.append("content-type", ${JSON.stringify(bodyModel.contentType)});
+    
+            ${generateRequestContentTypeCodeBody(bodyModel)}
+
+            break;
+          }
+        `;
+      }
+
+      yield itt`
+        default:
+          throw new lib.Unreachable();
+      `;
+    }
+
+    function* generateRequestContentTypeCodeBody(bodyModel?: skiffaCore.BodyContainer) {
+      if (bodyModel == null) {
+        yield itt`
+          body = null;
+        `;
+        return;
+      }
+
+      switch (bodyModel.contentType) {
+        case "application/json": {
+          const isBodyTypeFunction = getIsBodyFunction(names, bodyModel);
+
+          if (isBodyTypeFunction != null) {
+            yield itt`
+              if(configuration.validateOutgoingEntity) {
+                if(!validators.${isBodyTypeFunction}(entity)) {
+                  const lastError = validators.getLastValidationError();
+                  throw new lib.ClientResponseEntityValidationFailed(
+                    lastError.path,
+                    lastError.rule,
+                  );
+                }
+              }
+            `;
+          }
+
+          yield itt`
+            const stream = lib.serializeJsonEntity(entity);
+            body = await lib.collectStream(stream);
+          `;
+
+          break;
+        }
+
+        case "text/plain": {
+          const isBodyTypeFunction = getIsBodyFunction(names, bodyModel);
+
+          if (isBodyTypeFunction != null) {
+            yield itt`
+              if(configuration.validateOutgoingEntity) {
+                if(!validators.${isBodyTypeFunction}(entity)) {
+                  const lastError = validators.getLastValidationError();
+                  throw new lib.ClientResponseEntityValidationFailed(
+                    lastError.path,
+                    lastError.rule,
+                  );
+                }
+              }
+            `;
+          }
+
+          yield itt`
+            const stream = lib.serializeTextValue(String(entity));
+            body = await lib.collectStream(stream);
+          `;
+
+          break;
+        }
+
+        default: {
+          yield itt`
+            const stream = body(undefined);
+            body = await lib.collectStream(stream);
+          `;
+
+          yield itt`
+            break;
+          `;
+        }
+      }
+    }
+
+    // do the actual request
+
     yield itt`
       const requestInit: RequestInit = {
         headers: requestHeaders,
         method: ${JSON.stringify(operationModel.method.toUpperCase())},
         redirect: "manual",
-        body: fetchBody,
+        body,
       };
       const fetchResponse = await fetch(url, requestInit);
   
@@ -551,454 +666,302 @@ export function* generateFacadeOperationFunction(
         fetchResponse.headers.get("content-type");
     `;
 
+    // and handle the response
+
     yield itt`
       switch(fetchResponse.status) {
         ${generateResponseStatusCodeCaseClauses()}
       }
     `;
-  }
 
-  function* generateRequestContentTypeCaseClauses() {
-    for (const bodyModel of requestBodyModels) {
-      yield itt`
-        case ${JSON.stringify(bodyModel.contentType)}: {
-          requestHeaders.append("content-type", ${JSON.stringify(bodyModel.contentType)});
-  
-          ${generateRequestContentTypeCodeBody(bodyModel)}
-        }
-      `;
-    }
-
-    yield itt`
-      default:
-        throw new lib.Unreachable();
-    `;
-  }
-
-  function* generateRequestContentTypeCodeBody(bodyModel?: skiffaCore.BodyContainer) {
-    if (bodyModel == null) {
-      yield itt`
-        fetchBody = null;
-      `;
-      return;
-    }
-
-    switch (bodyModel.contentType) {
-      case "application/x-ndjson": {
-        const bodySchemaId = bodyModel.schemaId;
-        const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
-        const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
-
-        yield itt`
-          let entities = body(undefined) as AsyncIterable<${bodyTypeName === null ? "unknown" : `types.${bodyTypeName}`}>;
-         `;
-
-        if (isBodyTypeFunction != null) {
-          yield itt`
-            if(configuration.validateOutgoingBody) {
-              const mapAssertEntity = (entity: unknown) => {
-                if(!validators.${isBodyTypeFunction}(entity)) {
-                  const lastError = validators.getLastValidationError();
-                  throw new lib.ClientResponseEntityValidationFailed(
-                    lastError.path,
-                    lastError.rule,
-                  );
-                }
-                return entity;
-              };
-              entities = lib.mapAsyncIterable(entities, mapAssertEntity);
-            }
-          `;
-        }
-
-        yield itt`
-          const stream = lib.serializeNdjsonEntities(entities);
-          fetchBody = await lib.collectStream(stream);
-        `;
-
-        yield itt`
-          break;
-        `;
-        break;
-      }
-
-      case "application/json": {
-        const bodySchemaId = bodyModel.schemaId;
-        const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
-        const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
-
-        if (isBodyTypeFunction != null) {
-          yield itt`
-            let entity = body as ${bodyTypeName === null ? "unknown" : `types.${bodyTypeName}`};
-          `;
-
-          yield itt`
-            if(configuration.validateOutgoingBody) {
-              const mapAssertEntity = (entity: unknown) => {
-                if(!validators.${isBodyTypeFunction}(entity)) {
-                  const lastError = validators.getLastValidationError();
-                  throw new lib.ClientResponseEntityValidationFailed(
-                    lastError.path,
-                    lastError.rule,
-                  );
-                }
-                return entity;
-              };
-              entity = mapAssertEntity(entity);
-            }
-          `;
-        }
-
-        yield itt`
-          const stream = lib.serializeJsonEntity(entity);
-          fetchBody = await lib.collectStream(stream);
-        `;
-
-        yield itt`
-          break;
-        `;
-        break;
-      }
-
-      case "text/plain": {
-        const bodySchemaId = bodyModel.schemaId;
-        const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
-        const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
-
-        yield itt`
-          let entity = body as ${bodyTypeName === null ? "unknown" : `types.${bodyTypeName}`};
-        `;
-
-        if (isBodyTypeFunction != null) {
-          yield itt`
-            if(configuration.validateOutgoingBody) {
-              const mapAssertEntity = (entity: unknown) => {
-                if(!validators.${isBodyTypeFunction}(entity)) {
-                  const lastError = validators.getLastValidationError();
-                  throw new lib.ClientResponseEntityValidationFailed(
-                    lastError.path,
-                    lastError.rule,
-                  );
-                }
-                return entity;
-              };
-              entity = mapAssertEntity(entity);
-            }
-          `;
-        }
-
-        yield itt`
-          const stream = lib.serializeTextValue(entity);
-          fetchBody = await lib.collectStream(stream);
-        `;
-
-        yield itt`
-          break;
-        `;
-        break;
-      }
-
-      default: {
-        yield itt`
-          let stream = body(undefined);
-          fetchBody = await lib.collectStream(stream);
-        `;
-
-        yield itt`
-          break;
-        `;
-      }
-    }
-  }
-
-  function* generateResponseStatusCodeCaseClauses() {
-    for (const operationResultModel of operationModel.operationResults) {
-      const statusCodes = [...operationResultModel.statusCodes].filter(
-        (statusCode) => statusCode >= 200 && statusCode < 300,
-      );
-      let statusCode;
-      while ((statusCode = statusCodes.shift()) != null) {
-        yield itt`case ${JSON.stringify(statusCode)}:`;
-        // it's te last one!
-        if (statusCodes.length === 0) {
-          yield itt`
-            {
-              ${generateOperationResultBody(operationResultModel)}
-              break;
-            }
-          `;
-        }
-      }
-    }
-
-    yield itt`
-      default:
-        throw new lib.UnexpectedStatusCode(fetchResponse.status)  
-    `;
-  }
-
-  function* generateOperationResultBody(operationResultModel: skiffaCore.OperationResultContainer) {
-    const responseParametersName = getResponseParametersTypeName(
-      operationModel,
-      operationResultModel,
-    );
-    const isResponseParametersFunction = getIsResponseParametersFunction(
-      operationModel,
-      operationResultModel,
-    );
-
-    if (hasParametersReturn) {
-      yield itt`
-      const responseParameters = {
-        ${operationResultModel.headerParameters.map((parameterModel) => {
-          const parameterName = getParameterMemberName(parameterModel);
-          const parseParameterFunction = getParseParameterFunction(names, parameterModel);
-
-          if (parseParameterFunction == null) {
-            return `
-              ${parameterName}: fetchResponse.headers.get(${JSON.stringify(parameterModel.name)}),
+    function* generateResponseStatusCodeCaseClauses() {
+      for (const operationResultModel of operationModel.operationResults) {
+        const statusCodes = [...operationResultModel.statusCodes].filter(
+          (statusCode) => statusCode >= 200 && statusCode < 300,
+        );
+        let statusCode;
+        while ((statusCode = statusCodes.shift()) != null) {
+          yield itt`case ${JSON.stringify(statusCode)}:`;
+          // it's te last one!
+          if (statusCodes.length === 0) {
+            yield itt`
+              {
+                ${generateOperationResultBody(operationResultModel)}
+                break;
+              }
             `;
           }
-
-          return `
-            ${parameterName}: parsers.${parseParameterFunction}(fetchResponse.headers.get(${JSON.stringify(
-              parameterModel.name,
-            )})),
-          `;
-        })}
-      } as parameters.${responseParametersName};
-  
-      if(configuration.validateIncomingParameters) {
-        if(!parameters.${isResponseParametersFunction}(responseParameters)) {
-          const lastError = parameters.getLastParameterValidationError();
-          throw new lib.ClientResponseParameterValidationFailed(
-            lastError.parameterName,
-            lastError.path,
-            lastError.rule,
-          );
         }
       }
-    `;
-    }
 
-    const responseBodyModels = selectBodies(operationResultModel, responseTypes);
-
-    switch (responseBodyModels.length) {
-      case 0: {
-        yield* generateOperationResultContentTypeBody();
-        break;
-      }
-
-      default: {
-        yield itt`
-          if (responseContentType == null) {
-            throw new lib.ClientResponseMissingContentType();
-          }
-        `;
-
-        yield itt`
-          switch(responseContentType) {
-            ${generateOperationResultContentTypeCaseClauses(operationResultModel)}
-          }
-        `;
-      }
-    }
-  }
-
-  function* generateOperationResultContentTypeCaseClauses(
-    operationResultModel: skiffaCore.OperationResultContainer,
-  ) {
-    const responseBodyModels = selectBodies(operationResultModel, responseTypes);
-
-    for (const bodyModel of responseBodyModels) {
       yield itt`
-        case ${JSON.stringify(bodyModel.contentType)}:
-        {
-          ${generateOperationResultContentTypeBody(bodyModel)}
+        default:
+          throw new lib.UnexpectedStatusCode(fetchResponse.status)  
+      `;
+    }
+
+    function* generateOperationResultBody(
+      operationResultModel: skiffaCore.OperationResultContainer,
+    ) {
+      const responseParametersName = getResponseParametersTypeName(
+        operationModel,
+        operationResultModel,
+      );
+      const isResponseParametersFunction = getIsResponseParametersFunction(
+        operationModel,
+        operationResultModel,
+      );
+
+      if (hasParametersReturn) {
+        yield itt`
+        const responseParameters = {
+          ${operationResultModel.headerParameters.map((parameterModel) => {
+            const parameterName = getParameterMemberName(parameterModel);
+            const parseParameterFunction = getParseParameterFunction(names, parameterModel);
+
+            if (parseParameterFunction == null) {
+              return `
+                ${parameterName}: fetchResponse.headers.get(${JSON.stringify(parameterModel.name)}),
+              `;
+            }
+
+            return `
+              ${parameterName}: parsers.${parseParameterFunction}(fetchResponse.headers.get(${JSON.stringify(
+                parameterModel.name,
+              )})),
+            `;
+          })}
+        } as parameters.${responseParametersName};
+    
+        if(configuration.validateIncomingParameters) {
+          if(!parameters.${isResponseParametersFunction}(responseParameters)) {
+            const lastError = parameters.getLastParameterValidationError();
+            throw new lib.ClientResponseParameterValidationFailed(
+              lastError.parameterName,
+              lastError.path,
+              lastError.rule,
+            );
+          }
+        }
+      `;
+      }
+
+      const responseBodyModels = selectBodies(operationResultModel, responseTypes);
+
+      switch (responseBodyModels.length) {
+        case 0: {
+          yield* generateOperationResultContentTypeBody();
           break;
         }
-      `;
-    }
 
-    yield itt`
-      default:
-        throw new lib.ClientResponseUnexpectedContentType();       
-    `;
-  }
+        default: {
+          yield itt`
+            if (responseContentType == null) {
+              throw new lib.ClientResponseMissingContentType();
+            }
+          `;
 
-  function* generateOperationResultContentTypeBody(bodyModel?: skiffaCore.BodyContainer) {
-    const returnArguments = new Array<string>();
-
-    if (hasStatusReturn) {
-      returnArguments.push(`fetchResponse.status`);
-    }
-
-    if (hasParametersReturn) {
-      returnArguments.push(`responseParameters`);
-    }
-
-    if (hasContentTypeReturn) {
-      returnArguments.push(`responseContentType`);
-    }
-
-    if (hasEntityReturn) {
-      if (bodyModel == null) {
-        returnArguments.push(`undefined`);
-      } else {
-        yield itt`
-        const responseBody = fetchResponse.body;
-        if (responseBody == null) {
-          throw new Error("expected body");
+          yield itt`
+            switch(responseContentType) {
+              ${generateOperationResultContentTypeCaseClauses(operationResultModel)}
+            }
+          `;
         }
-      `;
+      }
+    }
 
+    function* generateOperationResultContentTypeCaseClauses(
+      operationResultModel: skiffaCore.OperationResultContainer,
+    ) {
+      const responseBodyModels = selectBodies(operationResultModel, responseTypes);
+
+      for (const bodyModel of responseBodyModels) {
         yield itt`
-        const stream = (signal?: AbortSignal) => lib.fromReadableStream(
-          responseBody,
-          signal
-        );
+          case ${JSON.stringify(bodyModel.contentType)}:
+          {
+            ${generateOperationResultContentTypeBody(bodyModel)}
+            break;
+          }
+        `;
+      }
+
+      yield itt`
+        default:
+          throw new lib.ClientResponseUnexpectedContentType();       
       `;
+    }
 
-        switch (bodyModel.contentType) {
-          case "application/x-ndjson": {
-            const bodySchemaId = bodyModel.schemaId;
-            const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
-            const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
+    function* generateOperationResultContentTypeBody(bodyModel?: skiffaCore.BodyContainer) {
+      const returnArguments = new Array<string>();
 
-            yield itt`
-              const resultBody = (signal: AbortSignal) => {
-                let entities = lib.deserializeNdjsonEntities(
-                  stream,
-                  signal,
-                ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
-                ${
-                  isBodyTypeFunction == null
-                    ? ""
-                    : itt`
-                  const mapAssertEntity = (entity: unknown) => {
-                    if(!validators.${isBodyTypeFunction}(entity)) {
+      if (hasStatusReturn) {
+        returnArguments.push(`fetchResponse.status`);
+      }
+
+      if (hasParametersReturn) {
+        returnArguments.push(`responseParameters`);
+      }
+
+      if (hasContentTypeReturn) {
+        returnArguments.push(`responseContentType`);
+      }
+
+      if (hasEntityReturn) {
+        if (bodyModel == null) {
+          returnArguments.push(`undefined`);
+        } else {
+          yield itt`
+          const responseBody = fetchResponse.body;
+          if (responseBody == null) {
+            throw new Error("expected body");
+          }
+        `;
+
+          yield itt`
+          const stream = (signal?: AbortSignal) => lib.fromReadableStream(
+            responseBody,
+            signal
+          );
+        `;
+
+          switch (bodyModel.contentType) {
+            case "application/x-ndjson": {
+              const bodySchemaId = bodyModel.schemaId;
+              const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
+              const isBodyTypeFunction = getIsBodyFunction(names, bodyModel);
+
+              if (isBodyTypeFunction == null) {
+                yield itt`
+                  async function* resultEntityGenerator(signal: AbortSignal) {
+                    const entityIterable = lib.deserializeNdjsonEntities(
+                      stream,
+                      signal,
+                    ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
+                    yield* entityIterable;
+                  }
+                `;
+              } else {
+                yield itt`
+                  async function* resultEntityGenerator(signal: AbortSignal) {
+                    const entityIterable = lib.deserializeNdjsonEntities(
+                      stream,
+                      signal,
+                    ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
+                    if(configuration.validateIncomingEntity) {
+                      for await(const entity of entityIterable) {
+                        if(!validators.${isBodyTypeFunction}(entity)) {
+                          const lastError = validators.getLastValidationError();
+                          throw new lib.ClientResponseEntityValidationFailed(
+                            lastError.path,
+                            lastError.rule,
+                          );
+                        }
+                        yield entity;
+                      }
+                    }
+                    else {
+                      yield* entityIterable;
+                    }
+                  }
+                `;
+              }
+
+              returnArguments.push(`resultEntityGenerator`);
+              break;
+            }
+
+            case "application/json": {
+              const bodySchemaId = bodyModel.schemaId;
+              const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
+              const isBodyTypeFunction = getIsBodyFunction(names, bodyModel);
+
+              yield itt`
+                const resultEntity = await lib.deserializeJsonEntity(
+                  stream
+                ) as ${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`};
+  
+              `;
+
+              if (isBodyTypeFunction != null) {
+                yield itt`
+                  if(configuration.validateIncomingEntity) {
+                    if(!validators.${isBodyTypeFunction}(resultEntity)) {
                       const lastError = validators.getLastValidationError();
                       throw new lib.ClientResponseEntityValidationFailed(
                         lastError.path,
                         lastError.rule,
                       );
                     }
-                    return entity;
-                  };
-                  if(configuration.validateIncomingBody) {
-                    entities = lib.mapAsyncIterable(entities, mapAssertEntity);
                   }
-                  return entities;
-                `
-                }
+                `;
               }
-            `;
 
-            returnArguments.push(`resultBody`);
-            break;
-          }
+              returnArguments.push(`resultEntity`);
+              break;
+            }
 
-          case "application/json": {
-            const bodySchemaId = bodyModel.schemaId;
-            const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
-            const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
+            case "text/plain": {
+              const bodySchemaId = bodyModel.schemaId;
+              const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
+              const isBodyTypeFunction = getIsBodyFunction(names, bodyModel);
+              const parseBodyFunction = getParseBodyFunction(names, bodyModel);
 
-            yield itt`
-              let resultBody = lib.deserializeJsonEntity(
-                stream
-              ) as Promise<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
+              yield itt`
+                const resultText = await lib.deserializeTextValue(stream);
+                const resultEntity = ${
+                  parseBodyFunction == null
+                    ? "textValue"
+                    : `parsers.${parseBodyFunction}(resultText)`
+                } as ${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`};
+              `;
 
-              if(configuration.validateIncomingBody) {
-                ${
-                  isBodyTypeFunction == null
-                    ? ""
-                    : itt`
-                    const mapAssertEntity = (entity: unknown) => {
-                      if(!validators.${isBodyTypeFunction}(entity)) {
-                        const lastError = validators.getLastValidationError();
-                        throw new lib.ClientResponseEntityValidationFailed(
-                          lastError.path,
-                          lastError.rule,
-                        );
-                      }
-                      return entity;
-                    };
-                  `
-                }
-                resultBody = await lib.mapPromise(resultBody, mapAssertEntity);
+              if (isBodyTypeFunction != null) {
+                yield itt`
+                  if(configuration.validateIncomingEntity) {
+                    if(!validators.${isBodyTypeFunction}(resultEntity)) {
+                      const lastError = validators.getLastValidationError();
+                      throw new lib.ClientResponseEntityValidationFailed(
+                        lastError.path,
+                        lastError.rule,
+                      );
+                    }
+                  }
+                `;
               }
-            `;
 
-            returnArguments.push(`resultBody`);
-            break;
-          }
+              returnArguments.push(`resultEntity`);
+              break;
+            }
 
-          case "text/plain": {
-            const bodySchemaId = bodyModel.schemaId;
-            const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
-            const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
-            const parseBodyFunction = bodyTypeName == null ? bodyTypeName : "parse" + bodyTypeName;
-
-            yield itt`
-              const textValue = lib.deserializeTextValue(stream);
-              let resultBody = ${
-                parseBodyFunction == null
-                  ? "textValue"
-                  : `lib.mapPromise(textValue, parsers.${parseBodyFunction})`
-              } as Promise<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;;
-            
-              if(configuration.validateIncomingBody) {
-                ${
-                  isBodyTypeFunction == null
-                    ? ""
-                    : itt`
-                    const mapAssertEntity = (entity: unknown) => {
-                      if(!validators.${isBodyTypeFunction}(entity)) {
-                        const lastError = validators.getLastValidationError();
-                        throw new lib.ClientResponseEntityValidationFailed(
-                          lastError.path,
-                          lastError.rule,
-                        );
-                      }
-                      return entity;
-                    };
-                  `
-                }
-                resultBody = await lib.mapPromise(resultBody, mapAssertEntity);
-              }
-            `;
-            returnArguments.push(`resultBody`);
-            break;
-          }
-
-          default: {
-            returnArguments.push(`stream`);
+            default: {
+              returnArguments.push(`stream`);
+            }
           }
         }
       }
-    }
 
-    switch (returnArguments.length) {
-      case 0: {
-        yield itt`
-          return;
-        `;
-        break;
-      }
+      switch (returnArguments.length) {
+        case 0: {
+          yield itt`
+            return;
+          `;
+          break;
+        }
 
-      case 1: {
-        const [returnArgument] = returnArguments as [string];
-        yield itt`
-          return ${returnArgument};
-        `;
-        break;
-      }
+        case 1: {
+          const [returnArgument] = returnArguments as [string];
+          yield itt`
+            return ${returnArgument};
+          `;
+          break;
+        }
 
-      default: {
-        yield itt`
-          return [${returnArguments.map((arg) => `${arg},\n`).join("")}];
-        `;
-        break;
+        default: {
+          yield itt`
+            return [${returnArguments.map((arg) => `${arg},\n`).join("")}];
+          `;
+          break;
+        }
       }
     }
   }

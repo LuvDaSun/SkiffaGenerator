@@ -33,9 +33,9 @@ export function* generateClientTsCode(
   yield itt`
     export interface ClientConfiguration {
       baseUrl?: URL;
-      validateIncomingBody?: boolean;
+      validateIncomingEntity?: boolean;
       validateIncomingParameters?: boolean;
-      validateOutgoingBody?: boolean;
+      validateOutgoingEntity?: boolean;
       validateOutgoingParameters?: boolean;
       ${generateCredentialFields()}
     }

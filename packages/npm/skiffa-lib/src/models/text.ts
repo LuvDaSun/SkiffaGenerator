@@ -36,10 +36,12 @@ export type IncomingTextContainer = {
 
 //#region serialization
 
-export async function* serializeTextValue(value: string): AsyncIterable<Uint8Array> {
+export async function* serializeTextValue(
+  value: string | Promise<string>,
+): AsyncIterable<Uint8Array> {
   const encoder = new TextEncoder();
 
-  yield encoder.encode(value);
+  yield encoder.encode(await value);
 }
 
 export async function* serializeTextLines(lines: AsyncIterable<string>): AsyncIterable<Uint8Array> {

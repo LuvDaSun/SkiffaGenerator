@@ -37,10 +37,12 @@ export type IncomingJsonContainer<T> = {
 
 //#region serialization
 
-export async function* serializeJsonEntity(entity: unknown): AsyncIterable<Uint8Array> {
+export async function* serializeJsonEntity(
+  entity: unknown | Promise<unknown>,
+): AsyncIterable<Uint8Array> {
   const encoder = new TextEncoder();
 
-  yield encoder.encode(JSON.stringify(entity));
+  yield encoder.encode(JSON.stringify(await entity));
 }
 
 export async function deserializeJsonEntity(
