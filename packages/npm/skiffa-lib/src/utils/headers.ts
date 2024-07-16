@@ -22,7 +22,7 @@ export function parseBasicAuthorizationHeader(values: Iterable<string>) {
   if (encoded == null) return;
 
   const decoded = Base64.decode(encoded);
-  const [id, secret] = decoded.split(":", 2);
+  const [id, secret] = decoded.split(":", 2) as [string, string];
 
   return { id, secret };
 }
