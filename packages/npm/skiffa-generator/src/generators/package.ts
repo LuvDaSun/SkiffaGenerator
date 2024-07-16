@@ -4,6 +4,7 @@ import fs from "fs";
 import { Router } from "goodrouter";
 import path from "path";
 import { NestedText, flattenNestedText, itt, splitIterableText } from "../utils.js";
+import { generateAcceptTsCode } from "./files/accept-ts.js";
 import { generateBrowserTsCode } from "./files/browser-ts.js";
 import { generateBuildJsCode } from "./files/build-js.js";
 import { generateCleanJsCode } from "./files/clean-js.js";
@@ -15,7 +16,6 @@ import { generateParametersTsCode } from "./files/parameters-ts.js";
 import { generateRollupConfigJsCode } from "./files/rollup-config-js.js";
 import { generateRouterTsCode } from "./files/router-ts.js";
 import { generateServerTsCode } from "./files/server-ts.js";
-import { generateSharedTsCode } from "./files/shared-ts.js";
 import { generateTsconfigJsonData } from "./files/tsconfig-json.js";
 
 export interface PackageConfiguration {
@@ -100,8 +100,8 @@ export function generatePackage(
   }
 
   {
-    const content = generateSharedTsCode(apiModel, responseTypes);
-    const filePath = path.join(packageDirectoryPath, "src", "shared.ts");
+    const content = generateAcceptTsCode(apiModel, responseTypes);
+    const filePath = path.join(packageDirectoryPath, "src", "accept.ts");
     writeContentToFile(filePath, content);
   }
 

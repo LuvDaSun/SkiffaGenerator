@@ -165,15 +165,9 @@ function* generateOperationTest(
   }
 
   let statusCode = 0;
-  // we don't want 1xx or 3xx status codes
+  // only 200 - 300
   for (statusCode of operationResultModel.statusCodes) {
     if (statusCode >= 200 && statusCode < 300) {
-      break;
-    }
-    if (statusCode >= 400 && statusCode < 500) {
-      break;
-    }
-    if (statusCode >= 500 && statusCode < 600) {
       break;
     }
   }

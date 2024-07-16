@@ -29,7 +29,7 @@ export function* generateServerTsCode(
     import * as types from "./types.js";
     import * as validators from "./validators.js";
     import * as parsers from "./parsers.js";
-    import * as shared from "./shared.js";
+    import * as accept from "./accept.js";
     import * as lib from "@skiffa/lib";
     import { router } from "./router.js";
   `;

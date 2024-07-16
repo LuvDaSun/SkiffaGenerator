@@ -1,3 +1,4 @@
+export * from "./files/accept-ts.js";
 export * from "./files/browser-ts.js";
 export * from "./files/build-js.js";
 export * from "./files/clean-js.js";
@@ -9,5 +10,4 @@ export * from "./files/parameters-ts.js";
 export * from "./files/rollup-config-js.js";
 export * from "./files/router-ts.js";
 export * from "./files/server-ts.js";
-export * from "./files/shared-ts.js";
 export * from "./files/tsconfig-json.js";

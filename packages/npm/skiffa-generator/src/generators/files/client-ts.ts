@@ -25,12 +25,12 @@ export function* generateClientTsCode(
     import * as types from "./types.js";
     import * as validators from "./validators.js";
     import * as parsers from "./parsers.js";
-    import * as shared from "./shared.js";
+    import * as accept from "./accept.js";
     import { router } from "./router.js";
   `;
 
   yield itt`
-    export const defaultClientConfiguration: client.ClientConfiguration = {
+    export const defaultClientConfiguration: ClientConfiguration = {
       baseUrl: ${baseUrl == null ? "undefined" : JSON.stringify(baseUrl.toString())},
       validateIncomingEntity: true,
       validateIncomingParameters: true,

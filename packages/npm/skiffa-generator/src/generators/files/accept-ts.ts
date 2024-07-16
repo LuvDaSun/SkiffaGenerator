@@ -3,7 +3,7 @@ import { packageInfo } from "../../utils.js";
 import { generateOperationAcceptType } from "../types.js";
 import { generateOperationAcceptConstant } from "../variables/operation-accept.js";
 
-export function* generateSharedTsCode(
+export function* generateAcceptTsCode(
   apiModel: skiffaCore.ApiContainer,
   responseTypes: Array<string>,
 ) {

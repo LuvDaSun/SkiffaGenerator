@@ -16,7 +16,7 @@ export function* generateBrowserTsCode() {
     export * as parsers from "./parsers.js";
     export * as parameters from "./parameters.js";
     export * as mocks from "./mocks.js";
-    export * as shared from "./shared.js";
+    export * as accept from "./accept.js";
     export * as client from "./client.js";
 
     export { router } from "./router.js";

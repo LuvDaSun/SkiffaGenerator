@@ -532,7 +532,7 @@ export function* generateClientOperationFunction(
         requestHeaders.append("set-cookie", cookie);
       }
 
-      requestHeaders.append("accept", lib.stringifyAcceptHeader(shared.${operationAcceptConstName}));
+      requestHeaders.append("accept", lib.stringifyAcceptHeader(accept.${operationAcceptConstName}));
 
       const url = new URL(path, configuration.baseUrl);
       let body: BodyInit | null;  

@@ -103,8 +103,8 @@ function* generateBody(
   */
   yield itt`
     const accepts = [
-      ...lib.intersect(responseAccepts, shared.${operationAcceptConstName}),
-    ] as shared.${operationAcceptTypeName}[];
+      ...lib.intersect(responseAccepts, accept.${operationAcceptConstName}),
+    ] as accept.${operationAcceptTypeName}[];
   `;
 
   /**
