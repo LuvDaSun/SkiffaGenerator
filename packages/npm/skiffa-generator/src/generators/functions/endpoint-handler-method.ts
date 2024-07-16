@@ -468,7 +468,7 @@ function* generateRequestContentTypeCodeBody(
               serverIncomingRequest.stream
             ) as Promise<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
             if(validateIncomingEntity) {
-              entity = lib.mapPromise(entity, mapAssertEntity);
+              entity = lib.mapPromisable(entity, mapAssertEntity);
             }
             return entity;
           },
@@ -722,7 +722,7 @@ function* generateOperationResultContentTypeBody(
             else if("entity" in outgoingResponse) {
               let entity = outgoingResponse.entity();
               if(validateOutgoingEntity) {
-                entity = lib.mapPromise(entity, mapAssertEntity);
+                entity = lib.mapPromisable(entity, mapAssertEntity);
               }
               return lib.serializeJsonEntity(entity);
             }
