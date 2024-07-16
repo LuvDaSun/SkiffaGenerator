@@ -1,7 +1,8 @@
+import { mapIterable } from "@jns42/generator";
 import * as skiffaCore from "@skiffa/core";
 import assert from "assert";
 import { packageInfo } from "../../utils.js";
-import { itt } from "../../utils/iterable-text-template.js";
+import { itt, NestedText } from "../../utils/iterable-text-template.js";
 import {
   isBodyModelMockable,
   isOperationModelMockable,
@@ -49,87 +50,18 @@ export function* generateClientServerTestTsCode(
 
   for (const pathModel of apiModel.paths) {
     for (const operationModel of pathModel.operations) {
-      if (!isOperationModelMockable(operationModel, mockables)) {
+      if (!isOperationModelMockable(operationModel, mockables, requestTypes, responseTypes)) {
         continue;
       }
 
-      const requestBodyModels = selectBodies(operationModel, requestTypes);
-      if (requestBodyModels.length === 0) {
-        for (const operationResultModel of operationModel.operationResults) {
-          if (!isOperationResultModelMockable(operationResultModel, mockables)) {
-            continue;
-          }
-
-          const responseBodyModels = selectBodies(operationResultModel, responseTypes);
-
-          if (responseBodyModels.length === 0) {
-            yield generateOperationTest(
-              names,
-              mockables,
-              apiModel,
-              operationModel,
-              null,
-              operationResultModel,
-              null,
-            );
-          }
-          for (const responseBodyModel of responseBodyModels) {
-            if (!isBodyModelMockable(responseBodyModel, mockables)) {
-              continue;
-            }
-
-            yield generateOperationTest(
-              names,
-              mockables,
-              apiModel,
-              operationModel,
-              null,
-              operationResultModel,
-              responseBodyModel,
-            );
-          }
-        }
-      }
-      for (const requestBodyModel of requestBodyModels) {
-        if (!isBodyModelMockable(requestBodyModel, mockables)) {
-          continue;
-        }
-
-        for (const operationResultModel of operationModel.operationResults) {
-          if (!isOperationResultModelMockable(operationResultModel, mockables)) {
-            continue;
-          }
-
-          const responseBodyModels = selectBodies(operationResultModel, responseTypes);
-
-          if (responseBodyModels.length === 0) {
-            yield generateOperationTest(
-              names,
-              mockables,
-              apiModel,
-              operationModel,
-              requestBodyModel,
-              operationResultModel,
-              null,
-            );
-          }
-          for (const responseBodyModel of responseBodyModels) {
-            if (!isBodyModelMockable(responseBodyModel, mockables)) {
-              continue;
-            }
-
-            yield generateOperationTest(
-              names,
-              mockables,
-              apiModel,
-              operationModel,
-              requestBodyModel,
-              operationResultModel,
-              responseBodyModel,
-            );
-          }
-        }
-      }
+      yield generateOperationTest(
+        names,
+        mockables,
+        apiModel,
+        operationModel,
+        requestTypes,
+        responseTypes,
+      );
     }
   }
 }
@@ -139,10 +71,14 @@ function* generateOperationTest(
   mockables: Set<string>,
   apiModel: skiffaCore.ApiContainer,
   operationModel: skiffaCore.OperationContainer,
-  requestBodyModel: skiffaCore.BodyContainer | null,
-  operationResultModel: skiffaCore.OperationResultContainer,
-  responseBodyModel: skiffaCore.BodyContainer | null,
+  requestTypes: string[],
+  responseTypes: string[],
 ) {
+  const requestBodyModels = selectBodies(operationModel, requestTypes);
+  const operationResultModels = operationModel.operationResults.filter((operationResultModel) =>
+    operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 300),
+  );
+
   const authenticationNames = new Set(
     operationModel.authenticationRequirements.flatMap((group) =>
       group.requirements.map((requirement) => requirement.authenticationName),
@@ -154,143 +90,216 @@ function* generateOperationTest(
 
   const registerOperationHandlerMethodName = getRegisterOperationHandlerName(operationModel);
 
-  let testNameParts = new Array<string>();
-  testNameParts.push(operationModel.name);
-  if (requestBodyModel != null) {
-    testNameParts.push(requestBodyModel.contentType);
-  }
-  testNameParts.push(operationResultModel.statusKind);
-  if (responseBodyModel != null) {
-    testNameParts.push(responseBodyModel.contentType);
-  }
+  const hasParametersArgument =
+    operationModel.pathParameters.length > 0 ||
+    operationModel.queryParameters.length > 0 ||
+    operationModel.headerParameters.length > 0 ||
+    operationModel.cookieParameters.length > 0;
+  const hasContentTypeArgument = requestBodyModels.length > 1;
+  const hasEntityArgument = requestBodyModels.length > 0;
 
-  let statusCode = 0;
-  // only 200 - 300
-  for (statusCode of operationResultModel.statusCodes) {
-    if (statusCode >= 200 && statusCode < 300) {
-      break;
+  const hasStatusReturn = operationResultModels.length > 1;
+  const hasParametersReturn = operationResultModels.some(
+    (model) => model.headerParameters.length > 0,
+  );
+  const hasContentTypeReturn = operationResultModels.some(
+    (model) => selectBodies(model, responseTypes).length > 1,
+  );
+  const hasEntityReturn = operationResultModels.some(
+    (model) => selectBodies(model, responseTypes).length > 0,
+  );
+
+  if (requestBodyModels.length === 0) {
+    for (const operationResultModel of operationResultModels) {
+      if (!isOperationResultModelMockable(operationResultModel, mockables, responseTypes)) {
+        continue;
+      }
+
+      const responseBodyModels = selectBodies(operationResultModel, responseTypes);
+
+      if (responseBodyModels.length === 0) {
+        yield generateOperationResultTest(null, operationResultModel, null);
+      }
+      for (const responseBodyModel of responseBodyModels) {
+        if (!isBodyModelMockable(responseBodyModel, mockables)) {
+          continue;
+        }
+
+        yield generateOperationResultTest(null, operationResultModel, responseBodyModel);
+      }
+    }
+  }
+  for (const requestBodyModel of requestBodyModels) {
+    if (!isBodyModelMockable(requestBodyModel, mockables)) {
+      continue;
+    }
+
+    for (const operationResultModel of operationModel.operationResults) {
+      if (!isOperationResultModelMockable(operationResultModel, mockables, responseTypes)) {
+        continue;
+      }
+
+      const responseBodyModels = selectBodies(operationResultModel, responseTypes);
+
+      if (responseBodyModels.length === 0) {
+        yield generateOperationResultTest(requestBodyModel, operationResultModel, null);
+      }
+      for (const responseBodyModel of responseBodyModels) {
+        if (!isBodyModelMockable(responseBodyModel, mockables)) {
+          continue;
+        }
+
+        yield generateOperationResultTest(
+          requestBodyModel,
+          operationResultModel,
+          responseBodyModel,
+        );
+      }
     }
   }
 
-  yield itt`
+  function* generateOperationResultTest(
+    requestBodyModel: skiffaCore.BodyContainer | null,
+    operationResultModel: skiffaCore.OperationResultContainer,
+    responseBodyModel: skiffaCore.BodyContainer | null,
+  ) {
+    let testNameParts = new Array<string>();
+    testNameParts.push(operationModel.name);
+    if (requestBodyModel != null) {
+      testNameParts.push(requestBodyModel.contentType);
+    }
+    testNameParts.push(operationResultModel.statusKind);
+    if (responseBodyModel != null) {
+      testNameParts.push(responseBodyModel.contentType);
+    }
+
+    let statusCode = 0;
+    // only 200 - 300
+    for (statusCode of operationResultModel.statusCodes) {
+      if (statusCode >= 200 && statusCode < 300) {
+        break;
+      }
+    }
+
+    yield itt`
     test(${JSON.stringify(testNameParts.join(" "))}, async () => {
       ${generateTestBody()}
     });
   `;
 
-  function* generateTestBody() {
-    yield itt`
-      const apiServer = new server.Server<ApiServerAuthentication>({
-        validateIncomingParameters: false,
-        validateIncomingEntity: false,
-        validateOutgoingParameters: false,
-        validateOutgoingEntity: false,
-      });
-      apiServer.${registerOperationHandlerMethodName}(async (incomingRequest, authentication, accepts) => {
-        ${generateServerOperationHandler()}
-      });
-    `;
-    for (const authenticationModel of authenticationModels) {
-      const registerAuthenticationHandlerMethodName =
-        getRegisterAuthenticationHandlerName(authenticationModel);
+    function* generateTestBody() {
+      yield itt`
+        const apiServer = new server.Server<ApiServerAuthentication>({
+          validateIncomingParameters: false,
+          validateIncomingEntity: false,
+          validateOutgoingParameters: false,
+          validateOutgoingEntity: false,
+        });
+        apiServer.${registerOperationHandlerMethodName}(async (incomingRequest, authentication, accepts) => {
+          ${generateServerOperationHandler()}
+        });
+      `;
+      for (const authenticationModel of authenticationModels) {
+        const registerAuthenticationHandlerMethodName =
+          getRegisterAuthenticationHandlerName(authenticationModel);
 
-      switch (authenticationModel.type) {
-        case "apiKey":
-          yield itt`
+        switch (authenticationModel.type) {
+          case "apiKey":
+            yield itt`
             apiServer.${registerAuthenticationHandlerMethodName}(
               async (credential) => credential === "super-secret-api-key"
             )
           `;
-          break;
-        case "http":
-          switch (authenticationModel.scheme) {
-            case "basic":
-              yield itt`
+            break;
+          case "http":
+            switch (authenticationModel.scheme) {
+              case "basic":
+                yield itt`
                 apiServer.${registerAuthenticationHandlerMethodName}(
                   async (credential) =>
                     credential.id === "elmerbulthuis" && credential.secret === "welkom123"
                 )
               `;
-              break;
+                break;
 
-            case "bearer":
-              yield itt`
+              case "bearer":
+                yield itt`
                 apiServer.${registerAuthenticationHandlerMethodName}(
                   async (credential) => credential === "super-secret-api-key"
                 )
               `;
-              break;
+                break;
 
-            default: {
-              throw "impossible";
+              default: {
+                throw "impossible";
+              }
             }
-          }
-          break;
+            break;
 
-        default: {
-          throw "impossible";
+          default: {
+            throw "impossible";
+          }
         }
       }
-    }
-    yield itt`
-      let lastError: unknown;
-      await using listener = await lib.listen(apiServer, {});
-      const { port } = listener;
-      const baseUrl = new URL(\`http://localhost:\${port}\`);
-    `;
-    yield generateClientTest();
-  }
-
-  function* generateServerOperationHandler() {
-    for (const parameterModel of [
-      ...operationModel.cookieParameters,
-      ...operationModel.headerParameters,
-      ...operationModel.pathParameters,
-      ...operationModel.queryParameters,
-    ]) {
-      if (!isParameterModelMockable(parameterModel, mockables)) {
-        continue;
-      }
-
-      const validateFunctionName = getIsParameterFunction(names, parameterModel);
-      assert(validateFunctionName != null);
-
       yield itt`
+        let lastError: unknown;
+        await using listener = await lib.listen(apiServer, {});
+        const { port } = listener;
+        const baseUrl = new URL(\`http://localhost:\${port}\`);
+      `;
+      yield generateClientTest();
+    }
+
+    function* generateServerOperationHandler() {
+      for (const parameterModel of [
+        ...operationModel.cookieParameters,
+        ...operationModel.headerParameters,
+        ...operationModel.pathParameters,
+        ...operationModel.queryParameters,
+      ]) {
+        if (!isParameterModelMockable(parameterModel, mockables)) {
+          continue;
+        }
+
+        const validateFunctionName = getIsParameterFunction(names, parameterModel);
+        assert(validateFunctionName != null);
+
+        yield itt`
         {
           const parameterValue = incomingRequest.parameters.${getParameterMemberName(parameterModel)};
           const valid = validators.${validateFunctionName}(parameterValue);
           assert.equal(valid, true);
         }
       `;
-    }
+      }
 
-    if (requestBodyModel != null) {
-      yield itt`
+      if (requestBodyModel != null) {
+        yield itt`
         assert.equal(incomingRequest.contentType, ${JSON.stringify(requestBodyModel.contentType)})
       `;
 
-      switch (requestBodyModel.contentType) {
-        case "application/json": {
-          const validateFunctionName = getIsBodyFunction(names, requestBodyModel);
-          assert(validateFunctionName != null);
+        switch (requestBodyModel.contentType) {
+          case "application/json": {
+            const validateFunctionName = getIsBodyFunction(names, requestBodyModel);
+            assert(validateFunctionName != null);
 
-          yield itt`
+            yield itt`
               {
                 const entity = await incomingRequest.entity();
                 const valid = validators.${validateFunctionName}(entity);
                 assert.equal(valid, true);
               }
             `;
-          break;
+            break;
+          }
+
+          default:
+            throw new Error("unsupported content-type");
         }
-
-        default:
-          throw new Error("unsupported content-type");
       }
-    }
 
-    if (responseBodyModel == null) {
-      yield itt`
+      if (responseBodyModel == null) {
+        yield itt`
         return {
           status: ${JSON.stringify(statusCode)},
           parameters: {
@@ -299,15 +308,15 @@ function* generateOperationTest(
           contentType: null,
         }
       `;
-    } else {
-      switch (responseBodyModel.contentType) {
-        case "application/json": {
-          const mockFunctionName = getMockBodyFunction(names, responseBodyModel);
-          assert(mockFunctionName != null);
+      } else {
+        switch (responseBodyModel.contentType) {
+          case "application/json": {
+            const mockFunctionName = getMockBodyFunction(names, responseBodyModel);
+            assert(mockFunctionName != null);
 
-          const entityExpression = itt`mocks.${mockFunctionName}()`;
+            const entityExpression = itt`mocks.${mockFunctionName}()`;
 
-          yield itt`
+            yield itt`
             return {
               status: ${JSON.stringify(statusCode)},
               parameters: {
@@ -317,190 +326,225 @@ function* generateOperationTest(
               entity: async () => ${entityExpression},
             }
           `;
-          break;
-        }
+            break;
+          }
 
-        default:
-          throw new Error("unsupported content-type");
+          default:
+            throw new Error("unsupported content-type");
+        }
       }
     }
-  }
 
-  function* generateClientTest() {
-    const callMethodFunctionName = getOperationFunctionName(operationModel);
-    if (requestBodyModel == null) {
-      yield itt`
-        const operationResult = await client.${callMethodFunctionName}(
-          {
-            contentType: null,
-            parameters: {${generateRequestParametersMockBody()}},
-          },
-          {
-            baseUrl,
-            validateIncomingParameters: false,
-            validateIncomingEntity: false,
-            validateOutgoingParameters: false,
-            validateOutgoingEntity: false,
-            ${generateCredentialsMockContent()}
-          },
-    );
-      `;
-    } else {
-      switch (requestBodyModel.contentType) {
-        case "application/json": {
+    function* generateClientTest() {
+      const callMethodFunctionName = getOperationFunctionName(operationModel);
+      const functionArguments = new Array<NestedText>();
+      const returnArguments = new Array<NestedText>();
+
+      if (hasParametersArgument) {
+        functionArguments.push(itt`{${generateRequestParametersMockBody()}}`);
+      }
+
+      if (hasContentTypeArgument) {
+        functionArguments.push(JSON.stringify(requestBodyModel?.contentType ?? null));
+      }
+
+      if (hasEntityArgument) {
+        if (requestBodyModel == null) {
+          functionArguments.push("undefined");
+        } else {
           const mockFunctionName = getMockBodyFunction(names, requestBodyModel);
           assert(mockFunctionName != null);
 
-          const entityExpression = itt`mocks.${mockFunctionName}()`;
+          const entityExpression = `mocks.${mockFunctionName}()`;
+          functionArguments.push(entityExpression);
+        }
+      }
 
+      functionArguments.push(itt`
+        {
+          baseUrl,
+          validateIncomingParameters: false,
+          validateIncomingEntity: false,
+          validateOutgoingParameters: false,
+          validateOutgoingEntity: false,
+          ${generateCredentialsMockContent()}
+        }
+      `);
+
+      if (hasStatusReturn) {
+        returnArguments.push("resultStatus");
+      }
+
+      if (hasParametersArgument) {
+        returnArguments.push("resultParameters");
+      }
+
+      if (hasContentTypeReturn) {
+        returnArguments.push("resultContentType");
+      }
+
+      if (hasEntityReturn) {
+        returnArguments.push("resultEntity");
+      }
+
+      switch (returnArguments.length) {
+        case 0: {
           yield itt`
-            const operationResult = await client.${callMethodFunctionName}(
-              {
-                contentType: ${JSON.stringify(requestBodyModel.contentType)},
-                parameters: {${generateRequestParametersMockBody()}},
-                entity: async () => ${entityExpression},
-              },
-              {
-                baseUrl,
-                validateIncomingParameters: false,
-                validateIncomingEntity: false,
-                validateOutgoingParameters: false,
-                validateOutgoingEntity: false,
-                ${generateCredentialsMockContent()}
-              },
+            await client.${callMethodFunctionName}(
+              ${mapIterable(functionArguments, (item) => itt`${item},\n`)}
             );
           `;
-
           break;
         }
-
-        default:
-          throw new Error("unsupported content-type");
-      }
-    }
-
-    yield itt`
-      assert.ifError(lastError);
-    `;
-
-    yield itt`
-      lib.expectStatus(operationResult, ${JSON.stringify(statusCode)});
-    `;
-
-    for (const parameterModel of operationResultModel.headerParameters) {
-      if (!isParameterModelMockable(parameterModel, mockables)) {
-        continue;
-      }
-
-      const validateFunctionName = getIsParameterFunction(names, parameterModel);
-      assert(validateFunctionName != null);
-
-      yield itt`
-        {
-          const parameterValue = operationResult.parameters.${getParameterMemberName(parameterModel)};
-          const valid = validators.${validateFunctionName}(parameterValue);
-          assert.equal(valid, true);
+        case 1: {
+          const [returnArgument] = returnArguments as [NestedText];
+          yield itt`
+            const ${returnArgument} = await client.${callMethodFunctionName}(
+              ${mapIterable(functionArguments, (item) => itt`${item},\n`)}
+            );
+          `;
+          break;
         }
-      `;
-    }
+        default: {
+          yield itt`
+            const [
+              ${mapIterable(returnArguments, (item) => itt`${item},\n`)}
+            ] = await client.${callMethodFunctionName}(
+              ${mapIterable(functionArguments, (item) => itt`${item},\n`)}
+            );
+          `;
+          break;
+        }
+      }
 
-    if (responseBodyModel != null) {
       yield itt`
-        assert(operationResult.contentType === ${JSON.stringify(responseBodyModel.contentType)})
+        assert.ifError(lastError);
       `;
 
-      switch (responseBodyModel.contentType) {
-        case "application/json": {
+      if (hasStatusReturn) {
+        yield itt`
+          assert.equal(resultStatus, ${JSON.stringify(statusCode)});
+        `;
+      }
+
+      if (hasParametersReturn) {
+        for (const parameterModel of operationResultModel.headerParameters) {
+          if (!isParameterModelMockable(parameterModel, mockables)) {
+            continue;
+          }
+
+          const validateFunctionName = getIsParameterFunction(names, parameterModel);
+          assert(validateFunctionName != null);
+
+          yield itt`
+            {
+              const parameterValue = resultParameters.${getParameterMemberName(parameterModel)};
+              const valid = validators.${validateFunctionName}(parameterValue);
+              assert.equal(valid, true);
+            }
+          `;
+        }
+      }
+
+      if (hasContentTypeReturn) {
+        assert(responseBodyModel != null);
+
+        yield itt`
+          assert(resultContentType === ${JSON.stringify(responseBodyModel.contentType)})
+        `;
+      }
+
+      if (hasEntityReturn) {
+        if (responseBodyModel == null) {
+          yield itt`
+            assert.equal(resultEntity, undefined);
+          `;
+        } else {
           const validateFunctionName = getIsBodyFunction(names, responseBodyModel);
           if (validateFunctionName != null) {
             yield itt`
               { 
-                const entity = await operationResult.entity();
-                const valid = validators.${validateFunctionName}(entity);
+                const valid = validators.${validateFunctionName}(resultEntity);
                 assert.equal(valid, true);
               }
             `;
           }
-          break;
         }
-
-        default:
-          throw new Error("unsupported content-type");
       }
     }
-  }
 
-  function* generateCredentialsMockContent() {
-    for (const authenticationModel of authenticationModels) {
-      switch (authenticationModel.type) {
-        case "apiKey":
-          yield itt`
+    function* generateCredentialsMockContent() {
+      for (const authenticationModel of authenticationModels) {
+        switch (authenticationModel.type) {
+          case "apiKey":
+            yield itt`
             ${getAuthenticationMemberName(authenticationModel)}: "super-secret",
           `;
-          break;
+            break;
 
-        case "http":
-          switch (authenticationModel.scheme) {
-            case "basic":
-              yield itt`
+          case "http":
+            switch (authenticationModel.scheme) {
+              case "basic":
+                yield itt`
                 ${getAuthenticationMemberName(authenticationModel)}: {
                   id: "elmerbulthuis",
                   secret: "welkom123",
                 },
               `;
-              break;
+                break;
 
-            case "bearer":
-              yield itt`
+              case "bearer":
+                yield itt`
                 ${getAuthenticationMemberName(authenticationModel)}: "super-secret",
               `;
-              break;
+                break;
 
-            default: {
-              throw "impossible";
+              default: {
+                throw "impossible";
+              }
             }
-          }
-          break;
+            break;
 
-        default: {
-          throw "impossible";
+          default: {
+            throw "impossible";
+          }
         }
       }
     }
-  }
 
-  function* generateRequestParametersMockBody() {
-    for (const parameterModel of [
-      ...operationModel.cookieParameters,
-      ...operationModel.headerParameters,
-      ...operationModel.pathParameters,
-      ...operationModel.queryParameters,
-    ]) {
-      if (!isParameterModelMockable(parameterModel, mockables)) {
-        continue;
-      }
+    function* generateRequestParametersMockBody() {
+      for (const parameterModel of [
+        ...operationModel.cookieParameters,
+        ...operationModel.headerParameters,
+        ...operationModel.pathParameters,
+        ...operationModel.queryParameters,
+      ]) {
+        if (!isParameterModelMockable(parameterModel, mockables)) {
+          continue;
+        }
 
-      const mockFunctionName = getMockParameterFunction(names, parameterModel);
-      assert(mockFunctionName != null);
+        const mockFunctionName = getMockParameterFunction(names, parameterModel);
+        assert(mockFunctionName != null);
 
-      yield itt`
+        yield itt`
         ${getParameterMemberName(parameterModel)}: mocks.${mockFunctionName}(),
       `;
+      }
     }
-  }
 
-  function* generateResponseParametersMockBody() {
-    for (const parameterModel of operationResultModel.headerParameters) {
-      if (!isParameterModelMockable(parameterModel, mockables)) {
-        continue;
-      }
+    function* generateResponseParametersMockBody() {
+      for (const parameterModel of operationResultModel.headerParameters) {
+        if (!isParameterModelMockable(parameterModel, mockables)) {
+          continue;
+        }
 
-      const mockFunctionName = getMockParameterFunction(names, parameterModel);
-      assert(mockFunctionName != null);
+        const mockFunctionName = getMockParameterFunction(names, parameterModel);
+        assert(mockFunctionName != null);
 
-      yield itt`
+        yield itt`
         ${getParameterMemberName(parameterModel)}: mocks.${mockFunctionName}(),
       `;
+      }
     }
   }
 }
