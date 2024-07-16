@@ -9,7 +9,6 @@ import { generateBuildJsCode } from "./files/build-js.js";
 import { generateCleanJsCode } from "./files/clean-js.js";
 import { generateClientServerTestTsCode } from "./files/client-server-test-ts.js";
 import { generateClientTsCode } from "./files/client-ts.js";
-import { generateFacadeTsCode } from "./files/facade-ts.js";
 import { generateMainTsCode } from "./files/main-ts.js";
 import { generatePackageJsonData } from "./files/package-json.js";
 import { generateParametersTsCode } from "./files/parameters-ts.js";
@@ -119,13 +118,7 @@ export function generatePackage(
   }
 
   {
-    const content = generateClientTsCode(names, router, apiModel, requestTypes, responseTypes);
-    const filePath = path.join(packageDirectoryPath, "src", "client.ts");
-    writeContentToFile(filePath, content);
-  }
-
-  {
-    const content = generateFacadeTsCode(
+    const content = generateClientTsCode(
       names,
       router,
       apiModel,
@@ -133,7 +126,7 @@ export function generatePackage(
       responseTypes,
       baseUrl,
     );
-    const filePath = path.join(packageDirectoryPath, "src", "facade.ts");
+    const filePath = path.join(packageDirectoryPath, "src", "client.ts");
     writeContentToFile(filePath, content);
   }
 

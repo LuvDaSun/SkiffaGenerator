@@ -1,6 +1,5 @@
 export * from "./functions/client-operation.js";
 export * from "./functions/endpoint-handler-method.js";
-export * from "./functions/facade-operation.js";
 export * from "./functions/is-authentication.js";
 export * from "./functions/is-request-parameters.js";
 export * from "./functions/is-response-parameters.js";

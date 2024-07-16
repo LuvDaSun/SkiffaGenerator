@@ -2,13 +2,11 @@ import * as skiffaCore from "@skiffa/core";
 import { Router } from "goodrouter";
 import { packageInfo } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
-import { generateClientOperationFunction } from "../functions/client-operation.js";
+import { generateClientOperationFunction } from "../functions.js";
 import { getAuthenticationCredentialTypeName, getAuthenticationMemberName } from "../names.js";
 import {
   generateAuthenticationCredentialType,
   generateOperationCredentialsType,
-  generateOperationIncomingResponseType,
-  generateOperationOutgoingRequestType,
 } from "../types.js";
 
 export function* generateClientTsCode(
@@ -17,6 +15,7 @@ export function* generateClientTsCode(
   apiModel: skiffaCore.ApiContainer,
   requestTypes: Array<string>,
   responseTypes: Array<string>,
+  baseUrl: URL | undefined,
 ) {
   yield skiffaCore.banner("//", `v${packageInfo.version}`);
 
@@ -31,15 +30,24 @@ export function* generateClientTsCode(
   `;
 
   yield itt`
-    export interface ClientConfiguration {
-      baseUrl?: URL;
-      validateIncomingEntity?: boolean;
-      validateIncomingParameters?: boolean;
-      validateOutgoingEntity?: boolean;
-      validateOutgoingParameters?: boolean;
-      ${generateCredentialFields()}
-    }
+    export const defaultClientConfiguration: client.ClientConfiguration = {
+      baseUrl: ${baseUrl == null ? "undefined" : JSON.stringify(baseUrl.toString())},
+      validateIncomingEntity: true,
+      validateIncomingParameters: true,
+      validateOutgoingEntity: false,
+      validateOutgoingParameters: false,
+    };
   `;
+  yield itt`
+  export interface ClientConfiguration {
+    baseUrl?: URL;
+    validateIncomingEntity?: boolean;
+    validateIncomingParameters?: boolean;
+    validateOutgoingEntity?: boolean;
+    validateOutgoingParameters?: boolean;
+    ${generateCredentialFields()}
+  }
+`;
 
   function* generateCredentialFields() {
     for (const authenticationModel of apiModel.authentication) {
@@ -47,11 +55,10 @@ export function* generateClientTsCode(
       const typeName = getAuthenticationCredentialTypeName(authenticationModel);
 
       yield `
-        ${memberName}?: ${typeName};
-      `;
+      ${memberName}?: ${typeName};
+    `;
     }
   }
-
   for (const authenticationModel of apiModel.authentication) {
     yield* generateAuthenticationCredentialType(authenticationModel);
   }
@@ -67,8 +74,6 @@ export function* generateClientTsCode(
         responseTypes,
       );
       yield* generateOperationCredentialsType(apiModel, operationModel);
-      yield* generateOperationOutgoingRequestType(names, operationModel, requestTypes);
-      yield* generateOperationIncomingResponseType(names, operationModel, responseTypes);
     }
   }
 }
