@@ -10,8 +10,6 @@ import {
   generateOperationAuthenticationType,
   generateOperationHandlerType,
   generateOperationHandlersType,
-  generateOperationIncomingRequestType,
-  generateOperationOutgoingResponseType,
   generateServerAuthenticationType,
 } from "../types.js";
 
@@ -64,9 +62,6 @@ export function* generateServerTsCode(
 
       yield* generateIsAuthenticationFunction(apiModel, operationModel);
       yield* generateOperationAuthenticationType(apiModel, operationModel);
-
-      yield* generateOperationIncomingRequestType(names, operationModel, requestTypes);
-      yield* generateOperationOutgoingResponseType(names, operationModel, responseTypes);
     }
   }
 }
