@@ -144,25 +144,27 @@ export function* generateClientOperationFunction(
   }
 
   function* generateFunctionImplementation() {
-    const functionArguments = new Array<string>();
+    const functionArguments = new Array<[string, string]>();
 
     if (hasParametersArgument) {
       const parametersTypeName = getRequestParametersTypeName(operationModel);
-      functionArguments.push(`parameters: $parameters.${parametersTypeName}`);
+      functionArguments.push(["parameters", `$parameters.${parametersTypeName}`]);
     }
 
     if (hasContentTypeArgument) {
-      functionArguments.push(
-        `contentType: ${requestBodyModels
+      functionArguments.push([
+        "contentType",
+        requestBodyModels
           .map((model) => model.contentType)
           .map((value) => JSON.stringify(value))
-          .join(" | ")}`,
-      );
+          .join(" | "),
+      ]);
     }
 
     if (hasEntityArgument) {
-      functionArguments.push(
-        `entity: ${requestBodyModels
+      functionArguments.push([
+        "entity",
+        requestBodyModels
           .map((requestBodyModel) => {
             const requestEntityTypeName =
               requestBodyModel?.schemaId == null ? null : names[requestBodyModel.schemaId];
@@ -173,20 +175,21 @@ export function* generateClientOperationFunction(
                 ? "unknown"
                 : `types.${requestEntityTypeName}`;
           })
-          .join(" | ")}`,
-      );
+          .join(" | "),
+      ]);
     }
 
-    functionArguments.push(
-      `configurationOptions: Partial<ClientConfiguration & ${credentialsName}> = {}`,
-    );
+    functionArguments.push([
+      "configurationOptions",
+      `Partial<ClientConfiguration & ${credentialsName}> = {}`,
+    ]);
 
     yield itt`
       /**
         ${jsDoc}
       */
       export async function ${operationFunctionName}(
-        ${functionArguments.map((element) => `${element},\n`).join("")}
+        ${functionArguments.map(([name, type]) => `${name}: ${type},\n`).join("")}
       ): Promise<${generateFunctionReturnType()}> {
         ${generateFunctionBody()}
       }
@@ -249,15 +252,16 @@ export function* generateClientOperationFunction(
       responseBodyModel?.schemaId == null ? null : names[responseBodyModel.schemaId];
     const isStream = responseBodyModel?.contentType === "application/x-ndjson";
 
-    const tuple = new Array<string>();
+    const tuple = new Array<[string, string]>();
 
     if (hasStatusReturn) {
-      tuple.push(
+      tuple.push([
+        "status",
         [...operationResultModel.statusCodes]
           .filter((statusCode) => statusCode >= 200 && statusCode < 300)
           .map((value) => JSON.stringify(value))
           .join(" | "),
-      );
+      ]);
     }
 
     if (hasParametersReturn) {
@@ -265,15 +269,16 @@ export function* generateClientOperationFunction(
         operationModel,
         operationResultModel,
       );
-      tuple.push(`$parameters.${parametersTypeName}`);
+      tuple.push(["parameters", `$parameters.${parametersTypeName}`]);
     }
 
     if (hasContentTypeReturn) {
-      tuple.push(JSON.stringify(responseBodyModel?.contentType ?? null));
+      tuple.push(["contentType", JSON.stringify(responseBodyModel?.contentType ?? null)]);
     }
 
     if (hasEntityReturn) {
-      tuple.push(
+      tuple.push([
+        "entity",
         responseBodyModel == null
           ? "undefined"
           : responseEntityTypeName == null
@@ -283,7 +288,7 @@ export function* generateClientOperationFunction(
             : isStream
               ? `(signal: AbortSignal) => AsyncIterable<types.${responseEntityTypeName}>`
               : `types.${responseEntityTypeName}`,
-      );
+      ]);
     }
 
     switch (tuple.length) {
@@ -292,13 +297,13 @@ export function* generateClientOperationFunction(
         break;
 
       case 1:
-        const [element] = tuple;
-        yield element;
+        const [[_name, type]] = tuple as [[string, string]];
+        yield type;
         break;
 
       default:
         yield `[
-          ${tuple.map((element) => `${element},\n`).join("")}
+          ${tuple.map(([name, type]) => `${name}: ${type},\n`).join("")}
         ]`;
         break;
     }
