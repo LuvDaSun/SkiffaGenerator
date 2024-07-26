@@ -104,41 +104,42 @@ export function* generateClientOperationFunction(
     const requestEntityTypeName =
       requestBodyModel?.schemaId == null ? null : names[requestBodyModel.schemaId];
 
-    const functionArguments = new Array<string>();
+    const functionArguments = new Array<[string, string]>();
 
     if (hasParametersArgument) {
       const parametersTypeName = getRequestParametersTypeName(operationModel);
-      functionArguments.push(`parameters: $parameters.${parametersTypeName}`);
+      functionArguments.push(["parameters", `$parameters.${parametersTypeName}`]);
     }
 
     if (hasContentTypeArgument) {
-      functionArguments.push(
-        `contentType: ${JSON.stringify(requestBodyModel?.contentType ?? null)}`,
-      );
+      functionArguments.push([
+        "contentType",
+        JSON.stringify(requestBodyModel?.contentType ?? null),
+      ]);
     }
 
     if (hasEntityArgument) {
-      functionArguments.push(
-        `entity: ${
-          requestBodyModel == null
-            ? "undefined"
-            : requestEntityTypeName == null
-              ? "unknown"
-              : `types.${requestEntityTypeName}`
-        }`,
-      );
+      functionArguments.push([
+        "entity",
+        requestBodyModel == null
+          ? "undefined"
+          : requestEntityTypeName == null
+            ? "unknown"
+            : `types.${requestEntityTypeName}`,
+      ]);
     }
 
-    functionArguments.push(
-      `configurationOptions?: Partial<ClientConfiguration & ${credentialsName}>`,
-    );
+    functionArguments.push([
+      "configurationOptions?",
+      `Partial<ClientConfiguration & ${credentialsName}>`,
+    ]);
 
     yield itt`
         /**
           ${jsDoc}
         */
         export function ${operationFunctionName}(
-          ${functionArguments.map((element) => `${element},\n`).join("")}
+          ${functionArguments.map(([name, type]) => `${name}: ${type},\n`).join("")}
         ): Promise<${generateFunctionReturnType()}>;
       `;
   }
