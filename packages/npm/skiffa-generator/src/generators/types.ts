@@ -4,8 +4,6 @@ export * from "./types/operation-accept.js";
 export * from "./types/operation-authentication.js";
 export * from "./types/operation-handler.js";
 export * from "./types/operation-incoming-request.js";
-export * from "./types/operation-incoming-response.js";
-export * from "./types/operation-outgoing-request.js";
 export * from "./types/operation-outgoing-response.js";
 export * from "./types/operation-parameters.js";
 export * from "./types/operation-result-parameters.js";
