@@ -194,10 +194,10 @@ export function* generateOperationHandlerType(
           ? "undefined"
           : responseEntityTypeName == null
             ? isStream
-              ? "(signal: AbortSignal) => AsyncIterable<unknown>"
+              ? "(signal?: AbortSignal) => AsyncIterable<unknown>"
               : "unknown"
             : isStream
-              ? `(signal: AbortSignal) => AsyncIterable<types.${responseEntityTypeName}>`
+              ? `(signal?: AbortSignal) => AsyncIterable<types.${responseEntityTypeName}>`
               : `types.${responseEntityTypeName}`,
       ]);
     }

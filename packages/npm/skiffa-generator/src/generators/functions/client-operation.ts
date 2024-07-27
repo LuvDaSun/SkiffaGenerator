@@ -284,10 +284,10 @@ export function* generateClientOperationFunction(
           ? "undefined"
           : responseEntityTypeName == null
             ? isStream
-              ? "(signal: AbortSignal) => AsyncIterable<unknown>"
+              ? "(signal?: AbortSignal) => AsyncIterable<unknown>"
               : "unknown"
             : isStream
-              ? `(signal: AbortSignal) => AsyncIterable<types.${responseEntityTypeName}>`
+              ? `(signal?: AbortSignal) => AsyncIterable<types.${responseEntityTypeName}>`
               : `types.${responseEntityTypeName}`,
       ]);
     }
@@ -838,7 +838,7 @@ export function* generateClientOperationFunction(
 
               if (isBodyTypeFunction == null) {
                 yield itt`
-                  async function* resultEntityGenerator(signal: AbortSignal) {
+                  async function* resultEntityGenerator(signal?: AbortSignal) {
                     const entityIterable = lib.deserializeNdjsonEntities(
                       stream,
                       signal,
@@ -848,7 +848,7 @@ export function* generateClientOperationFunction(
                 `;
               } else {
                 yield itt`
-                  async function* resultEntityGenerator(signal: AbortSignal) {
+                  async function* resultEntityGenerator(signal?: AbortSignal) {
                     const entityIterable = lib.deserializeNdjsonEntities(
                       stream,
                       signal,
