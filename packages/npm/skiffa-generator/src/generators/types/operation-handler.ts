@@ -1,4 +1,5 @@
 import * as skiffaCore from "@skiffa/core";
+import { joinIterable } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { selectBodies } from "../helpers.js";
 import {
@@ -56,15 +57,27 @@ export function* generateOperationHandlerType(
     (model) => selectBodies(model, responseTypes).length > 0,
   );
 
-  if (requestBodyModels.length === 0) {
-    yield generateHandlerInterface();
-  }
+  const functionArgumentTuples = requestBodyModels.flatMap((requestBodyModel) =>
+    generateHandlerArguments(requestBodyModel),
+  );
 
-  for (const requestBodyModel of requestBodyModels) {
-    yield generateHandlerInterface(requestBodyModel);
-  }
+  yield itt`
+      export type ${operationHandlerTypeName}<A extends ${serverAuthenticationName}> = (
+      ${
+        functionArgumentTuples.length > 0
+          ? itt`
+            ...args: ${joinIterable(
+              requestBodyModels.map((requestBodyModel) =>
+                generateHandlerArguments(requestBodyModel),
+              ),
+              " |\n",
+            )}`
+          : ""
+      }
+      ) => Promise<${generateHandlerReturnType()}>;
+    `;
 
-  function* generateHandlerInterface(requestBodyModel?: skiffaCore.BodyContainer) {
+  function* generateHandlerArguments(requestBodyModel?: skiffaCore.BodyContainer) {
     const requestEntityTypeName =
       requestBodyModel?.schemaId == null ? null : names[requestBodyModel.schemaId];
 
@@ -102,11 +115,9 @@ export function* generateOperationHandlerType(
     }
 
     yield itt`
-      export interface ${operationHandlerTypeName}<A extends ${serverAuthenticationName}> {
-        (
-          ${functionArguments.map(([name, type]) => `${name}: ${type},\n`).join("")}
-        ): Promise<${generateHandlerReturnType()}>;
-      } 
+      [
+        ${functionArguments.map(([name, type]) => `${name}: ${type},\n`).join("")}
+      ]
     `;
   }
 
