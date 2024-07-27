@@ -75,9 +75,11 @@ function* generateOperationTest(
   responseTypes: string[],
 ) {
   const requestBodyModels = selectBodies(operationModel, requestTypes);
-  const operationResultModels = operationModel.operationResults.filter((operationResultModel) =>
-    operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 300),
+  const clientOperationResultModels = operationModel.operationResults.filter(
+    (operationResultModel) =>
+      operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 300),
   );
+  const serverOperationResultModels = operationModel.operationResults;
 
   const authenticationNames = new Set(
     operationModel.authenticationRequirements.flatMap((group) =>
@@ -98,23 +100,35 @@ function* generateOperationTest(
   const hasContentTypeArgument = requestBodyModels.length > 1;
   const hasEntityArgument = requestBodyModels.length > 0;
   const hasAuthenticationArgument = operationModel.authenticationRequirements.length > 0;
-  const hasAcceptsArgument = operationResultModels.some(
+  const hasServerAcceptsArgument = serverOperationResultModels.some(
     (model) => selectBodies(model, responseTypes).length > 1,
   );
 
-  const hasStatusReturn = operationResultModels.flatMap((model) => model.statusCodes).length > 1;
-  const hasParametersReturn = operationResultModels.some(
+  const hasClientStatusReturn =
+    clientOperationResultModels.flatMap((model) => model.statusCodes).length > 1;
+  const hasServerStatusReturn =
+    serverOperationResultModels.flatMap((model) => model.statusCodes).length > 1;
+  const hasClientParametersReturn = clientOperationResultModels.some(
     (model) => model.headerParameters.length > 0,
   );
-  const hasContentTypeReturn = operationResultModels.some(
+  const hasServerParametersReturn = serverOperationResultModels.some(
+    (model) => model.headerParameters.length > 0,
+  );
+  const hasClientContentTypeReturn = clientOperationResultModels.some(
     (model) => selectBodies(model, responseTypes).length > 1,
   );
-  const hasEntityReturn = operationResultModels.some(
+  const hasServerContentTypeReturn = serverOperationResultModels.some(
+    (model) => selectBodies(model, responseTypes).length > 1,
+  );
+  const hasClientEntityReturn = clientOperationResultModels.some(
+    (model) => selectBodies(model, responseTypes).length > 0,
+  );
+  const hasServerEntityReturn = serverOperationResultModels.some(
     (model) => selectBodies(model, responseTypes).length > 0,
   );
 
   if (requestBodyModels.length === 0) {
-    for (const operationResultModel of operationResultModels) {
+    for (const operationResultModel of clientOperationResultModels) {
       if (!isOperationResultModelMockable(operationResultModel, mockables, responseTypes)) {
         continue;
       }
@@ -209,7 +223,7 @@ function* generateOperationTest(
         handlerArguments.push("authentication");
       }
 
-      if (hasAcceptsArgument) {
+      if (hasServerAcceptsArgument) {
         handlerArguments.push("accepts");
       }
 
@@ -325,15 +339,15 @@ function* generateOperationTest(
       }
 
       const tuple = new Array<string>();
-      if (hasStatusReturn) {
+      if (hasServerStatusReturn) {
         tuple.push(JSON.stringify(statusCode));
       }
 
-      if (hasParametersReturn) {
+      if (hasServerParametersReturn) {
         tuple.push(`{${generateResponseParametersMockBody()}}`);
       }
 
-      if (hasContentTypeReturn) {
+      if (hasServerContentTypeReturn) {
         if (responseBodyModel == null) {
           tuple.push("null");
         } else {
@@ -341,7 +355,7 @@ function* generateOperationTest(
         }
       }
 
-      if (hasEntityReturn) {
+      if (hasServerEntityReturn) {
         if (responseBodyModel == null) {
           tuple.push("undefined");
         } else {
@@ -367,7 +381,7 @@ function* generateOperationTest(
 
         case 1: {
           const [value] = tuple as [string];
-          yield itt`return value;`;
+          yield itt`return ${value};`;
           break;
         }
 
@@ -413,7 +427,7 @@ function* generateOperationTest(
         }
       `);
 
-      if (hasStatusReturn) {
+      if (hasClientStatusReturn) {
         returnArguments.push("resultStatus");
       }
 
@@ -421,11 +435,11 @@ function* generateOperationTest(
         returnArguments.push("resultParameters");
       }
 
-      if (hasContentTypeReturn) {
+      if (hasClientContentTypeReturn) {
         returnArguments.push("resultContentType");
       }
 
-      if (hasEntityReturn) {
+      if (hasClientEntityReturn) {
         returnArguments.push("resultEntity");
       }
 
@@ -463,13 +477,13 @@ function* generateOperationTest(
         assert.ifError(lastError);
       `;
 
-      if (hasStatusReturn) {
+      if (hasClientStatusReturn) {
         yield itt`
           assert.equal(resultStatus, ${JSON.stringify(statusCode)});
         `;
       }
 
-      if (hasParametersReturn) {
+      if (hasClientParametersReturn) {
         for (const parameterModel of operationResultModel.headerParameters) {
           if (!isParameterModelMockable(parameterModel, mockables)) {
             continue;
@@ -488,7 +502,7 @@ function* generateOperationTest(
         }
       }
 
-      if (hasContentTypeReturn) {
+      if (hasClientContentTypeReturn) {
         assert(responseBodyModel != null);
 
         yield itt`
@@ -496,7 +510,7 @@ function* generateOperationTest(
         `;
       }
 
-      if (hasEntityReturn) {
+      if (hasClientEntityReturn) {
         if (responseBodyModel == null) {
           yield itt`
             assert.equal(resultEntity, undefined);
