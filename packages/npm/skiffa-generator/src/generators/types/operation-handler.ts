@@ -57,9 +57,10 @@ export function* generateOperationHandlerType(
     (model) => selectBodies(model, responseTypes).length > 0,
   );
 
-  const functionArgumentTuples = requestBodyModels.map((requestBodyModel) =>
-    generateHandlerArgumentTuple(requestBodyModel),
-  );
+  const functionArgumentTuples =
+    requestBodyModels.length > 0
+      ? requestBodyModels.map((requestBodyModel) => generateHandlerArgumentTuple(requestBodyModel))
+      : [generateHandlerArgumentTuple()];
 
   yield itt`
       export type ${operationHandlerTypeName}<A extends ${serverAuthenticationName}> = (
