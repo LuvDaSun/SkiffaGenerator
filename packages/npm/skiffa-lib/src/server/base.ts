@@ -10,13 +10,13 @@ export interface ServerIncomingRequest {
   query: string;
   method: string;
   headers: Parameters;
-  stream(signal: AbortSignal): AsyncIterable<Uint8Array>;
+  stream(signal?: AbortSignal): AsyncIterable<Uint8Array>;
 }
 
 export interface ServerOutgoingResponse {
   status: StatusCode;
   headers: Parameters;
-  stream?(signal: AbortSignal): AsyncIterable<Uint8Array>;
+  stream?(signal?: AbortSignal): AsyncIterable<Uint8Array>;
 }
 
 export interface ServerMiddleware {
