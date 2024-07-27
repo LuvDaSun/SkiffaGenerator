@@ -108,7 +108,7 @@ export function* generateClientOperationFunction(
 
     if (hasParametersArgument) {
       const parametersTypeName = getRequestParametersTypeName(operationModel);
-      functionArguments.push(["parameters", `parameters.${parametersTypeName}`]);
+      functionArguments.push(["parameters", `$parameters.${parametersTypeName}`]);
     }
 
     if (hasContentTypeArgument) {
@@ -149,7 +149,7 @@ export function* generateClientOperationFunction(
 
     if (hasParametersArgument) {
       const parametersTypeName = getRequestParametersTypeName(operationModel);
-      functionArguments.push(["parameters", `parameters.${parametersTypeName}`]);
+      functionArguments.push(["parameters", `$parameters.${parametersTypeName}`]);
     }
 
     if (hasContentTypeArgument) {
@@ -270,7 +270,7 @@ export function* generateClientOperationFunction(
         operationModel,
         operationResultModel,
       );
-      tuple.push(["parameters", `parameters.${parametersTypeName}`]);
+      tuple.push(["parameters", `$parameters.${parametersTypeName}`]);
     }
 
     if (hasContentTypeReturn) {
@@ -344,8 +344,8 @@ export function* generateClientOperationFunction(
     if (hasParametersArgument) {
       yield itt`
         if(configuration.validateOutgoingParameters) {
-          if(!parameters.${isRequestParametersFunction}(parameters)) {
-            const lastError = parameters.getLastParameterValidationError();
+          if(!$parameters.${isRequestParametersFunction}(parameters)) {
+            const lastError = $parameters.getLastParameterValidationError();
             throw new lib.ClientRequestParameterValidationFailed(
               lastError.parameterName,
               lastError.path,
@@ -737,11 +737,11 @@ export function* generateClientOperationFunction(
               )})),
             `;
           })}
-        } as parameters.${responseParametersName};
+        } as $parameters.${responseParametersName};
     
         if(configuration.validateIncomingParameters) {
-          if(!parameters.${isResponseParametersFunction}(responseParameters)) {
-            const lastError = parameters.getLastParameterValidationError();
+          if(!$parameters.${isResponseParametersFunction}(responseParameters)) {
+            const lastError = $parameters.getLastParameterValidationError();
             throw new lib.ClientResponseParameterValidationFailed(
               lastError.parameterName,
               lastError.path,
