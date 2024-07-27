@@ -7,14 +7,6 @@ export async function* mapAsyncIterable<T, R>(
   }
 }
 
-export async function mapPromisable<T, R>(
-  promise: Promise<T>,
-  mapper: (value: T) => R,
-): Promise<R> {
-  const value = await promise;
-  return mapper(value);
-}
-
 export function first<T>(iterable: Iterable<T>): T | undefined {
   for (const item of iterable) {
     return item;

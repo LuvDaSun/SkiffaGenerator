@@ -360,6 +360,18 @@ function* generateBody(
     }
   }
 
+  if (!hasStatusReturn) {
+    if (operationResultModels.length === 1) {
+      const [operationResultModel] = operationResultModels as [skiffaCore.OperationResultContainer];
+      if (operationResultModel.statusCodes.length === 1) {
+        const [statusCode] = [...operationResultModel.statusCodes] as [number];
+        yield itt`
+          const status = ${JSON.stringify(statusCode)};
+        `;
+      }
+    }
+  }
+
   yield itt`
     let serverOutgoingResponse: lib.ServerOutgoingResponse;
     `;
@@ -477,37 +489,43 @@ function* generateBody(
         const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
         const isBodyTypeFunction = getIsBodyFunction(names, bodyModel);
 
-        yield itt`
-          const mapAssertEntity = (entity: unknown) => {
-            ${
-              isBodyTypeFunction == null
-                ? ""
-                : itt`
-              if(!validators.${isBodyTypeFunction}(entity)) {
-                const lastError = validators.getLastValidationError();
-                throw new lib.ServerRequestEntityValidationFailed(
-                  lastError.path,
-                  lastError.rule,
-                );
+        if (isBodyTypeFunction == null) {
+          yield itt`
+            requestEntity = async function* (signal) {
+              let entities = lib.deserializeNdjsonEntities(
+                serverIncomingRequest.stream,
+                signal,
+              ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
+              yield* entities;
+            };
+          `;
+        } else {
+          yield itt`
+            requestEntity = async function* (signal) {
+              let entities = lib.deserializeNdjsonEntities(
+                serverIncomingRequest.stream,
+                signal,
+              ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
+              if(validateIncomingEntity) {
+                for await(const entity of entities) {
+                  if(!validators.${isBodyTypeFunction}(entity)) {
+                    const lastError = validators.getLastValidationError();
+                    throw new lib.ServerRequestEntityValidationFailed(
+                      lastError.path,
+                      lastError.rule,
+                    );
+                  }
+                  yield entity;
+                }
               }
-            `
-            }
-            return entity;
-          };
-        `;
+              else {
+                yield* entities;
+              }
+              return entities;
+            };
+          `;
+        }
 
-        yield itt`
-          requestEntity = function(signal) {
-            let entities = lib.deserializeNdjsonEntities(
-              serverIncomingRequest.stream,
-              signal,
-            ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
-            if(validateIncomingEntity) {
-              entities = lib.mapAsyncIterable(entities, mapAssertEntity);
-            }
-            return entities;
-          };
-        `;
         break;
       }
 
@@ -574,8 +592,8 @@ function* generateBody(
 
       default: {
         yield itt`
-          requestEntity = function(signal){
-            return serverIncomingRequest.stream(signal);
+          requestEntity = async function* (signal){
+            yield* serverIncomingRequest.stream(signal);
           };
         `;
       }
@@ -736,19 +754,46 @@ function* generateBody(
           }
         `;
 
-        yield itt`
-          serverOutgoingResponse = {
-            status,
-            headers: responseHeaders,
-            stream(signal) {
-              let entities = responseEntity(signal);
-              if(validateOutgoingEntity) {
-                entities = lib.mapAsyncIterable(entities, mapAssertEntity);
-              }
-              return lib.serializeNdjsonEntities(entities);
-            },
-          }
-        `;
+        if (isBodyTypeFunction == null) {
+          yield itt`
+            serverOutgoingResponse = {
+              status,
+              headers: responseHeaders,
+              async *stream(signal) {
+                const entities = responseEntity(signal);
+                yield* lib.serializeNdjsonEntities(entities);
+              },
+            }
+          `;
+        } else {
+          yield itt`
+            serverOutgoingResponse = {
+              status,
+              headers: responseHeaders,
+              async *stream(signal) {
+                const entities = responseEntity(signal);
+                if(validateOutgoingEntity) {
+                  lib.serializeNdjsonEntities((async function* () {
+                    for await(const entity of entities) {
+                      if(!validators.${isBodyTypeFunction}(entity)) {
+                        const lastError = validators.getLastValidationError();
+                        throw new lib.ServerResponseEntityValidationFailed(
+                          lastError.path,
+                          lastError.rule,
+                        );
+                      }
+                      yield entity;
+                    }
+                  })());
+                }
+                else {
+                  yield* lib.serializeNdjsonEntities(entities);
+                }
+              },
+            }
+          `;
+        }
+
         break;
       }
 
@@ -773,8 +818,8 @@ function* generateBody(
           serverOutgoingResponse = {
             status,
             headers: responseHeaders,
-            stream(signal) {
-              return lib.serializeJsonEntity(responseEntity);
+            async *stream(signal) {
+              yield* lib.serializeJsonEntity(responseEntity);
             },
           }
         `;
@@ -800,10 +845,10 @@ function* generateBody(
 
         yield itt`
           serverOutgoingResponse = {
-            status: outgoingResponse.status,
+            status,
             headers: responseHeaders,
-            stream(signal) {
-              return lib.serializeTextValue(String(responseEntity));
+            async *stream(signal) {
+              yield* lib.serializeTextValue(String(responseEntity));
             },
           }
         `;
