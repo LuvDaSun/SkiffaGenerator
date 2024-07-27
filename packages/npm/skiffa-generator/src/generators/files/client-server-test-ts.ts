@@ -320,6 +320,7 @@ function* generateOperationTest(
         }
 
         switch (requestBodyModel.contentType) {
+          case "text/plain":
           case "application/json": {
             const validateFunctionName = getIsBodyFunction(names, requestBodyModel);
             assert(validateFunctionName != null);
@@ -360,6 +361,7 @@ function* generateOperationTest(
           tuple.push("undefined");
         } else {
           switch (responseBodyModel.contentType) {
+            case "text/plain":
             case "application/json": {
               const mockFunctionName = getMockBodyFunction(names, responseBodyModel);
               assert(mockFunctionName != null);
