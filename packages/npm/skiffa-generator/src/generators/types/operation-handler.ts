@@ -57,8 +57,8 @@ export function* generateOperationHandlerType(
     (model) => selectBodies(model, responseTypes).length > 0,
   );
 
-  const functionArgumentTuples = requestBodyModels.flatMap((requestBodyModel) =>
-    generateHandlerArguments(requestBodyModel),
+  const functionArgumentTuples = requestBodyModels.map((requestBodyModel) =>
+    generateHandlerArgumentTuple(requestBodyModel),
   );
 
   yield itt`
@@ -66,18 +66,13 @@ export function* generateOperationHandlerType(
       ${
         functionArgumentTuples.length > 0
           ? itt`
-            ...args: ${joinIterable(
-              requestBodyModels.map((requestBodyModel) =>
-                generateHandlerArguments(requestBodyModel),
-              ),
-              " |\n",
-            )}`
+            ...args: ${joinIterable(functionArgumentTuples, " |\n")}`
           : ""
       }
       ) => Promise<${generateHandlerReturnType()}>;
     `;
 
-  function* generateHandlerArguments(requestBodyModel?: skiffaCore.BodyContainer) {
+  function* generateHandlerArgumentTuple(requestBodyModel?: skiffaCore.BodyContainer) {
     const requestEntityTypeName =
       requestBodyModel?.schemaId == null ? null : names[requestBodyModel.schemaId];
 

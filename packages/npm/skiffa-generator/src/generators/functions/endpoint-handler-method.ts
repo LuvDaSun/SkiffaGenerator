@@ -12,6 +12,7 @@ import {
   getOperationAcceptConstName,
   getOperationAcceptTypeName,
   getOperationHandlerName,
+  getOperationHandlerTypeName,
   getParameterMemberName,
   getParseBodyFunction,
   getParseParameterFunction,
@@ -50,6 +51,7 @@ function* generateBody(
   responseTypes: Array<string>,
 ) {
   const operationHandlerName = getOperationHandlerName(operationModel);
+  const operationHandlerTypeName = getOperationHandlerTypeName(operationModel);
   const requestParametersName = getRequestParametersTypeName(operationModel);
   const isRequestParametersFunction = getIsRequestParametersFunction(operationModel);
   const isOperationAuthenticationName = getIsOperationAuthenticationName(operationModel);
@@ -337,7 +339,9 @@ function* generateBody(
     case 0: {
       yield itt`
         await this.operationHandlers.${operationHandlerName}(
-          ${functionCallArguments.map((argument) => itt`${argument},\n`)}
+          ...[
+            ${functionCallArguments.map((argument) => itt`${argument},\n`)}
+          ] as Parameters<${operationHandlerTypeName}<A>>
         );
       `;
       break;
@@ -346,7 +350,9 @@ function* generateBody(
       const [argument] = functionReturnArguments as [string];
       yield itt`
         const ${argument} = await this.operationHandlers.${operationHandlerName}(
-          ${functionCallArguments.map((argument) => itt`${argument},\n`)}
+          ...[
+            ${functionCallArguments.map((argument) => itt`${argument},\n`)}
+          ] as Parameters<${operationHandlerTypeName}<A>>
         );
       `;
       break;
@@ -354,7 +360,9 @@ function* generateBody(
     default: {
       yield itt`
         const [${functionReturnArguments.map((argument) => itt`${argument},\n`)}] = await this.operationHandlers.${operationHandlerName}(
-          ${functionCallArguments.map((argument) => itt`${argument},\n`)}
+          ...[
+            ${functionCallArguments.map((argument) => itt`${argument},\n`)}
+          ] as Parameters<${operationHandlerTypeName}<A>>
         );
       `;
     }
