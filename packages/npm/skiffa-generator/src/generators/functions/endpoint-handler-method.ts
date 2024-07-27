@@ -5,7 +5,7 @@ import {
   getAuthenticationHandlerName,
   getAuthenticationMemberName,
   getEndpointHandlerName,
-  getIncomingRequestTypeName,
+  getIsBodyFunction,
   getIsOperationAuthenticationName,
   getIsRequestParametersFunction,
   getIsResponseParametersFunction,
@@ -13,6 +13,7 @@ import {
   getOperationAcceptTypeName,
   getOperationHandlerName,
   getParameterMemberName,
+  getParseBodyFunction,
   getParseParameterFunction,
   getRequestParametersTypeName,
 } from "../names.js";
@@ -49,7 +50,6 @@ function* generateBody(
   responseTypes: Array<string>,
 ) {
   const operationHandlerName = getOperationHandlerName(operationModel);
-  const operationIncomingRequestName = getIncomingRequestTypeName(operationModel);
   const requestParametersName = getRequestParametersTypeName(operationModel);
   const isRequestParametersFunction = getIsRequestParametersFunction(operationModel);
   const isOperationAuthenticationName = getIsOperationAuthenticationName(operationModel);
@@ -64,6 +64,32 @@ function* generateBody(
   const operationAcceptTypeName = getOperationAcceptTypeName(operationModel);
   const operationAcceptConstName = getOperationAcceptConstName(operationModel);
 
+  const operationResultModels = operationModel.operationResults;
+  const requestBodyModels = selectBodies(operationModel, requestTypes);
+
+  const hasParametersArgument =
+    operationModel.pathParameters.length > 0 ||
+    operationModel.queryParameters.length > 0 ||
+    operationModel.headerParameters.length > 0 ||
+    operationModel.cookieParameters.length > 0;
+  const hasContentTypeArgument = requestBodyModels.length > 1;
+  const hasEntityArgument = requestBodyModels.length > 0;
+  const hasAuthenticationArgument = operationModel.authenticationRequirements.length > 0;
+  const hasAcceptsArgument = operationResultModels.some(
+    (model) => selectBodies(model, responseTypes).length > 1,
+  );
+
+  const hasStatusReturn = operationResultModels.length > 1;
+  const hasParametersReturn = operationResultModels.some(
+    (model) => model.headerParameters.length > 0,
+  );
+  const hasContentTypeReturn = operationResultModels.some(
+    (model) => selectBodies(model, responseTypes).length > 1,
+  );
+  const hasEntityReturn = operationResultModels.some(
+    (model) => selectBodies(model, responseTypes).length > 0,
+  );
+
   yield itt`
     const { 
       validateIncomingEntity,
@@ -71,6 +97,12 @@ function* generateBody(
       validateOutgoingEntity,
       validateOutgoingParameters,
     } = this.configuration;
+  `;
+
+  yield itt`
+    if(this.operationHandlers.${operationHandlerName} == null) {
+      throw new lib.OperationNotImplemented();
+    }
   `;
 
   /**
@@ -82,174 +114,180 @@ function* generateBody(
       lib.getParameterValues(serverIncomingRequest.headers, "cookie");
     const requestContentType =
       lib.first(lib.getParameterValues(serverIncomingRequest.headers, "content-type"));
-    const responseAccepts =
-      lib.parseAcceptHeader(lib.getParameterValues(serverIncomingRequest.headers, "accept"));
   `;
 
+  if (hasAcceptsArgument) {
+    yield itt`
+      const responseAccepts =
+        lib.parseAcceptHeader(lib.getParameterValues(serverIncomingRequest.headers, "accept"));
+    `;
+  }
   /**
    * now we put the raw parameters in variables, path parameters are already
    * present, they are in the methods arguments
    */
 
-  yield itt`
+  if (hasParametersArgument) {
+    yield itt`
     const queryParameters =
       lib.parseParameters([serverIncomingRequest.query], "?", "&", "=");
     const cookieParameters = 
       lib.parseParameters(cookie, "", "; ", "=");
   `;
+  }
 
-  /*
+  if (hasAcceptsArgument) {
+    /*
   set accept for use in 
   */
-  yield itt`
-    const accepts = [
-      ...lib.intersect(responseAccepts, accept.${operationAcceptConstName}),
-    ] as accept.${operationAcceptTypeName}[];
-  `;
+    yield itt`
+      const accepts = [
+        ...lib.intersect(responseAccepts, accept.${operationAcceptConstName}),
+      ] as accept.${operationAcceptTypeName}[];
+    `;
+  }
 
-  /**
-   * let's handle authentication
-   */
+  if (hasAuthenticationArgument) {
+    /**
+     * let's handle authentication
+     */
 
-  yield itt`
-    const credentials = {
-      ${generateCredentialsContent()}
-    }
-  `;
-
-  yield itt`
-    const authentication = Object.fromEntries(
-      await Promise.all([
-        ${authenticationModels.map(
-          (authenticationModel) => itt`
-            (
-              async () => [
-                ${JSON.stringify(getAuthenticationMemberName(authenticationModel))},
-                credentials.${getAuthenticationMemberName(authenticationModel)} == null ?
-                  undefined :
-                  await this.authenticationHandlers.${getAuthenticationHandlerName(authenticationModel)}?.
-                    (credentials.${getAuthenticationMemberName(authenticationModel)})
-              ]
-            )(),
-          `,
-        )}
-      ]),
-    ) as A;
-
-    if(!${isOperationAuthenticationName}(authentication)) {
-      throw new lib.AuthenticationFailed();
-    }
-  `;
-
-  /**
-   * create the request parameters object
-   */
-
-  yield itt`
-    const requestParameters = {
-      ${[
-        ...operationModel.pathParameters.map((parameterModel) => {
-          const parameterName = getParameterMemberName(parameterModel);
-          const parseParameterFunction = getParseParameterFunction(names, parameterModel);
-
-          if (parseParameterFunction == null) {
-            return `
-              ${parameterName}: 
-                lib.first(lib.getParameterValues(pathParameters, ${JSON.stringify(parameterModel.name)})),
-            `;
-          }
-
-          return `
-            ${parameterName}: 
-              parsers.${parseParameterFunction}(lib.getParameterValues(pathParameters, ${JSON.stringify(
-                parameterModel.name,
-              )})),
-          `;
-        }),
-        ...operationModel.headerParameters.map((parameterModel) => {
-          const parameterName = getParameterMemberName(parameterModel);
-          const parseParameterFunction = getParseParameterFunction(names, parameterModel);
-
-          if (parseParameterFunction == null) {
-            return `
-              ${parameterName}: 
-              lib.first(lib.getParameterValues(pathParameters, ${JSON.stringify(parameterModel.name)})),
-            `;
-          }
-
-          return `
-          ${parameterName}: 
-              parsers.${parseParameterFunction}(lib.getParameterValues(serverIncomingRequest.headers, ${JSON.stringify(
-                parameterModel.name,
-              )})),
-          `;
-        }),
-        ...operationModel.queryParameters.map((parameterModel) => {
-          const parameterName = getParameterMemberName(parameterModel);
-          const parseParameterFunction = getParseParameterFunction(names, parameterModel);
-
-          if (parseParameterFunction == null) {
-            return `
-              ${parameterName}: 
-                lib.first(lib.getParameterValues(queryParameters, ${JSON.stringify(parameterModel.name)})),
-            `;
-          }
-
-          return `
-            ${parameterName}: 
-              parsers.${parseParameterFunction}(lib.getParameterValues(queryParameters, ${JSON.stringify(
-                parameterModel.name,
-              )})),
-          `;
-        }),
-        ...operationModel.cookieParameters.map((parameterModel) => {
-          const parameterName = getParameterMemberName(parameterModel);
-          const parseParameterFunction = getParseParameterFunction(names, parameterModel);
-
-          if (parseParameterFunction == null) {
-            return `
-              ${parameterName}: 
-                lib.first(lib.getParameterValues(cookieParameters, ${JSON.stringify(parameterModel.name)})),
-            `;
-          }
-
-          return `
-            ${parameterName}: 
-              parsers.${parseParameterFunction}(lib.getParameterValues(cookieParameters, ${JSON.stringify(
-                parameterModel.name,
-              )})),
-          `;
-        }),
-      ]}
-    } as parameters.${requestParametersName};
-
-    if(validateIncomingParameters) {
-      if(!parameters.${isRequestParametersFunction}(requestParameters)) {
-        const lastError = parameters.getLastParameterValidationError();
-        throw new lib.ServerRequestParameterValidationFailed(
-          lastError.parameterName,
-          lastError.path,
-          lastError.rule
-        );
+    yield itt`
+      const credentials = {
+        ${generateCredentialsContent()}
       }
-    }
-  `;
+    `;
+
+    yield itt`
+      const authentication = Object.fromEntries(
+        await Promise.all([
+          ${authenticationModels.map(
+            (authenticationModel) => itt`
+              (
+                async () => [
+                  ${JSON.stringify(getAuthenticationMemberName(authenticationModel))},
+                  credentials.${getAuthenticationMemberName(authenticationModel)} == null ?
+                    undefined :
+                    await this.authenticationHandlers.${getAuthenticationHandlerName(authenticationModel)}?.
+                      (credentials.${getAuthenticationMemberName(authenticationModel)})
+                ]
+              )(),
+            `,
+          )}
+        ]),
+      ) as A;
+
+      if(!${isOperationAuthenticationName}(authentication)) {
+        throw new lib.AuthenticationFailed();
+      }
+    `;
+  }
+
+  if (hasParametersArgument) {
+    /**
+     * create the request parameters object
+     */
+
+    yield itt`
+      const requestParameters = {
+        ${[
+          ...operationModel.pathParameters.map((parameterModel) => {
+            const parameterName = getParameterMemberName(parameterModel);
+            const parseParameterFunction = getParseParameterFunction(names, parameterModel);
+
+            if (parseParameterFunction == null) {
+              return `
+                ${parameterName}: 
+                  lib.first(lib.getParameterValues(pathParameters, ${JSON.stringify(parameterModel.name)})),
+              `;
+            }
+
+            return `
+              ${parameterName}: 
+                parsers.${parseParameterFunction}(lib.getParameterValues(pathParameters, ${JSON.stringify(
+                  parameterModel.name,
+                )})),
+            `;
+          }),
+          ...operationModel.headerParameters.map((parameterModel) => {
+            const parameterName = getParameterMemberName(parameterModel);
+            const parseParameterFunction = getParseParameterFunction(names, parameterModel);
+
+            if (parseParameterFunction == null) {
+              return `
+                ${parameterName}: 
+                lib.first(lib.getParameterValues(pathParameters, ${JSON.stringify(parameterModel.name)})),
+              `;
+            }
+
+            return `
+            ${parameterName}: 
+                parsers.${parseParameterFunction}(lib.getParameterValues(serverIncomingRequest.headers, ${JSON.stringify(
+                  parameterModel.name,
+                )})),
+            `;
+          }),
+          ...operationModel.queryParameters.map((parameterModel) => {
+            const parameterName = getParameterMemberName(parameterModel);
+            const parseParameterFunction = getParseParameterFunction(names, parameterModel);
+
+            if (parseParameterFunction == null) {
+              return `
+                ${parameterName}: 
+                  lib.first(lib.getParameterValues(queryParameters, ${JSON.stringify(parameterModel.name)})),
+              `;
+            }
+
+            return `
+              ${parameterName}: 
+                parsers.${parseParameterFunction}(lib.getParameterValues(queryParameters, ${JSON.stringify(
+                  parameterModel.name,
+                )})),
+            `;
+          }),
+          ...operationModel.cookieParameters.map((parameterModel) => {
+            const parameterName = getParameterMemberName(parameterModel);
+            const parseParameterFunction = getParseParameterFunction(names, parameterModel);
+
+            if (parseParameterFunction == null) {
+              return `
+                ${parameterName}: 
+                  lib.first(lib.getParameterValues(cookieParameters, ${JSON.stringify(parameterModel.name)})),
+              `;
+            }
+
+            return `
+              ${parameterName}: 
+                parsers.${parseParameterFunction}(lib.getParameterValues(cookieParameters, ${JSON.stringify(
+                  parameterModel.name,
+                )})),
+            `;
+          }),
+        ]}
+      } as parameters.${requestParametersName};
+
+      if(validateIncomingParameters) {
+        if(!parameters.${isRequestParametersFunction}(requestParameters)) {
+          const lastError = parameters.getLastParameterValidationError();
+          throw new lib.ServerRequestParameterValidationFailed(
+            lastError.parameterName,
+            lastError.path,
+            lastError.rule
+          );
+        }
+      }
+    `;
+  }
 
   /**
    * now lets construct the incoming request object, this object will be
    * passed to the operation handler later
    */
 
-  yield itt`
-    let incomingRequest: ${operationIncomingRequestName};
-  `;
-
-  const requestBodyModels = selectBodies(operationModel, requestTypes);
-
-  if (requestBodyModels.length === 0) {
-    yield* generateRequestContentTypeCodeBody(names);
-  } else {
+  if (hasEntityArgument) {
     yield itt`
+      let requestEntity;
+
       if(requestContentType == null) {
         throw new lib.ServerRequestMissingContentType();
       }
@@ -264,15 +302,32 @@ function* generateBody(
    * execute the operation handler and collect the response
    */
 
+  const functionCallArguments = new Array<string>();
+
+  if (hasParametersArgument) {
+    functionCallArguments.push("requestParameters");
+  }
+
+  if (hasContentTypeArgument) {
+    functionCallArguments.push("requestContentType");
+  }
+
+  if (hasEntityArgument) {
+    functionCallArguments.push("requestEntity");
+  }
+
+  if (hasAuthenticationArgument) {
+    functionCallArguments.push("authentication");
+  }
+
+  if (hasAcceptsArgument) {
+    functionCallArguments.push("accepts");
+  }
+
   yield itt`
-    const outgoingResponse = await this.operationHandlers.${operationHandlerName}?.(
-      incomingRequest,
-      authentication,
-      accepts
+    const outgoingResponse = await this.operationHandlers.${operationHandlerName}(
+      ${functionCallArguments.map((argument) => itt`${argument},\n`)}
     );
-    if (outgoingResponse == null) {
-      throw new lib.OperationNotImplemented();
-    }
   `;
 
   yield itt`
@@ -373,23 +428,13 @@ function* generateRequestContentTypeCodeCaseClauses(
 
 function* generateRequestContentTypeCodeBody(
   names: Record<string, string>,
-  bodyModel?: skiffaCore.BodyContainer,
+  bodyModel: skiffaCore.BodyContainer,
 ) {
-  if (bodyModel == null) {
-    yield itt`
-      incomingRequest = {
-        parameters: requestParameters,
-        contentType: null,
-      };
-    `;
-    return;
-  }
-
   switch (bodyModel.contentType) {
     case "application/x-ndjson": {
       const bodySchemaId = bodyModel.schemaId;
       const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
-      const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
+      const isBodyTypeFunction = getIsBodyFunction(names, bodyModel);
 
       yield itt`
         const mapAssertEntity = (entity: unknown) => {
@@ -411,22 +456,15 @@ function* generateRequestContentTypeCodeBody(
       `;
 
       yield itt`
-        incomingRequest = {
-          parameters: requestParameters,
-          contentType: requestContentType,
-          stream(signal) {
-            return serverIncomingRequest.stream(signal);
-          },
-          entities(signal) {
-            let entities = lib.deserializeNdjsonEntities(
-              serverIncomingRequest.stream,
-              signal,
-            ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
-            if(validateIncomingEntity) {
-              entities = lib.mapAsyncIterable(entities, mapAssertEntity);
-            }
-            return entities;
-          },
+        requestEntity = function(signal) {
+          let entities = lib.deserializeNdjsonEntities(
+            serverIncomingRequest.stream,
+            signal,
+          ) as AsyncIterable<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
+          if(validateIncomingEntity) {
+            entities = lib.mapAsyncIterable(entities, mapAssertEntity);
+          }
+          return entities;
         };
       `;
       break;
@@ -435,72 +473,68 @@ function* generateRequestContentTypeCodeBody(
     case "application/json": {
       const bodySchemaId = bodyModel.schemaId;
       const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
-      const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
+      const isBodyTypeFunction = getIsBodyFunction(names, bodyModel);
 
       yield itt`
-        const mapAssertEntity = (entity: unknown) => {
-          ${
-            isBodyTypeFunction == null
-              ? ""
-              : itt`
-            if(!validators.${isBodyTypeFunction}(entity)) {
+        requestEntity = await lib.deserializeJsonEntity(
+          serverIncomingRequest.stream
+        ) as ${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`};
+      `;
+
+      if (isBodyTypeFunction != null) {
+        yield itt`
+          if(validateIncomingEntity) {
+            if(!validators.${isBodyTypeFunction}(requestEntity)) {
               const lastError = validators.getLastValidationError();
               throw new lib.ServerRequestEntityValidationFailed(
                 lastError.path,
                 lastError.rule,
               );
             }
-          `
           }
-          return entity;
-        };
-      `;
+        `;
+      }
 
-      yield itt`
-        incomingRequest = {
-          parameters: requestParameters,
-          contentType: requestContentType,
-          stream(signal) {
-            return serverIncomingRequest.stream(signal);
-          },
-          entity() {
-            let entity = lib.deserializeJsonEntity(
-              serverIncomingRequest.stream
-            ) as Promise<${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`}>;
-            if(validateIncomingEntity) {
-              entity = lib.mapPromisable(entity, mapAssertEntity);
-            }
-            return entity;
-          },
-        };
-      `;
       break;
     }
 
     case "text/plain": {
-      yield itt`
-        incomingRequest = {
-          parameters: requestParameters,
-          contentType: requestContentType,
-          stream(signal) {
-            return serverIncomingRequest.stream(signal);
-          },
-          value() {
-            return lib.deserializeTextValue(serverIncomingRequest.stream);
-          },
-        };
-      `;
+      const bodySchemaId = bodyModel.schemaId;
+      const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
+      const isBodyTypeFunction = getIsBodyFunction(names, bodyModel);
+      const parseBodyFunction = getParseBodyFunction(names, bodyModel);
+
+      if (parseBodyFunction == null) {
+        yield itt`
+          requestEntity = await lib.deserializeTextValue(serverIncomingRequest.stream);
+        `;
+      } else {
+        yield itt`
+          requestEntity = parsers.${parseBodyFunction}(await lib.deserializeTextValue(serverIncomingRequest.stream)) as ${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`};
+        `;
+      }
+
+      if (isBodyTypeFunction != null) {
+        yield itt`
+          if(validateIncomingEntity) {
+            if(!validators.${isBodyTypeFunction}(requestEntity)) {
+              const lastError = validators.getLastValidationError();
+              throw new lib.ServerRequestEntityValidationFailed(
+                lastError.path,
+                lastError.rule,
+              );
+            }
+          }
+        `;
+      }
+
       break;
     }
 
     default: {
       yield itt`
-        incomingRequest = {
-          parameters: requestParameters,
-          contentType: requestContentType,
-          stream(signal) {
-            return serverIncomingRequest.stream(signal);
-          },
+        requestEntity = function(signal){
+          return serverIncomingRequest.stream(signal);
         };
       `;
     }

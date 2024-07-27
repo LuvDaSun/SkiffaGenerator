@@ -41,22 +41,6 @@ export function getAuthenticationCredentialTypeName(
   return toPascal(authenticationModel.name, "credential");
 }
 
-export function getIncomingRequestTypeName(operationModel: skiffaCore.OperationContainer) {
-  return toPascal(operationModel.name, "incoming", "request");
-}
-
-export function getIncomingResponseTypeName(operationModel: skiffaCore.OperationContainer) {
-  return toPascal(operationModel.name, "incoming", "response");
-}
-
-export function getOutgoingRequestTypeName(operationModel: skiffaCore.OperationContainer) {
-  return toPascal(operationModel.name, "outgoing", "request");
-}
-
-export function getOutgoingResponseTypeName(operationModel: skiffaCore.OperationContainer) {
-  return toPascal(operationModel.name, "outgoing", "response");
-}
-
 export function getRequestParametersTypeName(operationModel: skiffaCore.OperationContainer) {
   return toPascal(operationModel.name, "request", "parameters");
 }
