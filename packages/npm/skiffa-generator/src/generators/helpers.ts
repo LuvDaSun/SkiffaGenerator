@@ -51,7 +51,7 @@ export function isOperationResultModelMockable(
 export function isBodyModelMockable(model: skiffaCore.BodyContainer, mockables: Set<string>) {
   return (
     (model.schemaId == null || mockables.has(model.schemaId)) &&
-    model.contentType === "application/json"
+    (model.contentType === "application/json" || model.contentType === "text/plain")
   );
 }
 
