@@ -1,41 +1,3 @@
-import { StatusCode } from "../utils/status-code.js";
-
-//#region interfaces
-
-export type OutgoingTextRequest<C extends string> = {
-  readonly contentType: C;
-} & OutgoingTextContainer;
-
-export type OutgoingTextResponse<S extends StatusCode, C extends string> = {
-  readonly status: S;
-  readonly contentType: C;
-} & OutgoingTextContainer;
-
-export type IncomingTextRequest<C extends string> = {
-  readonly contentType: C;
-} & IncomingTextContainer;
-
-export type IncomingTextResponse<S extends StatusCode, C extends string> = {
-  readonly status: S;
-  readonly contentType: C;
-} & IncomingTextContainer;
-
-//#endregion
-
-//#region containers
-
-export type OutgoingTextContainer =
-  | { stream(signal?: AbortSignal): AsyncIterable<Uint8Array> }
-  | { value(): Promise<string> };
-
-export type IncomingTextContainer = {
-  stream(signal?: AbortSignal): AsyncIterable<Uint8Array>;
-} & { value(): Promise<string> };
-
-//#endregion
-
-//#region serialization
-
 export async function* serializeTextValue(
   value: string | Promise<string>,
 ): AsyncIterable<Uint8Array> {
@@ -97,5 +59,3 @@ export async function* deserializeTextLines(
     }
   }
 }
-
-//#endregion

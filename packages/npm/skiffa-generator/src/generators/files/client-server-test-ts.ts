@@ -97,8 +97,12 @@ function* generateOperationTest(
     operationModel.cookieParameters.length > 0;
   const hasContentTypeArgument = requestBodyModels.length > 1;
   const hasEntityArgument = requestBodyModels.length > 0;
+  const hasAuthenticationArgument = operationModel.authenticationRequirements.length > 0;
+  const hasAcceptsArgument = operationResultModels.some(
+    (model) => selectBodies(model, responseTypes).length > 1,
+  );
 
-  const hasStatusReturn = operationResultModels.length > 1;
+  const hasStatusReturn = operationResultModels.flatMap((model) => model.statusCodes).length > 1;
   const hasParametersReturn = operationResultModels.some(
     (model) => model.headerParameters.length > 0,
   );
@@ -188,6 +192,27 @@ function* generateOperationTest(
   `;
 
     function* generateTestBody() {
+      const handlerArguments = new Array<string>();
+      if (hasParametersArgument) {
+        handlerArguments.push("parameters");
+      }
+
+      if (hasContentTypeArgument) {
+        handlerArguments.push("contentType");
+      }
+
+      if (hasEntityArgument) {
+        handlerArguments.push("entity");
+      }
+
+      if (hasAuthenticationArgument) {
+        handlerArguments.push("authentication");
+      }
+
+      if (hasAcceptsArgument) {
+        handlerArguments.push("accepts");
+      }
+
       yield itt`
         const apiServer = new server.Server<ApiServerAuthentication>({
           validateIncomingParameters: false,
@@ -195,7 +220,7 @@ function* generateOperationTest(
           validateOutgoingParameters: false,
           validateOutgoingEntity: false,
         });
-        apiServer.${registerOperationHandlerMethodName}(async (incomingRequest, authentication, accepts) => {
+        apiServer.${registerOperationHandlerMethodName}(async (${handlerArguments.join(", ")}) => {
           ${generateServerOperationHandler()}
         });
       `;
@@ -265,18 +290,20 @@ function* generateOperationTest(
         assert(validateFunctionName != null);
 
         yield itt`
-        {
-          const parameterValue = incomingRequest.parameters.${getParameterMemberName(parameterModel)};
-          const valid = validators.${validateFunctionName}(parameterValue);
-          assert.equal(valid, true);
-        }
-      `;
+          {
+            const parameterValue = parameters.${getParameterMemberName(parameterModel)};
+            const valid = validators.${validateFunctionName}(parameterValue);
+            assert.equal(valid, true);
+          }
+        `;
       }
 
       if (requestBodyModel != null) {
-        yield itt`
-        assert.equal(incomingRequest.contentType, ${JSON.stringify(requestBodyModel.contentType)})
-      `;
+        if (hasContentTypeArgument) {
+          yield itt`
+            assert.equal(contentType, ${JSON.stringify(requestBodyModel.contentType)})
+          `;
+        }
 
         switch (requestBodyModel.contentType) {
           case "application/json": {
@@ -285,7 +312,6 @@ function* generateOperationTest(
 
             yield itt`
               {
-                const entity = await incomingRequest.entity();
                 const valid = validators.${validateFunctionName}(entity);
                 assert.equal(valid, true);
               }
@@ -298,39 +324,55 @@ function* generateOperationTest(
         }
       }
 
-      if (responseBodyModel == null) {
-        yield itt`
-        return {
-          status: ${JSON.stringify(statusCode)},
-          parameters: {
-            ${generateResponseParametersMockBody()}
-          },
-          contentType: null,
+      const tuple = new Array<string>();
+      if (hasStatusReturn) {
+        tuple.push(JSON.stringify(statusCode));
+      }
+
+      if (hasParametersReturn) {
+        tuple.push(`{${generateResponseParametersMockBody()}}`);
+      }
+
+      if (hasContentTypeReturn) {
+        if (responseBodyModel == null) {
+          tuple.push("null");
+        } else {
+          tuple.push(JSON.stringify(responseBodyModel.contentType));
         }
-      `;
-      } else {
-        switch (responseBodyModel.contentType) {
-          case "application/json": {
-            const mockFunctionName = getMockBodyFunction(names, responseBodyModel);
-            assert(mockFunctionName != null);
+      }
 
-            const entityExpression = itt`mocks.${mockFunctionName}()`;
+      if (hasEntityReturn) {
+        if (responseBodyModel == null) {
+          tuple.push("undefined");
+        } else {
+          switch (responseBodyModel.contentType) {
+            case "application/json": {
+              const mockFunctionName = getMockBodyFunction(names, responseBodyModel);
+              assert(mockFunctionName != null);
 
-            yield itt`
-            return {
-              status: ${JSON.stringify(statusCode)},
-              parameters: {
-                ${generateResponseParametersMockBody()}
-              },
-              contentType: ${JSON.stringify(responseBodyModel.contentType)},
-              entity: async () => ${entityExpression},
+              tuple.push(`mocks.${mockFunctionName}()`);
+              break;
             }
-          `;
-            break;
-          }
 
-          default:
-            throw new Error("unsupported content-type");
+            default:
+              throw new Error("unsupported content-type");
+          }
+        }
+      }
+
+      switch (tuple.length) {
+        case 0: {
+          break;
+        }
+
+        case 1: {
+          const [value] = tuple as [string];
+          yield itt`return value;`;
+          break;
+        }
+
+        default: {
+          yield itt`return [${tuple.join(", ")}];`;
         }
       }
     }
