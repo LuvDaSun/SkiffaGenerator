@@ -102,7 +102,7 @@ export function* generateOperationHandlerType(
     }
 
     yield itt`
-      export interface ${operationHandlerTypeName}<A extends ${serverAuthenticationName} = {}> {
+      export interface ${operationHandlerTypeName}<A extends ${serverAuthenticationName}> {
         (
           ${functionArguments.map(([name, type]) => `${name}: ${type},\n`).join("")}
         ): Promise<${generateHandlerReturnType()}>;
@@ -226,7 +226,7 @@ export function* generateOperationHandlersType(apiModel: skiffaCore.ApiContainer
   const typeName = getOperationHandlersTypeName();
 
   yield itt`
-    export type ${typeName}<A extends ${serverAuthenticationName} = {}> = {
+    export type ${typeName}<A extends ${serverAuthenticationName}> = {
       ${body()}
     }
   `;
