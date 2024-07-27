@@ -81,7 +81,7 @@ export function* generateClientOperationFunction(
   const hasContentTypeArgument = requestBodyModels.length > 1;
   const hasEntityArgument = requestBodyModels.length > 0;
 
-  const hasStatusReturn = operationResultModels.length > 1;
+  const hasStatusReturn = operationResultModels.flatMap((model) => model.statusCodes).length > 1;
   const hasParametersReturn = operationResultModels.some(
     (model) => model.headerParameters.length > 0,
   );
