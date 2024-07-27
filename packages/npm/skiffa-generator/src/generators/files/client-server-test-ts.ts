@@ -291,7 +291,7 @@ function* generateOperationTest(
 
         yield itt`
           {
-            const parameterValue = parameters.${getParameterMemberName(parameterModel)};
+            const parameterValue = $parameters.${getParameterMemberName(parameterModel)};
             const valid = validators.${validateFunctionName}(parameterValue);
             assert.equal(valid, true);
           }

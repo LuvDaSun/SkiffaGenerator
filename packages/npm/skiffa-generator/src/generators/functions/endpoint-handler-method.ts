@@ -266,11 +266,11 @@ function* generateBody(
             `;
           }),
         ]}
-      } as parameters.${requestParametersName};
+      } as $parameters.${requestParametersName};
 
       if(validateIncomingParameters) {
-        if(!parameters.${isRequestParametersFunction}(requestParameters)) {
-          const lastError = parameters.getLastParameterValidationError();
+        if(!$parameters.${isRequestParametersFunction}(requestParameters)) {
+          const lastError = $parameters.getLastParameterValidationError();
           throw new lib.ServerRequestParameterValidationFailed(
             lastError.parameterName,
             lastError.path,
@@ -641,8 +641,8 @@ function* generateBody(
 
       yield itt`
         if(validateOutgoingParameters) {
-          if(!parameters.${isResponseParametersFunction}(responseParameters ?? {})) {
-            const lastError = parameters.getLastParameterValidationError();
+          if(!$parameters.${isResponseParametersFunction}(responseParameters ?? {})) {
+            const lastError = $parameters.getLastParameterValidationError();
             throw new lib.ServerResponseParameterValidationFailed(
               lastError.parameterName,
               lastError.path,
