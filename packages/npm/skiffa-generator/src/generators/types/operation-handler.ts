@@ -81,7 +81,7 @@ export function* generateOperationHandlerType(
 
     if (hasParametersArgument) {
       const parametersTypeName = getRequestParametersTypeName(operationModel);
-      functionArguments.push(["parameters", `$parameters.${parametersTypeName}`]);
+      functionArguments.push(["parameters", `parameters.${parametersTypeName}`]);
     }
 
     if (hasContentTypeArgument) {
@@ -187,7 +187,7 @@ export function* generateOperationHandlerType(
         operationModel,
         operationResultModel,
       );
-      tuple.push(["parameters", `$parameters.${parametersTypeName}`]);
+      tuple.push(["parameters", `parameters.${parametersTypeName}`]);
     }
 
     if (hasContentTypeReturn) {
