@@ -570,8 +570,6 @@ export function* generateClientOperationFunction(
       for (const bodyModel of requestBodyModels) {
         yield itt`
           case ${JSON.stringify(bodyModel.contentType)}: {
-            requestHeaders.append("content-type", ${JSON.stringify(bodyModel.contentType)});
-    
             ${generateRequestContentTypeCodeBody(bodyModel)}
 
             break;
@@ -593,6 +591,9 @@ export function* generateClientOperationFunction(
         return;
       }
 
+      yield itt`
+        requestHeaders.append("content-type", ${JSON.stringify(bodyModel.contentType)});
+      `;
       switch (bodyModel.contentType) {
         case "application/json": {
           const isBodyTypeFunction = getIsBodyFunction(names, bodyModel);

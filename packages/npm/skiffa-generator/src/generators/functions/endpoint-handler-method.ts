@@ -561,7 +561,6 @@ function* generateBody(
             }
           `;
         }
-
         break;
       }
 
@@ -573,7 +572,7 @@ function* generateBody(
 
         if (parseBodyFunction == null) {
           yield itt`
-            requestEntity = await lib.deserializeTextValue(serverIncomingRequest.stream);
+            requestEntity = await lib.deserializeTextValue(serverIncomingRequest.stream) as ${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`};
           `;
         } else {
           yield itt`
@@ -594,7 +593,6 @@ function* generateBody(
             }
           `;
         }
-
         break;
       }
 
@@ -743,25 +741,6 @@ function* generateBody(
         const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
         const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
 
-        yield itt`
-          const mapAssertEntity = (entity: unknown) => {
-            ${
-              isBodyTypeFunction == null
-                ? ""
-                : itt`
-              if(!validators.${isBodyTypeFunction}(entity)) {
-                const lastError = validators.getLastValidationError();
-                throw new lib.ServerResponseEntityValidationFailed(
-                  lastError.path,
-                  lastError.rule,
-                );
-              }
-            `
-            }
-            return entity as ${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`};
-          }
-        `;
-
         if (isBodyTypeFunction == null) {
           yield itt`
             serverOutgoingResponse = {
@@ -812,12 +791,14 @@ function* generateBody(
 
         if (isBodyTypeFunction != null) {
           yield itt`
-            if(!validators.${isBodyTypeFunction}(responseEntity)) {
-              const lastError = validators.getLastValidationError();
-              throw new lib.ServerResponseEntityValidationFailed(
-                lastError.path,
-                lastError.rule,
-              );
+            if(validateOutgoingEntity) {
+              if(!validators.${isBodyTypeFunction}(responseEntity)) {
+                const lastError = validators.getLastValidationError();
+                throw new lib.ServerResponseEntityValidationFailed(
+                  lastError.path,
+                  lastError.rule,
+                );
+              }
             }
           `;
         }
@@ -841,12 +822,14 @@ function* generateBody(
 
         if (isBodyTypeFunction != null) {
           yield itt`
-            if(!validators.${isBodyTypeFunction}(responseEntity)) {
-              const lastError = validators.getLastValidationError();
-              throw new lib.ServerResponseEntityValidationFailed(
-                lastError.path,
-                lastError.rule,
-              );
+            if(validateOutgoingEntity) {
+              if(!validators.${isBodyTypeFunction}(responseEntity)) {
+                const lastError = validators.getLastValidationError();
+                throw new lib.ServerResponseEntityValidationFailed(
+                  lastError.path,
+                  lastError.rule,
+                );
+              }
             }
           `;
         }
