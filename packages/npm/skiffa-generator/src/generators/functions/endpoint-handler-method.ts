@@ -364,12 +364,26 @@ function* generateBody(
     let serverOutgoingResponse: lib.ServerOutgoingResponse;
     `;
 
-  if (hasStatusReturn) {
-    yield itt`
-      switch(status) {
-        ${generateStatusCodeCaseClauses()}
-      }
-    `;
+  switch (operationResultModels.length) {
+    case 0: {
+      yield itt`
+        throw new lib.Unreachable();
+      `;
+      break;
+    }
+    case 1: {
+      const [operationResultModel] = operationResultModels as [skiffaCore.OperationResultContainer];
+      yield generateOperationResultBody(operationResultModel);
+      break;
+    }
+
+    default: {
+      yield itt`
+        switch(status) {
+          ${generateStatusCodeCaseClauses()}
+        }
+      `;
+    }
   }
 
   yield itt`
@@ -593,23 +607,25 @@ function* generateBody(
   }
 
   function* generateOperationResultBody(operationResultModel: skiffaCore.OperationResultContainer) {
-    const isResponseParametersFunction = getIsResponseParametersFunction(
-      operationModel,
-      operationResultModel,
-    );
+    if (hasParametersReturn) {
+      const isResponseParametersFunction = getIsResponseParametersFunction(
+        operationModel,
+        operationResultModel,
+      );
 
-    yield itt`
-      if(validateOutgoingParameters) {
-        if(!parameters.${isResponseParametersFunction}(responseParameters ?? {})) {
-          const lastError = parameters.getLastParameterValidationError();
-          throw new lib.ServerResponseParameterValidationFailed(
-            lastError.parameterName,
-            lastError.path,
-            lastError.rule,
-          );
+      yield itt`
+        if(validateOutgoingParameters) {
+          if(!parameters.${isResponseParametersFunction}(responseParameters ?? {})) {
+            const lastError = parameters.getLastParameterValidationError();
+            throw new lib.ServerResponseParameterValidationFailed(
+              lastError.parameterName,
+              lastError.path,
+              lastError.rule,
+            );
+          }
         }
-      }
-    `;
+      `;
+    }
 
     yield itt`
       const responseHeaders = {};
@@ -639,15 +655,24 @@ function* generateBody(
 
     const responseBodyModels = selectBodies(operationResultModel, responseTypes);
 
-    if (responseBodyModels.length === 0) {
-      yield* generateOperationResultContentTypeBody();
-      return;
-    } else {
-      yield itt`
-        switch(responseContentType) {
-          ${generateOperationResultContentTypeCaseClauses(operationResultModel)}
-        }
-      `;
+    switch (responseBodyModels.length) {
+      case 0: {
+        yield generateOperationResultContentTypeBody();
+        break;
+      }
+      case 1: {
+        const [responseBodyModel] = responseBodyModels as [skiffaCore.BodyContainer];
+        yield generateOperationResultContentTypeBody(responseBodyModel);
+        break;
+      }
+      default: {
+        yield itt`
+          switch(responseContentType) {
+            ${generateOperationResultContentTypeCaseClauses(operationResultModel)}
+          }
+        `;
+        break;
+      }
     }
   }
 
@@ -732,35 +757,24 @@ function* generateBody(
         const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
         const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
 
-        yield itt`
-        const mapAssertEntity = (entity: unknown) => {
-          ${
-            isBodyTypeFunction == null
-              ? ""
-              : itt`
-            if(!validators.${isBodyTypeFunction}(entity)) {
+        if (isBodyTypeFunction != null) {
+          yield itt`
+            if(!validators.${isBodyTypeFunction}(responseEntity)) {
               const lastError = validators.getLastValidationError();
               throw new lib.ServerResponseEntityValidationFailed(
                 lastError.path,
                 lastError.rule,
               );
             }
-          `
-          }
-          return entity as ${bodyTypeName == null ? "unknown" : `types.${bodyTypeName}`};
+          `;
         }
-      `;
 
         yield itt`
           serverOutgoingResponse = {
             status,
             headers: responseHeaders,
             stream(signal) {
-              let entity = responseEntity();
-              if(validateOutgoingEntity) {
-                entity = lib.mapPromisable(entity, mapAssertEntity);
-              }
-              return lib.serializeJsonEntity(entity);
+              return lib.serializeJsonEntity(responseEntity);
             },
           }
         `;
@@ -768,12 +782,28 @@ function* generateBody(
       }
 
       case "text/plain": {
+        const bodySchemaId = bodyModel.schemaId;
+        const bodyTypeName = bodySchemaId == null ? bodySchemaId : names[bodySchemaId];
+        const isBodyTypeFunction = bodyTypeName == null ? bodyTypeName : "is" + bodyTypeName;
+
+        if (isBodyTypeFunction != null) {
+          yield itt`
+            if(!validators.${isBodyTypeFunction}(responseEntity)) {
+              const lastError = validators.getLastValidationError();
+              throw new lib.ServerResponseEntityValidationFailed(
+                lastError.path,
+                lastError.rule,
+              );
+            }
+          `;
+        }
+
         yield itt`
           serverOutgoingResponse = {
             status: outgoingResponse.status,
             headers: responseHeaders,
             stream(signal) {
-              return lib.serializeTextValue(responseEntity);
+              return lib.serializeTextValue(String(responseEntity));
             },
           }
         `;
