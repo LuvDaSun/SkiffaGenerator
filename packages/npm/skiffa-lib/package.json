@@ -1,12 +1,12 @@
 {
   "name": "@skiffa/lib",
-  "version": "0.12.3",
+  "version": "0.12.4",
   "description": "",
   "type": "module",
   "main": "./bundled/main.cjs",
   "module": "./bundles/main.js",
   "types": "./typed/main.d.ts",
-  "browser": "./bundles/browser.js",
+  "browser": "./bundled/browser.js",
   "exports": {
     ".": {
       "require": "./bundled/main.cjs",
