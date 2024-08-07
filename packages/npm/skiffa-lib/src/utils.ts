@@ -1,6 +1,5 @@
 export * from "./utils/functional.js";
 export * from "./utils/headers.js";
-export * from "./utils/listener.js";
 export * from "./utils/method.js";
 export * from "./utils/parameters.js";
 export * from "./utils/status-code.js";
