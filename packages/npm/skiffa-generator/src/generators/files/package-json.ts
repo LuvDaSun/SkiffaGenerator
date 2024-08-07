@@ -10,11 +10,13 @@ export function generatePackageJsonData(name: string, version: string) {
     main: "./bundled/main.cjs",
     module: "./bundled/main.js",
     types: "./typed/main.d.ts",
+    browser: "./bundled/browser.js",
     exports: {
       ".": {
         require: "./bundled/main.cjs",
         import: "./bundled/main.js",
         types: "./typed/main.d.ts",
+        browser: "./bundled/browser.js",
       },
     },
     files: ["./typed/**", "./bundled/**"],
