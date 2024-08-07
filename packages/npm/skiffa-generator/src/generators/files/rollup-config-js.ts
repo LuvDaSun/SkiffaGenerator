@@ -18,11 +18,19 @@ export function* generateRollupConfigJsCode() {
       external,
       input: path.resolve("transpiled", "main.js"),
       output: { file: path.resolve("bundled", "main.js"), format: "module", sourcemap: true },
+      context: "global",
     },
     {
       external,
       input: path.resolve("transpiled", "main.js"),
       output: { file: path.resolve("bundled", "main.cjs"), format: "commonjs", sourcemap: true },
+      context: "global",
+    },
+    {
+      external,
+      input: path.resolve("transpiled", "browser.js"),
+      output: { file: path.resolve("bundled", "browser.js"), format: "module", sourcemap: true },
+      context: "window",
     },
   ]);
   `;
