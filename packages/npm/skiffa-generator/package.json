@@ -1,6 +1,6 @@
 {
   "name": "@skiffa/generator",
-  "version": "0.13.5",
+  "version": "0.13.6",
   "sideEffects": false,
   "description": "",
   "type": "module",
@@ -45,9 +45,9 @@
     "@jns42/core": "^0.7.9",
     "@jns42/generator": "^0.21.6",
     "@skiffa/core": "^0.2.3",
-    "@skiffa/lib": "^0.12.1",
-    "@types/node": "^18.19.42",
-    "@types/yargs": "^17.0.32",
+    "@skiffa/lib": "^0.12.2",
+    "@types/node": "^18.19.43",
+    "@types/yargs": "^17.0.33",
     "camelcase": "^8.0.0",
     "goodrouter": "^2.1.6",
     "tslib": "^2.6.3",
@@ -58,7 +58,7 @@
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.7",
     "@tsconfig/node18": "^18.2.4",
-    "rollup": "^4.19.1",
+    "rollup": "^4.20.0",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "typescript": "^5.5.4"
   },
