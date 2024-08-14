@@ -32,6 +32,10 @@
     "type": "git",
     "url": "git+ssh://git@github.com/LuvDaSun/Skiffa"
   },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/LuvDaSun"
+  },
   "author": "LuvDaSun Software B.V.",
   "license": "ISC",
   "bugs": {
