@@ -32,3 +32,4 @@ tokio = { version = "1.38.0", features = ["full"] }
 
 [lib]
 crate-type = ["rlib", "cdylib"]
+
