@@ -333,10 +333,10 @@ export function* generateClientOperationFunction(
     // lets fill some request parameters
 
     yield itt`
-      const pathParameters = {};
-      const queryParameters = {};
+      const pathParameters = {} as Record<string, string>;
+      const queryParameters = {} as Record<string, string>;
       const requestHeaders = new Headers();
-      const cookieParameters = {};
+      const cookieParameters = {} as Record<string, string>;
     `;
 
     // if there are no parameters, then we
@@ -459,7 +459,7 @@ export function* generateClientOperationFunction(
               case "query": {
                 yield itt`
                 if(configuration.${getAuthenticationMemberName(authenticationModel)} != null) {
-                  queryParameters.append(${JSON.stringify(authenticationModel.name)}, configuration.${getAuthenticationMemberName(authenticationModel)});
+                  queryParameters[${JSON.stringify(authenticationModel.name)}] = configuration.${getAuthenticationMemberName(authenticationModel)};
                 }
               `;
                 break;
@@ -510,6 +510,16 @@ export function* generateClientOperationFunction(
               }
             }
             break;
+
+          case "oauth2": {
+            // WARN
+            break;
+          }
+
+          case "openIdConnect": {
+            // WARN
+            break;
+          }
 
           default: {
             throw "impossible";

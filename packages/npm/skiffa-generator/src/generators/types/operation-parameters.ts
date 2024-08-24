@@ -1,5 +1,5 @@
 import * as skiffaCore from "@skiffa/core";
-import camelcase from "camelcase";
+import { toCamel } from "../../utils.js";
 import { itt } from "../../utils/iterable-text-template.js";
 import { getRequestParametersTypeName } from "../names.js";
 
@@ -23,7 +23,7 @@ export function* generateOperationParametersTypes(
         const parameterTypeName = parameterSchemaId == null ? undefined : names[parameterSchemaId];
 
         return itt`
-          ${camelcase(parameterModel.name)}${parameterModel.required ? "" : "?"}:
+          ${toCamel(parameterModel.name)}${parameterModel.required ? "" : "?"}:
             ${parameterTypeName == null ? "unknown" : `types.${parameterTypeName}`}
         `;
       })}

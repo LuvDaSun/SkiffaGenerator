@@ -275,6 +275,16 @@ function* generateOperationTest(
             }
             break;
 
+          case "oauth2": {
+            // WARN
+            break;
+          }
+
+          case "openIdConnect": {
+            // WARN
+            break;
+          }
+
           default: {
             throw "impossible";
           }
@@ -562,6 +572,16 @@ function* generateOperationTest(
               }
             }
             break;
+
+          case "oauth2": {
+            // WARN
+            break;
+          }
+
+          case "openIdConnect": {
+            // WARN
+            break;
+          }
 
           default: {
             throw "impossible";

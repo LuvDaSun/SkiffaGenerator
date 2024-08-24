@@ -70,6 +70,12 @@ export function* generateAuthenticationCredentialType(
             return "unknown";
         }
 
+      case "oauth2":
+        return "unknown";
+
+      case "openIdConnect":
+        return "unknown";
+
       default:
         return "unknown";
     }
