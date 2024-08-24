@@ -1,6 +1,6 @@
 {
   "name": "@skiffa/generator",
-  "version": "0.13.6",
+  "version": "0.13.7",
   "sideEffects": false,
   "description": "",
   "type": "module",
