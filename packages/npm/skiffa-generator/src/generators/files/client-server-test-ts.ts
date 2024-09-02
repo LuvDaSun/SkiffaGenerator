@@ -315,7 +315,7 @@ function* generateOperationTest(
 
         yield itt`
           {
-            const parameterValue = $parameters.${getParameterMemberName(parameterModel)};
+            const parameterValue = parameters.${getParameterMemberName(parameterModel)};
             const valid = validators.${validateFunctionName}(parameterValue);
             assert.equal(valid, true);
           }
@@ -443,7 +443,7 @@ function* generateOperationTest(
         returnArguments.push("resultStatus");
       }
 
-      if (hasParametersArgument) {
+      if (hasClientParametersReturn) {
         returnArguments.push("resultParameters");
       }
 
@@ -563,8 +563,8 @@ function* generateOperationTest(
 
               case "bearer":
                 yield itt`
-                ${getAuthenticationMemberName(authenticationModel)}: "super-secret",
-              `;
+                  ${getAuthenticationMemberName(authenticationModel)}: "super-secret",
+                `;
                 break;
 
               default: {

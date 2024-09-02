@@ -26,7 +26,7 @@ export function isOperationModelMockable(
       ...model.headerParameters,
       ...model.queryParameters,
       ...model.cookieParameters,
-    ].every((model) => isParameterModelMockable(model, mockables)) &&
+    ].every((model) => isParameterModelMockable(model, mockables) || !model.required) &&
     (model.bodies.length == 0 ||
       selectBodies(model, requestTypes).some((model) => isBodyModelMockable(model, mockables))) &&
     (model.operationResults.length == 0 ||
@@ -42,7 +42,9 @@ export function isOperationResultModelMockable(
   responseTypes: Array<string>,
 ) {
   return (
-    [...model.headerParameters].every((model) => isParameterModelMockable(model, mockables)) &&
+    [...model.headerParameters].every(
+      (model) => isParameterModelMockable(model, mockables) || !model.required,
+    ) &&
     (model.bodies.length == 0 ||
       selectBodies(model, responseTypes).some((model) => isBodyModelMockable(model, mockables)))
   );
@@ -60,5 +62,5 @@ export function isParameterModelMockable(
   model: skiffaCore.ParameterContainer,
   mockables: Set<string>,
 ) {
-  return model.schemaId == null || mockables.has(model.schemaId) || !model.required;
+  return model.schemaId == null || mockables.has(model.schemaId);
 }

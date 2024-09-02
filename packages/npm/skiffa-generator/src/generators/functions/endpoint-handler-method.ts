@@ -128,15 +128,12 @@ function* generateBody(
    * now we put the raw parameters in variables, path parameters are already
    * present, they are in the methods arguments
    */
-
-  if (hasParametersArgument) {
-    yield itt`
+  yield itt`
     const queryParameters =
       lib.parseParameters([serverIncomingRequest.query], "?", "&", "=");
     const cookieParameters = 
       lib.parseParameters(cookie, "", "; ", "=");
   `;
-  }
 
   if (hasAcceptsArgument) {
     /*
@@ -467,11 +464,17 @@ function* generateBody(
 
         case "oauth2": {
           // WARN
+          yield itt`
+            ${getAuthenticationMemberName(authenticationModel)}: undefined,
+          `;
           break;
         }
 
         case "openIdConnect": {
           // WARN
+          yield itt`
+            ${getAuthenticationMemberName(authenticationModel)}: undefined,
+          `;
           break;
         }
 

@@ -52,11 +52,21 @@ export function* generateAuthenticationHandlerType(
 
     case "oauth2": {
       // WARN
+      yield itt`
+        export type ${handlerTypeName}<A extends ${serverAuthenticationName}> =
+          (credential: unknown) =>
+            Promise<A[${JSON.stringify(getAuthenticationMemberName(authenticationModel))}] | undefined>;
+        `;
       break;
     }
 
     case "openIdConnect": {
       // WARN
+      yield itt`
+        export type ${handlerTypeName}<A extends ${serverAuthenticationName}> =
+          (credential: unknown) =>
+            Promise<A[${JSON.stringify(getAuthenticationMemberName(authenticationModel))}] | undefined>;
+        `;
       break;
     }
 
