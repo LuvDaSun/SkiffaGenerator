@@ -563,8 +563,8 @@ function* generateOperationTest(
 
               case "bearer":
                 yield itt`
-                ${getAuthenticationMemberName(authenticationModel)}: "super-secret",
-              `;
+                  ${getAuthenticationMemberName(authenticationModel)}: "super-secret",
+                `;
                 break;
 
               default: {
