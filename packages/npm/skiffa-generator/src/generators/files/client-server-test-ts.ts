@@ -443,7 +443,7 @@ function* generateOperationTest(
         returnArguments.push("resultStatus");
       }
 
-      if (hasParametersArgument) {
+      if (hasClientParametersReturn) {
         returnArguments.push("resultParameters");
       }
 
