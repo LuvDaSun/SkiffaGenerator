@@ -45,14 +45,14 @@
     "@appsignal/nodejs": "^3.4.9",
     "@opentelemetry/api": "^1.9.0",
     "@skiffa/lib": "^0.12.4",
-    "@types/node": "^18.19.45",
+    "@types/node": "^18.19.50",
     "tslib": "^2.7.0",
-    "type-fest": "^4.25.0"
+    "type-fest": "^4.26.0"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.7",
     "@tsconfig/node18": "^18.2.4",
-    "rollup": "^4.21.0",
+    "rollup": "^4.21.2",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "typescript": "^5.5.4"
   },
