@@ -34,7 +34,6 @@ export function generatePackageJsonData(name: string, version: string) {
     engines: {
       node: ">=18",
     },
-    packageManager: "npm@10.5.0",
   };
 
   return content;
