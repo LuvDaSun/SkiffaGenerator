@@ -1,6 +1,6 @@
 {
   "name": "@skiffa/generator",
-  "version": "0.13.16",
+  "version": "0.13.17",
   "sideEffects": false,
   "description": "",
   "type": "module",
@@ -48,8 +48,8 @@
   "dependencies": {
     "@jns42/core": "^0.7.11",
     "@jns42/generator": "^0.21.13",
-    "@skiffa/core": "^0.2.4",
-    "@skiffa/lib": "^0.12.5",
+    "@skiffa/core": "^0.2.5",
+    "@skiffa/lib": "^0.12.6",
     "@types/node": "^18.19.50",
     "@types/yargs": "^17.0.33",
     "camelcase": "^8.0.0",
@@ -63,7 +63,6 @@
     "@rollup/plugin-replace": "^5.0.7",
     "@tsconfig/node18": "^18.2.4",
     "rollup": "^4.21.2",
-    "rollup-plugin-sourcemaps": "^0.6.3",
     "typescript": "^5.5.4"
   },
   "engines": {
