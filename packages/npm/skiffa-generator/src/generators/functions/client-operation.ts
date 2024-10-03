@@ -679,8 +679,9 @@ export function* generateClientOperationFunction(
       };
       const fetchResponse = await fetch(url, requestInit);
   
-      const responseContentType = 
-        fetchResponse.headers.get("content-type");
+      const responseContentTypeMatches = [
+        lib.parseContentTypeMatches([fetchResponse.headers.get("content-type") ?? ""])
+      ];
     `;
 
     // and handle the response
@@ -773,15 +774,18 @@ export function* generateClientOperationFunction(
 
         default: {
           yield itt`
-            if (responseContentType == null) {
+            if (responseContentTypeMatches.length === 0) {
               throw new lib.ClientResponseMissingContentType();
             }
           `;
 
           yield itt`
-            switch(responseContentType) {
-              ${generateOperationResultContentTypeCaseClauses(operationResultModel)}
+            for(const responseContentTypeMatch of responseContentTypeMatches) {
+              switch(responseContentTypeMatch) {
+                ${generateOperationResultContentTypeCaseClauses(operationResultModel)}
+              }
             }
+            throw new lib.ClientResponseUnexpectedContentType();
           `;
         }
       }
@@ -801,11 +805,6 @@ export function* generateClientOperationFunction(
           }
         `;
       }
-
-      yield itt`
-        default:
-          throw new lib.ClientResponseUnexpectedContentType();       
-      `;
     }
 
     function* generateOperationResultContentTypeBody(bodyModel?: skiffaCore.BodyContainer) {
