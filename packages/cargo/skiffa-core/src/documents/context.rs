@@ -119,7 +119,8 @@ impl DocumentContextContainer {
       };
 
       for referenced_location in document.get_referenced_locations()? {
-        let referenced_retrieval_location = retrieval_location.join(&referenced_location);
+        let referenced_retrieval_location =
+          retrieval_location.join(&referenced_location).set_root();
 
         queue.push(referenced_retrieval_location);
       }
