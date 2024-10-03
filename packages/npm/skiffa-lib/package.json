@@ -44,16 +44,16 @@
     "library"
   ],
   "dependencies": {
-    "@types/node": "^18.19.50",
+    "@types/node": "^18.19.54",
     "js-base64": "^3.7.7",
     "msecs": "^1.0.4",
     "tslib": "^2.7.0",
-    "type-fest": "^4.26.0"
+    "type-fest": "^4.26.1"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.4",
-    "rollup": "^4.21.2",
-    "typescript": "^5.5.4"
+    "rollup": "^4.24.0",
+    "typescript": "^5.6.2"
   },
   "engines": {
     "node": ">=18"
