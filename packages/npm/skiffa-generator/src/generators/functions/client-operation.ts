@@ -680,7 +680,7 @@ export function* generateClientOperationFunction(
       const fetchResponse = await fetch(url, requestInit);
   
       const responseContentTypeMatches = [
-        lib.parseContentTypeMatches([fetchResponse.headers.get("content-type") ?? ""])
+        ...lib.parseContentTypeMatches([fetchResponse.headers.get("content-type") ?? ""])
       ];
     `;
 
