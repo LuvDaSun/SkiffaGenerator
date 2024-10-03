@@ -10,6 +10,25 @@ export function parseAuthorizationHeader(scheme: string, values: Iterable<string
   }
 }
 
+export function* parseContentTypeMatches(values: Iterable<string>): Iterable<string> {
+  for (const value of values) {
+    const parts = value.split(";", 2);
+    const [part] = parts;
+    if (part == null) {
+      continue;
+    }
+
+    const match = /^(.+?)\/(.+)$/.exec(part);
+    if (match == null) {
+      continue;
+    }
+
+    yield match[0].trim();
+    yield (match[1] ?? "*").trim() + "/*";
+    yield "*/*";
+  }
+}
+
 export function stringifyAuthorizationHeader(scheme: string, value: string) {
   const prefix = scheme + " ";
 
