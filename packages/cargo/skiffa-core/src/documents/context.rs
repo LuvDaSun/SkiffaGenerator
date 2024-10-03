@@ -119,7 +119,8 @@ impl DocumentContextContainer {
       };
 
       for referenced_location in document.get_referenced_locations()? {
-        let referenced_retrieval_location = retrieval_location.join(&referenced_location);
+        let referenced_retrieval_location =
+          retrieval_location.join(&referenced_location).set_root();
 
         queue.push(referenced_retrieval_location);
       }
@@ -227,5 +228,31 @@ mod tests {
         }
       }
     }
+  }
+
+  #[tokio::test]
+  async fn test_oas30_response_component() {
+    let context = DocumentContextContainer::default();
+    context.register_well_known_factories();
+
+    let location = "../../../fixtures/specifications/response-component.yaml#";
+
+    context.load_from_location(location).await.unwrap();
+    let api = context.get_api_model(location).unwrap();
+
+    assert_eq!(api.location(), location.to_string());
+  }
+
+  #[tokio::test]
+  async fn test_oas30_parameter_component() {
+    let context = DocumentContextContainer::default();
+    context.register_well_known_factories();
+
+    let location = "../../../fixtures/specifications/parameter-component.yaml#";
+
+    context.load_from_location(location).await.unwrap();
+    let api = context.get_api_model(location).unwrap();
+
+    assert_eq!(api.location(), location.to_string());
   }
 }

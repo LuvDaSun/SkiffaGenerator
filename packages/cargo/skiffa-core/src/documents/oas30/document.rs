@@ -39,9 +39,9 @@ impl Document {
           None
         }
       })
-      .map(|(location, reference)| {
+      .map(|(_location, reference)| {
         let reference_location: NodeLocation = reference.parse()?;
-        Ok(location.join(&reference_location))
+        Ok(reference_location)
       })
   }
 

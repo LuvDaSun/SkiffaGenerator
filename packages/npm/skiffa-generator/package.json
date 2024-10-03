@@ -50,20 +50,20 @@
     "@jns42/generator": "^0.21.13",
     "@skiffa/core": "^0.2.5",
     "@skiffa/lib": "^0.12.6",
-    "@types/node": "^18.19.50",
+    "@types/node": "^18.19.54",
     "@types/yargs": "^17.0.33",
     "camelcase": "^8.0.0",
     "goodrouter": "^2.1.6",
     "tslib": "^2.7.0",
-    "type-fest": "^4.26.0",
+    "type-fest": "^4.26.1",
     "yaml": "^2.5.1",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@rollup/plugin-replace": "^5.0.7",
+    "@rollup/plugin-replace": "^6.0.1",
     "@tsconfig/node18": "^18.2.4",
-    "rollup": "^4.21.2",
-    "typescript": "^5.5.4"
+    "rollup": "^4.24.0",
+    "typescript": "^5.6.2"
   },
   "engines": {
     "node": ">=18"
