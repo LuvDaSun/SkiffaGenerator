@@ -1,0 +1,24 @@
+openapi: 3.0.0
+info:
+  title: "reponse-component-test"
+  description: "Testing to see if refs in responses work!"
+  version: "0.1.0"
+
+paths:
+  /noop:
+    parameters:
+      - { $ref: "#/components/parameters/language" }
+    get:
+      operationId: noop
+      parameters: []
+      responses:
+        "204":
+          description: No Content
+
+components:
+  parameters:
+    language:
+      name: language
+      in: query
+      schema:
+        type: string
