@@ -1,6 +1,6 @@
 {
   "name": "@skiffa/core",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "sideEffects": false,
   "description": "core library",
   "type": "commonjs",
