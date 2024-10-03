@@ -44,7 +44,7 @@
   "dependencies": {
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/instrumentation": "^0.53.0",
-    "@skiffa/lib": "^0.12.7",
+    "@skiffa/lib": "^0.12.8",
     "@types/node": "^18.19.54",
     "tslib": "^2.7.0",
     "type-fest": "^4.26.1"
