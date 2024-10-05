@@ -21,7 +21,7 @@
     "prepack": "node ./scripts/build.mjs",
     "pretest": "tsc",
     "build": "node ./scripts/build.mjs",
-    "test": "node --test ./transpiled/**/*.test.js"
+    "test": "$npm_node_execpath --test ./transpiled/**/*.test.js"
   },
   "repository": {
     "type": "git",

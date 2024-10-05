@@ -14,7 +14,7 @@
     "formatting": "prettier --check *",
     "build": "$npm_execpath run --workspaces --if-present build",
     "pretest": "$npm_execpath run --workspaces --if-present pretest",
-    "test": "node --test packages/npm/*/transpiled/**/*.test.js"
+    "test": "$npm_node_execpath --test packages/npm/*/transpiled/**/*.test.js"
   },
   "devDependencies": {
     "cspell": "^8.14.4",
