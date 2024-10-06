@@ -17,8 +17,7 @@
   ],
   "scripts": {
     "prepack": "node ./scripts/build.mjs",
-    "build": "node ./scripts/build.mjs",
-    "clean": "node ./scripts/clean.mjs"
+    "build": "node ./scripts/build.mjs"
   },
   "repository": {
     "type": "git",
