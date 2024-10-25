@@ -22,10 +22,10 @@
     "skiffa-generator": "bundled/program.js"
   },
   "scripts": {
-    "prepack": "$npm_node_execpath ./scripts/build.mjs",
-    "pretest": "$npm_node_execpath ./scripts/build.mjs",
-    "build": "$npm_node_execpath ./scripts/build.mjs",
-    "test": "$npm_node_execpath --test ./transpiled/**/*.test.js"
+    "prepack": "node ./scripts/build.mjs",
+    "pretest": "node ./scripts/build.mjs",
+    "build": "node ./scripts/build.mjs",
+    "test": "node --test ./transpiled/**/*.test.js"
   },
   "repository": {
     "type": "git",

@@ -16,8 +16,8 @@
     "./dist/**"
   ],
   "scripts": {
-    "prepack": "$npm_node_execpath ./scripts/build.mjs",
-    "build": "$npm_node_execpath ./scripts/build.mjs"
+    "prepack": "node ./scripts/build.mjs",
+    "build": "node ./scripts/build.mjs"
   },
   "repository": {
     "type": "git",
