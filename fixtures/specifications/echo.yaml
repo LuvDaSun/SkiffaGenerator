@@ -8,11 +8,7 @@ info:
 paths:
   /echo:
     parameters:
-      - in: query
-        required: true
-        name: value
-        schema:
-          type: string
+      - $ref: "#/components/parameters/value"
     post:
       operationId: echo
       summary: echo
@@ -27,3 +23,12 @@ paths:
           content:
             text/plain: {}
             application/octet-stream: {}
+
+components:
+  parameters:
+    value:
+      in: query
+      required: true
+      name: value
+      schema:
+        type: string
