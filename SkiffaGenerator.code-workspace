@@ -34,7 +34,6 @@
     },
   ],
   "settings": {
-    "window.title": "Skiffa",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll": "always",

@@ -20,10 +20,9 @@
     "./bundled/**"
   ],
   "scripts": {
-    "prepack": "node ./scripts/build.js",
-    "pretest": "tsc",
-    "build": "node ./scripts/build.js",
-    "clean": "node ./scripts/clean.js",
+    "prepack": "node ./scripts/build.mjs",
+    "pretest": "node ./scripts/build.mjs",
+    "build": "node ./scripts/build.mjs",
     "test": "node --test ./transpiled/**/*.test.js"
   },
   "repository": {
@@ -44,16 +43,16 @@
     "library"
   ],
   "dependencies": {
-    "@types/node": "^18.19.54",
+    "@types/node": "^20.17.0",
     "js-base64": "^3.7.7",
     "msecs": "^1.0.4",
-    "tslib": "^2.7.0",
+    "tslib": "^2.8.0",
     "type-fest": "^4.26.1"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.4",
     "rollup": "^4.24.0",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.3"
   },
   "engines": {
     "node": ">=18"

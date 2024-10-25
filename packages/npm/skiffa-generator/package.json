@@ -22,10 +22,9 @@
     "skiffa-generator": "bundled/program.js"
   },
   "scripts": {
-    "prepack": "node ./scripts/build.js",
-    "pretest": "tsc",
-    "build": "node ./scripts/build.js",
-    "clean": "node ./scripts/clean.js",
+    "prepack": "node ./scripts/build.mjs",
+    "pretest": "node ./scripts/build.mjs",
+    "build": "node ./scripts/build.mjs",
     "test": "node --test ./transpiled/**/*.test.js"
   },
   "repository": {
@@ -47,23 +46,23 @@
   ],
   "dependencies": {
     "@jns42/core": "^0.7.11",
-    "@jns42/generator": "^0.21.13",
+    "@jns42/generator": "^0.21.15",
     "@skiffa/core": "^0.2.6",
     "@skiffa/lib": "^0.12.8",
-    "@types/node": "^18.19.54",
+    "@types/node": "^20.17.0",
     "@types/yargs": "^17.0.33",
     "camelcase": "^8.0.0",
     "goodrouter": "^2.1.6",
-    "tslib": "^2.7.0",
+    "tslib": "^2.8.0",
     "type-fest": "^4.26.1",
-    "yaml": "^2.5.1",
+    "yaml": "^2.6.0",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "^6.0.1",
     "@tsconfig/node18": "^18.2.4",
     "rollup": "^4.24.0",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.3"
   },
   "engines": {
     "node": ">=18"

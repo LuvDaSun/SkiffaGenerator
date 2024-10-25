@@ -21,7 +21,7 @@ for F in $(ls fixtures/specifications/*.yaml); do
     ERROR=1
   fi;
 
-  ( cd generated/npm/$(basename $F .yaml) ; npm install)
+  ( cd generated/npm/$(basename $F .yaml) ; npm install --no-package-lock)
 
   if [ $? -ne 0 ]; then
     ERROR=1
