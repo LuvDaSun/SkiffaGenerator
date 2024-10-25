@@ -43,7 +43,7 @@
     "library"
   ],
   "dependencies": {
-    "@types/node": "^18.19.59",
+    "@types/node": "^20.17.0",
     "js-base64": "^3.7.7",
     "msecs": "^1.0.4",
     "tslib": "^2.8.0",

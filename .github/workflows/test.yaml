@@ -5,8 +5,8 @@ jobs:
   test-lts:
     strategy:
       matrix:
-        node-version: [18, 20, 22]
-        rust-version: [1.79]
+        node-version: [20, 22]
+        rust-version: [1.82]
         runs-on: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.runs-on }}
     steps:

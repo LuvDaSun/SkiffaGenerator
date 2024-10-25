@@ -49,7 +49,7 @@
     "@jns42/generator": "^0.21.15",
     "@skiffa/core": "^0.2.6",
     "@skiffa/lib": "^0.12.8",
-    "@types/node": "^18.19.59",
+    "@types/node": "^20.17.0",
     "@types/yargs": "^17.0.33",
     "camelcase": "^8.0.0",
     "goodrouter": "^2.1.6",

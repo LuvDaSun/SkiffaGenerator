@@ -4,7 +4,7 @@ on:
 jobs:
   audit:
     runs-on: ubuntu-latest
-    container: node:21.5.0-alpine3.19
+    container: node:20.18.0-alpine3.19
     steps:
       - uses: actions/checkout@v4
       - run: npm ci
