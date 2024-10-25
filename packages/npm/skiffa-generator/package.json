@@ -1,6 +1,6 @@
 {
   "name": "@skiffa/generator",
-  "version": "0.13.20",
+  "version": "0.13.21",
   "sideEffects": false,
   "description": "",
   "type": "module",
@@ -47,8 +47,8 @@
   "dependencies": {
     "@jns42/core": "^0.7.11",
     "@jns42/generator": "^0.21.15",
-    "@skiffa/core": "^0.2.6",
-    "@skiffa/lib": "^0.12.8",
+    "@skiffa/core": "^0.2.7",
+    "@skiffa/lib": "^0.12.9",
     "@types/node": "^20.17.0",
     "@types/yargs": "^17.0.33",
     "camelcase": "^8.0.0",
