@@ -1,0 +1,27 @@
+openapi: 3.0.0
+
+info:
+  title: Test api
+  description: |-
+    For testing purpose!
+  version: 0.1.0
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags:
+        - system
+      summary: Health check endpoint
+      description: Check if the API is up and running
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "OK"
