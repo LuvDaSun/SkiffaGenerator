@@ -18,9 +18,9 @@
     "./bundled/**"
   ],
   "scripts": {
-    "prepack": "node ./scripts/build.mjs",
-    "pretest": "tsc",
-    "build": "node ./scripts/build.mjs",
+    "prepack": "$npm_node_execpath ./scripts/build.mjs",
+    "pretest": "$npm_node_execpath ./scripts/build.mjs",
+    "build": "$npm_node_execpath ./scripts/build.mjs",
     "test": "$npm_node_execpath --test ./transpiled/**/*.test.js"
   },
   "repository": {
