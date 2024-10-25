@@ -11,7 +11,10 @@
   "packageManager": "npm@10.5.0",
   "scripts": {
     "spelling": "cspell",
-    "formatting": "prettier --check *"
+    "formatting": "prettier --check *",
+    "build": "$npm_execpath run --workspaces --if-present build",
+    "pretest": "$npm_execpath run --workspaces --if-present pretest",
+    "test": "$npm_node_execpath --test packages/npm/*/transpiled/**/*.test.js"
   },
   "devDependencies": {
     "cspell": "^8.14.4",
