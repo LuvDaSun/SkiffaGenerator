@@ -17,9 +17,7 @@ paths:
           description: Ok
           headers:
             value:
-              required: true
-              schema:
-                type: string
+              $ref: "#/components/headers/value"
           content:
             text/plain: {}
             application/octet-stream: {}
@@ -30,5 +28,10 @@ components:
       in: query
       required: true
       name: value
+      schema:
+        type: string
+  headers:
+    value:
+      required: true
       schema:
         type: string
