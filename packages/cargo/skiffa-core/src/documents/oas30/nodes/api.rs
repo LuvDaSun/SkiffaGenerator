@@ -92,6 +92,50 @@ impl Api {
         .collect(),
     )
   }
+
+  pub fn parameter_components(&self) -> Option<BTreeMap<Vec<String>, RequestParameter>> {
+    let member = "components";
+    let member_1 = "parameters";
+    Some(
+      self
+        .0
+        .as_object()?
+        .get(member)?
+        .as_object()?
+        .get(member_1)?
+        .as_object()?
+        .into_iter()
+        .map(|(key, node)| {
+          (
+            vec![member.to_owned(), member_1.to_owned(), key.clone()],
+            node.clone().into(),
+          )
+        })
+        .collect(),
+    )
+  }
+
+  pub fn response_components(&self) -> Option<BTreeMap<Vec<String>, OperationResult>> {
+    let member = "components";
+    let member_1 = "responses";
+    Some(
+      self
+        .0
+        .as_object()?
+        .get(member)?
+        .as_object()?
+        .get(member_1)?
+        .as_object()?
+        .into_iter()
+        .map(|(key, node)| {
+          (
+            vec![member.to_owned(), member_1.to_owned(), key.clone()],
+            node.clone().into(),
+          )
+        })
+        .collect(),
+    )
+  }
 }
 
 impl From<serde_json::Value> for Api {

@@ -612,8 +612,16 @@ impl Document {
           .flatten()
           .map(move |pointer| Ok(location.push_pointer(pointer)))
       })
-      // TODO read parameter components
-      // TODO read response components
+      .chain(Self::get_sub_locations_from_node_entries(
+        location.clone(),
+        node.parameter_components().into_iter().flatten(),
+        |location, node| self.get_schema_locations_from_request_parameter(location, node),
+      ))
+      .chain(Self::get_sub_locations_from_node_entries(
+        location.clone(),
+        node.response_components().into_iter().flatten(),
+        |location, node| self.get_schema_locations_from_operation_result(location, node),
+      ))
       .chain(Self::get_sub_locations_from_node_entries(
         location.clone(),
         node
