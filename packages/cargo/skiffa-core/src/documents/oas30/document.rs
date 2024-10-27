@@ -619,6 +619,11 @@ impl Document {
       ))
       .chain(Self::get_sub_locations_from_node_entries(
         location.clone(),
+        node.header_components().into_iter().flatten(),
+        |location, node| self.get_schema_locations_from_response_header(location, node),
+      ))
+      .chain(Self::get_sub_locations_from_node_entries(
+        location.clone(),
         node.response_components().into_iter().flatten(),
         |location, node| self.get_schema_locations_from_operation_result(location, node),
       ))
