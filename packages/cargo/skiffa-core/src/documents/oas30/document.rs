@@ -604,14 +604,16 @@ impl Document {
     node: nodes::Api,
   ) -> impl Iterator<Item = Result<NodeLocation, DocumentError>> + '_ {
     iter::empty()
-      // .chain({
-      //   let location = location.clone();
-      //   node
-      //     .schema_component_pointers()
-      //     .into_iter()
-      //     .flatten()
-      //     .map(move |pointer| Ok(location.push_pointer(pointer)))
-      // })
+      .chain({
+        let location = location.clone();
+        node
+          .schema_component_pointers()
+          .into_iter()
+          .flatten()
+          .map(move |pointer| Ok(location.push_pointer(pointer)))
+      })
+      // TODO read parameter components
+      // TODO read response components
       .chain(Self::get_sub_locations_from_node_entries(
         location.clone(),
         node
