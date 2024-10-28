@@ -1,5 +1,5 @@
 use super::*;
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Clone)]
 pub struct Api(serde_json::Value);
@@ -72,26 +72,92 @@ impl Api {
     )
   }
 
-  // pub fn schema_component_pointers(&self) -> Option<BTreeSet<Vec<String>>> {
-  //   Some(
-  //     self
-  //       .0
-  //       .as_object()?
-  //       .get("components")?
-  //       .as_object()?
-  //       .get("schemas")?
-  //       .as_object()?
-  //       .keys()
-  //       .map(|key| {
-  //         vec![
-  //           "components".to_owned(),
-  //           "schemas".to_owned(),
-  //           key.to_owned(),
-  //         ]
-  //       })
-  //       .collect(),
-  //   )
-  // }
+  pub fn schema_component_pointers(&self) -> Option<BTreeSet<Vec<String>>> {
+    Some(
+      self
+        .0
+        .as_object()?
+        .get("components")?
+        .as_object()?
+        .get("schemas")?
+        .as_object()?
+        .keys()
+        .map(|key| {
+          vec![
+            "components".to_owned(),
+            "schemas".to_owned(),
+            key.to_owned(),
+          ]
+        })
+        .collect(),
+    )
+  }
+
+  pub fn parameter_components(&self) -> Option<BTreeMap<Vec<String>, RequestParameter>> {
+    let member = "components";
+    let member_1 = "parameters";
+    Some(
+      self
+        .0
+        .as_object()?
+        .get(member)?
+        .as_object()?
+        .get(member_1)?
+        .as_object()?
+        .into_iter()
+        .map(|(key, node)| {
+          (
+            vec![member.to_owned(), member_1.to_owned(), key.clone()],
+            node.clone().into(),
+          )
+        })
+        .collect(),
+    )
+  }
+
+  pub fn header_components(&self) -> Option<BTreeMap<Vec<String>, ResponseHeader>> {
+    let member = "components";
+    let member_1 = "headers";
+    Some(
+      self
+        .0
+        .as_object()?
+        .get(member)?
+        .as_object()?
+        .get(member_1)?
+        .as_object()?
+        .into_iter()
+        .map(|(key, node)| {
+          (
+            vec![member.to_owned(), member_1.to_owned(), key.clone()],
+            node.clone().into(),
+          )
+        })
+        .collect(),
+    )
+  }
+
+  pub fn response_components(&self) -> Option<BTreeMap<Vec<String>, OperationResult>> {
+    let member = "components";
+    let member_1 = "responses";
+    Some(
+      self
+        .0
+        .as_object()?
+        .get(member)?
+        .as_object()?
+        .get(member_1)?
+        .as_object()?
+        .into_iter()
+        .map(|(key, node)| {
+          (
+            vec![member.to_owned(), member_1.to_owned(), key.clone()],
+            node.clone().into(),
+          )
+        })
+        .collect(),
+    )
+  }
 }
 
 impl From<serde_json::Value> for Api {
