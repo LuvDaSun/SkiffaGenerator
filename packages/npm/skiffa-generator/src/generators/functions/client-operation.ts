@@ -819,7 +819,7 @@ export function* generateClientOperationFunction(
       }
 
       if (hasContentTypeReturn) {
-        returnArguments.push(`responseContentType`);
+        returnArguments.push(JSON.stringify(bodyModel?.contentType ?? null));
       }
 
       if (hasEntityReturn) {
