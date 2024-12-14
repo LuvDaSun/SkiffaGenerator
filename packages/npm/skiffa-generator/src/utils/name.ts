@@ -6,7 +6,7 @@ export function toCamel(...parts: string[]) {
   const sourceName = parts.join(" ").replaceAll(sanitizeRe, " ");
   return camelcase(sourceName, {
     pascalCase: false,
-    preserveConsecutiveUppercase: false,
+    preserveConsecutiveUppercase: true,
   });
 }
 
@@ -14,6 +14,6 @@ export function toPascal(...parts: string[]) {
   const sourceName = parts.join(" ").replaceAll(sanitizeRe, " ");
   return camelcase(sourceName, {
     pascalCase: true,
-    preserveConsecutiveUppercase: false,
+    preserveConsecutiveUppercase: true,
   });
 }
