@@ -28,11 +28,10 @@ export async function* fromReadableStream(
     return;
   }
 
-  const onAbort = () => stream.cancel();
-
-  signal?.addEventListener("abort", onAbort);
+  const reader = stream.getReader();
   try {
-    const reader = stream.getReader();
+    const onAbort = () => reader.cancel();
+    signal?.addEventListener("abort", onAbort);
     try {
       let result = await reader.read();
       while (!result.done) {
@@ -40,10 +39,10 @@ export async function* fromReadableStream(
         result = await reader.read();
       }
     } finally {
-      reader.releaseLock();
+      signal?.removeEventListener("abort", onAbort);
     }
   } finally {
-    signal?.removeEventListener("abort", onAbort);
+    reader.releaseLock();
   }
 }
 
