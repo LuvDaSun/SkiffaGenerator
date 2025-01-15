@@ -40,6 +40,14 @@ export class OperationNotImplemented extends ServerError {
   }
 }
 
+export class NotFound extends ServerError {
+  public readonly name = "OperationNotImplemented";
+
+  constructor() {
+    super(`Not found`);
+  }
+}
+
 export class ServerRequestMissingContentType extends ServerError {
   public readonly name = "ServerRequestMissingContentType";
 

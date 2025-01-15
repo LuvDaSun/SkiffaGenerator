@@ -24,7 +24,7 @@ export function createErrorMiddleware(): ServerMiddleware {
         };
       }
 
-      if (error instanceof errors.NoRouteFound) {
+      if (error instanceof errors.NoRouteFound || error instanceof errors.NotFound) {
         return {
           headers: {},
           status: 404,

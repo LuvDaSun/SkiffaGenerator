@@ -1,6 +1,6 @@
 {
   "name": "@skiffa/lib",
-  "version": "0.12.10",
+  "version": "0.12.11",
   "description": "",
   "type": "module",
   "main": "./bundled/main.cjs",
@@ -43,16 +43,16 @@
     "library"
   ],
   "dependencies": {
-    "@types/node": "^20.17.10",
+    "@types/node": "^20.17.13",
     "js-base64": "^3.7.7",
     "msecs": "^1.0.4",
     "tslib": "^2.8.1",
-    "type-fest": "^4.31.0"
+    "type-fest": "^4.32.0"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.4",
-    "rollup": "^4.29.1",
-    "typescript": "^5.7.2"
+    "rollup": "^4.30.1",
+    "typescript": "^5.7.3"
   },
   "engines": {
     "node": ">=18"
