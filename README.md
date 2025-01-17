@@ -5,7 +5,8 @@ With love from [Scheveningen](https://www.youtube.com/live/DaG5JReOYEw?si=Jbe5P4
 We love our early bird sponsors!
 
 [<img src="assets/nawadi.svg" alt="Nationaal Watersportdiploma" width="100" />](https://www.nationaalwatersportdiploma.nl/)
-[Prospero](https://prosperoapp.com)
+[<img src="assets/prospero.png" alt="Prospero" width="100" />](https://prosperoapp.com/)
+[<img src="assets/token-me.png" alt="TokenMe" width="100" />](https://token-me.com/)
 
 ## Installing
 
