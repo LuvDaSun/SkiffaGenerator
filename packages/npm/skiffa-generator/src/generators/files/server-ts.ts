@@ -1,7 +1,6 @@
 import * as skiffaCore from "@skiffa/core";
 import { Router } from "goodrouter";
-import { packageInfo } from "../../utils.js";
-import { itt } from "../../utils/iterable-text-template.js";
+import { itt, packageInfo } from "../../utils.js";
 import { generateServerClass } from "../classes.js";
 import { generateIsAuthenticationFunction } from "../functions/is-authentication.js";
 import {

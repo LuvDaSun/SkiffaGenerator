@@ -1,6 +1,5 @@
 import * as skiffaCore from "@skiffa/core";
-import { packageInfo } from "../../utils.js";
-import { itt } from "../../utils/iterable-text-template.js";
+import { itt, packageInfo } from "../../utils.js";
 import {
   generateIsRequestParametersFunction,
   generateIsResponseParametersFunction,

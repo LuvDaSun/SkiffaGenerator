@@ -3,16 +3,16 @@
   "version": "0.12.12",
   "description": "",
   "type": "module",
-  "main": "./bundled/main.cjs",
   "module": "./bundles/main.js",
+  "main": "./bundled/main.cjs",
   "types": "./typed/main.d.ts",
   "browser": "./bundled/browser.js",
   "exports": {
     ".": {
-      "require": "./bundled/main.cjs",
+      "browser": "./bundled/browser.js",
       "import": "./bundled/main.js",
-      "types": "./typed/main.d.ts",
-      "browser": "./bundled/browser.js"
+      "require": "./bundled/main.cjs",
+      "types": "./typed/main.d.ts"
     }
   },
   "files": [
@@ -43,7 +43,7 @@
     "library"
   ],
   "dependencies": {
-    "@types/node": "^20.17.13",
+    "@types/node": "^22.10.7",
     "js-base64": "^3.7.7",
     "msecs": "^1.0.4",
     "tslib": "^2.8.1",

@@ -4,8 +4,8 @@
   "sideEffects": false,
   "description": "",
   "type": "module",
-  "main": "./bundled/main.cjs",
   "module": "./bundled/main.js",
+  "main": "./bundled/main.cjs",
   "types": "./typed/main.d.ts",
   "exports": {
     ".": {
@@ -46,10 +46,10 @@
   ],
   "dependencies": {
     "@jns42/core": "^0.7.11",
-    "@jns42/generator": "^0.21.15",
+    "@jns42/generator": "^0.21.16",
     "@skiffa/core": "^0.2.8",
     "@skiffa/lib": "^0.12.12",
-    "@types/node": "^20.17.13",
+    "@types/node": "^22.10.7",
     "@types/yargs": "^17.0.33",
     "camelcase": "^8.0.0",
     "goodrouter": "^2.1.7",

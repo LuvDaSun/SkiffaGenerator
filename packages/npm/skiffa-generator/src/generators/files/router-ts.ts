@@ -1,7 +1,6 @@
 import * as skiffaCore from "@skiffa/core";
 import { Router, RouterMode } from "goodrouter";
-import { packageInfo } from "../../utils.js";
-import { itt } from "../../utils/iterable-text-template.js";
+import { itt, packageInfo } from "../../utils.js";
 
 export function* generateRouterTsCode(router: Router<number>) {
   yield skiffaCore.banner("//", `v${packageInfo.version}`);
