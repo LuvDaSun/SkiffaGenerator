@@ -1,8 +1,7 @@
 import { mapIterable } from "@jns42/generator";
 import * as skiffaCore from "@skiffa/core";
 import assert from "assert";
-import { packageInfo } from "../../utils.js";
-import { itt, NestedText } from "../../utils/iterable-text-template.js";
+import { itt, NestedText, packageInfo } from "../../utils.js";
 import {
   isBodyModelMockable,
   isOperationModelMockable,
