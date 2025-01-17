@@ -13,10 +13,11 @@ export function generatePackageJsonData(name: string, version: string) {
     browser: "./bundled/browser.js",
     exports: {
       ".": {
-        require: "./bundled/main.cjs",
-        import: "./bundled/main.js",
-        types: "./typed/main.d.ts",
+        // Order matters for vite! So let's make vite happy and set browser first.
         browser: "./bundled/browser.js",
+        import: "./bundled/main.js",
+        require: "./bundled/main.cjs",
+        types: "./typed/main.d.ts",
       },
     },
     files: ["./typed/**", "./bundled/**"],
