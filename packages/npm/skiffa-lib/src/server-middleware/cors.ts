@@ -24,7 +24,7 @@ export function createCorsMiddleware(configuration: CorsMiddlewareConfiguration)
           "access-control-allow-origin": allowOrigin,
           "access-control-max-age": (maxAge / second).toFixed(0),
           "access-control-allow-methods": methods.join(", "),
-          "access-control-allow-headers": "*",
+          "access-control-allow-headers": ["Authorization", "*"].join(", "),
           "access-control-expose-headers": "*",
         },
       };
