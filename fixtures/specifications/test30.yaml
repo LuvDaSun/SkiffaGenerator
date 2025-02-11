@@ -106,15 +106,15 @@ components:
   securitySchemes:
     api-key-header:
       type: apiKey
-      name: api-key-header
+      name: x-api-key-header
       in: header
     api-key-cookie:
       type: apiKey
-      name: api-key-cookie
+      name: x-api-key-cookie
       in: cookie
     api-key-query:
       type: apiKey
-      name: api-key-query
+      name: x-api-key-query
       in: query
     http-basic:
       type: http

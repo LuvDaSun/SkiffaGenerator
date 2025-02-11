@@ -47,7 +47,7 @@
     "js-base64": "^3.7.7",
     "msecs": "^1.0.4",
     "tslib": "^2.8.1",
-    "type-fest": "^4.33.0"
+    "type-fest": "^4.34.1"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.4",

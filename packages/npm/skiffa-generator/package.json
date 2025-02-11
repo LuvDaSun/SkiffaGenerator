@@ -1,6 +1,6 @@
 {
   "name": "@skiffa/generator",
-  "version": "0.13.32",
+  "version": "0.13.33",
   "sideEffects": false,
   "description": "",
   "type": "module",
@@ -54,7 +54,7 @@
     "camelcase": "^8.0.0",
     "goodrouter": "^2.1.7",
     "tslib": "^2.8.1",
-    "type-fest": "^4.33.0",
+    "type-fest": "^4.34.1",
     "yaml": "^2.7.0",
     "yargs": "^17.7.2"
   },

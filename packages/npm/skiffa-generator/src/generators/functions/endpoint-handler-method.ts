@@ -415,7 +415,7 @@ function* generateBody(
             case "query": {
               yield itt`
                 ${getAuthenticationMemberName(authenticationModel)}:
-                  lib.first(lib.getParameterValues(queryParameters, ${JSON.stringify(authenticationModel.name)})),
+                  lib.first(lib.getParameterValues(queryParameters, ${JSON.stringify(authenticationModel.parameterName)})),
               `;
               break;
             }
@@ -423,7 +423,7 @@ function* generateBody(
             case "header": {
               yield itt`
                 ${getAuthenticationMemberName(authenticationModel)}:
-                  lib.first(lib.getParameterValues(serverIncomingRequest.headers, ${JSON.stringify(authenticationModel.name)})),
+                  lib.first(lib.getParameterValues(serverIncomingRequest.headers, ${JSON.stringify(authenticationModel.parameterName)})),
               `;
               break;
             }
@@ -431,7 +431,7 @@ function* generateBody(
             case "cookie": {
               yield itt`
                 ${getAuthenticationMemberName(authenticationModel)}:
-                  lib.first(lib.getParameterValues(cookieParameters, ${JSON.stringify(authenticationModel.name)})),
+                  lib.first(lib.getParameterValues(cookieParameters, ${JSON.stringify(authenticationModel.parameterName)})),
               `;
               break;
             }

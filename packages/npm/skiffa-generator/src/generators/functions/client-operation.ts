@@ -459,7 +459,7 @@ export function* generateClientOperationFunction(
               case "query": {
                 yield itt`
                 if(configuration.${getAuthenticationMemberName(authenticationModel)} != null) {
-                  queryParameters[${JSON.stringify(authenticationModel.name)}] = configuration.${getAuthenticationMemberName(authenticationModel)};
+                  queryParameters[${JSON.stringify(authenticationModel.parameterName)}] = configuration.${getAuthenticationMemberName(authenticationModel)};
                 }
               `;
                 break;
@@ -468,7 +468,7 @@ export function* generateClientOperationFunction(
               case "header": {
                 yield itt`
                 if(configuration.${getAuthenticationMemberName(authenticationModel)} != null) {
-                  requestHeaders.append(${JSON.stringify(authenticationModel.name)}, configuration.${getAuthenticationMemberName(authenticationModel)});
+                  requestHeaders.append(${JSON.stringify(authenticationModel.parameterName)}, configuration.${getAuthenticationMemberName(authenticationModel)});
                 }
               `;
                 break;
@@ -477,7 +477,7 @@ export function* generateClientOperationFunction(
               case "cookie": {
                 yield itt`
                 if(configuration.${getAuthenticationMemberName(authenticationModel)} != null) {
-                  cookieParameters.append(${JSON.stringify(authenticationModel.name)}, configuration.${getAuthenticationMemberName(authenticationModel)});
+                  cookieParameters.append(${JSON.stringify(authenticationModel.parameterName)}, configuration.${getAuthenticationMemberName(authenticationModel)});
                 }
               `;
                 break;

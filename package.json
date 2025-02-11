@@ -18,6 +18,6 @@
   },
   "devDependencies": {
     "cspell": "^8.17.3",
-    "prettier": "^3.4.2"
+    "prettier": "^3.5.0"
   }
 }
