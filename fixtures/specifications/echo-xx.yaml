@@ -1,0 +1,37 @@
+openapi: 3.0.2
+
+info:
+  title: echo
+  description: echo
+  version: 0.1.0
+
+paths:
+  /echo:
+    parameters:
+      - $ref: "#/components/parameters/value-parameter"
+    post:
+      operationId: echo
+      summary: echo
+      responses:
+        "2XX":
+          description: Ok
+          headers:
+            value:
+              $ref: "#/components/headers/value-header"
+          content:
+            text/plain: {}
+            application/octet-stream: {}
+
+components:
+  parameters:
+    value-parameter:
+      in: query
+      required: true
+      name: value
+      schema:
+        type: string
+  headers:
+    value-header:
+      required: true
+      schema:
+        type: string
