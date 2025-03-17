@@ -104,9 +104,9 @@ function* generateOperationTest(
   );
 
   const hasClientStatusReturn =
-    clientOperationResultModels.flatMap((model) => model.statusCodes).length > 1;
+    clientOperationResultModels.flatMap((model) => [...model.statusCodes]).length > 1;
   const hasServerStatusReturn =
-    serverOperationResultModels.flatMap((model) => model.statusCodes).length > 1;
+    serverOperationResultModels.flatMap((model) => [...model.statusCodes]).length > 1;
   const hasClientParametersReturn = clientOperationResultModels.some(
     (model) => model.headerParameters.length > 0,
   );

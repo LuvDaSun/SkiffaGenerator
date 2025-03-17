@@ -46,7 +46,8 @@ export function* generateOperationHandlerType(
     (model) => selectBodies(model, responseTypes).length > 1,
   );
 
-  const hasStatusReturn = operationResultModels.flatMap((model) => model.statusCodes).length > 1;
+  const hasStatusReturn =
+    operationResultModels.flatMap((model) => [...model.statusCodes]).length > 1;
   const hasParametersReturn = operationResultModels.some(
     (model) => model.headerParameters.length > 0,
   );
