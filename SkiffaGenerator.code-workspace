@@ -47,6 +47,7 @@
     "[rust]": {
       "editor.defaultFormatter": "rust-lang.rust-analyzer",
     },
+    "npm.scriptRunner": "npm",
   },
   "extensions": {
     "recommendations": [
