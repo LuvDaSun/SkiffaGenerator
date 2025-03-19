@@ -47,9 +47,23 @@ export async function* fromReadableStream(
 }
 
 export async function collectStream(iterable: AsyncIterable<Uint8Array>) {
-  const collected = new Array<number>();
-  for await (const bytes of iterable) {
-    collected.push(...bytes);
+  let buffer = new Uint8Array(1024);
+  let length = 0;
+
+  for await (const chunk of iterable) {
+    if (length + chunk.length > buffer.length) {
+      let newSize = buffer.length * 2;
+      while (length + chunk.length > newSize) {
+        newSize *= 2;
+      }
+
+      const newBuffer = new Uint8Array(newSize);
+      newBuffer.set(buffer);
+      buffer = newBuffer;
+    }
+    buffer.set(chunk, length);
+    length += chunk.length;
   }
-  return Uint8Array.from(collected);
+
+  return buffer.subarray(0, length);
 }
