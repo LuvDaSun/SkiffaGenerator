@@ -76,7 +76,7 @@ function* generateOperationTest(
   const requestBodyModels = selectBodies(operationModel, requestTypes);
   const clientOperationResultModels = operationModel.operationResults.filter(
     (operationResultModel) =>
-      operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 300),
+      operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 400),
   );
   const serverOperationResultModels = operationModel.operationResults;
 
@@ -193,7 +193,7 @@ function* generateOperationTest(
     let statusCode = 0;
     // only 200 - 300
     for (statusCode of operationResultModel.statusCodes) {
-      if (statusCode >= 200 && statusCode < 300) {
+      if (statusCode >= 200 && statusCode < 400) {
         break;
       }
     }
