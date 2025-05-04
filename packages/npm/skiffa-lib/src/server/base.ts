@@ -28,10 +28,10 @@ export interface ServerMiddleware {
 }
 
 export interface ServerBaseConfiguration {
-  prefixPath: string;
+  pathPrefix: string;
 }
 export const defaultServerBaseConfiguration: ServerBaseConfiguration = {
-  prefixPath: "/",
+  pathPrefix: "/",
 };
 
 export abstract class ServerBase {
@@ -65,8 +65,8 @@ export abstract class ServerBase {
         assert(urlMatch != null);
 
         const pathWithPrefix = urlMatch[1] ?? "";
-        if (pathWithPrefix.startsWith(this.configuration.prefixPath)) {
-          const path = "/" + pathWithPrefix.substring(this.configuration.prefixPath.length);
+        if (pathWithPrefix.startsWith(this.configuration.pathPrefix)) {
+          const path = "/" + pathWithPrefix.substring(this.configuration.pathPrefix.length);
           const query = urlMatch[2] ?? "";
           const method = request.method.toUpperCase();
           const headers = request.headers as Parameters;
