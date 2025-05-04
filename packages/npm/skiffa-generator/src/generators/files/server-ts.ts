@@ -32,13 +32,14 @@ export function* generateServerTsCode(
   `;
 
   yield itt`
-    export interface ServerConfiguration {
+    export interface ServerConfiguration extends lib.ServerBaseConfiguration {
       validateIncomingEntity: boolean;
       validateIncomingParameters: boolean;
       validateOutgoingEntity: boolean;
       validateOutgoingParameters: boolean;
     }
     export const defaultServerConfiguration: ServerConfiguration = {
+      ...lib.defaultServerBaseConfiguration,
       validateIncomingEntity: true,
       validateIncomingParameters: true,
       validateOutgoingEntity: false,

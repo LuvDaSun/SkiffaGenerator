@@ -27,7 +27,16 @@ export interface ServerMiddleware {
   ): Promise<ServerOutgoingResponse>;
 }
 
+export interface ServerBaseConfiguration {
+  prefixPath: string;
+}
+export const defaultServerBaseConfiguration: ServerBaseConfiguration = {
+  prefixPath: "/",
+};
+
 export abstract class ServerBase {
+  protected abstract readonly configuration: ServerBaseConfiguration;
+
   public wrappers = { ...defaultServerWrappers };
 
   protected middleware: ServerMiddleware = (request, next) => next(request);
@@ -55,47 +64,56 @@ export abstract class ServerBase {
         const urlMatch = /^(.*?)(\?.*)?$/g.exec(request.url);
         assert(urlMatch != null);
 
-        const incomingRequest = {
-          path: urlMatch[1] ?? "",
-          query: urlMatch[2] ?? "",
-          method: request.method.toUpperCase(),
-          headers: request.headers as Parameters,
-          stream(signal?: AbortSignal) {
-            if (signal != null) {
-              /*
-               * aborting the request will drain the request stream
-               */
-              const onAbort = () => request.resume();
+        const pathWithPrefix = urlMatch[1] ?? "";
+        if (pathWithPrefix.startsWith(this.configuration.prefixPath)) {
+          const path = "/" + pathWithPrefix.substring(this.configuration.prefixPath.length);
+          const query = urlMatch[2] ?? "";
+          const method = request.method.toUpperCase();
+          const headers = request.headers as Parameters;
 
-              signal.addEventListener("abort", onAbort);
-              request.addListener("end", () => {
-                signal.removeEventListener("abort", onAbort);
-              });
+          const incomingRequest = {
+            path,
+            query,
+            method,
+            headers,
+            stream(signal?: AbortSignal) {
+              if (signal != null) {
+                /*
+                 * aborting the request will drain the request stream
+                 */
+                const onAbort = () => request.resume();
+
+                signal.addEventListener("abort", onAbort);
+                request.addListener("end", () => {
+                  signal.removeEventListener("abort", onAbort);
+                });
+              }
+
+              return request;
+            },
+          };
+
+          const outgoingResponse = await this.middleware(incomingRequest, (incomingRequest) => {
+            return this.requestHandler(incomingRequest);
+          });
+
+          response.statusCode = outgoingResponse.status;
+          for (const [headerName, headerValue] of Object.entries(outgoingResponse.headers)) {
+            response.setHeader(headerName, headerValue);
+          }
+          if ("flushHeaders" in response) {
+            response.flushHeaders();
+          }
+
+          if (outgoingResponse.stream != null) {
+            for await (const chunk of outgoingResponse.stream(abortController.signal)) {
+              await new Promise<void>((resolve, reject) =>
+                response.write(chunk, (error) => (error ? reject(error) : resolve())),
+              );
             }
-
-            return request;
-          },
-        };
-
-        const outgoingResponse = await this.middleware(incomingRequest, (incomingRequest) => {
-          return this.requestHandler(incomingRequest);
-        });
-
-        response.statusCode = outgoingResponse.status;
-        for (const [headerName, headerValue] of Object.entries(outgoingResponse.headers)) {
-          response.setHeader(headerName, headerValue);
-        }
-        if ("flushHeaders" in response) {
-          response.flushHeaders();
-        }
-
-        if (outgoingResponse.stream != null) {
-          for await (const chunk of outgoingResponse.stream(abortController.signal)) {
-            await new Promise<void>((resolve, reject) =>
-              response.write(chunk, (error) => (error ? reject(error) : resolve())),
-            );
           }
         }
+
         await new Promise<void>((resolve) => response.end(() => resolve()));
       };
 
