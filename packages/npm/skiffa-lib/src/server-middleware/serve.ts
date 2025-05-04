@@ -1,8 +1,6 @@
 import fs from "fs/promises";
 import { ServerMiddleware } from "../server.js";
 
-// all of this should move to @skiffa/lib
-
 /**
  * Configure static files to serve, of, when false. Server an empty (204) response.
  */

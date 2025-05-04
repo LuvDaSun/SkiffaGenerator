@@ -69,7 +69,7 @@ export function* generateClientOperationFunction(
     .join("\n");
 
   const operationResultModels = operationModel.operationResults.filter((operationResultModel) =>
-    operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 300),
+    operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 400),
   );
   const requestBodyModels = selectBodies(operationModel, requestTypes);
 
@@ -260,7 +260,7 @@ export function* generateClientOperationFunction(
       tuple.push([
         "status",
         [...operationResultModel.statusCodes]
-          .filter((statusCode) => statusCode >= 200 && statusCode < 300)
+          .filter((statusCode) => statusCode >= 200 && statusCode < 400)
           .map((value) => JSON.stringify(value))
           .join(" | "),
       ]);
@@ -696,7 +696,7 @@ export function* generateClientOperationFunction(
     function* generateResponseStatusCodeCaseClauses() {
       for (const operationResultModel of operationModel.operationResults) {
         const statusCodes = [...operationResultModel.statusCodes].filter(
-          (statusCode) => statusCode >= 200 && statusCode < 300,
+          (statusCode) => statusCode >= 200 && statusCode < 400,
         );
         let statusCode;
         while ((statusCode = statusCodes.shift()) != null) {
