@@ -16,7 +16,7 @@
     "test": "node --test packages/npm/*/transpiled/**/*.test.js"
   },
   "devDependencies": {
-    "cspell": "^8.17.5",
+    "cspell": "^8.19.4",
     "prettier": "^3.5.3"
   },
   "packageManager": "npm@10.8.3"
