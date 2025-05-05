@@ -493,6 +493,7 @@ impl Document {
         .map(Into::into)
         .unwrap_or_default(),
       parameter_name: security_scheme_node.parameter_name().map(Into::into),
+      bearer_format: None,
     })
   }
 

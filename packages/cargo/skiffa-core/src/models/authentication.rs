@@ -11,6 +11,7 @@ pub struct Authentication {
   pub parameter_name: Option<String>,
   pub r#in: Option<String>,
   pub scheme: Option<String>,
+  pub bearer_format: Option<String>,
 }
 
 #[derive(Clone)]
@@ -52,6 +53,11 @@ impl AuthenticationContainer {
   #[wasm_bindgen(getter, js_name = "scheme")]
   pub fn scheme(&self) -> Option<String> {
     self.0.scheme.clone()
+  }
+
+  #[wasm_bindgen(getter, js_name = "bearerFormat")]
+  pub fn bearer_format(&self) -> Option<String> {
+    self.0.bearer_format.clone()
   }
 }
 

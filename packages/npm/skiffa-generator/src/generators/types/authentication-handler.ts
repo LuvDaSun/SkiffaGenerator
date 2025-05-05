@@ -37,11 +37,14 @@ export function* generateAuthenticationHandlerType(
           break;
 
         case "bearer":
-          yield itt`
-            export type ${handlerTypeName}<A extends ${serverAuthenticationName}> =
-              (credential: string) =>
-                Promise<A[${JSON.stringify(getAuthenticationMemberName(authenticationModel))}] | undefined>;
-            `;
+          switch (authenticationModel.bearerFormat) {
+            default:
+              yield itt`
+                export type ${handlerTypeName}<A extends ${serverAuthenticationName}> =
+                  (credential: string) =>
+                    Promise<A[${JSON.stringify(getAuthenticationMemberName(authenticationModel))}] | undefined>;
+                `;
+          }
           break;
 
         default: {
