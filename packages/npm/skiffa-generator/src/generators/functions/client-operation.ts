@@ -331,6 +331,13 @@ export function* generateClientOperationFunction(
       }
     `;
 
+    yield itt`
+      const abortController = new AbortController();
+      if (configurationOptions.signal != null) {
+        lib.setupAbortBubble(abortController, configurationOptions.signal);
+      }
+    `;
+
     // lets fill some request parameters
 
     yield itt`
