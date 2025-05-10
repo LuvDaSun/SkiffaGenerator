@@ -44,6 +44,7 @@ export function* generateClientTsCode(
     validateIncomingParameters?: boolean;
     validateOutgoingEntity?: boolean;
     validateOutgoingParameters?: boolean;
+    signal?: AbortSignal;
     ${generateCredentialFields()}
   }
 `;

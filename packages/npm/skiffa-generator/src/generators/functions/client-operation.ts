@@ -331,6 +331,13 @@ export function* generateClientOperationFunction(
       }
     `;
 
+    yield itt`
+      const abortController = new AbortController();
+      if (configurationOptions.signal != null) {
+        lib.setupAbortBubble(abortController, configurationOptions.signal);
+      }
+    `;
+
     // lets fill some request parameters
 
     yield itt`
@@ -677,6 +684,7 @@ export function* generateClientOperationFunction(
         method: ${JSON.stringify(operationModel.method.toUpperCase())},
         redirect: "manual",
         body,
+        signal: abortController.signal,
       };
       const fetchResponse = await fetch(url, requestInit);
   
@@ -835,10 +843,15 @@ export function* generateClientOperationFunction(
         `;
 
           yield itt`
-          const stream = (signal?: AbortSignal) => lib.fromReadableStream(
-            responseBody,
-            signal
-          );
+          const stream = (signal?: AbortSignal) => {
+            if (signal != null) {
+              lib.setupAbortBubble(abortController, signal);
+            }
+            return lib.fromReadableStream(
+              responseBody,
+              signal,
+            );
+          }
         `;
 
           switch (bodyModel.contentType) {
