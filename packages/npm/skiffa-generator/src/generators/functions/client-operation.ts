@@ -843,7 +843,7 @@ export function* generateClientOperationFunction(
         `;
 
           yield itt`
-          const stream = (signal?: AbortSignal) => () => {
+          const stream = (signal?: AbortSignal) => {
             if (signal != null) {
               lib.setupAbortBubble(abortController, signal);
             }
