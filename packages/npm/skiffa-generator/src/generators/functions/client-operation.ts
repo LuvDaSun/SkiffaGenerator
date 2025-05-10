@@ -684,6 +684,7 @@ export function* generateClientOperationFunction(
         method: ${JSON.stringify(operationModel.method.toUpperCase())},
         redirect: "manual",
         body,
+        signal: abortController.signal,
       };
       const fetchResponse = await fetch(url, requestInit);
   
