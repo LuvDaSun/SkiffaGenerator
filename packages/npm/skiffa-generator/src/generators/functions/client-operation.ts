@@ -842,10 +842,15 @@ export function* generateClientOperationFunction(
         `;
 
           yield itt`
-          const stream = (signal?: AbortSignal) => lib.fromReadableStream(
-            responseBody,
-            signal
-          );
+          const stream = (signal?: AbortSignal) => () => {
+            if (signal != null) {
+              lib.setupAbortBubble(abortController, signal);
+            }
+            return lib.fromReadableStream(
+              responseBody,
+              signal,
+            );
+          }
         `;
 
           switch (bodyModel.contentType) {
