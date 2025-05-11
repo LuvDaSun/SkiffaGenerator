@@ -1,8 +1,10 @@
 export function setupAbortBubble(parentController: AbortController, childSignal: AbortSignal) {
+  const parentSignal = parentController.signal;
   if (childSignal.aborted) {
-    parentController.abort(childSignal.reason);
+    if (!parentSignal.aborted) {
+      parentController.abort(childSignal.reason);
+    }
   } else {
-    const parentSignal = parentController.signal;
     const parentAbortHandler = () => {
       parentSignal.removeEventListener("abort", parentAbortHandler);
       childSignal.removeEventListener("abort", childAbortHandler);
