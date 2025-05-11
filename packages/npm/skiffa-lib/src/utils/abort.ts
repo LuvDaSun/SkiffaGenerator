@@ -8,7 +8,12 @@ export function setupAbortBubble(parentController: AbortController, childSignal:
       childSignal.removeEventListener("abort", childAbortHandler);
     };
     const childAbortHandler = () => {
-      parentController.abort(childSignal.reason);
+      parentSignal.removeEventListener("abort", parentAbortHandler);
+      childSignal.removeEventListener("abort", childAbortHandler);
+
+      if (!parentSignal.aborted) {
+        parentController.abort(childSignal.reason);
+      }
     };
     parentSignal.addEventListener("abort", parentAbortHandler);
     childSignal.addEventListener("abort", childAbortHandler);
