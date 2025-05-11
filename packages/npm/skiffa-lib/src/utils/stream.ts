@@ -6,8 +6,11 @@ export function toReadableStream(iterable: AsyncIterable<Uint8Array>): ReadableS
       iterator = iterable[Symbol.asyncIterator]();
     },
     async pull(controller) {
+      if (iterator == null) {
+        return;
+      }
       try {
-        const next = await iterator!.next();
+        const next = await iterator.next();
         if (next.done ?? false) {
           controller.close();
         } else {
@@ -16,6 +19,12 @@ export function toReadableStream(iterable: AsyncIterable<Uint8Array>): ReadableS
       } catch (error) {
         controller.error(error);
       }
+    },
+    async cancel(reason) {
+      if (iterator == null) {
+        return;
+      }
+      await iterator.return?.(reason);
     },
   });
 }
@@ -30,13 +39,21 @@ export async function* fromReadableStream(
 
   const reader = stream.getReader();
   try {
-    const onAbort = () => reader.cancel();
+    let cancelPromise: Promise<void> | undefined = undefined;
+    const onAbort = () => {
+      cancelPromise = reader.cancel();
+    };
     signal?.addEventListener("abort", onAbort);
     try {
-      let result = await reader.read();
-      while (!result.done) {
+      while (true) {
+        if (cancelPromise != null) {
+          await cancelPromise;
+        }
+        let result = await reader.read();
+        if (result.done) {
+          break;
+        }
         yield result.value;
-        result = await reader.read();
       }
     } finally {
       signal?.removeEventListener("abort", onAbort);
