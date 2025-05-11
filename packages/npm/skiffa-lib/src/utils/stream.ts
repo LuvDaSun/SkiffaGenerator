@@ -39,16 +39,14 @@ export async function* fromReadableStream(
 
   const reader = stream.getReader();
   try {
-    let cancelPromise: Promise<void> | undefined = undefined;
     const onAbort = () => {
-      cancelPromise = reader.cancel();
+      reader.cancel().catch(() => {
+        // we don't really care for errors after abort
+      });
     };
     signal?.addEventListener("abort", onAbort);
     try {
       while (true) {
-        if (cancelPromise != null) {
-          await cancelPromise;
-        }
         let result = await reader.read();
         if (result.done) {
           break;
