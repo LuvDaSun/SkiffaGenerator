@@ -506,11 +506,14 @@ export function* generateClientOperationFunction(
                 break;
 
               case "bearer":
-                yield itt`
-                if(configuration.${getAuthenticationMemberName(authenticationModel)} != null) {
-                  requestHeaders.append("authorization", lib.stringifyAuthorizationHeader("Bearer", configuration.${getAuthenticationMemberName(authenticationModel)}));
+                switch (authenticationModel.bearerFormat) {
+                  default:
+                    yield itt`
+                      if(configuration.${getAuthenticationMemberName(authenticationModel)} != null) {
+                        requestHeaders.append("authorization", lib.stringifyAuthorizationHeader("Bearer", configuration.${getAuthenticationMemberName(authenticationModel)}));
+                      }
+                    `;
                 }
-              `;
                 break;
 
               default: {

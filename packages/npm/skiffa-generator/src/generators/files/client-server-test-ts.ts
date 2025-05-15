@@ -261,11 +261,14 @@ function* generateOperationTest(
                 break;
 
               case "bearer":
-                yield itt`
-                apiServer.${registerAuthenticationHandlerMethodName}(
-                  async (credential) => credential === "super-secret-api-key"
-                )
-              `;
+                switch (authenticationModel.bearerFormat) {
+                  default:
+                    yield itt`
+                      apiServer.${registerAuthenticationHandlerMethodName}(
+                        async (credential) => credential === "super-secret-api-key"
+                      )
+                    `;
+                }
                 break;
 
               default: {
@@ -561,9 +564,12 @@ function* generateOperationTest(
                 break;
 
               case "bearer":
-                yield itt`
-                  ${getAuthenticationMemberName(authenticationModel)}: "super-secret",
-                `;
+                switch (authenticationModel.bearerFormat) {
+                  default:
+                    yield itt`
+                      ${getAuthenticationMemberName(authenticationModel)}: "super-secret",
+                    `;
+                }
                 break;
 
               default: {
