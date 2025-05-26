@@ -451,10 +451,13 @@ function* generateBody(
               break;
 
             case "bearer":
-              yield itt`
-                ${getAuthenticationMemberName(authenticationModel)}:
-                  lib.parseAuthorizationHeader("bearer", lib.getParameterValues(serverIncomingRequest.headers, "authorization")),
-              `;
+              switch (authenticationModel.bearerFormat) {
+                default:
+                  yield itt`
+                    ${getAuthenticationMemberName(authenticationModel)}:
+                      lib.parseAuthorizationHeader("bearer", lib.getParameterValues(serverIncomingRequest.headers, "authorization")),
+                  `;
+              }
               break;
 
             default: {

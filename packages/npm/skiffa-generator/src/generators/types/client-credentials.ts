@@ -64,7 +64,10 @@ export function* generateAuthenticationCredentialType(
             `;
 
           case "bearer":
-            return `string`;
+            switch (authenticationModel.bearerFormat) {
+              default:
+                return `string`;
+            }
 
           default:
             return "unknown";
