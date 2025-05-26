@@ -69,7 +69,7 @@ export function* generateClientOperationFunction(
     .join("\n");
 
   const operationResultModels = operationModel.operationResults.filter((operationResultModel) =>
-    operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 300),
+    operationResultModel.statusCodes.some((statusCode) => statusCode >= 200 && statusCode < 400),
   );
   const requestBodyModels = selectBodies(operationModel, requestTypes);
 
@@ -260,7 +260,7 @@ export function* generateClientOperationFunction(
       tuple.push([
         "status",
         [...operationResultModel.statusCodes]
-          .filter((statusCode) => statusCode >= 200 && statusCode < 300)
+          .filter((statusCode) => statusCode >= 200 && statusCode < 400)
           .map((value) => JSON.stringify(value))
           .join(" | "),
       ]);
@@ -328,6 +328,13 @@ export function* generateClientOperationFunction(
     yield itt`
       if(configuration.baseUrl == null) {
         throw new Error("please set baseUrl");
+      }
+    `;
+
+    yield itt`
+      const abortController = new AbortController();
+      if (configurationOptions.signal != null) {
+        lib.setupAbortBubble(abortController, configurationOptions.signal);
       }
     `;
 
@@ -680,6 +687,7 @@ export function* generateClientOperationFunction(
         method: ${JSON.stringify(operationModel.method.toUpperCase())},
         redirect: "manual",
         body,
+        signal: abortController.signal,
       };
       const fetchResponse = await fetch(url, requestInit);
   
@@ -699,7 +707,7 @@ export function* generateClientOperationFunction(
     function* generateResponseStatusCodeCaseClauses() {
       for (const operationResultModel of operationModel.operationResults) {
         const statusCodes = [...operationResultModel.statusCodes].filter(
-          (statusCode) => statusCode >= 200 && statusCode < 300,
+          (statusCode) => statusCode >= 200 && statusCode < 400,
         );
         let statusCode;
         while ((statusCode = statusCodes.shift()) != null) {
@@ -838,10 +846,15 @@ export function* generateClientOperationFunction(
         `;
 
           yield itt`
-          const stream = (signal?: AbortSignal) => lib.fromReadableStream(
-            responseBody,
-            signal
-          );
+          const stream = (signal?: AbortSignal) => {
+            if (signal != null) {
+              lib.setupAbortBubble(abortController, signal);
+            }
+            return lib.fromReadableStream(
+              responseBody,
+              signal,
+            );
+          }
         `;
 
           switch (bodyModel.contentType) {
