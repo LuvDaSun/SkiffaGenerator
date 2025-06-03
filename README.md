@@ -41,7 +41,7 @@ Testing integrations with a third party may be difficult. Skiffa can solve that.
 
 ### Many more!
 
-There are many more, some very specific use cases, if you have an intersting one. Please let us know!
+There are many more, some very specific use cases, if you have an interesting one. Please let us know!
 
 ## Installing
 
